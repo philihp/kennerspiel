@@ -1,0 +1,22 @@
+types:
+  GameStatus:
+    - LOBBY
+    - IN_PROGRESS
+    - OVER
+  Player:
+    id: UserId
+  State:
+    players: Player[]
+    activePlayer: UserId?
+    moves: string[]
+
+methods:
+  createGame:
+  makeMove:
+    command: string
+
+auth:
+  anonymous: {}
+
+userState: State
+error: string
