@@ -30,8 +30,8 @@
     ]
   },
   "lint-staged": {
-    "src/**/*.{js,json,ts}": [
-      "eslint --ext .js,.json,.ts --fix"
+    "src/**/*.{js,jsx,json,ts,tsx}": [
+      "eslint --ext .js,.jsx,.json,.ts,.tsx --fix"
     ]
   },
   "prettier": "@philihp/prettier-config",
