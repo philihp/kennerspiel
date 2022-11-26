@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "hathora dev",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "cd .. && husky install server/.husky"
   },
   "devDependencies": {
     "@philihp/eslint-config": "6.0.2",
