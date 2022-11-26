@@ -1,5 +1,5 @@
-import { Methods, Context } from "./.hathora/methods";
-import { Response } from "../api/base";
+import { Methods, Context } from './.hathora/methods'
+import { Response } from '../api/base'
 import {
   GameStatus,
   Player,
@@ -8,9 +8,9 @@ import {
   IInitializeRequest,
   ICreateGameRequest,
   IMakeMoveRequest,
-} from "../api/types";
+} from '../api/types'
 
-type InternalState = State;
+type InternalState = State
 
 export class Impl implements Methods<InternalState> {
   initialize(ctx: Context, request: IInitializeRequest): InternalState {
@@ -18,15 +18,18 @@ export class Impl implements Methods<InternalState> {
       players: [],
       activePlayer: undefined,
       moves: [],
-    };
+    }
   }
+
   createGame(state: InternalState, userId: UserId, ctx: Context, request: ICreateGameRequest): Response {
-    return Response.error("Not implemented");
+    return Response.error('Not implemented')
   }
+
   makeMove(state: InternalState, userId: UserId, ctx: Context, request: IMakeMoveRequest): Response {
-    return Response.error("Not implemented");
+    return Response.error('Not implemented')
   }
+
   getUserState(state: InternalState, userId: UserId): State {
-    return state;
+    return state
   }
 }
