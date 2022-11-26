@@ -32,8 +32,8 @@
     ]
   },
   "lint-staged": {
-    "**/*.{ts,tsx}": [
-      "eslint --ext .ts,.tsx --fix"
+    "**/*.{ts}": [
+      "eslint --ext .ts --fix"
     ]
   },
   "prettier": "@philihp/prettier-config",
