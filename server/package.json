@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "hathora dev",
     "test": "jest",
+    "lint": "eslint --ext .ts .",
     "prepare": "cd .. && husky install server/.husky"
   },
   "devDependencies": {
@@ -31,8 +32,8 @@
     ]
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,json,ts,tsx}": [
-      "eslint --ext .js,.jsx,.json,.ts,.tsx --fix"
+    "**/*.{ts,tsx}": [
+      "eslint --ext .ts,.tsx --fix"
     ]
   },
   "prettier": "@philihp/prettier-config",
@@ -50,8 +51,10 @@
       "@philihp"
     ],
     "settings": {
+      "react": {
+        "version": "9999"
+      },
       "import/extensions": [
-        ".js",
         ".ts"
       ],
       "import/parsers": {
@@ -63,12 +66,15 @@
         "typescript": {},
         "node": {
           "extensions": [
-            ".js",
             ".ts"
           ]
         }
       }
     },
-    "rules": {}
+    "rules": {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "class-methods-use-this": "off"
+    }
   }
 }
