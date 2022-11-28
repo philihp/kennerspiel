@@ -26,7 +26,8 @@ export class Impl implements Methods<InternalState> {
   }
 
   makeMove(state: InternalState, userId: UserId, ctx: Context, request: IMakeMoveRequest): Response {
-    return Response.error('Not implemented')
+    state.moves.push(request.command)
+    return Response.ok()
   }
 
   getUserState(state: InternalState, userId: UserId): State {
