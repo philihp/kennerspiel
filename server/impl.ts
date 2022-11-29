@@ -8,6 +8,9 @@ import {
   IInitializeRequest,
   ICreateGameRequest,
   IMakeMoveRequest,
+  IJoinGameRequest,
+  IEndGameRequest,
+  IStartGameRequest,
 } from '../api/types'
 
 type InternalState = State
@@ -22,6 +25,18 @@ export class Impl implements Methods<InternalState> {
   }
 
   createGame(state: InternalState, userId: UserId, ctx: Context, request: ICreateGameRequest): Response {
+    return Response.error('Not implemented')
+  }
+
+  joinGame(state: State, userId: string, ctx: Context, request: IJoinGameRequest): Response {
+    return Response.error('Not implemented')
+  }
+
+  endGame(state: State, userId: string, ctx: Context, request: IEndGameRequest): Response {
+    return Response.error('Not implemented')
+  }
+
+  startGame(state: State, userId: string, ctx: Context, request: IStartGameRequest): Response {
     return Response.error('Not implemented')
   }
 
