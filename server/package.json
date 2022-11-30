@@ -72,9 +72,11 @@
       }
     },
     "rules": {
-      "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "off",
-      "class-methods-use-this": "off"
+      "class-methods-use-this": "off",
+      "default-case": "off",
+      "no-param-reassign": "off",
+      "no-unused-vars": "off"
     }
   }
 }
