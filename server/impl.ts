@@ -6,7 +6,7 @@ import {
   State,
   UserId,
   IInitializeRequest,
-  ICreateGameRequest,
+  IResetGameRequest,
   IMakeMoveRequest,
   IJoinGameRequest,
   IEndGameRequest,
@@ -25,8 +25,8 @@ export class Impl implements Methods<InternalState> {
     }
   }
 
-  createGame(state: InternalState, userId: UserId, ctx: Context, request: ICreateGameRequest): Response {
-    if (state.status === GameStatus.STARTED) return Response.error('Game currently in progress. Finish it first')
+  resetGame(state: InternalState, userId: UserId, ctx: Context, request: IResetGameRequest): Response {
+    if (state.status === GameStatus.STARTED) return Response.error('Cannot reset a game currently in progress')
     state.status = GameStatus.SEATING
     state.players = []
     state.activePlayer = undefined
