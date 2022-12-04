@@ -6,10 +6,11 @@ types:
   Player:
     id: UserId
     color: Color
+    pending: string[]
   State:
     status: GameStatus
     players: Player[]
-    activePlayer: UserId?
+    active: UserId?
     moves: string[]
   Color:
     - RED
@@ -27,7 +28,6 @@ methods:
     command: string
 
 auth:
-  anonymous: {}
   nickname: {}
 
 userState: State

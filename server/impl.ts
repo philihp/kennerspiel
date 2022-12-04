@@ -13,23 +13,21 @@ import {
   IStartGameRequest,
 } from '../api/types'
 
-type InternalState = State
-
-export class Impl implements Methods<InternalState> {
-  initialize(ctx: Context, request: IInitializeRequest): InternalState {
+export class Impl implements Methods<State> {
+  initialize(ctx: Context, request: IInitializeRequest): State {
     return {
       status: GameStatus.SEATING,
       players: [],
-      activePlayer: undefined,
+      active: undefined,
       moves: [],
     }
   }
 
-  resetGame(state: InternalState, userId: UserId, ctx: Context, request: IResetGameRequest): Response {
+  resetGame(state: State, userId: UserId, ctx: Context, request: IResetGameRequest): Response {
     if (state.status === GameStatus.STARTED) return Response.error('Cannot reset a game currently in progress')
     state.status = GameStatus.SEATING
     state.players = []
-    state.activePlayer = undefined
+    state.active = undefined
     state.moves = []
     return Response.ok()
   }
@@ -41,9 +39,10 @@ export class Impl implements Methods<InternalState> {
     if (state.status === GameStatus.STARTED) {
       return Response.error('Game has started')
     }
-    if (!state.players.some((player: Player) => player.color === request.color)) {
-      state.players.push({ id: userId, color: request.color })
+    if (state.players.some((player: Player) => player.color === request.color)) {
+      return Response.error('Someone is already that color')
     }
+    state.players.push({ id: userId, color: request.color, pending: [] })
     return Response.ok()
   }
 
@@ -56,6 +55,9 @@ export class Impl implements Methods<InternalState> {
   }
 
   startGame(state: State, userId: string, ctx: Context, request: IStartGameRequest): Response {
+    if (state.players.length === 0) {
+      return Response.error('At least one player must join before the game can begin')
+    }
     if (state.status === GameStatus.STARTED) {
       return Response.error('Game has already started')
     }
@@ -66,12 +68,16 @@ export class Impl implements Methods<InternalState> {
     return Response.ok()
   }
 
-  makeMove(state: InternalState, userId: UserId, ctx: Context, request: IMakeMoveRequest): Response {
-    state.moves.push(request.command)
+  makeMove(state: State, userId: UserId, ctx: Context, request: IMakeMoveRequest): Response {
+    const thisPlayer = state.players.find(({ id }) => id === userId)
+    if (thisPlayer === undefined) {
+      return Response.error(`${userId} is not a player of this game`)
+    }
+    thisPlayer.pending.push(request.command)
     return Response.ok()
   }
 
-  getUserState(state: InternalState, userId: UserId): State {
+  getUserState(state: State, userId: UserId): State {
     return state
   }
 }
