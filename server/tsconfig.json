@@ -5,6 +5,16 @@
     "strict": true,
     "target": "esnext",
     "moduleResolution": "node",
-    "isolatedModules": true
-  }
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "outDir": "./dist",
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../api"
+    }
+  ]
 }
