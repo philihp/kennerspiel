@@ -37,7 +37,8 @@
       "@typescript-eslint"
     ],
     "extends": [
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "@philihp"
     ],
     "settings": {
       "react": {
