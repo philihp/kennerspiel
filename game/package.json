@@ -3,8 +3,7 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "lint": "eslint --ext .ts .",
-    "prepare": "cd .. && husky install game/.husky"
+    "lint": "eslint --ext .ts"
   },
   "dependencies": {},
   "devDependencies": {
@@ -26,9 +25,7 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "transformIgnorePatterns": [
-      "node_modules"
-    ]
+    "rootDir": "src/"
   },
   "lint-staged": {
     "**/*.ts": [
