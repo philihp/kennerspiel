@@ -1,10 +1,10 @@
-name: server
+name: game
 
 on:
   push:
     paths:
-      - server/**
-      - .github/workflows/server.yml
+      - game/**
+      - .github/workflows/game.yml
 
 env:
   CI: true
@@ -14,17 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: server
+        working-directory: game
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18.x
           cache: npm
-          cache-dependency-path: server/package-lock.json
+          cache-dependency-path: game/package-lock.json
       - run: npm install
-      - run: npm install -g hathora
-      - run: hathora build
-        working-directory: .
       - run: npm run build --if-present
       - run: npm run lint
+      - run: npm run test
