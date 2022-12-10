@@ -6,5 +6,8 @@ export const config = (state: GameState, params: GameCommandConfigParams) => {
   return {
     ...state,
     numberOfPlayers: params.players,
+    rondel: {
+      pointingBefore: 0,
+    },
   }
 }

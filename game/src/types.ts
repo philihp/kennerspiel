@@ -34,6 +34,13 @@ export type GameState = {
   actionList: GameAction[]
   activePlayerIndex: number
   numberOfPlayers: number
+  rondel?: {
+    pointingBefore: number
+    wood?: number
+    clay?: number
+    coin?: number
+    joker?: number
+  }
 }
 
 export type GameCommand = (state: GameState, params?: GameCommandParams) => GameState | undefined

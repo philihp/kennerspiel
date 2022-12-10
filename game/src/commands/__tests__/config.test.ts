@@ -30,7 +30,7 @@ describe('commands/config', () => {
   })
 
   it('can config from setup', () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const dst = config(
       {
         ...initialState,
@@ -39,6 +39,7 @@ describe('commands/config', () => {
       { players: 3 }
     )
     expect(dst?.numberOfPlayers).toBe(3)
+    expect(dst?.rondel).toBeDefined()
   })
 
   it('cannot set numberOfPlayers past 4', () => {

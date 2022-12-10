@@ -36,6 +36,9 @@ describe('commands/commit', () => {
       numberOfPlayers: 3,
       activePlayerIndex: 0,
       status: GameStatusEnum.PLAYING,
+      rondel: {
+        pointingBefore: 0,
+      },
     })
     expect(dst?.activePlayerIndex).toBe(1)
   })
@@ -47,7 +50,24 @@ describe('commands/commit', () => {
       numberOfPlayers: 3,
       activePlayerIndex: 2,
       status: GameStatusEnum.PLAYING,
+      rondel: {
+        pointingBefore: 0,
+      },
     })
     expect(dst?.activePlayerIndex).toBe(0)
+  })
+
+  it('wrap around rondel', () => {
+    expect.assertions(1)
+    const dst = commit({
+      ...initialState,
+      numberOfPlayers: 3,
+      activePlayerIndex: 2,
+      status: GameStatusEnum.PLAYING,
+      rondel: {
+        pointingBefore: 12,
+      },
+    })
+    expect(dst?.rondel?.pointingBefore).toBe(0)
   })
 })

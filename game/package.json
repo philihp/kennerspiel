@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "test": "jest",
-    "lint": "eslint --ext .ts",
+    "lint": "eslint --ext .ts src/",
     "prepare": "cd .. && husky install game/.husky"
   },
   "devDependencies": {
@@ -43,7 +43,8 @@
       "@typescript-eslint"
     ],
     "extends": [
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "@philihp"
     ],
     "settings": {
       "react": {
