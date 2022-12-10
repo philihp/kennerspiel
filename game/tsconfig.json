@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "esnext",
+    "strict": true,
+    "target": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "outDir": "./dist",
+    "composite": true
+  },
+  "include": ["src/**/*"]
+}
