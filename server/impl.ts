@@ -4,14 +4,17 @@ import {
   GameStatus,
   Player,
   State,
+  Color,
   UserId,
   IInitializeRequest,
   IResetGameRequest,
-  IMakeMoveRequest,
   IJoinGameRequest,
-  IEndGameRequest,
   IStartGameRequest,
+  IEndGameRequest,
+  IMakeMoveRequest,
 } from '../api/types'
+
+type InternalState = State
 
 export class Impl implements Methods<State> {
   initialize(ctx: Context, request: IInitializeRequest): State {
