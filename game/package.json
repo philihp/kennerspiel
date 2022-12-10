@@ -1,9 +1,9 @@
 {
-  "name": "game",
+  "name": "hathora-et-labora-game",
   "type": "module",
   "scripts": {
     "test": "jest",
-    "lint": "eslint --ext .ts"
+    "lint": "eslint --ext .ts src/"
   },
   "dependencies": {},
   "devDependencies": {
@@ -66,10 +66,6 @@
           ]
         }
       }
-    },
-    "rules": {
-      "@typescript-eslint/no-unused-vars": "off",
-      "no-unused-vars": "off"
     }
   }
 }
