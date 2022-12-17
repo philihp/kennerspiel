@@ -1,5 +1,5 @@
-import { Methods, Context } from './.hathora/methods'
-import { Response } from '../api/base'
+import { Methods, Context } from "./.hathora/methods";
+import { Response } from "../api/base";
 import {
   GameStatus,
   Player,
@@ -12,9 +12,9 @@ import {
   IStartGameRequest,
   IEndGameRequest,
   IMakeMoveRequest,
-} from '../api/types'
+} from "../api/types";
 
-type InternalState = State
+type InternalState = State;
 
 export class Impl implements Methods<State> {
   initialize(ctx: Context, request: IInitializeRequest): State {
