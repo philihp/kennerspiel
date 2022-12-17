@@ -1,31 +1,25 @@
 import { initialState } from '../../reducer'
-import { GameStatusEnum } from '../../types'
+import { GameState, GameStatusEnum } from '../../types'
 import { commit } from '../commit'
 
 describe('commands/commit', () => {
   it('cannot commit from setup', () => {
     expect.assertions(1)
     expect(
-      commit(
-        {
-          ...initialState,
-          status: GameStatusEnum.SETUP,
-        },
-        { players: 3 }
-      )
+      commit({
+        ...initialState,
+        status: GameStatusEnum.SETUP,
+      })
     ).toBeUndefined()
   })
 
   it('cannot commit from finished', () => {
     expect.assertions(1)
     expect(
-      commit(
-        {
-          ...initialState,
-          status: GameStatusEnum.FINISHED,
-        },
-        { players: 2 }
-      )
+      commit({
+        ...initialState,
+        status: GameStatusEnum.FINISHED,
+      })
     ).toBeUndefined()
   })
 
@@ -33,7 +27,11 @@ describe('commands/commit', () => {
     expect.assertions(1)
     const dst = commit({
       ...initialState,
-      numberOfPlayers: 3,
+      config: {
+        players: 3,
+        country: 'ireland',
+        length: 'long',
+      },
       activePlayerIndex: 0,
       status: GameStatusEnum.PLAYING,
       rondel: {
@@ -47,7 +45,11 @@ describe('commands/commit', () => {
     expect.assertions(1)
     const dst = commit({
       ...initialState,
-      numberOfPlayers: 3,
+      config: {
+        players: 3,
+        country: 'france',
+        length: 'short',
+      },
       activePlayerIndex: 2,
       status: GameStatusEnum.PLAYING,
       rondel: {
@@ -59,15 +61,20 @@ describe('commands/commit', () => {
 
   it('wrap around rondel', () => {
     expect.assertions(1)
-    const dst = commit({
+    const src: GameState = {
       ...initialState,
-      numberOfPlayers: 3,
+      config: {
+        players: 3,
+        country: 'france',
+        length: 'long',
+      },
       activePlayerIndex: 2,
       status: GameStatusEnum.PLAYING,
       rondel: {
         pointingBefore: 12,
       },
-    })
+    }
+    const dst = commit(src)
     expect(dst?.rondel?.pointingBefore).toBe(0)
   })
 })
