@@ -1,3 +1,5 @@
+import fastShuffle from 'fast-shuffle'
+import { newRandGen, randNext } from 'fn-pcg'
 import {
   BuildingEnum,
   Clergy,
@@ -34,22 +36,46 @@ const makeLandscape = (color: PlayerColor) => {
 type StartParser = (params: string[]) => GameCommandStartParams
 
 const BAD_PARSE: GameCommandStartParams = {
+  seed: 0,
   colors: [],
+}
+
+const stringToColor: (s: string) => PlayerColor = (s) => {
+  switch (s) {
+    case 'RED':
+      return PlayerColor.Red
+    case 'GREEN':
+      return PlayerColor.Green
+    case 'BLUE':
+      return PlayerColor.Blue
+    case 'WHITE':
+    default:
+      return PlayerColor.White
+  }
 }
 
 export const parse: StartParser = (params) => {
   if (params === undefined) return BAD_PARSE
+  if (params.length <= 1 || params.length > 5) return BAD_PARSE
+  const [seedParam, ...colorParams] = params
+  const seed = Number.parseInt(seedParam, 10)
+  if (seed === undefined || Number.isNaN(seed)) return BAD_PARSE
+  const colors = colorParams.map(stringToColor)
   return {
-    colors: [],
+    seed,
+    colors,
   }
 }
 
-export const start = (state: GameState, { colors }: GameCommandStartParams) => {
+export const start = (state: GameState, { seed, colors }: GameCommandStartParams) => {
   if (state.status !== GameStatusEnum.SETUP) return undefined
   if (state.rondel === undefined) return undefined
   if (state.config === undefined) return undefined
   if (state.config.players === undefined) return undefined
   if (colors.length !== state.config.players) return undefined
+
+  const [playerOrderSeed, randGen] = randNext(newRandGen(seed))
+  const shuffledColors = fastShuffle(playerOrderSeed, colors)
 
   const players = new Array<Tableau>(state.config.players)
     .fill({
@@ -80,11 +106,12 @@ export const start = (state: GameState, { colors }: GameCommandStartParams) => {
     })
     .map((player, i) => ({
       ...player,
-      landscape: makeLandscape(colors[i]),
+      landscape: makeLandscape(shuffledColors[i]),
     }))
 
   return {
     ...state,
+    randGen,
     status: GameStatusEnum.PLAYING,
     players,
     rondel: {

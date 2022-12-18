@@ -5,7 +5,7 @@ import { parser } from './parser'
 import { GameCommandEnum, GameState, GameStatusEnum, Reducer } from './types'
 
 export const initialState: GameState = {
-  seed: 0,
+  randGen: 0n,
   status: GameStatusEnum.SETUP,
   activePlayerIndex: 0,
   actionList: [],

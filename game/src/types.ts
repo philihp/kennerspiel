@@ -1,3 +1,5 @@
+import { PCGState } from 'fn-pcg'
+
 export enum GameCommandEnum {
   CONFIG = 'CONFIG',
   START = 'START',
@@ -22,6 +24,7 @@ export enum PlayerColor {
 }
 
 export type GameCommandStartParams = {
+  seed: number
   colors: PlayerColor[]
 }
 
@@ -126,7 +129,7 @@ export type GameActionUndefined = { command: undefined; params: undefined }
 export type GameAction = GameActionCommit | GameActionConfig | GameActionStart | GameActionUndefined
 
 export type GameState = {
-  seed: number
+  randGen: PCGState
   status: GameStatusEnum
   actionList: GameAction[]
   activePlayerIndex: number
