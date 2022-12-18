@@ -29,8 +29,17 @@ describe('commands/start', () => {
     ).toBeUndefined()
   })
 
-  it('can start from setup', () => {
-    expect.assertions(2)
+  it('cannot start before configured', () => {
+    expect.assertions(1)
+    const dst = start({
+      ...initialState,
+      status: GameStatusEnum.SETUP,
+    })
+    expect(dst).toBeUndefined()
+  })
+
+  it('cannot start without config', () => {
+    expect.assertions(1)
     const dst = start({
       ...initialState,
       rondel: {
@@ -38,7 +47,23 @@ describe('commands/start', () => {
       },
       status: GameStatusEnum.SETUP,
     })
-    expect(dst?.status).toBe(GameStatusEnum.PLAYING)
-    expect(dst?.rondel).toBeDefined()
+    expect(dst).toBeUndefined()
+  })
+
+  it('can start after being configured', () => {
+    expect.assertions(1)
+    const dst = start({
+      ...initialState,
+      status: GameStatusEnum.SETUP,
+      rondel: {
+        pointingBefore: 0,
+      },
+      config: {
+        players: 2,
+        country: 'france',
+        length: 'short',
+      },
+    })
+    expect(dst).toBeDefined()
   })
 })

@@ -25,12 +25,11 @@ export const parse: ConfigParser = (params) => {
   if (!['ireland', 'france'].includes(country)) return BAD_PARSE
   const length = params[2]
   if (!['short', 'long'].includes(length)) return BAD_PARSE
-  const out: GameCommandConfigParams = {
+  return {
     players: players as GameConfigPlayers,
     country: country as GameConfigCountry,
     length: length as GameConfigLength,
   }
-  return out
 }
 
 export const config = (state: GameState, params: GameCommandConfigParams) => {
