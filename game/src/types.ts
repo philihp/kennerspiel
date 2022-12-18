@@ -14,6 +14,17 @@ export type GameCommandConfigParams = {
   country?: GameConfigCountry
 }
 
+export enum PlayerColor {
+  Red = 'R',
+  Green = 'G',
+  Blue = 'B',
+  White = 'W',
+}
+
+export type GameCommandStartParams = {
+  colors: PlayerColor[]
+}
+
 export enum GameStatusEnum {
   SETUP = 'SETUP',
   PLAYING = 'PLAYING',
@@ -82,13 +93,35 @@ export type Tile = [LandEnum, BuildingEnum?]
 export type Tableau = {
   clergy: Clergy[]
   landscape: Tile[][]
+  peat: number
+  penny: number
+  clay: number
+  wood: number
+  grain: number
+  sheep: number
+  stone: number
+  flour: number
+  grapes: number
+  nickel: number
+  hops: number
+  coal: number
+  book: number
+  pottery: number
+  whiskey: number
+  straw: number
+  meat: number
+  ornament: number
+  bread: number
+  wine: number
+  beer: number
+  reliquary: number
 }
 
 export type GameUnparsedAction = string[]
 
 export type GameActionCommit = { command: GameCommandEnum.COMMIT; params: undefined }
 export type GameActionConfig = { command: GameCommandEnum.CONFIG; params: GameCommandConfigParams }
-export type GameActionStart = { command: GameCommandEnum.START; params: undefined }
+export type GameActionStart = { command: GameCommandEnum.START; params: GameCommandStartParams }
 export type GameActionUndefined = { command: undefined; params: undefined }
 export type GameAction = GameActionCommit | GameActionConfig | GameActionStart | GameActionUndefined
 

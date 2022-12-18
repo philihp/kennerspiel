@@ -1,5 +1,6 @@
 import { GameCommandEnum, Parser } from './types'
 import { parse as parseConfig } from './commands/config'
+import { parse as parseStart } from './commands/start'
 
 export const parser: Parser = ([command, ...params]) => {
   switch (command) {
@@ -16,7 +17,7 @@ export const parser: Parser = ([command, ...params]) => {
     case GameCommandEnum.START:
       return {
         command: GameCommandEnum.START,
-        params: undefined,
+        params: parseStart(params),
       }
   }
   return {

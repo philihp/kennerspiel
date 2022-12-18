@@ -17,7 +17,7 @@ export const reducer: Reducer = (state, action) => {
     case GameCommandEnum.CONFIG:
       return config(state, params)
     case GameCommandEnum.START:
-      return start(state)
+      return start(state, params)
     case GameCommandEnum.COMMIT:
       return commit(state)
     default:
