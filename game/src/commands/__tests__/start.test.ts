@@ -51,7 +51,7 @@ describe('commands/start', () => {
   })
 
   it('can start after being configured', () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const dst = start({
       ...initialState,
       status: GameStatusEnum.SETUP,
@@ -65,5 +65,44 @@ describe('commands/start', () => {
       },
     })
     expect(dst).toBeDefined()
+    expect(dst?.players).toHaveLength(2)
+  })
+
+  it('creates a tableau for every player', () => {
+    expect.assertions(10)
+    const dst = start({
+      ...initialState,
+      status: GameStatusEnum.SETUP,
+      rondel: {
+        pointingBefore: 0,
+      },
+      config: {
+        players: 4,
+        country: 'france',
+        length: 'short',
+      },
+    })
+    expect(dst).toBeDefined()
+    expect(dst?.players).toHaveLength(4)
+    expect(dst?.players?.[0]?.landscape).toStrictEqual([
+      [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
+      [['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
+    ])
+    expect(dst?.players?.[0]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+    expect(dst?.players?.[1]?.landscape).toStrictEqual([
+      [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LG1']],
+      [['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P'], ['P', 'LG3']],
+    ])
+    expect(dst?.players?.[1]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+    expect(dst?.players?.[2]?.landscape).toStrictEqual([
+      [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1']],
+      [['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3']],
+    ])
+    expect(dst?.players?.[2]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+    expect(dst?.players?.[3]?.landscape).toStrictEqual([
+      [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LW1']],
+      [['P', 'LPE'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3']],
+    ])
+    expect(dst?.players?.[3]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
   })
 })

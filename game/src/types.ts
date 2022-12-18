@@ -20,6 +20,70 @@ export enum GameStatusEnum {
   FINISHED = 'FINISHED',
 }
 
+export enum LandEnum {
+  Hillside = 'H',
+  Plains = 'P',
+  Coast = 'C',
+  Water = 'W',
+  Mountain = 'M',
+}
+
+export enum ResourceEnum {
+  Wood = 'Wo',
+  Whiskey = 'Wh',
+  Grain = 'Gn',
+  Straw = 'Sw',
+  Meat = 'Mt',
+  Clay = 'Cl',
+  Pottery = 'Po',
+  Peat = 'Pt',
+  Coal = 'Co',
+  Penny = 'Pn',
+  Book = 'Bo',
+  Stone = 'Sn',
+  Ornament = 'Or',
+  Flour = 'Fl',
+  Bread = 'Br',
+  Grape = 'Gp',
+  Wine = 'Wn',
+  Nickel = 'Ni',
+  Reliquary = 'Rq',
+  Hops = 'Ho',
+  Beear = 'Be',
+  BonusPoint = 'Bp',
+  Joker = 'Jo', // Use the Joker
+}
+
+export enum BuildingEnum {
+  Peat = 'LPE',
+  Forest = 'LFO',
+  ClayMoundR = 'LR1',
+  ClayMoundG = 'LG1',
+  ClayMoundB = 'LB1',
+  ClayMoundW = 'LW1',
+  FarmYardR = 'LR2',
+  FarmYardG = 'LG2',
+  FarmYardB = 'LB2',
+  FarmYardW = 'LW2',
+  CloisterOfficeR = 'LR3',
+  CloisterOfficeG = 'LG3',
+  CloisterOfficeB = 'LB3',
+  CloisterOfficeW = 'LW3',
+}
+
+export enum Clergy {
+  laybrother1 = 'LayBrother1',
+  laybrother2 = 'LayBrother2',
+  prior = 'Prior',
+}
+
+export type Tile = [LandEnum, BuildingEnum?]
+
+export type Tableau = {
+  clergy: Clergy[]
+  landscape: Tile[][]
+}
+
 export type GameUnparsedAction = string[]
 
 export type GameActionCommit = { command: GameCommandEnum.COMMIT; params: undefined }
@@ -41,6 +105,7 @@ export type GameState = {
     coin?: number
     joker?: number
   }
+  players?: Tableau[]
 }
 
 export type GameCommand = (state: GameState, params?: unknown) => GameState | undefined
