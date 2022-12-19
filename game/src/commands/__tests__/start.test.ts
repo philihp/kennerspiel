@@ -1,5 +1,6 @@
 import { initialState } from '../../reducer'
 import { GameStatusEnum, PlayerColor } from '../../types'
+import { config } from '../config'
 import { parse, start } from '../start'
 
 describe('commands/start', () => {
@@ -107,22 +108,22 @@ describe('commands/start', () => {
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LW1']],
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3']],
       ])
-      expect(dst?.players?.[0]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+      expect(dst?.players?.[0]?.clergy).toStrictEqual(['LB1W', 'LB2W', 'PRIW'])
       expect(dst?.players?.[1]?.landscape).toStrictEqual([
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1']],
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3']],
       ])
-      expect(dst?.players?.[1]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+      expect(dst?.players?.[1]?.clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
       expect(dst?.players?.[2]?.landscape).toStrictEqual([
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LG1']],
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P'], ['P', 'LG3']],
       ])
-      expect(dst?.players?.[2]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+      expect(dst?.players?.[2]?.clergy).toStrictEqual(['LB1G', 'LB2G', 'PRIG'])
       expect(dst?.players?.[3]?.landscape).toStrictEqual([
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
       ])
-      expect(dst?.players?.[3]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+      expect(dst?.players?.[3]?.clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
     })
 
     it('responds to alternate starting color order', () => {
@@ -148,17 +149,31 @@ describe('commands/start', () => {
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
       ])
-      expect(dst?.players?.[0]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+      expect(dst?.players?.[0]?.clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
       expect(dst?.players?.[1]?.landscape).toStrictEqual([
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1']],
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3']],
       ])
-      expect(dst?.players?.[1]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+      expect(dst?.players?.[1]?.clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
       expect(dst?.players?.[2]?.landscape).toStrictEqual([
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LW1']],
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3']],
       ])
-      expect(dst?.players?.[2]?.clergy).toStrictEqual(['LayBrother1', 'LayBrother2', 'Prior'])
+      expect(dst?.players?.[2]?.clergy).toStrictEqual(['LB1W', 'LB2W', 'PRIW'])
+    })
+
+    it('sets round, and moveInRound, and a starting player', () => {
+      expect.assertions(4)
+      const s0 = initialState
+      const s1 = config(s0!, { country: 'france', players: 4, length: 'long' })
+      const s2 = start(s1!, {
+        colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
+        seed: 12345,
+      })
+      expect(s2?.moveInRound).toBe(1)
+      expect(s2?.round).toBe(1)
+      expect(s2?.startingPlayer).toBeGreaterThanOrEqual(0)
+      expect(s2?.startingPlayer).toBeLessThan(4)
     })
   })
   describe('parser', () => {

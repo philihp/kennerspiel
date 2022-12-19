@@ -95,9 +95,18 @@ export type GameCommandUseParams = {
 }
 
 export enum Clergy {
-  laybrother1 = 'LayBrother1',
-  laybrother2 = 'LayBrother2',
-  prior = 'Prior',
+  LayBrother1R = 'LB1R',
+  LayBrother2R = 'LB2R',
+  PriorR = 'PRIR',
+  LayBrother1G = 'LB1G',
+  LayBrother2G = 'LB2G',
+  PriorG = 'PRIG',
+  LayBrother1B = 'LB1B',
+  LayBrother2B = 'LB2B',
+  PriorB = 'PRIB',
+  LayBrother1W = 'LB1W',
+  LayBrother2W = 'LB2W',
+  PriorW = 'PRIW',
 }
 
 export type Tile = [LandEnum, BuildingEnum?]
@@ -156,6 +165,9 @@ export type GameState = {
     stone?: number
   }
   players?: Tableau[]
+  moveInRound?: number
+  round?: number
+  startingPlayer?: number
 }
 
 export type GameCommand = (state: GameState, params?: unknown) => GameState | undefined

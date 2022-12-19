@@ -1,6 +1,6 @@
 import { initialState } from '../../reducer'
 import { Tableau } from '../../types'
-import { getActivePlayer, setActivePlayer } from '../player'
+import { getPlayer, setPlayer } from '../player'
 
 const p: Tableau = {
   clergy: [],
@@ -30,35 +30,53 @@ const p: Tableau = {
 }
 
 describe('board/player', () => {
-  describe('getActivePlayer', () => {
+  describe('getPlayer', () => {
     it('gets the active player', () => {
       expect.assertions(1)
-      const p1 = { ...p }
-      const p2 = { ...p }
-      const p3 = { ...p }
-      const src = { ...initialState, activePlayerIndex: 1, players: [p1, p2, p3] }
-      expect(getActivePlayer(src)).toBe(p2)
+      const p0: Tableau = { ...p, coal: 1 }
+      const p1: Tableau = { ...p, meat: 1 }
+      const p2: Tableau = { ...p, beer: 1 }
+      const src = { ...initialState, activePlayerIndex: 1, players: [p0, p1, p2] }
+      expect(getPlayer(src)?.meat).toBe(1)
+    })
+    it('gets the indexed player', () => {
+      expect.assertions(1)
+      const p0: Tableau = { ...p, coal: 1 }
+      const p1: Tableau = { ...p, meat: 1 }
+      const p2: Tableau = { ...p, beer: 1 }
+      const src = { ...initialState, activePlayerIndex: 1, players: [p0, p1, p2] }
+      expect(getPlayer(src, 0)?.coal).toBe(1)
     })
     it('returns undefined if no players', () => {
       expect.assertions(1)
       const src = { ...initialState, activePlayerIndex: 1, players: undefined }
-      expect(getActivePlayer(src)).toBeUndefined()
+      expect(getPlayer(src)).toBeUndefined()
     })
     it('out of bounds returns undefined', () => {
       expect.assertions(1)
       const src = { ...initialState, activePlayerIndex: 4, players: [p, p, p] }
-      expect(getActivePlayer(src)).toBeUndefined()
+      expect(getPlayer(src)).toBeUndefined()
     })
   })
-  describe('setActivePlayer', () => {
+  describe('setPlayer', () => {
     it('sets the active player only', () => {
       expect.assertions(4)
       const src = { ...initialState, activePlayerIndex: 2, players: [p, p, p, p] }
       const player: Tableau = { ...p, wood: 5 }
-      const dst = setActivePlayer(src, player)
+      const dst = setPlayer(src, player)
       expect(dst?.players?.[0].wood).toBe(0)
       expect(dst?.players?.[1].wood).toBe(0)
       expect(dst?.players?.[2].wood).toBe(5)
+      expect(dst?.players?.[3].wood).toBe(0)
+    })
+    it('sets the indexed player', () => {
+      expect.assertions(4)
+      const src = { ...initialState, activePlayerIndex: 2, players: [p, p, p, p] }
+      const player: Tableau = { ...p, wood: 5 }
+      const dst = setPlayer(src, player, 1)
+      expect(dst?.players?.[0].wood).toBe(0)
+      expect(dst?.players?.[1].wood).toBe(5)
+      expect(dst?.players?.[2].wood).toBe(0)
       expect(dst?.players?.[3].wood).toBe(0)
     })
   })

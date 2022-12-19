@@ -1,5 +1,6 @@
 import fastShuffle from 'fast-shuffle'
-import { newRandGen, randNext } from 'fn-pcg'
+import { newRandGen, randNext, randRange } from 'fn-pcg'
+import { clergy } from '../board/player'
 import {
   BuildingEnum,
   Clergy,
@@ -74,12 +75,14 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
   if (state.config.players === undefined) return undefined
   if (colors.length !== state.config.players) return undefined
 
-  const [playerOrderSeed, randGen] = randNext(newRandGen(seed))
+  const randGen0 = newRandGen(seed)
+  const [playerOrderSeed, randGen1] = randNext(randGen0)
+  const [startingPlayer, randGen2] = randRange(0, state.config.players, randGen1)
   const shuffledColors = fastShuffle(playerOrderSeed, colors)
 
   const players = new Array<Tableau>(state.config.players)
     .fill({
-      clergy: [Clergy.laybrother1, Clergy.laybrother2, Clergy.prior],
+      clergy: [],
       landscape: [[]],
       peat: 1,
       penny: 1,
@@ -107,11 +110,12 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
     .map((player, i) => ({
       ...player,
       landscape: makeLandscape(shuffledColors[i]),
+      clergy: clergy(shuffledColors[i]),
     }))
 
   return {
     ...state,
-    randGen,
+    randGen: randGen2,
     status: GameStatusEnum.PLAYING,
     players,
     rondel: {
@@ -126,5 +130,8 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
       stone: 0,
       joker: 0,
     },
+    round: 1,
+    moveInRound: 1,
+    startingPlayer,
   }
 }
