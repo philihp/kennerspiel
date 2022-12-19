@@ -4,6 +4,7 @@ export enum GameCommandEnum {
   CONFIG = 'CONFIG',
   START = 'START',
   COMMIT = 'COMMIT',
+  USE = 'USE',
 }
 
 export type GameConfigPlayers = 1 | 2 | 3 | 4
@@ -47,6 +48,7 @@ export enum ResourceEnum {
   Whiskey = 'Wh',
   Grain = 'Gn',
   Straw = 'Sw',
+  Sheep = 'Sh',
   Meat = 'Mt',
   Clay = 'Cl',
   Pottery = 'Po',
@@ -63,7 +65,7 @@ export enum ResourceEnum {
   Nickel = 'Ni',
   Reliquary = 'Rq',
   Hops = 'Ho',
-  Beear = 'Be',
+  Beer = 'Be',
   BonusPoint = 'Bp',
   Joker = 'Jo', // Use the Joker
 }
@@ -83,6 +85,13 @@ export enum BuildingEnum {
   CloisterOfficeG = 'LG3',
   CloisterOfficeB = 'LB3',
   CloisterOfficeW = 'LW3',
+}
+
+export type GameCommandUseParams = {
+  building?: BuildingEnum
+  p1?: ResourceEnum[]
+  p2?: ResourceEnum[]
+  coords?: number[][] // TODO??
 }
 
 export enum Clergy {

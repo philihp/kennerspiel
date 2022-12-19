@@ -1,6 +1,5 @@
 import {
   GameCommandConfigParams,
-  GameCommandEnum,
   GameConfigCountry,
   GameConfigLength,
   GameConfigPlayers,
