@@ -116,9 +116,14 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
     players,
     rondel: {
       ...state.rondel,
-      wood: 0,
+      grain: 0,
+      peat: 0,
+      sheep: 0,
       clay: 0,
       coin: 0,
+      wood: 0,
+      grape: 0,
+      stone: 0,
       joker: 0,
     },
   }
