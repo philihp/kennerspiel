@@ -149,6 +149,11 @@ export type GameState = {
     clay?: number
     coin?: number
     joker?: number
+    grain?: number
+    peat?: number
+    sheep?: number
+    grape?: number
+    stone?: number
   }
   players?: Tableau[]
 }

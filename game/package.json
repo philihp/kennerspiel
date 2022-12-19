@@ -77,6 +77,16 @@
       "default-case": "off",
       "no-param-reassign": "off",
       "no-unused-vars": "off"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*"
+        ],
+        "rules": {
+          "@typescript-eslint/no-non-null-assertion": "off"
+        }
+      }
+    ]
   }
 }
