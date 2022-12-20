@@ -36,3 +36,61 @@ export const preMove = (state: GameState): GameState | undefined => {
 
   return newState
 }
+
+export const postMove = (state: GameState): GameState | undefined => {
+  if (state.config === undefined) return undefined
+  if (state.players === undefined) return undefined
+  if (state.moveInRound === undefined) return undefined
+  if (state.round === undefined) return undefined
+  if (state.startingPlayer === undefined) return undefined
+
+  let { round, settling, extraRound, activePlayerIndex, moveInRound, startingPlayer } = state
+  activePlayerIndex = (activePlayerIndex + 1) % state.players.length
+  moveInRound += 1
+
+  if (extraRound && moveInRound === state.players.length + 1) {
+    // board.postExtraRound()
+    extraRound = false
+    settling = true
+    moveInRound = 1
+  }
+
+  if (moveInRound === state.players.length + 1 || settling) {
+    // board.postSettlement()
+    settling = false
+    // TODO: layout unbuilt buildings
+    // TODO: layout unbuilt settlements
+    // TODO: push arm, set gameover after settlement E
+
+    round++
+    moveInRound = 1
+  } else if (!settling && moveInRound === state.players.length) {
+    // board.postRound()
+    moveInRound = 1
+
+    // if(isExtraRound(board.getRound())) {
+    // if (false) {
+    //   round += 1
+    //   extraRound = true
+    // }
+    // // else if(board.isRoundBeforeSettlement(board.getRound())) {
+    // else if (false) {
+    //   settling = true
+    // } else {
+    round++
+    // }
+
+    // 5 -- pass starting player
+    startingPlayer = (startingPlayer + 1) % state.players.length
+  }
+
+  return {
+    ...state,
+    round,
+    settling,
+    extraRound,
+    activePlayerIndex,
+    moveInRound,
+    startingPlayer,
+  }
+}

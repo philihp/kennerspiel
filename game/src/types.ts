@@ -166,9 +166,13 @@ export type GameState = {
     stone?: number
   }
   players?: Tableau[]
+  settling: boolean
+  extraRound: boolean
   moveInRound?: number
   round?: number
   startingPlayer?: number
+  plotPurchasePrices: number[]
+  districtPurchasePrices: number[]
 }
 
 export type GameCommand = (state: GameState, params?: unknown) => GameState | undefined
@@ -176,3 +180,40 @@ export type GameCommand = (state: GameState, params?: unknown) => GameState | un
 export type Reducer = (state: GameState, action: string[]) => GameState | undefined
 
 export type Parser = (action: GameUnparsedAction) => GameAction
+
+export enum SettlementRound {
+  L = 'L',
+  S = 'S',
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+}
+
+// export type GameMode = {
+//   roundBuildings: BuildingEnum[]
+//   futureBuildings: BuildingEnum[]
+//   isExtraRound: (round: number) => boolean
+//   roundBeforeSettlement: (round: number) => SettlementRound | undefined
+//   postMove: (state: GameState) => GameState
+//   isNeutralBuidingPhase: boolean
+//   preRound: (state: GameState) => GameState
+//   postRound: (state: GameState) => GameState
+//   grapeActiveOnRound: number
+//   stoneActiveOnRound: number
+//   jokerActiveOnRound: number
+//   movesInRound: number
+//   lastSettlementAfterRound: number
+//   customizeLandscape?: (landscape: Tile[][]) => Tile[][]
+//   productionBonusActive: boolean
+//   roundStartBonusActive: boolean
+//   secondLayBrotherUsed: boolean
+//   distributeProductionBonus: () => never
+//   plotPurchasePrices: number[]
+//   districtPurchasePrices: number[]
+//   neutralPlayerUsed: boolean
+//   grapesUsed: boolean
+//   stoneUsed: boolean
+//   priorSpecialInExtraRound: boolean
+// }

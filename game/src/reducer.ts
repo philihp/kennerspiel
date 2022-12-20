@@ -9,6 +9,10 @@ export const initialState: GameState = {
   status: GameStatusEnum.SETUP,
   activePlayerIndex: 0,
   actionList: [],
+  settling: false,
+  extraRound: false,
+  plotPurchasePrices: [],
+  districtPurchasePrices: [],
 }
 
 export const reducer: Reducer = (state, action) => {
