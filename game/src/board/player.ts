@@ -1,6 +1,6 @@
 import { Clergy, GameState, PlayerColor, Tableau } from '../types'
 
-export const clergy = (color: PlayerColor): Clergy[] => {
+export const clergyForColor = (color: PlayerColor): Clergy[] => {
   switch (color) {
     case PlayerColor.Red:
       return [Clergy.LayBrother1R, Clergy.LayBrother2R, Clergy.PriorR]

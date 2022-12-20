@@ -13,7 +13,7 @@ describe('buildings/farmyard', () => {
       const s2 = start(s1!, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })
       expect(s2).toBeDefined()
       expect(s2?.activePlayerIndex).toBe(0)
-      expect(s2?.players[0].landscape?.[1][2]).toStrictEqual(['P', 'LR2'])
+      expect(s2?.players![0].landscape?.[1][2]).toStrictEqual(['P', 'LR2'])
       const s3 = use(s2!, { building: BuildingEnum.FarmYardR, p1: [ResourceEnum.Sheep] })
       expect(s3?.rondel?.sheep).toBe(s3?.rondel?.pointingBefore)
     })

@@ -1,6 +1,6 @@
 import fastShuffle from 'fast-shuffle'
 import { newRandGen, randNext, randRange } from 'fn-pcg'
-import { clergy } from '../board/player'
+import { clergyForColor } from '../board/player'
 import {
   BuildingEnum,
   Clergy,
@@ -68,7 +68,7 @@ export const parse: StartParser = (params) => {
   }
 }
 
-export const start = (state: GameState, { seed, colors }: GameCommandStartParams) => {
+export const start = (state: GameState, { seed, colors }: GameCommandStartParams): GameState | undefined => {
   if (state.status !== GameStatusEnum.SETUP) return undefined
   if (state.rondel === undefined) return undefined
   if (state.config === undefined) return undefined
@@ -82,6 +82,7 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
 
   const players = new Array<Tableau>(state.config.players)
     .fill({
+      color: PlayerColor.Red, // placeholder
       clergy: [],
       landscape: [[]],
       peat: 1,
@@ -109,8 +110,9 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
     })
     .map((player, i) => ({
       ...player,
+      color: shuffledColors[i],
       landscape: makeLandscape(shuffledColors[i]),
-      clergy: clergy(shuffledColors[i]),
+      clergy: clergyForColor(shuffledColors[i]),
     }))
 
   return {

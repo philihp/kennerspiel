@@ -31,7 +31,7 @@ export const parse: ConfigParser = (params) => {
   }
 }
 
-export const config = (state: GameState, params: GameCommandConfigParams) => {
+export const config = (state: GameState, params: GameCommandConfigParams): GameState | undefined => {
   if (state.status !== GameStatusEnum.SETUP) return undefined
   return {
     ...state,

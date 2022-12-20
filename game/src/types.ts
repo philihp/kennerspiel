@@ -109,9 +109,10 @@ export enum Clergy {
   PriorW = 'PRIW',
 }
 
-export type Tile = [LandEnum, BuildingEnum?]
+export type Tile = [LandEnum, BuildingEnum?, Clergy?]
 
 export type Tableau = {
+  color: PlayerColor
   clergy: Clergy[]
   landscape: Tile[][]
   peat: number

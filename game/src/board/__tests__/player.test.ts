@@ -1,8 +1,9 @@
 import { initialState } from '../../reducer'
-import { Tableau } from '../../types'
+import { PlayerColor, Tableau } from '../../types'
 import { getPlayer, setPlayer } from '../player'
 
 const p: Tableau = {
+  color: PlayerColor.Red,
   clergy: [],
   landscape: [],
   peat: 0,
