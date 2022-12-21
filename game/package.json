@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "fast-shuffle": "5.0.2",
-    "fn-pcg": "1.0.0"
+    "fn-pcg": "1.0.0",
+    "ts-pattern": "^4.0.6"
   },
   "devDependencies": {
     "@philihp/eslint-config": "6.0.2",
