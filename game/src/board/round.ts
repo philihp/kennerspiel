@@ -1,15 +1,21 @@
-import { GameState, GameStatusEnum, Tile } from '../types'
+import { GameState, GameStatusEnum, Rondel, Tile } from '../types'
 import { clergyForColor, setPlayer } from './player'
 
 export const preMove = (state: GameState): GameState | undefined => {
   let newState = state
   if (state.status !== GameStatusEnum.PLAYING) return undefined
   if (state.players === undefined) return undefined
+  if (state.moveInRound === undefined) return undefined
+  if (state.rondel === undefined) return undefined
+  if (state.config === undefined) return undefined
 
   // TODO: isExtraRound
   // TODO: isSettling
 
-  if (state?.moveInRound === 1) {
+  if (state.moveInRound === 1) {
+    // board.preRound()
+
+    // 1 - reset clergymen
     state.players.forEach((player, i) => {
       if (player.clergy.length === 0) {
         // clergy are all placed
@@ -32,6 +38,38 @@ export const preMove = (state: GameState): GameState | undefined => {
         )
       }
     })
+
+    // 2 - push arm
+    const { rondel } = state
+    const next = rondel.pointingBefore + (1 % 13)
+    const bumper = (from?: number) => {
+      if (from === next) {
+        if (state.config?.players === 1) return undefined
+        return (from + 1) % 13
+      }
+      return from
+    }
+    const newRondel: Rondel = {
+      ...rondel,
+      pointingBefore: next,
+      grain: bumper(rondel.grain),
+      sheep: bumper(rondel.sheep),
+      clay: bumper(rondel.clay),
+      coin: bumper(rondel.coin),
+      wood: bumper(rondel.wood),
+      joker: bumper(rondel.joker),
+      peat: bumper(rondel.peat),
+      grape: bumper(rondel.grape),
+      stone: bumper(rondel.stone),
+    }
+    newState.rondel = newRondel
+
+    // mode.preRound();
+
+    // 3 - check to see if grapes/stone should become active
+    // if(round == mode.grapeActiveOnRound()) getWheel().getGrape().setActive(true);
+    // if(round == mode.stoneActiveOnRound()) getWheel().getStone().setActive(true);
+    // if(round == mode.jokerActiveOnRound()) getWheel().getJoker().setActive(true);
   }
 
   return newState

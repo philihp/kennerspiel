@@ -139,6 +139,19 @@ export type Tableau = {
   reliquary: number
 }
 
+export type Rondel = {
+  pointingBefore: number
+  wood?: number
+  clay?: number
+  coin?: number
+  joker?: number
+  grain?: number
+  peat?: number
+  sheep?: number
+  grape?: number
+  stone?: number
+}
+
 export type GameUnparsedAction = string[]
 
 export type GameActionCommit = { command: GameCommandEnum.COMMIT; params: undefined }
@@ -153,18 +166,7 @@ export type GameState = {
   actionList: GameAction[]
   activePlayerIndex: number
   config?: GameCommandConfigParams
-  rondel?: {
-    pointingBefore: number
-    wood?: number
-    clay?: number
-    coin?: number
-    joker?: number
-    grain?: number
-    peat?: number
-    sheep?: number
-    grape?: number
-    stone?: number
-  }
+  rondel?: Rondel
   players?: Tableau[]
   settling: boolean
   extraRound: boolean

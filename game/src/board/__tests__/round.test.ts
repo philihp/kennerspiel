@@ -7,6 +7,7 @@ import { preMove } from '../round'
 describe('board/round', () => {
   describe('preMove', () => {
     it('removes all clergy if all are placed', () => {
+      expect.assertions(2)
       const s0 = initialState
       const s1 = config(s0, { country: 'ireland', length: 'long', players: 2 })
       const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })
@@ -48,6 +49,7 @@ describe('board/round', () => {
     })
 
     it('doesnt update anything if clergy still unplaced', () => {
+      expect.assertions(4)
       const s0 = initialState
       const s1 = config(s0, { country: 'ireland', length: 'long', players: 2 })
       const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })
@@ -88,6 +90,20 @@ describe('board/round', () => {
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1', 'LB1B']],
         [['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3', 'PRIB']],
       ])
+    })
+
+    it('pushes the arm forward', () => {
+      expect.assertions(2)
+      const s0 = initialState
+      const s1 = config(s0, { country: 'ireland', length: 'long', players: 2 })!
+      const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
+      const s3: GameState = {
+        ...s2,
+        moveInRound: 1,
+      }
+      expect(s3.rondel?.pointingBefore).toBe(0)
+      const s4 = preMove(s3)!
+      expect(s4.rondel?.pointingBefore).toBe(1)
     })
   })
 })
