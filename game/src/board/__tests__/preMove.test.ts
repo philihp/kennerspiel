@@ -104,7 +104,7 @@ describe('board/preMove', () => {
   })
 
   it('pushes the arm forward', () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const configuration = {
       players: 3 as GameConfigPlayers,
       country: 'ireland' as GameConfigCountry,
@@ -114,5 +114,6 @@ describe('board/preMove', () => {
     const s1 = config(s0, configuration)!
     const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue] })!
     expect(s2.rondel?.pointingBefore).toBe(1)
+    expect(s2.buildings).toStrictEqual(['G01', 'G02', 'I04', 'I05', 'G06', 'G07', 'I08', 'I09', 'I11', 'G12'])
   })
 })

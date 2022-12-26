@@ -1,5 +1,6 @@
 import fastShuffle from 'fast-shuffle'
 import { newRandGen, randNext, randRange } from 'fn-pcg'
+import { roundBuildings } from '../board/buildings'
 import { mode } from '../board/mode'
 import { clergyForColor } from '../board/player'
 import { preMove } from '../board/preMove'
@@ -103,6 +104,7 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
     round: 1,
     moveInRound: 1,
     startingPlayer,
+    buildings: roundBuildings(state.config, state.settlementRound),
   }
 
   const { preMove } = mode(state.config)
