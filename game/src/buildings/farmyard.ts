@@ -1,4 +1,4 @@
-import { getActivePlayer, setActivePlayer } from '../board/player'
+import { getPlayer, setPlayer } from '../board/player'
 import { take } from '../board/wheel'
 import { GameCommandUseParams, GameState, ResourceEnum } from '../types'
 
@@ -26,7 +26,7 @@ export const use = (state: GameState, { building, p1 }: GameCommandUseParams): G
 
   const takenValue = take(rondel.pointingBefore, tokenIndex, state.config)
 
-  const oldPlayer = getActivePlayer(state)
+  const oldPlayer = getPlayer(state)
   if (oldPlayer === undefined) return undefined
   const newPlayer = { ...oldPlayer }
 
@@ -38,5 +38,5 @@ export const use = (state: GameState, { building, p1 }: GameCommandUseParams): G
     return undefined
   }
 
-  return setActivePlayer(state, newPlayer)
+  return setPlayer(state, newPlayer)
 }

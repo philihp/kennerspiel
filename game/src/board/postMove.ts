@@ -1,5 +1,6 @@
-import { match } from 'ts-pattern'
+import { match, P } from 'ts-pattern'
 import { GameCommandConfigParams, GameState, PostMoveHandler } from '../types'
+import { roundBuildings } from './buildings'
 import { settlementRounds } from './settlements'
 
 export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
@@ -61,7 +62,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       moveInRound++
 
       if (settling && moveInRound === 3) {
-        // board.postSettlement()
+        settling = false
       } else if (!settling && moveInRound === 4) {
         // board.postRound
         moveInRound = 1
@@ -75,7 +76,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
 
       return { ...state, round, settling, moveInRound }
     })
-    .with({ players: 4 }, { players: 3 }, () => (state: GameState) => {
+    .with({ players: P.union(3, 4) }, () => (state: GameState) => {
       if (state.config === undefined) return undefined
       if (state.players === undefined) return undefined
       if (state.moveInRound === undefined) return undefined
@@ -96,6 +97,8 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (moveInRound === state.players.length + 1 || settling) {
         // board.postSettlement()
         settling = false
+
+        const newBuildings = roundBuildings(state.config, state.settlementRound)
         // TODO: layout unbuilt buildings
         // TODO: layout unbuilt settlements
         // TODO: push arm, set gameover after settlement E
