@@ -1,7 +1,8 @@
+import { parser } from '../../parser'
 import { initialState } from '../../reducer'
 import { GameStatusEnum, PlayerColor } from '../../types'
 import { config } from '../config'
-import { parse, start } from '../start'
+import { start } from '../start'
 
 describe('commands/start', () => {
   describe('start', () => {
@@ -179,17 +180,21 @@ describe('commands/start', () => {
   describe('parser', () => {
     it('parses colors', () => {
       expect.assertions(1)
-      expect(parse(['12345', 'RED', 'BLUE'])).toStrictEqual({
-        seed: 12345,
-        colors: ['R', 'B'],
+      expect(parser(['START', '12345', 'R', 'B'])).toStrictEqual({
+        command: 'START',
+        params: {
+          seed: 12345,
+          colors: ['R', 'B'],
+        },
       })
     })
     it('fails if no colors', () => {
       expect.assertions(1)
-      expect(parse(['42'])).toStrictEqual({
-        seed: 0,
-        colors: [],
-      })
+      expect(parser(['START', '42'])).toBeUndefined()
+    })
+    it('fails if not a number for seed', () => {
+      expect.assertions(1)
+      expect(parser(['START', 'ABC', 'R', 'B'])).toBeUndefined()
     })
   })
 })

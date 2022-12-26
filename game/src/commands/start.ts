@@ -34,40 +34,6 @@ const makeLandscape = (color: PlayerColor) => {
   ]
 }
 
-type StartParser = (params: string[]) => GameCommandStartParams
-
-const BAD_PARSE: GameCommandStartParams = {
-  seed: 0,
-  colors: [],
-}
-
-const stringToColor: (s: string) => PlayerColor = (s) => {
-  switch (s) {
-    case 'RED':
-      return PlayerColor.Red
-    case 'GREEN':
-      return PlayerColor.Green
-    case 'BLUE':
-      return PlayerColor.Blue
-    case 'WHITE':
-    default:
-      return PlayerColor.White
-  }
-}
-
-export const parse: StartParser = (params) => {
-  if (params === undefined) return BAD_PARSE
-  if (params.length <= 1 || params.length > 5) return BAD_PARSE
-  const [seedParam, ...colorParams] = params
-  const seed = Number.parseInt(seedParam, 10)
-  if (seed === undefined || Number.isNaN(seed)) return BAD_PARSE
-  const colors = colorParams.map(stringToColor)
-  return {
-    seed,
-    colors,
-  }
-}
-
 export const start = (state: GameState, { seed, colors }: GameCommandStartParams): GameState | undefined => {
   if (state.status !== GameStatusEnum.SETUP) return undefined
   if (state.rondel === undefined) return undefined

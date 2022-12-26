@@ -27,18 +27,20 @@ export const parser: Parser = (unparsedAction) =>
       })
     )
     .with(
-      [GameCommandEnum.START, P.number, PColor],
-      [GameCommandEnum.START, P.number, PColor, PColor],
-      [GameCommandEnum.START, P.number, PColor, PColor, PColor],
-      [GameCommandEnum.START, P.number, PColor, PColor, PColor, PColor],
-      ([_, seed, ...colors]) => {
+      [GameCommandEnum.START, P.string, PColor],
+      [GameCommandEnum.START, P.string, PColor, PColor],
+      [GameCommandEnum.START, P.string, PColor, PColor, PColor],
+      [GameCommandEnum.START, P.string, PColor, PColor, PColor, PColor],
+      ([_, unparsedSeed, ...colors]) => {
+        const seed = Number.parseInt(unparsedSeed, 10)
+        if (Number.isNaN(seed)) return undefined
         return {
           command: GameCommandEnum.START,
           params: {
-            seed: Number.parseInt(seed, 10),
+            seed,
             colors: colors as PlayerColor[],
           },
         }
       }
     )
-    .otherwise(() => undefined as GameActionUndefined)
+    .otherwise((p) => undefined as GameActionUndefined)

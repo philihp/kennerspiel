@@ -35,6 +35,16 @@ export enum GameStatusEnum {
   FINISHED = 'FINISHED',
 }
 
+export enum SettlementRound {
+  L = 'L',
+  S = 'S',
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+}
+
 export enum LandEnum {
   Hillside = 'H',
   Plains = 'P',
@@ -68,6 +78,17 @@ export enum ResourceEnum {
   Beer = 'Be',
   BonusPoint = 'Bp',
   Joker = 'Jo', // Use the Joker
+}
+
+export enum SettlementEnum {
+  ShantyTown = 'S01',
+  FarmingVillage = 'S02',
+  MarketTown = 'S03',
+  FishingVillage = 'S04',
+  ArtistsColony = 'S05',
+  Hamlet = 'S06',
+  Village = 'S07',
+  HilltopVillage = 'S08',
 }
 
 export enum BuildingEnum {
@@ -173,6 +194,7 @@ export type GameState = {
   moveInRound?: number
   round?: number
   startingPlayer?: number
+  settlementRound: SettlementRound
   plotPurchasePrices: number[]
   districtPurchasePrices: number[]
 }
@@ -182,16 +204,6 @@ export type GameCommand = (state: GameState, params?: unknown) => GameState | un
 export type Reducer = (state: GameState, action: string[]) => GameState | undefined
 
 export type Parser = (action: GameUnparsedAction) => GameAction
-
-export enum SettlementRound {
-  L = 'L',
-  S = 'S',
-  A = 'A',
-  B = 'B',
-  C = 'C',
-  D = 'D',
-  E = 'E',
-}
 
 export type PreMoveHandler = (state: GameState) => GameState | undefined
 export type PostMoveHandler = (state: GameState) => GameState | undefined

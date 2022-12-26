@@ -2,7 +2,7 @@ import { commit } from './commands/commit'
 import { config } from './commands/config'
 import { start } from './commands/start'
 import { parser } from './parser'
-import { GameCommandEnum, GameState, GameStatusEnum, Reducer } from './types'
+import { GameCommandEnum, GameState, GameStatusEnum, Reducer, SettlementRound } from './types'
 
 export const initialState: GameState = {
   randGen: 0n,
@@ -11,6 +11,7 @@ export const initialState: GameState = {
   actionList: [],
   settling: false,
   extraRound: false,
+  settlementRound: SettlementRound.S,
   plotPurchasePrices: [],
   districtPurchasePrices: [],
 }

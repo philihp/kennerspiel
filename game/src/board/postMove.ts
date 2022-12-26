@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern'
 import { GameCommandConfigParams, GameState, PostMoveHandler } from '../types'
-import { settlementRounds } from './settlementRounds'
+import { settlementRounds } from './settlements'
 
 export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
   return match<GameCommandConfigParams, PostMoveHandler>(config) // .

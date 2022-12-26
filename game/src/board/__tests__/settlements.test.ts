@@ -1,6 +1,40 @@
-import { settlementRounds } from '../settlementRounds'
+import { SettlementRound } from '../../types'
+import { roundSettlements, settlementRounds } from '../settlements'
 
-describe('board/settlementRounds', () => {
+describe('board/settlements', () => {
+  describe('roundSettlements', () => {
+    it('returns list for settlement L', () => {
+      expect.assertions(1)
+      expect(roundSettlements(SettlementRound.L)).toStrictEqual([])
+    })
+    it('returns list for settlement S', () => {
+      expect.assertions(1)
+      expect(roundSettlements(SettlementRound.S)).toStrictEqual([])
+    })
+    it('returns list for settlement A', () => {
+      expect.assertions(1)
+      expect(roundSettlements(SettlementRound.A)).toStrictEqual(['S01', 'S02', 'S03', 'S04', 'S05'])
+    })
+    it('returns list for settlement B', () => {
+      expect.assertions(1)
+      expect(roundSettlements(SettlementRound.B)).toStrictEqual(['S06'])
+    })
+    it('returns list for settlement C', () => {
+      expect.assertions(1)
+      expect(roundSettlements(SettlementRound.C)).toStrictEqual(['S07'])
+    })
+    it('returns list for settlement D', () => {
+      expect.assertions(1)
+      expect(roundSettlements(SettlementRound.D)).toStrictEqual(['S08'])
+    })
+    it('returns list for settlement E', () => {
+      expect.assertions(1)
+      expect(roundSettlements(SettlementRound.E)).toStrictEqual([])
+    })
+  })
+})
+
+describe('settlementRounds', () => {
   it('returns rounds for 1 player france short', () => {
     expect.assertions(1)
     expect(settlementRounds({ players: 1, country: 'france', length: 'short' })).toStrictEqual([11, 15, 21, 25, 31])
