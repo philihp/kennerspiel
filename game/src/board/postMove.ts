@@ -1,5 +1,6 @@
 import { match } from 'ts-pattern'
 import { GameCommandConfigParams, GameState, PostMoveHandler } from '../types'
+import { settlementRounds } from './settlementRounds'
 
 export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
   return match<GameCommandConfigParams, PostMoveHandler>(config) // .
@@ -14,14 +15,65 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       return state
     })
     .with({ players: 2, length: 'long' }, () => (state: GameState) => {
-      // TODO
-      // https://github.com/philihp/weblabora/blob/737717fd59c1301da6584a6874a20420eba4e71e/src/main/java/com/philihp/weblabora/model/BoardModeTwoLongFrance.java
-      return state
+      if (state.players === undefined) return undefined
+      if (state.moveInRound === undefined) return undefined
+      if (state.round === undefined) return undefined
+
+      let { round, settling, moveInRound, activePlayerIndex } = state
+
+      if (moveInRound === 2 || settling) {
+        activePlayerIndex = (activePlayerIndex + 1) % state.players.length
+      }
+      moveInRound++
+
+      if (settling && moveInRound === 3) {
+        // board.postSettlement()
+        settling = false
+
+        // TODO: layout unbuilt buildings
+        // TODO: layout unbuilt settlements
+
+        // TODO: if settlementRound === E, setGameOver, push arm
+
+        round++
+        moveInRound = 1
+      } else if (!settling && moveInRound === 4) {
+        // board.postRound
+      }
+
+      return {
+        ...state,
+        settling,
+        moveInRound,
+        activePlayerIndex,
+        round,
+      }
     })
-    .with({ players: 2, length: 'short' }, () => (state: GameState) => {
-      // TODO
-      // https://github.com/philihp/weblabora/blob/737717fd59c1301da6584a6874a20420eba4e71e/src/main/java/com/philihp/weblabora/model/BoardModeTwoLongFrance.java
-      return state
+    .with({ players: 2, length: 'short' }, (config) => (state: GameState) => {
+      if (state.players === undefined) return undefined
+      if (state.moveInRound === undefined) return undefined
+      if (state.round === undefined) return undefined
+
+      let { round, settling, moveInRound, activePlayerIndex } = state
+      if (moveInRound === 2 || settling) {
+        activePlayerIndex = (activePlayerIndex + 1) % state.players.length
+      }
+      moveInRound++
+
+      if (settling && moveInRound === 3) {
+        // board.postSettlement()
+      } else if (!settling && moveInRound === 4) {
+        // board.postRound
+        moveInRound = 1
+
+        if (!settlementRounds(config).includes(round)) {
+          settling = true
+        } else {
+          round++
+        }
+      }
+
+      return { ...state, round, settling, moveInRound }
     })
     .with({ players: 4 }, { players: 3 }, () => (state: GameState) => {
       if (state.config === undefined) return undefined

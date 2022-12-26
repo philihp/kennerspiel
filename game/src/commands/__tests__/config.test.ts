@@ -1,6 +1,7 @@
+import { parser } from '../../parser'
 import { initialState } from '../../reducer'
-import { GameCommandConfigParams, GameStatusEnum } from '../../types'
-import { config, parse } from '../config'
+import { GameActionConfig, GameCommandConfigParams, GameStatusEnum } from '../../types'
+import { config } from '../config'
 
 describe('commands/config', () => {
   describe('config', () => {
@@ -42,31 +43,24 @@ describe('commands/config', () => {
   describe('parse', () => {
     it('exactly three params', () => {
       expect.assertions(3)
-      const { players, country, length } = parse(['4', 'ireland', 'long'])
+      const {
+        params: { players, country, length },
+      } = parser(['CONFIG', '4', 'ireland', 'long']) as GameActionConfig
       expect(players).toBe(4)
       expect(country).toBe('ireland')
       expect(length).toBe('long')
     })
     it('does not allow players under 1', () => {
-      expect.assertions(3)
-      const { players, country, length } = parse(['-1', 'ireland', 'long'])
-      expect(players).toBeUndefined()
-      expect(country).toBeUndefined()
-      expect(length).toBeUndefined()
+      expect.assertions(1)
+      expect(parser(['CONFIG', '-1', 'ireland', 'long'])).toBeUndefined()
     })
     it('does not allow non-standard country', () => {
-      expect.assertions(3)
-      const { players, country, length } = parse(['3', 'syria', 'long'])
-      expect(players).toBeUndefined()
-      expect(country).toBeUndefined()
-      expect(length).toBeUndefined()
+      expect.assertions(1)
+      expect(parser(['CONFIG', '3', 'syria', 'long'])).toBeUndefined()
     })
     it('does not allow a weird length', () => {
-      expect.assertions(3)
-      const { players, country, length } = parse(['4', 'ireland', 'brief'])
-      expect(players).toBeUndefined()
-      expect(country).toBeUndefined()
-      expect(length).toBeUndefined()
+      expect.assertions(1)
+      expect(parser(['CONFIG', '4', 'ireland', 'brief'])).toBeUndefined()
     })
   })
 })

@@ -1,16 +1,19 @@
 import { config } from '../../commands/config'
 import { start } from '../../commands/start'
 import { initialState } from '../../reducer'
-import { Clergy, GameState, PlayerColor } from '../../types'
+import { Clergy, GameConfigCountry, GameConfigLength, GameConfigPlayers, GameState, PlayerColor } from '../../types'
 import { preMove as unconfiguredPreMove } from '../preMove'
 
 describe('board/preMove', () => {
-  const preMove = unconfiguredPreMove({})
-
   it('removes all clergy if all are placed', () => {
     expect.assertions(2)
+    const configuration = {
+      players: 2 as GameConfigPlayers,
+      country: 'ireland' as GameConfigCountry,
+      length: 'long' as GameConfigLength,
+    }
     const s0 = initialState
-    const s1 = config(s0, { country: 'ireland', length: 'long', players: 2 })
+    const s1 = config(s0, configuration)
     const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })
     const s3: GameState = {
       ...s2!,
@@ -41,6 +44,7 @@ describe('board/preMove', () => {
         },
       ],
     }
+    const preMove = unconfiguredPreMove(configuration)
     const s4 = preMove(s3!)
     expect(s4!.players![0].clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
     expect(s4!.players![0].landscape).toStrictEqual([
@@ -51,8 +55,13 @@ describe('board/preMove', () => {
 
   it('doesnt update anything if clergy still unplaced', () => {
     expect.assertions(4)
+    const configuration = {
+      players: 2 as GameConfigPlayers,
+      country: 'ireland' as GameConfigCountry,
+      length: 'long' as GameConfigLength,
+    }
     const s0 = initialState
-    const s1 = config(s0, { country: 'ireland', length: 'long', players: 2 })
+    const s1 = config(s0, configuration)
     const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })
     const s3: GameState = {
       ...s2!,
@@ -83,6 +92,7 @@ describe('board/preMove', () => {
         },
       ],
     }
+    const preMove = unconfiguredPreMove(configuration)
     const s4 = preMove(s3!)
     expect(s4!.players![0].clergy).toBe(s3!.players![0].clergy)
     expect(s4!.players![0].clergy).toStrictEqual(['LB2B'])
@@ -95,14 +105,20 @@ describe('board/preMove', () => {
 
   it('pushes the arm forward', () => {
     expect.assertions(2)
+    const configuration = {
+      players: 2 as GameConfigPlayers,
+      country: 'ireland' as GameConfigCountry,
+      length: 'long' as GameConfigLength,
+    }
     const s0 = initialState
-    const s1 = config(s0, { country: 'ireland', length: 'long', players: 2 })!
+    const s1 = config(s0, configuration)!
     const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
     const s3: GameState = {
       ...s2,
       moveInRound: 1,
     }
     expect(s3.rondel?.pointingBefore).toBe(0)
+    const preMove = unconfiguredPreMove(configuration)
     const s4 = preMove(s3)!
     expect(s4.rondel?.pointingBefore).toBe(1)
   })

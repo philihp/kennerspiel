@@ -16,12 +16,12 @@ export const initialState: GameState = {
 }
 
 export const reducer: Reducer = (state, action) => {
-  const { command, params } = parser(action)
-  switch (command) {
+  const parsed = parser(action)
+  switch (parsed?.command) {
     case GameCommandEnum.CONFIG:
-      return config(state, params)
+      return config(state, parsed.params)
     case GameCommandEnum.START:
-      return start(state, params)
+      return start(state, parsed.params)
     case GameCommandEnum.COMMIT:
       return commit(state)
     default:

@@ -12,9 +12,9 @@ export type GameConfigLength = 'short' | 'long'
 export type GameConfigCountry = 'ireland' | 'france'
 
 export type GameCommandConfigParams = {
-  players?: GameConfigPlayers
-  length?: GameConfigLength
-  country?: GameConfigCountry
+  players: GameConfigPlayers
+  length: GameConfigLength
+  country: GameConfigCountry
 }
 
 export enum PlayerColor {
@@ -154,10 +154,10 @@ export type Rondel = {
 
 export type GameUnparsedAction = string[]
 
-export type GameActionCommit = { command: GameCommandEnum.COMMIT; params: undefined }
+export type GameActionCommit = { command: GameCommandEnum.COMMIT }
 export type GameActionConfig = { command: GameCommandEnum.CONFIG; params: GameCommandConfigParams }
 export type GameActionStart = { command: GameCommandEnum.START; params: GameCommandStartParams }
-export type GameActionUndefined = { command: undefined; params: undefined }
+export type GameActionUndefined = undefined
 export type GameAction = GameActionCommit | GameActionConfig | GameActionStart | GameActionUndefined
 
 export type GameState = {
