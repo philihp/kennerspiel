@@ -104,22 +104,15 @@ describe('board/preMove', () => {
   })
 
   it('pushes the arm forward', () => {
-    expect.assertions(2)
+    expect.assertions(1)
     const configuration = {
-      players: 2 as GameConfigPlayers,
+      players: 3 as GameConfigPlayers,
       country: 'ireland' as GameConfigCountry,
       length: 'long' as GameConfigLength,
     }
     const s0 = initialState
     const s1 = config(s0, configuration)!
-    const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
-    const s3: GameState = {
-      ...s2,
-      moveInRound: 1,
-    }
-    expect(s3.rondel?.pointingBefore).toBe(0)
-    const preMove = unconfiguredPreMove(configuration)
-    const s4 = preMove(s3)!
-    expect(s4.rondel?.pointingBefore).toBe(1)
+    const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue] })!
+    expect(s2.rondel?.pointingBefore).toBe(1)
   })
 })

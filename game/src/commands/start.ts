@@ -1,6 +1,8 @@
 import fastShuffle from 'fast-shuffle'
 import { newRandGen, randNext, randRange } from 'fn-pcg'
+import { mode } from '../board/mode'
 import { clergyForColor } from '../board/player'
+import { preMove } from '../board/preMove'
 import {
   BuildingEnum,
   Clergy,
@@ -81,7 +83,7 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
       clergy: clergyForColor(shuffledColors[i]),
     }))
 
-  return {
+  const newState = {
     ...state,
     randGen: randGen2,
     status: GameStatusEnum.PLAYING,
@@ -102,4 +104,7 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
     moveInRound: 1,
     startingPlayer,
   }
+
+  const { preMove } = mode(state.config)
+  return preMove(newState)
 }

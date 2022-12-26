@@ -19,8 +19,9 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (state.players === undefined) return undefined
       if (state.moveInRound === undefined) return undefined
       if (state.round === undefined) return undefined
+      if (state.config === undefined) return undefined
 
-      let { round, settling, moveInRound, activePlayerIndex } = state
+      let { buildings, round, settling, moveInRound, activePlayerIndex } = state
 
       if (moveInRound === 2 || settling) {
         activePlayerIndex = (activePlayerIndex + 1) % state.players.length
@@ -30,8 +31,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (settling && moveInRound === 3) {
         // board.postSettlement()
         settling = false
-
-        // TODO: layout unbuilt buildings
+        buildings = roundBuildings(state.config, state.settlementRound)
         // TODO: layout unbuilt settlements
 
         // TODO: if settlementRound === E, setGameOver, push arm
@@ -83,7 +83,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (state.round === undefined) return undefined
       if (state.startingPlayer === undefined) return undefined
 
-      let { round, settling, extraRound, activePlayerIndex, moveInRound, startingPlayer } = state
+      let { buildings, round, settling, extraRound, activePlayerIndex, moveInRound, startingPlayer } = state
       activePlayerIndex = (activePlayerIndex + 1) % state.players.length
       moveInRound += 1
 
@@ -97,9 +97,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (moveInRound === state.players.length + 1 || settling) {
         // board.postSettlement()
         settling = false
-
-        const newBuildings = roundBuildings(state.config, state.settlementRound)
-        // TODO: layout unbuilt buildings
+        buildings = roundBuildings(state.config, state.settlementRound)
         // TODO: layout unbuilt settlements
         // TODO: push arm, set gameover after settlement E
 
@@ -133,6 +131,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         activePlayerIndex,
         moveInRound,
         startingPlayer,
+        buildings,
       }
     })
     .otherwise(() => () => undefined)

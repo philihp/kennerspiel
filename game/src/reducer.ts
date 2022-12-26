@@ -14,6 +14,7 @@ export const initialState: GameState = {
   settlementRound: SettlementRound.S,
   plotPurchasePrices: [],
   districtPurchasePrices: [],
+  buildings: [],
 }
 
 export const reducer: Reducer = (state, action) => {

@@ -267,6 +267,7 @@ export type GameState = {
   round?: number
   startingPlayer?: number
   settlementRound: SettlementRound
+  buildings: BuildingEnum[]
   plotPurchasePrices: number[]
   districtPurchasePrices: number[]
 }
