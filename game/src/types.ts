@@ -207,6 +207,7 @@ export type Tile = [LandEnum, BuildingEnum?, Clergy?]
 export type Tableau = {
   color: PlayerColor
   clergy: Clergy[]
+  settlements: SettlementEnum[]
   landscape: Tile[][]
   peat: number
   penny: number

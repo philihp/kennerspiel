@@ -176,7 +176,33 @@ describe('commands/start', () => {
       expect(s2?.startingPlayer).toBeGreaterThanOrEqual(0)
       expect(s2?.startingPlayer).toBeLessThan(4)
     })
+
+    it('starts up with buildings and settlements', () => {
+      const s0 = initialState
+      const s1 = config(s0, { country: 'france', players: 4, length: 'long' })!
+      const s2 = start(s1, {
+        colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
+        seed: 12345,
+      })!
+      expect(s2.buildings).toStrictEqual([
+        'G01',
+        'G02',
+        'F03',
+        'F04',
+        'F05',
+        'G06',
+        'G07',
+        'F08',
+        'F09',
+        'F10',
+        'F11',
+        'G12',
+        'G13',
+      ])
+      expect(s2.players![0].settlements).toStrictEqual(['S01', 'S02', 'S03', 'S04'])
+    })
   })
+
   describe('parser', () => {
     it('parses colors', () => {
       expect.assertions(1)

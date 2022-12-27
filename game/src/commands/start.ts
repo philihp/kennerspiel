@@ -4,6 +4,7 @@ import { roundBuildings } from '../board/buildings'
 import { mode } from '../board/mode'
 import { clergyForColor } from '../board/player'
 import { preMove } from '../board/preMove'
+import { roundSettlements, settlementRounds } from '../board/settlements'
 import {
   BuildingEnum,
   Clergy,
@@ -12,6 +13,7 @@ import {
   GameStatusEnum,
   LandEnum,
   PlayerColor,
+  SettlementRound,
   Tableau,
   Tile,
 } from '../types'
@@ -54,6 +56,7 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
       color: PlayerColor.Red, // placeholder
       clergy: [],
       landscape: [[]],
+      settlements: [],
       peat: 1,
       penny: 1,
       clay: 1,
@@ -82,6 +85,7 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
       color: shuffledColors[i],
       landscape: makeLandscape(shuffledColors[i]),
       clergy: clergyForColor(shuffledColors[i]),
+      settlements: roundSettlements(SettlementRound.S),
     }))
 
   const newState = {

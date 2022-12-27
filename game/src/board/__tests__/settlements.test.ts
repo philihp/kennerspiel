@@ -9,11 +9,11 @@ describe('board/settlements', () => {
     })
     it('returns list for settlement S', () => {
       expect.assertions(1)
-      expect(roundSettlements(SettlementRound.S)).toStrictEqual([])
+      expect(roundSettlements(SettlementRound.S)).toStrictEqual(['S01', 'S02', 'S03', 'S04'])
     })
     it('returns list for settlement A', () => {
       expect.assertions(1)
-      expect(roundSettlements(SettlementRound.A)).toStrictEqual(['S01', 'S02', 'S03', 'S04', 'S05'])
+      expect(roundSettlements(SettlementRound.A)).toStrictEqual(['S05'])
     })
     it('returns list for settlement B', () => {
       expect.assertions(1)

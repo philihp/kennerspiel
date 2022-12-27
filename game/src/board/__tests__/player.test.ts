@@ -5,7 +5,8 @@ import { getPlayer, setPlayer } from '../player'
 const p: Tableau = {
   color: PlayerColor.Red,
   clergy: [],
-  landscape: [],
+  landscape: [[]],
+  settlements: [],
   peat: 0,
   penny: 0,
   clay: 0,

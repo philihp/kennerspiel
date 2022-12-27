@@ -12,13 +12,13 @@ export const settlementRounds = (config: GameCommandConfigParams): number[] =>
 
 export const roundSettlements = (round: SettlementRound): SettlementEnum[] =>
   match(round)
-    .with(SettlementRound.A, () => [
+    .with(SettlementRound.S, () => [
       SettlementEnum.ShantyTown,
       SettlementEnum.FarmingVillage,
       SettlementEnum.MarketTown,
       SettlementEnum.FishingVillage,
-      SettlementEnum.ArtistsColony,
     ])
+    .with(SettlementRound.A, () => [SettlementEnum.ArtistsColony])
     .with(SettlementRound.B, () => [SettlementEnum.Hamlet])
     .with(SettlementRound.C, () => [SettlementEnum.Village])
     .with(SettlementRound.D, () => [SettlementEnum.HilltopVillage])
