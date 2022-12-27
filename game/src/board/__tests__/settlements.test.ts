@@ -1,35 +1,35 @@
-import { SettlementRound } from '../../types'
+import { PlayerColor, SettlementRound } from '../../types'
 import { roundSettlements, settlementRounds } from '../settlements'
 
 describe('board/settlements', () => {
   describe('roundSettlements', () => {
     it('returns list for settlement L', () => {
       expect.assertions(1)
-      expect(roundSettlements(SettlementRound.L)).toStrictEqual([])
+      expect(roundSettlements(PlayerColor.Blue, SettlementRound.L)).toStrictEqual([])
     })
     it('returns list for settlement S', () => {
       expect.assertions(1)
-      expect(roundSettlements(SettlementRound.S)).toStrictEqual(['S01', 'S02', 'S03', 'S04'])
+      expect(roundSettlements(PlayerColor.Blue, SettlementRound.S)).toStrictEqual(['SB1', 'SB2', 'SB3', 'SB4'])
     })
     it('returns list for settlement A', () => {
       expect.assertions(1)
-      expect(roundSettlements(SettlementRound.A)).toStrictEqual(['S05'])
+      expect(roundSettlements(PlayerColor.Blue, SettlementRound.A)).toStrictEqual(['SB5'])
     })
     it('returns list for settlement B', () => {
       expect.assertions(1)
-      expect(roundSettlements(SettlementRound.B)).toStrictEqual(['S06'])
+      expect(roundSettlements(PlayerColor.Blue, SettlementRound.B)).toStrictEqual(['SB6'])
     })
     it('returns list for settlement C', () => {
       expect.assertions(1)
-      expect(roundSettlements(SettlementRound.C)).toStrictEqual(['S07'])
+      expect(roundSettlements(PlayerColor.Blue, SettlementRound.C)).toStrictEqual(['SB7'])
     })
     it('returns list for settlement D', () => {
       expect.assertions(1)
-      expect(roundSettlements(SettlementRound.D)).toStrictEqual(['S08'])
+      expect(roundSettlements(PlayerColor.Blue, SettlementRound.D)).toStrictEqual(['SB8'])
     })
     it('returns list for settlement E', () => {
       expect.assertions(1)
-      expect(roundSettlements(SettlementRound.E)).toStrictEqual([])
+      expect(roundSettlements(PlayerColor.Blue, SettlementRound.E)).toStrictEqual([])
     })
   })
 })

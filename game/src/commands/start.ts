@@ -85,7 +85,7 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
       color: shuffledColors[i],
       landscape: makeLandscape(shuffledColors[i]),
       clergy: clergyForColor(shuffledColors[i]),
-      settlements: roundSettlements(SettlementRound.S),
+      settlements: roundSettlements(player.color, SettlementRound.S),
     }))
 
   const newState = {
