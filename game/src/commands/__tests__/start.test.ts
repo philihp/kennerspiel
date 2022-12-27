@@ -184,21 +184,8 @@ describe('commands/start', () => {
         colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
         seed: 12345,
       })!
-      expect(s2.buildings).toStrictEqual([
-        'G01',
-        'G02',
-        'F03',
-        'F04',
-        'F05',
-        'G06',
-        'G07',
-        'F08',
-        'F09',
-        'F10',
-        'F11',
-        'G12',
-        'G13',
-      ])
+      const buildings = ['G01', 'G02', 'F03', 'F04', 'F05', 'G06', 'G07', 'F08', 'F09', 'F10', 'F11', 'G12', 'G13']
+      expect(s2.buildings).toStrictEqual(buildings)
       expect(s2.players![0].settlements).toStrictEqual(['S01', 'S02', 'S03', 'S04'])
     })
   })
