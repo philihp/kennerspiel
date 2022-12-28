@@ -44,7 +44,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         round++
         moveInRound = 1
       } else if (!settling && moveInRound === 4) {
-        // board.postRound
+        // TODO: board.postRound
       }
 
       return {
@@ -140,7 +140,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         round++
         moveInRound = 1
       } else if (!settling && moveInRound === state.players.length) {
-        // board.postRound()
+        // TODO: board.postRound()
         moveInRound = 1
 
         // if(isExtraRound(board.getRound())) {
