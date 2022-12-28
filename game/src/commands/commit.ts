@@ -1,4 +1,5 @@
-import { mode } from '../board/mode'
+import { postMove } from '../board/postMove'
+import { preMove } from '../board/preMove'
 import { GameCommand, GameState, GameStatusEnum } from '../types'
 
 export const commit: GameCommand = (state: GameState) => {
@@ -9,9 +10,7 @@ export const commit: GameCommand = (state: GameState) => {
   if (state.players === undefined) return undefined
   if (state.moveInRound === undefined) return undefined
 
-  const { preMove, postMove } = mode(state.config)
-
-  const newState = postMove(state)
+  const newState = postMove(state.config)(state)
   if (newState === undefined) return undefined
 
   // premove

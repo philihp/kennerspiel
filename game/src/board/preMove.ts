@@ -1,7 +1,8 @@
-import { match } from 'ts-pattern'
 import { GameState, GameStatusEnum, PreMoveHandler, Rondel, Tile } from '../types'
 import { isExtraRound, isPriorSpecialInExtraRound } from './extraRound'
 import { clergyForColor, setPlayer } from './player'
+import { preRound } from './preRound'
+import { pushArm } from './rondel'
 import { nextSettlementRound } from './settlements'
 
 export const preMove: PreMoveHandler = (state: GameState): GameState | undefined => {
@@ -52,33 +53,14 @@ export const preMove: PreMoveHandler = (state: GameState): GameState | undefined
     })
 
     // 2 - push arm
-    const { rondel } = state
-    const next = rondel.pointingBefore + (1 % 13)
-    const bumper = (from?: number) => {
-      if (from === next) {
-        if (state.config?.players === 1) return undefined
-        return (from + 1) % 13
-      }
-      return from
-    }
-    const newRondel: Rondel = {
-      ...rondel,
-      pointingBefore: next,
-      grain: bumper(rondel.grain),
-      sheep: bumper(rondel.sheep),
-      clay: bumper(rondel.clay),
-      coin: bumper(rondel.coin),
-      wood: bumper(rondel.wood),
-      joker: bumper(rondel.joker),
-      peat: bumper(rondel.peat),
-      grape: bumper(rondel.grape),
-      stone: bumper(rondel.stone),
-    }
-    newState.rondel = newRondel
+    newState.rondel = pushArm(state.rondel, state.config.players)
 
-    // TODO mode.preRound();
+    const preRoundState = preRound(state.config)(newState)
+    if (preRoundState === undefined) return undefined
+    newState = preRoundState
 
     // 3 - check to see if grapes/stone should become active
+    // TODO setActive tokens
     // if(round == mode.grapeActiveOnRound()) getWheel().getGrape().setActive(true);
     // if(round == mode.stoneActiveOnRound()) getWheel().getStone().setActive(true);
     // if(round == mode.jokerActiveOnRound()) getWheel().getJoker().setActive(true);

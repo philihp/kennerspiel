@@ -305,33 +305,4 @@ export type Parser = (action: GameUnparsedAction) => GameAction
 
 export type PreMoveHandler = (state: GameState) => GameState | undefined
 export type PostMoveHandler = (state: GameState) => GameState | undefined
-export type PreRoundHandler = (state: GameState) => GameState | undefined
 export type PostRoundHandler = (state: GameState) => GameState | undefined
-
-export type GameMode = {
-  preMove: PreMoveHandler
-  postMove: PostMoveHandler
-  preRound: PreRoundHandler
-  postRound: PostRoundHandler
-  // roundBuildings: BuildingEnum[]
-  // futureBuildings: BuildingEnum[]
-  // isExtraRound: (round: number) => boolean
-  // roundBeforeSettlement: (round: number) => SettlementRound | undefined
-  // isNeutralBuidingPhase: boolean
-  // grapeActiveOnRound: number
-  // stoneActiveOnRound: number
-  // jokerActiveOnRound: number
-  // movesInRound: number
-  // lastSettlementAfterRound: number
-  // customizeLandscape?: (landscape: Tile[][]) => Tile[][]
-  // productionBonusActive: boolean
-  // roundStartBonusActive: boolean
-  // secondLayBrotherUsed: boolean
-  // distributeProductionBonus: () => never
-  // plotPurchasePrices: number[]
-  // districtPurchasePrices: number[]
-  // neutralPlayerUsed: boolean
-  // grapesUsed: boolean
-  // stoneUsed: boolean
-  // priorSpecialInExtraRound: boolean
-}

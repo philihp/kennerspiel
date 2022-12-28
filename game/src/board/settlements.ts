@@ -18,7 +18,7 @@ export const nextSettlementRound = (prev: SettlementRound) => {
 }
 
 export const settlementOnRound = (config: GameCommandConfigParams, round: SettlementRound): number | undefined =>
-  match<[GameCommandConfigParams, SettlementRound], number>([config, round]) // .
+  match<[GameCommandConfigParams, SettlementRound], number | undefined>([config, round]) // .
     .with([{ players: 1 }, SettlementRound.A], () => 11)
     .with([{ players: 1 }, SettlementRound.B], () => 15)
     .with([{ players: 1 }, SettlementRound.C], () => 21)
@@ -43,7 +43,7 @@ export const settlementOnRound = (config: GameCommandConfigParams, round: Settle
     .with([{ players: P.when((p) => [3, 4].includes(p)), length: 'short' }, SettlementRound.C], () => 6)
     .with([{ players: P.when((p) => [3, 4].includes(p)), length: 'short' }, SettlementRound.D], () => 8)
     .with([{ players: P.when((p) => [3, 4].includes(p)), length: 'short' }, SettlementRound.E], () => 12)
-    .otherwise(() => 0)
+    .otherwise(() => undefined)
 
 export const roundSettlements = (color: PlayerColor, round: SettlementRound): SettlementEnum[] =>
   match<[PlayerColor, SettlementRound], SettlementEnum[]>([color, round])

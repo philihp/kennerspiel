@@ -1,17 +1,19 @@
 import { match, P } from 'ts-pattern'
 import { GameCommandConfigParams, GameState, GameStatusEnum, PostMoveHandler, SettlementRound } from '../types'
 import { roundBuildings } from './buildings'
-import { roundSettlements, settlementOnRound } from './settlements'
+import { postRound } from './postRound'
+import { pushArm } from './rondel'
+import { roundSettlements } from './settlements'
 
 export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
   return match<GameCommandConfigParams, PostMoveHandler>(config) // .
     .with({ players: 1, country: 'ireland' }, () => (state: GameState) => {
-      // TODO
+      // TODO postMove ireland solo
       // https://github.com/philihp/weblabora/blob/737717fd59c1301da6584a6874a20420eba4e71e/src/main/java/com/philihp/weblabora/model/BoardModeOneIreland.java#L113
       return state
     })
     .with({ players: 1, country: 'france' }, () => (state: GameState) => {
-      // TODO
+      // TODO postMove france solo
       // https://github.com/philihp/weblabora/blob/737717fd59c1301da6584a6874a20420eba4e71e/src/main/java/com/philihp/weblabora/model/BoardModeOneFrance.java#L121
       return state
     })
@@ -20,8 +22,10 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (state.moveInRound === undefined) return undefined
       if (state.round === undefined) return undefined
       if (state.config === undefined) return undefined
+      if (state.rondel === undefined) return undefined
 
-      let { status, players, buildings, round, settling, moveInRound, activePlayerIndex } = state
+      let { rondel, status, players, buildings, round, settling, moveInRound, activePlayerIndex } = state
+      let newState = state
 
       if (moveInRound === 2 || settling) {
         activePlayerIndex = (activePlayerIndex + 1) % state.players.length
@@ -38,17 +42,20 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         }))
         if (state.settlementRound === SettlementRound.E) {
           status = GameStatusEnum.FINISHED
-          // TODO: push arm
+          rondel = pushArm(rondel, state.config.players)
         }
 
         round++
         moveInRound = 1
       } else if (!settling && moveInRound === 4) {
-        // TODO: board.postRound
+        const postRoundState = postRound(state.config)(newState)
+        if (postRoundState === undefined) return undefined
+        newState = postRoundState
       }
 
       return {
-        ...state,
+        ...newState,
+        rondel,
         status,
         settling,
         moveInRound,
@@ -62,9 +69,11 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (state.moveInRound === undefined) return undefined
       if (state.config === undefined) return undefined
       if (state.round === undefined) return undefined
+      if (state.rondel === undefined) return undefined
       if (state.startingPlayer === undefined) return undefined
 
-      let { buildings, players, startingPlayer, round, moveInRound, activePlayerIndex, settling, status } = state
+      let { rondel, buildings, players, round, moveInRound, activePlayerIndex, settling, status } = state
+      let newState = state
       const { settlementRound } = state
       moveInRound++
 
@@ -80,41 +89,40 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
           }))
           if (state.settlementRound === SettlementRound.E) {
             status = GameStatusEnum.FINISHED
-            // TODO: push arm
+            rondel = pushArm(rondel, state.config.players)
           }
           round++
           moveInRound = 1
         }
       } else if (moveInRound > 2) {
         activePlayerIndex = (activePlayerIndex + 1) % state.players.length
-        // TODO 2-player board.postRound()
-        moveInRound = 1
-        if (state.round === settlementOnRound(state.config, state.settlementRound)) {
-          settling = true
-        } else {
-          round++
-        }
-
-        // begin 2-player end-game detection.
-        if (!settling && state.settlementRound === SettlementRound.D && state.buildings.length <= 3) {
-          status = GameStatusEnum.FINISHED
-        }
-        // end 2-player end-game detection.
-
-        startingPlayer = (startingPlayer + 1) % state.players.length
+        const postRoundState = postRound(state.config)(newState)
+        if (postRoundState === undefined) return undefined
+        newState = postRoundState
       }
 
-      return { ...state, buildings, players, round, moveInRound, activePlayerIndex, settlementRound, settling }
+      return {
+        ...newState,
+        rondel,
+        buildings,
+        players,
+        round,
+        moveInRound,
+        activePlayerIndex,
+        settlementRound,
+        settling,
+      }
     })
     .with({ players: P.union(3, 4) }, () => (state: GameState) => {
       if (state.config === undefined) return undefined
       if (state.players === undefined) return undefined
       if (state.moveInRound === undefined) return undefined
       if (state.round === undefined) return undefined
+      if (state.rondel === undefined) return undefined
       if (state.startingPlayer === undefined) return undefined
 
-      let { status, players, buildings, round, settling, extraRound, activePlayerIndex, moveInRound, startingPlayer } =
-        state
+      let newState = state
+      let { rondel, status, players, buildings, round, settling, extraRound, activePlayerIndex, moveInRound } = state
       activePlayerIndex = (activePlayerIndex + 1) % state.players.length
       moveInRound += 1
 
@@ -135,40 +143,27 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         }))
         if (state.settlementRound === SettlementRound.E) {
           status = GameStatusEnum.FINISHED
-          // TODO: push arm
+          rondel = pushArm(rondel, state.config.players)
         }
         round++
         moveInRound = 1
       } else if (!settling && moveInRound === state.players.length) {
-        // TODO: board.postRound()
-        moveInRound = 1
-
-        // if(isExtraRound(board.getRound())) {
-        // if (false) {
-        //   round += 1
-        //   extraRound = true
-        // }
-        // // else if(board.isRoundBeforeSettlement(board.getRound())) {
-        // else if (false) {
-        //   settling = true
-        // } else {
-        round++
-        // }
-
-        // 5 -- pass starting player
-        startingPlayer = (startingPlayer + 1) % state.players.length
+        const postRoundState = postRound(state.config)(state)
+        if (postRoundState === undefined) return undefined
+        newState = postRoundState
       }
 
       return {
-        ...state,
+        ...newState,
+        rondel,
         status,
+        players,
+        buildings,
         round,
         settling,
         extraRound,
         activePlayerIndex,
         moveInRound,
-        startingPlayer,
-        buildings,
       }
     })
     .otherwise(() => () => undefined)
