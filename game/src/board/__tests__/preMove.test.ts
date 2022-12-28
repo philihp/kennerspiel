@@ -2,7 +2,7 @@ import { config } from '../../commands/config'
 import { start } from '../../commands/start'
 import { initialState } from '../../reducer'
 import { Clergy, GameConfigCountry, GameConfigLength, GameConfigPlayers, GameState, PlayerColor } from '../../types'
-import { preMove as unconfiguredPreMove } from '../preMove'
+import { preMove } from '../preMove'
 
 describe('board/preMove', () => {
   it('removes all clergy if all are placed', () => {
@@ -44,7 +44,6 @@ describe('board/preMove', () => {
         },
       ],
     }
-    const preMove = unconfiguredPreMove(configuration)
     const s4 = preMove(s3!)
     expect(s4!.players![0].clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
     expect(s4!.players![0].landscape).toStrictEqual([
@@ -92,7 +91,6 @@ describe('board/preMove', () => {
         },
       ],
     }
-    const preMove = unconfiguredPreMove(configuration)
     const s4 = preMove(s3!)
     expect(s4!.players![0].clergy).toBe(s3!.players![0].clergy)
     expect(s4!.players![0].clergy).toStrictEqual(['LB2B'])

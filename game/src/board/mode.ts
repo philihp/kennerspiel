@@ -1,4 +1,4 @@
-import { match } from 'ts-pattern'
+import { match, P } from 'ts-pattern'
 import { GameCommandConfigParams, GameMode, GameState, PostRoundHandler, PreRoundHandler } from '../types'
 import { postMove } from './postMove'
 import { preMove } from './preMove'
@@ -18,7 +18,7 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler => 
 }
 
 export const mode = (config: GameCommandConfigParams): GameMode => ({
-  preMove: preMove(config),
+  preMove,
   postMove: postMove(config),
   preRound: preRound(config),
   postRound: postRound(config),

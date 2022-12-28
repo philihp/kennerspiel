@@ -4,7 +4,7 @@ import { roundBuildings } from '../board/buildings'
 import { mode } from '../board/mode'
 import { clergyForColor } from '../board/player'
 import { preMove } from '../board/preMove'
-import { roundSettlements, settlementRounds } from '../board/settlements'
+import { roundSettlements } from '../board/settlements'
 import {
   BuildingEnum,
   Clergy,

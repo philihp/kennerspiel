@@ -1,14 +1,49 @@
 import { P, match } from 'ts-pattern'
 import { GameCommandConfigParams, PlayerColor, SettlementEnum, SettlementRound } from '../types'
 
-export const settlementRounds = (config: GameCommandConfigParams): number[] =>
-  match<GameCommandConfigParams, number[]>(config) // .
-    .with({ players: 1 }, () => [11, 15, 21, 25, 31])
-    .with({ players: 2 }, () => [6, 13, 20, 27])
-    .with({ players: 3, length: 'long' }, () => [5, 10, 14, 19, 24])
-    .with({ players: 4, length: 'long' }, () => [6, 9, 15, 18, 24])
-    .with({ players: P.when((players) => [3, 4].includes(players)), length: 'short' }, () => [2, 4, 6, 8, 12])
-    .otherwise(() => [])
+export const nextSettlementRound = (prev: SettlementRound) => {
+  switch (prev) {
+    case SettlementRound.A:
+      return SettlementRound.B
+    case SettlementRound.B:
+      return SettlementRound.C
+    case SettlementRound.C:
+      return SettlementRound.D
+    case SettlementRound.D:
+      return SettlementRound.E
+    case SettlementRound.E:
+    default:
+      return SettlementRound.E
+  }
+}
+
+export const settlementOnRound = (config: GameCommandConfigParams, round: SettlementRound): number | undefined =>
+  match<[GameCommandConfigParams, SettlementRound], number>([config, round]) // .
+    .with([{ players: 1 }, SettlementRound.A], () => 11)
+    .with([{ players: 1 }, SettlementRound.B], () => 15)
+    .with([{ players: 1 }, SettlementRound.C], () => 21)
+    .with([{ players: 1 }, SettlementRound.D], () => 25)
+    .with([{ players: 1 }, SettlementRound.E], () => 31)
+    .with([{ players: 2 }, SettlementRound.A], () => 6)
+    .with([{ players: 2 }, SettlementRound.B], () => 13)
+    .with([{ players: 2 }, SettlementRound.C], () => 20)
+    .with([{ players: 2 }, SettlementRound.D], () => 27)
+    .with([{ players: 3, length: 'long' }, SettlementRound.A], () => 5)
+    .with([{ players: 3, length: 'long' }, SettlementRound.B], () => 10)
+    .with([{ players: 3, length: 'long' }, SettlementRound.C], () => 14)
+    .with([{ players: 3, length: 'long' }, SettlementRound.D], () => 19)
+    .with([{ players: 3, length: 'long' }, SettlementRound.E], () => 24)
+    .with([{ players: 4, length: 'long' }, SettlementRound.A], () => 6)
+    .with([{ players: 4, length: 'long' }, SettlementRound.B], () => 9)
+    .with([{ players: 4, length: 'long' }, SettlementRound.C], () => 15)
+    .with([{ players: 4, length: 'long' }, SettlementRound.D], () => 18)
+    .with([{ players: 4, length: 'long' }, SettlementRound.E], () => 24)
+    .with([{ players: P.when((p) => [3, 4].includes(p)), length: 'short' }, SettlementRound.A], () => 2)
+    .with([{ players: P.when((p) => [3, 4].includes(p)), length: 'short' }, SettlementRound.B], () => 4)
+    .with([{ players: P.when((p) => [3, 4].includes(p)), length: 'short' }, SettlementRound.C], () => 6)
+    .with([{ players: P.when((p) => [3, 4].includes(p)), length: 'short' }, SettlementRound.D], () => 8)
+    .with([{ players: P.when((p) => [3, 4].includes(p)), length: 'short' }, SettlementRound.E], () => 12)
+    .otherwise(() => 0)
 
 export const roundSettlements = (color: PlayerColor, round: SettlementRound): SettlementEnum[] =>
   match<[PlayerColor, SettlementRound], SettlementEnum[]>([color, round])
