@@ -1,5 +1,6 @@
 import { commit } from './commands/commit'
 import { config } from './commands/config'
+import { cutPeat } from './commands/cutPeat'
 import { start } from './commands/start'
 import { parser } from './parser'
 import { GameCommandEnum, GameState, GameStatusEnum, Reducer, SettlementRound } from './types'
@@ -26,6 +27,8 @@ export const reducer: Reducer = (state, action) => {
       return start(state, parsed.params)
     case GameCommandEnum.COMMIT:
       return commit(state)
+    case GameCommandEnum.CUT_PEAT:
+      return cutPeat(state, parsed.params)
     default:
       return undefined
   }

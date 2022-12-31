@@ -5,6 +5,7 @@ export enum GameCommandEnum {
   START = 'START',
   COMMIT = 'COMMIT',
   USE = 'USE',
+  CUT_PEAT = 'CUT_PEAT',
 }
 
 export type GameConfigPlayers = 1 | 2 | 3 | 4
@@ -211,6 +212,11 @@ export type GameCommandUseParams = {
   coords?: number[][] // TODO??
 }
 
+export type GameCommandCutPeatParams = {
+  coords: number[]
+  useJoker: boolean
+}
+
 export enum Clergy {
   LayBrother1R = 'LB1R',
   LayBrother2R = 'LB2R',
@@ -275,8 +281,9 @@ export type GameUnparsedAction = string[]
 export type GameActionCommit = { command: GameCommandEnum.COMMIT }
 export type GameActionConfig = { command: GameCommandEnum.CONFIG; params: GameCommandConfigParams }
 export type GameActionStart = { command: GameCommandEnum.START; params: GameCommandStartParams }
+export type GameActionCutPeat = { command: GameCommandEnum.CUT_PEAT; params: GameCommandCutPeatParams }
 export type GameActionUndefined = undefined
-export type GameAction = GameActionCommit | GameActionConfig | GameActionStart | GameActionUndefined
+export type GameAction = GameActionCommit | GameActionConfig | GameActionStart | GameActionCutPeat | GameActionUndefined
 
 export type GameState = {
   randGen: PCGState

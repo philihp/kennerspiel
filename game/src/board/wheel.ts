@@ -9,5 +9,5 @@ export const armValues = ({ length, players }: GameCommandConfigParams) => {
 
 export const take = (armIndex: number, tokenIndex: number, config: GameCommandConfigParams): number => {
   const armVals = armValues(config)
-  return armVals[(tokenIndex - armIndex + armVals.length) % armVals.length]
+  return armVals[(armIndex - tokenIndex + armVals.length) % armVals.length]
 }
