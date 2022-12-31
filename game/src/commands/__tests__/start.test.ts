@@ -6,38 +6,6 @@ import { start } from '../start'
 
 describe('commands/start', () => {
   describe('start', () => {
-    it('cannot start from playing', () => {
-      expect.assertions(1)
-      expect(
-        start(
-          {
-            ...initialState,
-            rondel: {
-              pointingBefore: 0,
-            },
-            status: GameStatusEnum.PLAYING,
-          },
-          { seed: 42, colors: [PlayerColor.Red] }
-        )
-      ).toBeUndefined()
-    })
-
-    it('cannot start from finished', () => {
-      expect.assertions(1)
-      expect(
-        start(
-          {
-            ...initialState,
-            rondel: {
-              pointingBefore: 0,
-            },
-            status: GameStatusEnum.FINISHED,
-          },
-          { seed: 42, colors: [PlayerColor.Red] }
-        )
-      ).toBeUndefined()
-    })
-
     it('cannot start before configured', () => {
       expect.assertions(1)
       const dst = start(

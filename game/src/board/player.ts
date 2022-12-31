@@ -1,4 +1,4 @@
-import { Clergy, GameState, PlayerColor, Tableau } from '../types'
+import { Clergy, GameState, GameStatePlaying, PlayerColor, Tableau } from '../types'
 
 export const clergyForColor = (color: PlayerColor): Clergy[] => {
   switch (color) {
@@ -15,10 +15,12 @@ export const clergyForColor = (color: PlayerColor): Clergy[] => {
   }
 }
 
-export const getPlayer = (state: GameState, playerIndex?: number): Tableau | undefined =>
-  state.players?.[playerIndex ?? state.activePlayerIndex]
+export const getPlayer = (
+  { players, activePlayerIndex }: GameStatePlaying,
+  playerIndex?: number
+): Tableau | undefined => players[playerIndex ?? activePlayerIndex]
 
-export const setPlayer = (state: GameState, player: Tableau, playerIndex?: number): GameState => {
+export const setPlayer = (state: GameStatePlaying, player: Tableau, playerIndex?: number): GameStatePlaying => {
   if (state.players === undefined) return state
   const i = playerIndex || state.activePlayerIndex
   return {

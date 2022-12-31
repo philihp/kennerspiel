@@ -1,9 +1,9 @@
 import { match, P } from 'ts-pattern'
-import { GameCommandConfigParams, GameState, PostMoveHandler } from '../types'
+import { GameCommandConfigParams, GameStatePlaying, PostMoveHandler } from '../types'
 
 export const preRound = (config: GameCommandConfigParams): PostMoveHandler =>
   match<GameCommandConfigParams, PostMoveHandler>(config)
-    .with({ length: 'short', players: P.union(3, 4) }, () => (state: GameState) => ({
+    .with({ length: 'short', players: P.union(3, 4) }, () => (state: GameStatePlaying) => ({
       ...state,
       players: state.players?.map((player) => {
         switch (state.round) {
@@ -84,4 +84,4 @@ export const preRound = (config: GameCommandConfigParams): PostMoveHandler =>
         }
       }),
     }))
-    .otherwise(() => (state: GameState) => state)
+    .otherwise(() => (state: GameStatePlaying) => state)

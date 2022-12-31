@@ -5,27 +5,6 @@ import { config } from '../config'
 
 describe('commands/config', () => {
   describe('config', () => {
-    const params: GameCommandConfigParams = { players: 2, country: 'ireland', length: 'long' }
-    it('cannot config from playing', () => {
-      expect.assertions(1)
-      const src = {
-        ...initialState,
-        status: GameStatusEnum.PLAYING,
-      }
-      const dst = config(src, params)
-      expect(dst).toBeUndefined()
-    })
-
-    it('cannot config from finished', () => {
-      expect.assertions(1)
-      const src = {
-        ...initialState,
-        status: GameStatusEnum.FINISHED,
-      }
-      const dst = config(src, params)
-      expect(dst).toBeUndefined()
-    })
-
     it('can config from setup', () => {
       expect.assertions(2)
       const dst = config(

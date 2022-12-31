@@ -285,31 +285,37 @@ export type GameActionCutPeat = { command: GameCommandEnum.CUT_PEAT; params: Gam
 export type GameActionUndefined = undefined
 export type GameAction = GameActionCommit | GameActionConfig | GameActionStart | GameActionCutPeat | GameActionUndefined
 
-export type GameState = {
+export type GameStateSetup = {
+  status: GameStatusEnum.SETUP
   randGen: PCGState
-  status: GameStatusEnum
-  actionList: GameAction[]
-  activePlayerIndex: number
+  players?: Tableau[]
   config?: GameCommandConfigParams
   rondel?: Rondel
-  players?: Tableau[]
+}
+export type GameStatePlaying = {
+  status: GameStatusEnum.PLAYING | GameStatusEnum.FINISHED
+  randGen: PCGState
+  actionList: GameAction[]
+  activePlayerIndex: number
+  config: GameCommandConfigParams
+  rondel: Rondel
+  players: Tableau[]
   settling: boolean
   extraRound: boolean
   moveInRound?: number
-  round?: number
-  startingPlayer?: number
+  round: number
+  startingPlayer: number
   settlementRound: SettlementRound
   buildings: BuildingEnum[]
   plotPurchasePrices: number[]
   districtPurchasePrices: number[]
 }
-
-export type GameCommand = (state: GameState, params?: unknown) => GameState | undefined
+export type GameState = GameStateSetup | GameStatePlaying
 
 export type Reducer = (state: GameState, action: string[]) => GameState | undefined
 
 export type Parser = (action: GameUnparsedAction) => GameAction
 
-export type PreMoveHandler = (state: GameState) => GameState | undefined
-export type PostMoveHandler = (state: GameState) => GameState | undefined
-export type PostRoundHandler = (state: GameState) => GameState | undefined
+export type PreMoveHandler = (state: GameStatePlaying) => GameStatePlaying | undefined
+export type PostMoveHandler = (state: GameStatePlaying) => GameStatePlaying | undefined
+export type PostRoundHandler = (state: GameStatePlaying) => GameStatePlaying | undefined

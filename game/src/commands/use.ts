@@ -1,4 +1,4 @@
-import { BuildingEnum, GameCommandUseParams, GameState, ResourceEnum } from '../types'
+import { BuildingEnum, GameCommandUseParams, GameStatePlaying, ResourceEnum } from '../types'
 
 type UseParser = (params: string[]) => GameCommandUseParams
 
@@ -45,7 +45,7 @@ export const parse: UseParser = (params) => {
   return BAD_PARSE
 }
 
-export const use = (state: GameState, params: GameCommandUseParams) => {
+export const use = (state: GameStatePlaying, params: GameCommandUseParams): GameStatePlaying => {
   return {
     ...state,
   }

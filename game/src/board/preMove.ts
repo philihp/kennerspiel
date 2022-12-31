@@ -1,11 +1,11 @@
-import { GameState, GameStatusEnum, PreMoveHandler, Rondel, Tile } from '../types'
+import { GameState, GameStatePlaying, GameStatusEnum, PreMoveHandler, Rondel, Tile } from '../types'
 import { isExtraRound, isPriorSpecialInExtraRound } from './extraRound'
 import { clergyForColor, setPlayer } from './player'
 import { preRound } from './preRound'
 import { pushArm } from './rondel'
 import { nextSettlementRound } from './settlements'
 
-export const preMove: PreMoveHandler = (state: GameState): GameState | undefined => {
+export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlaying | undefined => {
   let newState = state
   if (state.status !== GameStatusEnum.PLAYING) return undefined
   if (state.players === undefined) return undefined

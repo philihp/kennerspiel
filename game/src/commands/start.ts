@@ -6,9 +6,9 @@ import { preMove } from '../board/preMove'
 import { roundSettlements } from '../board/settlements'
 import {
   BuildingEnum,
-  Clergy,
   GameCommandStartParams,
-  GameState,
+  GameStatePlaying,
+  GameStateSetup,
   GameStatusEnum,
   LandEnum,
   PlayerColor,
@@ -38,8 +38,10 @@ const makeLandscape = (color: PlayerColor) => {
   ]
 }
 
-export const start = (state: GameState, { seed, colors }: GameCommandStartParams): GameState | undefined => {
-  if (state.status !== GameStatusEnum.SETUP) return undefined
+export const start = (
+  state: GameStateSetup,
+  { seed, colors }: GameCommandStartParams
+): GameStatePlaying | undefined => {
   if (state.rondel === undefined) return undefined
   if (state.config === undefined) return undefined
   if (state.config.players === undefined) return undefined
@@ -87,8 +89,9 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
       settlements: roundSettlements(player.color, SettlementRound.S),
     }))
 
-  const newState = {
+  const newState: GameStatePlaying = {
     ...state,
+    config: state.config,
     randGen: randGen2,
     status: GameStatusEnum.PLAYING,
     players,
@@ -107,7 +110,14 @@ export const start = (state: GameState, { seed, colors }: GameCommandStartParams
     round: 1,
     moveInRound: 1,
     startingPlayer,
-    buildings: roundBuildings(state.config, state.settlementRound),
+    buildings: roundBuildings(state.config, SettlementRound.S),
+    activePlayerIndex: 0,
+    actionList: [],
+    settling: false,
+    extraRound: false,
+    settlementRound: SettlementRound.S,
+    plotPurchasePrices: [],
+    districtPurchasePrices: [],
   }
 
   return preMove(newState)

@@ -1,7 +1,6 @@
-import { GameCommandConfigParams, GameState, GameStatusEnum } from '../types'
+import { GameCommandConfigParams, GameState, GameStateSetup } from '../types'
 
-export const config = (state: GameState, params: GameCommandConfigParams): GameState | undefined => {
-  if (state.status !== GameStatusEnum.SETUP) return undefined
+export const config = (state: GameStateSetup, params: GameCommandConfigParams): GameStateSetup | undefined => {
   return {
     ...state,
     config: params,

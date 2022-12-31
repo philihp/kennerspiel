@@ -1,10 +1,8 @@
 import { getPlayer, setPlayer } from '../board/player'
-import { GameCommandCutPeatParams, GameState, Tile, BuildingEnum, Tableau } from '../types'
+import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum, Tableau } from '../types'
 import { take } from '../board/wheel'
 
-export const cutPeat = (state: GameState, { coords, useJoker }: GameCommandCutPeatParams) => {
-  if (state.config === undefined) return undefined
-  if (state.rondel === undefined) return undefined
+export const cutPeat = (state: GameStatePlaying, { coords, useJoker }: GameCommandCutPeatParams) => {
   if (state.rondel.joker === undefined) return undefined
   if (state.rondel.peat === undefined) return undefined
 

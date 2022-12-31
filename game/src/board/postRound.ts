@@ -1,11 +1,11 @@
 import { match, P } from 'ts-pattern'
-import { GameCommandConfigParams, GameState, GameStatusEnum, PostRoundHandler, SettlementRound } from '../types'
+import { GameCommandConfigParams, GameStatePlaying, GameStatusEnum, PostRoundHandler, SettlementRound } from '../types'
 import { isExtraRound } from './extraRound'
 import { settlementOnRound } from './settlements'
 
 export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
   match<GameCommandConfigParams, PostRoundHandler>(config)
-    .with({ players: 1 }, () => (state: GameState) => {
+    .with({ players: 1 }, () => (state: GameStatePlaying) => {
       if (state.round === undefined) return undefined
       if (state.config === undefined) return undefined
       if (state.startingPlayer === undefined) return undefined
@@ -40,7 +40,7 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
         startingPlayer,
       }
     })
-    .with({ players: 2 }, () => (state: GameState) => {
+    .with({ players: 2 }, () => (state: GameStatePlaying) => {
       if (state.round === undefined) return undefined
       if (state.config === undefined) return undefined
       if (state.startingPlayer === undefined) return undefined
@@ -71,7 +71,7 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
         startingPlayer,
       }
     })
-    .with({ players: P.union(3, 4) }, () => (state: GameState) => {
+    .with({ players: P.union(3, 4) }, () => (state: GameStatePlaying) => {
       if (state.round === undefined) return undefined
       if (state.config === undefined) return undefined
       if (state.startingPlayer === undefined) return undefined

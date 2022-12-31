@@ -1,5 +1,7 @@
+import { config } from '../../commands/config'
+import { start } from '../../commands/start'
 import { initialState } from '../../reducer'
-import { PlayerColor, Tableau } from '../../types'
+import { GameStatePlaying, PlayerColor, Tableau } from '../../types'
 import { getPlayer, setPlayer } from '../player'
 
 const p: Tableau = {
@@ -34,30 +36,22 @@ const p: Tableau = {
 describe('board/player', () => {
   describe('getPlayer', () => {
     it('gets the active player', () => {
-      expect.assertions(1)
-      const p0: Tableau = { ...p, coal: 1 }
-      const p1: Tableau = { ...p, meat: 1 }
-      const p2: Tableau = { ...p, beer: 1 }
-      const src = { ...initialState, activePlayerIndex: 1, players: [p0, p1, p2] }
-      expect(getPlayer(src)?.meat).toBe(1)
+      expect.assertions(3)
+      const s0 = initialState!
+      const s1 = config(s0, { length: 'long', players: 3, country: 'ireland' })!
+      const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue] })!
+      expect(getPlayer(s2)).toBe(s2.players[0])
+      expect(getPlayer(s2)).not.toBe(s2.players[1])
+      expect(getPlayer(s2)).not.toBe(s2.players[2])
     })
     it('gets the indexed player', () => {
-      expect.assertions(1)
-      const p0: Tableau = { ...p, coal: 1 }
-      const p1: Tableau = { ...p, meat: 1 }
-      const p2: Tableau = { ...p, beer: 1 }
-      const src = { ...initialState, activePlayerIndex: 1, players: [p0, p1, p2] }
-      expect(getPlayer(src, 0)?.coal).toBe(1)
-    })
-    it('returns undefined if no players', () => {
-      expect.assertions(1)
-      const src = { ...initialState, activePlayerIndex: 1, players: undefined }
-      expect(getPlayer(src)).toBeUndefined()
-    })
-    it('out of bounds returns undefined', () => {
-      expect.assertions(1)
-      const src = { ...initialState, activePlayerIndex: 4, players: [p, p, p] }
-      expect(getPlayer(src)).toBeUndefined()
+      expect.assertions(3)
+      const s0 = initialState!
+      const s1 = config(s0, { length: 'long', players: 3, country: 'ireland' })!
+      const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue] })!
+      expect(getPlayer(s2, 0)).toBe(s2.players[0])
+      expect(getPlayer(s2, 1)).toBe(s2.players[1])
+      expect(getPlayer(s2, 2)).toBe(s2.players[2])
     })
   })
   describe('setPlayer', () => {
@@ -65,7 +59,7 @@ describe('board/player', () => {
       expect.assertions(4)
       const src = { ...initialState, activePlayerIndex: 2, players: [p, p, p, p] }
       const player: Tableau = { ...p, wood: 5 }
-      const dst = setPlayer(src, player)
+      const dst = setPlayer(src as unknown as GameStatePlaying, player)
       expect(dst?.players?.[0].wood).toBe(0)
       expect(dst?.players?.[1].wood).toBe(0)
       expect(dst?.players?.[2].wood).toBe(5)
@@ -75,7 +69,7 @@ describe('board/player', () => {
       expect.assertions(4)
       const src = { ...initialState, activePlayerIndex: 2, players: [p, p, p, p] }
       const player: Tableau = { ...p, wood: 5 }
-      const dst = setPlayer(src, player, 1)
+      const dst = setPlayer(src as unknown as GameStatePlaying, player, 1)
       expect(dst?.players?.[0].wood).toBe(0)
       expect(dst?.players?.[1].wood).toBe(5)
       expect(dst?.players?.[2].wood).toBe(0)

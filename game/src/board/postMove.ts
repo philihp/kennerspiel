@@ -1,5 +1,5 @@
 import { match, P } from 'ts-pattern'
-import { GameCommandConfigParams, GameState, GameStatusEnum, PostMoveHandler, SettlementRound } from '../types'
+import { GameCommandConfigParams, GameStatePlaying, GameStatusEnum, PostMoveHandler, SettlementRound } from '../types'
 import { roundBuildings } from './buildings'
 import { postRound } from './postRound'
 import { pushArm } from './rondel'
@@ -7,17 +7,17 @@ import { roundSettlements } from './settlements'
 
 export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
   return match<GameCommandConfigParams, PostMoveHandler>(config) // .
-    .with({ players: 1, country: 'ireland' }, () => (state: GameState) => {
+    .with({ players: 1, country: 'ireland' }, () => (state: GameStatePlaying) => {
       // TODO postMove ireland solo
       // https://github.com/philihp/weblabora/blob/737717fd59c1301da6584a6874a20420eba4e71e/src/main/java/com/philihp/weblabora/model/BoardModeOneIreland.java#L113
       return state
     })
-    .with({ players: 1, country: 'france' }, () => (state: GameState) => {
+    .with({ players: 1, country: 'france' }, () => (state: GameStatePlaying) => {
       // TODO postMove france solo
       // https://github.com/philihp/weblabora/blob/737717fd59c1301da6584a6874a20420eba4e71e/src/main/java/com/philihp/weblabora/model/BoardModeOneFrance.java#L121
       return state
     })
-    .with({ players: 2, length: 'long' }, () => (state: GameState) => {
+    .with({ players: 2, length: 'long' }, () => (state: GameStatePlaying) => {
       if (state.players === undefined) return undefined
       if (state.moveInRound === undefined) return undefined
       if (state.round === undefined) return undefined
@@ -64,7 +64,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         players,
       }
     })
-    .with({ players: 2, length: 'short' }, (config) => (state: GameState) => {
+    .with({ players: 2, length: 'short' }, (config) => (state: GameStatePlaying) => {
       if (state.players === undefined) return undefined
       if (state.moveInRound === undefined) return undefined
       if (state.config === undefined) return undefined
@@ -113,7 +113,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         settling,
       }
     })
-    .with({ players: P.union(3, 4) }, () => (state: GameState) => {
+    .with({ players: P.union(3, 4) }, () => (state: GameStatePlaying) => {
       if (state.config === undefined) return undefined
       if (state.players === undefined) return undefined
       if (state.moveInRound === undefined) return undefined

@@ -6,26 +6,6 @@ import { start } from '../start'
 
 describe('commands/commit', () => {
   describe('commit', () => {
-    it('cannot commit from setup', () => {
-      expect.assertions(1)
-      expect(
-        commit({
-          ...initialState,
-          status: GameStatusEnum.SETUP,
-        })
-      ).toBeUndefined()
-    })
-
-    it('cannot commit from finished', () => {
-      expect.assertions(1)
-      expect(
-        commit({
-          ...initialState,
-          status: GameStatusEnum.FINISHED,
-        })
-      ).toBeUndefined()
-    })
-
     it('can commit from playing', () => {
       expect.assertions(2)
       const s0 = initialState

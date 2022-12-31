@@ -3,32 +3,24 @@ import { config } from './commands/config'
 import { cutPeat } from './commands/cutPeat'
 import { start } from './commands/start'
 import { parser } from './parser'
-import { GameCommandEnum, GameState, GameStatusEnum, Reducer, SettlementRound } from './types'
+import { GameCommandEnum, GameStatePlaying, GameStateSetup, GameStatusEnum, Reducer } from './types'
 
-export const initialState: GameState = {
+export const initialState: GameStateSetup = {
   randGen: 0n,
   status: GameStatusEnum.SETUP,
-  activePlayerIndex: 0,
-  actionList: [],
-  settling: false,
-  extraRound: false,
-  settlementRound: SettlementRound.S,
-  plotPurchasePrices: [],
-  districtPurchasePrices: [],
-  buildings: [],
 }
 
 export const reducer: Reducer = (state, action) => {
   const parsed = parser(action)
   switch (parsed?.command) {
     case GameCommandEnum.CONFIG:
-      return config(state, parsed.params)
+      return config(state as GameStateSetup, parsed.params)
     case GameCommandEnum.START:
-      return start(state, parsed.params)
+      return start(state as GameStateSetup, parsed.params)
     case GameCommandEnum.COMMIT:
-      return commit(state)
+      return commit(state as GameStatePlaying)
     case GameCommandEnum.CUT_PEAT:
-      return cutPeat(state, parsed.params)
+      return cutPeat(state as GameStatePlaying, parsed.params)
     default:
       return undefined
   }
