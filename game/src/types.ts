@@ -276,8 +276,6 @@ export type Rondel = {
   stone?: number
 }
 
-export type GameUnparsedAction = string[]
-
 export type GameActionCommit = { command: GameCommandEnum.COMMIT }
 export type GameActionConfig = { command: GameCommandEnum.CONFIG; params: GameCommandConfigParams }
 export type GameActionStart = { command: GameCommandEnum.START; params: GameCommandStartParams }
@@ -313,8 +311,6 @@ export type GameStatePlaying = {
 export type GameState = GameStateSetup | GameStatePlaying
 
 export type Reducer = (state: GameState, action: string[]) => GameState | undefined
-
-export type Parser = (action: GameUnparsedAction) => GameAction
 
 export type PreMoveHandler = (state: GameStatePlaying) => GameStatePlaying | undefined
 export type PostMoveHandler = (state: GameStatePlaying) => GameStatePlaying | undefined
