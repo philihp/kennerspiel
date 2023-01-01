@@ -2,12 +2,8 @@ import { getPlayer, setPlayer } from '../board/player'
 import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum, Tableau } from '../types'
 import { take } from '../board/wheel'
 
-export const cutPeat = (state: GameStatePlaying, { coords, useJoker }: GameCommandCutPeatParams) => {
-  if (state.rondel.joker === undefined) return undefined
-  if (state.rondel.peat === undefined) return undefined
-
+export const cutPeat = (state: GameStatePlaying, { row, col, useJoker }: GameCommandCutPeatParams) => {
   const player: Tableau = { ...(getPlayer(state) as Tableau) }
-  const [row, col] = coords
 
   if (player === undefined) return undefined
   if (player.landscape === undefined) return undefined
@@ -16,12 +12,12 @@ export const cutPeat = (state: GameStatePlaying, { coords, useJoker }: GameComma
   const [land, building] = tile
   if (building !== BuildingEnum.Peat) return undefined
 
+  const { joker, peat, pointingBefore } = state.rondel
+
   return {
     ...setPlayer(state, {
       ...player,
-      peat:
-        player.peat +
-        take(state.rondel.pointingBefore, useJoker ? state.rondel.joker : state.rondel.peat, state.config),
+      peat: player.peat + take(pointingBefore, (useJoker ? joker : peat) ?? pointingBefore, state.config),
       landscape: [
         ...player.landscape.slice(0, row),
         [...player.landscape[row].slice(0, col), [land] as Tile, ...player.landscape[row].slice(col + 1)],
@@ -30,8 +26,8 @@ export const cutPeat = (state: GameStatePlaying, { coords, useJoker }: GameComma
     }),
     rondel: {
       ...state.rondel,
-      joker: useJoker ? state.rondel.pointingBefore : state.rondel.joker,
-      peat: !useJoker ? state.rondel.pointingBefore : state.rondel.joker,
+      joker: useJoker ? pointingBefore : joker,
+      peat: !useJoker ? pointingBefore : joker,
     },
   }
 }

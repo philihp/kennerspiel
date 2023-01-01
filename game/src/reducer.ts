@@ -50,12 +50,15 @@ export const reducer: Reducer = (state, action) =>
     )
     .with(
       [GameCommandEnum.CUT_PEAT, P.string, P.string],
-      [GameCommandEnum.CUT_PEAT, P.string, P.string, 'Jo'],
+      [GameCommandEnum.CUT_PEAT, 'Jo', P.string, P.string],
       ([_, col, row, useJoker]) =>
         cutPeat(state as GameStatePlaying, {
-          coords: [Number.parseInt(col, 10), Number.parseInt(row, 10)],
+          col: Number.parseInt(col, 10),
+          row: Number.parseInt(row, 10),
           useJoker: useJoker === 'Jo',
         })
     )
     .with([GameCommandEnum.COMMIT], () => commit(state as GameStatePlaying))
-    .otherwise(() => state)
+    .otherwise((command) => {
+      throw new Error(`Unable to parse [${command.join(',')}]`)
+    })

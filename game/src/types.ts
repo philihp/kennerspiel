@@ -213,7 +213,8 @@ export type GameCommandUseParams = {
 }
 
 export type GameCommandCutPeatParams = {
-  coords: number[]
+  row: number
+  col: number
   useJoker: boolean
 }
 
@@ -300,7 +301,7 @@ export type GameStatePlaying = {
   players: Tableau[]
   settling: boolean
   extraRound: boolean
-  moveInRound?: number
+  moveInRound: number
   round: number
   startingPlayer: number
   settlementRound: SettlementRound

@@ -7,12 +7,6 @@ import { nextSettlementRound } from './settlements'
 
 export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlaying | undefined => {
   let newState = state
-  if (state.status !== GameStatusEnum.PLAYING) return undefined
-  if (state.players === undefined) return undefined
-  if (state.moveInRound === undefined) return undefined
-  if (state.rondel === undefined) return undefined
-  if (state.config === undefined) return undefined
-  if (state.round === undefined) return undefined
 
   if (isExtraRound(state.config, state.round)) {
     // board.preExtraRound()
@@ -21,12 +15,16 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlayi
     } else {
       // TODO: for each player, if all placed, reset them
     }
-    state.extraRound = true
+    newState = {
+      ...newState,
+      extraRound: true,
+    }
   } else if (state.settling && state.moveInRound === 1) {
     // board.preSettling()
-    newState.settlementRound = nextSettlementRound(state.settlementRound)
+    newState = { ...newState, settlementRound: nextSettlementRound(state.settlementRound) }
   } else if (state.moveInRound === 1) {
     // board.preRound()
+    newState = { ...newState }
 
     // 1 - reset clergymen
     state.players.forEach((player, i) => {
@@ -40,15 +38,7 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlayi
             return landStack
           })
         )
-        newState = setPlayer(
-          newState,
-          {
-            ...player,
-            clergy,
-            landscape,
-          },
-          i
-        )
+        newState = setPlayer(newState, { ...player, clergy, landscape }, i)
       }
     })
 
@@ -65,13 +55,6 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlayi
     // if(round == mode.stoneActiveOnRound()) getWheel().getStone().setActive(true);
     // if(round == mode.jokerActiveOnRound()) getWheel().getJoker().setActive(true);
   }
-
-  // TODO: actionsBeforeSettlement
-  //   	if(!isGameOver()) {
-  // 	for (int i = 0; i < players.length; i++) {
-  // 		players[i].setActionsBeforeSettlement(actionsBeforeSettlement(i));
-  // 	}
-  // }
 
   return newState
 }

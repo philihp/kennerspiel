@@ -15,10 +15,10 @@ export const clergyForColor = (color: PlayerColor): Clergy[] => {
   }
 }
 
-export const getPlayer = (
-  { players, activePlayerIndex }: GameStatePlaying,
-  playerIndex?: number
-): Tableau | undefined => players[playerIndex ?? activePlayerIndex]
+export const getPlayer = (state: GameStatePlaying, playerIndex?: number): Tableau | undefined => {
+  const index = playerIndex ?? state?.activePlayerIndex
+  return state.players[index]
+}
 
 export const setPlayer = (state: GameStatePlaying, player: Tableau, playerIndex?: number): GameStatePlaying => {
   if (state.players === undefined) return state
