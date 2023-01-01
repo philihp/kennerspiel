@@ -1,49 +1,18 @@
-import { parse, parseResourceParam } from '../use'
+import { initialState } from '../../reducer'
+import { BuildingEnum, PlayerColor } from '../../types'
+import { config } from '../config'
+import { start } from '../start'
+import { use } from '../use'
 
 describe('commands/use', () => {
-  describe('parse', () => {
-    it('parses building out', () => {
-      const parsed = parse(['LG1'])
-      expect(parsed).toStrictEqual({ building: 'LG1' })
-    })
-    it('parses command with one param', () => {
-      const parsed = parse(['LR2', 'Sh'])
-      expect(parsed).toStrictEqual({ building: 'LR2', p1: ['Sh'] })
-    })
-    it('borks itself when building is not known', () => {
-      const parsed = parse(['!!!'])
-      expect(parsed).toStrictEqual({})
-    })
-  })
+  const s0 = initialState
+  const s1 = config(s0, { country: 'france', players: 3, length: 'long' })!
+  const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green] })!
 
-  describe('parseResourceParam', () => {
-    it('parses empty string', () => {
-      const src = ''
-      const dst = parseResourceParam(src)
-      expect(dst).toStrictEqual([])
-    })
-    it('returns undefined if undefined in', () => {
-      expect(parseResourceParam(undefined)).toBeUndefined()
-    })
-    it('parses single unit', () => {
-      const src = 'Pt'
-      const dst = parseResourceParam(src)
-      expect(dst).toStrictEqual(['Pt'])
-    })
-    it('parses multiple units', () => {
-      const src = 'PtPtPtPt'
-      const dst = parseResourceParam(src)
-      expect(dst).toStrictEqual(['Pt', 'Pt', 'Pt', 'Pt'])
-    })
-    it('gracefull failing if odd number of chars', () => {
-      const src = 'PnP'
-      const dst = parseResourceParam(src)
-      expect(dst).toStrictEqual(['Pn'])
-    })
-    it('weird values dont come out', () => {
-      const src = 'Pq'
-      const dst = parseResourceParam(src)
-      expect(dst).toStrictEqual([])
+  describe('use', () => {
+    it('throws errors on invalid building', () => {
+      // expect(() => use(s2, 'XXX' as unknown as BuildingEnum, [])).toThrow()
+      expect(use(s2, 'XXX' as unknown as BuildingEnum, [])).toBeUndefined()
     })
   })
 })

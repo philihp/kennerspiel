@@ -1,42 +1,20 @@
 import fastShuffle from 'fast-shuffle'
 import { newRandGen, randNext, randRange } from 'fn-pcg'
 import { roundBuildings } from '../board/buildings'
+import { makeLandscape, modeSetup } from '../board/modeSetup'
 import { clergyForColor } from '../board/player'
 import { preMove } from '../board/preMove'
 import { roundSettlements } from '../board/settlements'
 import {
-  BuildingEnum,
   GameCommandStartParams,
   GameStatePlaying,
   GameStateSetup,
   GameStatusEnum,
-  LandEnum,
   PlayerColor,
   SettlementRound,
   Tableau,
   Tile,
 } from '../types'
-
-const PP: Tile = [LandEnum.Plains, BuildingEnum.Peat]
-const PF: Tile = [LandEnum.Plains, BuildingEnum.Forest]
-const P: Tile = [LandEnum.Plains]
-
-const startBuilding = {
-  [PlayerColor.Red]: [BuildingEnum.ClayMoundR, BuildingEnum.FarmYardR, BuildingEnum.CloisterOfficeR],
-  [PlayerColor.Green]: [BuildingEnum.ClayMoundG, BuildingEnum.FarmYardG, BuildingEnum.CloisterOfficeG],
-  [PlayerColor.Blue]: [BuildingEnum.ClayMoundB, BuildingEnum.FarmYardB, BuildingEnum.CloisterOfficeB],
-  [PlayerColor.White]: [BuildingEnum.ClayMoundW, BuildingEnum.FarmYardW, BuildingEnum.CloisterOfficeW],
-}
-
-const makeLandscape = (color: PlayerColor) => {
-  const cm: Tile = [LandEnum.Hillside, startBuilding[color][0]]
-  const fy: Tile = [LandEnum.Plains, startBuilding[color][1]]
-  const co: Tile = [LandEnum.Plains, startBuilding[color][2]]
-  return [
-    [PP, PF, PF, P, cm],
-    [PP, PF, fy, P, co],
-  ]
-}
 
 export const start = (
   state: GameStateSetup,
@@ -118,7 +96,8 @@ export const start = (
     settlementRound: SettlementRound.S,
     plotPurchasePrices: [],
     districtPurchasePrices: [],
+    neutralBuildingPhase: false,
   }
 
-  return preMove(newState)
+  return preMove(modeSetup(state.config)(newState))
 }

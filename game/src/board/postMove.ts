@@ -1,6 +1,14 @@
 import { match, P } from 'ts-pattern'
-import { GameCommandConfigParams, GameStatePlaying, GameStatusEnum, PostMoveHandler, SettlementRound } from '../types'
+import {
+  GameCommandConfigParams,
+  GameStatePlaying,
+  GameStatusEnum,
+  PostMoveHandler,
+  SettlementRound,
+  Tile,
+} from '../types'
 import { roundBuildings } from './buildings'
+import { clergyForColor } from './player'
 import { postRound } from './postRound'
 import { pushArm } from './rondel'
 import { roundSettlements } from './settlements'
@@ -8,14 +16,201 @@ import { roundSettlements } from './settlements'
 export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
   return match<GameCommandConfigParams, PostMoveHandler>(config) // .
     .with({ players: 1, country: 'ireland' }, () => (state: GameStatePlaying) => {
-      // TODO postMove ireland solo
-      // https://github.com/philihp/weblabora/blob/737717fd59c1301da6584a6874a20420eba4e71e/src/main/java/com/philihp/weblabora/model/BoardModeOneIreland.java#L113
-      return state
+      const newState = { ...state }
+      let {
+        buildings,
+        players,
+        activePlayerIndex,
+        settling,
+        extraRound,
+        moveInRound,
+        settlementRound,
+        status,
+        neutralBuildingPhase,
+        rondel,
+        round,
+      } = state
+
+      // clear any coins that may have been paid to neutral player
+      players = [state.players[0], { ...state.players[1], penny: 0 }]
+
+      if (state.extraRound && moveInRound === 2) {
+        settling = true
+        settlementRound = SettlementRound.E
+        extraRound = false
+      } else if (settlementRound === SettlementRound.E) {
+        status = GameStatusEnum.FINISHED
+      }
+
+      if (settling && state.buildings.length === 0) {
+        if (neutralBuildingPhase) {
+          moveInRound++
+          activePlayerIndex = (activePlayerIndex + 1) % state.players.length
+          neutralBuildingPhase = false
+
+          const neutralClergy = clergyForColor(players[1].color)
+          if (players[1].clergy.length === 0) {
+            players[1] = {
+              ...players[1],
+              clergy: neutralClergy,
+              landscape: players[1].landscape.map((landRow) =>
+                landRow.map((landStack) => {
+                  const [land, building, clergy] = landStack
+                  if (clergy && neutralClergy.includes(clergy)) return [land, building, undefined] as Tile
+                  return landStack
+                })
+              ),
+            }
+          }
+        } else {
+          // board.postSettlement()
+          settling = false
+          buildings = roundBuildings(state.config, state.settlementRound)
+          players = players.map((player) => ({
+            ...player,
+            settlements: [...player.settlements, ...roundSettlements(player.color, state.settlementRound)],
+          }))
+          if (state.settlementRound === SettlementRound.E) {
+            status = GameStatusEnum.FINISHED
+            rondel = pushArm(rondel, state.config.players)
+          }
+          round++
+          moveInRound = 1
+        }
+      } else {
+        moveInRound++
+        if (!settling && moveInRound > 2) {
+          // board.postRound()
+          return postRound(state.config)({
+            ...newState,
+            players,
+            buildings,
+            activePlayerIndex,
+            settling,
+            extraRound,
+            moveInRound,
+            settlementRound,
+            status,
+            neutralBuildingPhase,
+            rondel,
+            round,
+          })
+        }
+      }
+
+      return {
+        ...newState,
+        players,
+        buildings,
+        activePlayerIndex,
+        settling,
+        extraRound,
+        moveInRound,
+        settlementRound,
+        status,
+        neutralBuildingPhase,
+        rondel,
+        round,
+      }
     })
     .with({ players: 1, country: 'france' }, () => (state: GameStatePlaying) => {
-      // TODO postMove france solo
-      // https://github.com/philihp/weblabora/blob/737717fd59c1301da6584a6874a20420eba4e71e/src/main/java/com/philihp/weblabora/model/BoardModeOneFrance.java#L121
-      return state
+      const newState = { ...state }
+      let {
+        buildings,
+        players,
+        activePlayerIndex,
+        settling,
+        extraRound,
+        moveInRound,
+        settlementRound,
+        status,
+        neutralBuildingPhase,
+        rondel,
+        round,
+      } = state
+
+      // clear any coins that may have been paid to neutral player
+      players = [state.players[0], { ...state.players[1], penny: 0 }]
+
+      if (state.extraRound) {
+        moveInRound = 2
+        settling = true
+        settlementRound = SettlementRound.E
+        extraRound = false
+      } else if (settlementRound === SettlementRound.E) {
+        status = GameStatusEnum.FINISHED
+      }
+
+      if (settling && state.buildings.length === 0) {
+        if (neutralBuildingPhase) {
+          moveInRound++
+          activePlayerIndex = (activePlayerIndex + 1) % state.players.length
+          neutralBuildingPhase = false
+
+          const neutralClergy = clergyForColor(players[1].color)
+          if (players[1].clergy.length === 0) {
+            players[1] = {
+              ...players[1],
+              clergy: neutralClergy,
+              landscape: players[1].landscape.map((landRow) =>
+                landRow.map((landStack) => {
+                  const [land, building, clergy] = landStack
+                  if (clergy && neutralClergy.includes(clergy)) return [land, building, undefined] as Tile
+                  return landStack
+                })
+              ),
+            }
+          }
+        } else {
+          // board.postSettlement()
+          settling = false
+          buildings = roundBuildings(state.config, state.settlementRound)
+          players = players.map((player) => ({
+            ...player,
+            settlements: [...player.settlements, ...roundSettlements(player.color, state.settlementRound)],
+          }))
+          if (state.settlementRound === SettlementRound.E) {
+            status = GameStatusEnum.FINISHED
+            rondel = pushArm(rondel, state.config.players)
+          }
+          round++
+          moveInRound = 1
+        }
+      } else {
+        moveInRound++
+        if (!settling && moveInRound > 2) {
+          // board.postRound()
+          return postRound(state.config)({
+            ...newState,
+            players,
+            buildings,
+            activePlayerIndex,
+            settling,
+            extraRound,
+            moveInRound,
+            settlementRound,
+            status,
+            neutralBuildingPhase,
+            rondel,
+            round,
+          })
+        }
+      }
+
+      return {
+        ...newState,
+        players,
+        buildings,
+        activePlayerIndex,
+        settling,
+        extraRound,
+        moveInRound,
+        settlementRound,
+        status,
+        neutralBuildingPhase,
+        rondel,
+        round,
+      }
     })
     .with({ players: 2, length: 'long' }, () => (state: GameStatePlaying) => {
       if (state.players === undefined) return undefined
@@ -38,7 +233,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         buildings = roundBuildings(state.config, state.settlementRound)
         players = players.map((player) => ({
           ...player,
-          settlements: roundSettlements(player.color, state.settlementRound),
+          settlements: [...player.settlements, ...roundSettlements(player.color, state.settlementRound)],
         }))
         if (state.settlementRound === SettlementRound.E) {
           status = GameStatusEnum.FINISHED

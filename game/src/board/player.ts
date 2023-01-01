@@ -1,4 +1,4 @@
-import { Clergy, GameState, GameStatePlaying, PlayerColor, Tableau } from '../types'
+import { Clergy, GameStatePlaying, PlayerColor, Tableau } from '../types'
 
 export const clergyForColor = (color: PlayerColor): Clergy[] => {
   switch (color) {

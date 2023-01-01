@@ -1,5 +1,5 @@
 import { initialState } from '../../reducer'
-import { GameStatusEnum, PlayerColor } from '../../types'
+import { PlayerColor } from '../../types'
 import { commit } from '../commit'
 import { config } from '../config'
 import { start } from '../start'

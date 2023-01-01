@@ -3,7 +3,9 @@ import { commit } from './commands/commit'
 import { config } from './commands/config'
 import { cutPeat } from './commands/cutPeat'
 import { start } from './commands/start'
+import { use } from './commands/use'
 import {
+  BuildingEnum,
   GameCommandEnum,
   GameConfigCountry,
   GameConfigLength,
@@ -57,6 +59,20 @@ export const reducer: Reducer = (state, action) =>
           row: Number.parseInt(row, 10),
           useJoker: useJoker === 'Jo',
         })
+    )
+    .with(
+      [GameCommandEnum.USE, P.string],
+      [GameCommandEnum.USE, P.string, P.string],
+      [GameCommandEnum.USE, P.string, P.string, P.string],
+      [GameCommandEnum.USE, P.string, P.string, P.string, P.string],
+      [GameCommandEnum.USE, P.string, P.string, P.string, P.string, P.string],
+      [GameCommandEnum.USE, P.string, P.string, P.string, P.string, P.string, P.string],
+      [GameCommandEnum.USE, P.string, P.string, P.string, P.string, P.string, P.string, P.string],
+      [GameCommandEnum.USE, P.string, P.string, P.string, P.string, P.string, P.string, P.string, P.string],
+      [GameCommandEnum.USE, P.string, P.string, P.string, P.string, P.string, P.string, P.string, P.string, P.string],
+      ([_command, building, ...params]) => {
+        return use(state as GameStatePlaying, building as BuildingEnum, params)
+      }
     )
     .with([GameCommandEnum.COMMIT], () => commit(state as GameStatePlaying))
     .otherwise((command) => {

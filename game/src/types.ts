@@ -205,11 +205,19 @@ export enum BuildingEnum {
   HouseOfTheBrotherhood = 'G41',
 }
 
-export type GameCommandUseParams = {
-  building?: BuildingEnum
-  p1?: ResourceEnum[]
-  p2?: ResourceEnum[]
-  coords?: number[][] // TODO??
+export type UsageParamSingle = {
+  param: string
+}
+export type UsageParamDouble = {
+  p1: string
+  p2: string
+}
+export type UsageParamCoord = {
+  row: number
+  col: number
+}
+export type UsageParamCoords = {
+  coords: { row: number; col: number }[]
 }
 
 export type GameCommandCutPeatParams = {
@@ -299,6 +307,8 @@ export type GameStatePlaying = {
   config: GameCommandConfigParams
   rondel: Rondel
   players: Tableau[]
+  neutralPlayer?: Tableau
+  neutralBuildingPhase: boolean
   settling: boolean
   extraRound: boolean
   moveInRound: number
