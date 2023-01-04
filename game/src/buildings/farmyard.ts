@@ -2,8 +2,12 @@ import { getPlayer, setPlayer } from '../board/player'
 import { take } from '../board/wheel'
 import { UsageParamSingle, GameStatePlaying, ResourceEnum } from '../types'
 
-export const farmyard = (state: GameStatePlaying, { param }: UsageParamSingle): GameStatePlaying | undefined => {
+export const farmyard = (
+  state: GameStatePlaying | undefined,
+  { param }: UsageParamSingle
+): GameStatePlaying | undefined => {
   if (param === undefined) return undefined
+  if (state === undefined) return undefined
   const rondel = { ...state.rondel }
   let tokenIndex = 0
   if (param.includes(ResourceEnum.Joker) && rondel.joker !== undefined) {

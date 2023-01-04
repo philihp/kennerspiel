@@ -15,7 +15,7 @@ export const clergyForColor = (color: PlayerColor): Clergy[] => {
   }
 }
 
-export const getPlayer = (state: GameStatePlaying, playerIndex?: number): Tableau | undefined => {
+export const getPlayer = (state: GameStatePlaying, playerIndex?: number): Tableau => {
   const index = playerIndex ?? state?.activePlayerIndex
   return state.players[index]
 }
@@ -28,3 +28,8 @@ export const setPlayer = (state: GameStatePlaying, player: Tableau, playerIndex?
     players: [...state.players.slice(0, i), player, ...state.players.slice(i + 1)],
   }
 }
+
+export const isPrior = (clergy: Clergy | undefined) =>
+  clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy)
+
+export const isLayBrother = (clergy: Clergy | undefined) => clergy && !isPrior(clergy)

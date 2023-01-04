@@ -1,8 +1,8 @@
 import { config } from '../../commands/config'
 import { start } from '../../commands/start'
 import { initialState } from '../../reducer'
-import { GameStatePlaying, PlayerColor, Tableau } from '../../types'
-import { getPlayer, setPlayer } from '../player'
+import { Clergy, GameStatePlaying, PlayerColor, Tableau } from '../../types'
+import { getPlayer, isLayBrother, isPrior, setPlayer } from '../player'
 
 const p: Tableau = {
   color: PlayerColor.Red,
@@ -74,6 +74,31 @@ describe('board/player', () => {
       expect(dst?.players?.[1].wood).toBe(5)
       expect(dst?.players?.[2].wood).toBe(0)
       expect(dst?.players?.[3].wood).toBe(0)
+    })
+  })
+
+  describe('isPrior', () => {
+    it('thinks priors are priors', () => {
+      expect(isPrior(Clergy.PriorW)).toBeTruthy()
+    })
+    it('thinks lay brothers arent priors', () => {
+      expect(isPrior(Clergy.LayBrother1R)).toBeFalsy()
+      expect(isPrior(Clergy.LayBrother2R)).toBeFalsy()
+    })
+    it('does not think undefined is a prior', () => {
+      expect(isPrior(undefined)).toBeFalsy()
+    })
+  })
+  describe('isLayBrother', () => {
+    it('thinks priors are priors', () => {
+      expect(isLayBrother(Clergy.PriorW)).toBeFalsy()
+    })
+    it('thinks lay brothers arent priors', () => {
+      expect(isLayBrother(Clergy.LayBrother1R)).toBeTruthy()
+      expect(isLayBrother(Clergy.LayBrother2R)).toBeTruthy()
+    })
+    it('does not think undefined is a prior', () => {
+      expect(isLayBrother(undefined)).toBeFalsy()
     })
   })
 })

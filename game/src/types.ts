@@ -205,18 +205,21 @@ export enum BuildingEnum {
   HouseOfTheBrotherhood = 'G41',
 }
 
-export type UsageParamSingle = {
+type UsageOfClergy = {
+  usePrior?: boolean
+}
+export type UsageParamSingle = UsageOfClergy & {
   param: string
 }
-export type UsageParamDouble = {
+export type UsageParamDouble = UsageOfClergy & {
   p1: string
   p2: string
 }
-export type UsageParamCoord = {
+export type UsageParamCoord = UsageOfClergy & {
   row: number
   col: number
 }
-export type UsageParamCoords = {
+export type UsageParamCoords = UsageOfClergy & {
   coords: { row: number; col: number }[]
 }
 
