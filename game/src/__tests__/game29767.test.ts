@@ -28,6 +28,6 @@ describe('game 29767', () => {
     expect(s4.players[0].grain).toBe(0)
     const s5 = reducer(s4, ['USE', 'LR2', 'Gn'])! as GameStatePlaying
     expect(s5.players[0].grain).toBe(2)
-    // expect(s5.players[0].clergy).toStrictEqual(['LB2R', 'PRIR'])
+    expect(s5.players[0].clergy).toStrictEqual(['LB2R', 'PRIR'])
   })
 })
