@@ -1,5 +1,14 @@
 import { match, P } from 'ts-pattern'
-import { BuildingEnum, GameCommandConfigParams, SettlementRound } from '../types'
+import { BuildingEnum, GameCommandConfigParams, LandEnum, SettlementRound } from '../types'
+
+export const terrainForBuilding = (building: BuildingEnum) =>
+  match<BuildingEnum, LandEnum[]>(building).otherwise(() => [
+    LandEnum.Coast,
+    LandEnum.Hillside,
+    LandEnum.Mountain,
+    LandEnum.Plains,
+    LandEnum.Water,
+  ])
 
 export const roundBuildings = (config: GameCommandConfigParams, round: SettlementRound): BuildingEnum[] =>
   match<[GameCommandConfigParams, SettlementRound], BuildingEnum[]>([config, round])

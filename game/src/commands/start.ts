@@ -13,7 +13,6 @@ import {
   PlayerColor,
   SettlementRound,
   Tableau,
-  Tile,
 } from '../types'
 
 export const start = (

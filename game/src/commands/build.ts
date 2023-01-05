@@ -1,24 +1,43 @@
+import { pipe } from 'ramda'
+import { terrainForBuilding } from '../board/buildings'
 import { getPlayer } from '../board/player'
-import { GameCommandBuildParams, GameStatePlaying } from '../types'
+import { BuildingEnum, GameCommandBuildParams, GameStatePlaying } from '../types'
 
-export const build =
-  ({ row, col, building }: GameCommandBuildParams) =>
-  (state: GameStatePlaying): GameStatePlaying | undefined => {
-    if (!state.buildings.includes(building)) return undefined
+const checkBuildingUnbuilt =
+  (building: BuildingEnum) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state?.buildings.includes(building) ? state : undefined
 
-    const player = getPlayer(state)
-    const [land, erection] = player.landscape[row][col]
-    if (erection !== undefined) return undefined
+const checkLandscapeFree =
+  (row: number, col: number) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state && !state.players[state.activePlayerIndex].landscape[row][col][1] ? state : undefined
 
-    // check land type matches
-    // check player has building cost
-    // if this building is a cloister, make sure its next to another
+const checkLandTypeMatches =
+  (row: number, col: number, building: BuildingEnum) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state && terrainForBuilding(building).includes(state.players[state.activePlayerIndex].landscape[row][col][0])
+      ? state
+      : undefined
 
-    // === all good
+export const build = ({ row, col, building }: GameCommandBuildParams) =>
+  pipe(
+    checkBuildingUnbuilt(building),
+    checkLandscapeFree(row, col),
+    checkLandTypeMatches(row, col, building)
+    // checkPlayerHasBuildingCost,
+    // checkBuildingCloister,
+    // removeBuildingFromUnbuilt,
+    // addBuildingAtLandscape,
+    // removePlayerResources
+  )
 
-    // remove building from unbuilt
-    // add building at landscape
-    // remove player resources
+// TODO:  check land type matches
+// TODO: check player has building cost
+// TODO: if this building is a cloister, make sure its next to another
 
-    return state
-  }
+// === all good
+
+// TODO: remove building from unbuilt
+// TODO: add building at landscape
+// TODO: remove player resources
