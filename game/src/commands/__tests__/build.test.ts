@@ -47,6 +47,25 @@ describe('commands/build', () => {
       const s4 = reducer(s3, ['BUILD', 'G07', '0', '1'])! as GameStatePlaying
       expect(s4).toBeUndefined()
     })
+    it('fails when player cant afford building', () => {
+      const s3: GameStatePlaying = {
+        ...s2,
+        activePlayerIndex: 0,
+        players: [
+          {
+            ...s2.players[0],
+            wood: 0,
+            penny: 0,
+            clay: 0,
+            stone: 0,
+            straw: 0,
+          },
+          ...s2.players.slice(1),
+        ],
+      }
+      const s4 = reducer(s3, ['BUILD', 'G07', '3', '1'])! as GameStatePlaying
+      expect(s4).toBeUndefined()
+    })
     it('builds just fine', () => {
       const s3: GameStatePlaying = {
         ...s2,
