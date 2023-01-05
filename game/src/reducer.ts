@@ -1,4 +1,5 @@
 import { match, P } from 'ts-pattern'
+import { build } from './commands/build'
 import { commit } from './commands/commit'
 import { config } from './commands/config'
 import { cutPeat } from './commands/cutPeat'
@@ -70,6 +71,13 @@ export const reducer: Reducer = (state, action) =>
           row: Number.parseInt(row, 10),
           useJoker: useJoker === 'Jo',
         })(state as GameStatePlaying)
+    )
+    .with([GameCommandEnum.BUILD, P.string, P.string, P.string], ([_, building, col, row]) =>
+      build({
+        building: building as BuildingEnum,
+        col: Number.parseInt(col, 10),
+        row: Number.parseInt(row, 10),
+      })(state as GameStatePlaying)
     )
     .with(
       [GameCommandEnum.USE, P.string],

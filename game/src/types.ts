@@ -7,6 +7,7 @@ export enum GameCommandEnum {
   USE = 'USE',
   CUT_PEAT = 'CUT_PEAT',
   FELL_TREES = 'FELL_TREES',
+  BUILD = 'BUILD',
 }
 
 export type GameConfigPlayers = 1 | 2 | 3 | 4
@@ -228,6 +229,12 @@ export type GameCommandCutPeatParams = {
   row: number
   col: number
   useJoker: boolean
+}
+
+export type GameCommandBuildParams = {
+  row: number
+  col: number
+  building: BuildingEnum
 }
 
 export type GameCommandFellTreesParams = {

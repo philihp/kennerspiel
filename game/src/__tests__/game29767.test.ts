@@ -15,6 +15,8 @@ describe('game 29767', () => {
     const s9 = reducer(s8, ['CUT_PEAT', '0', '1']!) as GameStatePlaying
     const s10 = reducer(s9, ['COMMIT'])! as GameStatePlaying
     const s11 = reducer(s10, ['USE', 'LR1'])! as GameStatePlaying
+    const s12 = reducer(s11, ['COMMIT'])! as GameStatePlaying
+    const s13 = reducer(s12, ['BUILD', 'G07', '3', '0'])! as GameStatePlaying
     expect(s2.status).toBe('PLAYING')
     expect(s2.round).toBe(1)
     expect(s2.moveInRound).toBe(1)
@@ -58,5 +60,11 @@ describe('game 29767', () => {
     expect(s10.rondel.clay).toBe(0)
     expect(s11.rondel.clay).toBe(3)
     expect(s11.players[0].clay).toBe(4)
+
+    expect(s12.round).toBe(3)
+    expect(s12.moveInRound).toBe(2)
+    expect(s12.rondel.pointingBefore).toBe(3)
+
+    // expect(s13.players[0].landscape).toBe([])
   })
 })
