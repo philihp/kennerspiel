@@ -1,7 +1,8 @@
 import { match, P } from 'ts-pattern'
-import { BuildingEnum, GameCommandConfigParams, LandEnum, SettlementRound } from '../types'
+import { BuildingEnum, Cost, GameCommandConfigParams, LandEnum, SettlementRound } from '../types'
 
 export const terrainForBuilding = (building: BuildingEnum) =>
+  // TODO: this should be comprehensive
   match<BuildingEnum, LandEnum[]>(building).otherwise(() => [
     LandEnum.Coast,
     LandEnum.Hillside,
@@ -9,6 +10,52 @@ export const terrainForBuilding = (building: BuildingEnum) =>
     LandEnum.Plains,
     LandEnum.Water,
   ])
+
+export const costForBuilding = (building: BuildingEnum): Cost =>
+  // TODO: needs ireland buildings
+  match<BuildingEnum, Cost>(building)
+    .with(BuildingEnum.Bakery, () => ({ clay: 2, straw: 1 }))
+    .with(BuildingEnum.CloisterCourtyard, () => ({ wood: 2 }))
+    .with(BuildingEnum.HarborPromenade, () => ({ wood: 1, stone: 1 }))
+    .with(BuildingEnum.Market, () => ({ stone: 2 }))
+    .with(BuildingEnum.PeatCoalKiln, () => ({ clay: 1 }))
+    .with(BuildingEnum.StoneMerchant, () => ({ wood: 1 }))
+    .with(BuildingEnum.Windmill, () => ({ wood: 3, clay: 2 }))
+    .with(BuildingEnum.CloisterGarden, () => ({ penny: 3 }))
+    .with(BuildingEnum.FuelMerchant, () => ({ clay: 1, straw: 1 }))
+    .with(BuildingEnum.Priory, () => ({ wood: 1, clay: 1 }))
+    .with(BuildingEnum.BuildersMarket, () => ({ clay: 2 }))
+    .with(BuildingEnum.Carpentry, () => ({ wood: 2, clay: 1 }))
+    .with(BuildingEnum.GrainStorage, () => ({ wood: 1, straw: 1 }))
+    .with(BuildingEnum.CloisterLibrary, () => ({ stone: 2, straw: 1 }))
+    .with(BuildingEnum.CloisterWorkshop, () => ({ wood: 3 }))
+    .with(BuildingEnum.GrapevineA, () => ({ wood: 1 }))
+    .with(BuildingEnum.Slaughterhouse, () => ({ wood: 2, clay: 2 }))
+    .with(BuildingEnum.CloisterChapterHouse, () => ({ clay: 3, straw: 1 }))
+    .with(BuildingEnum.FinancedEstate, () => ({ clay: 1, stone: 1 }))
+    .with(BuildingEnum.CloisterChurch, () => ({ clay: 5, stone: 5 }))
+    .with(BuildingEnum.QuarryA, () => ({ penny: 5 }))
+    .with(BuildingEnum.Shipyard, () => ({ clay: 4, stone: 1 }))
+    .with(BuildingEnum.Winery, () => ({ clay: 2, straw: 2 }))
+    .with(BuildingEnum.Inn, () => ({ wood: 2, straw: 2 }))
+    .with(BuildingEnum.Bathhouse, () => ({ stone: 1, straw: 1 }))
+    .with(BuildingEnum.ChamberOfWonders, () => ({ wood: 1, clay: 1 }))
+    .with(BuildingEnum.Castle, () => ({ wood: 6, stone: 5 }))
+    .with(BuildingEnum.Palace, () => ({ penny: 25 }))
+    .with(BuildingEnum.ShippingCompany, () => ({ wood: 3, clay: 3 }))
+    .with(BuildingEnum.TownEstate, () => ({ stone: 2, straw: 2 }))
+    .with(BuildingEnum.Calefactory, () => ({ stone: 1 }))
+    .with(BuildingEnum.QuarryB, () => ({ penny: 5 }))
+    .with(BuildingEnum.GrapevineB, () => ({ wood: 1 }))
+    .with(BuildingEnum.Dormitory, () => ({ clay: 3 }))
+    .with(BuildingEnum.ForgersWorkshop, () => ({ clay: 2, straw: 1 }))
+    .with(BuildingEnum.HouseOfTheBrotherhood, () => ({ clay: 1, stone: 1 }))
+    .with(BuildingEnum.PrintingOffice, () => ({ wood: 1, stone: 2 }))
+    .with(BuildingEnum.Sacristy, () => ({ stone: 3, straw: 2 }))
+    .with(BuildingEnum.Hospice, () => ({ wood: 3, straw: 1 }))
+    .with(BuildingEnum.PilgrimageSite, () => ({ penny: 6 }))
+    .with(BuildingEnum.Estate, () => ({ wood: 2, stone: 2 }))
+    .otherwise(() => ({}))
 
 export const roundBuildings = (config: GameCommandConfigParams, round: SettlementRound): BuildingEnum[] =>
   match<[GameCommandConfigParams, SettlementRound], BuildingEnum[]>([config, round])

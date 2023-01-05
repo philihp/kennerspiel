@@ -260,6 +260,14 @@ export enum Clergy {
 
 export type Tile = [LandEnum, BuildingEnum?, Clergy?]
 
+export type Cost = {
+  penny?: number
+  clay?: number
+  wood?: number
+  stone?: number
+  straw?: number
+}
+
 export type Tableau = {
   color: PlayerColor
   clergy: Clergy[]

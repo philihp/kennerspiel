@@ -1,8 +1,7 @@
 import { initialState, reducer } from '../../reducer'
-import { BuildingEnum, Clergy, GameStatePlaying, LandEnum, PlayerColor, Tile } from '../../types'
+import { GameStatePlaying, PlayerColor } from '../../types'
 import { config } from '../config'
 import { start } from '../start'
-import { findBuilding, use } from '../use'
 
 describe('commands/build', () => {
   const s0 = initialState
