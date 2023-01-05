@@ -2,6 +2,7 @@ import { match, P } from 'ts-pattern'
 import { commit } from './commands/commit'
 import { config } from './commands/config'
 import { cutPeat } from './commands/cutPeat'
+import { fellTrees } from './commands/fellTrees'
 import { start } from './commands/start'
 import { use } from './commands/use'
 import {
@@ -54,11 +55,21 @@ export const reducer: Reducer = (state, action) =>
       [GameCommandEnum.CUT_PEAT, P.string, P.string],
       [GameCommandEnum.CUT_PEAT, 'Jo', P.string, P.string],
       ([_, col, row, useJoker]) =>
-        cutPeat(state as GameStatePlaying, {
+        cutPeat({
           col: Number.parseInt(col, 10),
           row: Number.parseInt(row, 10),
           useJoker: useJoker === 'Jo',
-        })
+        })(state as GameStatePlaying)
+    )
+    .with(
+      [GameCommandEnum.FELL_TREES, P.string, P.string],
+      [GameCommandEnum.FELL_TREES, 'Jo', P.string, P.string],
+      ([_, col, row, useJoker]) =>
+        fellTrees({
+          col: Number.parseInt(col, 10),
+          row: Number.parseInt(row, 10),
+          useJoker: useJoker === 'Jo',
+        })(state as GameStatePlaying)
     )
     .with(
       [GameCommandEnum.USE, P.string],
@@ -71,7 +82,7 @@ export const reducer: Reducer = (state, action) =>
       [GameCommandEnum.USE, P.string, P.string, P.string, P.string, P.string, P.string, P.string, P.string],
       [GameCommandEnum.USE, P.string, P.string, P.string, P.string, P.string, P.string, P.string, P.string, P.string],
       ([_command, building, ...params]) => {
-        return use(state as GameStatePlaying, building as BuildingEnum, params)
+        return use(building as BuildingEnum, params)(state as GameStatePlaying)
       }
     )
     .with([GameCommandEnum.COMMIT], () => commit(state as GameStatePlaying))

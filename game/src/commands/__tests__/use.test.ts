@@ -12,13 +12,13 @@ describe('commands/use', () => {
   describe('use', () => {
     it('throws errors on invalid building', () => {
       // expect(() => use(s2, 'XXX' as unknown as BuildingEnum, [])).toThrow()
-      expect(use(s2, 'XXX' as unknown as BuildingEnum, [])).toBeUndefined()
+      expect(use('XXX' as unknown as BuildingEnum, [])(s2)).toBeUndefined()
     })
     it('moves next clergyman to the building', () => {
       const s0 = initialState
       const s1 = config(s0, { country: 'france', length: 'long', players: 2 })!
       const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
-      const s3 = use(s2, BuildingEnum.FarmYardB, ['ShJo'])!
+      const s3 = use(BuildingEnum.FarmYardB, ['ShJo'])(s2)!
       expect(s2.activePlayerIndex).toBe(0)
       expect(s2.players[0].color).toBe(PlayerColor.Blue)
       expect(s2.players[0].landscape[1][2]).toStrictEqual(['P', 'LB2'])
@@ -30,7 +30,7 @@ describe('commands/use', () => {
       const s0 = initialState
       const s1 = config(s0, { country: 'france', length: 'long', players: 2 })!
       const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
-      const s3 = use(s2, BuildingEnum.FarmYardB, ['Sh'])!
+      const s3 = use(BuildingEnum.FarmYardB, ['Sh'])(s2)!
       expect(s2.activePlayerIndex).toBe(0)
       expect(s2.players[0].color).toBe(PlayerColor.Blue)
       expect(s2.players[0].sheep).toBe(1)
@@ -44,7 +44,7 @@ describe('commands/use', () => {
       const s0 = initialState
       const s1 = config(s0, { country: 'france', length: 'long', players: 2 })!
       const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
-      const s3 = use(s2, BuildingEnum.FarmYardB, ['ShJo'])!
+      const s3 = use(BuildingEnum.FarmYardB, ['ShJo'])(s2)!
       expect(s2.activePlayerIndex).toBe(0)
       expect(s2.players[0].color).toBe(PlayerColor.Blue)
       expect(s2.players[0].sheep).toBe(1)

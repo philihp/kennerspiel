@@ -1,6 +1,7 @@
 import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { getPlayer, isLayBrother, isPrior, setPlayer } from '../board/player'
+import { clayMound } from '../buildings/clayMound'
 import { farmyard } from '../buildings/farmyard'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
 
@@ -48,7 +49,7 @@ export const moveClergyToOwnBuilding =
     })
   }
 
-export const use = (state: GameStatePlaying, building: BuildingEnum, params: string[]): GameStatePlaying | undefined =>
+export const use = (building: BuildingEnum, params: string[]) =>
   pipe(
     moveClergyToOwnBuilding(
       building,
@@ -63,10 +64,23 @@ export const use = (state: GameStatePlaying, building: BuildingEnum, params: str
           P.union(BuildingEnum.FarmYardR, BuildingEnum.FarmYardG, BuildingEnum.FarmYardB, BuildingEnum.FarmYardW),
           [P.select()],
         ],
-        (param) => farmyard({ param })
+        farmyard
+      )
+      .with(
+        [
+          P.union(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW),
+          [P._],
+        ],
+        [
+          P.union(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW),
+          [],
+        ],
+        ([_, params]) => clayMound(params[0])
       )
       .otherwise(
         () => () => undefined
-        // { throw new Error(`Invalid params [${params}] for building ${building}`) }
+        // () => () => {
+        //   throw new Error(`Invalid params [${params}] for building ${building}`)
+        // }
       )
-  )(state)
+  )

@@ -16,7 +16,7 @@ describe('buildings/farmyard', () => {
       expect(s2.activePlayerIndex).toBe(0)
       expect(s2.players[0].landscape[1][2]).toStrictEqual(['P', 'LR2'])
       expect(s2.players[0].sheep).toBe(2)
-      const s3 = farmyard({ param: 'Sh' })(s2)!
+      const s3 = farmyard('Sh')(s2)!
       expect(s3.rondel.joker).not.toBe(s3.rondel.pointingBefore)
       expect(s3.rondel.sheep).toBe(s3.rondel.pointingBefore)
       expect(s3.players[0].sheep).toBe(4)
@@ -31,7 +31,7 @@ describe('buildings/farmyard', () => {
       expect(s2.activePlayerIndex).toBe(0)
       expect(s2.players[0].landscape[1][2]).toStrictEqual(['P', 'LR2'])
       expect(s2.players[0].sheep).toBe(2)
-      const s3 = farmyard({ param: 'JoSh' })(s2)!
+      const s3 = farmyard('JoSh')(s2)!
       expect(s3.rondel.joker).toBe(s3.rondel.pointingBefore)
       expect(s3.rondel.sheep).not.toBe(s3.rondel.pointingBefore)
       expect(s3.players[0].sheep).toBe(4)
@@ -46,7 +46,7 @@ describe('buildings/farmyard', () => {
       expect(s2.activePlayerIndex).toBe(0)
       expect(s2.players[0].landscape[1][2]).toStrictEqual(['P', 'LR2'])
       expect(s2.players[0].grain).toBe(2)
-      const s3 = farmyard({ param: 'Gn' })(s2)!
+      const s3 = farmyard('Gn')(s2)!
       expect(s3.rondel.joker).not.toBe(s3.rondel.pointingBefore)
       expect(s3.rondel.grain).toBe(s3.rondel.pointingBefore)
       expect(s3.players[0].grain).toBe(4)

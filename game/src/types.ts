@@ -6,6 +6,7 @@ export enum GameCommandEnum {
   COMMIT = 'COMMIT',
   USE = 'USE',
   CUT_PEAT = 'CUT_PEAT',
+  FELL_TREES = 'FELL_TREES',
 }
 
 export type GameConfigPlayers = 1 | 2 | 3 | 4
@@ -229,6 +230,12 @@ export type GameCommandCutPeatParams = {
   useJoker: boolean
 }
 
+export type GameCommandFellTreesParams = {
+  row: number
+  col: number
+  useJoker: boolean
+}
+
 export enum Clergy {
   LayBrother1R = 'LB1R',
   LayBrother2R = 'LB2R',
@@ -292,8 +299,15 @@ export type GameActionCommit = { command: GameCommandEnum.COMMIT }
 export type GameActionConfig = { command: GameCommandEnum.CONFIG; params: GameCommandConfigParams }
 export type GameActionStart = { command: GameCommandEnum.START; params: GameCommandStartParams }
 export type GameActionCutPeat = { command: GameCommandEnum.CUT_PEAT; params: GameCommandCutPeatParams }
+export type GameActionFellTrees = { command: GameCommandEnum.FELL_TREES; params: GameCommandFellTreesParams }
 export type GameActionUndefined = undefined
-export type GameAction = GameActionCommit | GameActionConfig | GameActionStart | GameActionCutPeat | GameActionUndefined
+export type GameAction =
+  | GameActionCommit
+  | GameActionConfig
+  | GameActionStart
+  | GameActionCutPeat
+  | GameActionFellTrees
+  | GameActionUndefined
 
 export type GameStateSetup = {
   status: GameStatusEnum.SETUP
