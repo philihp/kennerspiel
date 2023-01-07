@@ -1,5 +1,5 @@
 import { BuildingEnum, SettlementRound } from '../../types'
-import { costForBuilding, roundBuildings } from '../buildings'
+import { costForBuilding, isCloisterBuilding, roundBuildings } from '../buildings'
 
 describe('build/buildings', () => {
   describe('costForBuilding', () => {
@@ -16,6 +16,17 @@ describe('build/buildings', () => {
         'F24',
         'G26',
       ])
+    })
+  })
+  describe('isCloisterBuilding', () => {
+    it('considers Priory as a cloister', () => {
+      expect(isCloisterBuilding(BuildingEnum.Priory)).toBeTruthy()
+    })
+    it('does not consider Market as a cloister', () => {
+      expect(isCloisterBuilding(BuildingEnum.Market)).toBeFalsy()
+    })
+    it('does defines undefined as false', () => {
+      expect(isCloisterBuilding(undefined)).toBeFalsy()
     })
   })
 })

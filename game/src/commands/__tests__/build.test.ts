@@ -1,5 +1,5 @@
 import { initialState, reducer } from '../../reducer'
-import { GameStatePlaying, PlayerColor } from '../../types'
+import { BuildingEnum, GameStatePlaying, PlayerColor } from '../../types'
 import { config } from '../config'
 import { start } from '../start'
 
@@ -64,6 +64,24 @@ describe('commands/build', () => {
         ],
       }
       const s4 = reducer(s3, ['BUILD', 'G07', '3', '1'])! as GameStatePlaying
+      expect(s4).toBeUndefined()
+    })
+    it('fails if building cloister without being neighbors to another', () => {
+      const s3: GameStatePlaying = {
+        ...s2,
+        activePlayerIndex: 0,
+        players: [
+          {
+            ...s2.players[0],
+            wood: 10,
+            penny: 10,
+            clay: 10,
+            stone: 10,
+          },
+          ...s2.players.slice(1),
+        ],
+      }
+      const s4 = reducer(s3, ['BUILD', BuildingEnum.Priory, '3', '0'])! as GameStatePlaying
       expect(s4).toBeUndefined()
     })
     it('builds just fine', () => {

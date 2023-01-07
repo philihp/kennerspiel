@@ -57,6 +57,30 @@ export const costForBuilding = (building: BuildingEnum): Cost =>
     .with(BuildingEnum.Estate, () => ({ wood: 2, stone: 2 }))
     .otherwise(() => ({}))
 
+export const isCloisterBuilding = (building?: BuildingEnum): boolean => {
+  if (building === undefined) return false
+  return [
+    // TODO: add ireland cloisters
+    BuildingEnum.CloisterOfficeR,
+    BuildingEnum.CloisterOfficeG,
+    BuildingEnum.CloisterOfficeB,
+    BuildingEnum.CloisterOfficeW,
+    BuildingEnum.CloisterCourtyard,
+    BuildingEnum.CloisterGarden,
+    BuildingEnum.Priory,
+    BuildingEnum.CloisterLibrary,
+    BuildingEnum.CloisterWorkshop,
+    BuildingEnum.CloisterChapterHouse,
+    BuildingEnum.CloisterChurch,
+    BuildingEnum.Bathhouse,
+    BuildingEnum.Calefactory,
+    BuildingEnum.Dormitory,
+    BuildingEnum.HouseOfTheBrotherhood,
+    BuildingEnum.Sacristy,
+    BuildingEnum.Hospice,
+  ].includes(building)
+}
+
 export const roundBuildings = (config: GameCommandConfigParams, round: SettlementRound): BuildingEnum[] =>
   match<[GameCommandConfigParams, SettlementRound], BuildingEnum[]>([config, round])
     .with([{ country: 'france', players: 4 }, SettlementRound.S], () => [

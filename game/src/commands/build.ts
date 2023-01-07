@@ -1,5 +1,5 @@
 import { pipe } from 'ramda'
-import { costForBuilding, terrainForBuilding } from '../board/buildings'
+import { costForBuilding, isCloisterBuilding, terrainForBuilding } from '../board/buildings'
 import { getPlayer } from '../board/player'
 import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, Tableau } from '../types'
 
@@ -30,13 +30,27 @@ const checkPlayerHasBuildingCost =
       ? state
       : undefined
 
+const checkBuildingCloister =
+  (row: number, col: number, building: BuildingEnum) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state &&
+    (!isCloisterBuilding(building) ||
+      [
+        [-1, 0],
+        [1, 0],
+        [0, -1],
+        [0, 1],
+      ].some(([rowMod, colMod]) => isCloisterBuilding(getPlayer(state).landscape[row + rowMod]?.[col + colMod]?.[1])))
+      ? state
+      : undefined
+
 export const build = ({ row, col, building }: GameCommandBuildParams) =>
   pipe(
     checkBuildingUnbuilt(building),
     checkLandscapeFree(row, col),
     checkLandTypeMatches(row, col, building),
-    checkPlayerHasBuildingCost(building)
-    // checkBuildingCloister,
+    checkPlayerHasBuildingCost(building),
+    checkBuildingCloister(row, col, building)
     // removeBuildingFromUnbuilt,
     // addBuildingAtLandscape,
     // removePlayerResources
