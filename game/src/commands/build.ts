@@ -1,7 +1,7 @@
 import { pipe } from 'ramda'
 import { costForBuilding, isCloisterBuilding, terrainForBuilding } from '../board/buildings'
-import { getPlayer } from '../board/player'
-import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, Tableau } from '../types'
+import { getPlayer, setPlayer } from '../board/player'
+import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, Tableau, Tile } from '../types'
 
 const checkBuildingUnbuilt =
   (building: BuildingEnum) =>
@@ -44,24 +44,57 @@ const checkBuildingCloister =
       ? state
       : undefined
 
+const removeBuildingFromUnbuilt =
+  (building: BuildingEnum) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state && {
+      ...state,
+      buildings: state?.buildings.filter((b) => b !== building),
+    }
+
+const addBuildingAtLandscape =
+  (row: number, col: number, building: BuildingEnum) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined) return undefined
+    const player = getPlayer(state)
+    const landscape = [
+      ...player.landscape.slice(0, row),
+      [
+        ...player.landscape[row].slice(0, col),
+        [player.landscape[row][col][0], building] as Tile,
+        ...player.landscape[row].slice(col + 1),
+      ],
+      ...player.landscape.slice(row + 1),
+    ]
+    return setPlayer(state, {
+      ...player,
+      landscape,
+    })
+  }
+
+const removeBuildingCost =
+  (building: BuildingEnum) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined) return undefined
+    const player = Object.entries(costForBuilding(building)).reduce(
+      (p: Tableau, [type, amountNeeded]) => ({
+        ...p,
+        // ugh typescript, don't make it weird.
+        [type]: (p[type as keyof Tableau] as number) - amountNeeded,
+      }),
+      getPlayer(state)
+    )
+    return setPlayer(state, player)
+  }
+
 export const build = ({ row, col, building }: GameCommandBuildParams) =>
   pipe(
     checkBuildingUnbuilt(building),
     checkLandscapeFree(row, col),
     checkLandTypeMatches(row, col, building),
     checkPlayerHasBuildingCost(building),
-    checkBuildingCloister(row, col, building)
-    // removeBuildingFromUnbuilt,
-    // addBuildingAtLandscape,
-    // removePlayerResources
+    checkBuildingCloister(row, col, building),
+    removeBuildingFromUnbuilt(building),
+    addBuildingAtLandscape(row, col, building),
+    removeBuildingCost(building)
   )
-
-// TODO:  check land type matches
-// TODO: check player has building cost
-// TODO: if this building is a cloister, make sure its next to another
-
-// === all good
-
-// TODO: remove building from unbuilt
-// TODO: add building at landscape
-// TODO: remove player resources

@@ -94,12 +94,20 @@ describe('commands/build', () => {
             wood: 10,
             penny: 10,
             clay: 10,
+            stone: 10,
+            straw: 10,
           },
           ...s2.players.slice(1),
         ],
       }
-      const s4 = reducer(s3, ['BUILD', 'G07', '3', '1'])! as GameStatePlaying
+      const s4 = reducer(s3, ['BUILD', BuildingEnum.Windmill, '3', '1'])! as GameStatePlaying
       expect(s4).toBeDefined()
+      expect(s4.buildings).not.toContain(BuildingEnum.Windmill)
+      expect(s4.players[0].landscape[1][3][1]).toBe(BuildingEnum.Windmill)
+      expect(s4.players[0].wood).toBe(7)
+      expect(s4.players[0].clay).toBe(8)
+      expect(s4.players[0].stone).toBe(10)
+      expect(s4.players[0].straw).toBe(10)
     })
   })
 })
