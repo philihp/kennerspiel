@@ -2,6 +2,7 @@ import { match, P } from 'ts-pattern'
 import { build } from './commands/build'
 import { commit } from './commands/commit'
 import { config } from './commands/config'
+import { convert } from './commands/convert'
 import { cutPeat } from './commands/cutPeat'
 import { fellTrees } from './commands/fellTrees'
 import { start } from './commands/start'
@@ -19,6 +20,7 @@ import {
   PlayerColor,
   Reducer,
 } from './types'
+import { parseResourceParam } from './board/resource'
 
 export const initialState: GameStateSetup = {
   randGen: 0n,
@@ -92,6 +94,9 @@ export const reducer: Reducer = (state, action) =>
       ([_command, building, ...params]) => {
         return use(building as BuildingEnum, params)(state as GameStatePlaying)
       }
+    )
+    .with([GameCommandEnum.CONVERT, P.select('resources')], ({ resources }) =>
+      convert(parseResourceParam(resources))(state as GameStatePlaying)
     )
     .with([GameCommandEnum.COMMIT], () => commit(state as GameStatePlaying))
     .otherwise((command) => {

@@ -18,6 +18,7 @@ describe('game 29767', () => {
     const s12 = reducer(s11, ['COMMIT'])! as GameStatePlaying
     const s13 = reducer(s12, ['BUILD', 'G07', '3', '0'])! as GameStatePlaying
     const s14 = reducer(s13, ['USE', 'G07', 'PtPtPtPt'])! as GameStatePlaying
+    const s15 = reducer(s14, ['CONVERT', 'Gn'])! as GameStatePlaying
 
     expect(s2.status).toBe('PLAYING')
     expect(s2.round).toBe(1)
@@ -79,11 +80,24 @@ describe('game 29767', () => {
     expect(s13.players[0].clay).toBe(3)
     expect(s13.buildings).not.toContain('G07')
 
-    expect(s13.players[0].peat).toBe(4)
-    expect(s13.players[0].penny).toBe(0)
-    expect(s13.players[0].coal).toBe(0)
-    expect(s14.players[0].penny).toBe(1)
-    expect(s14.players[0].peat).toBe(0)
-    expect(s14.players[0].coal).toBe(5)
+    expect(s13.players[0]).toMatchObject({
+      peat: 4,
+      penny: 0,
+      coal: 0,
+    })
+    expect(s14.players[0]).toMatchObject({
+      penny: 1,
+      peat: 0,
+      coal: 5,
+    })
+
+    expect(s14.players[0]).toMatchObject({
+      grain: 2,
+      straw: 0,
+    })
+    expect(s15.players[0]).toMatchObject({
+      grain: 1,
+      straw: 1,
+    })
   })
 })
