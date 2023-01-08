@@ -59,7 +59,6 @@ const convertPenny =
 export const convert =
   (param: GameCommandConvertParams) =>
   (state: GameStatePlaying): GameStatePlaying | undefined => {
-    const player: Tableau = { ...(getPlayer(state) as Tableau) }
     if (param.penny ?? 0 % 5 !== 0) {
       return undefined
     }
@@ -67,11 +66,12 @@ export const convert =
     return setPlayer(
       state,
       pipe(
+        getPlayer,
         convertGrain(param.grain),
         convertWine(param.wine),
         convertNickel(param.nickel),
         convertWhiskey(param.whiskey),
         convertPenny(param.penny)
-      )(player)
+      )(state)
     )
   }
