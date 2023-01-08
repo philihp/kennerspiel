@@ -25,6 +25,19 @@ describe('commands/use', () => {
       expect(s3.players[0].clergy).toStrictEqual(['LB2B', 'PRIB'])
       expect(s3.players[0].landscape[1][2]).toStrictEqual(['P', 'LB2', 'LB1B'])
     })
+    it('fallback to prior if laypeople are used', () => {
+      const s0 = initialState
+      const s1 = config(s0, { country: 'france', length: 'long', players: 2 })!
+      const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
+      s2.players[0].clergy = [Clergy.PriorB]
+      const s3 = use(BuildingEnum.FarmYardB, ['ShJo'])(s2)!
+      expect(s2.activePlayerIndex).toBe(0)
+      expect(s2.players[0].color).toBe(PlayerColor.Blue)
+      expect(s2.players[0].landscape[1][2]).toStrictEqual(['P', 'LB2'])
+      expect(s2.players[0].clergy).toStrictEqual(['PRIB'])
+      expect(s3.players[0].clergy).toStrictEqual([])
+      expect(s3.players[0].landscape[1][2]).toStrictEqual(['P', 'LB2', 'PRIB'])
+    })
     it('gathers the goods', () => {
       const s0 = initialState
       const s1 = config(s0, { country: 'france', length: 'long', players: 2 })!

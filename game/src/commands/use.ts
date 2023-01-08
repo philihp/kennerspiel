@@ -32,7 +32,7 @@ export const moveClergyToOwnBuilding =
     const layBrothers = player.clergy.filter(isLayBrother)
     const priors = player.clergy.filter(isPrior)
     if (usePrior && priors.length === 0) return undefined
-    const nextClergy = usePrior ? priors[0] : [...layBrothers, ...priors][0]
+    const nextClergy = (usePrior ? priors : player.clergy)[0]
     if (nextClergy === undefined) return undefined
 
     return setPlayer(state, {
@@ -46,7 +46,7 @@ export const moveClergyToOwnBuilding =
         ],
         ...player.landscape.slice(row + 1),
       ],
-      clergy: [...layBrothers.slice(usePrior ? 0 : 1), ...priors.slice(usePrior ? 1 : 0)],
+      clergy: player.clergy.filter((c) => c !== nextClergy),
     })
   }
 
