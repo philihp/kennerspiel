@@ -1,7 +1,10 @@
 name: game
 
 on:
+  pull_request:
   push:
+    branches:
+      - main
     paths:
       - game/**
       - .github/workflows/game.yml
