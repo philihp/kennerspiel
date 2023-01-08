@@ -261,11 +261,28 @@ export enum Clergy {
 export type Tile = [LandEnum, BuildingEnum?, Clergy?]
 
 export type Cost = {
+  peat?: number
   penny?: number
   clay?: number
   wood?: number
+  grain?: number
+  sheep?: number
   stone?: number
+  flour?: number
+  grape?: number
+  nickel?: number
+  hops?: number
+  coal?: number
+  book?: number
+  pottery?: number
+  whiskey?: number
   straw?: number
+  meat?: number
+  ornament?: number
+  bread?: number
+  wine?: number
+  beer?: number
+  reliquary?: number
 }
 
 export type Tableau = {
@@ -281,7 +298,7 @@ export type Tableau = {
   sheep: number
   stone: number
   flour: number
-  grapes: number
+  grape: number
   nickel: number
   hops: number
   coal: number

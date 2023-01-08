@@ -17,6 +17,8 @@ describe('game 29767', () => {
     const s11 = reducer(s10, ['USE', 'LR1'])! as GameStatePlaying
     const s12 = reducer(s11, ['COMMIT'])! as GameStatePlaying
     const s13 = reducer(s12, ['BUILD', 'G07', '3', '0'])! as GameStatePlaying
+    const s14 = reducer(s13, ['USE', 'G07', 'PtPtPtPt'])! as GameStatePlaying
+
     expect(s2.status).toBe('PLAYING')
     expect(s2.round).toBe(1)
     expect(s2.moveInRound).toBe(1)
@@ -65,6 +67,23 @@ describe('game 29767', () => {
     expect(s12.moveInRound).toBe(2)
     expect(s12.rondel.pointingBefore).toBe(3)
 
-    // expect(s13.players[0].landscape).toBe([])
+    expect(s12.players[0].clay).toBe(4)
+    expect(s12.players[0].landscape).toStrictEqual([
+      [['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R']],
+      [['P'], ['P'], ['P', 'LR2', 'LB1R'], ['P'], ['P', 'LR3']],
+    ])
+    expect(s13.players[0].landscape).toStrictEqual([
+      [['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G07'], ['H', 'LR1', 'LB2R']],
+      [['P'], ['P'], ['P', 'LR2', 'LB1R'], ['P'], ['P', 'LR3']],
+    ])
+    expect(s13.players[0].clay).toBe(3)
+    expect(s13.buildings).not.toContain('G07')
+
+    expect(s13.players[0].peat).toBe(4)
+    expect(s13.players[0].penny).toBe(0)
+    expect(s13.players[0].coal).toBe(0)
+    expect(s14.players[0].penny).toBe(1)
+    expect(s14.players[0].peat).toBe(0)
+    expect(s14.players[0].coal).toBe(5)
   })
 })

@@ -81,6 +81,7 @@
       "class-methods-use-this": "off",
       "default-case": "off",
       "no-param-reassign": "off",
+      "no-restricted-syntax": "off",
       "no-unused-vars": "off"
     },
     "overrides": [

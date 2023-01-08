@@ -11,8 +11,7 @@ describe('commands/use', () => {
 
   describe('use', () => {
     it('throws errors on invalid building', () => {
-      // expect(() => use(s2, 'XXX' as unknown as BuildingEnum, [])).toThrow()
-      expect(use('XXX' as unknown as BuildingEnum, [])(s2)).toBeUndefined()
+      expect(() => use('XXX' as unknown as BuildingEnum, [])(s2)).toThrow()
     })
     it('moves next clergyman to the building', () => {
       const s0 = initialState

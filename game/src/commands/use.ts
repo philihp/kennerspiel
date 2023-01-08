@@ -3,6 +3,7 @@ import { match, P } from 'ts-pattern'
 import { getPlayer, isLayBrother, isPrior, setPlayer } from '../board/player'
 import { clayMound } from '../buildings/clayMound'
 import { farmyard } from '../buildings/farmyard'
+import { peatCoalKiln } from '../buildings/peatCoalKiln'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
 
 export const findBuilding = (landscape: Tile[][], building: BuildingEnum): { row?: number; col?: number } => {
@@ -31,7 +32,7 @@ export const moveClergyToOwnBuilding =
     const layBrothers = player.clergy.filter(isLayBrother)
     const priors = player.clergy.filter(isPrior)
     if (usePrior && priors.length === 0) return undefined
-    const nextClergy = usePrior ? priors[0] : layBrothers[0]
+    const nextClergy = usePrior ? priors[0] : [...layBrothers, ...priors][0]
     if (nextClergy === undefined) return undefined
 
     return setPlayer(state, {
@@ -54,6 +55,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
     moveClergyToOwnBuilding(
       building,
       false // TODO: we need a way of passing active player to the owner so they can choose
+      // TODO: if building has already been built this round, use Prior
     ),
     match<[BuildingEnum, string[]], (state: GameStatePlaying | undefined) => GameStatePlaying | undefined>([
       building,
@@ -77,10 +79,10 @@ export const use = (building: BuildingEnum, params: string[]) =>
         ],
         ([_, params]) => clayMound(params[0])
       )
-      .otherwise(
-        () => () => undefined
-        // () => () => {
-        //   throw new Error(`Invalid params [${params}] for building ${building}`)
-        // }
+      .with([BuildingEnum.PeatCoalKiln, []], [BuildingEnum.PeatCoalKiln, [P._]], ([_, params]) =>
+        peatCoalKiln(params[0])
       )
+      .otherwise(() => () => {
+        throw new Error(`Invalid params [${params}] for building ${building}`)
+      })
   )

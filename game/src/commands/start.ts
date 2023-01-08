@@ -43,7 +43,7 @@ export const start = (
       sheep: 1,
       stone: 0,
       flour: 0,
-      grapes: 0,
+      grape: 0,
       nickel: 0,
       hops: 0,
       coal: 0,
