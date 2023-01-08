@@ -8,7 +8,7 @@ describe('build/buildings', () => {
     })
   })
   describe('roundBuildings', () => {
-    it('returns a list of buildings', () => {
+    it('returns a list of buildings given a round', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.B)).toStrictEqual([
         'F20',
         'F21',
