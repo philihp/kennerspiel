@@ -8,6 +8,7 @@ export enum GameCommandEnum {
   CUT_PEAT = 'CUT_PEAT',
   FELL_TREES = 'FELL_TREES',
   BUILD = 'BUILD',
+  CONVERT = 'CONVERT',
 }
 
 export type GameConfigPlayers = 1 | 2 | 3 | 4
@@ -243,23 +244,6 @@ export type GameCommandFellTreesParams = {
   useJoker: boolean
 }
 
-export enum Clergy {
-  LayBrother1R = 'LB1R',
-  LayBrother2R = 'LB2R',
-  PriorR = 'PRIR',
-  LayBrother1G = 'LB1G',
-  LayBrother2G = 'LB2G',
-  PriorG = 'PRIG',
-  LayBrother1B = 'LB1B',
-  LayBrother2B = 'LB2B',
-  PriorB = 'PRIB',
-  LayBrother1W = 'LB1W',
-  LayBrother2W = 'LB2W',
-  PriorW = 'PRIW',
-}
-
-export type Tile = [LandEnum, BuildingEnum?, Clergy?]
-
 export type Cost = {
   peat?: number
   penny?: number
@@ -284,6 +268,25 @@ export type Cost = {
   beer?: number
   reliquary?: number
 }
+
+export type GameCommandConvertParams = Cost
+
+export enum Clergy {
+  LayBrother1R = 'LB1R',
+  LayBrother2R = 'LB2R',
+  PriorR = 'PRIR',
+  LayBrother1G = 'LB1G',
+  LayBrother2G = 'LB2G',
+  PriorG = 'PRIG',
+  LayBrother1B = 'LB1B',
+  LayBrother2B = 'LB2B',
+  PriorB = 'PRIB',
+  LayBrother1W = 'LB1W',
+  LayBrother2W = 'LB2W',
+  PriorW = 'PRIW',
+}
+
+export type Tile = [LandEnum, BuildingEnum?, Clergy?]
 
 export type Tableau = {
   color: PlayerColor
@@ -329,6 +332,7 @@ export type Rondel = {
 
 export type GameActionCommit = { command: GameCommandEnum.COMMIT }
 export type GameActionConfig = { command: GameCommandEnum.CONFIG; params: GameCommandConfigParams }
+export type GameActionConvert = { command: GameCommandEnum.CONVERT; params: GameCommandConvertParams }
 export type GameActionStart = { command: GameCommandEnum.START; params: GameCommandStartParams }
 export type GameActionCutPeat = { command: GameCommandEnum.CUT_PEAT; params: GameCommandCutPeatParams }
 export type GameActionFellTrees = { command: GameCommandEnum.FELL_TREES; params: GameCommandFellTreesParams }
