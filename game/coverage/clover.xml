@@ -1,0 +1,1010 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1673149367319" clover="3.2.0">
+  <project timestamp="1673149367319" name="All files">
+    <metrics statements="917" coveredstatements="537" conditionals="315" coveredconditionals="83" methods="277" coveredmethods="110" elements="1509" coveredelements="730" complexity="0" loc="917" ncloc="917" packages="4" files="25" classes="25"/>
+    <package name="src">
+      <metrics statements="211" coveredstatements="205" conditionals="19" coveredconditionals="18" methods="19" coveredmethods="13"/>
+      <file name="reducer.ts" path="/Users/philihp/work/hathora-et-labora/game/src/reducer.ts">
+        <metrics statements="26" coveredstatements="20" conditionals="1" coveredconditionals="0" methods="10" coveredmethods="4"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="8" type="stmt"/>
+        <line num="8" count="8" type="stmt"/>
+        <line num="9" count="8" type="stmt"/>
+        <line num="10" count="8" type="stmt"/>
+        <line num="23" count="8" type="stmt"/>
+        <line num="25" count="8" type="stmt"/>
+        <line num="30" count="8" type="stmt"/>
+        <line num="32" count="8" type="stmt"/>
+        <line num="33" count="6" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="50" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="95" count="2" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+      </file>
+      <file name="types.ts" path="/Users/philihp/work/hathora-et-labora/game/src/types.ts">
+        <metrics statements="185" coveredstatements="185" conditionals="18" coveredconditionals="18" methods="9" coveredmethods="9"/>
+        <line num="3" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="4" count="12" type="stmt"/>
+        <line num="5" count="12" type="stmt"/>
+        <line num="6" count="12" type="stmt"/>
+        <line num="7" count="12" type="stmt"/>
+        <line num="8" count="12" type="stmt"/>
+        <line num="9" count="12" type="stmt"/>
+        <line num="10" count="12" type="stmt"/>
+        <line num="11" count="12" type="stmt"/>
+        <line num="24" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="12" type="stmt"/>
+        <line num="26" count="12" type="stmt"/>
+        <line num="27" count="12" type="stmt"/>
+        <line num="28" count="12" type="stmt"/>
+        <line num="36" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="37" count="12" type="stmt"/>
+        <line num="38" count="12" type="stmt"/>
+        <line num="39" count="12" type="stmt"/>
+        <line num="42" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="12" type="stmt"/>
+        <line num="44" count="12" type="stmt"/>
+        <line num="45" count="12" type="stmt"/>
+        <line num="46" count="12" type="stmt"/>
+        <line num="47" count="12" type="stmt"/>
+        <line num="48" count="12" type="stmt"/>
+        <line num="49" count="12" type="stmt"/>
+        <line num="52" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="12" type="stmt"/>
+        <line num="54" count="12" type="stmt"/>
+        <line num="55" count="12" type="stmt"/>
+        <line num="56" count="12" type="stmt"/>
+        <line num="57" count="12" type="stmt"/>
+        <line num="60" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="61" count="12" type="stmt"/>
+        <line num="62" count="12" type="stmt"/>
+        <line num="63" count="12" type="stmt"/>
+        <line num="64" count="12" type="stmt"/>
+        <line num="65" count="12" type="stmt"/>
+        <line num="66" count="12" type="stmt"/>
+        <line num="67" count="12" type="stmt"/>
+        <line num="68" count="12" type="stmt"/>
+        <line num="69" count="12" type="stmt"/>
+        <line num="70" count="12" type="stmt"/>
+        <line num="71" count="12" type="stmt"/>
+        <line num="72" count="12" type="stmt"/>
+        <line num="73" count="12" type="stmt"/>
+        <line num="74" count="12" type="stmt"/>
+        <line num="75" count="12" type="stmt"/>
+        <line num="76" count="12" type="stmt"/>
+        <line num="77" count="12" type="stmt"/>
+        <line num="78" count="12" type="stmt"/>
+        <line num="79" count="12" type="stmt"/>
+        <line num="80" count="12" type="stmt"/>
+        <line num="81" count="12" type="stmt"/>
+        <line num="82" count="12" type="stmt"/>
+        <line num="83" count="12" type="stmt"/>
+        <line num="84" count="12" type="stmt"/>
+        <line num="87" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="88" count="12" type="stmt"/>
+        <line num="89" count="12" type="stmt"/>
+        <line num="90" count="12" type="stmt"/>
+        <line num="91" count="12" type="stmt"/>
+        <line num="92" count="12" type="stmt"/>
+        <line num="93" count="12" type="stmt"/>
+        <line num="94" count="12" type="stmt"/>
+        <line num="95" count="12" type="stmt"/>
+        <line num="96" count="12" type="stmt"/>
+        <line num="97" count="12" type="stmt"/>
+        <line num="98" count="12" type="stmt"/>
+        <line num="99" count="12" type="stmt"/>
+        <line num="100" count="12" type="stmt"/>
+        <line num="101" count="12" type="stmt"/>
+        <line num="102" count="12" type="stmt"/>
+        <line num="103" count="12" type="stmt"/>
+        <line num="104" count="12" type="stmt"/>
+        <line num="105" count="12" type="stmt"/>
+        <line num="106" count="12" type="stmt"/>
+        <line num="107" count="12" type="stmt"/>
+        <line num="108" count="12" type="stmt"/>
+        <line num="109" count="12" type="stmt"/>
+        <line num="110" count="12" type="stmt"/>
+        <line num="111" count="12" type="stmt"/>
+        <line num="112" count="12" type="stmt"/>
+        <line num="113" count="12" type="stmt"/>
+        <line num="114" count="12" type="stmt"/>
+        <line num="115" count="12" type="stmt"/>
+        <line num="116" count="12" type="stmt"/>
+        <line num="117" count="12" type="stmt"/>
+        <line num="118" count="12" type="stmt"/>
+        <line num="119" count="12" type="stmt"/>
+        <line num="122" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="123" count="12" type="stmt"/>
+        <line num="124" count="12" type="stmt"/>
+        <line num="125" count="12" type="stmt"/>
+        <line num="126" count="12" type="stmt"/>
+        <line num="127" count="12" type="stmt"/>
+        <line num="128" count="12" type="stmt"/>
+        <line num="129" count="12" type="stmt"/>
+        <line num="130" count="12" type="stmt"/>
+        <line num="131" count="12" type="stmt"/>
+        <line num="132" count="12" type="stmt"/>
+        <line num="133" count="12" type="stmt"/>
+        <line num="134" count="12" type="stmt"/>
+        <line num="135" count="12" type="stmt"/>
+        <line num="136" count="12" type="stmt"/>
+        <line num="138" count="12" type="stmt"/>
+        <line num="139" count="12" type="stmt"/>
+        <line num="140" count="12" type="stmt"/>
+        <line num="141" count="12" type="stmt"/>
+        <line num="142" count="12" type="stmt"/>
+        <line num="143" count="12" type="stmt"/>
+        <line num="144" count="12" type="stmt"/>
+        <line num="145" count="12" type="stmt"/>
+        <line num="146" count="12" type="stmt"/>
+        <line num="147" count="12" type="stmt"/>
+        <line num="148" count="12" type="stmt"/>
+        <line num="149" count="12" type="stmt"/>
+        <line num="150" count="12" type="stmt"/>
+        <line num="151" count="12" type="stmt"/>
+        <line num="152" count="12" type="stmt"/>
+        <line num="153" count="12" type="stmt"/>
+        <line num="154" count="12" type="stmt"/>
+        <line num="155" count="12" type="stmt"/>
+        <line num="156" count="12" type="stmt"/>
+        <line num="157" count="12" type="stmt"/>
+        <line num="159" count="12" type="stmt"/>
+        <line num="160" count="12" type="stmt"/>
+        <line num="161" count="12" type="stmt"/>
+        <line num="162" count="12" type="stmt"/>
+        <line num="163" count="12" type="stmt"/>
+        <line num="164" count="12" type="stmt"/>
+        <line num="165" count="12" type="stmt"/>
+        <line num="166" count="12" type="stmt"/>
+        <line num="167" count="12" type="stmt"/>
+        <line num="169" count="12" type="stmt"/>
+        <line num="170" count="12" type="stmt"/>
+        <line num="171" count="12" type="stmt"/>
+        <line num="172" count="12" type="stmt"/>
+        <line num="173" count="12" type="stmt"/>
+        <line num="174" count="12" type="stmt"/>
+        <line num="175" count="12" type="stmt"/>
+        <line num="176" count="12" type="stmt"/>
+        <line num="177" count="12" type="stmt"/>
+        <line num="178" count="12" type="stmt"/>
+        <line num="179" count="12" type="stmt"/>
+        <line num="180" count="12" type="stmt"/>
+        <line num="182" count="12" type="stmt"/>
+        <line num="183" count="12" type="stmt"/>
+        <line num="184" count="12" type="stmt"/>
+        <line num="185" count="12" type="stmt"/>
+        <line num="186" count="12" type="stmt"/>
+        <line num="187" count="12" type="stmt"/>
+        <line num="188" count="12" type="stmt"/>
+        <line num="189" count="12" type="stmt"/>
+        <line num="190" count="12" type="stmt"/>
+        <line num="191" count="12" type="stmt"/>
+        <line num="192" count="12" type="stmt"/>
+        <line num="193" count="12" type="stmt"/>
+        <line num="194" count="12" type="stmt"/>
+        <line num="196" count="12" type="stmt"/>
+        <line num="197" count="12" type="stmt"/>
+        <line num="198" count="12" type="stmt"/>
+        <line num="199" count="12" type="stmt"/>
+        <line num="200" count="12" type="stmt"/>
+        <line num="201" count="12" type="stmt"/>
+        <line num="202" count="12" type="stmt"/>
+        <line num="203" count="12" type="stmt"/>
+        <line num="204" count="12" type="stmt"/>
+        <line num="205" count="12" type="stmt"/>
+        <line num="206" count="12" type="stmt"/>
+        <line num="207" count="12" type="stmt"/>
+        <line num="208" count="12" type="stmt"/>
+        <line num="274" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="275" count="12" type="stmt"/>
+        <line num="276" count="12" type="stmt"/>
+        <line num="277" count="12" type="stmt"/>
+        <line num="278" count="12" type="stmt"/>
+        <line num="279" count="12" type="stmt"/>
+        <line num="280" count="12" type="stmt"/>
+        <line num="281" count="12" type="stmt"/>
+        <line num="282" count="12" type="stmt"/>
+        <line num="283" count="12" type="stmt"/>
+        <line num="284" count="12" type="stmt"/>
+        <line num="285" count="12" type="stmt"/>
+        <line num="286" count="12" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.board">
+      <metrics statements="480" coveredstatements="183" conditionals="168" coveredconditionals="34" methods="200" coveredmethods="80"/>
+      <file name="buildings.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/buildings.ts">
+        <metrics statements="84" coveredstatements="15" conditionals="1" coveredconditionals="1" methods="78" coveredmethods="8"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="14" count="9" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="60" count="9" type="stmt"/>
+        <line num="61" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="62" count="2" type="stmt"/>
+        <line num="84" count="9" type="stmt"/>
+        <line num="85" count="14" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="101" count="8" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="137" count="3" type="stmt"/>
+        <line num="149" count="2" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="178" count="0" type="stmt"/>
+        <line num="186" count="0" type="stmt"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="208" count="1" type="stmt"/>
+        <line num="215" count="0" type="stmt"/>
+        <line num="221" count="0" type="stmt"/>
+        <line num="230" count="0" type="stmt"/>
+        <line num="237" count="0" type="stmt"/>
+        <line num="243" count="0" type="stmt"/>
+        <line num="252" count="0" type="stmt"/>
+        <line num="260" count="0" type="stmt"/>
+        <line num="266" count="0" type="stmt"/>
+        <line num="275" count="0" type="stmt"/>
+        <line num="283" count="0" type="stmt"/>
+        <line num="289" count="0" type="stmt"/>
+        <line num="299" count="0" type="stmt"/>
+        <line num="308" count="0" type="stmt"/>
+        <line num="315" count="0" type="stmt"/>
+        <line num="325" count="0" type="stmt"/>
+        <line num="334" count="0" type="stmt"/>
+        <line num="341" count="0" type="stmt"/>
+      </file>
+      <file name="extraRound.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/extraRound.ts">
+        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="3"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="5" count="15" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="11" type="stmt"/>
+        <line num="8" count="15" type="stmt"/>
+        <line num="10" count="8" type="stmt"/>
+      </file>
+      <file name="modeSetup.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/modeSetup.ts">
+        <metrics statements="24" coveredstatements="20" conditionals="1" coveredconditionals="1" methods="7" coveredmethods="4"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="5" count="9" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="16" count="9" type="stmt"/>
+        <line num="17" count="39" type="stmt"/>
+        <line num="18" count="39" type="stmt"/>
+        <line num="19" count="39" type="stmt"/>
+        <line num="20" count="39" type="cond" truecount="1" falsecount="0"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="26" count="38" type="stmt"/>
+        <line num="32" count="9" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="9" type="stmt"/>
+        <line num="42" count="9" type="stmt"/>
+        <line num="43" count="13" type="stmt"/>
+        <line num="44" count="13" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="67" count="13" type="stmt"/>
+      </file>
+      <file name="player.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/player.ts">
+        <metrics statements="18" coveredstatements="17" conditionals="14" coveredconditionals="12" methods="5" coveredmethods="5"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="38" type="cond" truecount="4" falsecount="1"/>
+        <line num="6" count="13" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="10" count="14" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="18" count="8" type="stmt"/>
+        <line num="19" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="15" type="stmt"/>
+        <line num="23" count="8" type="stmt"/>
+        <line num="24" count="12" type="cond" truecount="0" falsecount="1"/>
+        <line num="25" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="12" type="stmt"/>
+        <line num="32" count="8" type="stmt"/>
+        <line num="33" count="19" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="10" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="postMove.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/postMove.ts">
+        <metrics statements="161" coveredstatements="24" conditionals="83" coveredconditionals="6" methods="22" coveredmethods="3"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="10" count="8" type="stmt"/>
+        <line num="11" count="8" type="stmt"/>
+        <line num="12" count="8" type="stmt"/>
+        <line num="13" count="8" type="stmt"/>
+        <line num="14" count="8" type="stmt"/>
+        <line num="16" count="8" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="73" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="135" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="138" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
+        <line num="140" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="144" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="145" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="146" count="0" type="stmt"/>
+        <line num="147" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="151" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="156" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
+        <line num="158" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="159" count="0" type="stmt"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="167" count="0" type="stmt"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="172" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
+        <line num="176" count="0" type="stmt"/>
+        <line num="177" count="0" type="stmt"/>
+        <line num="180" count="0" type="stmt"/>
+        <line num="181" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="215" count="0" type="stmt"/>
+        <line num="216" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="217" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="218" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="219" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="220" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="222" count="0" type="stmt"/>
+        <line num="223" count="0" type="stmt"/>
+        <line num="225" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="226" count="0" type="stmt"/>
+        <line num="228" count="0" type="stmt"/>
+        <line num="230" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="232" count="0" type="stmt"/>
+        <line num="233" count="0" type="stmt"/>
+        <line num="234" count="0" type="stmt"/>
+        <line num="238" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="239" count="0" type="stmt"/>
+        <line num="240" count="0" type="stmt"/>
+        <line num="243" count="0" type="stmt"/>
+        <line num="244" count="0" type="stmt"/>
+        <line num="245" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="246" count="0" type="stmt"/>
+        <line num="247" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="248" count="0" type="stmt"/>
+        <line num="251" count="0" type="stmt"/>
+        <line num="262" count="0" type="stmt"/>
+        <line num="263" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="264" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="265" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="266" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="267" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="268" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="270" count="0" type="stmt"/>
+        <line num="271" count="0" type="stmt"/>
+        <line num="272" count="0" type="stmt"/>
+        <line num="273" count="0" type="stmt"/>
+        <line num="275" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="276" count="0" type="stmt"/>
+        <line num="277" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="279" count="0" type="stmt"/>
+        <line num="280" count="0" type="stmt"/>
+        <line num="281" count="0" type="stmt"/>
+        <line num="285" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="286" count="0" type="stmt"/>
+        <line num="287" count="0" type="stmt"/>
+        <line num="289" count="0" type="stmt"/>
+        <line num="290" count="0" type="stmt"/>
+        <line num="292" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="293" count="0" type="stmt"/>
+        <line num="294" count="0" type="stmt"/>
+        <line num="295" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="296" count="0" type="stmt"/>
+        <line num="299" count="0" type="stmt"/>
+        <line num="311" count="1" type="stmt"/>
+        <line num="312" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="313" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="314" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="315" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="316" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="317" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="319" count="1" type="stmt"/>
+        <line num="320" count="1" type="stmt"/>
+        <line num="321" count="1" type="stmt"/>
+        <line num="322" count="1" type="stmt"/>
+        <line num="324" count="1" type="cond" truecount="1" falsecount="2"/>
+        <line num="326" count="0" type="stmt"/>
+        <line num="327" count="0" type="stmt"/>
+        <line num="328" count="0" type="stmt"/>
+        <line num="331" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="333" count="0" type="stmt"/>
+        <line num="334" count="0" type="stmt"/>
+        <line num="335" count="0" type="stmt"/>
+        <line num="339" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="340" count="0" type="stmt"/>
+        <line num="341" count="0" type="stmt"/>
+        <line num="343" count="0" type="stmt"/>
+        <line num="344" count="0" type="stmt"/>
+        <line num="345" count="1" type="cond" truecount="2" falsecount="1"/>
+        <line num="346" count="0" type="stmt"/>
+        <line num="347" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="348" count="0" type="stmt"/>
+        <line num="351" count="1" type="stmt"/>
+        <line num="364" count="0" type="stmt"/>
+      </file>
+      <file name="postRound.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/postRound.ts">
+        <metrics statements="51" coveredstatements="5" conditionals="26" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="10" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="77" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+      </file>
+      <file name="preMove.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/preMove.ts">
+        <metrics statements="28" coveredstatements="25" conditionals="15" coveredconditionals="9" methods="4" coveredmethods="4"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="8" count="8" type="stmt"/>
+        <line num="9" count="15" type="stmt"/>
+        <line num="11" count="15" type="cond" truecount="1" falsecount="1"/>
+        <line num="13" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="15" type="cond" truecount="2" falsecount="2"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="15" type="cond" truecount="1" falsecount="0"/>
+        <line num="27" count="15" type="stmt"/>
+        <line num="30" count="15" type="stmt"/>
+        <line num="31" count="41" type="cond" truecount="1" falsecount="0"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="10" type="cond" truecount="4" falsecount="0"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="38" count="7" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="46" count="15" type="stmt"/>
+        <line num="48" count="15" type="stmt"/>
+        <line num="49" count="15" type="cond" truecount="0" falsecount="1"/>
+        <line num="50" count="15" type="stmt"/>
+        <line num="59" count="15" type="stmt"/>
+      </file>
+      <file name="preRound.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/preRound.ts">
+        <metrics statements="19" coveredstatements="7" conditionals="13" coveredconditionals="1" methods="6" coveredmethods="6"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="5" count="15" type="stmt"/>
+        <line num="6" count="7" type="stmt"/>
+        <line num="9" count="21" type="cond" truecount="1" falsecount="12"/>
+        <line num="11" count="21" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="87" count="8" type="stmt"/>
+      </file>
+      <file name="resource.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/resource.ts">
+        <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="3" methods="6" coveredmethods="5"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="7" count="6" type="stmt"/>
+        <line num="8" count="12" type="stmt"/>
+        <line num="9" count="12" type="cond" truecount="1" falsecount="0"/>
+        <line num="13" count="264" type="stmt"/>
+        <line num="14" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="9" type="stmt"/>
+        <line num="18" count="6" type="stmt"/>
+        <line num="19" count="6" type="cond" truecount="0" falsecount="1"/>
+        <line num="20" count="6" type="stmt"/>
+        <line num="21" count="12" type="stmt"/>
+        <line num="50" count="6" type="stmt"/>
+      </file>
+      <file name="rondel.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/rondel.ts">
+        <metrics statements="8" coveredstatements="6" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="15" type="stmt"/>
+        <line num="5" count="15" type="stmt"/>
+        <line num="6" count="135" type="cond" truecount="0" falsecount="1"/>
+        <line num="7" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="135" type="stmt"/>
+        <line num="12" count="15" type="stmt"/>
+      </file>
+      <file name="settlements.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/settlements.ts">
+        <metrics statements="59" coveredstatements="38" conditionals="6" coveredconditionals="0" methods="54" coveredmethods="38"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="2" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="5" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="9" type="stmt"/>
+        <line num="21" count="76" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
+        <line num="25" count="4" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
+        <line num="27" count="4" type="stmt"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="30" count="4" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="41" count="20" type="stmt"/>
+        <line num="42" count="16" type="stmt"/>
+        <line num="43" count="12" type="stmt"/>
+        <line num="44" count="8" type="stmt"/>
+        <line num="45" count="4" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="9" type="stmt"/>
+        <line num="49" count="44" type="stmt"/>
+        <line num="50" count="37" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="90" count="2" type="stmt"/>
+      </file>
+      <file name="wheel.ts" path="/Users/philihp/work/hathora-et-labora/game/src/board/wheel.ts">
+        <metrics statements="7" coveredstatements="6" conditionals="3" coveredconditionals="1" methods="2" coveredmethods="2"/>
+        <line num="3" count="9" type="stmt"/>
+        <line num="4" count="11" type="cond" truecount="1" falsecount="2"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="7" count="11" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="11" count="11" type="stmt"/>
+        <line num="12" count="11" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.buildings">
+      <metrics statements="62" coveredstatements="60" conditionals="34" coveredconditionals="26" methods="6" coveredmethods="6"/>
+      <file name="clayMound.ts" path="/Users/philihp/work/hathora-et-labora/game/src/buildings/clayMound.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="9" coveredconditionals="6" methods="2" coveredmethods="2"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="cond" truecount="1" falsecount="0"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="15" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+      </file>
+      <file name="farmyard.ts" path="/Users/philihp/work/hathora-et-labora/game/src/buildings/farmyard.ts">
+        <metrics statements="30" coveredstatements="28" conditionals="19" coveredconditionals="14" methods="2" coveredmethods="2"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="8" count="3" type="cond" truecount="0" falsecount="1"/>
+        <line num="9" count="3" type="cond" truecount="0" falsecount="1"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="3" type="stmt"/>
+        <line num="12" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="25" count="3" type="stmt"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="28" count="3" type="cond" truecount="0" falsecount="1"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="31" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="3" type="stmt"/>
+      </file>
+      <file name="peatCoalKiln.ts" path="/Users/philihp/work/hathora-et-labora/game/src/buildings/peatCoalKiln.ts">
+        <metrics statements="13" coveredstatements="13" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="cond" truecount="1" falsecount="0"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="8" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="13" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.commands">
+      <metrics statements="164" coveredstatements="89" conditionals="94" coveredconditionals="5" methods="52" coveredmethods="11"/>
+      <file name="build.ts" path="/Users/philihp/work/hathora-et-labora/game/src/commands/build.ts">
+        <metrics statements="38" coveredstatements="12" conditionals="23" coveredconditionals="0" methods="21" coveredmethods="0"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="7" count="8" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="12" count="8" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="17" count="8" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="24" count="8" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="34" count="8" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="48" count="8" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="56" count="8" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="76" count="8" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="90" count="8" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+      </file>
+      <file name="commit.ts" path="/Users/philihp/work/hathora-et-labora/game/src/commands/commit.ts">
+        <metrics statements="6" coveredstatements="3" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="10" count="0" type="stmt"/>
+      </file>
+      <file name="config.ts" path="/Users/philihp/work/hathora-et-labora/game/src/commands/config.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="13" type="stmt"/>
+      </file>
+      <file name="convert.ts" path="/Users/philihp/work/hathora-et-labora/game/src/commands/convert.ts">
+        <metrics statements="32" coveredstatements="9" conditionals="31" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="6" count="8" type="cond" truecount="0" falsecount="1"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="14" count="8" type="cond" truecount="0" falsecount="1"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="22" count="8" type="cond" truecount="0" falsecount="1"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="30" count="8" type="cond" truecount="0" falsecount="1"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="38" count="8" type="cond" truecount="0" falsecount="1"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="65" count="8" type="stmt"/>
+        <line num="66" count="8" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+      </file>
+      <file name="cutPeat.ts" path="/Users/philihp/work/hathora-et-labora/game/src/commands/cutPeat.ts">
+        <metrics statements="15" coveredstatements="5" conditionals="12" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+      </file>
+      <file name="fellTrees.ts" path="/Users/philihp/work/hathora-et-labora/game/src/commands/fellTrees.ts">
+        <metrics statements="15" coveredstatements="5" conditionals="12" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+      </file>
+      <file name="start.ts" path="/Users/philihp/work/hathora-et-labora/game/src/commands/start.ts">
+        <metrics statements="21" coveredstatements="21" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="8" type="stmt"/>
+        <line num="8" count="8" type="stmt"/>
+        <line num="18" count="8" type="stmt"/>
+        <line num="22" count="13" type="cond" truecount="0" falsecount="1"/>
+        <line num="23" count="13" type="cond" truecount="0" falsecount="1"/>
+        <line num="24" count="13" type="cond" truecount="0" falsecount="1"/>
+        <line num="25" count="13" type="cond" truecount="0" falsecount="1"/>
+        <line num="27" count="13" type="stmt"/>
+        <line num="28" count="13" type="stmt"/>
+        <line num="29" count="13" type="stmt"/>
+        <line num="30" count="13" type="stmt"/>
+        <line num="32" count="13" type="stmt"/>
+        <line num="61" count="37" type="stmt"/>
+        <line num="69" count="13" type="stmt"/>
+        <line num="101" count="13" type="stmt"/>
+      </file>
+      <file name="use.ts" path="/Users/philihp/work/hathora-et-labora/game/src/commands/use.ts">
+        <metrics statements="35" coveredstatements="32" conditionals="11" coveredconditionals="5" methods="11" coveredmethods="8"/>
+        <line num="1" count="8" type="stmt"/>
+        <line num="2" count="8" type="stmt"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="7" count="8" type="stmt"/>
+        <line num="9" count="8" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="20" type="cond" truecount="1" falsecount="0"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="23" count="8" type="stmt"/>
+        <line num="24" count="8" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="29" count="2" type="cond" truecount="2" falsecount="1"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="2" type="cond" truecount="1" falsecount="2"/>
+        <line num="35" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="36" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="49" count="6" type="stmt"/>
+        <line num="53" count="8" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="80" count="2" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
