@@ -33,5 +33,9 @@ describe('buildings/peatCoalKiln', () => {
         coal: 14,
       })
     })
+    it('handles undefined states', () => {
+      const s3 = peatCoalKiln('PtPtPt')(undefined)
+      expect(s3).toBeUndefined()
+    })
   })
 })
