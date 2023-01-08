@@ -37,7 +37,11 @@ const convertWhiskey =
 const convertPenny =
   (amount = 0) =>
   (player: Tableau) => {
+    // first clone p
     const p = { ...player }
+
+    // Taken from Player.subtractCoins... feels gross
+    // https://github.com/philihp/weblabora/blob/737717fd59c1301da6584a6874a20420eba4e71e/src/main/java/com/philihp/weblabora/model/Player.java#L542
     p.penny -= amount
     while (p.penny < 0 && p.nickel > 0) {
       p.penny += 5
@@ -51,6 +55,8 @@ const convertPenny =
       p.penny += 2
       p.whiskey -= 1
     }
+
+    // then do the thing
     p.nickel += amount / 5
     p.penny += amount % 5
     return p
