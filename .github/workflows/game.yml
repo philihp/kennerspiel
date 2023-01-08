@@ -6,6 +6,8 @@ on:
       - opened
       - reopened
   push:
+    branches:
+      - main
     paths:
       - game/**
       - .github/workflows/game.yml
