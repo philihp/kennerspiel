@@ -65,6 +65,7 @@ const convertPenny =
 export const convert =
   (param: GameCommandConvertParams) =>
   (state: GameStatePlaying): GameStatePlaying | undefined => {
+    if (state === undefined) return undefined
     if (param.penny ?? 0 % 5 !== 0) {
       return undefined
     }
