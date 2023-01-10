@@ -17,6 +17,18 @@ describe('build/buildings', () => {
         'G26',
       ])
     })
+    it('does not contain specific cards in solo', () => {
+      const s = roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.S)
+      const a = roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.A)
+      const b = roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.B)
+      const c = roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.C)
+      const d = roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.D)
+      expect(s).not.toContain('F10')
+      expect(a).not.toContain('F10')
+      expect(b).not.toContain('F10')
+      expect(c).not.toContain('F10')
+      expect(d).not.toContain('F10')
+    })
   })
   describe('isCloisterBuilding', () => {
     it('considers Priory as a cloister', () => {

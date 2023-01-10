@@ -18,7 +18,9 @@ describe('game 29767', () => {
     const s12 = reducer(s11, ['COMMIT'])! as GameStatePlaying
     const s13 = reducer(s12, ['BUILD', 'G07', '3', '0'])! as GameStatePlaying
     const s14 = reducer(s13, ['USE', 'G07', 'PtPtPtPt'])! as GameStatePlaying
-    const s15 = reducer(s14, ['CONVERT', 'Gn'])! as GameStatePlaying
+    const s15 = reducer(s14, ['COMMIT'])! as GameStatePlaying
+    const s16 = reducer(s15, ['CONVERT', 'Gn'])! as GameStatePlaying
+    const s17 = reducer(s16, ['BUILD', 'G06', '0', '0'])! as GameStatePlaying
 
     expect(s2.status).toBe('PLAYING')
     expect(s2.round).toBe(1)
@@ -26,7 +28,6 @@ describe('game 29767', () => {
     expect(s2.settlementRound).toBe('S')
     expect(s2.extraRound).toBeFalsy()
     expect(s2.settling).toBeFalsy()
-    expect(s2.buildings).not.toContain(BuildingEnum.BuildersMarket)
     expect(s2.players[0].peat).toBe(0)
     expect(s3).toBeDefined()
     expect(s3.players[0].peat).toBe(2)
@@ -89,15 +90,32 @@ describe('game 29767', () => {
       penny: 1,
       peat: 0,
       coal: 5,
+      clergy: [],
     })
-
-    expect(s14.players[0]).toMatchObject({
+    expect(s14.rondel.pointingBefore).toBe(3)
+    expect(s14.moveInRound).toBe(2)
+    expect(s14.round).toBe(3)
+    expect(s15.round).toBe(4)
+    expect(s15.moveInRound).toBe(1)
+    expect(s15.rondel.pointingBefore).toBe(4)
+    expect(s15.players[0]).toMatchObject({
       grain: 2,
       straw: 0,
+      clergy: ['LB1R', 'LB2R', 'PRIR'],
     })
-    expect(s15.players[0]).toMatchObject({
+    expect(s16.players[0]).toMatchObject({
       grain: 1,
       straw: 1,
     })
+    expect(s17.players[0].landscape).toStrictEqual([
+      [
+        ['P', 'G06'],
+        ['P', 'LFO'],
+        ['P', 'LFO'],
+        ['P', 'G07'],
+        ['H', 'LR1'],
+      ],
+      [['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
+    ])
   })
 })

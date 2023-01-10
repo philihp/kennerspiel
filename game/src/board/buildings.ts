@@ -110,7 +110,7 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.HarborPromenade,
       BuildingEnum.StoneMerchant,
     ])
-    .with([{ country: 'france' }, SettlementRound.S], () => [
+    .with([{ country: 'france', players: 2 }, SettlementRound.S], () => [
       BuildingEnum.CloisterCourtyard,
       BuildingEnum.Windmill,
       BuildingEnum.Bakery,
@@ -118,6 +118,20 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Market,
       BuildingEnum.HarborPromenade,
       BuildingEnum.StoneMerchant,
+    ])
+    .with([{ country: 'france', players: 1 }, SettlementRound.S], () => [
+      BuildingEnum.Priory,
+      BuildingEnum.CloisterCourtyard,
+      BuildingEnum.GrainStorage,
+      BuildingEnum.Windmill,
+      BuildingEnum.Bakery,
+      BuildingEnum.FuelMerchant,
+      BuildingEnum.PeatCoalKiln,
+      BuildingEnum.Market,
+      BuildingEnum.CloisterGarden,
+      BuildingEnum.HarborPromenade,
+      BuildingEnum.StoneMerchant,
+      BuildingEnum.BuildersMarket,
     ])
     .with([{ country: 'ireland', players: 4 }, SettlementRound.S], () => [
       BuildingEnum.Priory,
@@ -146,7 +160,7 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Houseboat,
       BuildingEnum.StoneMerchant,
     ])
-    .with([{ country: 'ireland' }, SettlementRound.S], () => [
+    .with([{ country: 'ireland', players: 2 }, SettlementRound.S], () => [
       BuildingEnum.CloisterCourtyard,
       BuildingEnum.Malthouse,
       BuildingEnum.Brewery,
@@ -154,6 +168,21 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.FalseLighthouse,
       BuildingEnum.Houseboat,
       BuildingEnum.StoneMerchant,
+    ])
+    .with([{ country: 'ireland', players: 1 }, SettlementRound.S], () => [
+      BuildingEnum.Priory,
+      BuildingEnum.CloisterCourtyard,
+      BuildingEnum.Granary,
+      BuildingEnum.Malthouse,
+      BuildingEnum.Brewery,
+      BuildingEnum.FuelMerchant,
+      BuildingEnum.PeatCoalKiln,
+      BuildingEnum.FalseLighthouse,
+      BuildingEnum.SpinningMill,
+      BuildingEnum.Cottage,
+      BuildingEnum.Houseboat,
+      BuildingEnum.StoneMerchant,
+      BuildingEnum.BuildersMarket,
     ])
     .with([{ country: 'france', players: 4 }, SettlementRound.A], () => [
       BuildingEnum.GrapevineA,
@@ -170,7 +199,14 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.CloisterWorkshop,
       BuildingEnum.Slaughterhouse,
     ])
-    .with([{ country: 'france' }, SettlementRound.A], () => [
+    .with([{ country: 'france', players: 2 }, SettlementRound.A], () => [
+      BuildingEnum.CloisterLibrary,
+      BuildingEnum.CloisterWorkshop,
+      BuildingEnum.Slaughterhouse,
+    ])
+    .with([{ country: 'france', players: 1 }, SettlementRound.A], () => [
+      BuildingEnum.FinancedEstate,
+      BuildingEnum.CloisterChapterHouse,
       BuildingEnum.CloisterLibrary,
       BuildingEnum.CloisterWorkshop,
       BuildingEnum.Slaughterhouse,
@@ -190,8 +226,16 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.CloisterWorkshop,
       BuildingEnum.Slaughterhouse,
     ])
-    .with([{ country: 'ireland' }, SettlementRound.A], () => [
+    .with([{ country: 'ireland', players: 2 }, SettlementRound.A], () => [
       BuildingEnum.SacredSite,
+      BuildingEnum.Scriptorium,
+      BuildingEnum.CloisterWorkshop,
+      BuildingEnum.Slaughterhouse,
+    ])
+    .with([{ country: 'ireland', players: 1 }, SettlementRound.A], () => [
+      BuildingEnum.SacredSite,
+      BuildingEnum.DruidsHouse,
+      BuildingEnum.CloisterChapterHouse,
       BuildingEnum.Scriptorium,
       BuildingEnum.CloisterWorkshop,
       BuildingEnum.Slaughterhouse,
@@ -212,10 +256,19 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.CloisterChurch,
       BuildingEnum.Shipyard,
     ])
-    .with([{ country: 'france' }, SettlementRound.B], () => [
+    .with([{ country: 'france', players: 2 }, SettlementRound.B], () => [
       BuildingEnum.Winery,
       BuildingEnum.QuarryA,
       BuildingEnum.CloisterChurch,
+      BuildingEnum.Shipyard,
+    ])
+    .with([{ country: 'france', players: 1 }, SettlementRound.B], () => [
+      BuildingEnum.Inn,
+      BuildingEnum.Winery,
+      BuildingEnum.QuarryA,
+      BuildingEnum.Bathhouse,
+      BuildingEnum.CloisterChurch,
+      BuildingEnum.ChamberOfWonders,
       BuildingEnum.Shipyard,
     ])
     .with([{ country: 'ireland', players: 4 }, SettlementRound.B], () => [
@@ -234,10 +287,19 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Chapel,
       BuildingEnum.Shipyard,
     ])
-    .with([{ country: 'ireland' }, SettlementRound.B], () => [
+    .with([{ country: 'ireland', players: 2 }, SettlementRound.B], () => [
       BuildingEnum.WhiskeyDistillery,
       BuildingEnum.QuarryA,
       BuildingEnum.Chapel,
+      BuildingEnum.Shipyard,
+    ])
+    .with([{ country: 'ireland', players: 1 }, SettlementRound.B], () => [
+      BuildingEnum.Alehouse,
+      BuildingEnum.WhiskeyDistillery,
+      BuildingEnum.QuarryA,
+      BuildingEnum.Locutory,
+      BuildingEnum.Chapel,
+      BuildingEnum.Portico,
       BuildingEnum.Shipyard,
     ])
     .with([{ country: 'france', players: 4 }, SettlementRound.C], () => [
@@ -257,10 +319,17 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Calefactory,
       BuildingEnum.ShippingCompany,
     ])
-    .with([{ country: 'france' }, SettlementRound.C], () => [
+    .with([{ country: 'france', players: 2 }, SettlementRound.C], () => [
       BuildingEnum.Palace,
       BuildingEnum.Castle,
       BuildingEnum.TownEstate,
+      BuildingEnum.ShippingCompany,
+    ])
+    .with([{ country: 'france', players: 1 }, SettlementRound.C], () => [
+      BuildingEnum.Palace,
+      BuildingEnum.Castle,
+      BuildingEnum.TownEstate,
+      BuildingEnum.Calefactory,
       BuildingEnum.ShippingCompany,
     ])
     .with([{ country: 'ireland', players: 4 }, SettlementRound.C], () => [
@@ -280,11 +349,20 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Cooperage,
       BuildingEnum.FilialChurch,
     ])
-    .with([{ country: 'ireland' }, SettlementRound.C], () => [
+    .with([{ country: 'ireland', players: 2 }, SettlementRound.C], () => [
       BuildingEnum.GrandManor,
       BuildingEnum.Castle,
       BuildingEnum.Refectory,
       BuildingEnum.Cooperage,
+    ])
+    .with([{ country: 'ireland', players: 1 }, SettlementRound.C], () => [
+      BuildingEnum.GrandManor,
+      BuildingEnum.Castle,
+      BuildingEnum.ForestHut,
+      BuildingEnum.Refectory,
+      BuildingEnum.CoalHarbor,
+      BuildingEnum.Cooperage,
+      BuildingEnum.FilialChurch,
     ])
     .with([{ country: 'france', players: 4 }, SettlementRound.D], () => [
       BuildingEnum.Sacristy,
@@ -305,11 +383,21 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Hospice,
       BuildingEnum.HouseOfTheBrotherhood,
     ])
-    .with([{ country: 'france' }, SettlementRound.D], () => [
+    .with([{ country: 'france', players: 2 }, SettlementRound.D], () => [
       BuildingEnum.Sacristy,
       BuildingEnum.ForgersWorkshop,
       BuildingEnum.Dormitory,
       BuildingEnum.PrintingOffice,
+      BuildingEnum.HouseOfTheBrotherhood,
+    ])
+    .with([{ country: 'france', players: 1 }, SettlementRound.D], () => [
+      BuildingEnum.Sacristy,
+      BuildingEnum.ForgersWorkshop,
+      BuildingEnum.PilgrimageSite,
+      BuildingEnum.Dormitory,
+      BuildingEnum.PrintingOffice,
+      BuildingEnum.Estate,
+      BuildingEnum.Hospice,
       BuildingEnum.HouseOfTheBrotherhood,
     ])
     .with([{ country: 'ireland', players: 4 }, SettlementRound.D], () => [
@@ -331,11 +419,21 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Guesthouse,
       BuildingEnum.HouseOfTheBrotherhood,
     ])
-    .with([{ country: 'ireland' }, SettlementRound.D], () => [
+    .with([{ country: 'ireland', players: 2 }, SettlementRound.D], () => [
       BuildingEnum.Sacristy,
       BuildingEnum.RoundTower,
       BuildingEnum.Bulwark,
       BuildingEnum.FestivalGround,
+      BuildingEnum.HouseOfTheBrotherhood,
+    ])
+    .with([{ country: 'ireland', players: 1 }, SettlementRound.D], () => [
+      BuildingEnum.Sacristy,
+      BuildingEnum.RoundTower,
+      BuildingEnum.Camera,
+      BuildingEnum.Bulwark,
+      BuildingEnum.FestivalGround,
+      BuildingEnum.Estate,
+      BuildingEnum.Guesthouse,
       BuildingEnum.HouseOfTheBrotherhood,
     ])
     .otherwise(() => [])
