@@ -61,7 +61,7 @@ export const modeSetup =
             {
               ...state.players[0],
               color,
-              landscape: makeLandscape(color),
+              landscape: makeLandscape(color, true),
             },
           ],
         }
