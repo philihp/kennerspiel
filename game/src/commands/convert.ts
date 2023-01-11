@@ -66,11 +66,11 @@ export const convert =
   (param: GameCommandConvertParams) =>
   (state: GameStatePlaying): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    if (param.penny ?? 0 % 5 !== 0) {
+    if ((param.penny ?? 0) % 5 !== 0) {
       return undefined
     }
 
-    return setPlayer(
+    const out = setPlayer(
       state,
       pipe(
         getPlayer,
@@ -81,4 +81,6 @@ export const convert =
         convertPenny(param.penny)
       )(state)
     )
+
+    return out
   }

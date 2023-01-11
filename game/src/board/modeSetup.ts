@@ -44,8 +44,10 @@ export const modeSetup =
     match(config)
       .with({ players: 1, country: 'france' }, () => {
         const [neutralColorIndex, randGen] = randRange(0, 3, state.randGen)
+        const color = neutralColor(state.players[0].color, neutralColorIndex)
         return {
           ...state,
+          randGen,
           players: [
             {
               ...state.players[0],
@@ -58,8 +60,8 @@ export const modeSetup =
             },
             {
               ...state.players[0],
-              color: neutralColor(state.players[0].color, neutralColorIndex),
-              landscape: [],
+              color,
+              landscape: makeLandscape(color, true),
             },
           ],
         }
