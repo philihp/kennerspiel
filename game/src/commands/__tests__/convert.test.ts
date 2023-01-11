@@ -18,77 +18,81 @@ describe('commands/convert', () => {
       expect(s3).toMatchObject(s2)
     })
     it('converts nickel to pennies', () => {
-      const src = {
+      const s3 = {
         ...s2,
         players: [
-          (s2.players[0] = {
+          {
             ...s2.players[0],
             nickel: 1,
             penny: 1,
             wine: 1,
-          }),
+          },
+          ...s2.players.slice(1),
         ],
       }
-      const dst = convert({ nickel: 1 })(src)!
-      expect(dst.players[0]).toMatchObject({
+      const s4 = convert({ nickel: 1 })(s3)!
+      expect(s4.players[0]).toMatchObject({
         nickel: 0,
         penny: 6,
         wine: 1,
       })
     })
     it('converts pennies to nickel', () => {
-      const src = {
+      const s3 = {
         ...s2,
         players: [
-          (s2.players[0] = {
+          {
             ...s2.players[0],
             nickel: 2,
             penny: 6,
             wine: 1,
-          }),
+          },
+          ...s2.players.slice(1),
         ],
       }
-      const dst = convert({ penny: 5 })(src)!
-      expect(dst.players[0]).toMatchObject({
+      const s4 = convert({ penny: 5 })(s3)!
+      expect(s4.players[0]).toMatchObject({
         nickel: 3,
         penny: 1,
         wine: 1,
       })
     })
     it('converts wine if needed to uptoken to nickel', () => {
-      const src = {
+      const s3 = {
         ...s2,
         players: [
-          (s2.players[0] = {
+          {
             ...s2.players[0],
             nickel: 0,
             penny: 2,
             wine: 4,
-          }),
+          },
+          ...s2.players.slice(1),
         ],
       }
-      const dst = convert({ penny: 5 })(src)!
-      expect(dst.players[0]).toMatchObject({
+      const s4 = convert({ penny: 5 })(s3)!
+      expect(s4.players[0]).toMatchObject({
         nickel: 1,
         penny: 0,
         wine: 1,
       })
     })
     it('converts whiskey if needed to uptoken to nickel', () => {
-      const src = {
+      const s3 = {
         ...s2,
         players: [
-          (s2.players[0] = {
+          {
             ...s2.players[0],
             nickel: 0,
             penny: 2,
             whiskey: 4,
-          }),
+          },
+          ...s2.players.slice(1),
         ],
       }
-      const dst = convert({ penny: 5 })(src)!
+      const s4 = convert({ penny: 5 })(s3)!
 
-      expect(dst.players[0]).toMatchObject({
+      expect(s4.players[0]).toMatchObject({
         nickel: 1,
         penny: 1,
         whiskey: 2,
