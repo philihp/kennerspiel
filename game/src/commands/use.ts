@@ -4,6 +4,7 @@ import { getPlayer, isLayBrother, isPrior, setPlayer } from '../board/player'
 import { bakery } from '../buildings/bakery'
 import { clayMound } from '../buildings/clayMound'
 import { cloisterCourtyard } from '../buildings/cloisterCourtyard'
+import { cloisterOffice } from '../buildings/cloisterOffice'
 import { farmyard } from '../buildings/farmyard'
 import { peatCoalKiln } from '../buildings/peatCoalKiln'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
@@ -80,6 +81,27 @@ export const use = (building: BuildingEnum, params: string[]) =>
           [],
         ],
         ([_, params]) => clayMound(params[0])
+      )
+      .with(
+        [
+          P.union(
+            BuildingEnum.CloisterOfficeR,
+            BuildingEnum.CloisterOfficeG,
+            BuildingEnum.CloisterOfficeB,
+            BuildingEnum.CloisterOfficeW
+          ),
+          [P._],
+        ],
+        [
+          P.union(
+            BuildingEnum.CloisterOfficeR,
+            BuildingEnum.CloisterOfficeG,
+            BuildingEnum.CloisterOfficeB,
+            BuildingEnum.CloisterOfficeW
+          ),
+          [],
+        ],
+        ([_, params]) => cloisterOffice(params[0])
       )
       .with([BuildingEnum.PeatCoalKiln, []], [BuildingEnum.PeatCoalKiln, [P._]], ([_, params]) =>
         peatCoalKiln(params[0])
