@@ -50,6 +50,6 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
   return cost
 }
 
-export const differentGoods = (cost: Cost) => {
-  return 0
-}
+export const differentGoods = (cost: Cost) => Object.keys(cost).filter((k) => cost[k as keyof Cost] ?? 0 >= 1).length
+
+export const totalGoods = (cost: Cost) => Object.keys(cost).reduce((sum, k) => sum + (cost[k as keyof Cost] ?? 0), 0)
