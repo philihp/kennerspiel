@@ -1,4 +1,4 @@
-import { parseResourceParam } from '../resource'
+import { differentGoods, maskGoods, multiplyGoods, parseResourceParam, totalGoods } from '../resource'
 import { take } from '../wheel'
 
 describe('board/resource', () => {
@@ -27,6 +27,49 @@ describe('board/resource', () => {
     it('handles an empty string', () => {
       const res = ''
       expect(parseResourceParam(res)).toMatchObject({})
+    })
+  })
+
+  describe('differentGoods', () => {
+    it('counts up the different goods', () => {
+      expect(differentGoods({ clay: 1, wood: 1, grain: 1 })).toBe(3)
+    })
+    it('does not count if value is 0', () => {
+      expect(differentGoods({ clay: 1, wood: 0, grain: 1 })).toBe(2)
+    })
+    it('accepts empty cost', () => {
+      expect(differentGoods({})).toBe(0)
+    })
+  })
+  describe('totalGoods', () => {
+    it('sums up the different goods', () => {
+      expect(totalGoods({ clay: 1, wood: 1, grain: 4 })).toBe(6)
+    })
+    it('accepts empty cost', () => {
+      expect(totalGoods({})).toBe(0)
+    })
+  })
+
+  describe('multiplyGoods', () => {
+    it('multiplies the goods', () => {
+      expect(multiplyGoods(4)({ grain: 1, wood: 2 })).toMatchObject({
+        grain: 4,
+        wood: 8,
+      })
+    })
+  })
+
+  describe('maskGoods', () => {
+    it('ands two sets together', () => {
+      const out = maskGoods(['stone', 'grain', 'wood'])({ stone: 2, wood: 1, clay: 1 })
+      expect(out).toMatchObject({
+        stone: 2,
+        wood: 1,
+      })
+      expect(Object.keys(out)).toContain('stone')
+      expect(Object.keys(out)).toContain('wood')
+      expect(Object.keys(out)).not.toContain('grain')
+      expect(Object.keys(out)).not.toContain('clay')
     })
   })
 })

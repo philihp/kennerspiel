@@ -1,5 +1,5 @@
 import { match, P } from 'ts-pattern'
-import { Cost, ResourceEnum } from '../types'
+import { Cost, ResourceEnum, Tableau } from '../types'
 
 const ResourceValues = Object.values(ResourceEnum)
 
@@ -49,3 +49,27 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
   }
   return cost
 }
+
+export const differentGoods = (cost: Cost) => Object.keys(cost).filter((k) => cost[k as keyof Cost] ?? 0 >= 1).length
+
+export const totalGoods = (cost: Cost) => Object.keys(cost).reduce((sum, k) => sum + (cost[k as keyof Cost] ?? 0), 0)
+
+export const multiplyGoods = (by: number) => (cost: Cost) =>
+  Object.keys(cost).reduce(
+    (cost, k) => {
+      const c = cost[k as keyof Cost]
+      if (c !== undefined) {
+        cost[k as keyof Cost] = c * by
+      }
+      return cost
+    },
+    { ...cost }
+  )
+
+export const maskGoods =
+  (goods: (keyof Cost)[]) =>
+  (cost: Cost): Cost =>
+    goods.reduce((outCost, key) => {
+      if (cost[key]) outCost[key] = cost[key]
+      return outCost
+    }, {} as Cost)

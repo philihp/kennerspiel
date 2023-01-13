@@ -2,6 +2,7 @@ import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { getPlayer, isLayBrother, isPrior, setPlayer } from '../board/player'
 import { clayMound } from '../buildings/clayMound'
+import { cloisterCourtyard } from '../buildings/cloisterCourtyard'
 import { farmyard } from '../buildings/farmyard'
 import { peatCoalKiln } from '../buildings/peatCoalKiln'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
@@ -82,6 +83,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.PeatCoalKiln, []], [BuildingEnum.PeatCoalKiln, [P._]], ([_, params]) =>
         peatCoalKiln(params[0])
       )
+      .with([BuildingEnum.CloisterCourtyard, [P._, P._]], ([_, params]) => cloisterCourtyard(params[0], params[1]))
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })
