@@ -1,5 +1,4 @@
-import { differentGoods, maskGoods, multiplyGoods, parseResourceParam, totalGoods } from '../resource'
-import { take } from '../wheel'
+import { costEnergy, differentGoods, maskGoods, multiplyGoods, parseResourceParam, totalGoods } from '../resource'
 
 describe('board/resource', () => {
   describe('parseResourceParam', () => {
@@ -70,6 +69,23 @@ describe('board/resource', () => {
       expect(Object.keys(out)).toContain('wood')
       expect(Object.keys(out)).not.toContain('grain')
       expect(Object.keys(out)).not.toContain('clay')
+    })
+  })
+  describe('costEnergy', () => {
+    it('looks at coal', () => {
+      expect(costEnergy({ coal: 4 })).toBe(12)
+    })
+    it('looks at peat', () => {
+      expect(costEnergy({ peat: 4 })).toBe(8)
+    })
+    it('looks at wood', () => {
+      expect(costEnergy({ wood: 4 })).toBe(4)
+    })
+    it('looks at straw', () => {
+      expect(costEnergy({ straw: 5 })).toBe(2.5)
+    })
+    it('combines items', () => {
+      expect(costEnergy({ coal: 1, peat: 1, wood: 1, straw: 1 })).toBe(6.5)
     })
   })
 })

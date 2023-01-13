@@ -73,3 +73,10 @@ export const maskGoods =
       if (cost[key]) outCost[key] = cost[key]
       return outCost
     }, {} as Cost)
+
+export const costEnergy = ({ coal = 0, peat = 0, wood = 0, straw = 0 }) => coal * 3 + peat * 2 + wood + straw * 0.5
+
+export const canAfford =
+  (cost: Cost) =>
+  (player: Tableau): boolean =>
+    Object.entries(cost).every(([type, amountNeeded]) => player[type as keyof Tableau] >= amountNeeded)
