@@ -1,4 +1,4 @@
-import { differentGoods, parseResourceParam, totalGoods } from '../resource'
+import { differentGoods, maskGoods, multiplyGoods, parseResourceParam, totalGoods } from '../resource'
 import { take } from '../wheel'
 
 describe('board/resource', () => {
@@ -47,6 +47,29 @@ describe('board/resource', () => {
     })
     it('accepts empty cost', () => {
       expect(totalGoods({})).toBe(0)
+    })
+  })
+
+  describe('multiplyGoods', () => {
+    it('multiplies the goods', () => {
+      expect(multiplyGoods(4)({ grain: 1, wood: 2 })).toMatchObject({
+        grain: 4,
+        wood: 8,
+      })
+    })
+  })
+
+  describe('maskGoods', () => {
+    it('ands two sets together', () => {
+      const out = maskGoods(['stone', 'grain', 'wood'])({ stone: 2, wood: 1, clay: 1 })
+      expect(out).toMatchObject({
+        stone: 2,
+        wood: 1,
+      })
+      expect(Object.keys(out)).toContain('stone')
+      expect(Object.keys(out)).toContain('wood')
+      expect(Object.keys(out)).not.toContain('grain')
+      expect(Object.keys(out)).not.toContain('clay')
     })
   })
 })

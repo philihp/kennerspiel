@@ -2,7 +2,7 @@ import { config } from '../../commands/config'
 import { start } from '../../commands/start'
 import { initialState } from '../../reducer'
 import { Clergy, GameStatePlaying, PlayerColor, Tableau } from '../../types'
-import { getPlayer, isLayBrother, isPrior, setPlayer } from '../player'
+import { getPlayer, isLayBrother, isPrior, payCost, setPlayer } from '../player'
 
 const p: Tableau = {
   color: PlayerColor.Red,
@@ -99,6 +99,63 @@ describe('board/player', () => {
     })
     it('does not think undefined is a prior', () => {
       expect(isLayBrother(undefined)).toBeFalsy()
+    })
+  })
+
+  describe('payCost', () => {
+    const player: Tableau = {
+      color: PlayerColor.Blue,
+      clergy: [],
+      settlements: [],
+      landscape: [[]],
+      peat: 0,
+      penny: 0,
+      clay: 4,
+      wood: 2,
+      grain: 3,
+      sheep: 0,
+      stone: 0,
+      flour: 0,
+      grape: 0,
+      nickel: 4,
+      hops: 0,
+      coal: 0,
+      book: 0,
+      pottery: 0,
+      whiskey: 0,
+      straw: 6,
+      meat: 0,
+      ornament: 0,
+      bread: 1,
+      wine: 0,
+      beer: 0,
+      reliquary: 0,
+    }
+
+    it('can pay a cost', () => {
+      expect(player).toMatchObject({
+        clay: 4,
+      })
+      expect(payCost({ clay: 3 })(player)).toMatchObject({
+        clay: 1,
+      })
+    })
+    it('accepts multiple things as cost', () => {
+      expect(player).toMatchObject({
+        clay: 4,
+        wood: 2,
+      })
+      expect(payCost({ clay: 3, wood: 2 })(player)).toMatchObject({
+        clay: 1,
+        wood: 0,
+      })
+    })
+
+    it('fails if player cant pay', () => {
+      expect(player).toMatchObject({
+        clay: 4,
+      })
+      expect(payCost({ clay: 5 })(player)).toBeUndefined()
     })
   })
 })

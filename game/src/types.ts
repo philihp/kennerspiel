@@ -288,6 +288,7 @@ export enum Clergy {
 
 export type Tile = [LandEnum, BuildingEnum?, Clergy?]
 
+// TODO: try to Required<Cost> &
 export type Tableau = {
   color: PlayerColor
   clergy: Clergy[]
