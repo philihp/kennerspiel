@@ -1,4 +1,4 @@
-import { parseResourceParam } from '../resource'
+import { differentGoods, parseResourceParam } from '../resource'
 import { take } from '../wheel'
 
 describe('board/resource', () => {
@@ -27,6 +27,12 @@ describe('board/resource', () => {
     it('handles an empty string', () => {
       const res = ''
       expect(parseResourceParam(res)).toMatchObject({})
+    })
+  })
+
+  describe('differentGoods', () => {
+    it('accepts empty cost', () => {
+      expect(differentGoods({})).toBe(0)
     })
   })
 })

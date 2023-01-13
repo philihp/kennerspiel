@@ -49,3 +49,7 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
   }
   return cost
 }
+
+export const differentGoods = (cost: Cost) => {
+  return 0
+}
