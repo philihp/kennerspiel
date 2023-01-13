@@ -1,6 +1,6 @@
 import { postMove } from '../board/postMove'
 import { preMove } from '../board/preMove'
-import { GameStatePlaying, GameStatusEnum } from '../types'
+import { GameStatePlaying } from '../types'
 
 export const commit = (state: GameStatePlaying) => {
   const newState = postMove(state.config)(state)

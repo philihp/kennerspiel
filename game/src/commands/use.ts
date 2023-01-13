@@ -5,6 +5,7 @@ import { bakery } from '../buildings/bakery'
 import { clayMound } from '../buildings/clayMound'
 import { cloisterCourtyard } from '../buildings/cloisterCourtyard'
 import { farmyard } from '../buildings/farmyard'
+import { grainStorage } from '../buildings/grainStorage'
 import { peatCoalKiln } from '../buildings/peatCoalKiln'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
 
@@ -86,6 +87,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       )
       .with([BuildingEnum.CloisterCourtyard, [P._, P._]], ([_, params]) => cloisterCourtyard(params[0], params[1]))
       .with([BuildingEnum.Bakery, [P._]], ([_, params]) => bakery(params[0]))
+      .with([BuildingEnum.GrainStorage, []], grainStorage)
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })
