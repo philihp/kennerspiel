@@ -8,6 +8,7 @@ import { cloisterOffice } from '../buildings/cloisterOffice'
 import { farmyard } from '../buildings/farmyard'
 import { grainStorage } from '../buildings/grainStorage'
 import { peatCoalKiln } from '../buildings/peatCoalKiln'
+import { windmill } from '../buildings/windmill'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
 
 export const findBuilding = (landscape: Tile[][], building: BuildingEnum): { row?: number; col?: number } => {
@@ -110,6 +111,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.CloisterCourtyard, [P._, P._]], ([_, params]) => cloisterCourtyard(params[0], params[1]))
       .with([BuildingEnum.Bakery, [P._]], ([_, params]) => bakery(params[0]))
       .with([BuildingEnum.GrainStorage, []], grainStorage)
+      .with([BuildingEnum.Windmill, [P._]], ([_, params]) => windmill(params[0]))
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })
