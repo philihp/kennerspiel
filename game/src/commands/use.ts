@@ -6,6 +6,7 @@ import { clayMound } from '../buildings/clayMound'
 import { cloisterCourtyard } from '../buildings/cloisterCourtyard'
 import { cloisterOffice } from '../buildings/cloisterOffice'
 import { farmyard } from '../buildings/farmyard'
+import { fuelMerchant } from '../buildings/fuelMerchant'
 import { grainStorage } from '../buildings/grainStorage'
 import { peatCoalKiln } from '../buildings/peatCoalKiln'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
@@ -33,7 +34,6 @@ export const moveClergyToOwnBuilding =
     if (row === undefined || col === undefined) return undefined
     const [land] = player.landscape[row][col]
 
-    const layBrothers = player.clergy.filter(isLayBrother)
     const priors = player.clergy.filter(isPrior)
     if (usePrior && priors.length === 0) return undefined
     const nextClergy = (usePrior ? priors : player.clergy)[0]
@@ -110,6 +110,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.CloisterCourtyard, [P._, P._]], ([_, params]) => cloisterCourtyard(params[0], params[1]))
       .with([BuildingEnum.Bakery, [P._]], ([_, params]) => bakery(params[0]))
       .with([BuildingEnum.GrainStorage, []], grainStorage)
+      .with([BuildingEnum.FuelMerchant, [P._]], ([_, params]) => fuelMerchant(params[0]))
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })

@@ -31,9 +31,9 @@ export const setPlayer = (state: GameStatePlaying, player: Tableau, playerIndex?
 }
 
 export const setPlayerCurried =
-  (player: Tableau) =>
-  (state: GameStatePlaying): GameStatePlaying =>
-    setPlayer(state, player)
+  (player?: Tableau) =>
+  (state: GameStatePlaying): GameStatePlaying | undefined =>
+    player && setPlayer(state, player)
 
 export const isPrior = (clergy: Clergy | undefined) =>
   clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy)
