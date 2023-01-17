@@ -11,6 +11,7 @@ import { fuelMerchant } from '../buildings/fuelMerchant'
 import { grainStorage } from '../buildings/grainStorage'
 import { market } from '../buildings/market'
 import { peatCoalKiln } from '../buildings/peatCoalKiln'
+import { stoneMerchant } from '../buildings/stoneMerchant'
 import { windmill } from '../buildings/windmill'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
 
@@ -122,6 +123,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.Windmill, [P._]], ([_, params]) => windmill(params[0]))
       .with([BuildingEnum.Market, [P._]], ([_, params]) => market(params[0]))
       .with([BuildingEnum.CloisterGarden, []], cloisterGarden)
+      .with([BuildingEnum.StoneMerchant, [P._]], ([_, params]) => stoneMerchant(params[0]))
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })
