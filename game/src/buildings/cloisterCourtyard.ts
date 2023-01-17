@@ -17,5 +17,5 @@ export const cloisterCourtyard =
     const paidCost = payCost(inputs)(player)
     if (paidCost === undefined) return undefined
     const gotOut = getCost(multiplyGoods(6)(outputs))(paidCost)
-    return setPlayer(state, gotOut)
+    return gotOut && setPlayer(state, gotOut)
   }

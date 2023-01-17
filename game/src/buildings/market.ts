@@ -17,5 +17,5 @@ export const market =
       nickel: 1,
       penny: 2,
     })(paidCost)
-    return setPlayer(state, gotOut)
+    return gotOut && setPlayer(state, gotOut)
   }
