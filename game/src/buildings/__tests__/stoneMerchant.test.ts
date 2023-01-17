@@ -29,12 +29,12 @@ describe('buildings/stoneMerchant', () => {
         usableBuildings: ['G12'],
       })
       const s5 = reducer(s4, ['USE', 'G12', 'PtPtBrBrBr'])! as GameStatePlaying
-      // expect(s5.players[0]).toMatchObject({
-      //   peat: 0,
-      //   bread: 0,
-      //   stone: 4,
-      // })
-      // expect(s5).toMatchObject({})
+      expect(s5.players[0]).toMatchObject({
+        peat: 0,
+        bread: 0,
+        stone: 4,
+      })
+      expect(s5).toMatchObject({})
     })
   })
 })

@@ -9,11 +9,10 @@ export const stoneMerchant =
     const inputs = parseResourceParam(param)
     const energy = costEnergy(inputs)
     const food = costFood(inputs)
-    const iterations = Math.floor(Math.min(energy, food / 2, 5))
 
     const player = getPlayer(state)
     const costPaid = payCost(inputs)(player)
-    const gotStone = getCost({ stone: iterations })(costPaid)
+    const gotStone = getCost({ stone: Math.floor(Math.min(energy, food / 2, 5)) })(costPaid)
 
     return setPlayerCurried(gotStone)(state)
   }
