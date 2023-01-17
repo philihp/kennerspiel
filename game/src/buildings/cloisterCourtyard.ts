@@ -10,7 +10,8 @@ export const cloisterCourtyard =
     if (state === undefined) return undefined
     const inputs = parseResourceParam(input)
     const outputs = parseResourceParam(output)
-    if (totalGoods(inputs) !== 3 && differentGoods(inputs) !== 3) return undefined
+    if (totalGoods(inputs) !== 3) return undefined
+    if (differentGoods(inputs) !== 3) return undefined
     if (totalGoods(maskGoods(ALLOWED_OUTPUT)(outputs)) !== 1 && differentGoods(outputs) !== 1) return undefined
     const player = getPlayer(state)
     const paidCost = payCost(inputs)(player)
