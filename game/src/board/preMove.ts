@@ -21,7 +21,11 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlayi
     }
   } else if (state.settling && state.moveInRound === 1) {
     // board.preSettling()
-    newState = { ...newState, settlementRound: nextSettlementRound(state.settlementRound) }
+    newState = {
+      ...newState,
+      settlementRound: nextSettlementRound(state.settlementRound),
+      usableBuildings: undefined,
+    }
   } else if (state.moveInRound === 1) {
     // board.preRound()
     newState = { ...newState }
@@ -44,6 +48,9 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlayi
 
     // 2 - push arm
     newState.rondel = pushArm(state.rondel, state.config.players)
+
+    // clear usableBuildings filter
+    newState.usableBuildings = undefined
 
     const preRoundState = preRound(state.config)(newState)
     if (preRoundState === undefined) return undefined

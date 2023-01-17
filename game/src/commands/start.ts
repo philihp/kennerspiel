@@ -1,5 +1,6 @@
 import fastShuffle from 'fast-shuffle'
 import { newRandGen, randNext, randRange } from 'fn-pcg'
+import { pipe } from 'ramda'
 import { roundBuildings } from '../board/buildings'
 import { makeLandscape, modeSetup } from '../board/modeSetup'
 import { clergyForColor } from '../board/player'
@@ -98,5 +99,8 @@ export const start = (
     neutralBuildingPhase: false,
   }
 
-  return preMove(modeSetup(state.config)(newState))
+  return pipe(
+    modeSetup(state.config), // basically just single player stuff
+    preMove
+  )(newState)
 }
