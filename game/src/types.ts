@@ -4,6 +4,7 @@ export enum GameCommandEnum {
   CONFIG = 'CONFIG',
   START = 'START',
   COMMIT = 'COMMIT',
+  WITH_PRIOR = 'WITH_PRIOR',
   USE = 'USE',
   CUT_PEAT = 'CUT_PEAT',
   FELL_TREES = 'FELL_TREES',
@@ -371,6 +372,7 @@ export type GameStatePlaying = {
   settlementRound: SettlementRound
   buildings: BuildingEnum[]
   usableBuildings?: BuildingEnum[]
+  nextUsePrior: boolean
   plotPurchasePrices: number[]
   districtPurchasePrices: number[]
 }

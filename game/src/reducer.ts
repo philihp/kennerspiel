@@ -21,6 +21,7 @@ import {
   Reducer,
 } from './types'
 import { parseResourceParam } from './board/resource'
+import { withPrior } from './commands/withPrior'
 
 export const initialState: GameStateSetup = {
   randGen: 0n,
@@ -81,6 +82,7 @@ export const reducer: Reducer = (state, action) =>
         row: Number.parseInt(row, 10),
       })(state as GameStatePlaying)
     )
+    .with([GameCommandEnum.WITH_PRIOR], () => withPrior(state as GameStatePlaying))
     .with(
       [GameCommandEnum.USE, P.string],
       [GameCommandEnum.USE, P.string, P.string],
