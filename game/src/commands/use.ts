@@ -4,6 +4,7 @@ import { getPlayer, isLayBrother, isPrior, setPlayer } from '../board/player'
 import { bakery } from '../buildings/bakery'
 import { clayMound } from '../buildings/clayMound'
 import { cloisterCourtyard } from '../buildings/cloisterCourtyard'
+import { cloisterGarden } from '../buildings/cloisterGarden'
 import { cloisterOffice } from '../buildings/cloisterOffice'
 import { farmyard } from '../buildings/farmyard'
 import { fuelMerchant } from '../buildings/fuelMerchant'
@@ -115,6 +116,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.FuelMerchant, [P._]], ([_, params]) => fuelMerchant(params[0]))
       .with([BuildingEnum.Windmill, [P._]], ([_, params]) => windmill(params[0]))
       .with([BuildingEnum.Market, [P._]], ([_, params]) => market(params[0]))
+      .with([BuildingEnum.CloisterGarden, [P._]], ([_, params]) => cloisterGarden(params[0]))
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })

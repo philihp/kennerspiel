@@ -22,7 +22,7 @@ describe('buildings/cloisterGarden', () => {
       expect(s4.players[0]).toMatchObject({
         penny: 0,
       })
-      const s5 = cloisterGarden('F09')(s4)! as GameStatePlaying
+      const s5 = reducer(s4, ['USE', 'F09', 'LR3'])! as GameStatePlaying
       expect(s5.players[0]).toMatchObject({
         grape: 1,
       })
