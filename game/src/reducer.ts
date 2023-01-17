@@ -66,11 +66,11 @@ export const reducer: Reducer = (state, action) =>
     )
     .with(
       [GameCommandEnum.FELL_TREES, P.string, P.string],
-      [GameCommandEnum.FELL_TREES, 'Jo', P.string, P.string],
+      [GameCommandEnum.FELL_TREES, P.string, P.string, 'Jo'],
       ([_, col, row, useJoker]) =>
         fellTrees({
           col: Number.parseInt(col, 10),
-          row: Number.parseInt(row, 10),
+          row: Number.parseInt(row ?? '', 10),
           useJoker: useJoker === 'Jo',
         })(state as GameStatePlaying)
     )

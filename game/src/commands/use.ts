@@ -4,9 +4,11 @@ import { getPlayer, isLayBrother, isPrior, setPlayer } from '../board/player'
 import { bakery } from '../buildings/bakery'
 import { clayMound } from '../buildings/clayMound'
 import { cloisterCourtyard } from '../buildings/cloisterCourtyard'
+import { cloisterOffice } from '../buildings/cloisterOffice'
 import { farmyard } from '../buildings/farmyard'
 import { grainStorage } from '../buildings/grainStorage'
 import { peatCoalKiln } from '../buildings/peatCoalKiln'
+import { windmill } from '../buildings/windmill'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
 
 export const findBuilding = (landscape: Tile[][], building: BuildingEnum): { row?: number; col?: number } => {
@@ -82,12 +84,34 @@ export const use = (building: BuildingEnum, params: string[]) =>
         ],
         ([_, params]) => clayMound(params[0])
       )
+      .with(
+        [
+          P.union(
+            BuildingEnum.CloisterOfficeR,
+            BuildingEnum.CloisterOfficeG,
+            BuildingEnum.CloisterOfficeB,
+            BuildingEnum.CloisterOfficeW
+          ),
+          [P._],
+        ],
+        [
+          P.union(
+            BuildingEnum.CloisterOfficeR,
+            BuildingEnum.CloisterOfficeG,
+            BuildingEnum.CloisterOfficeB,
+            BuildingEnum.CloisterOfficeW
+          ),
+          [],
+        ],
+        ([_, params]) => cloisterOffice(params[0])
+      )
       .with([BuildingEnum.PeatCoalKiln, []], [BuildingEnum.PeatCoalKiln, [P._]], ([_, params]) =>
         peatCoalKiln(params[0])
       )
       .with([BuildingEnum.CloisterCourtyard, [P._, P._]], ([_, params]) => cloisterCourtyard(params[0], params[1]))
       .with([BuildingEnum.Bakery, [P._]], ([_, params]) => bakery(params[0]))
       .with([BuildingEnum.GrainStorage, []], grainStorage)
+      .with([BuildingEnum.Windmill, [P._]], ([_, params]) => windmill(params[0]))
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })
