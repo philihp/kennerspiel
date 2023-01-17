@@ -97,6 +97,8 @@ export const start = (
     plotPurchasePrices: [],
     districtPurchasePrices: [],
     neutralBuildingPhase: false,
+    usableBuildings: undefined,
+    nextUsePrior: false,
   }
 
   return pipe(

@@ -37,7 +37,7 @@ export const findBuilding = (landscape: Tile[][], building: BuildingEnum): { row
 }
 
 export const moveClergyToOwnBuilding =
-  (building: BuildingEnum, usePrior: boolean) =>
+  (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
     const player = getPlayer(state)
@@ -46,8 +46,8 @@ export const moveClergyToOwnBuilding =
     const [land] = player.landscape[row][col]
 
     const priors = player.clergy.filter(isPrior)
-    if (usePrior && priors.length === 0) return undefined
-    const nextClergy = (usePrior ? priors : player.clergy)[0]
+    if (state.nextUsePrior && priors.length === 0) return undefined
+    const nextClergy = (state.nextUsePrior ? priors : player.clergy)[0]
     if (nextClergy === undefined) return undefined
 
     return setPlayer(state, {
@@ -68,11 +68,7 @@ export const moveClergyToOwnBuilding =
 export const use = (building: BuildingEnum, params: string[]) =>
   pipe(
     checkBuildingUsable(building),
-    moveClergyToOwnBuilding(
-      building,
-      false // TODO: we need a way of passing active player to the owner so they can choose
-      // TODO: if building has already been built this round, use Prior
-    ),
+    moveClergyToOwnBuilding(building),
     match<[BuildingEnum, string[]], (state: GameStatePlaying | undefined) => GameStatePlaying | undefined>([
       building,
       params,

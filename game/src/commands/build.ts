@@ -83,6 +83,15 @@ const removeBuildingCost =
     return setPlayer(state, player)
   }
 
+export const allowPriorToUse =
+  (building: BuildingEnum) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state && {
+      ...state,
+      nextUsePrior: true,
+      usableBuildings: [building],
+    }
+
 export const build = ({ row, col, building }: GameCommandBuildParams) =>
   pipe(
     checkBuildingUnbuilt(building),
@@ -92,5 +101,6 @@ export const build = ({ row, col, building }: GameCommandBuildParams) =>
     checkBuildingCloister(row, col, building),
     removeBuildingFromUnbuilt(building),
     addBuildingAtLandscape(row, col, building),
-    removeBuildingCost(building)
+    removeBuildingCost(building),
+    allowPriorToUse(building)
   )

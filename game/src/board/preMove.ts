@@ -52,6 +52,9 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlayi
     // clear usableBuildings filter
     newState.usableBuildings = undefined
 
+    // dont let previous player force next player into PRIOR
+    newState.nextUsePrior = false
+
     const preRoundState = preRound(state.config)(newState)
     if (preRoundState === undefined) return undefined
     newState = preRoundState
