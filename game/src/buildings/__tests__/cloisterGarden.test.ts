@@ -1,6 +1,5 @@
 import { reducer, initialState } from '../../reducer'
 import { GameStatePlaying } from '../../types'
-import { cloisterGarden } from '../cloisterGarden'
 
 describe('buildings/cloisterGarden', () => {
   describe('use', () => {
@@ -22,9 +21,12 @@ describe('buildings/cloisterGarden', () => {
       expect(s4.players[0]).toMatchObject({
         penny: 0,
       })
-      const s5 = reducer(s4, ['USE', 'F09', 'LR3'])! as GameStatePlaying
+      const s5 = reducer(s4, ['USE', 'F09'])! as GameStatePlaying
       expect(s5.players[0]).toMatchObject({
         grape: 1,
+      })
+      expect(s5).toMatchObject({
+        usableBuildings: ['LR3'],
       })
     })
   })

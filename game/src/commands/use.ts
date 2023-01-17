@@ -14,6 +14,14 @@ import { peatCoalKiln } from '../buildings/peatCoalKiln'
 import { windmill } from '../buildings/windmill'
 import { BuildingEnum, GameStatePlaying, Tile } from '../types'
 
+const checkBuildingUsable =
+  (building: BuildingEnum) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined) return undefined
+    if (state.usableBuildings && !state.usableBuildings.includes(building)) return undefined
+    return state
+  }
+
 export const findBuilding = (landscape: Tile[][], building: BuildingEnum): { row?: number; col?: number } => {
   let row
   let col
@@ -59,6 +67,7 @@ export const moveClergyToOwnBuilding =
 
 export const use = (building: BuildingEnum, params: string[]) =>
   pipe(
+    checkBuildingUsable(building),
     moveClergyToOwnBuilding(
       building,
       false // TODO: we need a way of passing active player to the owner so they can choose
@@ -116,7 +125,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.FuelMerchant, [P._]], ([_, params]) => fuelMerchant(params[0]))
       .with([BuildingEnum.Windmill, [P._]], ([_, params]) => windmill(params[0]))
       .with([BuildingEnum.Market, [P._]], ([_, params]) => market(params[0]))
-      .with([BuildingEnum.CloisterGarden, [P._]], ([_, params]) => cloisterGarden(params[0]))
+      .with([BuildingEnum.CloisterGarden, []], cloisterGarden)
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })

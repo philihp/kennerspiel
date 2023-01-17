@@ -35,6 +35,17 @@ export const setPlayerCurried =
   (state: GameStatePlaying): GameStatePlaying | undefined =>
     player && setPlayer(state, player)
 
+// export const mutateActivePlayer =
+//   (func: (player: Tableau) => Tableau) =>
+//   (state: GameStatePlaying): GameStatePlaying | undefined => ({
+//     ...state,
+//     players: [
+//       ...state.players.slice(0, state.activePlayerIndex),
+//       { ...func(state.players[state.activePlayerIndex]) },
+//       ...state.players.slice(state.activePlayerIndex + 1),
+//     ],
+//   })
+
 export const isPrior = (clergy: Clergy | undefined) =>
   clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy)
 
