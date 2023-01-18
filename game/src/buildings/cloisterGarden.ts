@@ -1,8 +1,7 @@
 import { filter, pipe, reduce } from 'ramda'
 import { isCloisterBuilding } from '../board/buildings'
 import { findBuilding } from '../board/landscape'
-import { getCost, getPlayer, payCost, setPlayer, setPlayerCurried } from '../board/player'
-import { parseResourceParam, totalGoods, differentGoods, multiplyGoods, maskGoods } from '../board/resource'
+import { getPlayer, setPlayerCurried } from '../board/player'
 import { BuildingEnum, Cost, GameStatePlaying, Tile } from '../types'
 
 const whichIndexHasBuilding =
