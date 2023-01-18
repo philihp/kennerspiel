@@ -1,29 +1,45 @@
-import { getPlayer, setPlayer } from '../board/player'
+import { pipe } from 'ramda'
+import { withActivePlayer } from '../board/player'
 import { take } from '../board/wheel'
 import { GameStatePlaying, ResourceEnum } from '../types'
 
-export const clayMound =
-  (param = '') =>
+const advanceClayOnRondel =
+  (withJoker: boolean) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state && {
+      ...state,
+      rondel: {
+        ...state.rondel,
+        joker: withJoker ? state.rondel.pointingBefore : state.rondel.joker,
+        clay: !withJoker ? state.rondel.pointingBefore : state.rondel.clay,
+      },
+    }
+
+const takePlayerClay =
+  (withJoker: boolean) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    const rondel = { ...state.rondel }
-    let tokenIndex = 0
-    if (param.includes(ResourceEnum.Joker) && rondel.joker !== undefined) {
-      tokenIndex = rondel.joker
-      rondel.joker = rondel.pointingBefore
-    } else {
-      tokenIndex = rondel.clay ?? rondel.pointingBefore
-      rondel.clay = rondel.pointingBefore
-    }
-
-    const takenValue = take(rondel.pointingBefore, tokenIndex, state.config)
-
-    const oldPlayer = getPlayer(state)
-    if (oldPlayer === undefined) return undefined
-    const newPlayer = { ...oldPlayer, clay: oldPlayer.clay + takenValue }
-
-    return {
-      ...setPlayer(state, newPlayer),
-      rondel,
-    }
+    const {
+      config,
+      rondel: { joker, clay, pointingBefore },
+    } = state
+    return withActivePlayer(
+      (player) =>
+        player && {
+          ...player,
+          clay: player.clay + take(pointingBefore, (withJoker ? joker : clay) ?? pointingBefore, config),
+        }
+    )(state)
   }
+
+export const clayMound = (param = '') => {
+  const withJoker = param.includes(ResourceEnum.Joker)
+  return (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined) return undefined
+    return pipe(
+      //
+      takePlayerClay(withJoker),
+      advanceClayOnRondel(withJoker)
+    )(state)
+  }
+}

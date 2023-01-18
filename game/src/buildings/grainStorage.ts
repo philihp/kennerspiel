@@ -1,15 +1,29 @@
-import { getPlayer, setPlayer, subtractCoins } from '../board/player'
-import { parseResourceParam, totalGoods, differentGoods, multiplyGoods, maskGoods } from '../board/resource'
-import { Cost, GameStatePlaying } from '../types'
+import { pipe } from 'ramda'
+import { subtractCoins, withActivePlayer } from '../board/player'
+import { GameStatePlaying, Tableau } from '../types'
+
+const checkPlayerHasPenny = (player: Tableau | undefined): Tableau | undefined => {
+  if (player === undefined) return undefined
+  if (player.penny === 0 && player.nickel === 0 && player.wine === 0 && player.whiskey === 0) return undefined
+  return player
+}
+
+const addSixGrain = (player: Tableau | undefined): Tableau | undefined =>
+  player && {
+    ...player,
+    grain: player.grain + 6,
+  }
 
 export const grainStorage =
   () =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    const player = getPlayer(state)
-    if (player.penny === 0 && player.nickel === 0 && player.wine === 0 && player.whiskey === 0) return undefined
-    return setPlayer(state, {
-      ...subtractCoins(1)(player),
-      grain: player.grain + 6,
-    })
+    return withActivePlayer(
+      pipe(
+        //
+        checkPlayerHasPenny,
+        (player) => player && subtractCoins(1)(player),
+        addSixGrain
+      )
+    )(state)
   }

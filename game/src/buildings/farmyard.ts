@@ -1,43 +1,93 @@
-import { getPlayer, setPlayer } from '../board/player'
+import { pipe } from 'ramda'
+import { withActivePlayer } from '../board/player'
 import { take } from '../board/wheel'
 import { GameStatePlaying, ResourceEnum } from '../types'
 
-export const farmyard =
-  (param: string) =>
+const advanceJokerOnRondel =
+  (withJoker: boolean) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    !withJoker
+      ? state
+      : state && {
+          ...state,
+          rondel: {
+            ...state.rondel,
+            joker: state.rondel.pointingBefore,
+          },
+        }
+
+const advanceSheepOnRondel =
+  (withSheep: boolean) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    !withSheep
+      ? state
+      : state && {
+          ...state,
+          rondel: {
+            ...state.rondel,
+            sheep: state.rondel.pointingBefore,
+          },
+        }
+
+const advanceGrainOnRondel =
+  (withGrain: boolean) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    !withGrain
+      ? state
+      : state && {
+          ...state,
+          rondel: {
+            ...state.rondel,
+            grain: state.rondel.pointingBefore,
+          },
+        }
+
+const takePlayerSheep =
+  (shouldTake: boolean, withJoker: boolean) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (param === undefined) return undefined
-    if (state === undefined) return undefined
-    const rondel = { ...state.rondel }
-    let tokenIndex = 0
-    if (param.includes(ResourceEnum.Joker) && rondel.joker !== undefined) {
-      tokenIndex = rondel.joker
-      rondel.joker = rondel.pointingBefore
-    } else if (param.includes(ResourceEnum.Sheep) && rondel.sheep !== undefined) {
-      tokenIndex = rondel.sheep
-      rondel.sheep = rondel.pointingBefore
-    } else if (param.includes(ResourceEnum.Grain) && rondel.grain !== undefined) {
-      tokenIndex = rondel.grain
-      rondel.grain = rondel.pointingBefore
-    } else {
-      return undefined
-    }
-
-    const takenValue = take(rondel.pointingBefore, tokenIndex, state.config)
-
-    const oldPlayer = getPlayer(state)
-    if (oldPlayer === undefined) return undefined
-    const newPlayer = { ...oldPlayer }
-
-    if (param.includes(ResourceEnum.Grain)) {
-      newPlayer.grain += takenValue
-    } else if (param.includes(ResourceEnum.Sheep)) {
-      newPlayer.sheep += takenValue
-    } else {
-      return undefined
-    }
-
-    return {
-      ...setPlayer(state, newPlayer),
-      rondel,
-    }
+    if (state === undefined || !shouldTake) return state
+    const {
+      config,
+      rondel: { joker, sheep, pointingBefore },
+    } = state
+    return withActivePlayer(
+      (player) =>
+        player && {
+          ...player,
+          sheep: player.sheep + take(pointingBefore, (withJoker ? joker : sheep) ?? pointingBefore, config),
+        }
+    )(state)
   }
+
+const takePlayerGrain =
+  (shouldTake: boolean, withJoker: boolean) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined || !shouldTake) return state
+    const {
+      config,
+      rondel: { joker, grain, pointingBefore },
+    } = state
+    return withActivePlayer(
+      (player) =>
+        player && {
+          ...player,
+          grain: player.grain + take(pointingBefore, (withJoker ? joker : grain) ?? pointingBefore, config),
+        }
+    )(state)
+  }
+
+export const farmyard = (param = '') => {
+  const withJoker = param.includes(ResourceEnum.Joker)
+  const withSheep = param.includes(ResourceEnum.Sheep)
+  const withGrain = param.includes(ResourceEnum.Grain)
+  return (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    return pipe(
+      //
+      takePlayerSheep(withSheep, withJoker),
+      takePlayerGrain(withGrain, withJoker),
+      advanceJokerOnRondel(withJoker),
+      advanceSheepOnRondel(!withJoker && withSheep),
+      advanceGrainOnRondel(!withJoker && withGrain)
+    )(state)
+  }
+}

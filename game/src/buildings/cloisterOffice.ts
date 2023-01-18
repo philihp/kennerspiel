@@ -1,29 +1,45 @@
-import { getPlayer, setPlayer } from '../board/player'
+import { pipe } from 'ramda'
+import { withActivePlayer } from '../board/player'
 import { take } from '../board/wheel'
 import { GameStatePlaying, ResourceEnum } from '../types'
 
-export const cloisterOffice =
-  (param = '') =>
+const advanceCoinOnRondel =
+  (withJoker: boolean) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state && {
+      ...state,
+      rondel: {
+        ...state.rondel,
+        joker: withJoker ? state.rondel.pointingBefore : state.rondel.joker,
+        coin: !withJoker ? state.rondel.pointingBefore : state.rondel.coin,
+      },
+    }
+
+const takePlayerCoin =
+  (withJoker: boolean) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    const rondel = { ...state.rondel }
-    let tokenIndex = 0
-    if (param.includes(ResourceEnum.Joker) && rondel.joker !== undefined) {
-      tokenIndex = rondel.joker
-      rondel.joker = rondel.pointingBefore
-    } else {
-      tokenIndex = rondel.coin ?? rondel.pointingBefore
-      rondel.coin = rondel.pointingBefore
-    }
-
-    const takenValue = take(rondel.pointingBefore, tokenIndex, state.config)
-
-    const oldPlayer = getPlayer(state)
-    if (oldPlayer === undefined) return undefined
-    const newPlayer = { ...oldPlayer, penny: oldPlayer.penny + takenValue }
-
-    return {
-      ...setPlayer(state, newPlayer),
-      rondel,
-    }
+    const {
+      config,
+      rondel: { joker, coin, pointingBefore },
+    } = state
+    return withActivePlayer(
+      (player) =>
+        player && {
+          ...player,
+          penny: player.penny + take(pointingBefore, (withJoker ? joker : coin) ?? pointingBefore, config),
+        }
+    )(state)
   }
+
+export const cloisterOffice = (param = '') => {
+  const withJoker = param.includes(ResourceEnum.Joker)
+  return (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined) return undefined
+    return pipe(
+      //
+      takePlayerCoin(withJoker),
+      advanceCoinOnRondel(withJoker)
+    )(state)
+  }
+}

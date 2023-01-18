@@ -94,5 +94,7 @@ export const costFood = ({
 
 export const canAfford =
   (cost: Cost) =>
-  (player: Tableau): boolean =>
+  (player: Tableau): Tableau | undefined =>
     Object.entries(cost).every(([type, amountNeeded]) => player[type as keyof Tableau] >= amountNeeded)
+      ? player
+      : undefined
