@@ -53,7 +53,8 @@ export const isLayBrother = (clergy: Clergy | undefined) => clergy && !isPrior(c
 
 export const payCost =
   (cost: Cost) =>
-  (player: Tableau): Tableau | undefined => {
+  (player: Tableau | undefined): Tableau | undefined => {
+    if (player === undefined) return undefined
     const newPlayer: Tableau | undefined = { ...player }
     const fields = Object.entries(cost)
     for (let i = 0; i < fields.length; i++) {
@@ -67,7 +68,8 @@ export const payCost =
 
 export const getCost =
   (cost: Cost) =>
-  (player: Tableau): Tableau =>
+  (player: Tableau | undefined): Tableau | undefined =>
+    player &&
     Object.entries(cost).reduce(
       (player, [type, amount]) => ({
         ...player,

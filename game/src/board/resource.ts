@@ -76,6 +76,22 @@ export const maskGoods =
 
 export const costEnergy = ({ coal = 0, peat = 0, wood = 0, straw = 0 }) => coal * 3 + peat * 2 + wood + straw * 0.5
 
+export const costFood = ({
+  penny = 0,
+  grain = 0,
+  sheep = 0,
+  flour = 0,
+  grapes = 0,
+  nickel = 0,
+  hops = 0,
+  whiskey = 0,
+  meat = 0,
+  bread = 0,
+  wine = 0,
+  beer = 0,
+}) =>
+  penny + grain + 2 * sheep + flour + grapes + 5 * nickel + hops + 2 * whiskey + 5 * meat + 3 * bread + wine + 5 * beer
+
 export const canAfford =
   (cost: Cost) =>
   (player: Tableau): boolean =>

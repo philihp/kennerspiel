@@ -6,7 +6,7 @@ import { pushArm } from './rondel'
 import { nextSettlementRound } from './settlements'
 
 export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlaying | undefined => {
-  let newState = state
+  let newState: GameStatePlaying | undefined = state
 
   if (isExtraRound(state.config, state.round)) {
     // board.preExtraRound()
@@ -42,7 +42,7 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlayi
             return landStack
           })
         )
-        newState = setPlayer(newState, { ...player, clergy, landscape }, i)
+        newState = newState && setPlayer(newState, { ...player, clergy, landscape }, i)
       }
     })
 
