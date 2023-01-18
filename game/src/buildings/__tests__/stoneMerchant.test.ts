@@ -1,5 +1,5 @@
 import { reducer, initialState } from '../../reducer'
-import { BuildingEnum, GameStatePlaying } from '../../types'
+import { GameStatePlaying } from '../../types'
 
 describe('buildings/stoneMerchant', () => {
   describe('use', () => {

@@ -1,17 +1,16 @@
-import { getPlayer, setPlayer } from '../board/player'
+import { withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
 import { GameStatePlaying } from '../types'
 
-export const windmill =
-  (param = '') =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
-    const iterations = Math.min(parseResourceParam(param).grain ?? 0, 7)
-    const player = getPlayer(state)
-    return setPlayer(state, {
+export const windmill = (param = '') => {
+  const { grain = 0 } = parseResourceParam(param)
+  const iterations = Math.min(grain, 7)
+  return (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state &&
+    withActivePlayer((player) => ({
       ...player,
       grain: player.grain - iterations,
       flour: player.flour + iterations,
       straw: player.straw + iterations,
-    })
-  }
+    }))(state)
+}
