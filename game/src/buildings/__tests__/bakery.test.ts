@@ -5,7 +5,12 @@ import { GameStatePlaying, PlayerColor } from '../../types'
 import { bakery } from '../bakery'
 
 describe('buildings/bakery', () => {
-  describe('use', () => {
+  describe('bakery', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = bakery()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('bakes bread using wood, then converts to coins', () => {
       expect.assertions(3)
       const s0 = initialState

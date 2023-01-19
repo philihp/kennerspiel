@@ -1,8 +1,14 @@
 import { reducer, initialState } from '../../reducer'
 import { BuildingEnum, GameStatePlaying } from '../../types'
+import { windmill } from '../windmill'
 
 describe('buildings/cloisterCourtyard', () => {
   describe('use', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = windmill()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('goes through a happy path', () => {
       const s0 = initialState
       const s1 = reducer(s0, ['CONFIG', '1', 'france', 'long'])!

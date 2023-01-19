@@ -1,8 +1,14 @@
 import { reducer, initialState } from '../../reducer'
 import { GameStatePlaying } from '../../types'
+import { stoneMerchant } from '../stoneMerchant'
 
 describe('buildings/stoneMerchant', () => {
   describe('use', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = stoneMerchant()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('goes through a happy path', () => {
       const s0 = initialState
       const s1 = reducer(s0, ['CONFIG', '1', 'france', 'short'])!
