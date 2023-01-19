@@ -1,10 +1,11 @@
 import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
-import { getPlayer, isLayBrother, isPrior, setPlayer } from '../board/player'
+import { getPlayer, isPrior, setPlayer } from '../board/player'
 import { bakery } from '../buildings/bakery'
 import { bathhouse } from '../buildings/bathhouse'
 import { buildersMarket } from '../buildings/buildersMarket'
 import { calefactory } from '../buildings/calefactory'
+import { carpentry } from '../buildings/carpentry'
 import { castle } from '../buildings/castle'
 import { chamberOfWonders } from '../buildings/chamberOfWonders'
 import { clayMound } from '../buildings/clayMound'
@@ -149,6 +150,9 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.Bathhouse, []], bathhouse)
       .with([BuildingEnum.BuildersMarket, []], buildersMarket)
       .with([BuildingEnum.Calefactory, []], calefactory)
+      .with([BuildingEnum.Carpentry, [P._, P._]], ([_, [row, col]]) =>
+        carpentry(Number.parseInt(row ?? '', 10), Number.parseInt(col ?? '', 10))
+      )
       .with([BuildingEnum.Castle, []], castle)
       .with([BuildingEnum.ChamberOfWonders, []], chamberOfWonders)
       .with([BuildingClaymound, [P._]], [BuildingClaymound, []], ([_, params]) => clayMound(params[0]))
