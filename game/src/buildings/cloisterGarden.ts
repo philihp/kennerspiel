@@ -1,8 +1,8 @@
 import { filter, pipe, reduce } from 'ramda'
 import { isCloisterBuilding } from '../board/buildings'
 import { findBuilding } from '../board/landscape'
-import { getPlayer, setPlayerCurried } from '../board/player'
-import { BuildingEnum, Cost, GameStatePlaying, Tile } from '../types'
+import { withActivePlayer } from '../board/player'
+import { BuildingEnum, GameStatePlaying, Tile } from '../types'
 
 const whichIndexHasBuilding =
   (building: BuildingEnum) =>
@@ -48,16 +48,14 @@ export const setNeighboringCloisterToGarden = (state: GameStatePlaying | undefin
   }
 }
 
-export const cloisterGarden =
-  () =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
-    const player = getPlayer(state)
-    return pipe(
-      setPlayerCurried({
-        ...player,
-        grape: player.grape + 1,
-      }),
-      setNeighboringCloisterToGarden
-    )(state)
-  }
+export const cloisterGarden = () =>
+  pipe(
+    withActivePlayer(
+      (player) =>
+        player && {
+          ...player,
+          grape: player.grape + 1,
+        }
+    ),
+    setNeighboringCloisterToGarden
+  )

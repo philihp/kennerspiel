@@ -7,10 +7,12 @@ import { clergyForColor } from '../board/player'
 import { preMove } from '../board/preMove'
 import { roundSettlements } from '../board/settlements'
 import {
+  GameCommandEnum,
   GameCommandStartParams,
   GameStatePlaying,
   GameStateSetup,
   GameStatusEnum,
+  NextUseClergy,
   PlayerColor,
   SettlementRound,
   Tableau,
@@ -98,7 +100,7 @@ export const start = (
     districtPurchasePrices: [],
     neutralBuildingPhase: false,
     usableBuildings: undefined,
-    nextUsePrior: false,
+    nextUse: NextUseClergy.Any,
   }
 
   return pipe(

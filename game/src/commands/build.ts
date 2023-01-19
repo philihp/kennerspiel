@@ -2,12 +2,13 @@ import { pipe } from 'ramda'
 import { costForBuilding, isCloisterBuilding, terrainForBuilding } from '../board/buildings'
 import { getPlayer, setPlayer } from '../board/player'
 import { canAfford } from '../board/resource'
-import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, Tableau, Tile } from '../types'
+import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, NextUseClergy, Tableau, Tile } from '../types'
 
 const checkBuildingUnbuilt =
   (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    state?.buildings.includes(building) ? state : undefined
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    return state?.buildings.includes(building) ? state : undefined
+  }
 
 const checkLandscapeFree =
   (row: number, col: number) =>
@@ -23,8 +24,9 @@ const checkLandTypeMatches =
 
 const checkPlayerHasBuildingCost =
   (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    state && canAfford(costForBuilding(building))(getPlayer(state)) ? state : undefined
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    return state && canAfford(costForBuilding(building))(getPlayer(state)) ? state : undefined
+  }
 
 const checkBuildingCloister =
   (row: number, col: number, building: BuildingEnum) =>
@@ -85,12 +87,15 @@ const removeBuildingCost =
 
 export const allowPriorToUse =
   (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    state && {
-      ...state,
-      nextUsePrior: true,
-      usableBuildings: [building],
-    }
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    return (
+      state && {
+        ...state,
+        nextUse: NextUseClergy.OnlyPrior,
+        usableBuildings: [building],
+      }
+    )
+  }
 
 export const build = ({ row, col, building }: GameCommandBuildParams) =>
   pipe(

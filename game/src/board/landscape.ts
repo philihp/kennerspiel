@@ -1,4 +1,4 @@
-import { BuildingEnum, Tile } from '../types'
+import { BuildingEnum, Clergy, Tile } from '../types'
 
 export const findBuilding =
   (building: BuildingEnum) =>
@@ -15,4 +15,19 @@ export const findBuilding =
     })
     if (row === undefined || col === undefined) return undefined
     return [row, col]
+  }
+
+export const findClergy =
+  (clergy: Clergy[]) =>
+  (landscape: Tile[][]): [number, number, Tile][] => {
+    const locationsFound: [number, number, Tile][] = []
+    landscape.forEach((landRow, r) => {
+      landRow.forEach((land, c) => {
+        const [_l, _b, clergyHere] = land
+        if (clergyHere && clergy.includes(clergyHere)) {
+          locationsFound.push([r, c, land])
+        }
+      })
+    })
+    return locationsFound
   }
