@@ -1,4 +1,4 @@
-import { GameState, GameStatePlaying, GameStatusEnum, PreMoveHandler, Rondel, Tile } from '../types'
+import { GameState, GameStatePlaying, GameStatusEnum, NextUseClergy, PreMoveHandler, Rondel, Tile } from '../types'
 import { isExtraRound, isPriorSpecialInExtraRound } from './extraRound'
 import { clergyForColor, setPlayer } from './player'
 import { preRound } from './preRound'
@@ -53,7 +53,7 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlayi
     newState.usableBuildings = undefined
 
     // dont let previous player force next player into PRIOR
-    newState.nextUsePrior = false
+    newState.nextUse = NextUseClergy.Any
 
     const preRoundState = preRound(state.config)(newState)
     if (preRoundState === undefined) return undefined

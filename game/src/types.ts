@@ -209,6 +209,13 @@ export enum BuildingEnum {
   HouseOfTheBrotherhood = 'G41',
 }
 
+export enum NextUseClergy {
+  Any = 'any', // next use can use any clergy (prefer lay)
+  OnlyPrior = 'only-prior', // next use must use prior, or it will fail
+  Free = 'free', // next use does not move a clergy
+  None = 'none', // next use must always fail
+}
+
 type UsageOfClergy = {
   usePrior?: boolean
 }
@@ -372,7 +379,7 @@ export type GameStatePlaying = {
   settlementRound: SettlementRound
   buildings: BuildingEnum[]
   usableBuildings?: BuildingEnum[]
-  nextUsePrior: boolean
+  nextUse: NextUseClergy
   plotPurchasePrices: number[]
   districtPurchasePrices: number[]
 }
