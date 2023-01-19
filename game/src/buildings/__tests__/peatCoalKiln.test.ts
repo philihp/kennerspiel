@@ -6,6 +6,11 @@ import { peatCoalKiln } from '../peatCoalKiln'
 
 describe('buildings/peatCoalKiln', () => {
   describe('peatCoalKiln', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = peatCoalKiln()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('goes through a happy path', () => {
       expect.assertions(4)
       const s0 = initialState

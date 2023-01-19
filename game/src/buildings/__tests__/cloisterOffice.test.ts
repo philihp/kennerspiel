@@ -1,11 +1,14 @@
-import { config } from '../../commands/config'
-import { start } from '../../commands/start'
 import { reducer, initialState } from '../../reducer'
-import { BuildingEnum, GameStatePlaying, PlayerColor, ResourceEnum } from '../../types'
+import { GameStatePlaying } from '../../types'
 import { clayMound } from '../clayMound'
 
 describe('buildings/clayMound', () => {
-  describe('use', () => {
+  describe('clayMound', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = clayMound()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('goes through a happy path', () => {
       expect.assertions(7)
       const s0 = initialState

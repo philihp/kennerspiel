@@ -1,8 +1,14 @@
 import { reducer, initialState } from '../../reducer'
 import { GameStatePlaying } from '../../types'
+import { estate } from '../estate'
 
 describe('buildings/estate', () => {
-  describe('use', () => {
+  describe('estate', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = estate()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('baseline happy path', () => {
       const s0 = initialState
       const s1 = reducer(s0, ['CONFIG', '4', 'france', 'long'])!

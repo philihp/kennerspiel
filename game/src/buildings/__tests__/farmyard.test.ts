@@ -1,11 +1,16 @@
 import { config } from '../../commands/config'
 import { start } from '../../commands/start'
-import { reducer, initialState } from '../../reducer'
-import { BuildingEnum, PlayerColor, ResourceEnum } from '../../types'
+import { initialState } from '../../reducer'
+import { GameStatePlaying, PlayerColor } from '../../types'
 import { farmyard } from '../farmyard'
 
 describe('buildings/farmyard', () => {
-  describe('use', () => {
+  describe('farmyard', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = farmyard()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('goes through a happy path', () => {
       expect.assertions(8)
       const s0 = initialState

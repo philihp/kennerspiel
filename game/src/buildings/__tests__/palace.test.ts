@@ -1,8 +1,14 @@
 import { reducer, initialState } from '../../reducer'
 import { GameStatePlaying } from '../../types'
+import { palace } from '../palace'
 
 describe('buildings/palace', () => {
-  describe('use', () => {
+  describe('palace', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = palace()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('baseline happy path', () => {
       const s0 = initialState
       const s1 = reducer(s0, ['CONFIG', '4', 'france', 'long'])!

@@ -1,8 +1,14 @@
 import { reducer, initialState } from '../../reducer'
 import { BuildingEnum, Clergy, GameStatePlaying, LandEnum, NextUseClergy, PlayerColor } from '../../types'
+import { priory } from '../priory'
 
 describe('buildings/proiry', () => {
   describe('use', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = priory()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('using priory allows usage of many buildings except itself', () => {
       const s0 = initialState
       const s1 = reducer(s0, ['CONFIG', '3', 'france', 'short'])!

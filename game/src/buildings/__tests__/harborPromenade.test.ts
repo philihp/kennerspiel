@@ -1,8 +1,14 @@
 import { initialState, reducer } from '../../reducer'
 import { GameStatePlaying, NextUseClergy } from '../../types'
+import { harborPromenade } from '../harborPromenade'
 
-describe('buildings/carpentry', () => {
-  describe('use', () => {
+describe('buildings/harborPromenade', () => {
+  describe('harborPromenade', () => {
+    it('retains undefined state', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = harborPromenade()(s0)
+      expect(s1).toBeUndefined()
+    })
     it('goes through a happy path', () => {
       const s0 = initialState
       const s1 = reducer(s0, ['CONFIG', '4', 'france', 'long'])!
