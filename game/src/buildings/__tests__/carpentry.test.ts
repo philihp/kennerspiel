@@ -20,11 +20,12 @@ describe('buildings/carpentry', () => {
         nextUse: NextUseClergy.OnlyPrior,
         usableBuildings: ['F10'],
       })
-      const s4 = reducer(s3, ['USE', 'F10', '1', '0'])! as GameStatePlaying
+      const s4 = reducer(s3, ['USE', 'F10', '0', '1'])! as GameStatePlaying
       expect(s4).toMatchObject({
         usableBuildings: [],
         nextUse: NextUseClergy.None,
       })
+      expect(s4.players[0].landscape[0][1]).toStrictEqual(['P'])
     })
   })
 })

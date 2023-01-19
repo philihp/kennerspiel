@@ -194,6 +194,13 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.TownEstate, []], townEstate)
       .with([BuildingEnum.Windmill, [P._]], ([_, params]) => windmill(params[0]))
       .with([BuildingEnum.Winery, []], winery)
+      .with([BuildingEnum.GrainStorage, []], grainStorage)
+      .with([BuildingEnum.FuelMerchant, [P._]], ([_, params]) => fuelMerchant(params[0]))
+      .with([BuildingEnum.Windmill, [P._]], ([_, params]) => windmill(params[0]))
+      .with([BuildingEnum.Market, [P._]], ([_, params]) => market(params[0]))
+      .with([BuildingEnum.CloisterGarden, []], cloisterGarden)
+      .with([BuildingEnum.StoneMerchant, [P._]], ([_, params]) => stoneMerchant(params[0]))
+      .with([BuildingEnum.Priory, []], priory)
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })
