@@ -1,15 +1,25 @@
 import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
+import { payCost, withActivePlayer } from '../board/player'
+import { differentGoods, parseResourceParam } from '../board/resource'
+import { Cost, Tableau } from '../types'
 
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
+const check13DifferentGoods =
+  (input: Cost) =>
+  (player: Tableau | undefined): Tableau | undefined =>
+    differentGoods(input) === 13 ? player : undefined
 
-export const chamberOfWonders = (param = '') =>
-  pipe(
-    //
-    buildingStub,
-    buildingStub,
-    buildingStub
+const getWonder = (player: Tableau | undefined): Tableau | undefined =>
+  // TODO
+  player
+
+export const chamberOfWonders = (param = '') => {
+  const inputs = parseResourceParam(param)
+  return withActivePlayer(
+    pipe(
+      //
+      check13DifferentGoods(inputs),
+      payCost(inputs),
+      getWonder
+    )
   )
+}
