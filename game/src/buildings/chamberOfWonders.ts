@@ -6,7 +6,7 @@ const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | u
   return state
 }
 
-export const chamberOfWonders = () =>
+export const chamberOfWonders = (param = '') =>
   pipe(
     //
     buildingStub,

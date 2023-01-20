@@ -6,7 +6,7 @@ const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | u
   return state
 }
 
-export const calefactory = () =>
+export const calefactory = (row1 = '', col1 = '', row2 = '', col2 = '') =>
   pipe(
     //
     buildingStub,
