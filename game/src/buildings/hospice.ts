@@ -1,15 +1,17 @@
 import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
+import { GameStatePlaying, NextUseClergy } from '../types'
 
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+const allowUseAnyUnbuiltBuilding = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
-  return state
+  return {
+    ...state,
+    usableBuildings: state.buildings,
+    nextUse: NextUseClergy.Free,
+  }
 }
 
 export const hospice = () =>
   pipe(
     //
-    buildingStub,
-    buildingStub,
-    buildingStub
+    allowUseAnyUnbuiltBuilding
   )
