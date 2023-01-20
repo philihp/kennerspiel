@@ -7,7 +7,6 @@ import { clergyForColor } from '../board/player'
 import { preMove } from '../board/preMove'
 import { roundSettlements } from '../board/settlements'
 import {
-  GameCommandEnum,
   GameCommandStartParams,
   GameStatePlaying,
   GameStateSetup,
