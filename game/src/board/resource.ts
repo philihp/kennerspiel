@@ -74,6 +74,9 @@ export const maskGoods =
       return outCost
     }, {} as Cost)
 
+export const costMoney = ({ penny = 0, nickel = 0, wine = 0, whiskey = 0 }): number =>
+  penny + 5 * nickel + wine + 2 * whiskey
+
 export const costEnergy = ({ coal = 0, peat = 0, wood = 0, straw = 0 }) => coal * 3 + peat * 2 + wood + straw * 0.5
 
 export const costFood = ({
@@ -90,7 +93,15 @@ export const costFood = ({
   wine = 0,
   beer = 0,
 }) =>
-  penny + grain + 2 * sheep + flour + grapes + 5 * nickel + hops + 2 * whiskey + 5 * meat + 3 * bread + wine + 5 * beer
+  grain +
+  2 * sheep +
+  flour +
+  grapes +
+  hops +
+  5 * meat +
+  3 * bread +
+  5 * beer +
+  costMoney({ penny, nickel, wine, whiskey })
 
 export const canAfford =
   (cost: Cost) =>
