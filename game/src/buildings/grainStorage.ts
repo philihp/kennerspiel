@@ -15,7 +15,7 @@ const addSixGrain = (player: Tableau | undefined): Tableau | undefined =>
   }
 
 export const grainStorage =
-  () =>
+  (param = '') =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
     return withActivePlayer(

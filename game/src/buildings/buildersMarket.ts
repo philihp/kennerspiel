@@ -6,7 +6,7 @@ const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | u
   return state
 }
 
-export const buildersMarket = () =>
+export const buildersMarket = (param = '') =>
   pipe(
     //
     buildingStub,

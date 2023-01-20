@@ -6,7 +6,7 @@ const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | u
   return state
 }
 
-export const cloisterWorkshop = () =>
+export const cloisterWorkshop = (param = '') =>
   pipe(
     //
     buildingStub,

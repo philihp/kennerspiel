@@ -1,12 +1,12 @@
 import { reducer, initialState } from '../../reducer'
 import { GameStatePlaying } from '../../types'
-import { cloisterCourtyard } from '../cloisterCourtyard'
+import { grainStorage } from '../grainStorage'
 
-describe('buildings/cloisterCourtyard', () => {
-  describe('cloisterCourtyard', () => {
+describe('buildings/grainStorage', () => {
+  describe('grainStorage', () => {
     it('retains undefined state', () => {
       const s0: GameStatePlaying | undefined = undefined
-      const s1 = cloisterCourtyard()(s0)
+      const s1 = grainStorage()(s0)
       expect(s1).toBeUndefined()
     })
     it('goes through a happy path', () => {
@@ -41,7 +41,7 @@ describe('buildings/cloisterCourtyard', () => {
         wood: 1,
         sheep: 0,
       })
-      const s11 = reducer(s10, ['USE', 'F03'])! as GameStatePlaying
+      const s11 = reducer(s10, ['USE', 'F03', 'Pn'])! as GameStatePlaying
       expect(s11.players[0]).toMatchObject({
         straw: 0,
         clay: 0,

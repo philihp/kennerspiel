@@ -6,7 +6,7 @@ const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | u
   return state
 }
 
-export const printingOffice = () =>
+export const printingOffice = (...coords: string[]) =>
   pipe(
     //
     buildingStub,

@@ -52,7 +52,7 @@ describe('buildings/proiry', () => {
         nextUse: NextUseClergy.Free,
         usableBuildings: [BuildingEnum.GrainStorage, BuildingEnum.Windmill],
       })
-      const s6 = reducer(s5, ['USE', BuildingEnum.GrainStorage])! as GameStatePlaying
+      const s6 = reducer(s5, ['USE', BuildingEnum.GrainStorage, 'Pn'])! as GameStatePlaying
       expect(s6.players[0]).toMatchObject({
         penny: 0,
         grain: 8,

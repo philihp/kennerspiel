@@ -6,7 +6,7 @@ const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | u
   return state
 }
 
-export const financedEstate = () =>
+export const financedEstate = (param = '') =>
   pipe(
     //
     buildingStub,

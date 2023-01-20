@@ -6,7 +6,7 @@ const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | u
   return state
 }
 
-export const grapevine = () =>
+export const grapevine = (param = '') =>
   pipe(
     //
     buildingStub,
