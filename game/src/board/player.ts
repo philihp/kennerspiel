@@ -1,4 +1,3 @@
-import { P } from 'ts-pattern'
 import { Clergy, Cost, GameStatePlaying, PlayerColor, Tableau } from '../types'
 
 export const clergyForColor = (color: PlayerColor): Clergy[] => {

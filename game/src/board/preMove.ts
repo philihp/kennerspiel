@@ -55,6 +55,9 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlayi
     // dont let previous player force next player into PRIOR
     newState.nextUse = NextUseClergy.Any
 
+    // once per turn, a player can buy a landscape
+    newState.canBuyLandscape = true
+
     const preRoundState = preRound(state.config)(newState)
     if (preRoundState === undefined) return undefined
     newState = preRoundState

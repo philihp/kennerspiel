@@ -22,6 +22,15 @@ export type GameCommandConfigParams = {
   country: GameConfigCountry
 }
 
+export type GameCommandBuyDistrictParams = {
+  y: number
+  side: 'PLAINS' | 'HILLS'
+}
+export type GameCommandBuyPlotParams = {
+  y: number
+  side: 'MOUNTAIN' | 'COAST'
+}
+
 export enum PlayerColor {
   Red = 'R',
   Green = 'G',
@@ -380,6 +389,7 @@ export type GameStatePlaying = {
   buildings: BuildingEnum[]
   usableBuildings?: BuildingEnum[]
   nextUse: NextUseClergy
+  canBuyLandscape: boolean
   plotPurchasePrices: number[]
   districtPurchasePrices: number[]
 }

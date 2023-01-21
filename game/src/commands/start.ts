@@ -2,6 +2,7 @@ import fastShuffle from 'fast-shuffle'
 import { newRandGen, randNext, randRange } from 'fn-pcg'
 import { pipe } from 'ramda'
 import { roundBuildings } from '../board/buildings'
+import { districtPrices, plotPrices } from '../board/landscape'
 import { makeLandscape, modeSetup } from '../board/modeSetup'
 import { clergyForColor } from '../board/player'
 import { preMove } from '../board/preMove'
@@ -95,11 +96,12 @@ export const start = (
     settling: false,
     extraRound: false,
     settlementRound: SettlementRound.S,
-    plotPurchasePrices: [],
-    districtPurchasePrices: [],
+    plotPurchasePrices: plotPrices(state.config),
+    districtPurchasePrices: districtPrices(state.config),
     neutralBuildingPhase: false,
     usableBuildings: undefined,
     nextUse: NextUseClergy.Any,
+    canBuyLandscape: true,
   }
 
   return pipe(
