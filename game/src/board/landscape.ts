@@ -1,4 +1,15 @@
-import { BuildingEnum, Clergy, Tile } from '../types'
+import { match } from 'ts-pattern'
+import { BuildingEnum, Clergy, GameCommandConfigParams, Tile } from '../types'
+
+export const districtPrices = (config: GameCommandConfigParams): number[] =>
+  match(config)
+    .with({ players: 1 }, () => [8, 7, 6, 5, 5, 4, 4, 3, 2])
+    .otherwise(() => [2, 3, 4, 4, 5, 5, 6, 7, 8])
+
+export const plotPrices = (config: GameCommandConfigParams): number[] =>
+  match(config)
+    .with({ players: 1 }, () => [7, 6, 6, 5, 5, 5, 4, 4, 3])
+    .otherwise(() => [3, 4, 4, 5, 5, 5, 6, 6, 7])
 
 export const findBuilding =
   (building: BuildingEnum) =>

@@ -1,5 +1,5 @@
 import { BuildingEnum, Clergy, LandEnum, Tile } from '../../types'
-import { findBuilding, findClergy } from '../landscape'
+import { districtPrices, findBuilding, findClergy, plotPrices } from '../landscape'
 
 describe('board/landscape', () => {
   describe('findBuilding', () => {
@@ -51,6 +51,28 @@ describe('board/landscape', () => {
     })
     it('returns empty if it cant find', () => {
       expect(findClergy([Clergy.LayBrother2B])(landscape)).toStrictEqual([])
+    })
+  })
+
+  describe('districtPrices', () => {
+    it('gives an array large to small for single player', () => {
+      expect(districtPrices({ players: 1, country: 'france', length: 'long' })).toStrictEqual([
+        8, 7, 6, 5, 5, 4, 4, 3, 2,
+      ])
+    })
+    it('gives an array small to large for multiplayer', () => {
+      expect(districtPrices({ players: 3, country: 'ireland', length: 'short' })).toStrictEqual([
+        2, 3, 4, 4, 5, 5, 6, 7, 8,
+      ])
+    })
+  })
+
+  describe('plotPrices', () => {
+    it('gives an array large to small for single player', () => {
+      expect(plotPrices({ players: 1, country: 'ireland', length: 'short' })).toStrictEqual([7, 6, 6, 5, 5, 5, 4, 4, 3])
+    })
+    it('gives an array small to large for multiplayer', () => {
+      expect(plotPrices({ players: 3, country: 'ireland', length: 'long' })).toStrictEqual([3, 4, 4, 5, 5, 5, 6, 6, 7])
     })
   })
 })
