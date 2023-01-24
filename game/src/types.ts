@@ -311,6 +311,7 @@ export type Tableau = {
   clergy: Clergy[]
   settlements: SettlementEnum[]
   landscape: Tile[][]
+  landscapeOffset: number
   peat: number
   penny: number
   clay: number

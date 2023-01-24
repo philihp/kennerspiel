@@ -34,6 +34,7 @@ describe('commands/buyDistrict', () => {
       })
       expect(s4.players[0]).toMatchObject({
         penny: 3,
+        landscapeOffset: 1,
         landscape: [
           [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H']],
           [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
@@ -69,6 +70,7 @@ describe('commands/buyDistrict', () => {
       })
       expect(s4.players[0]).toMatchObject({
         penny: 3,
+        landscapeOffset: 0,
         landscape: [
           [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
           [['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
