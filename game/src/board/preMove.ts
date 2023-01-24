@@ -5,7 +5,9 @@ import { preRound } from './preRound'
 import { pushArm } from './rondel'
 import { nextSettlementRound } from './settlements'
 
-export const preMove: PreMoveHandler = (state: GameStatePlaying): GameStatePlaying | undefined => {
+export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  if (state === undefined) return undefined
+
   let newState: GameStatePlaying | undefined = state
 
   if (isExtraRound(state.config, state.round)) {

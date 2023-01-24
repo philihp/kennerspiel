@@ -4,6 +4,32 @@ import { costMoney } from '../board/resource'
 import { subtractCoins, withActivePlayer } from '../board/player'
 import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, BuildingEnum } from '../types'
 
+const checkDistrictAvailable = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+  if (state?.districtPurchasePrices.length === 0) return undefined
+  return state
+}
+
+const checkForConnection = (y: number) =>
+  // new district must have an existing
+  withActivePlayer((player) => {
+    const { landscape } = player
+    if (
+      landscape[y]?.[-1] === undefined &&
+      landscape[y]?.[5] === undefined &&
+      landscape[y - 1]?.[0] === undefined &&
+      landscape[y + 1]?.[0] === undefined
+    )
+      return undefined
+    return player
+  })
+
+const checkForOverlap = (y: number) =>
+  withActivePlayer((player) => {
+    const { landscape } = player
+    if (landscape[y]?.[0] !== undefined) return undefined
+    return player
+  })
+
 const payForDistrict = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
   if (state.districtPurchasePrices.length === 0) return undefined
@@ -52,12 +78,17 @@ const newDistrict = (side: 'PLAINS' | 'HILLS'): Tile[] =>
 
 const addNewDistrict = (y: number, side: 'PLAINS' | 'HILLS') =>
   withActivePlayer((player) => {
-    const oldLandscape = player.landscape
-    const newLandscape = [newDistrict(side), ...oldLandscape]
-
+    const landscape = [...player.landscape]
+    if (y < 0) landscape.unshift(newDistrict(side))
+    else {
+      while (![...landscape.keys()].includes(y)) {
+        landscape.push([])
+      }
+      landscape[y] = newDistrict(side)
+    }
     return {
       ...player,
-      landscape: newLandscape,
+      landscape,
     }
   })
 
@@ -66,6 +97,9 @@ export const buyDistrict =
   (state: GameStatePlaying): GameStatePlaying | undefined => {
     return pipe(
       //
+      checkDistrictAvailable,
+      checkForOverlap(y),
+      checkForConnection(y),
       payForDistrict,
       removeDistrictFromPool,
       denyBuyingAnyMoreLandscape,

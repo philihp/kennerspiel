@@ -397,6 +397,6 @@ export type GameState = GameStateSetup | GameStatePlaying
 
 export type Reducer = (state: GameState, action: string[]) => GameState | undefined
 
-export type PreMoveHandler = (state: GameStatePlaying) => GameStatePlaying | undefined
+export type PreMoveHandler = (state: GameStatePlaying | undefined) => GameStatePlaying | undefined
 export type PostMoveHandler = (state: GameStatePlaying) => GameStatePlaying | undefined
 export type PostRoundHandler = (state: GameStatePlaying) => GameStatePlaying | undefined
