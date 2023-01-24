@@ -37,6 +37,7 @@ export const start = (
       color: PlayerColor.Red, // placeholder
       clergy: [],
       landscape: [[]],
+      landscapeOffset: 0,
       settlements: [],
       peat: 1,
       penny: 1,

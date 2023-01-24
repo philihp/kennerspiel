@@ -1,6 +1,6 @@
 import { pipe } from 'ramda'
 import { costForBuilding, isCloisterBuilding, terrainForBuilding } from '../board/buildings'
-import { getPlayer, setPlayer } from '../board/player'
+import { getPlayer, setPlayer, withActivePlayer } from '../board/player'
 import { canAfford } from '../board/resource'
 import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, NextUseClergy, Tableau, Tile } from '../types'
 
@@ -10,17 +10,20 @@ const checkBuildingUnbuilt =
     return state?.buildings.includes(building) ? state : undefined
   }
 
-const checkLandscapeFree =
-  (row: number, col: number) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    state && !state.players[state.activePlayerIndex].landscape[row][col][1] ? state : undefined
+const checkLandscapeFree = (row: number, col: number) => {
+  return withActivePlayer((player) => {
+    const [, erection] = player.landscape[row + player.landscapeOffset][col]
+    if (erection !== undefined) return undefined
+    return player
+  })
+}
 
-const checkLandTypeMatches =
-  (row: number, col: number, building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    state && terrainForBuilding(building).includes(state.players[state.activePlayerIndex].landscape[row][col][0])
-      ? state
-      : undefined
+const checkLandTypeMatches = (row: number, col: number, building: BuildingEnum) =>
+  withActivePlayer((player) => {
+    const landAtSpot = player.landscape[row + player.landscapeOffset][col][0]
+    if (!terrainForBuilding(building).includes(landAtSpot)) return undefined
+    return player
+  })
 
 const checkPlayerHasBuildingCost =
   (building: BuildingEnum) =>
@@ -28,19 +31,17 @@ const checkPlayerHasBuildingCost =
     return state && canAfford(costForBuilding(building))(getPlayer(state)) ? state : undefined
   }
 
-const checkBuildingCloister =
-  (row: number, col: number, building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    state &&
-    (!isCloisterBuilding(building) ||
-      [
-        [-1, 0],
-        [1, 0],
-        [0, -1],
-        [0, 1],
-      ].some(([rowMod, colMod]) => isCloisterBuilding(getPlayer(state).landscape[row + rowMod]?.[col + colMod]?.[1])))
-      ? state
-      : undefined
+const checkBuildingCloister = (row: number, col: number, building: BuildingEnum) => {
+  if (isCloisterBuilding(building) === false) return (state: GameStatePlaying | undefined) => state
+  return withActivePlayer((player) => {
+    const { landscape, landscapeOffset } = player
+    if (isCloisterBuilding(landscape[row + landscapeOffset + 1]?.[col]?.[1])) return player
+    if (isCloisterBuilding(landscape[row + landscapeOffset - 1]?.[col]?.[1])) return player
+    if (isCloisterBuilding(landscape[row + landscapeOffset]?.[col + 1]?.[1])) return player
+    if (isCloisterBuilding(landscape[row + landscapeOffset]?.[col - 1]?.[1])) return player
+    return undefined
+  })
+}
 
 const removeBuildingFromUnbuilt =
   (building: BuildingEnum) =>
@@ -50,25 +51,23 @@ const removeBuildingFromUnbuilt =
       buildings: state?.buildings.filter((b) => b !== building),
     }
 
-const addBuildingAtLandscape =
-  (row: number, col: number, building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
-    const player = getPlayer(state)
+const addBuildingAtLandscape = (row: number, col: number, building: BuildingEnum) =>
+  withActivePlayer((player) => {
+    const rowOff = row + player.landscapeOffset
     const landscape = [
-      ...player.landscape.slice(0, row),
+      ...player.landscape.slice(0, rowOff),
       [
-        ...player.landscape[row].slice(0, col),
-        [player.landscape[row][col][0], building] as Tile,
-        ...player.landscape[row].slice(col + 1),
+        ...player.landscape[rowOff].slice(0, col),
+        [player.landscape[rowOff][col][0], building] as Tile,
+        ...player.landscape[rowOff].slice(col + 1),
       ],
-      ...player.landscape.slice(row + 1),
+      ...player.landscape.slice(rowOff + 1),
     ]
-    return setPlayer(state, {
+    return {
       ...player,
       landscape,
-    })
-  }
+    }
+  })
 
 const removeBuildingCost =
   (building: BuildingEnum) =>

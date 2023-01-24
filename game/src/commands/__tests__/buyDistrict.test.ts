@@ -34,12 +34,35 @@ describe('commands/buyDistrict', () => {
       })
       expect(s4.players[0]).toMatchObject({
         penny: 3,
+        landscapeOffset: 1,
         landscape: [
           [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H']],
           [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
           [['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
         ],
       })
+    })
+    it('does not allow buying twice', () => {
+      const s0 = initialState
+      const s1 = config(s0, {
+        players: 3,
+        country: 'ireland',
+        length: 'long',
+      })!
+      const s2 = start(s1, {
+        seed: 42,
+        colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue],
+      })! as GameStatePlaying
+      const s3: GameStatePlaying = {
+        ...s2,
+        players: [{ ...s2.players[0], penny: 0, nickel: 1 }, ...s2.players.slice(1)],
+      }
+      const s4 = buyDistrict({ side: 'HILLS', y: -1 })(s3)!
+      expect(s4).toMatchObject({
+        canBuyLandscape: false,
+      })
+      const s5 = buyDistrict({ side: 'PLAINS', y: -2 })(s4)!
+      expect(s5).toBeUndefined()
     })
     it('can buyDistrict to bottom', () => {
       const s0 = initialState
@@ -69,6 +92,7 @@ describe('commands/buyDistrict', () => {
       })
       expect(s4.players[0]).toMatchObject({
         penny: 3,
+        landscapeOffset: 0,
         landscape: [
           [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
           [['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3']],

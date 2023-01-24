@@ -4,6 +4,9 @@ import { costMoney } from '../board/resource'
 import { subtractCoins, withActivePlayer } from '../board/player'
 import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, BuildingEnum } from '../types'
 
+const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined =>
+  state?.canBuyLandscape ? state : undefined
+
 const checkDistrictAvailable = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state?.districtPurchasePrices.length === 0) return undefined
   return state
@@ -33,13 +36,11 @@ const checkForOverlap = (y: number) =>
 const payForDistrict = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
   if (state.districtPurchasePrices.length === 0) return undefined
-  return withActivePlayer((player) => {
-    // can this be cleaner?
-    const playerMoney = costMoney(player)
-    const nextDistrictCost = state.districtPurchasePrices[0]
-    if (playerMoney < nextDistrictCost) return undefined
-    return subtractCoins(nextDistrictCost)(player)
-  })(state)
+  return withActivePlayer((player) =>
+    costMoney(player) >= state.districtPurchasePrices[0]
+      ? subtractCoins(state.districtPurchasePrices[0])(player)
+      : undefined
+  )(state)
 }
 
 const removeDistrictFromPool = (state?: GameStatePlaying): GameStatePlaying | undefined => {
@@ -79,8 +80,11 @@ const newDistrict = (side: 'PLAINS' | 'HILLS'): Tile[] =>
 const addNewDistrict = (y: number, side: 'PLAINS' | 'HILLS') =>
   withActivePlayer((player) => {
     const landscape = [...player.landscape]
-    if (y < 0) landscape.unshift(newDistrict(side))
-    else {
+    let { landscapeOffset } = player
+    if (y < 0) {
+      landscape.unshift(newDistrict(side))
+      landscapeOffset++
+    } else {
       while (![...landscape.keys()].includes(y)) {
         landscape.push([])
       }
@@ -89,20 +93,19 @@ const addNewDistrict = (y: number, side: 'PLAINS' | 'HILLS') =>
     return {
       ...player,
       landscape,
+      landscapeOffset,
     }
   })
 
-export const buyDistrict =
-  ({ side, y }: GameCommandBuyDistrictParams) =>
-  (state: GameStatePlaying): GameStatePlaying | undefined => {
-    return pipe(
-      //
-      checkDistrictAvailable,
-      checkForOverlap(y),
-      checkForConnection(y),
-      payForDistrict,
-      removeDistrictFromPool,
-      denyBuyingAnyMoreLandscape,
-      addNewDistrict(y, side)
-    )(state)
-  }
+export const buyDistrict = ({ side, y }: GameCommandBuyDistrictParams) =>
+  pipe(
+    //
+    checkCanBuyLandscape,
+    checkDistrictAvailable,
+    checkForOverlap(y),
+    checkForConnection(y),
+    payForDistrict,
+    removeDistrictFromPool,
+    denyBuyingAnyMoreLandscape,
+    addNewDistrict(y, side)
+  )
