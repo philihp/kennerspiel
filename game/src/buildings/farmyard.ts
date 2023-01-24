@@ -80,14 +80,12 @@ export const farmyard = (param = '') => {
   const withJoker = param.includes(ResourceEnum.Joker)
   const withSheep = param.includes(ResourceEnum.Sheep)
   const withGrain = param.includes(ResourceEnum.Grain)
-  return (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    return pipe(
-      //
-      takePlayerSheep(withSheep, withJoker),
-      takePlayerGrain(withGrain, withJoker),
-      advanceJokerOnRondel(withJoker),
-      advanceSheepOnRondel(!withJoker && withSheep),
-      advanceGrainOnRondel(!withJoker && withGrain)
-    )(state)
-  }
+  return pipe(
+    //
+    takePlayerSheep(withSheep, withJoker),
+    takePlayerGrain(withGrain, withJoker),
+    advanceJokerOnRondel(withJoker),
+    advanceSheepOnRondel(!withJoker && withSheep),
+    advanceGrainOnRondel(!withJoker && withGrain)
+  )
 }
