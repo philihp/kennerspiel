@@ -4,6 +4,9 @@ import { costMoney } from '../board/resource'
 import { subtractCoins, withActivePlayer } from '../board/player'
 import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, BuildingEnum } from '../types'
 
+const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined =>
+  state?.canBuyLandscape ? state : undefined
+
 const checkDistrictAvailable = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state?.districtPurchasePrices.length === 0) return undefined
   return state
@@ -97,6 +100,7 @@ const addNewDistrict = (y: number, side: 'PLAINS' | 'HILLS') =>
 export const buyDistrict = ({ side, y }: GameCommandBuyDistrictParams) =>
   pipe(
     //
+    checkCanBuyLandscape,
     checkDistrictAvailable,
     checkForOverlap(y),
     checkForConnection(y),
