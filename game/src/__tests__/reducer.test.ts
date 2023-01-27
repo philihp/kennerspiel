@@ -67,6 +67,10 @@ describe('reducer', () => {
       expect(initialState).toBeDefined()
     })
 
+    it('handles unfound commands', () => {
+      expect(() => reducer(s0, ['FOFOFOFOFOFO'])).toThrow()
+    })
+
     it('calls buyDistrict', () => {
       const s1 = reducer(s0, ['BUY_DISTRICT', '-1', 'HILLS'])! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({

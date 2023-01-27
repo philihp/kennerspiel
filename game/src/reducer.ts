@@ -50,14 +50,11 @@ export const reducer: Reducer = (state, action) =>
       [GameCommandEnum.START, P.string, PColor, PColor],
       [GameCommandEnum.START, P.string, PColor, PColor, PColor],
       [GameCommandEnum.START, P.string, PColor, PColor, PColor, PColor],
-      ([_, unparsedSeed, ...colors]) => {
-        const seed = Number.parseInt(unparsedSeed, 10)
-        if (Number.isNaN(seed)) return undefined
-        return start(state as GameStateSetup, {
-          seed,
+      ([_, unparsedSeed, ...colors]) =>
+        start(state as GameStateSetup, {
+          seed: Number.parseInt(unparsedSeed, 10),
           colors: colors as PlayerColor[],
         })
-      }
     )
     .with(
       [GameCommandEnum.CUT_PEAT, P.string, P.string],
