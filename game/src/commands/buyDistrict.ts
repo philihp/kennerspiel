@@ -23,8 +23,8 @@ const checkForConnection = (y: number) =>
 
 const checkForOverlap = (y: number) =>
   withActivePlayer((player) => {
-    const { landscape } = player
-    if (landscape[y]?.[0] !== undefined) return undefined
+    const { landscape, landscapeOffset } = player
+    if (landscape[y + landscapeOffset]?.[3][0] !== undefined) return undefined
     return player
   })
 
@@ -57,49 +57,56 @@ const denyBuyingAnyMoreLandscape = (state?: GameStatePlaying): GameStatePlaying 
   }
 }
 
-const newDistrict = (side: 'PLAINS' | 'HILLS'): Tile[] =>
-  match(side)
-    .with('HILLS', () => [
-      [] as Tile,
-      [] as Tile,
-      [LandEnum.Plains, BuildingEnum.Peat] as Tile,
-      [LandEnum.Plains, BuildingEnum.Forest] as Tile,
-      [LandEnum.Plains, BuildingEnum.Forest] as Tile,
-      [LandEnum.Hillside] as Tile,
-      [LandEnum.Hillside] as Tile,
-      [] as Tile,
-      [] as Tile,
-    ])
-    .with('PLAINS', () => [
-      [] as Tile,
-      [] as Tile,
-      [LandEnum.Plains, BuildingEnum.Forest] as Tile,
-      [LandEnum.Plains] as Tile,
-      [LandEnum.Plains] as Tile,
-      [LandEnum.Plains] as Tile,
-      [LandEnum.Hillside] as Tile,
-      [] as Tile,
-      [] as Tile,
-    ])
-    .exhaustive()
-
-const addNewDistrict = (y: number, side: 'PLAINS' | 'HILLS') =>
+const NEW_ROW: Tile[] = [[], [], [], [], [], [], [], [], []]
+const expandLandscape = (y: number) =>
   withActivePlayer((player) => {
     const landscape = [...player.landscape]
     let { landscapeOffset } = player
-    if (y < 0) {
-      landscape.unshift(newDistrict(side))
+    if (y + player.landscapeOffset < 0) {
+      landscape.unshift(NEW_ROW)
       landscapeOffset++
-    } else {
-      while (![...landscape.keys()].includes(y)) {
-        landscape.push([])
-      }
-      landscape[y] = newDistrict(side)
+    } else if (y + player.landscapeOffset >= landscape.length) {
+      landscape.push(NEW_ROW)
     }
     return {
       ...player,
       landscape,
       landscapeOffset,
+    }
+  })
+
+const newDistrict = (side: 'PLAINS' | 'HILLS'): Tile[] =>
+  match(side)
+    .with('HILLS', () => [
+      [LandEnum.Plains, BuildingEnum.Peat] as Tile,
+      [LandEnum.Plains, BuildingEnum.Forest] as Tile,
+      [LandEnum.Plains, BuildingEnum.Forest] as Tile,
+      [LandEnum.Hillside] as Tile,
+      [LandEnum.Hillside] as Tile,
+    ])
+    .with('PLAINS', () => [
+      [LandEnum.Plains, BuildingEnum.Forest] as Tile,
+      [LandEnum.Plains] as Tile,
+      [LandEnum.Plains] as Tile,
+      [LandEnum.Plains] as Tile,
+      [LandEnum.Hillside] as Tile,
+    ])
+    .exhaustive()
+
+const addNewDistrict = (y: number, side: 'PLAINS' | 'HILLS') =>
+  withActivePlayer((player) => {
+    const newTiles = newDistrict(side)
+    const rowsBefore = player.landscape.slice(0, y + player.landscapeOffset)
+    const newRow = [
+      ...player.landscape[y + player.landscapeOffset].slice(0, 2),
+      ...newTiles,
+      ...player.landscape[y + player.landscapeOffset].slice(7, 9),
+    ]
+    const rowsAfter = player.landscape.slice(y + player.landscapeOffset + 1)
+    const landscape = [...rowsBefore, newRow, ...rowsAfter]
+    return {
+      ...player,
+      landscape,
     }
   })
 
@@ -113,5 +120,6 @@ export const buyDistrict = ({ side, y }: GameCommandBuyDistrictParams) =>
     payForDistrict,
     removeDistrictFromPool,
     denyBuyingAnyMoreLandscape,
+    expandLandscape(y),
     addNewDistrict(y, side)
   )
