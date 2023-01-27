@@ -86,14 +86,53 @@ describe('commands/buyPlot', () => {
         plotPurchasePrices: [1, 1, 1, 1, 1],
         canBuyLandscape: false,
       })
-      // expect(s1.players[0]).toMatchObject({
-      //   penny: 99,
-      //   landscape: [
-      //     [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P']],
-      //     [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P']],
-      //   ],
-      //   landscapeOffset: 0,
-      // })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        ],
+        landscapeOffset: 0,
+      })
+    })
+
+    it('can buy a coastline plot at -1', () => {
+      const s1 = buyPlot({ side: 'COAST', y: -1 })(s0)!
+      expect(s1).toMatchObject({
+        plotPurchasePrices: [1, 1, 1, 1, 1],
+        canBuyLandscape: false,
+      })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [['W'], ['C'], [], [], [], [], [], [], []],
+          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        ],
+        landscapeOffset: 1,
+      })
+    })
+
+    it('can not buy a coastline plot at -2 because it isnt connected', () => {
+      const s1 = buyPlot({ side: 'COAST', y: -2 })(s0)!
+      expect(s1).toBeUndefined()
+    })
+
+    it('can buy a coastline plot at +1', () => {
+      const s1 = buyPlot({ side: 'COAST', y: +1 })(s0)!
+      expect(s1).toMatchObject({
+        plotPurchasePrices: [1, 1, 1, 1, 1],
+        canBuyLandscape: false,
+      })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+          [['W'], ['C'], [], [], [], [], [], [], []],
+        ],
+        landscapeOffset: 0,
+      })
     })
   })
 })
