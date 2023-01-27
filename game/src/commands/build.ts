@@ -12,7 +12,7 @@ const checkBuildingUnbuilt =
 
 const checkLandscapeFree = (row: number, col: number) => {
   return withActivePlayer((player) => {
-    const [, erection] = player.landscape[row + player.landscapeOffset][col]
+    const [, erection] = player.landscape[row + player.landscapeOffset][col + 2]
     if (erection !== undefined) return undefined
     return player
   })
@@ -20,8 +20,8 @@ const checkLandscapeFree = (row: number, col: number) => {
 
 const checkLandTypeMatches = (row: number, col: number, building: BuildingEnum) =>
   withActivePlayer((player) => {
-    const landAtSpot = player.landscape[row + player.landscapeOffset][col][0]
-    if (!terrainForBuilding(building).includes(landAtSpot)) return undefined
+    const landAtSpot = player.landscape[row + player.landscapeOffset][col + 2][0]
+    if (landAtSpot && !terrainForBuilding(building).includes(landAtSpot)) return undefined
     return player
   })
 
@@ -35,10 +35,10 @@ const checkBuildingCloister = (row: number, col: number, building: BuildingEnum)
   if (isCloisterBuilding(building) === false) return (state: GameStatePlaying | undefined) => state
   return withActivePlayer((player) => {
     const { landscape, landscapeOffset } = player
-    if (isCloisterBuilding(landscape[row + landscapeOffset + 1]?.[col]?.[1])) return player
-    if (isCloisterBuilding(landscape[row + landscapeOffset - 1]?.[col]?.[1])) return player
+    if (isCloisterBuilding(landscape[row + landscapeOffset + 1]?.[col + 2]?.[1])) return player
+    if (isCloisterBuilding(landscape[row + landscapeOffset - 1]?.[col + 2]?.[1])) return player
+    if (isCloisterBuilding(landscape[row + landscapeOffset]?.[col + 3]?.[1])) return player
     if (isCloisterBuilding(landscape[row + landscapeOffset]?.[col + 1]?.[1])) return player
-    if (isCloisterBuilding(landscape[row + landscapeOffset]?.[col - 1]?.[1])) return player
     return undefined
   })
 }
@@ -57,9 +57,9 @@ const addBuildingAtLandscape = (row: number, col: number, building: BuildingEnum
     const landscape = [
       ...player.landscape.slice(0, rowOff),
       [
-        ...player.landscape[rowOff].slice(0, col),
-        [player.landscape[rowOff][col][0], building] as Tile,
-        ...player.landscape[rowOff].slice(col + 1),
+        ...player.landscape[rowOff].slice(0, col + 2),
+        [player.landscape[rowOff][col + 2][0], building] as Tile,
+        ...player.landscape[rowOff].slice(col + 2 + 1),
       ],
       ...player.landscape.slice(rowOff + 1),
     ]

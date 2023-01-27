@@ -37,7 +37,7 @@ describe('buildings/cloisterCourtyard', () => {
       const s10 = reducer(s9, ['COMMIT'])! as GameStatePlaying
 
       const s11 = reducer(s10, ['BUILD', 'F04', '3', '1'])! as GameStatePlaying
-      expect(s11.players[0].landscape[1][3]).toStrictEqual(['P', 'F04'])
+      expect(s11.players[0].landscape[1][5]).toStrictEqual(['P', 'F04'])
       expect(s11.players[0]).toMatchObject({
         clay: 0,
         wood: 2,

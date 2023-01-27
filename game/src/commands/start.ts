@@ -93,7 +93,6 @@ export const start = (
     startingPlayer,
     buildings: roundBuildings(state.config, SettlementRound.S),
     activePlayerIndex: 0,
-    actionList: [],
     settling: false,
     extraRound: false,
     settlementRound: SettlementRound.S,

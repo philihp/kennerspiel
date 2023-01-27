@@ -22,7 +22,7 @@ describe('buildings/market', () => {
         penny: 1,
       }
       const s3 = reducer(s2, ['BUILD', 'F08', '3', '1'])! as GameStatePlaying
-      expect(s3.players[0].landscape[1][3]).toStrictEqual(['P', 'F08'])
+      expect(s3.players[0].landscape[1][5]).toStrictEqual(['P', 'F08'])
       const s4 = reducer(s3, ['USE', 'F08', 'SwClPtPn'])! as GameStatePlaying
       expect(s4).toBeDefined()
       expect(s4.players[0]).toMatchObject({

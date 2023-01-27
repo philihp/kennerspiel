@@ -25,7 +25,7 @@ describe('buildings/carpentry', () => {
         usableBuildings: [],
         nextUse: NextUseClergy.None,
       })
-      expect(s4.players[0].landscape[0][1]).toStrictEqual(['P'])
+      expect(s4.players[0].landscape[0][3]).toStrictEqual(['P'])
     })
   })
 })

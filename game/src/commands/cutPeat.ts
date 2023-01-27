@@ -8,17 +8,17 @@ const removePeatAt =
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return state
     const player = { ...getPlayer(state) }
-    const tile = player.landscape?.[row]?.[col]
+    const tile = player.landscape?.[row]?.[col + 2]
     if (tile === undefined) return undefined
     const [land, building] = tile
     if (building !== BuildingEnum.Peat) return undefined
     player.landscape = [
       ...player.landscape.slice(0, row),
       [
-        ...player.landscape[row].slice(0, col),
+        ...player.landscape[row].slice(0, col + 2),
         // the tile in question
         [land] as Tile,
-        ...player.landscape[row].slice(col + 1),
+        ...player.landscape[row].slice(col + 2 + 1),
       ],
       ...player.landscape.slice(row + 1),
     ]

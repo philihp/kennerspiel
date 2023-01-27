@@ -23,8 +23,8 @@ describe('buildings/proiry', () => {
           {
             ...s2.players[0],
             landscape: [
-              [[LandEnum.Plains], [LandEnum.Plains, BuildingEnum.CloisterOfficeR]],
-              [[LandEnum.Plains], [LandEnum.Plains]],
+              [[], [], [LandEnum.Plains], [LandEnum.Plains, BuildingEnum.CloisterOfficeR], [], []],
+              [[], [], [LandEnum.Plains], [LandEnum.Plains], [], []],
             ],
             wood: 1,
             clay: 1,

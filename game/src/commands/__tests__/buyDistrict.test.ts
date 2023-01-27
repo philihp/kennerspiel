@@ -36,9 +36,9 @@ describe('commands/buyDistrict', () => {
         penny: 3,
         landscapeOffset: 1,
         landscape: [
-          [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H']],
-          [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
-          [['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
         ],
       })
     })
@@ -94,9 +94,9 @@ describe('commands/buyDistrict', () => {
         penny: 3,
         landscapeOffset: 0,
         landscape: [
-          [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
-          [['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
-          [['P', 'LFO'], ['P'], ['P'], ['P'], ['H']],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          [[], [], ['P', 'LFO'], ['P'], ['P'], ['P'], ['H'], [], []],
         ],
       })
     })

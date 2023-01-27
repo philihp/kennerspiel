@@ -36,7 +36,7 @@ describe('buildings/chamberOfWonders', () => {
         ],
       }
       const s4 = reducer(s3, ['BUILD', 'F25', '3', '1'])! as GameStatePlaying
-      expect(s4.players[0].landscape[1][3]).toStrictEqual(['P', 'F25'])
+      expect(s4.players[0].landscape[1][5]).toStrictEqual(['P', 'F25'])
       expect(s4.players[0]).toMatchObject({
         peat: 1,
         penny: 1,

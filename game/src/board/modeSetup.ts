@@ -19,13 +19,13 @@ export const makeLandscape = (color: PlayerColor, isNeutral?: boolean): Tile[][]
   const co: Tile = [LandEnum.Plains, startBuilding[color][2]]
   if (isNeutral) {
     return [
-      [[LandEnum.Plains, BuildingEnum.BuildersMarket], P, P, P, cm],
-      [P, P, fy, P, co],
+      [[], [], [LandEnum.Plains, BuildingEnum.BuildersMarket], P, P, P, cm, [], []],
+      [[], [], P, P, fy, P, co, [], []],
     ]
   }
   return [
-    [PP, PF, PF, P, cm],
-    [PP, PF, fy, P, co],
+    [[], [], PP, PF, PF, P, cm, [], []],
+    [[], [], PP, PF, fy, P, co, [], []],
   ]
 }
 

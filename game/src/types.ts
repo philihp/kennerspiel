@@ -303,7 +303,7 @@ export enum Clergy {
   PriorW = 'PRIW',
 }
 
-export type Tile = [LandEnum, BuildingEnum?, Clergy?]
+export type Tile = [LandEnum?, BuildingEnum?, Clergy?]
 
 // TODO: try to Required<Cost> &
 export type Tableau = {
@@ -374,7 +374,6 @@ export type GameStateSetup = {
 export type GameStatePlaying = {
   status: GameStatusEnum.PLAYING | GameStatusEnum.FINISHED
   randGen: PCGState
-  actionList: GameAction[]
   activePlayerIndex: number
   config: GameCommandConfigParams
   rondel: Rondel

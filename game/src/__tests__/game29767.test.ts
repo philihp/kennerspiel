@@ -31,7 +31,7 @@ describe('game 29767', () => {
     expect(s2.players[0].peat).toBe(0)
     expect(s3).toBeDefined()
     expect(s3.players[0].peat).toBe(2)
-    expect(s3.players[0].landscape[0][0]).toStrictEqual(['P'])
+    expect(s3.players[0].landscape[0][2]).toStrictEqual(['P'])
     expect(s3.rondel.peat).toBe(s3.rondel.pointingBefore)
     expect(s3.players[0].clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
     expect(s4.round).toBe(1)
@@ -71,12 +71,12 @@ describe('game 29767', () => {
 
     expect(s12.players[0].clay).toBe(4)
     expect(s12.players[0].landscape).toStrictEqual([
-      [['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R']],
-      [['P'], ['P'], ['P', 'LR2', 'LB1R'], ['P'], ['P', 'LR3']],
+      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R'], [], []],
+      [[], [], ['P'], ['P'], ['P', 'LR2', 'LB1R'], ['P'], ['P', 'LR3'], [], []],
     ])
     expect(s13.players[0].landscape).toStrictEqual([
-      [['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G07'], ['H', 'LR1', 'LB2R']],
-      [['P'], ['P'], ['P', 'LR2', 'LB1R'], ['P'], ['P', 'LR3']],
+      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G07'], ['H', 'LR1', 'LB2R'], [], []],
+      [[], [], ['P'], ['P'], ['P', 'LR2', 'LB1R'], ['P'], ['P', 'LR3'], [], []],
     ])
     expect(s13.players[0].clay).toBe(3)
     expect(s13.buildings).not.toContain('G07')
@@ -108,14 +108,8 @@ describe('game 29767', () => {
       straw: 1,
     })
     expect(s17.players[0].landscape).toStrictEqual([
-      [
-        ['P', 'G06'],
-        ['P', 'LFO'],
-        ['P', 'LFO'],
-        ['P', 'G07'],
-        ['H', 'LR1'],
-      ],
-      [['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
+      [[], [], ['P', 'G06'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G07'], ['H', 'LR1'], [], []],
+      [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
     ])
   })
 })

@@ -7,11 +7,6 @@ import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, Buildin
 const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined =>
   state?.canBuyLandscape ? state : undefined
 
-const checkDistrictAvailable = (state?: GameStatePlaying): GameStatePlaying | undefined => {
-  if (state?.districtPurchasePrices.length === 0) return undefined
-  return state
-}
-
 const checkForConnection = (y: number) =>
   // new district must have an existing
   withActivePlayer((player) => {
@@ -33,14 +28,17 @@ const checkForOverlap = (y: number) =>
     return player
   })
 
+const checkCanAfford = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+  const cost = state?.districtPurchasePrices[0] ?? 999
+  return withActivePlayer((player) => {
+    if (costMoney(player) < cost) return undefined
+    return player
+  })(state)
+}
+
 const payForDistrict = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
-  if (state.districtPurchasePrices.length === 0) return undefined
-  return withActivePlayer((player) =>
-    costMoney(player) >= state.districtPurchasePrices[0]
-      ? subtractCoins(state.districtPurchasePrices[0])(player)
-      : undefined
-  )(state)
+  return withActivePlayer(subtractCoins(state.districtPurchasePrices[0]))(state)
 }
 
 const removeDistrictFromPool = (state?: GameStatePlaying): GameStatePlaying | undefined => {
@@ -62,18 +60,26 @@ const denyBuyingAnyMoreLandscape = (state?: GameStatePlaying): GameStatePlaying 
 const newDistrict = (side: 'PLAINS' | 'HILLS'): Tile[] =>
   match(side)
     .with('HILLS', () => [
+      [] as Tile,
+      [] as Tile,
       [LandEnum.Plains, BuildingEnum.Peat] as Tile,
       [LandEnum.Plains, BuildingEnum.Forest] as Tile,
       [LandEnum.Plains, BuildingEnum.Forest] as Tile,
       [LandEnum.Hillside] as Tile,
       [LandEnum.Hillside] as Tile,
+      [] as Tile,
+      [] as Tile,
     ])
     .with('PLAINS', () => [
+      [] as Tile,
+      [] as Tile,
       [LandEnum.Plains, BuildingEnum.Forest] as Tile,
       [LandEnum.Plains] as Tile,
       [LandEnum.Plains] as Tile,
       [LandEnum.Plains] as Tile,
       [LandEnum.Hillside] as Tile,
+      [] as Tile,
+      [] as Tile,
     ])
     .exhaustive()
 
@@ -101,8 +107,8 @@ export const buyDistrict = ({ side, y }: GameCommandBuyDistrictParams) =>
   pipe(
     //
     checkCanBuyLandscape,
-    checkDistrictAvailable,
     checkForOverlap(y),
+    checkCanAfford,
     checkForConnection(y),
     payForDistrict,
     removeDistrictFromPool,

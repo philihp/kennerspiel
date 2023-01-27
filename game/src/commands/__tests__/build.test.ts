@@ -103,7 +103,7 @@ describe('commands/build', () => {
       const s4 = reducer(s3, ['BUILD', BuildingEnum.Windmill, '3', '1'])! as GameStatePlaying
       expect(s4).toBeDefined()
       expect(s4.buildings).not.toContain(BuildingEnum.Windmill)
-      expect(s4.players[0].landscape[1][3][1]).toBe(BuildingEnum.Windmill)
+      expect(s4.players[0].landscape[1][5][1]).toBe(BuildingEnum.Windmill)
       expect(s4.players[0].wood).toBe(7)
       expect(s4.players[0].clay).toBe(8)
       expect(s4.players[0].stone).toBe(10)
@@ -123,9 +123,9 @@ describe('commands/build', () => {
             straw: 10,
             landscapeOffset: 1,
             landscape: [
-              [[LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains]],
-              [[LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains]],
-              [[LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains]],
+              [[], [], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [], []],
+              [[], [], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [], []],
+              [[], [], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [], []],
             ],
           },
           ...s2.players.slice(1),
@@ -140,9 +140,9 @@ describe('commands/build', () => {
         stone: 10,
         straw: 10,
         landscape: [
-          [['P'], ['P', 'F04'], ['P']],
-          [['P'], ['P'], ['P']],
-          [['P'], ['P'], ['P']],
+          [[], [], ['P'], ['P', 'F04'], ['P'], [], []],
+          [[], [], ['P'], ['P'], ['P'], [], []],
+          [[], [], ['P'], ['P'], ['P'], [], []],
         ],
       })
     })
