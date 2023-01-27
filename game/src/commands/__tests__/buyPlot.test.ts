@@ -2,11 +2,11 @@ import { initialState } from '../../reducer'
 import {
   GameStatePlaying,
   GameStatusEnum,
-  LandEnum,
   NextUseClergy,
   PlayerColor,
   SettlementRound,
   Tableau,
+  Tile,
 } from '../../types'
 import { buyPlot } from '../buyPlot'
 
@@ -16,9 +16,9 @@ describe('commands/buyPlot', () => {
     clergy: [],
     settlements: [],
     landscape: [
-      [[], [], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [], []],
-      [[], [], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [], []],
-    ],
+      [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+      [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+    ] as Tile[][],
     landscapeOffset: 0,
     peat: 0,
     penny: 100,
@@ -117,6 +117,30 @@ describe('commands/buyPlot', () => {
       const s1 = buyPlot({ side: 'COAST', y: -2 })(s0)!
       expect(s1).toBeUndefined()
     })
+    it('can buy a coastline plot at -2 if coast connected', () => {
+      const connectedCoast = [
+        [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+      ] as Tile[][]
+      const s1 = buyPlot({ side: 'COAST', y: -2 })({
+        ...s0,
+        players: [{ ...s0.players[0], landscape: connectedCoast }, ...s0.players.slice(1)],
+      })!
+      expect(s1).toMatchObject({
+        plotPurchasePrices: [1, 1, 1, 1, 1],
+        canBuyLandscape: false,
+      })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [['W'], ['C'], [], [], [], [], [], [], []],
+          [['W'], ['C'], [], [], [], [], [], [], []],
+          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        ],
+        landscapeOffset: 2,
+      })
+    })
 
     it('can buy a coastline plot at +1', () => {
       const s1 = buyPlot({ side: 'COAST', y: +1 })(s0)!
@@ -130,6 +154,145 @@ describe('commands/buyPlot', () => {
           [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
           [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
           [['W'], ['C'], [], [], [], [], [], [], []],
+        ],
+        landscapeOffset: 0,
+      })
+    })
+
+    it('can not buy a coastline plot at +2 because it isnt connected', () => {
+      const s1 = buyPlot({ side: 'COAST', y: +2 })(s0)!
+      expect(s1?.players?.[0]?.landscape).toBeUndefined()
+    })
+    it('can buy a coastline plot at +2 if coast connected', () => {
+      const connectedCoast = [
+        [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+      ] as Tile[][]
+      const s1 = buyPlot({ side: 'COAST', y: +2 })({
+        ...s0,
+        players: [{ ...s0.players[0], landscape: connectedCoast }, ...s0.players.slice(1)],
+      })!
+      expect(s1).toMatchObject({
+        plotPurchasePrices: [1, 1, 1, 1, 1],
+        canBuyLandscape: false,
+      })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+          [['W'], ['C'], [], [], [], [], [], [], []],
+          [['W'], ['C'], [], [], [], [], [], [], []],
+        ],
+        landscapeOffset: 0,
+      })
+    })
+
+    //-----
+
+    it('can buy a mountain plot at 0', () => {
+      const s1 = buyPlot({ side: 'MOUNTAIN', y: 0 })(s0)!
+      expect(s1).toMatchObject({
+        plotPurchasePrices: [1, 1, 1, 1, 1],
+        canBuyLandscape: false,
+      })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+        ],
+        landscapeOffset: 0,
+      })
+    })
+
+    it('can buy a mountain plot at -1', () => {
+      const s1 = buyPlot({ side: 'MOUNTAIN', y: -1 })(s0)!
+      expect(s1).toMatchObject({
+        plotPurchasePrices: [1, 1, 1, 1, 1],
+        canBuyLandscape: false,
+      })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [[], [], [], [], [], [], [], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        ],
+        landscapeOffset: 1,
+      })
+    })
+
+    it('can not buy a mountain plot at -2 because it isnt connected', () => {
+      const s1 = buyPlot({ side: 'MOUNTAIN', y: -2 })(s0)!
+      expect(s1).toBeUndefined()
+    })
+    it('can buy a mountain plot at -2 if coast connected', () => {
+      const connectedMountain = [
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+      ] as Tile[][]
+      const s1 = buyPlot({ side: 'MOUNTAIN', y: -2 })({
+        ...s0,
+        players: [{ ...s0.players[0], landscape: connectedMountain }, ...s0.players.slice(1)],
+      })!
+      expect(s1).toMatchObject({
+        plotPurchasePrices: [1, 1, 1, 1, 1],
+        canBuyLandscape: false,
+      })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [[], [], [], [], [], [], [], ['H'], ['M']],
+          [[], [], [], [], [], [], [], ['H'], ['.']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+        ],
+        landscapeOffset: 2,
+      })
+    })
+
+    it('can buy a mountain plot at +1', () => {
+      const s1 = buyPlot({ side: 'MOUNTAIN', y: +1 })(s0)!
+      expect(s1).toMatchObject({
+        plotPurchasePrices: [1, 1, 1, 1, 1],
+        canBuyLandscape: false,
+      })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
+          [[], [], [], [], [], [], [], ['H'], ['.']],
+        ],
+        landscapeOffset: 0,
+      })
+    })
+
+    it('can not buy a mountain plot at +2 because it isnt connected', () => {
+      const s1 = buyPlot({ side: 'MOUNTAIN', y: +2 })(s0)!
+      expect(s1?.players?.[0]?.landscape).toBeUndefined()
+    })
+    it('can buy a mountain plot at +2 if coast connected', () => {
+      const connectedMountain = [
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+      ] as Tile[][]
+      const s1 = buyPlot({ side: 'MOUNTAIN', y: +2 })({
+        ...s0,
+        players: [{ ...s0.players[0], landscape: connectedMountain }, ...s0.players.slice(1)],
+      })!
+      expect(s1).toMatchObject({
+        plotPurchasePrices: [1, 1, 1, 1, 1],
+        canBuyLandscape: false,
+      })
+      expect(s1.players[0]).toMatchObject({
+        penny: 99,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+          [[], [], [], [], [], [], [], ['H'], ['M']],
+          [[], [], [], [], [], [], [], ['H'], ['.']],
         ],
         landscapeOffset: 0,
       })

@@ -65,6 +65,7 @@ export enum LandEnum {
   Coast = 'C',
   Water = 'W',
   Mountain = 'M',
+  BelowMountain = '.',
 }
 
 export enum ResourceEnum {

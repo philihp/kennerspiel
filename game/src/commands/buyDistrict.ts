@@ -10,12 +10,12 @@ const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | unde
 const checkForConnection = (y: number) =>
   // new district must have an existing
   withActivePlayer((player) => {
-    const { landscape } = player
+    const { landscape, landscapeOffset } = player
     if (
-      landscape[y]?.[-1] === undefined &&
-      landscape[y]?.[5] === undefined &&
-      landscape[y - 1]?.[0] === undefined &&
-      landscape[y + 1]?.[0] === undefined
+      landscape[y + landscapeOffset]?.[-1] === undefined &&
+      landscape[y + landscapeOffset]?.[5] === undefined &&
+      landscape[y + landscapeOffset - 1]?.[0] === undefined &&
+      landscape[y + landscapeOffset + 1]?.[0] === undefined
     )
       return undefined
     return player

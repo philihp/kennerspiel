@@ -7,14 +7,76 @@ import { GameStatePlaying, GameCommandBuyPlotParams, Tile, LandEnum, BuildingEnu
 const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined =>
   state?.canBuyLandscape ? state : undefined
 
-const checkForConnection = (y: number) =>
+const checkForConnection = (y: number, side: 'COAST' | 'MOUNTAIN') =>
   withActivePlayer((player) => {
-    if (y + player.landscapeOffset < -1) return undefined
+    const { landscape, landscapeOffset } = player
+
+    const cabove = landscape[y + landscapeOffset - 1]?.[1][0]
+    const cuplef = landscape[y + landscapeOffset]?.[3][0]
+    const clolef = landscape[y + landscapeOffset + 1]?.[3][0]
+    const cbelow = landscape[y + landscapeOffset + 2]?.[1][0] // below
+    const mabove = landscape[y + landscapeOffset - 1]?.[7][0]
+    const muplef = landscape[y + landscapeOffset]?.[6][0]
+    const mlolef = landscape[y + landscapeOffset + 1]?.[6][0]
+    const mbelow = landscape[y + landscapeOffset + 2]?.[7][0] // below
+
+    if (
+      match(side)
+        .with(
+          'COAST',
+          () =>
+            landscape[y + landscapeOffset - 1]?.[1][0] === undefined && // above
+            landscape[y + landscapeOffset]?.[3][0] === undefined && // upper-left
+            landscape[y + landscapeOffset + 1]?.[3][0] === undefined && // lower-left
+            landscape[y + landscapeOffset + 2]?.[1][0] === undefined // below
+        )
+        .with(
+          'MOUNTAIN',
+          () =>
+            landscape[y + landscapeOffset - 1]?.[7][0] === undefined && // above
+            landscape[y + landscapeOffset]?.[6][0] === undefined && // upper-left
+            landscape[y + landscapeOffset + 1]?.[6][0] === undefined && // lower-left
+            landscape[y + landscapeOffset + 2]?.[7][0] === undefined // below
+        )
+        .exhaustive()
+    )
+      return undefined
     return player
   })
 
-const checkForOverlap = (y: number) =>
+const checkForOverlap = (y: number, side: 'COAST' | 'MOUNTAIN') =>
   withActivePlayer((player) => {
+    const { landscape, landscapeOffset } = player
+
+    const cabove = landscape[y + landscapeOffset]?.[0][0]
+    const cuplef = landscape[y + landscapeOffset]?.[1][0]
+    const clolef = landscape[y + landscapeOffset + 1]?.[0][0]
+    const cbelow = landscape[y + landscapeOffset + 1]?.[1][0]
+    const mabove = landscape[y + landscapeOffset]?.[7][0]
+    const muplef = landscape[y + landscapeOffset]?.[8][0]
+    const mlolef = landscape[y + landscapeOffset + 1]?.[7][0]
+    const mbelow = landscape[y + landscapeOffset + 1]?.[8][0]
+    if (
+      match(side)
+        .with(
+          'COAST',
+          () =>
+            landscape[y + landscapeOffset]?.[0][0] !== undefined ||
+            landscape[y + landscapeOffset]?.[1][0] !== undefined ||
+            landscape[y + landscapeOffset + 1]?.[0][0] !== undefined ||
+            landscape[y + landscapeOffset + 1]?.[1][0] !== undefined
+        )
+        .with(
+          'MOUNTAIN',
+          () =>
+            landscape[y + landscapeOffset]?.[7][0] !== undefined ||
+            landscape[y + landscapeOffset]?.[8][0] !== undefined ||
+            landscape[y + landscapeOffset + 1]?.[7][0] !== undefined ||
+            landscape[y + landscapeOffset + 1]?.[8][0] !== undefined
+        )
+        .exhaustive()
+    )
+      return undefined
     return player
   })
 
@@ -49,28 +111,28 @@ const denyBuyingAnyMoreLandscape = (state?: GameStatePlaying): GameStatePlaying 
 }
 
 const newPlot = (side: 'COAST' | 'MOUNTAIN'): Tile[][] =>
-  match(side)
+  match<'COAST' | 'MOUNTAIN', Tile[][]>(side)
     .with('COAST', () => [
-      //
-      [[LandEnum.Water] as Tile, [LandEnum.Coast] as Tile],
-      [[LandEnum.Water] as Tile, [LandEnum.Coast] as Tile],
+      [[LandEnum.Water], [LandEnum.Coast]],
+      [[LandEnum.Water], [LandEnum.Coast]],
     ])
     .with('MOUNTAIN', () => [
-      //
-      [[LandEnum.Hillside] as Tile, [LandEnum.Mountain] as Tile],
-      [[LandEnum.Hillside] as Tile],
+      [[LandEnum.Hillside], [LandEnum.Mountain]],
+      [[LandEnum.Hillside], [LandEnum.BelowMountain]],
     ])
     .exhaustive()
 
-const addTopRow = (y: number) =>
+const NEW_ROW: Tile[] = [[], [], [], [], [], [], [], [], []]
+const expandLandscape = (y: number) =>
   withActivePlayer((player) => {
     const landscape = [...player.landscape]
     let { landscapeOffset } = player
-    if (y + player.landscapeOffset < 0) {
-      landscape.unshift([[], [], [], [], [], [], [], [], []])
+    while (y + landscapeOffset < 0) {
+      landscape.unshift(NEW_ROW)
       landscapeOffset++
-    } else if (y + 1 + player.landscapeOffset >= landscape.length) {
-      landscape.push([[], [], [], [], [], [], [], [], []])
+    }
+    while (y + landscapeOffset + 2 > landscape.length) {
+      landscape.push(NEW_ROW)
     }
 
     return {
@@ -86,10 +148,18 @@ const addNewPlot = (y: number, side: 'COAST' | 'MOUNTAIN') =>
     const rowsBefore = player.landscape.slice(0, y + player.landscapeOffset)
     const rowsAfter = player.landscape.slice(y + player.landscapeOffset + 2)
 
-    const row0 = [...newTiles[0], ...(player.landscape[y + player.landscapeOffset] ?? []).slice(2)]
-    const row1 = [...newTiles[1], ...(player.landscape[y + player.landscapeOffset + 1] ?? []).slice(2)]
+    const newRows = match<'COAST' | 'MOUNTAIN', Tile[][]>(side)
+      .with('COAST', () => [
+        [...newTiles[0], ...(player.landscape[y + player.landscapeOffset] ?? []).slice(2)],
+        [...newTiles[1], ...(player.landscape[y + player.landscapeOffset + 1] ?? []).slice(2)],
+      ])
+      .with('MOUNTAIN', () => [
+        [...(player.landscape[y + player.landscapeOffset] ?? []).slice(0, 7), ...newTiles[0]],
+        [...(player.landscape[y + player.landscapeOffset + 1] ?? []).slice(0, 7), ...newTiles[1]],
+      ])
+      .exhaustive()
 
-    const landscape = [...rowsBefore, row0, row1, ...rowsAfter]
+    const landscape = [...rowsBefore, ...newRows, ...rowsAfter]
 
     return {
       ...player,
@@ -101,12 +171,12 @@ export const buyPlot = ({ side, y }: GameCommandBuyPlotParams) =>
   pipe(
     //
     checkCanBuyLandscape,
-    checkForOverlap(y),
+    checkForOverlap(y, side),
     checkCanAfford,
-    checkForConnection(y),
+    checkForConnection(y, side),
     payForPlot,
     removePlotFromPool,
     denyBuyingAnyMoreLandscape,
-    addTopRow(y),
+    expandLandscape(y),
     addNewPlot(y, side)
   )
