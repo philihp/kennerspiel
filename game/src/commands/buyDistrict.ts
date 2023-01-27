@@ -4,8 +4,11 @@ import { costMoney } from '../board/resource'
 import { subtractCoins, withActivePlayer } from '../board/player'
 import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, BuildingEnum } from '../types'
 
-const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined =>
-  state?.canBuyLandscape ? state : undefined
+const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+  if (state === undefined) return undefined
+  if (state.canBuyLandscape === false) return undefined
+  return state
+}
 
 const checkForConnection = (y: number) =>
   // new district must have an existing

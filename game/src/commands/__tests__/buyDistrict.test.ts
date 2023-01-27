@@ -42,6 +42,11 @@ describe('commands/buyDistrict', () => {
         ],
       })
     })
+
+    it('handles undefined state', () => {
+      expect(buyDistrict({ side: 'PLAINS', y: -1 })(undefined)).toBeUndefined()
+    })
+
     it('does not allow buying twice', () => {
       const s0 = initialState
       const s1 = config(s0, {
@@ -64,6 +69,7 @@ describe('commands/buyDistrict', () => {
       const s5 = buyDistrict({ side: 'PLAINS', y: -2 })(s4)!
       expect(s5).toBeUndefined()
     })
+
     it('can buyDistrict to bottom', () => {
       const s0 = initialState
       const s1 = config(s0, {
