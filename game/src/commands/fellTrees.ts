@@ -9,7 +9,7 @@ export const fellTrees =
 
     if (player === undefined) return undefined
     if (player.landscape === undefined) return undefined
-    const tile = player.landscape?.[row]?.[col]
+    const tile = player.landscape?.[row]?.[col + 2]
     if (tile === undefined) return undefined
     const [land, building] = tile
     if (building !== BuildingEnum.Forest) return undefined
@@ -22,7 +22,12 @@ export const fellTrees =
         wood: player.wood + take(pointingBefore, (useJoker ? joker : wood) ?? pointingBefore, state.config),
         landscape: [
           ...player.landscape.slice(0, row),
-          [...player.landscape[row].slice(0, col), [land] as Tile, ...player.landscape[row].slice(col + 1)],
+          [
+            //
+            ...player.landscape[row].slice(0, col + 2),
+            [land] as Tile,
+            ...player.landscape[row].slice(col + 2 + 1),
+          ],
           ...player.landscape.slice(row + 1),
         ],
       }),

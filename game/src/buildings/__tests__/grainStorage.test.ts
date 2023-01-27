@@ -32,7 +32,7 @@ describe('buildings/grainStorage', () => {
         wood: 2,
       })
       const s10 = reducer(s9, ['BUILD', 'F03', '3', '1'])! as GameStatePlaying
-      expect(s10.players[0].landscape[1][3]).toStrictEqual(['P', 'F03'])
+      expect(s10.players[0].landscape[1][5]).toStrictEqual(['P', 'F03'])
       expect(s10.players[0]).toMatchObject({
         straw: 0,
         clay: 0,

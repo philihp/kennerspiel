@@ -20,10 +20,10 @@ describe('commands/use', () => {
       const s3 = use(BuildingEnum.FarmYardB, ['ShJo'])(s2)!
       expect(s2.activePlayerIndex).toBe(0)
       expect(s2.players[0].color).toBe(PlayerColor.Blue)
-      expect(s2.players[0].landscape[1][2]).toStrictEqual(['P', 'LB2'])
+      expect(s2.players[0].landscape[1][4]).toStrictEqual(['P', 'LB2'])
       expect(s2.players[0].clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
       expect(s3.players[0].clergy).toStrictEqual(['LB2B', 'PRIB'])
-      expect(s3.players[0].landscape[1][2]).toStrictEqual(['P', 'LB2', 'LB1B'])
+      expect(s3.players[0].landscape[1][4]).toStrictEqual(['P', 'LB2', 'LB1B'])
     })
     it('fallback to prior if laypeople are used', () => {
       const s0 = initialState
@@ -33,10 +33,10 @@ describe('commands/use', () => {
       const s3 = use(BuildingEnum.FarmYardB, ['ShJo'])(s2)!
       expect(s2.activePlayerIndex).toBe(0)
       expect(s2.players[0].color).toBe(PlayerColor.Blue)
-      expect(s2.players[0].landscape[1][2]).toStrictEqual(['P', 'LB2'])
+      expect(s2.players[0].landscape[1][4]).toStrictEqual(['P', 'LB2'])
       expect(s2.players[0].clergy).toStrictEqual(['PRIB'])
       expect(s3.players[0].clergy).toStrictEqual([])
-      expect(s3.players[0].landscape[1][2]).toStrictEqual(['P', 'LB2', 'PRIB'])
+      expect(s3.players[0].landscape[1][4]).toStrictEqual(['P', 'LB2', 'PRIB'])
     })
     it('gathers the goods', () => {
       const s0 = initialState

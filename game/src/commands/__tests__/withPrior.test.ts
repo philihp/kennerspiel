@@ -31,7 +31,7 @@ describe('commands/withPrior', () => {
       const s5 = reducer(s4, ['BUILD', 'G07', '3', '1'])! as GameStatePlaying
       const s6 = reducer(s5, ['USE', 'G07'])! as GameStatePlaying
       const s7 = reducer(s6, ['COMMIT'])! as GameStatePlaying
-      expect(s7.players[0].landscape[1][3]).toStrictEqual(['P', 'G07', 'PRIR'])
+      expect(s7.players[0].landscape[1][5]).toStrictEqual(['P', 'G07', 'PRIR'])
     })
     it('uses the laybrother if it you want to commit first', () => {
       const s0 = initialState
@@ -43,7 +43,7 @@ describe('commands/withPrior', () => {
       const s6 = reducer(s5, ['COMMIT'])! as GameStatePlaying
       const s7 = reducer(s6, ['USE', 'G07'])! as GameStatePlaying
       const s8 = reducer(s7, ['COMMIT'])! as GameStatePlaying
-      expect(s8.players[0].landscape[1][3]).toStrictEqual(['P', 'G07', 'LB2R'])
+      expect(s8.players[0].landscape[1][5]).toStrictEqual(['P', 'G07', 'LB2R'])
     })
     it('uses the prior, optionally', () => {
       const s0 = initialState
@@ -56,7 +56,7 @@ describe('commands/withPrior', () => {
       const s7 = reducer(s6, ['WITH_PRIOR'])! as GameStatePlaying
       const s8 = reducer(s7, ['USE', 'G07'])! as GameStatePlaying
       const s9 = reducer(s8, ['COMMIT'])! as GameStatePlaying
-      expect(s8.players[0].landscape[1][3]).toStrictEqual(['P', 'G07', 'PRIR'])
+      expect(s8.players[0].landscape[1][5]).toStrictEqual(['P', 'G07', 'PRIR'])
     })
     it('doesnt let you do it twice', () => {
       const s0 = initialState

@@ -18,7 +18,7 @@ describe('buildings/fuelMerchant', () => {
       s2.players[0].peat = 3
       s2.players[0].penny = 3
       const s3 = reducer(s2, ['BUILD', 'G06', '3', '1'])! as GameStatePlaying
-      expect(s3.players[0].landscape[1][3]).toStrictEqual(['P', 'G06'])
+      expect(s3.players[0].landscape[1][5]).toStrictEqual(['P', 'G06'])
       expect(s3.players[0]).toMatchObject({
         straw: 0,
         clay: 0,

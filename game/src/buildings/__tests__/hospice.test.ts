@@ -29,7 +29,7 @@ describe('buildings/hospice', () => {
         ],
       }
       const s4 = reducer(s3, ['BUILD', 'F40', '3', '1'])! as GameStatePlaying
-      expect(s4.players[0].landscape[1][3]).toStrictEqual(['P', 'F40'])
+      expect(s4.players[0].landscape[1][5]).toStrictEqual(['P', 'F40'])
       expect(s4.players[0]).toMatchObject({
         wood: 0,
         straw: 0,

@@ -9,15 +9,15 @@ describe('board/modeSetup', () => {
     it('creates a landscape', () => {
       const ls = makeLandscape(PlayerColor.Red)
       expect(ls).toStrictEqual([
-        [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1']],
-        [['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3']],
+        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
       ])
     })
     it('creates a neutral landscape', () => {
       const ls = makeLandscape(PlayerColor.Blue, true)
       expect(ls).toStrictEqual([
-        [['P', 'G13'], ['P'], ['P'], ['P'], ['H', 'LB1']],
-        [['P'], ['P'], ['P', 'LB2'], ['P'], ['P', 'LB3']],
+        [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['H', 'LB1'], [], []],
+        [[], [], ['P'], ['P'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
       ])
     })
   })
@@ -28,12 +28,12 @@ describe('board/modeSetup', () => {
       const s1 = config(s0, { country: 'france', players: 1, length: 'long' })!
       const s2 = start(s1, { seed: 1, colors: [PlayerColor.Blue] })!
       expect(s2.players[0].landscape).toStrictEqual([
-        [['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1']],
-        [['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3']],
+        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
+        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
       ])
       expect(s2.players[1].landscape).toStrictEqual([
-        [['P', 'G13'], ['P'], ['P'], ['P'], ['H', 'LW1']],
-        [['P'], ['P'], ['P', 'LW2'], ['P'], ['P', 'LW3']],
+        [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['H', 'LW1'], [], []],
+        [[], [], ['P'], ['P'], ['P', 'LW2'], ['P'], ['P', 'LW3'], [], []],
       ])
     })
   })
