@@ -4,22 +4,15 @@ import { costMoney } from '../board/resource'
 import { subtractCoins, withActivePlayer } from '../board/player'
 import { GameStatePlaying, GameCommandBuyPlotParams, Tile, LandEnum, BuildingEnum } from '../types'
 
-const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined =>
-  state?.canBuyLandscape ? state : undefined
+const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+  if (state === undefined) return undefined
+  if (state.canBuyLandscape === false) return undefined
+  return state
+}
 
 const checkForConnection = (y: number, side: 'COAST' | 'MOUNTAIN') =>
   withActivePlayer((player) => {
     const { landscape, landscapeOffset } = player
-
-    const cabove = landscape[y + landscapeOffset - 1]?.[1][0]
-    const cuplef = landscape[y + landscapeOffset]?.[3][0]
-    const clolef = landscape[y + landscapeOffset + 1]?.[3][0]
-    const cbelow = landscape[y + landscapeOffset + 2]?.[1][0] // below
-    const mabove = landscape[y + landscapeOffset - 1]?.[7][0]
-    const muplef = landscape[y + landscapeOffset]?.[6][0]
-    const mlolef = landscape[y + landscapeOffset + 1]?.[6][0]
-    const mbelow = landscape[y + landscapeOffset + 2]?.[7][0] // below
-
     if (
       match(side)
         .with(
@@ -47,15 +40,6 @@ const checkForConnection = (y: number, side: 'COAST' | 'MOUNTAIN') =>
 const checkForOverlap = (y: number, side: 'COAST' | 'MOUNTAIN') =>
   withActivePlayer((player) => {
     const { landscape, landscapeOffset } = player
-
-    const cabove = landscape[y + landscapeOffset]?.[0][0]
-    const cuplef = landscape[y + landscapeOffset]?.[1][0]
-    const clolef = landscape[y + landscapeOffset + 1]?.[0][0]
-    const cbelow = landscape[y + landscapeOffset + 1]?.[1][0]
-    const mabove = landscape[y + landscapeOffset]?.[7][0]
-    const muplef = landscape[y + landscapeOffset]?.[8][0]
-    const mlolef = landscape[y + landscapeOffset + 1]?.[7][0]
-    const mbelow = landscape[y + landscapeOffset + 1]?.[8][0]
     if (
       match(side)
         .with(

@@ -22,6 +22,8 @@ import {
 } from './types'
 import { parseResourceParam } from './board/resource'
 import { withPrior } from './commands/withPrior'
+import { buyPlot } from './commands/buyPlot'
+import { buyDistrict } from './commands/buyDistrict'
 
 export const initialState: GameStateSetup = {
   randGen: 0n,
@@ -29,6 +31,8 @@ export const initialState: GameStateSetup = {
 }
 
 const PColor = P.union(PlayerColor.Blue, PlayerColor.White, PlayerColor.Red, PlayerColor.Green)
+const PPlot = P.union('MOUNTAIN', 'COAST')
+const PDistrict = P.union('HILLS', 'PLAINS')
 
 export const reducer: Reducer = (state, action) =>
   match<string[], GameState | undefined>(action) // .
@@ -46,14 +50,11 @@ export const reducer: Reducer = (state, action) =>
       [GameCommandEnum.START, P.string, PColor, PColor],
       [GameCommandEnum.START, P.string, PColor, PColor, PColor],
       [GameCommandEnum.START, P.string, PColor, PColor, PColor, PColor],
-      ([_, unparsedSeed, ...colors]) => {
-        const seed = Number.parseInt(unparsedSeed, 10)
-        if (Number.isNaN(seed)) return undefined
-        return start(state as GameStateSetup, {
-          seed,
+      ([_, unparsedSeed, ...colors]) =>
+        start(state as GameStateSetup, {
+          seed: Number.parseInt(unparsedSeed, 10),
           colors: colors as PlayerColor[],
         })
-      }
     )
     .with(
       [GameCommandEnum.CUT_PEAT, P.string, P.string],
@@ -96,6 +97,18 @@ export const reducer: Reducer = (state, action) =>
       ([_command, building, ...params]) => {
         return use(building as BuildingEnum, params)(state as GameStatePlaying)
       }
+    )
+    .with([GameCommandEnum.BUY_PLOT, P._, PPlot], ([_, y, side]) =>
+      buyPlot({
+        y: Number.parseInt(y, 10),
+        side: side as 'MOUNTAIN' | 'COAST',
+      })(state as GameStatePlaying)
+    )
+    .with([GameCommandEnum.BUY_DISTRICT, P._, PDistrict], ([_, y, side]) =>
+      buyDistrict({
+        y: Number.parseInt(y, 10),
+        side: side as 'HILLS' | 'PLAINS',
+      })(state as GameStatePlaying)
     )
     .with([GameCommandEnum.CONVERT, P.select('resources')], ({ resources }) =>
       convert(parseResourceParam(resources))(state as GameStatePlaying)

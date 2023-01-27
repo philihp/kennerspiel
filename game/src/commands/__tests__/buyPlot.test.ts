@@ -71,6 +71,10 @@ describe('commands/buyPlot', () => {
   }
 
   describe('buyPlot', () => {
+    it('handles undefined state', () => {
+      expect(buyPlot({ side: 'MOUNTAIN', y: -1 })(undefined)).toBeUndefined()
+    })
+
     it('starts out with a buffer on the left', () => {
       expect(s0.players[0]).toMatchObject({
         landscape: [
