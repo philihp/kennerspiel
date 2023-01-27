@@ -29,8 +29,9 @@ const checkForOverlap = (y: number) =>
   })
 
 const checkCanAfford = (state?: GameStatePlaying): GameStatePlaying | undefined => {
-  const cost = state?.districtPurchasePrices[0] ?? 999
+  const cost = state?.districtPurchasePrices[0]
   return withActivePlayer((player) => {
+    if (cost === undefined) return undefined
     if (costMoney(player) < cost) return undefined
     return player
   })(state)
