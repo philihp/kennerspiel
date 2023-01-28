@@ -22,7 +22,7 @@ export const grainStorage =
       pipe(
         //
         checkPlayerHasPenny,
-        (player) => player && subtractCoins(1)(player),
+        subtractCoins(1),
         addSixGrain
       )
     )(state)
