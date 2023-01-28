@@ -1,233 +1,257 @@
-import { config } from '../../commands/config'
-import { start } from '../../commands/start'
+import {
+  GameStatePlaying,
+  GameStatusEnum,
+  NextUseClergy,
+  PlayerColor,
+  SettlementRound,
+  Tableau,
+  Tile,
+} from '../../types'
 import { initialState } from '../../reducer'
-import { GameStatePlaying, PlayerColor } from '../../types'
 import { bakery } from '../bakery'
 
 describe('buildings/bakery', () => {
   describe('bakery', () => {
+    const p0: Tableau = {
+      color: PlayerColor.Blue,
+      clergy: [],
+      settlements: [],
+      landscape: [
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+      ] as Tile[][],
+      landscapeOffset: 0,
+      peat: 0,
+      penny: 0,
+      clay: 0,
+      wood: 0,
+      grain: 0,
+      sheep: 0,
+      stone: 0,
+      flour: 0,
+      grape: 0,
+      nickel: 0,
+      hops: 0,
+      coal: 0,
+      book: 0,
+      pottery: 0,
+      whiskey: 0,
+      straw: 0,
+      meat: 0,
+      ornament: 0,
+      bread: 0,
+      wine: 0,
+      beer: 0,
+      reliquary: 0,
+    }
+    const s0: GameStatePlaying = {
+      ...initialState,
+      status: GameStatusEnum.PLAYING,
+      activePlayerIndex: 0,
+      config: {
+        country: 'france',
+        players: 3,
+        length: 'long',
+      },
+      rondel: {
+        pointingBefore: 0,
+      },
+      players: [{ ...p0 }, { ...p0 }, { ...p0 }],
+      settling: false,
+      extraRound: false,
+      moveInRound: 1,
+      round: 1,
+      startingPlayer: 1,
+      settlementRound: SettlementRound.S,
+      buildings: [],
+      nextUse: NextUseClergy.Any,
+      canBuyLandscape: true,
+      plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+      districtPurchasePrices: [],
+      neutralBuildingPhase: false,
+    }
+
     it('retains undefined state', () => {
       const s0: GameStatePlaying | undefined = undefined
       const s1 = bakery()(s0)
       expect(s1).toBeUndefined()
     })
     it('bakes bread using wood, then converts to coins', () => {
-      expect.assertions(3)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', length: 'short', players: 3 })!
-      const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
-            flour: 2,
+            ...s0.players[0],
+            grain: 10,
+            flour: 10,
+            wood: 10,
+            bread: 10,
           },
-          s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
-      } as GameStatePlaying
-      expect(s3.activePlayerIndex).toBe(0)
-      expect(s3.players[0]).toMatchObject({
-        flour: 2,
-        wood: 1,
-        bread: 0,
-        nickel: 0,
-        penny: 1,
-      })
-      const s4 = bakery('WoFlFlBrBr')(s3)!
-      expect(s4.players[0]).toMatchObject({
-        flour: 0,
-        wood: 0,
-        bread: 0,
+      }
+      const s2 = bakery('WoFlFlBrBr')(s1)!
+      expect(s2.players[0]).toMatchObject({
+        grain: 10,
+        flour: 8,
+        wood: 9,
+        bread: 10,
+        penny: 3,
         nickel: 1,
-        penny: 4,
       })
     })
     it('bakes bread using wood with partial coin conversion', () => {
-      expect.assertions(3)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', length: 'short', players: 3 })!
-      const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
-            flour: 2,
+            ...s0.players[0],
+            grain: 10,
+            flour: 10,
+            wood: 10,
+            bread: 10,
           },
-          s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
-      } as GameStatePlaying
-      expect(s3.activePlayerIndex).toBe(0)
+      }
+      const s2 = bakery('WoFlFlBrBr')(s1)!
+      const s3 = bakery('WoFlFlBr')(s2)!
       expect(s3.players[0]).toMatchObject({
-        flour: 2,
-        wood: 1,
-        bread: 0,
-        nickel: 0,
-        penny: 1,
-      })
-      const s4 = bakery('WoFlFlBr')(s3)!
-      expect(s4.players[0]).toMatchObject({
-        flour: 0,
-        wood: 0,
-        bread: 1,
-        nickel: 0,
-        penny: 5,
+        flour: 6,
+        wood: 8,
+        bread: 11,
+        nickel: 1,
+        penny: 7,
       })
     })
     it('bakes bread using wood with no coin conversion', () => {
-      expect.assertions(3)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', length: 'short', players: 3 })!
-      const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
-            flour: 2,
+            ...s0.players[0],
+            grain: 10,
+            flour: 10,
+            wood: 10,
+            bread: 10,
           },
-          s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
-      } as GameStatePlaying
-      expect(s3.activePlayerIndex).toBe(0)
-      expect(s3.players[0]).toMatchObject({
-        flour: 2,
-        wood: 1,
-        bread: 0,
-        nickel: 0,
-        penny: 1,
+      }
+      const s2 = bakery('WoFlFlBrBr')(s1)!
+      expect(s2.players[0]).toMatchObject({
+        grain: 10,
+        flour: 8,
+        wood: 9,
+        bread: 10,
+        penny: 3,
+        nickel: 1,
       })
-      const s4 = bakery('WoFlFl')(s3)!
-      expect(s4.players[0]).toMatchObject({
-        flour: 0,
-        wood: 0,
-        bread: 2,
-        nickel: 0,
-        penny: 1,
+      const s3 = bakery('WoFlFl')(s2)!
+      expect(s3.players[0]).toMatchObject({
+        flour: 6,
+        wood: 8,
+        bread: 12,
+        nickel: 1,
+        penny: 3,
       })
     })
     it('baking bread with wood, rounds down on half usage', () => {
-      expect.assertions(3)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', length: 'short', players: 3 })!
-      const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
-            flour: 2,
+            ...s0.players[0],
+            grain: 10,
+            flour: 10,
+            wood: 10,
+            bread: 10,
           },
-          s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
-      } as GameStatePlaying
-      expect(s3.activePlayerIndex).toBe(0)
-      expect(s3.players[0]).toMatchObject({
-        flour: 2,
-        wood: 1,
-        bread: 0,
-        nickel: 0,
-        penny: 1,
+      }
+      const s2 = bakery('WoFlFlBrBr')(s1)!
+      expect(s2.players[0]).toMatchObject({
+        grain: 10,
+        flour: 8,
+        wood: 9,
+        bread: 10,
+        penny: 3,
+        nickel: 1,
       })
-      const s4 = bakery('WoFl')(s3)!
-      expect(s4.players[0]).toMatchObject({
-        flour: 1,
-        wood: 0,
-        bread: 1,
-        nickel: 0,
-        penny: 1,
+      const s3 = bakery('WoFl')(s2)!
+      expect(s3.players[0]).toMatchObject({
+        bread: 11,
+        flour: 7,
+        nickel: 1,
+        penny: 3,
+        wood: 8,
       })
     })
     it('allows using just to sell bread without baking', () => {
-      expect.assertions(3)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', length: 'short', players: 3 })!
-      const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
-            bread: 2,
+            ...s0.players[0],
+            grain: 10,
+            flour: 10,
+            wood: 10,
+            bread: 10,
           },
-          s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
-      } as GameStatePlaying
-      expect(s3.activePlayerIndex).toBe(0)
-      expect(s3.players[0]).toMatchObject({
-        bread: 2,
-        nickel: 0,
-        penny: 1,
-      })
-      const s4 = bakery('BrBr')(s3)!
-      expect(s4.players[0]).toMatchObject({
-        bread: 0,
+      }
+      const s2 = bakery('BrBr')(s1)!
+      expect(s2.players[0]).toMatchObject({
+        grain: 10,
+        flour: 10,
+        wood: 10,
+        bread: 8,
         nickel: 1,
-        penny: 4,
+        penny: 3,
       })
     })
     it('can bake one bread, but sell two if already had one', () => {
-      expect.assertions(3)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', length: 'short', players: 3 })!
-      const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
-            flour: 1,
-            bread: 1,
+            ...s0.players[0],
+            grain: 10,
+            flour: 10,
+            wood: 10,
+            bread: 10,
           },
-          s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
-      } as GameStatePlaying
-      expect(s3.activePlayerIndex).toBe(0)
-      expect(s3.players[0]).toMatchObject({
-        flour: 1,
-        wood: 1,
-        bread: 1,
-        nickel: 0,
-        penny: 1,
-      })
-      const s4 = bakery('WoFlBrBr')(s3)!
-      expect(s4.players[0]).toMatchObject({
-        flour: 0,
-        wood: 0,
-        bread: 0,
+      }
+      const s2 = bakery('WoFlBrBr')(s1)!
+      expect(s2.players[0]).toMatchObject({
+        grain: 10,
+        flour: 9,
+        wood: 9,
+        bread: 9,
         nickel: 1,
-        penny: 4,
+        penny: 3,
       })
     })
     it('does not allow selling bread you dont have and arent making', () => {
-      expect.assertions(3)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', length: 'short', players: 3 })!
-      const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
-            flour: 1,
-            wood: 1,
-            bread: 1,
-            penny: 0,
+            ...s0.players[0],
+            grain: 10,
+            flour: 10,
+            wood: 10,
+            bread: 0,
           },
-          s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
-      } as GameStatePlaying
-      expect(s3.activePlayerIndex).toBe(0)
-      expect(s3.players[0]).toMatchObject({
-        flour: 1,
-        wood: 1,
-        bread: 1,
-        nickel: 0,
-        penny: 0,
-      })
-      const s4 = bakery('BrBr')(s3)!
-      expect(s4).toBeUndefined()
+      }
+      const s2 = bakery('BrBr')(s1)!
+      expect(s2).toBeUndefined()
     })
   })
 })
