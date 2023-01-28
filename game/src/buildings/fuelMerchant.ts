@@ -1,7 +1,7 @@
 import { pipe } from 'ramda'
 import { payCost, withActivePlayer } from '../board/player'
 import { canAfford, costEnergy, parseResourceParam } from '../board/resource'
-import { Cost, GameStatePlaying, Tableau } from '../types'
+import { Cost, Tableau } from '../types'
 
 const addProceeds = (fuel: Cost) => {
   const energy = costEnergy(fuel)
@@ -30,17 +30,14 @@ const addProceeds = (fuel: Cost) => {
   }
 }
 
-export const fuelMerchant =
-  (param = '') =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
-    const inputs = parseResourceParam(param)
-    return withActivePlayer(
-      pipe(
-        //
-        (p) => (canAfford(inputs)(p) ? p : undefined),
-        payCost(inputs),
-        addProceeds(inputs)
-      )
-    )(state)
-  }
+export const fuelMerchant = (param = '') => {
+  const inputs = parseResourceParam(param)
+  return withActivePlayer(
+    pipe(
+      //
+      (p) => (canAfford(inputs)(p) ? p : undefined),
+      payCost(inputs),
+      addProceeds(inputs)
+    )
+  )
+}
