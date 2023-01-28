@@ -14,16 +14,14 @@ const addSixGrain = (player: Tableau | undefined): Tableau | undefined =>
     grain: player.grain + 6,
   }
 
-export const grainStorage =
-  (param = '') =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
-    return withActivePlayer(
-      pipe(
-        //
-        checkPlayerHasPenny,
-        subtractCoins(1),
-        addSixGrain
-      )
-    )(state)
-  }
+export const grainStorage = (param = '') => {
+  if (param === '') return () => undefined // (state: GameStatePlaying | undefined) => state
+  return withActivePlayer(
+    pipe(
+      //
+      checkPlayerHasPenny,
+      (player) => player && subtractCoins(1)(player),
+      addSixGrain
+    )
+  )
+}
