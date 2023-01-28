@@ -85,7 +85,8 @@ export const getCost =
 
 export const subtractCoins =
   (amount: number) =>
-  (player: Tableau): Tableau => {
+  (player: Tableau | undefined): Tableau | undefined => {
+    if (player === undefined) return undefined
     // first clone p
     const p = { ...player }
 

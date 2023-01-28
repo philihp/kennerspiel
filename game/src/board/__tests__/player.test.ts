@@ -2,7 +2,7 @@ import { config } from '../../commands/config'
 import { start } from '../../commands/start'
 import { initialState } from '../../reducer'
 import { Clergy, GameStatePlaying, PlayerColor, Tableau } from '../../types'
-import { getPlayer, isLayBrother, isPrior, payCost, setPlayer } from '../player'
+import { getPlayer, isLayBrother, isPrior, payCost, setPlayer, subtractCoins } from '../player'
 
 const p: Tableau = {
   color: PlayerColor.Red,
@@ -158,6 +158,112 @@ describe('board/player', () => {
         clay: 4,
       })
       expect(payCost({ clay: 5 })(player)).toBeUndefined()
+    })
+  })
+
+  describe('subtractCoin', () => {
+    const p0: Tableau = {
+      color: PlayerColor.Red,
+      clergy: [],
+      settlements: [],
+      landscape: [[]],
+      landscapeOffset: 0,
+      peat: 0,
+      penny: 0,
+      clay: 0,
+      wood: 0,
+      grain: 0,
+      sheep: 0,
+      stone: 0,
+      flour: 0,
+      grape: 0,
+      nickel: 0,
+      hops: 0,
+      coal: 0,
+      book: 0,
+      pottery: 0,
+      whiskey: 0,
+      straw: 0,
+      meat: 0,
+      ornament: 0,
+      bread: 0,
+      wine: 0,
+      beer: 0,
+      reliquary: 0,
+    }
+
+    it('supports undefined player', () => {
+      expect(subtractCoins(3)(undefined)).toBeUndefined()
+    })
+    it('subtracts coins from pennies', () => {
+      expect(
+        subtractCoins(3)({
+          ...p0,
+          penny: 4,
+        })
+      ).toMatchObject({
+        penny: 1,
+      })
+    })
+    it('subtracts from nickel when pennies runs dry', () => {
+      expect(
+        subtractCoins(3)({
+          ...p0,
+          penny: 2,
+          nickel: 3,
+        })
+      ).toMatchObject({
+        nickel: 2,
+        penny: 4,
+      })
+    })
+    it('subtracts from whiskey when penny and nickel run dry', () => {
+      expect(
+        subtractCoins(3)({
+          ...p0,
+          penny: 2,
+          whiskey: 4,
+        })
+      ).toMatchObject({
+        penny: 1,
+        whiskey: 3,
+      })
+    })
+    it('prefers nickel over whiskey', () => {
+      expect(
+        subtractCoins(1)({
+          ...p0,
+          nickel: 1,
+          whiskey: 1,
+        })
+      ).toMatchObject({
+        penny: 4,
+        whiskey: 1,
+      })
+    })
+    it('subtracts from wine when penny and nickel run dry', () => {
+      expect(
+        subtractCoins(3)({
+          ...p0,
+          penny: 2,
+          wine: 4,
+        })
+      ).toMatchObject({
+        penny: 0,
+        wine: 3,
+      })
+    })
+    it('prefers nickel over wine', () => {
+      expect(
+        subtractCoins(1)({
+          ...p0,
+          nickel: 1,
+          wine: 1,
+        })
+      ).toMatchObject({
+        penny: 4,
+        wine: 1,
+      })
     })
   })
 })

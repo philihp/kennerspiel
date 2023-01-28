@@ -11,7 +11,7 @@ describe('commands/convert', () => {
 
   describe('convert', () => {
     it('cannot convert undefined state', () => {
-      expect(convert({})(undefined as unknown as GameStatePlaying)).toBeUndefined()
+      expect(convert({})(undefined)).toBeUndefined()
     })
     it('accepts a noop', () => {
       const s3 = convert({})(s2)
