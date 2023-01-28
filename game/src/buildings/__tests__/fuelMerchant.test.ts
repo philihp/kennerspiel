@@ -1,4 +1,4 @@
-import { reducer, initialState } from '../../reducer'
+import { initialState } from '../../reducer'
 import {
   GameStatePlaying,
   GameStatusEnum,
