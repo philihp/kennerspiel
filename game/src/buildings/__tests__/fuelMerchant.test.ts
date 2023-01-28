@@ -96,7 +96,28 @@ describe('buildings/fuelMerchant', () => {
         nickel: 1,
       })
     })
-    it('burns 6 energy', () => {
+    it('will not automatically upchange to nickels', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            peat: 5,
+            wood: 2,
+            penny: 3,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const s2 = fuelMerchant('PtPtPt')(s1)!
+      expect(s2.players[0]).toMatchObject({
+        peat: 2,
+        wood: 2,
+        penny: 6,
+        nickel: 1,
+      })
+    })
+    it('burns 9 energy', () => {
       const s1 = {
         ...s0,
         players: [
@@ -108,12 +129,12 @@ describe('buildings/fuelMerchant', () => {
           ...s0.players.slice(1),
         ],
       }
-      const s2 = fuelMerchant('PtPtPt')(s1)!
+      const s2 = fuelMerchant('PtPtPtWoPt')(s1)!
       expect(s2.players[0]).toMatchObject({
-        peat: 2,
-        wood: 2,
-        penny: 3,
-        nickel: 1,
+        peat: 1,
+        wood: 1,
+        penny: 0,
+        nickel: 2,
       })
     })
   })
