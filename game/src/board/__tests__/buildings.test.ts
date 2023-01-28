@@ -6,6 +6,30 @@ describe('build/buildings', () => {
     it('has appropriate building materials for Priory', () => {
       expect(costForBuilding(BuildingEnum.Priory)).toStrictEqual({ clay: 1, wood: 1 })
     })
+    it('has appropriate building materials for Cloister Courtyard', () => {
+      expect(costForBuilding(BuildingEnum.CloisterCourtyard)).toStrictEqual({ wood: 2 })
+    })
+    it('has appropriate building materials for Grain Storage', () => {
+      expect(costForBuilding(BuildingEnum.GrainStorage)).toStrictEqual({ wood: 1, straw: 1 })
+    })
+    it('has appropriate building materials for Windmill', () => {
+      expect(costForBuilding(BuildingEnum.Windmill)).toStrictEqual({ wood: 3, clay: 2 })
+    })
+    it('has appropriate building materials for Bakery', () => {
+      expect(costForBuilding(BuildingEnum.Bakery)).toStrictEqual({ clay: 2, straw: 1 })
+    })
+    it('has appropriate building materials for Fuel Merchant', () => {
+      expect(costForBuilding(BuildingEnum.FuelMerchant)).toStrictEqual({ clay: 1, straw: 1 })
+    })
+    it('has appropriate building materials for Peat Coal Kiln', () => {
+      expect(costForBuilding(BuildingEnum.PeatCoalKiln)).toStrictEqual({ clay: 1 })
+    })
+    it('has appropriate building materials for Market', () => {
+      expect(costForBuilding(BuildingEnum.Market)).toStrictEqual({ stone: 2 })
+    })
+    it('has appropriate building materials for Cloister Garden', () => {
+      expect(costForBuilding(BuildingEnum.CloisterGarden)).toStrictEqual({ penny: 3 })
+    })
   })
   describe('roundBuildings', () => {
     it('returns a list of buildings given a round', () => {
