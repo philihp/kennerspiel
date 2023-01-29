@@ -15,7 +15,7 @@ export const buildersMarket = (param = '') => {
       //
       checkWorthTwoCoins(inputs),
       payCost(inputs),
-      getCost({ wood: 1, clay: 1, stone: 1, straw: 1 })
+      getCost({ wood: 2, clay: 2, stone: 1, straw: 1 })
     )
   )
 }
