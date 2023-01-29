@@ -1,15 +1,42 @@
 import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
+import { withActivePlayer } from '../board/player'
+import { take } from '../board/wheel'
+import { GameStatePlaying, ResourceEnum } from '../types'
 
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
+const advanceGrapeOnRondel =
+  (withJoker: boolean) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+    state && {
+      ...state,
+      rondel: {
+        ...state.rondel,
+        joker: withJoker ? state.rondel.pointingBefore : state.rondel.joker,
+        grape: !withJoker ? state.rondel.pointingBefore : state.rondel.grape,
+      },
+    }
 
-export const grapevine = (param = '') =>
-  pipe(
+const takePlayerGrape =
+  (withJoker: boolean) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined) return undefined
+    const {
+      config,
+      rondel: { joker, grape, pointingBefore },
+    } = state
+    return withActivePlayer(
+      (player) =>
+        player && {
+          ...player,
+          grape: player.grape + take(pointingBefore, (withJoker ? joker : grape) ?? pointingBefore, config),
+        }
+    )(state)
+  }
+
+export const grapevine = (param = '') => {
+  const withJoker = param.includes(ResourceEnum.Joker)
+  return pipe(
     //
-    buildingStub,
-    buildingStub,
-    buildingStub
+    takePlayerGrape(withJoker),
+    advanceGrapeOnRondel(withJoker)
   )
+}

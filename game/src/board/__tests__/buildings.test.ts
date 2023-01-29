@@ -42,6 +42,9 @@ describe('build/buildings', () => {
     it("has appropriate building materials for Builders' Market", () => {
       expect(costForBuilding(BuildingEnum.BuildersMarket)).toStrictEqual({ clay: 2 })
     })
+    it('has appropriate building materials for Grapevine', () => {
+      expect(costForBuilding(BuildingEnum.GrapevineA)).toStrictEqual({ wood: 1 })
+    })
   })
   describe('roundBuildings', () => {
     it('returns a list of buildings given a round', () => {
