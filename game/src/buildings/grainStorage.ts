@@ -1,6 +1,6 @@
 import { pipe } from 'ramda'
 import { subtractCoins, withActivePlayer } from '../board/player'
-import { GameStatePlaying, Tableau } from '../types'
+import { Tableau } from '../types'
 
 const checkPlayerHasPenny = (player: Tableau | undefined): Tableau | undefined => {
   if (player === undefined) return undefined
@@ -20,7 +20,7 @@ export const grainStorage = (param = '') => {
     pipe(
       //
       checkPlayerHasPenny,
-      (player) => player && subtractCoins(1)(player),
+      subtractCoins(1),
       addSixGrain
     )
   )

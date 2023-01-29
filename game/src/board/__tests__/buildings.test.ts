@@ -30,6 +30,36 @@ describe('build/buildings', () => {
     it('has appropriate building materials for Cloister Garden', () => {
       expect(costForBuilding(BuildingEnum.CloisterGarden)).toStrictEqual({ penny: 3 })
     })
+    it('has appropriate building materials for Carpentry', () => {
+      expect(costForBuilding(BuildingEnum.Carpentry)).toStrictEqual({ wood: 2, clay: 1 })
+    })
+    it('has appropriate building materials for Harbor Promenade', () => {
+      expect(costForBuilding(BuildingEnum.HarborPromenade)).toStrictEqual({ wood: 1, stone: 1 })
+    })
+    it('has appropriate building materials for Stone Merchant', () => {
+      expect(costForBuilding(BuildingEnum.StoneMerchant)).toStrictEqual({ wood: 1 })
+    })
+    it("has appropriate building materials for Builders' Market", () => {
+      expect(costForBuilding(BuildingEnum.BuildersMarket)).toStrictEqual({ clay: 2 })
+    })
+    it('has appropriate building materials for Grapevine', () => {
+      expect(costForBuilding(BuildingEnum.GrapevineA)).toStrictEqual({ wood: 1 })
+    })
+    it('has appropriate building materials for Financed Estate', () => {
+      expect(costForBuilding(BuildingEnum.FinancedEstate)).toStrictEqual({ clay: 1, stone: 1 })
+    })
+    it('has appropriate building materials for Cloister Chapter House', () => {
+      expect(costForBuilding(BuildingEnum.CloisterChapterHouse)).toStrictEqual({ clay: 3, straw: 1 })
+    })
+    it('has appropriate building materials for Cloister Library', () => {
+      expect(costForBuilding(BuildingEnum.CloisterLibrary)).toStrictEqual({ straw: 1, stone: 2 })
+    })
+    it('has appropriate building materials for Cloister Workshop', () => {
+      expect(costForBuilding(BuildingEnum.CloisterWorkshop)).toStrictEqual({ wood: 3 })
+    })
+    it('has appropriate building materials for Slaughterhouse', () => {
+      expect(costForBuilding(BuildingEnum.Slaughterhouse)).toStrictEqual({ wood: 2, clay: 2 })
+    })
   })
   describe('roundBuildings', () => {
     it('returns a list of buildings given a round', () => {

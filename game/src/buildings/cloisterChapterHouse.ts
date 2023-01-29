@@ -1,15 +1,4 @@
-import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
-
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
+import { getCost, withActivePlayer } from '../board/player'
 
 export const cloisterChapterHouse = () =>
-  pipe(
-    //
-    buildingStub,
-    buildingStub,
-    buildingStub
-  )
+  withActivePlayer(getCost({ clay: 1, wood: 1, peat: 1, sheep: 1, grain: 1, penny: 1 }))

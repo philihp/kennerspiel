@@ -1,15 +1,21 @@
 import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
+import { getCost, payCost, withActivePlayer } from '../board/player'
+import { costMoney, parseResourceParam } from '../board/resource'
+import { Cost, Tableau } from '../types'
 
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
+const checkWorthOneCoin =
+  (input: Cost) =>
+  (player: Tableau | undefined): Tableau | undefined =>
+    costMoney(input) >= 1 ? player : undefined
 
-export const financedEstate = (param = '') =>
-  pipe(
-    //
-    buildingStub,
-    buildingStub,
-    buildingStub
+export const financedEstate = (param = '') => {
+  const inputs = parseResourceParam(param)
+  return withActivePlayer(
+    pipe(
+      //
+      checkWorthOneCoin(inputs),
+      payCost(inputs),
+      getCost({ book: 1, bread: 1, grape: 2, flour: 2 })
+    )
   )
+}
