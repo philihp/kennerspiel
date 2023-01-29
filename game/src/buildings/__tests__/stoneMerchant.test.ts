@@ -1,46 +1,129 @@
-import { reducer, initialState } from '../../reducer'
-import { GameStatePlaying } from '../../types'
+import { initialState } from '../../reducer'
+import {
+  GameStatePlaying,
+  GameStatusEnum,
+  NextUseClergy,
+  PlayerColor,
+  SettlementRound,
+  Tableau,
+  Tile,
+} from '../../types'
 import { stoneMerchant } from '../stoneMerchant'
 
 describe('buildings/stoneMerchant', () => {
-  describe('use', () => {
-    it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
-      const s1 = stoneMerchant()(s0)
-      expect(s1).toBeUndefined()
-    })
+  describe('stoneMerchant', () => {
+    const p0: Tableau = {
+      color: PlayerColor.Blue,
+      clergy: [],
+      settlements: [],
+      landscape: [
+        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      ] as Tile[][],
+      landscapeOffset: 0,
+      peat: 10,
+      penny: 10,
+      clay: 10,
+      wood: 10,
+      grain: 10,
+      sheep: 10,
+      stone: 10,
+      flour: 10,
+      grape: 10,
+      nickel: 10,
+      hops: 10,
+      coal: 10,
+      book: 10,
+      pottery: 10,
+      whiskey: 10,
+      straw: 10,
+      meat: 10,
+      ornament: 10,
+      bread: 10,
+      wine: 10,
+      beer: 10,
+      reliquary: 10,
+    }
+    const s0: GameStatePlaying = {
+      ...initialState,
+      status: GameStatusEnum.PLAYING,
+      activePlayerIndex: 0,
+      config: {
+        country: 'france',
+        players: 3,
+        length: 'long',
+      },
+      rondel: {
+        pointingBefore: 0,
+      },
+      players: [{ ...p0 }, { ...p0 }, { ...p0 }],
+      settling: false,
+      extraRound: false,
+      moveInRound: 1,
+      round: 1,
+      startingPlayer: 1,
+      settlementRound: SettlementRound.S,
+      buildings: [],
+      nextUse: NextUseClergy.Any,
+      canBuyLandscape: true,
+      plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+      districtPurchasePrices: [],
+      neutralBuildingPhase: false,
+    }
+
     it('goes through a happy path', () => {
-      const s0 = initialState
-      const s1 = reducer(s0, ['CONFIG', '1', 'france', 'short'])!
-      const s2 = reducer(s1, ['START', '42', 'R'])! as GameStatePlaying
-      const s3 = {
-        ...s2,
-        players: [
-          {
-            ...s2?.players[0],
-            wood: 1,
-            peat: 2,
-            bread: 3,
-          },
-          s2?.players.slice(1),
-        ],
-      } as GameStatePlaying
-      const s4 = reducer(s3, ['BUILD', 'G12', '3', '1'])! as GameStatePlaying
-      expect(s4.players[0]).toMatchObject({
-        wood: 0,
-        peat: 2,
-        bread: 3,
+      const s1 = stoneMerchant('ShShCo')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        sheep: 8,
+        coal: 9,
+        stone: 12,
       })
-      expect(s4).toMatchObject({
-        usableBuildings: ['G12'],
+    })
+
+    it('does not give energy change', () => {
+      const s1 = stoneMerchant('ShCo')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        wood: 10,
+        sheep: 9,
+        coal: 9,
+        stone: 11,
       })
-      const s5 = reducer(s4, ['USE', 'G12', 'PtPtBrBrBr'])! as GameStatePlaying
-      expect(s5.players[0]).toMatchObject({
-        peat: 0,
-        bread: 0,
-        stone: 4,
+    })
+    it('does not give food change', () => {
+      const s1 = stoneMerchant('GnCo')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        wood: 10,
+        grain: 9,
+        coal: 9,
+        stone: 10, // not even 2 food, gives you zero stone
       })
-      expect(s5).toMatchObject({})
+    })
+
+    it('can be used up to 5 times', () => {
+      const s1 = stoneMerchant('ShShShShShWoWoWoWoWo')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        sheep: 5,
+        wood: 5,
+        stone: 15,
+      })
+    })
+
+    it('max output is 5, but still consumes everything', () => {
+      const s1 = stoneMerchant('ShShShShShShShWoWoWoWoWoWoWo')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        sheep: 3,
+        wood: 3,
+        stone: 15,
+      })
+    })
+
+    it('does not consume what it doesnt have', () => {
+      const s1 = {
+        ...s0,
+        players: [{ ...s0.players[0], sheep: 0, wood: 0, stone: 0 }, ...s0.players.slice(1)],
+      }
+      const s2 = stoneMerchant('ShWo')(s1)! as GameStatePlaying
+      expect(s2).toBeUndefined()
     })
   })
 })
