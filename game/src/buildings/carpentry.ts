@@ -1,24 +1,36 @@
 import { pipe } from 'ramda'
 import { withActivePlayer } from '../board/player'
-import { BuildingEnum } from '../types'
+import { BuildingEnum, GameStatePlaying } from '../types'
+
+const checkSpotIsForest = (row: number, col: number) =>
+  withActivePlayer((player) => {
+    if (player.landscape[row][col + 2][1] !== BuildingEnum.Forest) return undefined
+    return player
+  })
 
 const removeForestAt = (row: number, col: number) =>
-  withActivePlayer((player) => {
-    if (player === undefined) return undefined
-    const [land, building] = player.landscape[row][col + 2]
-    if (building !== BuildingEnum.Forest) return undefined
-    return {
-      ...player,
-      landscape: [
-        ...player.landscape.slice(0, row),
-        [...player.landscape[row].slice(0, col + 2), [land], ...player.landscape[row].slice(col + 2 + 1)],
-        ...player.landscape.slice(row + 1),
-      ],
-    }
-  })
+  withActivePlayer(
+    (player) =>
+      player && {
+        ...player,
+        landscape: [
+          ...player.landscape.slice(0, row),
+          [
+            ...player.landscape[row].slice(0, col + 2),
+            [player.landscape[row][col + 2][0]],
+            ...player.landscape[row].slice(col + 2 + 1),
+          ],
+          ...player.landscape.slice(row + 1),
+        ],
+      }
+  )
+
+const allowBuildAction = (state: GameStatePlaying | undefined) => state
 
 export const carpentry = (row: number, col: number) =>
   pipe(
     //
-    removeForestAt(row, col)
+    checkSpotIsForest(row, col),
+    removeForestAt(row, col),
+    allowBuildAction
   )
