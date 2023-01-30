@@ -87,6 +87,9 @@ describe('build/buildings', () => {
     it('has appropriate building materials for Shipyard', () => {
       expect(costForBuilding(BuildingEnum.Shipyard)).toStrictEqual({ clay: 4, stone: 1 })
     })
+    it('has appropriate building materials for Estate', () => {
+      expect(costForBuilding(BuildingEnum.Estate)).toStrictEqual({ wood: 2, stone: 2 })
+    })
   })
   describe('roundBuildings', () => {
     it('returns a list of buildings given a round', () => {
