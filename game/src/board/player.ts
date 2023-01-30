@@ -106,5 +106,7 @@ export const subtractCoins =
       p.whiskey -= 1
     }
 
+    if (p.penny < 0 || p.nickel < 0 || p.wine < 0 || p.whiskey < 0) return undefined
+
     return p
   }
