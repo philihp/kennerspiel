@@ -1,57 +1,89 @@
-import { reducer, initialState } from '../../reducer'
-import { BuildingEnum, GameStatePlaying } from '../../types'
+import { initialState } from '../../reducer'
+import {
+  BuildingEnum,
+  GameStatePlaying,
+  GameStatusEnum,
+  NextUseClergy,
+  PlayerColor,
+  SettlementRound,
+  Tableau,
+  Tile,
+} from '../../types'
 import { hospice } from '../hospice'
 
 describe('buildings/hospice', () => {
   describe('hospice', () => {
+    const p0: Tableau = {
+      color: PlayerColor.Blue,
+      clergy: [],
+      settlements: [],
+      landscape: [
+        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      ] as Tile[][],
+      landscapeOffset: 0,
+      peat: 0,
+      penny: 0,
+      clay: 0,
+      wood: 0,
+      grain: 0,
+      sheep: 0,
+      stone: 0,
+      flour: 0,
+      grape: 0,
+      nickel: 0,
+      hops: 0,
+      coal: 10,
+      book: 0,
+      pottery: 3,
+      whiskey: 0,
+      straw: 0,
+      meat: 10,
+      ornament: 0,
+      bread: 0,
+      wine: 0,
+      beer: 0,
+      reliquary: 0,
+    }
+    const s0: GameStatePlaying = {
+      ...initialState,
+      status: GameStatusEnum.PLAYING,
+      activePlayerIndex: 0,
+      config: {
+        country: 'france',
+        players: 3,
+        length: 'long',
+      },
+      rondel: {
+        pointingBefore: 3,
+        grape: 1,
+        joker: 2,
+      },
+      players: [{ ...p0 }, { ...p0 }, { ...p0 }],
+      settling: false,
+      extraRound: false,
+      moveInRound: 1,
+      round: 1,
+      startingPlayer: 1,
+      settlementRound: SettlementRound.C,
+      buildings: ['F27', 'G28', 'F29', 'F30'] as BuildingEnum[],
+      nextUse: NextUseClergy.Any,
+      canBuyLandscape: true,
+      plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+      districtPurchasePrices: [],
+      neutralBuildingPhase: false,
+    }
+
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
-      const s1 = hospice()(s0)
+      const s1 = hospice()(undefined)!
       expect(s1).toBeUndefined()
     })
-    it('baseline happy path to build', () => {
-      const s0 = initialState
-      const s1 = reducer(s0, ['CONFIG', '4', 'france', 'long'])!
-      const s2 = reducer(s1, ['START', '42', 'R', 'B', 'G', 'W'])! as GameStatePlaying
-      const s3 = {
-        ...s2,
-        buildings: [BuildingEnum.HarborPromenade, BuildingEnum.Hospice],
-        players: [
-          {
-            ...s2.players[0],
-            wood: 3,
-            straw: 1,
-            penny: 0,
-            wine: 0,
-            pottery: 0,
-          },
-          ...s2.players.slice(1),
-        ],
-      }
-      const s4 = reducer(s3, ['BUILD', 'F40', '3', '1'])! as GameStatePlaying
-      expect(s4.players[0].landscape[1][5]).toStrictEqual(['P', 'F40'])
-      expect(s4.players[0]).toMatchObject({
-        wood: 0,
-        straw: 0,
-      })
-      expect(s4).toMatchObject({
-        usableBuildings: ['F40'],
-        nextUse: 'only-prior',
-      })
-      const s5 = reducer(s4, ['USE', 'F40'])! as GameStatePlaying
-      expect(s5).toMatchObject({
-        usableBuildings: ['F11'],
+
+    it('adds usable buildings and makes next use free', () => {
+      const s1 = hospice()(s0)!
+      expect(s1).toMatchObject({
         nextUse: 'free',
-      })
-      const s6 = reducer(s5, ['USE', 'F11'])! as GameStatePlaying
-      expect(s6).toMatchObject({
-        nextUse: 'none',
-      })
-      expect(s6.players[0]).toMatchObject({
-        wood: 1,
-        wine: 1,
-        penny: 1,
-        pottery: 1,
+        usableBuildings: ['F27', 'G28', 'F29', 'F30'],
       })
     })
   })
