@@ -8,11 +8,10 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { grapevine } from '../grapevine'
 import { townEstate } from '../townEstate'
 
-describe('buildings/grapevine', () => {
-  describe('grapevine', () => {
+describe('buildings/townEstate', () => {
+  describe('townEstate', () => {
     const p0: Tableau = {
       color: PlayerColor.Blue,
       clergy: [],
