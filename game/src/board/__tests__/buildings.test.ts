@@ -99,6 +99,9 @@ describe('build/buildings', () => {
     it('has appropriate building materials for Hospice', () => {
       expect(costForBuilding(BuildingEnum.Hospice)).toStrictEqual({ wood: 3, straw: 1 })
     })
+    it('has appropriate building materials for House of the Brotherhood', () => {
+      expect(costForBuilding(BuildingEnum.HouseOfTheBrotherhood)).toStrictEqual({ clay: 1, stone: 1 })
+    })
   })
   describe('roundBuildings', () => {
     it('returns a list of buildings given a round', () => {
