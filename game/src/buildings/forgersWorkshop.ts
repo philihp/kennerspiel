@@ -1,15 +1,16 @@
 import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
+import { getCost, payCost, withActivePlayer } from '../board/player'
+import { costMoney, parseResourceParam } from '../board/resource'
 
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
-
-export const forgersWorkshop = (param = '') =>
-  pipe(
-    //
-    buildingStub,
-    buildingStub,
-    buildingStub
+export const forgersWorkshop = (param = '') => {
+  const input = parseResourceParam(param)
+  const coins = costMoney(input)
+  return withActivePlayer(
+    pipe(
+      //
+      payCost(input),
+      getCost({ reliquary: coins >= 5 ? 1 : 0 }),
+      getCost({ reliquary: Math.floor((coins - 5) / 10) })
+    )
   )
+}
