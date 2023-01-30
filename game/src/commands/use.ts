@@ -202,10 +202,10 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.QuarryB, [P._]], [BuildingEnum.QuarryB, []], ([_, params]) => quarry(params[0]))
       .with([BuildingEnum.Sacristy, []], sacristy)
       .with([BuildingEnum.ShippingCompany, [P._, P._]], ([_, params]) => shippingCompany(params[0], params[1]))
-      .with([BuildingEnum.Shipyard, []], shipyard)
+      .with([BuildingEnum.Shipyard, [P._]], ([_, params]) => shipyard(params[0]))
       .with([BuildingEnum.Slaughterhouse, [P._]], ([_, params]) => slaughterhouse(params[0]))
       .with([BuildingEnum.StoneMerchant, [P._]], ([_, params]) => stoneMerchant(params[0]))
-      .with([BuildingEnum.TownEstate, []], townEstate)
+      .with([BuildingEnum.TownEstate, [P._]], ([_, params]) => townEstate(params[0]))
       .with([BuildingEnum.Windmill, [P._]], ([_, params]) => windmill(params[0]))
       .with([BuildingEnum.Winery, [P._, P._]], ([_, params]) => winery(params[0], params[1]))
       .otherwise(() => () => {
