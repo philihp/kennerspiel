@@ -93,6 +93,9 @@ describe('build/buildings', () => {
     it("has appropriate building materials for Forgers' Workshop", () => {
       expect(costForBuilding(BuildingEnum.ForgersWorkshop)).toStrictEqual({ clay: 2, straw: 1 })
     })
+    it('has appropriate building materials for PilgrimageSite', () => {
+      expect(costForBuilding(BuildingEnum.PilgrimageSite)).toStrictEqual({ penny: 6 })
+    })
   })
   describe('roundBuildings', () => {
     it('returns a list of buildings given a round', () => {

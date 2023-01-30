@@ -31,7 +31,7 @@ import { inn } from '../buildings/inn'
 import { market } from '../buildings/market'
 import { palace } from '../buildings/palace'
 import { peatCoalKiln } from '../buildings/peatCoalKiln'
-import { pilgrimmageSite } from '../buildings/pilgrimageSite'
+import { pilgrimageSite } from '../buildings/pilgrimageSite'
 import { printingOffice } from '../buildings/printingOffice'
 import { priory } from '../buildings/priory'
 import { quarry } from '../buildings/quarry'
@@ -188,7 +188,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.PeatCoalKiln, []], [BuildingEnum.PeatCoalKiln, [P._]], ([_, params]) =>
         peatCoalKiln(params[0])
       )
-      .with([BuildingEnum.PilgrimageSite, [P._]], ([_, params]) => pilgrimmageSite(params[0]))
+      .with([BuildingEnum.PilgrimageSite, [P._]], ([_, params]) => pilgrimageSite(params[0]))
       .with(
         [BuildingEnum.PrintingOffice, []],
         [BuildingEnum.PrintingOffice, [P._, P._]],
