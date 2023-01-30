@@ -33,7 +33,7 @@ export const costForBuilding = (building: BuildingEnum): Cost =>
     .with(BuildingEnum.Slaughterhouse, () => ({ wood: 2, clay: 2 }))
     .with(BuildingEnum.CloisterChapterHouse, () => ({ clay: 3, straw: 1 }))
     .with(BuildingEnum.FinancedEstate, () => ({ clay: 1, stone: 1 }))
-    .with(BuildingEnum.CloisterChurch, () => ({ clay: 5, stone: 5 }))
+    .with(BuildingEnum.CloisterChurch, () => ({ clay: 5, stone: 3 }))
     .with(BuildingEnum.QuarryA, () => ({ penny: 5 }))
     .with(BuildingEnum.Shipyard, () => ({ clay: 4, stone: 1 }))
     .with(BuildingEnum.Winery, () => ({ clay: 2, straw: 2 }))
