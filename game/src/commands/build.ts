@@ -2,6 +2,7 @@ import { pipe } from 'ramda'
 import { costForBuilding, isCloisterBuilding, terrainForBuilding } from '../board/buildings'
 import { getPlayer, setPlayer, withActivePlayer } from '../board/player'
 import { canAfford } from '../board/resource'
+import { checkMainActionNotUsed, consumeMainAction } from '../board/state'
 import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, NextUseClergy, Tableau, Tile } from '../types'
 
 const checkBuildingUnbuilt =
@@ -98,6 +99,8 @@ export const allowPriorToUse =
 
 export const build = ({ row, col, building }: GameCommandBuildParams) =>
   pipe(
+    checkMainActionNotUsed,
+    consumeMainAction,
     checkBuildingUnbuilt(building),
     checkLandscapeFree(row, col),
     checkLandTypeMatches(row, col, building),

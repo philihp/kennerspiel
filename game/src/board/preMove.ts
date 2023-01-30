@@ -60,6 +60,9 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): Ga
     // once per turn, a player can buy a landscape
     newState.canBuyLandscape = true
 
+    newState.bonusActions = []
+    newState.mainActionUsed = false
+
     const preRoundState = preRound(state.config)(newState)
     if (preRoundState === undefined) return undefined
     newState = preRoundState

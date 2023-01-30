@@ -71,6 +71,8 @@ describe('buildings/cloisterLibrary', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('goes through a happy path', () => {

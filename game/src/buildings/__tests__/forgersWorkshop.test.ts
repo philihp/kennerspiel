@@ -73,6 +73,8 @@ describe('buildings/forgersWorkshop', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('can do both things', () => {

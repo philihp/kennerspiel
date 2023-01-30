@@ -73,6 +73,8 @@ describe('buildings/townEstate', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('can convert pottery', () => {

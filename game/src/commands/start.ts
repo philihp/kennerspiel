@@ -104,6 +104,8 @@ export const start = (
     usableBuildings: undefined,
     nextUse: NextUseClergy.Any,
     canBuyLandscape: true,
+    bonusActions: [],
+    mainActionUsed: false,
   }
 
   return pipe(

@@ -143,6 +143,8 @@ describe('buildings/houseOfTheBrotherhood', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('retains undefined state', () => {
@@ -268,6 +270,8 @@ describe('buildings/houseOfTheBrotherhood', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('3 cloisters gets 4.5 points, so you can get 2 books', () => {
@@ -345,6 +349,8 @@ describe('buildings/houseOfTheBrotherhood', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('gets 1 point per cloister, so 2 can be requested', () => {

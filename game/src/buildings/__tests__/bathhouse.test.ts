@@ -74,6 +74,8 @@ describe('buildings/bathhouse', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('follows happy path', () => {

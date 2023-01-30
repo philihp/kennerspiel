@@ -73,6 +73,8 @@ describe('buildings/shipyard', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('turns two wood into 1 ornament and 1 nickel', () => {

@@ -397,6 +397,8 @@ export type GameStatePlaying = {
   canBuyLandscape: boolean
   plotPurchasePrices: number[]
   districtPurchasePrices: number[]
+  mainActionUsed: boolean
+  bonusActions: GameCommandEnum[]
 }
 export type GameState = GameStateSetup | GameStatePlaying
 

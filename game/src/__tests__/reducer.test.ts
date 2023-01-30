@@ -62,6 +62,8 @@ describe('reducer', () => {
       plotPurchasePrices: [1],
       districtPurchasePrices: [1],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('exposes an initial state', () => {

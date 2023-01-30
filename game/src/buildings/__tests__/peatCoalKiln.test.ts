@@ -71,6 +71,8 @@ describe('buildings/peatCoalKiln', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('retains undefined state', () => {

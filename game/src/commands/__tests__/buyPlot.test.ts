@@ -70,6 +70,8 @@ describe('commands/buyPlot', () => {
     plotPurchasePrices: [1, 1, 1, 1, 1, 1],
     districtPurchasePrices: [],
     neutralBuildingPhase: false,
+    mainActionUsed: false,
+    bonusActions: [],
   }
 
   describe('buyPlot', () => {
