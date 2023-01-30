@@ -42,7 +42,7 @@ describe('build/buildings', () => {
     it("has appropriate building materials for Builders' Market", () => {
       expect(costForBuilding(BuildingEnum.BuildersMarket)).toStrictEqual({ clay: 2 })
     })
-    it('has appropriate building materials for Grapevine', () => {
+    it('has appropriate building materials for Grapevine A', () => {
       expect(costForBuilding(BuildingEnum.GrapevineA)).toStrictEqual({ wood: 1 })
     })
     it('has appropriate building materials for Financed Estate', () => {
@@ -71,6 +71,9 @@ describe('build/buildings', () => {
     })
     it('has appropriate building materials for Winery', () => {
       expect(costForBuilding(BuildingEnum.Winery)).toStrictEqual({ clay: 2, straw: 2 })
+    })
+    it('has appropriate building materials for Grapevine B', () => {
+      expect(costForBuilding(BuildingEnum.GrapevineB)).toStrictEqual({ wood: 1 })
     })
     it('has appropriate building materials for Town Estate', () => {
       expect(costForBuilding(BuildingEnum.TownEstate)).toStrictEqual({ stone: 2, straw: 2 })
