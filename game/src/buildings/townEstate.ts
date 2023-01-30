@@ -1,15 +1,16 @@
 import { pipe } from 'ramda'
+import { getCost, payCost, withActivePlayer } from '../board/player'
+import { parseResourceParam } from '../board/resource'
 import { GameStatePlaying } from '../types'
 
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
-
-export const townEstate = () =>
-  pipe(
-    //
-    buildingStub,
-    buildingStub,
-    buildingStub
+export const townEstate = (param = '') => {
+  const { pottery = 0 } = parseResourceParam(param)
+  if (pottery === 0) return (state: GameStatePlaying | undefined) => state
+  return withActivePlayer(
+    pipe(
+      //
+      payCost({ pottery }),
+      getCost({ nickel: 2, penny: 2 })
+    )
   )
+}
