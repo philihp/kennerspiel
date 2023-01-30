@@ -1,15 +1,15 @@
 import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
+import { getCost, payCost, withActivePlayer } from '../board/player'
+import { costEnergy, costFood, parseResourceParam } from '../board/resource'
 
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
-
-export const estate = (param = '') =>
-  pipe(
-    //
-    buildingStub,
-    buildingStub,
-    buildingStub
+export const estate = (param = '') => {
+  const input = parseResourceParam(param)
+  const iterations = Math.min(Math.floor(costEnergy(input) / 6) + Math.floor(costFood(input) / 10), 2)
+  return withActivePlayer(
+    pipe(
+      //
+      payCost(input),
+      getCost({ book: iterations, ornament: iterations })
+    )
   )
+}
