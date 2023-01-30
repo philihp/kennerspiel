@@ -84,7 +84,7 @@ export const costFood = ({
   grain = 0,
   sheep = 0,
   flour = 0,
-  grapes = 0,
+  grape = 0,
   nickel = 0,
   hops = 0,
   whiskey = 0,
@@ -96,12 +96,15 @@ export const costFood = ({
   grain +
   2 * sheep +
   flour +
-  grapes +
+  grape +
   hops +
   5 * meat +
   3 * bread +
   5 * beer +
   costMoney({ penny, nickel, wine, whiskey })
+
+export const costPoints = ({ nickel = 0, whiskey = 0, pottery = 0, book = 0, reliquary = 0, ornament = 0, wine = 0 }) =>
+  2 * nickel + 1 * whiskey + 3 * pottery + 2 * book + 8 * reliquary + 4 * ornament + 1 * wine
 
 export const canAfford =
   (cost: Cost) =>
