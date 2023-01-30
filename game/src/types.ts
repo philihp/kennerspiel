@@ -315,6 +315,7 @@ export type Tableau = {
   settlements: SettlementEnum[]
   landscape: Tile[][]
   landscapeOffset: number
+  wonders: number
   peat: number
   penny: number
   clay: number
@@ -380,6 +381,7 @@ export type GameStatePlaying = {
   activePlayerIndex: number
   config: GameCommandConfigParams
   rondel: Rondel
+  wonders: number
   players: Tableau[]
   neutralPlayer?: Tableau
   neutralBuildingPhase: boolean

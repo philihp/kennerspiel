@@ -20,6 +20,7 @@ describe('buildings/cloisterLibrary', () => {
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 0,
       peat: 0,
       penny: 10,
@@ -56,6 +57,7 @@ describe('buildings/cloisterLibrary', () => {
       rondel: {
         pointingBefore: 0,
       },
+      wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
       settling: false,
       extraRound: false,
