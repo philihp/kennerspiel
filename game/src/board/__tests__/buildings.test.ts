@@ -66,11 +66,17 @@ describe('build/buildings', () => {
     it('has appropriate building materials for Cloister Church', () => {
       expect(costForBuilding(BuildingEnum.CloisterChurch)).toStrictEqual({ clay: 5, stone: 3 })
     })
-    it('has appropriate building materials for Quarry', () => {
+    it('has appropriate building materials for Quarry A', () => {
       expect(costForBuilding(BuildingEnum.QuarryA)).toStrictEqual({ penny: 5 })
     })
     it('has appropriate building materials for Winery', () => {
       expect(costForBuilding(BuildingEnum.Winery)).toStrictEqual({ clay: 2, straw: 2 })
+    })
+    it('has appropriate building materials for Palace', () => {
+      expect(costForBuilding(BuildingEnum.Palace)).toStrictEqual({ penny: 25 })
+    })
+    it('has appropriate building materials for Quarry B', () => {
+      expect(costForBuilding(BuildingEnum.QuarryB)).toStrictEqual({ penny: 5 })
     })
   })
   describe('roundBuildings', () => {
