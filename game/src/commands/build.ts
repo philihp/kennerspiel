@@ -2,6 +2,7 @@ import { pipe } from 'ramda'
 import { costForBuilding, isCloisterBuilding, terrainForBuilding } from '../board/buildings'
 import { getPlayer, setPlayer, withActivePlayer } from '../board/player'
 import { canAfford } from '../board/resource'
+import { consumeMainAction } from '../board/state'
 import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, NextUseClergy, Tableau, Tile } from '../types'
 
 const checkMainActionNotUsed = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
@@ -9,12 +10,6 @@ const checkMainActionNotUsed = (state: GameStatePlaying | undefined): GameStateP
   if (state.mainActionUsed) return undefined
   return state
 }
-
-export const consumeMainAction = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-  state && {
-    ...state,
-    mainActionUsed: true,
-  }
 
 const checkBuildingUnbuilt =
   (building: BuildingEnum) =>

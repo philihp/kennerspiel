@@ -1,6 +1,7 @@
 import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { getPlayer, isPrior, setPlayer } from '../board/player'
+import { consumeMainAction } from '../board/state'
 import { bakery } from '../buildings/bakery'
 import { bathhouse } from '../buildings/bathhouse'
 import { buildersMarket } from '../buildings/buildersMarket'
@@ -44,12 +45,6 @@ import { townEstate } from '../buildings/townEstate'
 import { windmill } from '../buildings/windmill'
 import { winery } from '../buildings/winery'
 import { BuildingEnum, GameStatePlaying, NextUseClergy, Tile } from '../types'
-
-const consumeMainAction = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-  state && {
-    ...state,
-    mainActionUsed: true,
-  }
 
 const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   // mainActionUsed

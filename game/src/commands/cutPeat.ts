@@ -1,7 +1,17 @@
 import { pipe } from 'ramda'
+import { match } from 'ts-pattern'
 import { getPlayer, setPlayerCurried } from '../board/player'
 import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum, Tableau } from '../types'
 import { take } from '../board/wheel'
+import { consumeMainAction } from '../board/state'
+
+const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
+  return match(state)
+    .with(undefined, () => undefined)
+    .with({ mainActionUsed: false }, () => state)
+    .with({ mainActionUsed: true }, () => undefined)
+    .exhaustive()
+}
 
 const removePeatAt =
   (row: number, col: number) =>
@@ -25,7 +35,7 @@ const removePeatAt =
     return setPlayerCurried(player)(state)
   }
 
-export const givePlayerPeat =
+const givePlayerPeat =
   (useJoker: boolean) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
@@ -35,7 +45,7 @@ export const givePlayerPeat =
     return setPlayerCurried({ ...player, peat: player.peat + amount })(state)
   }
 
-export const updatePeatRondel =
+const updatePeatRondel =
   (useJoker: boolean) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
     state && {
@@ -49,7 +59,9 @@ export const updatePeatRondel =
 
 export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams) =>
   pipe(
-    // crazy when point-free makes it distinctly cleaner
+    //
+    checkStateAllowsUse,
+    consumeMainAction,
     givePlayerPeat(useJoker),
     removePeatAt(row, col),
     updatePeatRondel(useJoker)
