@@ -1,7 +1,6 @@
 import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { getPlayer, isPrior, setPlayer } from '../board/player'
-import { checkMainActionNotUsed, consumeMainAction } from '../board/state'
 import { bakery } from '../buildings/bakery'
 import { bathhouse } from '../buildings/bathhouse'
 import { buildersMarket } from '../buildings/buildersMarket'
@@ -46,7 +45,13 @@ import { windmill } from '../buildings/windmill'
 import { winery } from '../buildings/winery'
 import { BuildingEnum, GameStatePlaying, NextUseClergy, Tile } from '../types'
 
-export const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
+const consumeMainAction = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+  state && {
+    ...state,
+    mainActionUsed: true,
+  }
+
+const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   // mainActionUsed
   // -> true, go for it
   // -> false, then nextUse
@@ -86,7 +91,7 @@ export const findBuilding = (landscape: Tile[][], building: BuildingEnum): { row
   return { row, col }
 }
 
-export const moveClergyToOwnBuilding =
+const moveClergyToOwnBuilding =
   (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
