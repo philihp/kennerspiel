@@ -34,8 +34,8 @@ const PColor = P.union(PlayerColor.Blue, PlayerColor.White, PlayerColor.Red, Pla
 const PPlot = P.union('MOUNTAIN', 'COAST')
 const PDistrict = P.union('HILLS', 'PLAINS')
 
-export const reducer: Reducer = (state, action) =>
-  match<string[], GameState | undefined>(action) // .
+export const reducer: Reducer = (state, action) => {
+  return match<string[], GameState | undefined>(action) // .
     .with(
       [GameCommandEnum.CONFIG, P.union('1', '2', '3', '4'), P.union('ireland', 'france'), P.union('short', 'long')],
       ([_, players, country, length]) =>
@@ -117,3 +117,4 @@ export const reducer: Reducer = (state, action) =>
     .otherwise((command) => {
       throw new Error(`Unable to parse [${command.join(',')}]`)
     })
+}
