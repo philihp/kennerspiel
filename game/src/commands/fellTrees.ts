@@ -15,22 +15,23 @@ const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
 
 const removeForestAt = (row: number, col: number) =>
   withActivePlayer((player) => {
-    const tile = player.landscape?.[row]?.[col + 2]
+    const tile = player.landscape?.[row + player.landscapeOffset]?.[col + 2]
     if (tile === undefined) return undefined
     const [land, building] = tile
     if (building !== BuildingEnum.Forest) return undefined
+    const landscape = [
+      ...player.landscape.slice(0, row + player.landscapeOffset),
+      [
+        ...player.landscape[row + player.landscapeOffset].slice(0, col + 2),
+        // the tile in question
+        [land] as Tile,
+        ...player.landscape[row + player.landscapeOffset].slice(col + 2 + 1),
+      ],
+      ...player.landscape.slice(row + player.landscapeOffset + 1),
+    ]
     return {
       ...player,
-      landscape: [
-        ...player.landscape.slice(0, row),
-        [
-          ...player.landscape[row].slice(0, col + 2),
-          // the tile in question
-          [land] as Tile,
-          ...player.landscape[row].slice(col + 2 + 1),
-        ],
-        ...player.landscape.slice(row + 1),
-      ],
+      landscape,
     }
   })
 
