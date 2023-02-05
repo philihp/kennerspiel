@@ -1,5 +1,5 @@
 import { pipe } from 'ramda'
-import { getCost, withActivePlayer, payCost, setPlayer } from '../board/player'
+import { getCost, withActivePlayer, payCost } from '../board/player'
 import { parseResourceParam, totalGoods, differentGoods } from '../board/resource'
 import { GameStatePlaying } from '../types'
 

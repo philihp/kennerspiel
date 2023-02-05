@@ -1,6 +1,7 @@
 import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { getPlayer, isPrior, setPlayer } from '../board/player'
+import { consumeMainAction } from '../board/state'
 import { bakery } from '../buildings/bakery'
 import { bathhouse } from '../buildings/bathhouse'
 import { buildersMarket } from '../buildings/buildersMarket'
@@ -45,6 +46,24 @@ import { windmill } from '../buildings/windmill'
 import { winery } from '../buildings/winery'
 import { BuildingEnum, GameStatePlaying, NextUseClergy, Tile } from '../types'
 
+const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
+  // mainActionUsed
+  // -> true, go for it
+  // -> false, then nextUse
+  //                -> Any: default, do not allow (but why wasn't this set to None?)
+  //                -> Free: free use allowed
+  //                -> OnlyPrior: free use allowed, but only with prior
+  //                -> None: do not allow
+  return match(state)
+    .with(undefined, () => undefined)
+    .with({ mainActionUsed: false }, () => state)
+    .with({ nextUse: NextUseClergy.Free }, () => state)
+    .with({ nextUse: NextUseClergy.OnlyPrior }, () => state)
+    .with({ nextUse: NextUseClergy.Any }, () => undefined)
+    .with({ nextUse: NextUseClergy.None }, () => undefined)
+    .exhaustive()
+}
+
 const checkBuildingUsable =
   (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
@@ -67,7 +86,7 @@ export const findBuilding = (landscape: Tile[][], building: BuildingEnum): { row
   return { row, col }
 }
 
-export const moveClergyToOwnBuilding =
+const moveClergyToOwnBuilding =
   (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
@@ -138,8 +157,10 @@ const BuildingCloisterOffice = P.union(
 
 export const use = (building: BuildingEnum, params: string[]) =>
   pipe(
+    checkStateAllowsUse,
     checkBuildingUsable(building),
     moveClergyToOwnBuilding(building),
+    consumeMainAction,
     clearUsableBuildings,
     clearNextUse,
     match<[BuildingEnum, string[]], (state: GameStatePlaying | undefined) => GameStatePlaying | undefined>([

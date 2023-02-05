@@ -22,6 +22,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G01'], ['P', 'LB3', 'LB2B'], [], []],
         [['W'], ['C', 'G26', 'LB1B'], [], [], [], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 0,
       peat: 0,
       penny: 0,
@@ -55,6 +56,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], ['H', 'F27'], ['.']],
         [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3', 'LB1R'], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 1,
       peat: 0,
       penny: 0,
@@ -88,6 +90,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LG1'], [], []],
         [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P'], ['P', 'LG3'], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 1,
       peat: 0,
       penny: 0,
@@ -126,6 +129,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         grape: 1,
         joker: 2,
       },
+      wonders: 0,
       players: [p0, p1, p2],
       settling: false,
       extraRound: false,
@@ -139,6 +143,8 @@ describe('buildings/houseOfTheBrotherhood', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('retains undefined state', () => {
@@ -177,6 +183,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G01'], ['P', 'LB3', 'LB2B'], [], []],
         [['W'], ['C', 'G26', 'LB1B'], [], [], [], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 0,
       peat: 0,
       penny: 0,
@@ -210,6 +217,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], ['H', 'F27'], ['.']],
         [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3', 'LB1R'], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 1,
       peat: 0,
       penny: 0,
@@ -248,6 +256,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         grape: 1,
         joker: 2,
       },
+      wonders: 0,
       players: [p0, p1],
       settling: false,
       extraRound: false,
@@ -261,6 +270,8 @@ describe('buildings/houseOfTheBrotherhood', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('3 cloisters gets 4.5 points, so you can get 2 books', () => {
@@ -285,6 +296,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G01'], ['P', 'LB3', 'LB2B'], [], []],
         [['W'], ['C', 'G26', 'LB1B'], [], [], [], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 0,
       peat: 0,
       penny: 0,
@@ -323,6 +335,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         grape: 1,
         joker: 2,
       },
+      wonders: 0,
       players: [p0],
       settling: false,
       extraRound: false,
@@ -336,6 +349,8 @@ describe('buildings/houseOfTheBrotherhood', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('gets 1 point per cloister, so 2 can be requested', () => {

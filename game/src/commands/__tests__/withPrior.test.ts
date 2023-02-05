@@ -1,5 +1,5 @@
 import { initialState, reducer } from '../../reducer'
-import { BuildingEnum, GameStatePlaying, GameStateSetup } from '../../types'
+import { GameStatePlaying } from '../../types'
 
 describe('commands/withPrior', () => {
   describe('withPrior', () => {

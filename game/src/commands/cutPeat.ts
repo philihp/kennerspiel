@@ -1,31 +1,41 @@
 import { pipe } from 'ramda'
-import { getPlayer, setPlayerCurried } from '../board/player'
+import { match } from 'ts-pattern'
+import { getPlayer, setPlayerCurried, withActivePlayer } from '../board/player'
 import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum, Tableau } from '../types'
 import { take } from '../board/wheel'
+import { consumeMainAction } from '../board/state'
 
-const removePeatAt =
-  (row: number, col: number) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return state
-    const player = { ...getPlayer(state) }
-    const tile = player.landscape?.[row]?.[col + 2]
+const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
+  return match(state)
+    .with(undefined, () => undefined)
+    .with({ mainActionUsed: false }, () => state)
+    .with({ mainActionUsed: true }, () => undefined)
+    .exhaustive()
+}
+
+const removePeatAt = (row: number, col: number) =>
+  withActivePlayer((player) => {
+    const tile = player.landscape?.[row + player.landscapeOffset]?.[col + 2]
     if (tile === undefined) return undefined
     const [land, building] = tile
     if (building !== BuildingEnum.Peat) return undefined
-    player.landscape = [
-      ...player.landscape.slice(0, row),
+    const landscape = [
+      ...player.landscape.slice(0, row + player.landscapeOffset),
       [
-        ...player.landscape[row].slice(0, col + 2),
+        ...player.landscape[row + player.landscapeOffset].slice(0, col + 2),
         // the tile in question
         [land] as Tile,
-        ...player.landscape[row].slice(col + 2 + 1),
+        ...player.landscape[row + player.landscapeOffset].slice(col + 2 + 1),
       ],
-      ...player.landscape.slice(row + 1),
+      ...player.landscape.slice(row + player.landscapeOffset + 1),
     ]
-    return setPlayerCurried(player)(state)
-  }
+    return {
+      ...player,
+      landscape,
+    }
+  })
 
-export const givePlayerPeat =
+const givePlayerPeat =
   (useJoker: boolean) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
@@ -35,7 +45,7 @@ export const givePlayerPeat =
     return setPlayerCurried({ ...player, peat: player.peat + amount })(state)
   }
 
-export const updatePeatRondel =
+const updatePeatRondel =
   (useJoker: boolean) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
     state && {
@@ -49,7 +59,9 @@ export const updatePeatRondel =
 
 export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams) =>
   pipe(
-    // crazy when point-free makes it distinctly cleaner
+    //
+    checkStateAllowsUse,
+    consumeMainAction,
     givePlayerPeat(useJoker),
     removePeatAt(row, col),
     updatePeatRondel(useJoker)

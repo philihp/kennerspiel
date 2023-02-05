@@ -20,6 +20,7 @@ describe('buildings/stoneMerchant', () => {
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 0,
       peat: 10,
       penny: 10,
@@ -56,6 +57,7 @@ describe('buildings/stoneMerchant', () => {
       rondel: {
         pointingBefore: 0,
       },
+      wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
       settling: false,
       extraRound: false,
@@ -69,6 +71,8 @@ describe('buildings/stoneMerchant', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('goes through a happy path', () => {

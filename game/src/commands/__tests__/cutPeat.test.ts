@@ -1,68 +1,124 @@
 import { initialState } from '../../reducer'
-import { PlayerColor } from '../../types'
-import { config } from '../config'
+import {
+  GameStatePlaying,
+  GameStatusEnum,
+  NextUseClergy,
+  PlayerColor,
+  SettlementRound,
+  Tableau,
+  Tile,
+} from '../../types'
 import { cutPeat } from '../cutPeat'
-import { start } from '../start'
 
 describe('commands/cutPeat', () => {
   describe('cutPeat', () => {
-    it('removes the peat', () => {
-      expect.assertions(2)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', players: 3, length: 'long' })!
-      const s2 = start(s1, { seed: 12345, colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green] })!
-      expect(s2.players?.[0].landscape).toStrictEqual([
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
-      ])
-      const s3 = cutPeat({ row: 0, col: 0, useJoker: false })(s2)!
-      expect(s3.players?.[0].landscape).toStrictEqual([
-        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
-      ])
+    const p0: Tableau = {
+      color: PlayerColor.Blue,
+      clergy: [],
+      settlements: [],
+      landscape: [
+        [['W'], ['C'], [], [], [], [], [], [], []],
+        [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      ] as Tile[][],
+      wonders: 0,
+      landscapeOffset: 1,
+      peat: 0,
+      penny: 1,
+      clay: 0,
+      wood: 0,
+      grain: 0,
+      sheep: 0,
+      stone: 0,
+      flour: 0,
+      grape: 0,
+      nickel: 0,
+      hops: 0,
+      coal: 0,
+      book: 0,
+      pottery: 0,
+      whiskey: 0,
+      straw: 0,
+      meat: 0,
+      ornament: 0,
+      bread: 0,
+      wine: 0,
+      beer: 0,
+      reliquary: 0,
+    }
+    const s0: GameStatePlaying = {
+      ...initialState,
+      status: GameStatusEnum.PLAYING,
+      activePlayerIndex: 0,
+      config: {
+        country: 'france',
+        players: 3,
+        length: 'long',
+      },
+      rondel: {
+        pointingBefore: 2,
+        joker: 0,
+        peat: 1,
+      },
+      wonders: 0,
+      players: [{ ...p0 }, { ...p0 }, { ...p0 }],
+      settling: false,
+      extraRound: false,
+      moveInRound: 1,
+      round: 1,
+      startingPlayer: 1,
+      settlementRound: SettlementRound.S,
+      buildings: [],
+      nextUse: NextUseClergy.Any,
+      canBuyLandscape: true,
+      plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+      districtPurchasePrices: [],
+      neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
+    }
+
+    it('retains undefined state', () => {
+      const s1 = cutPeat({ row: 0, col: 1, useJoker: false })(undefined)
+      expect(s1).toBeUndefined()
     })
-    it('wont cut peat where there is no peat', () => {
-      expect.assertions(2)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', players: 3, length: 'long' })!
-      const s2 = start(s1, { seed: 12345, colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green] })!
-      expect(s2.players?.[0].landscape).toStrictEqual([
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
-      ])
-      const s3 = cutPeat({ row: 0, col: 1, useJoker: false })(s2)
-      expect(s3).toBeUndefined()
+    it('wont go if main action already used', () => {
+      const s1 = { ...s0, mainActionUsed: true }
+      const s2 = cutPeat({ row: 0, col: 1, useJoker: false })(s1)!
+      expect(s2).toBeUndefined()
+    })
+
+    it('removes the peat bog', () => {
+      const s1 = cutPeat({ row: 0, col: 0, useJoker: false })(s0)!
+      expect(s1.players[0]).toMatchObject({
+        landscape: [
+          [['W'], ['C'], [], [], [], [], [], [], []],
+          [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+          [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+        ],
+      })
+    })
+    it('wont cut peat where there are no peat bog', () => {
+      const s1 = cutPeat({ row: 0, col: 1, useJoker: false })(s0)!
+      expect(s1).toBeUndefined()
     })
     it('moves up the joker', () => {
-      expect.assertions(2)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', players: 3, length: 'long' })!
-      const s2 = start(s1, { seed: 12345, colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green] })!
-      const s3 = cutPeat({ row: 0, col: 0, useJoker: true })(s2)!
-      expect(s3.rondel.joker).toBe(1)
-      expect(s3.rondel.peat).toBe(0)
+      const s1 = cutPeat({ row: 0, col: 0, useJoker: true })(s0)!
+      expect(s1.rondel.joker).toBe(2)
+      expect(s1.rondel.peat).toBe(1)
     })
     it('moves up the peat token', () => {
-      expect.assertions(2)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', players: 3, length: 'long' })!
-      const s2 = start(s1, { seed: 12345, colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green] })!
-      const s3 = cutPeat({ row: 0, col: 0, useJoker: false })(s2)!
-      expect(s3.rondel.joker).toBe(0)
-      expect(s3.rondel.peat).toBe(1)
+      const s1 = cutPeat({ row: 0, col: 0, useJoker: false })(s0)!
+      expect(s1.rondel.joker).toBe(0)
+      expect(s1.rondel.peat).toBe(2)
     })
     it('gives the active player peat', () => {
-      expect.assertions(6)
-      const s0 = initialState
-      const s1 = config(s0, { country: 'france', players: 3, length: 'long' })!
-      const s2 = start(s1, { seed: 12345, colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green] })!
-      expect(s2.players?.[0].peat).toBe(1)
-      expect(s2.players?.[1].peat).toBe(1)
-      expect(s2.players?.[2].peat).toBe(1)
-      const s3 = cutPeat({ row: 0, col: 0, useJoker: false })(s2)!
-      expect(s3.players?.[0].peat).toBe(3)
-      expect(s2.players?.[1].peat).toBe(1)
-      expect(s2.players?.[2].peat).toBe(1)
+      const s1 = cutPeat({ row: 0, col: 0, useJoker: false })(s0)!
+      expect(s1.players[0].peat).toBe(2)
+    })
+    it('gives the active player joker-peat', () => {
+      const s1 = cutPeat({ row: 0, col: 0, useJoker: true })(s0)!
+      expect(s1.players[0].peat).toBe(3)
     })
   })
 })

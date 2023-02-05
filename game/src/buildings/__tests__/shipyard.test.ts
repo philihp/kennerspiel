@@ -20,6 +20,7 @@ describe('buildings/shipyard', () => {
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 0,
       peat: 0,
       penny: 0,
@@ -58,6 +59,7 @@ describe('buildings/shipyard', () => {
         grape: 1,
         joker: 2,
       },
+      wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
       settling: false,
       extraRound: false,
@@ -71,6 +73,8 @@ describe('buildings/shipyard', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('turns two wood into 1 ornament and 1 nickel', () => {

@@ -11,6 +11,7 @@ describe('reducer', () => {
         [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
         [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 0,
       peat: 0,
       penny: 100,
@@ -47,6 +48,7 @@ describe('reducer', () => {
       rondel: {
         pointingBefore: 0,
       },
+      wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
       settling: false,
       extraRound: false,
@@ -60,6 +62,8 @@ describe('reducer', () => {
       plotPurchasePrices: [1],
       districtPurchasePrices: [1],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('exposes an initial state', () => {

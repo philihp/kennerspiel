@@ -51,15 +51,6 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): Ga
     // 2 - push arm
     newState.rondel = pushArm(state.rondel, state.config.players)
 
-    // clear usableBuildings filter
-    newState.usableBuildings = undefined
-
-    // dont let previous player force next player into PRIOR
-    newState.nextUse = NextUseClergy.Any
-
-    // once per turn, a player can buy a landscape
-    newState.canBuyLandscape = true
-
     const preRoundState = preRound(state.config)(newState)
     if (preRoundState === undefined) return undefined
     newState = preRoundState
@@ -70,6 +61,18 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): Ga
     // if(round == mode.stoneActiveOnRound()) getWheel().getStone().setActive(true);
     // if(round == mode.jokerActiveOnRound()) getWheel().getJoker().setActive(true);
   }
+
+  // clear usableBuildings filter
+  newState.usableBuildings = undefined
+
+  // dont let previous player force next player into PRIOR
+  newState.nextUse = NextUseClergy.Any
+
+  // once per turn, a player can buy a landscape
+  newState.canBuyLandscape = true
+
+  newState.bonusActions = []
+  newState.mainActionUsed = false
 
   return newState
 }

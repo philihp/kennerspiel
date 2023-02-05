@@ -21,6 +21,7 @@ describe('buildings/shippingCompany', () => {
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
       ] as Tile[][],
+      wonders: 0,
       landscapeOffset: 0,
       peat: 10,
       penny: 0,
@@ -58,6 +59,7 @@ describe('buildings/shippingCompany', () => {
         pointingBefore: 7,
         joker: 5,
       },
+      wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
       settling: false,
       extraRound: false,
@@ -71,6 +73,8 @@ describe('buildings/shippingCompany', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       neutralBuildingPhase: false,
+      mainActionUsed: false,
+      bonusActions: [],
     }
 
     it('retains undefined state', () => {

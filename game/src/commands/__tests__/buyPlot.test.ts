@@ -19,6 +19,7 @@ describe('commands/buyPlot', () => {
       [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
       [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
     ] as Tile[][],
+    wonders: 0,
     landscapeOffset: 0,
     peat: 0,
     penny: 100,
@@ -55,6 +56,7 @@ describe('commands/buyPlot', () => {
     rondel: {
       pointingBefore: 0,
     },
+    wonders: 0,
     players: [{ ...p0 }, { ...p0 }, { ...p0 }],
     settling: false,
     extraRound: false,
@@ -68,6 +70,8 @@ describe('commands/buyPlot', () => {
     plotPurchasePrices: [1, 1, 1, 1, 1, 1],
     districtPurchasePrices: [],
     neutralBuildingPhase: false,
+    mainActionUsed: false,
+    bonusActions: [],
   }
 
   describe('buyPlot', () => {

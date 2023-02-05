@@ -39,6 +39,7 @@ export const start = (
       landscape: [[]],
       landscapeOffset: 0,
       settlements: [],
+      wonders: 0,
       peat: 1,
       penny: 1,
       clay: 1,
@@ -88,6 +89,7 @@ export const start = (
       stone: 0,
       joker: 0,
     },
+    wonders: 8,
     round: 1,
     moveInRound: 1,
     startingPlayer,
@@ -102,6 +104,8 @@ export const start = (
     usableBuildings: undefined,
     nextUse: NextUseClergy.Any,
     canBuyLandscape: true,
+    bonusActions: [],
+    mainActionUsed: false,
   }
 
   return pipe(
