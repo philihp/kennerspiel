@@ -43,12 +43,12 @@ describe('buildings/proiry', () => {
         ],
       }
       const s4 = reducer(s3, ['BUILD', BuildingEnum.Priory, '0', '0'])! as GameStatePlaying
-      expect(s4).toMatchObject({
+      expect(s4.turn).toMatchObject({
         nextUse: NextUseClergy.OnlyPrior,
         usableBuildings: [BuildingEnum.Priory],
       })
       const s5 = reducer(s4, ['USE', BuildingEnum.Priory])! as GameStatePlaying
-      expect(s5).toMatchObject({
+      expect(s5.turn).toMatchObject({
         nextUse: NextUseClergy.Free,
         usableBuildings: [BuildingEnum.GrainStorage, BuildingEnum.Windmill],
       })
@@ -57,7 +57,7 @@ describe('buildings/proiry', () => {
         penny: 0,
         grain: 8,
       })
-      expect(s6).toMatchObject({
+      expect(s6.turn).toMatchObject({
         nextUse: NextUseClergy.None,
         usableBuildings: [],
       })

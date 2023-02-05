@@ -1,7 +1,16 @@
 import { config } from '../../commands/config'
 import { start } from '../../commands/start'
 import { initialState } from '../../reducer'
-import { Clergy, GameConfigCountry, GameConfigLength, GameConfigPlayers, GameState, PlayerColor } from '../../types'
+import {
+  Clergy,
+  GameConfigCountry,
+  GameConfigLength,
+  GameConfigPlayers,
+  GameState,
+  GameStatePlaying,
+  GameStateSetup,
+  PlayerColor,
+} from '../../types'
 import { preMove } from '../preMove'
 
 describe('board/preMove', () => {
@@ -13,11 +22,14 @@ describe('board/preMove', () => {
       length: 'long' as GameConfigLength,
     }
     const s0 = initialState
-    const s1 = config(s0, configuration)
-    const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })
-    const s3: GameState = {
-      ...s2!,
-      moveInRound: 1,
+    const s1 = config(s0, configuration)! as GameStateSetup
+    const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })! as GameStatePlaying
+    const s3: GameStatePlaying = {
+      ...s2,
+      turn: {
+        ...s2.turn,
+        moveInRound: 1,
+      },
       players: [
         {
           ...s2!.players![0]!,
@@ -52,7 +64,7 @@ describe('board/preMove', () => {
         },
       ],
     }
-    const s4 = preMove(s3!)
+    const s4 = preMove(s3)
     expect(s4!.players![0].clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
     expect(s4!.players![0].landscape).toStrictEqual([
       [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
@@ -69,10 +81,13 @@ describe('board/preMove', () => {
     }
     const s0 = initialState
     const s1 = config(s0, configuration)
-    const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })
+    const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })! as GameStatePlaying
     const s3: GameState = {
       ...s2!,
-      moveInRound: 1,
+      turn: {
+        ...s2.turn,
+        moveInRound: 1,
+      },
       players: [
         {
           ...s2!.players![0]!,

@@ -44,7 +44,10 @@ export const setNeighboringCloisterToGarden = (state: GameStatePlaying | undefin
   )(checkLocations)
   return {
     ...state,
-    usableBuildings: cloisterNeighbors,
+    turn: {
+      ...state.turn,
+      usableBuildings: cloisterNeighbors,
+    },
   }
 }
 

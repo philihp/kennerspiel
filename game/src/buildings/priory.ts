@@ -14,8 +14,11 @@ const allowBuildingWithPriorUsable = (state: GameStatePlaying | undefined): Game
   const usableBuildings = clergyBuildings.filter((b) => b !== undefined && b !== BuildingEnum.Priory) as BuildingEnum[]
   return {
     ...state,
-    usableBuildings,
-    nextUse: NextUseClergy.Free,
+    turn: {
+      ...state.turn,
+      usableBuildings,
+      nextUse: NextUseClergy.Free,
+    },
   }
 }
 

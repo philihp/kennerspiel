@@ -54,6 +54,8 @@ describe('buildings/chamberOfWonders', () => {
       })
       expect(s4).toMatchObject({
         buildings: [],
+      })
+      expect(s4.turn).toMatchObject({
         nextUse: 'only-prior',
         usableBuildings: ['F25'],
       })

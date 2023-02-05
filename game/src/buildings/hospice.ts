@@ -5,8 +5,11 @@ const allowUseAnyUnbuiltBuilding = (state: GameStatePlaying | undefined): GameSt
   if (state === undefined) return undefined
   return {
     ...state,
-    usableBuildings: state.buildings,
-    nextUse: NextUseClergy.Free,
+    turn: {
+      ...state.turn,
+      usableBuildings: state.buildings,
+      nextUse: NextUseClergy.Free,
+    },
   }
 }
 

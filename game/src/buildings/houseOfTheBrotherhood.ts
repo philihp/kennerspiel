@@ -20,7 +20,7 @@ const cloistersInLandscape = map((landRow: Tile[]) => cloistersInRow(landRow as 
 const checkCloistersForPoints = (points: number) => (state: GameStatePlaying | undefined) => {
   if (state === undefined) return undefined
   const multiplier = pointsPerCloister(state.config)
-  const cloisters = sum(flatten(cloistersInLandscape(state.players[state.activePlayerIndex].landscape)))
+  const cloisters = sum(flatten(cloistersInLandscape(state.players[state.turn.activePlayerIndex].landscape)))
   if (multiplier * cloisters < points) return undefined
   return state
 }

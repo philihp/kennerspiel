@@ -18,7 +18,7 @@ describe('buildings/farmyard', () => {
       expect(s1).toBeDefined()
       const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
       expect(s2).toBeDefined()
-      expect(s2.activePlayerIndex).toBe(0)
+      expect(s2.turn.activePlayerIndex).toBe(0)
       expect(s2.players[0].landscape[1][4]).toStrictEqual(['P', 'LR2'])
       expect(s2.players[0].sheep).toBe(2)
       const s3 = farmyard('Sh')(s2)!
@@ -33,7 +33,7 @@ describe('buildings/farmyard', () => {
       expect(s1).toBeDefined()
       const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
       expect(s2).toBeDefined()
-      expect(s2.activePlayerIndex).toBe(0)
+      expect(s2.turn.activePlayerIndex).toBe(0)
       expect(s2.players[0].landscape[1][4]).toStrictEqual(['P', 'LR2'])
       expect(s2.players[0].sheep).toBe(2)
       const s3 = farmyard('JoSh')(s2)!
@@ -48,7 +48,7 @@ describe('buildings/farmyard', () => {
       expect(s1).toBeDefined()
       const s2 = start(s1, { colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green], seed: 42 })!
       expect(s2).toBeDefined()
-      expect(s2.activePlayerIndex).toBe(0)
+      expect(s2.turn.activePlayerIndex).toBe(0)
       expect(s2.players[0].landscape[1][4]).toStrictEqual(['P', 'LR2'])
       expect(s2.players[0].grain).toBe(2)
       const s3 = farmyard('Gn')(s2)!

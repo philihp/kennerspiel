@@ -49,7 +49,20 @@ describe('buildings/bathhouse', () => {
     const s0: GameStatePlaying = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
-      activePlayerIndex: 0,
+      turn: {
+        activePlayerIndex: 0,
+        settling: false,
+        extraRound: false,
+        moveInRound: 1,
+        round: 1,
+        startingPlayer: 1,
+        settlementRound: SettlementRound.S,
+        nextUse: NextUseClergy.Any,
+        canBuyLandscape: true,
+        neutralBuildingPhase: false,
+        mainActionUsed: false,
+        bonusActions: [],
+      },
       config: {
         country: 'france',
         players: 3,
@@ -62,20 +75,9 @@ describe('buildings/bathhouse', () => {
       },
       wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      settling: false,
-      extraRound: false,
-      moveInRound: 1,
-      round: 1,
-      startingPlayer: 1,
-      settlementRound: SettlementRound.S,
       buildings: [],
-      nextUse: NextUseClergy.Any,
-      canBuyLandscape: true,
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-      neutralBuildingPhase: false,
-      mainActionUsed: false,
-      bonusActions: [],
     }
 
     it('follows happy path', () => {

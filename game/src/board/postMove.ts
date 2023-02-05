@@ -20,21 +20,15 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       let {
         buildings,
         players,
-        activePlayerIndex,
-        settling,
-        extraRound,
-        moveInRound,
-        settlementRound,
         status,
-        neutralBuildingPhase,
         rondel,
-        round,
+        turn: { activePlayerIndex, settling, extraRound, moveInRound, settlementRound, neutralBuildingPhase, round },
       } = state
 
       // clear any coins that may have been paid to neutral player
       players = [state.players[0], { ...state.players[1], penny: 0 }]
 
-      if (state.extraRound && moveInRound === 2) {
+      if (extraRound && moveInRound === 2) {
         settling = true
         settlementRound = SettlementRound.E
         extraRound = false
@@ -65,12 +59,12 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         } else {
           // board.postSettlement()
           settling = false
-          buildings = roundBuildings(state.config, state.settlementRound)
+          buildings = roundBuildings(state.config, state.turn.settlementRound)
           players = players.map((player) => ({
             ...player,
-            settlements: [...player.settlements, ...roundSettlements(player.color, state.settlementRound)],
+            settlements: [...player.settlements, ...roundSettlements(player.color, state.turn.settlementRound)],
           }))
-          if (state.settlementRound === SettlementRound.E) {
+          if (state.turn.settlementRound === SettlementRound.E) {
             status = GameStatusEnum.FINISHED
             rondel = pushArm(rondel, state.config.players)
           }
@@ -85,15 +79,18 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
             ...newState,
             players,
             buildings,
-            activePlayerIndex,
-            settling,
-            extraRound,
-            moveInRound,
-            settlementRound,
+            turn: {
+              ...newState.turn,
+              activePlayerIndex,
+              extraRound,
+              moveInRound,
+              settlementRound,
+              settling,
+              neutralBuildingPhase,
+              round,
+            },
             status,
-            neutralBuildingPhase,
             rondel,
-            round,
           })
         }
       }
@@ -118,21 +115,15 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       let {
         buildings,
         players,
-        activePlayerIndex,
-        settling,
-        extraRound,
-        moveInRound,
-        settlementRound,
         status,
-        neutralBuildingPhase,
         rondel,
-        round,
+        turn: { activePlayerIndex, settling, extraRound, moveInRound, settlementRound, neutralBuildingPhase, round },
       } = state
 
       // clear any coins that may have been paid to neutral player
       players = [state.players[0], { ...state.players[1], penny: 0 }]
 
-      if (state.extraRound) {
+      if (state.turn.extraRound) {
         moveInRound = 2
         settling = true
         settlementRound = SettlementRound.E
@@ -164,12 +155,12 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         } else {
           // board.postSettlement()
           settling = false
-          buildings = roundBuildings(state.config, state.settlementRound)
+          buildings = roundBuildings(state.config, state.turn.settlementRound)
           players = players.map((player) => ({
             ...player,
-            settlements: [...player.settlements, ...roundSettlements(player.color, state.settlementRound)],
+            settlements: [...player.settlements, ...roundSettlements(player.color, state.turn.settlementRound)],
           }))
-          if (state.settlementRound === SettlementRound.E) {
+          if (state.turn.settlementRound === SettlementRound.E) {
             status = GameStatusEnum.FINISHED
             rondel = pushArm(rondel, state.config.players)
           }
@@ -184,15 +175,18 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
             ...newState,
             players,
             buildings,
-            activePlayerIndex,
-            settling,
-            extraRound,
-            moveInRound,
-            settlementRound,
+            turn: {
+              ...newState.turn,
+              activePlayerIndex,
+              settling,
+              extraRound,
+              moveInRound,
+              settlementRound,
+              neutralBuildingPhase,
+              round,
+            },
             status,
-            neutralBuildingPhase,
             rondel,
-            round,
           })
         }
       }
@@ -214,12 +208,18 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
     })
     .with({ players: 2, length: 'long' }, () => (state: GameStatePlaying) => {
       if (state.players === undefined) return undefined
-      if (state.moveInRound === undefined) return undefined
-      if (state.round === undefined) return undefined
+      if (state.turn.moveInRound === undefined) return undefined
+      if (state.turn.round === undefined) return undefined
       if (state.config === undefined) return undefined
       if (state.rondel === undefined) return undefined
 
-      let { rondel, status, players, buildings, round, settling, moveInRound, activePlayerIndex } = state
+      let {
+        rondel,
+        status,
+        players,
+        buildings,
+        turn: { round, settling, moveInRound, activePlayerIndex },
+      } = state
       let newState = state
 
       if (moveInRound === 2 || settling) {
@@ -230,12 +230,12 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (settling && moveInRound === 3) {
         // board.postSettlement()
         settling = false
-        buildings = roundBuildings(state.config, state.settlementRound)
+        buildings = roundBuildings(state.config, state.turn.settlementRound)
         players = players.map((player) => ({
           ...player,
-          settlements: [...player.settlements, ...roundSettlements(player.color, state.settlementRound)],
+          settlements: [...player.settlements, ...roundSettlements(player.color, state.turn.settlementRound)],
         }))
-        if (state.settlementRound === SettlementRound.E) {
+        if (state.turn.settlementRound === SettlementRound.E) {
           status = GameStatusEnum.FINISHED
           rondel = pushArm(rondel, state.config.players)
         }
@@ -261,15 +261,23 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
     })
     .with({ players: 2, length: 'short' }, (config) => (state: GameStatePlaying) => {
       if (state.players === undefined) return undefined
-      if (state.moveInRound === undefined) return undefined
+      if (state.turn.moveInRound === undefined) return undefined
       if (state.config === undefined) return undefined
-      if (state.round === undefined) return undefined
+      if (state.turn.round === undefined) return undefined
       if (state.rondel === undefined) return undefined
-      if (state.startingPlayer === undefined) return undefined
+      if (state.turn.startingPlayer === undefined) return undefined
 
-      let { rondel, buildings, players, round, moveInRound, activePlayerIndex, settling, status } = state
+      let {
+        rondel,
+        buildings,
+        players,
+        turn: { round, moveInRound, activePlayerIndex, settling },
+        status,
+      } = state
       let newState = state
-      const { settlementRound } = state
+      const {
+        turn: { settlementRound },
+      } = state
       moveInRound++
 
       if (settling) {
@@ -277,12 +285,12 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         if (moveInRound > 2) {
           // board.postSettlement()
           settling = false
-          buildings = roundBuildings(state.config, state.settlementRound)
+          buildings = roundBuildings(state.config, state.turn.settlementRound)
           players = players.map((player) => ({
             ...player,
-            settlements: roundSettlements(player.color, state.settlementRound),
+            settlements: roundSettlements(player.color, state.turn.settlementRound),
           }))
-          if (state.settlementRound === SettlementRound.E) {
+          if (state.turn.settlementRound === SettlementRound.E) {
             status = GameStatusEnum.FINISHED
             rondel = pushArm(rondel, state.config.players)
           }
@@ -311,13 +319,19 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
     .with({ players: P.union(3, 4) }, () => (state: GameStatePlaying) => {
       if (state.config === undefined) return undefined
       if (state.players === undefined) return undefined
-      if (state.moveInRound === undefined) return undefined
-      if (state.round === undefined) return undefined
+      if (state.turn.moveInRound === undefined) return undefined
+      if (state.turn.round === undefined) return undefined
       if (state.rondel === undefined) return undefined
-      if (state.startingPlayer === undefined) return undefined
+      if (state.turn.startingPlayer === undefined) return undefined
 
       let newState = state
-      let { rondel, status, players, buildings, round, settling, extraRound, activePlayerIndex, moveInRound } = state
+      let {
+        rondel,
+        status,
+        players,
+        buildings,
+        turn: { round, settling, extraRound, activePlayerIndex, moveInRound },
+      } = state
       activePlayerIndex = (activePlayerIndex + 1) % state.players.length
       moveInRound += 1
 
@@ -331,12 +345,12 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (moveInRound === state.players.length + 1 || settling) {
         // board.postSettlement()
         settling = false
-        buildings = roundBuildings(state.config, state.settlementRound)
+        buildings = roundBuildings(state.config, state.turn.settlementRound)
         players = players.map((player) => ({
           ...player,
-          settlements: roundSettlements(player.color, state.settlementRound),
+          settlements: roundSettlements(player.color, state.turn.settlementRound),
         }))
-        if (state.settlementRound === SettlementRound.E) {
+        if (state.turn.settlementRound === SettlementRound.E) {
           status = GameStatusEnum.FINISHED
           rondel = pushArm(rondel, state.config.players)
         }

@@ -18,7 +18,7 @@ describe('commands/use', () => {
       const s1 = config(s0, { country: 'france', length: 'long', players: 2 })!
       const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
       const s3 = use(BuildingEnum.FarmYardB, ['ShJo'])(s2)!
-      expect(s2.activePlayerIndex).toBe(0)
+      expect(s2.turn.activePlayerIndex).toBe(0)
       expect(s2.players[0].color).toBe(PlayerColor.Blue)
       expect(s2.players[0].landscape[1][4]).toStrictEqual(['P', 'LB2'])
       expect(s2.players[0].clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
@@ -31,7 +31,7 @@ describe('commands/use', () => {
       const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
       s2.players[0].clergy = [Clergy.PriorB]
       const s3 = use(BuildingEnum.FarmYardB, ['ShJo'])(s2)!
-      expect(s2.activePlayerIndex).toBe(0)
+      expect(s2.turn.activePlayerIndex).toBe(0)
       expect(s2.players[0].color).toBe(PlayerColor.Blue)
       expect(s2.players[0].landscape[1][4]).toStrictEqual(['P', 'LB2'])
       expect(s2.players[0].clergy).toStrictEqual(['PRIB'])
@@ -43,7 +43,7 @@ describe('commands/use', () => {
       const s1 = config(s0, { country: 'france', length: 'long', players: 2 })!
       const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
       const s3 = use(BuildingEnum.FarmYardB, ['Sh'])(s2)!
-      expect(s2.activePlayerIndex).toBe(0)
+      expect(s2.turn.activePlayerIndex).toBe(0)
       expect(s2.players[0].color).toBe(PlayerColor.Blue)
       expect(s2.players[0].sheep).toBe(1)
       expect(s2.rondel.sheep).toBe(0)
@@ -57,7 +57,7 @@ describe('commands/use', () => {
       const s1 = config(s0, { country: 'france', length: 'long', players: 2 })!
       const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })!
       const s3 = use(BuildingEnum.FarmYardB, ['ShJo'])(s2)!
-      expect(s2.activePlayerIndex).toBe(0)
+      expect(s2.turn.activePlayerIndex).toBe(0)
       expect(s2.players[0].color).toBe(PlayerColor.Blue)
       expect(s2.players[0].sheep).toBe(1)
       expect(s2.rondel.joker).toBe(0)

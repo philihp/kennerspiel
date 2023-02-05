@@ -16,8 +16,8 @@ describe('commands/commit', () => {
       })
       const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue] })
       const s3 = commit(s2!)
-      expect(s2?.activePlayerIndex).toBe(0)
-      expect(s3?.activePlayerIndex).toBe(1)
+      expect(s2?.turn?.activePlayerIndex).toBe(0)
+      expect(s3?.turn?.activePlayerIndex).toBe(1)
     })
 
     it('wrap around active player index', () => {
@@ -34,7 +34,7 @@ describe('commands/commit', () => {
       }
 
       const s3 = commit(s2!)
-      expect(s3?.activePlayerIndex).toBe(0)
+      expect(s3?.turn?.activePlayerIndex).toBe(0)
     })
   })
 })

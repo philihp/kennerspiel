@@ -23,24 +23,30 @@ describe('game 29767', () => {
     const s17 = reducer(s16, ['BUILD', 'G06', '0', '0'])! as GameStatePlaying
 
     expect(s2.status).toBe('PLAYING')
-    expect(s2.round).toBe(1)
-    expect(s2.moveInRound).toBe(1)
-    expect(s2.settlementRound).toBe('S')
-    expect(s2.extraRound).toBeFalsy()
-    expect(s2.settling).toBeFalsy()
+    expect(s2.turn).toMatchObject({
+      round: 1,
+      moveInRound: 1,
+      settlementRound: 'S',
+      extraRound: false,
+      settling: false,
+    })
     expect(s2.players[0].peat).toBe(0)
     expect(s3).toBeDefined()
     expect(s3.players[0].peat).toBe(2)
     expect(s3.players[0].landscape[0][2]).toStrictEqual(['P'])
     expect(s3.rondel.peat).toBe(s3.rondel.pointingBefore)
     expect(s3.players[0].clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
-    expect(s4.round).toBe(1)
-    expect(s4.moveInRound).toBe(2)
+    expect(s4.turn).toMatchObject({
+      round: 1,
+      moveInRound: 2,
+    })
     expect(s4.players[0].grain).toBe(0)
     expect(s5.players[0].grain).toBe(2)
     expect(s5.players[0].clergy).toStrictEqual(['LB2R', 'PRIR'])
-    expect(s6.round).toBe(2)
-    expect(s6.moveInRound).toBe(1)
+    expect(s6.turn).toMatchObject({
+      round: 2,
+      moveInRound: 1,
+    })
     expect(s6.rondel.pointingBefore).toBe(2)
 
     expect(s6.players[0].wood).toBe(0)
@@ -48,16 +54,20 @@ describe('game 29767', () => {
     expect(s7.rondel.wood).toBe(2)
     expect(s7.players[0].wood).toBe(3)
 
-    expect(s8.round).toBe(2)
-    expect(s8.moveInRound).toBe(2)
+    expect(s8.turn).toMatchObject({
+      round: 2,
+      moveInRound: 2,
+    })
     expect(s8.rondel.pointingBefore).toBe(2)
 
     expect(s8.players[0].peat).toBe(2)
     expect(s9.players[0].peat).toBe(4)
     expect(s9.rondel.peat).toBe(2)
 
-    expect(s10.round).toBe(3)
-    expect(s10.moveInRound).toBe(1)
+    expect(s8.turn).toMatchObject({
+      round: 3,
+      moveInRound: 1,
+    })
     expect(s10.rondel.pointingBefore).toBe(3)
 
     expect(s10.players[0].clay).toBe(0)
@@ -65,8 +75,10 @@ describe('game 29767', () => {
     expect(s11.rondel.clay).toBe(3)
     expect(s11.players[0].clay).toBe(4)
 
-    expect(s12.round).toBe(3)
-    expect(s12.moveInRound).toBe(2)
+    expect(s12.turn).toMatchObject({
+      round: 3,
+      moveInRound: 2,
+    })
     expect(s12.rondel.pointingBefore).toBe(3)
 
     expect(s12.players[0].clay).toBe(4)
@@ -93,10 +105,15 @@ describe('game 29767', () => {
       clergy: [],
     })
     expect(s14.rondel.pointingBefore).toBe(3)
-    expect(s14.moveInRound).toBe(2)
-    expect(s14.round).toBe(3)
-    expect(s15.round).toBe(4)
-    expect(s15.moveInRound).toBe(1)
+
+    expect(s14.turn).toMatchObject({
+      round: 3,
+      moveInRound: 2,
+    })
+    expect(s15.turn).toMatchObject({
+      round: 4,
+      moveInRound: 1,
+    })
     expect(s15.rondel.pointingBefore).toBe(4)
     expect(s15.players[0]).toMatchObject({
       grain: 2,

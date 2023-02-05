@@ -15,12 +15,12 @@ describe('board/postMove', () => {
     const s2 = start(s1, { seed, colors: colors.slice(0, 3) })!
     const s3 = postMove(s2)!
     it('advances active player', () => {
-      expect(s2.activePlayerIndex).toBe(0)
-      expect(s3.activePlayerIndex).toBe(1)
+      expect(s2.turn.activePlayerIndex).toBe(0)
+      expect(s3.turn.activePlayerIndex).toBe(1)
     })
     it('advances moveInRound', () => {
-      expect(s2.moveInRound).toBe(1)
-      expect(s3.moveInRound).toBe(2)
+      expect(s2.turn.moveInRound).toBe(1)
+      expect(s3.turn.moveInRound).toBe(2)
     })
   })
 })

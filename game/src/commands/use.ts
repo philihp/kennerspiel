@@ -56,11 +56,11 @@ const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   //                -> None: do not allow
   return match(state)
     .with(undefined, () => undefined)
-    .with({ mainActionUsed: false }, () => state)
-    .with({ nextUse: NextUseClergy.Free }, () => state)
-    .with({ nextUse: NextUseClergy.OnlyPrior }, () => state)
-    .with({ nextUse: NextUseClergy.Any }, () => undefined)
-    .with({ nextUse: NextUseClergy.None }, () => undefined)
+    .with({ turn: { mainActionUsed: false } }, () => state)
+    .with({ turn: { nextUse: NextUseClergy.Free } }, () => state)
+    .with({ turn: { nextUse: NextUseClergy.OnlyPrior } }, () => state)
+    .with({ turn: { nextUse: NextUseClergy.Any } }, () => undefined)
+    .with({ turn: { nextUse: NextUseClergy.None } }, () => undefined)
     .exhaustive()
 }
 
@@ -68,7 +68,7 @@ const checkBuildingUsable =
   (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    if (state.usableBuildings && !state.usableBuildings.includes(building)) return undefined
+    if (state.turn.usableBuildings && !state.turn.usableBuildings.includes(building)) return undefined
     return state
   }
 
@@ -90,16 +90,16 @@ const moveClergyToOwnBuilding =
   (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    if (state.nextUse === NextUseClergy.Free) return state
+    if (state.turn.nextUse === NextUseClergy.Free) return state
     const player = getPlayer(state)
     const { row, col } = findBuilding(player.landscape, building)
     if (row === undefined || col === undefined) return undefined
     const [land] = player.landscape[row][col]
 
     const priors = player.clergy.filter(isPrior)
-    if (state.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
+    if (state.turn.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
 
-    const nextClergy = match(state.nextUse)
+    const nextClergy = match(state.turn.nextUse)
       .with(NextUseClergy.Any, () => player.clergy[0])
       .with(NextUseClergy.None, () => undefined)
       .with(NextUseClergy.OnlyPrior, () => priors[0])
@@ -125,13 +125,19 @@ const moveClergyToOwnBuilding =
 const clearUsableBuildings = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
   state && {
     ...state,
-    usableBuildings: [],
+    turn: {
+      ...state.turn,
+      usableBuildings: [],
+    },
   }
 
 const clearNextUse = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
   state && {
     ...state,
-    nextUse: NextUseClergy.None,
+    turn: {
+      ...state.turn,
+      nextUse: NextUseClergy.None,
+    },
   }
 
 const BuildingFarmyard = P.union(

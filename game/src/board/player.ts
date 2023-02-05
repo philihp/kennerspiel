@@ -16,13 +16,13 @@ export const clergyForColor = (color: PlayerColor): Clergy[] => {
 }
 
 export const getPlayer = (state: GameStatePlaying, playerIndex?: number): Tableau => {
-  const index = playerIndex ?? state?.activePlayerIndex
+  const index = playerIndex ?? state?.turn?.activePlayerIndex
   return state.players[index]
 }
 
 export const setPlayer = (state: GameStatePlaying, player: Tableau, playerIndex?: number): GameStatePlaying => {
   if (state.players === undefined) return state
-  const i = playerIndex || state.activePlayerIndex
+  const i = playerIndex || state.turn.activePlayerIndex
   return {
     ...state,
     players: [...state.players.slice(0, i), player, ...state.players.slice(i + 1)],
@@ -38,10 +38,10 @@ export const withActivePlayer =
   (func: (player: Tableau) => Tableau | undefined) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return state
-    const beforePlayers = state.players.slice(0, state.activePlayerIndex)
-    const afterPlayers = state.players.slice(state.activePlayerIndex + 1)
+    const beforePlayers = state.players.slice(0, state.turn.activePlayerIndex)
+    const afterPlayers = state.players.slice(state.turn.activePlayerIndex + 1)
 
-    const updatedPlayer = func(state.players[state.activePlayerIndex])
+    const updatedPlayer = func(state.players[state.turn.activePlayerIndex])
     if (updatedPlayer === undefined) return undefined
 
     const players: Tableau[] = [...beforePlayers, updatedPlayer, ...afterPlayers]

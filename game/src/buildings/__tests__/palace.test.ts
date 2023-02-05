@@ -118,7 +118,20 @@ describe('buildings/palace', () => {
     const s0: GameStatePlaying = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
-      activePlayerIndex: 0,
+      turn: {
+        activePlayerIndex: 0,
+        settling: false,
+        extraRound: false,
+        moveInRound: 1,
+        round: 1,
+        startingPlayer: 1,
+        settlementRound: SettlementRound.S,
+        nextUse: NextUseClergy.Any,
+        canBuyLandscape: true,
+        neutralBuildingPhase: false,
+        mainActionUsed: false,
+        bonusActions: [],
+      },
       config: {
         country: 'france',
         players: 3,
@@ -131,20 +144,9 @@ describe('buildings/palace', () => {
       },
       wonders: 0,
       players: [p0, p1, p2],
-      settling: false,
-      extraRound: false,
-      moveInRound: 1,
-      round: 1,
-      startingPlayer: 1,
-      settlementRound: SettlementRound.S,
       buildings: [],
-      nextUse: NextUseClergy.Any,
-      canBuyLandscape: true,
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-      neutralBuildingPhase: false,
-      mainActionUsed: false,
-      bonusActions: [],
     }
 
     it('can take grapes', () => {
@@ -152,8 +154,8 @@ describe('buildings/palace', () => {
       expect(s1.players[0]).toMatchObject({
         wine: 0,
       })
-      expect(s1.nextUse).toBe('free')
-      expect(s1.usableBuildings?.sort()).toStrictEqual(['LB3', 'G26', 'LR3', 'G28', 'G19'].sort())
+      expect(s1.turn.nextUse).toBe('free')
+      expect(s1.turn.usableBuildings?.sort()).toStrictEqual(['LB3', 'G26', 'LR3', 'G28', 'G19'].sort())
     })
   })
 })
