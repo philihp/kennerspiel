@@ -78,9 +78,29 @@ describe('buildings/shippingCompany', () => {
     }
 
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
-      const s1 = shippingCompany()(s0)
+      const s1 = shippingCompany()(undefined)!
       expect(s1).toBeUndefined()
+    })
+    it('burns wood and makes meat', () => {
+      const s1 = shippingCompany('WoWoWo', 'Mt')(s0)!
+      expect(s1.players[0]).toMatchObject({
+        meat: 3,
+        wood: 7,
+      })
+    })
+    it('burns peat and makes bread', () => {
+      const s1 = shippingCompany('PtPt', 'Br')(s0)!
+      expect(s1.players[0]).toMatchObject({
+        peat: 8,
+        bread: 3,
+      })
+    })
+    it('burns coal and makes wine', () => {
+      const s1 = shippingCompany('Co', 'Wn')(s0)!
+      expect(s1.players[0]).toMatchObject({
+        coal: 9,
+        wine: 3,
+      })
     })
   })
 })
