@@ -1,6 +1,6 @@
 import { pipe } from 'ramda'
 import { match } from 'ts-pattern'
-import { getPlayer, setPlayerCurried } from '../board/player'
+import { getPlayer, setPlayerCurried, withActivePlayer } from '../board/player'
 import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum, Tableau } from '../types'
 import { take } from '../board/wheel'
 import { consumeMainAction } from '../board/state'
@@ -13,27 +13,27 @@ const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
     .exhaustive()
 }
 
-const removePeatAt =
-  (row: number, col: number) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return state
-    const player = { ...getPlayer(state) }
-    const tile = player.landscape?.[row]?.[col + 2]
+const removePeatAt = (row: number, col: number) =>
+  withActivePlayer((player) => {
+    const tile = player.landscape?.[row + player.landscapeOffset]?.[col + 2]
     if (tile === undefined) return undefined
     const [land, building] = tile
     if (building !== BuildingEnum.Peat) return undefined
-    player.landscape = [
-      ...player.landscape.slice(0, row),
+    const landscape = [
+      ...player.landscape.slice(0, row + player.landscapeOffset),
       [
-        ...player.landscape[row].slice(0, col + 2),
+        ...player.landscape[row + player.landscapeOffset].slice(0, col + 2),
         // the tile in question
         [land] as Tile,
-        ...player.landscape[row].slice(col + 2 + 1),
+        ...player.landscape[row + player.landscapeOffset].slice(col + 2 + 1),
       ],
-      ...player.landscape.slice(row + 1),
+      ...player.landscape.slice(row + player.landscapeOffset + 1),
     ]
-    return setPlayerCurried(player)(state)
-  }
+    return {
+      ...player,
+      landscape,
+    }
+  })
 
 const givePlayerPeat =
   (useJoker: boolean) =>

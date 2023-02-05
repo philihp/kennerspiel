@@ -78,6 +78,15 @@ describe('commands/fellTrees', () => {
       bonusActions: [],
     }
 
+    it('retains undefined state', () => {
+      const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(undefined)
+      expect(s1).toBeUndefined()
+    })
+    it('wont go if main action already used', () => {
+      const s1 = { ...s0, mainActionUsed: true }
+      const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
+      expect(s2).toBeUndefined()
+    })
     it('removes the forest', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(s0)!
       expect(s1.players[0]).toMatchObject({
