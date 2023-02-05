@@ -46,7 +46,7 @@ describe('game 29767', () => {
     expect(s6.players[0].wood).toBe(0)
     expect(s6.rondel.wood).toBe(0)
     expect(s7.rondel.wood).toBe(2)
-    expect(s7.players[0].wood).toBe(2)
+    expect(s7.players[0].wood).toBe(3)
 
     expect(s8.round).toBe(2)
     expect(s8.moveInRound).toBe(2)

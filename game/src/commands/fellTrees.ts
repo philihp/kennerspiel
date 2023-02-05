@@ -39,8 +39,8 @@ export const givePlayerWood =
   (useJoker: boolean) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    const { joker, peat, pointingBefore } = state.rondel
-    const amount = take(pointingBefore, (useJoker ? joker : peat) ?? pointingBefore, state.config)
+    const { joker, wood, pointingBefore } = state.rondel
+    const amount = take(pointingBefore, (useJoker ? joker : wood) ?? pointingBefore, state.config)
     return withActivePlayer(getCost({ wood: amount }))(state)
   }
 
