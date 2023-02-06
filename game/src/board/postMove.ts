@@ -274,7 +274,6 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (state.config === undefined) return undefined
       if (state.turn.round === undefined) return undefined
       if (state.rondel === undefined) return undefined
-      if (state.turn.startingPlayer === undefined) return undefined
 
       let {
         rondel,
@@ -333,7 +332,6 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
       if (state.turn.moveInRound === undefined) return undefined
       if (state.turn.round === undefined) return undefined
       if (state.rondel === undefined) return undefined
-      if (state.turn.startingPlayer === undefined) return undefined
 
       let newState = state
       let {
@@ -380,6 +378,7 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         players,
         buildings,
         turn: {
+          ...newState.turn,
           round,
           settling,
           extraRound,
