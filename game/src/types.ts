@@ -353,6 +353,22 @@ export type Rondel = {
   stone?: number
 }
 
+export type TurnRegister = {
+  startingPlayer: number
+  activePlayerIndex: number
+  neutralBuildingPhase: boolean
+  settling: boolean
+  settlementRound: SettlementRound
+  extraRound: boolean
+  moveInRound: number
+  round: number
+  usableBuildings?: BuildingEnum[]
+  nextUse: NextUseClergy
+  canBuyLandscape: boolean
+  mainActionUsed: boolean
+  bonusActions: GameCommandEnum[]
+}
+
 export type GameActionCommit = { command: GameCommandEnum.COMMIT }
 export type GameActionConfig = { command: GameCommandEnum.CONFIG; params: GameCommandConfigParams }
 export type GameActionConvert = { command: GameCommandEnum.CONVERT; params: GameCommandConvertParams }
@@ -378,27 +394,15 @@ export type GameStateSetup = {
 export type GameStatePlaying = {
   status: GameStatusEnum.PLAYING | GameStatusEnum.FINISHED
   randGen: PCGState
-  activePlayerIndex: number
   config: GameCommandConfigParams
   rondel: Rondel
   wonders: number
   players: Tableau[]
   neutralPlayer?: Tableau
-  neutralBuildingPhase: boolean
-  settling: boolean
-  extraRound: boolean
-  moveInRound: number
-  round: number
-  startingPlayer: number
-  settlementRound: SettlementRound
   buildings: BuildingEnum[]
-  usableBuildings?: BuildingEnum[]
-  nextUse: NextUseClergy
-  canBuyLandscape: boolean
   plotPurchasePrices: number[]
   districtPurchasePrices: number[]
-  mainActionUsed: boolean
-  bonusActions: GameCommandEnum[]
+  turn: TurnRegister
 }
 export type GameState = GameStateSetup | GameStatePlaying
 

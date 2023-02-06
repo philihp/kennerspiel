@@ -24,9 +24,9 @@ describe('buildings/cloisterCourtyard', () => {
       landscapeOffset: 0,
       peat: 0,
       penny: 0,
-      clay: 1,
-      wood: 1,
-      grain: 1,
+      clay: 11,
+      wood: 11,
+      grain: 11,
       sheep: 0,
       stone: 0,
       flour: 0,
@@ -48,7 +48,6 @@ describe('buildings/cloisterCourtyard', () => {
     const s0: GameStatePlaying = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
-      activePlayerIndex: 0,
       config: {
         country: 'france',
         players: 3,
@@ -59,20 +58,23 @@ describe('buildings/cloisterCourtyard', () => {
       },
       wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      settling: false,
-      extraRound: false,
-      moveInRound: 1,
-      round: 1,
-      startingPlayer: 1,
-      settlementRound: SettlementRound.S,
       buildings: [],
-      nextUse: NextUseClergy.Any,
-      canBuyLandscape: true,
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-      neutralBuildingPhase: false,
-      mainActionUsed: false,
-      bonusActions: [],
+      turn: {
+        activePlayerIndex: 0,
+        settling: false,
+        extraRound: false,
+        moveInRound: 1,
+        round: 1,
+        startingPlayer: 1,
+        settlementRound: SettlementRound.S,
+        nextUse: NextUseClergy.Any,
+        canBuyLandscape: true,
+        neutralBuildingPhase: false,
+        mainActionUsed: false,
+        bonusActions: [],
+      },
     }
 
     it('retains undefined state', () => {
@@ -83,11 +85,15 @@ describe('buildings/cloisterCourtyard', () => {
     it('goes through a happy path', () => {
       const s1 = cloisterCourtyard('ClWoGn', 'Sh')(s0)!
       expect(s1.players[0]).toMatchObject({
-        clay: 0,
-        wood: 0,
-        grain: 0,
+        clay: 10,
+        wood: 10,
+        grain: 10,
         sheep: 6,
       })
+    })
+    it('fails if two are the same', () => {
+      const s1 = cloisterCourtyard('ClWoWo', 'Sh')(s0)!
+      expect(s1).toBeUndefined()
     })
   })
 })

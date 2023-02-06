@@ -49,7 +49,20 @@ describe('commands/fellTrees', () => {
     const s0: GameStatePlaying = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
-      activePlayerIndex: 0,
+      turn: {
+        activePlayerIndex: 0,
+        settling: false,
+        extraRound: false,
+        moveInRound: 1,
+        round: 1,
+        startingPlayer: 1,
+        settlementRound: SettlementRound.S,
+        nextUse: NextUseClergy.Any,
+        canBuyLandscape: true,
+        neutralBuildingPhase: false,
+        mainActionUsed: false,
+        bonusActions: [],
+      },
       config: {
         country: 'france',
         players: 3,
@@ -62,20 +75,9 @@ describe('commands/fellTrees', () => {
       },
       wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      settling: false,
-      extraRound: false,
-      moveInRound: 1,
-      round: 1,
-      startingPlayer: 1,
-      settlementRound: SettlementRound.S,
       buildings: [],
-      nextUse: NextUseClergy.Any,
-      canBuyLandscape: true,
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-      neutralBuildingPhase: false,
-      mainActionUsed: false,
-      bonusActions: [],
     }
 
     it('retains undefined state', () => {
@@ -83,9 +85,15 @@ describe('commands/fellTrees', () => {
       expect(s1).toBeUndefined()
     })
     it('wont go if main action already used', () => {
-      const s1 = { ...s0, mainActionUsed: true }
+      const s1 = { ...s0, turn: { ...s0.turn, mainActionUsed: true } }
       const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
+    })
+    it('if wood not on rondel, keeps wood off but allows with zero wood', () => {
+      const s1 = { ...s0, rondel: { pointingBefore: 0, wood: undefined } }
+      const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
+      expect(s2.rondel.wood).toBeUndefined()
+      expect(s2.players[0].wood).toBe(0)
     })
     it('removes the forest', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(s0)!
@@ -102,9 +110,15 @@ describe('commands/fellTrees', () => {
       expect(s1).toBeUndefined()
     })
     it('moves up the joker', () => {
+      expect(s0.rondel).toMatchObject({
+        joker: 0,
+        wood: 1,
+      })
       const s1 = fellTrees({ row: 0, col: 1, useJoker: true })(s0)!
-      expect(s1.rondel.joker).toBe(2)
-      expect(s1.rondel.wood).toBe(1)
+      expect(s1.rondel).toMatchObject({
+        joker: 2,
+        wood: 1,
+      })
     })
     it('moves up the wood token', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(s0)!

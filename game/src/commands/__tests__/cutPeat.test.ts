@@ -49,7 +49,6 @@ describe('commands/cutPeat', () => {
     const s0: GameStatePlaying = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
-      activePlayerIndex: 0,
       config: {
         country: 'france',
         players: 3,
@@ -62,30 +61,41 @@ describe('commands/cutPeat', () => {
       },
       wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      settling: false,
-      extraRound: false,
-      moveInRound: 1,
-      round: 1,
-      startingPlayer: 1,
-      settlementRound: SettlementRound.S,
       buildings: [],
-      nextUse: NextUseClergy.Any,
-      canBuyLandscape: true,
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-      neutralBuildingPhase: false,
-      mainActionUsed: false,
-      bonusActions: [],
+      turn: {
+        activePlayerIndex: 0,
+        settling: false,
+        extraRound: false,
+        moveInRound: 1,
+        round: 1,
+        startingPlayer: 1,
+        settlementRound: SettlementRound.S,
+        nextUse: NextUseClergy.Any,
+        canBuyLandscape: true,
+        neutralBuildingPhase: false,
+        mainActionUsed: false,
+        bonusActions: [],
+      },
     }
 
     it('retains undefined state', () => {
-      const s1 = cutPeat({ row: 0, col: 1, useJoker: false })(undefined)
+      const s1 = cutPeat({ row: 0, col: 0, useJoker: false })(undefined)
       expect(s1).toBeUndefined()
     })
     it('wont go if main action already used', () => {
-      const s1 = { ...s0, mainActionUsed: true }
-      const s2 = cutPeat({ row: 0, col: 1, useJoker: false })(s1)!
+      const s1 = { ...s0, turn: { ...s0.turn, mainActionUsed: true } }
+      const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
+    })
+    it('if peat not on rondel, keeps token off but allows with zero peat', () => {
+      const s1 = { ...s0, rondel: { pointingBefore: 0, peat: undefined } }
+      expect(s1.players[0].peat).toBe(0)
+      expect(s1.rondel.peat).toBeUndefined()
+      const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
+      expect(s2.players[0].peat).toBe(0)
+      expect(s2.rondel.peat).toBeUndefined()
     })
 
     it('removes the peat bog', () => {

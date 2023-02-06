@@ -1,6 +1,6 @@
-import { pipe } from 'ramda'
+import { filter, pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
-import { getPlayer, isPrior, setPlayer } from '../board/player'
+import { getPlayer, isPrior, withActivePlayer } from '../board/player'
 import { consumeMainAction } from '../board/state'
 import { bakery } from '../buildings/bakery'
 import { bathhouse } from '../buildings/bathhouse'
@@ -54,7 +54,7 @@ const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   //                -> Free: free use allowed
   //                -> OnlyPrior: free use allowed, but only with prior
   //                -> None: do not allow
-  return match(state)
+  return match(state?.turn)
     .with(undefined, () => undefined)
     .with({ mainActionUsed: false }, () => state)
     .with({ nextUse: NextUseClergy.Free }, () => state)
@@ -68,17 +68,21 @@ const checkBuildingUsable =
   (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    if (state.usableBuildings && !state.usableBuildings.includes(building)) return undefined
+    if (state.turn.usableBuildings && !state.turn.usableBuildings.includes(building)) return undefined
     return state
   }
 
-export const findBuilding = (landscape: Tile[][], building: BuildingEnum): { row?: number; col?: number } => {
+export const findBuilding = (
+  landscape: Tile[][],
+  landscapeOffset: number,
+  building: BuildingEnum
+): { row?: number; col?: number } => {
   let row
   let col
   landscape.forEach((landRow, r) => {
     landRow.forEach(([_l, b, _c], c) => {
       if (building === b) {
-        row = r
+        row = r - landscapeOffset
         col = c
       }
     })
@@ -90,16 +94,16 @@ const moveClergyToOwnBuilding =
   (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    if (state.nextUse === NextUseClergy.Free) return state
+    if (state.turn.nextUse === NextUseClergy.Free) return state
     const player = getPlayer(state)
-    const { row, col } = findBuilding(player.landscape, building)
+    const { row, col } = findBuilding(player.landscape, player.landscapeOffset, building)
     if (row === undefined || col === undefined) return undefined
     const [land] = player.landscape[row][col]
 
     const priors = player.clergy.filter(isPrior)
-    if (state.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
+    if (state.turn.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
 
-    const nextClergy = match(state.nextUse)
+    const nextClergy = match(state.turn.nextUse)
       .with(NextUseClergy.Any, () => player.clergy[0])
       .with(NextUseClergy.None, () => undefined)
       .with(NextUseClergy.OnlyPrior, () => priors[0])
@@ -107,31 +111,37 @@ const moveClergyToOwnBuilding =
 
     if (nextClergy === undefined) return undefined
 
-    return setPlayer(state, {
+    return withActivePlayer((player) => ({
       ...player,
       landscape: [
-        ...player.landscape.slice(0, row),
+        ...player.landscape.slice(0, row + player.landscapeOffset),
         [
-          ...player.landscape[row].slice(0, col),
+          ...player.landscape[row + player.landscapeOffset].slice(0, col),
           [land, building, nextClergy] as Tile,
-          ...player.landscape[row].slice(col + 1),
+          ...player.landscape[row + player.landscapeOffset].slice(col + 1),
         ],
-        ...player.landscape.slice(row + 1),
+        ...player.landscape.slice(row + player.landscapeOffset + 1),
       ],
-      clergy: player.clergy.filter((c) => c !== nextClergy),
-    })
+      clergy: filter((c) => c !== nextClergy)(player.clergy),
+    }))(state)
   }
 
 const clearUsableBuildings = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
   state && {
     ...state,
-    usableBuildings: [],
+    turn: {
+      ...state.turn,
+      usableBuildings: [],
+    },
   }
 
 const clearNextUse = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
   state && {
     ...state,
-    nextUse: NextUseClergy.None,
+    turn: {
+      ...state.turn,
+      nextUse: NextUseClergy.None,
+    },
   }
 
 const BuildingFarmyard = P.union(

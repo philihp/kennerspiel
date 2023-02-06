@@ -1,28 +1,38 @@
+import { match } from 'ts-pattern'
 import { Clergy, Cost, GameStatePlaying, PlayerColor, Tableau } from '../types'
 
-export const clergyForColor = (color: PlayerColor): Clergy[] => {
-  switch (color) {
-    case PlayerColor.Red:
-      return [Clergy.LayBrother1R, Clergy.LayBrother2R, Clergy.PriorR]
-    case PlayerColor.Green:
-      return [Clergy.LayBrother1G, Clergy.LayBrother2G, Clergy.PriorG]
-    case PlayerColor.Blue:
-      return [Clergy.LayBrother1B, Clergy.LayBrother2B, Clergy.PriorB]
-    case PlayerColor.White:
-      return [Clergy.LayBrother1W, Clergy.LayBrother2W, Clergy.PriorW]
-    default:
-      return []
+export const withActivePlayer =
+  (func: (player: Tableau) => Tableau | undefined) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined) return state
+    const updatedPlayer = func(state.players[state.turn.activePlayerIndex])
+    if (updatedPlayer === undefined) return undefined
+    return {
+      ...state,
+      players: [
+        ...state.players.slice(0, state.turn.activePlayerIndex),
+        updatedPlayer,
+        ...state.players.slice(state.turn.activePlayerIndex + 1),
+      ],
+    }
   }
-}
+
+export const clergyForColor = (color: PlayerColor): Clergy[] =>
+  match(color)
+    .with(PlayerColor.Red, () => [Clergy.LayBrother1R, Clergy.LayBrother2R, Clergy.PriorR])
+    .with(PlayerColor.Green, () => [Clergy.LayBrother1G, Clergy.LayBrother2G, Clergy.PriorG])
+    .with(PlayerColor.Blue, () => [Clergy.LayBrother1B, Clergy.LayBrother2B, Clergy.PriorB])
+    .with(PlayerColor.White, () => [Clergy.LayBrother1W, Clergy.LayBrother2W, Clergy.PriorW])
+    .exhaustive()
 
 export const getPlayer = (state: GameStatePlaying, playerIndex?: number): Tableau => {
-  const index = playerIndex ?? state?.activePlayerIndex
+  const index = playerIndex ?? state?.turn?.activePlayerIndex
   return state.players[index]
 }
 
 export const setPlayer = (state: GameStatePlaying, player: Tableau, playerIndex?: number): GameStatePlaying => {
   if (state.players === undefined) return state
-  const i = playerIndex || state.activePlayerIndex
+  const i = playerIndex || state.turn.activePlayerIndex
   return {
     ...state,
     players: [...state.players.slice(0, i), player, ...state.players.slice(i + 1)],
@@ -33,23 +43,6 @@ export const setPlayerCurried =
   (player?: Tableau) =>
   (state: GameStatePlaying): GameStatePlaying | undefined =>
     player && setPlayer(state, player)
-
-export const withActivePlayer =
-  (func: (player: Tableau) => Tableau | undefined) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return state
-    const beforePlayers = state.players.slice(0, state.activePlayerIndex)
-    const afterPlayers = state.players.slice(state.activePlayerIndex + 1)
-
-    const updatedPlayer = func(state.players[state.activePlayerIndex])
-    if (updatedPlayer === undefined) return undefined
-
-    const players: Tableau[] = [...beforePlayers, updatedPlayer, ...afterPlayers]
-    return {
-      ...state,
-      players,
-    }
-  }
 
 export const isPrior = (clergy: Clergy | undefined) =>
   clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy)

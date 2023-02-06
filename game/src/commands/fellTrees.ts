@@ -8,14 +8,14 @@ import { consumeMainAction } from '../board/state'
 const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   return match(state)
     .with(undefined, () => undefined)
-    .with({ mainActionUsed: false }, () => state)
-    .with({ mainActionUsed: true }, () => undefined)
+    .with({ turn: { mainActionUsed: false } }, () => state)
+    .with({ turn: { mainActionUsed: true } }, () => undefined)
     .exhaustive()
 }
 
 const removeForestAt = (row: number, col: number) =>
   withActivePlayer((player) => {
-    const tile = player.landscape?.[row + player.landscapeOffset]?.[col + 2]
+    const tile = player.landscape[row + player.landscapeOffset][col + 2]
     if (tile === undefined) return undefined
     const [land, building] = tile
     if (building !== BuildingEnum.Forest) return undefined
@@ -44,17 +44,23 @@ export const givePlayerWood =
     return withActivePlayer(getCost({ wood: amount }))(state)
   }
 
-const updateWoodRondel =
-  (useJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    state && {
-      ...state,
-      rondel: {
-        ...state.rondel,
-        joker: useJoker ? state.rondel.pointingBefore : state.rondel.joker,
-        wood: !useJoker ? state.rondel.pointingBefore : state.rondel.wood,
-      },
-    }
+const updateWoodRondel = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+  state && {
+    ...state,
+    rondel: {
+      ...state.rondel,
+      wood: state.rondel.wood !== undefined ? state.rondel.pointingBefore : state.rondel.wood,
+    },
+  }
+
+const updateJokerRondel = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+  state && {
+    ...state,
+    rondel: {
+      ...state.rondel,
+      joker: state.rondel.joker !== undefined ? state.rondel.pointingBefore : state.rondel.joker,
+    },
+  }
 
 export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams) =>
   pipe(
@@ -63,5 +69,5 @@ export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams) =>
     consumeMainAction,
     givePlayerWood(useJoker),
     removeForestAt(row, col),
-    updateWoodRondel(useJoker)
+    useJoker ? updateJokerRondel : updateWoodRondel
   )

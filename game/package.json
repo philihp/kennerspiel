@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "fast-shuffle": "5.0.2",
-    "fn-pcg": "1.0.0",
+    "fn-pcg": "1.2.0",
     "ramda": "0.28.0",
     "ts-pattern": "4.0.6"
   },

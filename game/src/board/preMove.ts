@@ -10,7 +10,7 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): Ga
 
   let newState: GameStatePlaying | undefined = state
 
-  if (isExtraRound(state.config, state.round)) {
+  if (isExtraRound(state.config, state.turn.round)) {
     // board.preExtraRound()
     if (isPriorSpecialInExtraRound(state.config)) {
       // TODO: return all player priors home
@@ -19,16 +19,22 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): Ga
     }
     newState = {
       ...newState,
-      extraRound: true,
+      turn: {
+        ...newState.turn,
+        extraRound: true,
+      },
     }
-  } else if (state.settling && state.moveInRound === 1) {
+  } else if (state.turn.settling && state.turn.moveInRound === 1) {
     // board.preSettling()
     newState = {
       ...newState,
-      settlementRound: nextSettlementRound(state.settlementRound),
-      usableBuildings: undefined,
+      turn: {
+        ...newState.turn,
+        settlementRound: nextSettlementRound(state.turn.settlementRound),
+        usableBuildings: undefined,
+      },
     }
-  } else if (state.moveInRound === 1) {
+  } else if (state.turn.moveInRound === 1) {
     // board.preRound()
     newState = { ...newState }
 
@@ -62,17 +68,17 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): Ga
     // if(round == mode.jokerActiveOnRound()) getWheel().getJoker().setActive(true);
   }
 
-  // clear usableBuildings filter
-  newState.usableBuildings = undefined
-
-  // dont let previous player force next player into PRIOR
-  newState.nextUse = NextUseClergy.Any
-
-  // once per turn, a player can buy a landscape
-  newState.canBuyLandscape = true
-
-  newState.bonusActions = []
-  newState.mainActionUsed = false
+  newState.turn = {
+    ...newState.turn,
+    // clear usableBuildings filter
+    usableBuildings: undefined,
+    // dont let previous player force next player into PRIOR
+    nextUse: NextUseClergy.Any,
+    // once per turn, a player can buy a landscape
+    canBuyLandscape: true,
+    bonusActions: [],
+    mainActionUsed: false,
+  }
 
   return newState
 }

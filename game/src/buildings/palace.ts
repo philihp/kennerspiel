@@ -6,7 +6,10 @@ import { BuildingEnum, GameStatePlaying, NextUseClergy, Tableau, Tile } from '..
 const nextUseIsFree = (state: GameStatePlaying | undefined) =>
   state && {
     ...state,
-    nextUse: NextUseClergy.Free,
+    turn: {
+      ...state.turn,
+      nextUse: NextUseClergy.Free,
+    },
   }
 
 // given a row of tiles, return all of the buildings where there is a building AND a clergy
@@ -29,7 +32,7 @@ const occupiedBuildingsForPlayers = (players: Tableau[]) =>
   )
 
 const allOccupiedBuildingsUsable = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-  state && { ...state, usableBuildings: occupiedBuildingsForPlayers(state.players) }
+  state && { ...state, turn: { ...state.turn, usableBuildings: occupiedBuildingsForPlayers(state.players) } }
 
 export const palace = (input = '') => {
   const { wine = 0 } = parseResourceParam(input)

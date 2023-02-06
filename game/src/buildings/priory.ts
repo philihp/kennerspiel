@@ -9,13 +9,16 @@ const allowBuildingWithPriorUsable = (state: GameStatePlaying | undefined): Game
     .map(clergyForColor)
     .map(([, , prior]) => prior)
   const landscapes = state.players.map(({ landscape }) => landscape)
-  const clergyLocation = landscapes.map(findClergy(priors))
+  const clergyLocation = landscapes.map(findClergy(priors)).filter((l) => l.length > 0)
   const clergyBuildings = clergyLocation.map(([[_r, _c, [_l, building]]]) => building)
-  const usableBuildings = clergyBuildings.filter((b) => b !== undefined && b !== BuildingEnum.Priory) as BuildingEnum[]
+  const usableBuildings = clergyBuildings.filter((b) => b !== BuildingEnum.Priory) as BuildingEnum[]
   return {
     ...state,
-    usableBuildings,
-    nextUse: NextUseClergy.Free,
+    turn: {
+      ...state.turn,
+      usableBuildings,
+      nextUse: NextUseClergy.Free,
+    },
   }
 }
 

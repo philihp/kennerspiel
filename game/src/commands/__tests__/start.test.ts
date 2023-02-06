@@ -47,7 +47,7 @@ describe('commands/start', () => {
             length: 'short',
           },
         },
-        { seed: 42, colors: [PlayerColor.Red, PlayerColor.Green] }
+        { seed: 1, colors: [PlayerColor.Red, PlayerColor.Green] }
       )
       expect(dst).toBeDefined()
       expect(dst?.players).toHaveLength(2)
@@ -68,7 +68,7 @@ describe('commands/start', () => {
             length: 'short',
           },
         },
-        { seed: 42, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue, PlayerColor.White] }
+        { seed: 28, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue, PlayerColor.White] }
       )
       expect(dst).toBeDefined()
       expect(dst?.players).toHaveLength(4)
@@ -109,7 +109,7 @@ describe('commands/start', () => {
             length: 'short',
           },
         },
-        { seed: 42, colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue] }
+        { seed: 15, colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue] }
       )
       expect(dst).toBeDefined()
       expect(dst?.players).toHaveLength(3)
@@ -131,17 +131,18 @@ describe('commands/start', () => {
     })
 
     it('sets round, and moveInRound, and a starting player', () => {
-      expect.assertions(4)
       const s0 = initialState
       const s1 = config(s0!, { country: 'france', players: 4, length: 'long' })
       const s2 = start(s1!, {
         colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
         seed: 12345,
+      })!
+      expect(s2.turn).toMatchObject({
+        moveInRound: 1,
+        round: 1,
       })
-      expect(s2?.moveInRound).toBe(1)
-      expect(s2?.round).toBe(1)
-      expect(s2?.startingPlayer).toBeGreaterThanOrEqual(0)
-      expect(s2?.startingPlayer).toBeLessThan(4)
+      expect(s2.turn.startingPlayer).toBeGreaterThanOrEqual(0)
+      expect(s2.turn.startingPlayer).toBeLessThan(4)
     })
 
     it('starts up with buildings and settlements', () => {

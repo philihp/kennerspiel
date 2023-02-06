@@ -48,7 +48,6 @@ describe('buildings/cloisterGarden', () => {
     const s0: GameStatePlaying = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
-      activePlayerIndex: 0,
       config: {
         country: 'france',
         players: 3,
@@ -59,20 +58,23 @@ describe('buildings/cloisterGarden', () => {
       },
       wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      settling: false,
-      extraRound: false,
-      moveInRound: 1,
-      round: 1,
-      startingPlayer: 1,
-      settlementRound: SettlementRound.S,
       buildings: [],
-      nextUse: NextUseClergy.Any,
-      canBuyLandscape: true,
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-      neutralBuildingPhase: false,
-      mainActionUsed: false,
-      bonusActions: [],
+      turn: {
+        activePlayerIndex: 0,
+        settling: false,
+        extraRound: false,
+        moveInRound: 1,
+        round: 1,
+        startingPlayer: 1,
+        settlementRound: SettlementRound.S,
+        nextUse: NextUseClergy.Any,
+        canBuyLandscape: true,
+        neutralBuildingPhase: false,
+        mainActionUsed: false,
+        bonusActions: [],
+      },
     }
 
     it('goes through a happy path', () => {
@@ -82,21 +84,23 @@ describe('buildings/cloisterGarden', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P'], ['P'], ['P', 'F04'], ['P', 'F17'], ['P', 'LG1'], [], []],
+              [[], [], ['P'], ['P'], ['P', 'F04'], ['P', 'F17', 'PRIR'], ['P', 'G01'], [], []],
               [[], [], ['P'], ['P'], ['P', 'G16'], ['P', 'F09'], ['P', 'LG1'], [], []],
-              [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
+              [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'F08', 'LB1R'], ['P', 'LG3'], [], []],
             ] as Tile[][],
+            landscapeOffset: 1,
             grape: 0,
           },
           ...s0.players.slice(1),
         ],
       }
       const s2 = cloisterGarden()(s1)!
-      expect(s2.usableBuildings).toHaveLength(2)
-      expect(s2.usableBuildings).toContain('F17')
-      expect(s2.usableBuildings).toContain('G16')
-      expect(s2.usableBuildings).not.toContain('LG1')
-      expect(s2.usableBuildings).not.toContain('F08')
+      expect(s2.turn.usableBuildings).toHaveLength(2)
+      expect(s2.turn.usableBuildings).not.toContain('F17')
+      expect(s2.turn.usableBuildings).toContain('G16')
+      expect(s2.turn.usableBuildings).toContain('LG1')
+      expect(s2.turn.usableBuildings).not.toContain('F08')
+      expect(s2.turn.nextUse).toBe('free')
       expect(s2.players[0]).toMatchObject({
         grape: 1,
       })
