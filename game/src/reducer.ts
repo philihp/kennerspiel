@@ -58,7 +58,7 @@ export const reducer: Reducer = (state, action) => {
     )
     .with(
       [GameCommandEnum.CUT_PEAT, P.string, P.string],
-      [GameCommandEnum.CUT_PEAT, 'Jo', P.string, P.string],
+      [GameCommandEnum.CUT_PEAT, P.string, P.string, 'Jo'],
       ([_, col, row, useJoker]) =>
         cutPeat({
           col: Number.parseInt(col, 10),
