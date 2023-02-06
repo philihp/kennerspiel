@@ -86,10 +86,10 @@ describe('commands/use', () => {
       ],
     ]
     it('finds the building', () => {
-      expect(findBuilding(landscape, BuildingEnum.FarmYardB)).toStrictEqual({ row: 1, col: 2 })
+      expect(findBuilding(landscape, 0, BuildingEnum.FarmYardB)).toStrictEqual({ row: 1, col: 2 })
     })
     it('returns undefined if not found', () => {
-      expect(findBuilding(landscape, BuildingEnum.Alehouse)).toStrictEqual({ row: undefined, col: undefined })
+      expect(findBuilding(landscape, 0, BuildingEnum.Alehouse)).toStrictEqual({ row: undefined, col: undefined })
     })
   })
 })

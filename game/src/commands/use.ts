@@ -1,6 +1,6 @@
-import { pipe } from 'ramda'
+import { filter, pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
-import { getPlayer, isPrior, setPlayer } from '../board/player'
+import { getPlayer, isPrior, withActivePlayer } from '../board/player'
 import { consumeMainAction } from '../board/state'
 import { bakery } from '../buildings/bakery'
 import { bathhouse } from '../buildings/bathhouse'
@@ -72,13 +72,17 @@ const checkBuildingUsable =
     return state
   }
 
-export const findBuilding = (landscape: Tile[][], building: BuildingEnum): { row?: number; col?: number } => {
+export const findBuilding = (
+  landscape: Tile[][],
+  landscapeOffset: number,
+  building: BuildingEnum
+): { row?: number; col?: number } => {
   let row
   let col
   landscape.forEach((landRow, r) => {
     landRow.forEach(([_l, b, _c], c) => {
       if (building === b) {
-        row = r
+        row = r - landscapeOffset
         col = c
       }
     })
@@ -92,7 +96,7 @@ const moveClergyToOwnBuilding =
     if (state === undefined) return undefined
     if (state.turn.nextUse === NextUseClergy.Free) return state
     const player = getPlayer(state)
-    const { row, col } = findBuilding(player.landscape, building)
+    const { row, col } = findBuilding(player.landscape, player.landscapeOffset, building)
     if (row === undefined || col === undefined) return undefined
     const [land] = player.landscape[row][col]
 
@@ -107,19 +111,19 @@ const moveClergyToOwnBuilding =
 
     if (nextClergy === undefined) return undefined
 
-    return setPlayer(state, {
+    return withActivePlayer((player) => ({
       ...player,
       landscape: [
-        ...player.landscape.slice(0, row),
+        ...player.landscape.slice(0, row + player.landscapeOffset),
         [
-          ...player.landscape[row].slice(0, col),
+          ...player.landscape[row + player.landscapeOffset].slice(0, col),
           [land, building, nextClergy] as Tile,
-          ...player.landscape[row].slice(col + 1),
+          ...player.landscape[row + player.landscapeOffset].slice(col + 1),
         ],
-        ...player.landscape.slice(row + 1),
+        ...player.landscape.slice(row + player.landscapeOffset + 1),
       ],
-      clergy: player.clergy.filter((c) => c !== nextClergy),
-    })
+      clergy: filter((c) => c !== nextClergy)(player.clergy),
+    }))(state)
   }
 
 const clearUsableBuildings = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
