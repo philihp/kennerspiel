@@ -1,36 +1,29 @@
+import { match } from 'ts-pattern'
 import { Clergy, Cost, GameStatePlaying, PlayerColor, Tableau } from '../types'
 
 export const withActivePlayer =
   (func: (player: Tableau) => Tableau | undefined) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return state
-    const beforePlayers = state.players.slice(0, state.turn.activePlayerIndex)
-    const afterPlayers = state.players.slice(state.turn.activePlayerIndex + 1)
-
     const updatedPlayer = func(state.players[state.turn.activePlayerIndex])
     if (updatedPlayer === undefined) return undefined
-
-    const players: Tableau[] = [...beforePlayers, updatedPlayer, ...afterPlayers]
     return {
       ...state,
-      players,
+      players: [
+        ...state.players.slice(0, state.turn.activePlayerIndex),
+        updatedPlayer,
+        ...state.players.slice(state.turn.activePlayerIndex + 1),
+      ],
     }
   }
 
-export const clergyForColor = (color: PlayerColor): Clergy[] => {
-  switch (color) {
-    case PlayerColor.Red:
-      return [Clergy.LayBrother1R, Clergy.LayBrother2R, Clergy.PriorR]
-    case PlayerColor.Green:
-      return [Clergy.LayBrother1G, Clergy.LayBrother2G, Clergy.PriorG]
-    case PlayerColor.Blue:
-      return [Clergy.LayBrother1B, Clergy.LayBrother2B, Clergy.PriorB]
-    case PlayerColor.White:
-      return [Clergy.LayBrother1W, Clergy.LayBrother2W, Clergy.PriorW]
-    default:
-      return []
-  }
-}
+export const clergyForColor = (color: PlayerColor): Clergy[] =>
+  match(color)
+    .with(PlayerColor.Red, () => [Clergy.LayBrother1R, Clergy.LayBrother2R, Clergy.PriorR])
+    .with(PlayerColor.Green, () => [Clergy.LayBrother1G, Clergy.LayBrother2G, Clergy.PriorG])
+    .with(PlayerColor.Blue, () => [Clergy.LayBrother1B, Clergy.LayBrother2B, Clergy.PriorB])
+    .with(PlayerColor.White, () => [Clergy.LayBrother1W, Clergy.LayBrother2W, Clergy.PriorW])
+    .exhaustive()
 
 export const getPlayer = (state: GameStatePlaying, playerIndex?: number): Tableau => {
   const index = playerIndex ?? state?.turn?.activePlayerIndex
