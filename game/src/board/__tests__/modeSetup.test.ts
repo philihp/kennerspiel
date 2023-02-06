@@ -26,7 +26,7 @@ describe('board/modeSetup', () => {
     it('sets up boards for solo play', () => {
       const s0 = initialState!
       const s1 = config(s0, { country: 'france', players: 1, length: 'long' })!
-      const s2 = start(s1, { seed: 1, colors: [PlayerColor.Blue] })!
+      const s2 = start(s1, { seed: 3, colors: [PlayerColor.Blue] })!
       expect(s2.players[0].landscape).toStrictEqual([
         [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
         [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
