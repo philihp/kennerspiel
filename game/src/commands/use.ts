@@ -54,13 +54,13 @@ const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   //                -> Free: free use allowed
   //                -> OnlyPrior: free use allowed, but only with prior
   //                -> None: do not allow
-  return match(state)
+  return match(state?.turn)
     .with(undefined, () => undefined)
-    .with({ turn: { mainActionUsed: false } }, () => state)
-    .with({ turn: { nextUse: NextUseClergy.Free } }, () => state)
-    .with({ turn: { nextUse: NextUseClergy.OnlyPrior } }, () => state)
-    .with({ turn: { nextUse: NextUseClergy.Any } }, () => undefined)
-    .with({ turn: { nextUse: NextUseClergy.None } }, () => undefined)
+    .with({ mainActionUsed: false }, () => state)
+    .with({ nextUse: NextUseClergy.Free }, () => state)
+    .with({ nextUse: NextUseClergy.OnlyPrior }, () => state)
+    .with({ nextUse: NextUseClergy.Any }, () => undefined)
+    .with({ nextUse: NextUseClergy.None }, () => undefined)
     .exhaustive()
 }
 
