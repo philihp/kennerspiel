@@ -84,10 +84,11 @@ describe('buildings/cloisterGarden', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P'], ['P'], ['P', 'F04'], ['P', 'F17'], ['P', 'LG1'], [], []],
+              [[], [], ['P'], ['P'], ['P', 'F04'], ['P', 'F17', 'PRIR'], ['P', 'G01'], [], []],
               [[], [], ['P'], ['P'], ['P', 'G16'], ['P', 'F09'], ['P', 'LG1'], [], []],
-              [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
+              [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'F08', 'LB1R'], ['P', 'LG3'], [], []],
             ] as Tile[][],
+            landscapeOffset: 1,
             grape: 0,
           },
           ...s0.players.slice(1),
@@ -95,10 +96,11 @@ describe('buildings/cloisterGarden', () => {
       }
       const s2 = cloisterGarden()(s1)!
       expect(s2.turn.usableBuildings).toHaveLength(2)
-      expect(s2.turn.usableBuildings).toContain('F17')
+      expect(s2.turn.usableBuildings).not.toContain('F17')
       expect(s2.turn.usableBuildings).toContain('G16')
-      expect(s2.turn.usableBuildings).not.toContain('LG1')
+      expect(s2.turn.usableBuildings).toContain('LG1')
       expect(s2.turn.usableBuildings).not.toContain('F08')
+      expect(s2.turn.nextUse).toBe('free')
       expect(s2.players[0]).toMatchObject({
         grape: 1,
       })

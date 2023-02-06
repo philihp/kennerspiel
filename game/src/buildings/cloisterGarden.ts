@@ -1,8 +1,8 @@
-import { filter, pipe, reduce } from 'ramda'
+import { filter, map, pipe, reduce } from 'ramda'
 import { isCloisterBuilding } from '../board/buildings'
 import { findBuilding } from '../board/landscape'
 import { withActivePlayer } from '../board/player'
-import { BuildingEnum, GameStatePlaying, Tile } from '../types'
+import { BuildingEnum, GameStatePlaying, NextUseClergy, Tile } from '../types'
 
 const whichIndexHasBuilding =
   (building: BuildingEnum) =>
@@ -35,18 +35,21 @@ export const setNeighboringCloisterToGarden = (state: GameStatePlaying | undefin
   const cloisterNeighbors = pipe(
     reduce((accum, curr: [number, number, number]) => {
       const [p, r, c] = curr
-      const buildingHere = state.players[p].landscape?.[r]?.[c]?.[1]
-      if (buildingHere === undefined) return accum
-      accum.push(buildingHere)
+      const landStack = state.players[p].landscape?.[r]?.[c]
+      if (landStack === undefined) return accum
+      const [_, building, clergy] = landStack
+      if (building === undefined) return accum
+      if (clergy !== undefined) return accum
+      accum.push(building)
       return accum
-    }, [] as BuildingEnum[]),
-    filter(isCloisterBuilding)
+    }, [] as BuildingEnum[])
   )(checkLocations)
   return {
     ...state,
     turn: {
       ...state.turn,
       usableBuildings: cloisterNeighbors,
+      nextUse: NextUseClergy.Free,
     },
   }
 }
