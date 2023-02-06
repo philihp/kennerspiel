@@ -28,13 +28,16 @@ describe('commands/commit', () => {
         country: 'ireland',
         length: 'long',
       })
-      const s2 = {
-        ...start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue] })!,
-        activePlayerIndex: 2,
+      const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue] })!
+      const s3 = {
+        ...s2,
+        turn: {
+          ...s2.turn,
+          activePlayerIndex: 2,
+        },
       }
-
-      const s3 = commit(s2!)
-      expect(s3?.turn?.activePlayerIndex).toBe(0)
+      const s4 = commit(s3)
+      expect(s4?.turn?.activePlayerIndex).toBe(0)
     })
   })
 })

@@ -94,7 +94,7 @@ describe('commands/buyPlot', () => {
       const s1 = buyPlot({ side: 'COAST', y: 0 })(s0)!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,
@@ -110,7 +110,7 @@ describe('commands/buyPlot', () => {
       const s1 = buyPlot({ side: 'COAST', y: -1 })(s0)!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,
@@ -138,7 +138,7 @@ describe('commands/buyPlot', () => {
       })!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,
@@ -156,7 +156,7 @@ describe('commands/buyPlot', () => {
       const s1 = buyPlot({ side: 'COAST', y: +1 })(s0)!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,
@@ -184,7 +184,7 @@ describe('commands/buyPlot', () => {
       })!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,
@@ -204,7 +204,7 @@ describe('commands/buyPlot', () => {
       const s1 = buyPlot({ side: 'MOUNTAIN', y: 0 })(s0)!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,
@@ -220,7 +220,7 @@ describe('commands/buyPlot', () => {
       const s1 = buyPlot({ side: 'MOUNTAIN', y: -1 })(s0)!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,
@@ -248,7 +248,7 @@ describe('commands/buyPlot', () => {
       })!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,
@@ -266,7 +266,7 @@ describe('commands/buyPlot', () => {
       const s1 = buyPlot({ side: 'MOUNTAIN', y: +1 })(s0)!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,
@@ -294,7 +294,7 @@ describe('commands/buyPlot', () => {
       })!
       expect(s1).toMatchObject({
         plotPurchasePrices: [1, 1, 1, 1, 1],
-        canBuyLandscape: false,
+        turn: { canBuyLandscape: false },
       })
       expect(s1.players[0]).toMatchObject({
         penny: 99,

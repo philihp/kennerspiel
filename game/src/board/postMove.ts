@@ -15,7 +15,7 @@ import { roundSettlements } from './settlements'
 
 export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
   return match<GameCommandConfigParams, PostMoveHandler>(config) // .
-    .with({ players: 1, country: 'ireland' }, () => (state: GameStatePlaying) => {
+    .with({ players: 1, country: 'ireland' }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
       const newState = { ...state }
       let {
         buildings,
@@ -99,18 +99,21 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         ...newState,
         players,
         buildings,
-        activePlayerIndex,
-        settling,
-        extraRound,
-        moveInRound,
-        settlementRound,
-        status,
-        neutralBuildingPhase,
         rondel,
-        round,
+        status,
+        turn: {
+          ...newState.turn,
+          activePlayerIndex,
+          settling,
+          extraRound,
+          moveInRound,
+          settlementRound,
+          neutralBuildingPhase,
+          round,
+        },
       }
     })
-    .with({ players: 1, country: 'france' }, () => (state: GameStatePlaying) => {
+    .with({ players: 1, country: 'france' }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
       const newState = { ...state }
       let {
         buildings,
@@ -195,18 +198,21 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         ...newState,
         players,
         buildings,
-        activePlayerIndex,
-        settling,
-        extraRound,
-        moveInRound,
-        settlementRound,
+        turn: {
+          ...newState.turn,
+          activePlayerIndex,
+          settling,
+          extraRound,
+          moveInRound,
+          settlementRound,
+          neutralBuildingPhase,
+          round,
+        },
         status,
-        neutralBuildingPhase,
         rondel,
-        round,
       }
     })
-    .with({ players: 2, length: 'long' }, () => (state: GameStatePlaying) => {
+    .with({ players: 2, length: 'long' }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
       if (state.players === undefined) return undefined
       if (state.turn.moveInRound === undefined) return undefined
       if (state.turn.round === undefined) return undefined
@@ -252,14 +258,17 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         ...newState,
         rondel,
         status,
-        settling,
-        moveInRound,
-        activePlayerIndex,
-        round,
+        turn: {
+          ...newState.turn,
+          settling,
+          moveInRound,
+          activePlayerIndex,
+          round,
+        },
         players,
       }
     })
-    .with({ players: 2, length: 'short' }, (config) => (state: GameStatePlaying) => {
+    .with({ players: 2, length: 'short' }, (config) => (state: GameStatePlaying): GameStatePlaying | undefined => {
       if (state.players === undefined) return undefined
       if (state.turn.moveInRound === undefined) return undefined
       if (state.config === undefined) return undefined
@@ -309,14 +318,16 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         rondel,
         buildings,
         players,
-        round,
-        moveInRound,
-        activePlayerIndex,
-        settlementRound,
-        settling,
-      }
+        turn: {
+          round,
+          moveInRound,
+          activePlayerIndex,
+          settlementRound,
+          settling,
+        },
+      } as GameStatePlaying
     })
-    .with({ players: P.union(3, 4) }, () => (state: GameStatePlaying) => {
+    .with({ players: P.union(3, 4) }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
       if (state.config === undefined) return undefined
       if (state.players === undefined) return undefined
       if (state.turn.moveInRound === undefined) return undefined
@@ -368,12 +379,14 @@ export const postMove = (config: GameCommandConfigParams): PostMoveHandler => {
         status,
         players,
         buildings,
-        round,
-        settling,
-        extraRound,
-        activePlayerIndex,
-        moveInRound,
-      }
+        turn: {
+          round,
+          settling,
+          extraRound,
+          activePlayerIndex,
+          moveInRound,
+        },
+      } as GameStatePlaying
     })
     .otherwise(() => () => undefined)
 }

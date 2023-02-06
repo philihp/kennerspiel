@@ -5,7 +5,7 @@ import { settlementOnRound } from './settlements'
 
 export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
   match<GameCommandConfigParams, PostRoundHandler>(config)
-    .with({ players: 1 }, () => (state: GameStatePlaying) => {
+    .with({ players: 1 }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
       if (state.turn.round === undefined) return undefined
       if (state.config === undefined) return undefined
       if (state.turn.startingPlayer === undefined) return undefined
@@ -34,15 +34,18 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
 
       return {
         ...state,
-        moveInRound,
-        extraRound,
-        settling,
-        activePlayerIndex,
-        round,
-        startingPlayer,
+        turn: {
+          ...state.turn,
+          moveInRound,
+          extraRound,
+          settling,
+          activePlayerIndex,
+          round,
+          startingPlayer,
+        },
       }
     })
-    .with({ players: 2 }, () => (state: GameStatePlaying) => {
+    .with({ players: 2 }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
       if (state.turn.round === undefined) return undefined
       if (state.config === undefined) return undefined
       if (state.turn.startingPlayer === undefined) return undefined
@@ -69,14 +72,17 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
 
       return {
         ...state,
-        moveInRound,
-        settling,
-        round,
         status,
-        startingPlayer,
+        turn: {
+          ...state.turn,
+          moveInRound,
+          settling,
+          round,
+          startingPlayer,
+        },
       }
     })
-    .with({ players: P.union(3, 4) }, () => (state: GameStatePlaying) => {
+    .with({ players: P.union(3, 4) }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
       if (state.turn.round === undefined) return undefined
       if (state.config === undefined) return undefined
       if (state.turn.startingPlayer === undefined) return undefined
@@ -101,11 +107,14 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
 
       return {
         ...state,
-        moveInRound,
-        extraRound,
-        settling,
-        round,
-        startingPlayer,
+        turn: {
+          ...state.turn,
+          moveInRound,
+          extraRound,
+          settling,
+          round,
+          startingPlayer,
+        },
       }
     })
     .exhaustive()

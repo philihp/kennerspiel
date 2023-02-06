@@ -131,7 +131,6 @@ describe('commands/start', () => {
     })
 
     it('sets round, and moveInRound, and a starting player', () => {
-      expect.assertions(4)
       const s0 = initialState
       const s1 = config(s0!, { country: 'france', players: 4, length: 'long' })
       const s2 = start(s1!, {
