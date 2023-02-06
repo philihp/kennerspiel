@@ -47,7 +47,7 @@ describe('commands/start', () => {
             length: 'short',
           },
         },
-        { seed: 42, colors: [PlayerColor.Red, PlayerColor.Green] }
+        { seed: 1, colors: [PlayerColor.Red, PlayerColor.Green] }
       )
       expect(dst).toBeDefined()
       expect(dst?.players).toHaveLength(2)
@@ -68,7 +68,7 @@ describe('commands/start', () => {
             length: 'short',
           },
         },
-        { seed: 42, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue, PlayerColor.White] }
+        { seed: 28, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue, PlayerColor.White] }
       )
       expect(dst).toBeDefined()
       expect(dst?.players).toHaveLength(4)
@@ -109,7 +109,7 @@ describe('commands/start', () => {
             length: 'short',
           },
         },
-        { seed: 42, colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue] }
+        { seed: 15, colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue] }
       )
       expect(dst).toBeDefined()
       expect(dst?.players).toHaveLength(3)
