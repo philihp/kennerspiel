@@ -1,46 +1,9 @@
 import { pipe } from 'ramda'
+import { match, P } from 'ts-pattern'
 import { withActivePlayer } from '../board/player'
+import { updateRondel, withRondel } from '../board/rondel'
 import { take } from '../board/wheel'
 import { GameStatePlaying, ResourceEnum } from '../types'
-
-const advanceJokerOnRondel =
-  (withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    !withJoker
-      ? state
-      : state && {
-          ...state,
-          rondel: {
-            ...state.rondel,
-            joker: state.rondel.pointingBefore,
-          },
-        }
-
-const advanceSheepOnRondel =
-  (withSheep: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    !withSheep
-      ? state
-      : state && {
-          ...state,
-          rondel: {
-            ...state.rondel,
-            sheep: state.rondel.pointingBefore,
-          },
-        }
-
-const advanceGrainOnRondel =
-  (withGrain: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    !withGrain
-      ? state
-      : state && {
-          ...state,
-          rondel: {
-            ...state.rondel,
-            grain: state.rondel.pointingBefore,
-          },
-        }
 
 const takePlayerSheep =
   (shouldTake: boolean, withJoker: boolean) =>
@@ -76,16 +39,20 @@ const takePlayerGrain =
     )(state)
   }
 
+const updateToken = (withJoker: boolean, withSheep: boolean, withGrain: boolean) =>
+  match([withJoker, withSheep, withGrain])
+    .with([true, P.boolean, P.boolean], () => updateRondel('joker'))
+    .with([false, true, false], () => updateRondel('sheep'))
+    .with([false, false, true], () => updateRondel('grain'))
+    .otherwise(() => () => undefined)
+
 export const farmyard = (param = '') => {
   const withJoker = param.includes(ResourceEnum.Joker)
   const withSheep = param.includes(ResourceEnum.Sheep)
   const withGrain = param.includes(ResourceEnum.Grain)
   return pipe(
-    //
     takePlayerSheep(withSheep, withJoker),
     takePlayerGrain(withGrain, withJoker),
-    advanceJokerOnRondel(withJoker),
-    advanceSheepOnRondel(!withJoker && withSheep),
-    advanceGrainOnRondel(!withJoker && withGrain)
+    withRondel(updateToken(withJoker, withSheep, withGrain))
   )
 }
