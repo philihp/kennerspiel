@@ -4,6 +4,7 @@ import { getCost, withActivePlayer } from '../board/player'
 import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum } from '../types'
 import { take } from '../board/wheel'
 import { consumeMainAction } from '../board/state'
+import { updateRondel, withRondel } from '../board/rondel'
 
 const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   return match(state)
@@ -43,24 +44,6 @@ const givePlayerPeat =
     return withActivePlayer(getCost({ peat: amount }))(state)
   }
 
-const updatePeatRondel = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-  state && {
-    ...state,
-    rondel: {
-      ...state.rondel,
-      peat: state.rondel.peat !== undefined ? state.rondel.pointingBefore : state.rondel.peat,
-    },
-  }
-
-const updateJokerRondel = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-  state && {
-    ...state,
-    rondel: {
-      ...state.rondel,
-      joker: state.rondel.joker !== undefined ? state.rondel.pointingBefore : state.rondel.joker,
-    },
-  }
-
 export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams) =>
   pipe(
     //
@@ -68,5 +51,5 @@ export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams) =>
     consumeMainAction,
     givePlayerPeat(useJoker),
     removePeatAt(row, col),
-    useJoker ? updateJokerRondel : updatePeatRondel
+    withRondel(updateRondel(useJoker ? 'joker' : 'peat'))
   )

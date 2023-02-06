@@ -24,9 +24,9 @@ describe('buildings/cloisterCourtyard', () => {
       landscapeOffset: 0,
       peat: 0,
       penny: 0,
-      clay: 1,
-      wood: 1,
-      grain: 1,
+      clay: 11,
+      wood: 11,
+      grain: 11,
       sheep: 0,
       stone: 0,
       flour: 0,
@@ -85,11 +85,15 @@ describe('buildings/cloisterCourtyard', () => {
     it('goes through a happy path', () => {
       const s1 = cloisterCourtyard('ClWoGn', 'Sh')(s0)!
       expect(s1.players[0]).toMatchObject({
-        clay: 0,
-        wood: 0,
-        grain: 0,
+        clay: 10,
+        wood: 10,
+        grain: 10,
         sheep: 6,
       })
+    })
+    it('fails if two are the same', () => {
+      const s1 = cloisterCourtyard('ClWoWo', 'Sh')(s0)!
+      expect(s1).toBeUndefined()
     })
   })
 })

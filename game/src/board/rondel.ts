@@ -1,4 +1,26 @@
-import { Rondel } from '../types'
+import { GameStatePlaying, Rondel } from '../types'
+
+type TokenName = 'grain' | 'sheep' | 'clay' | 'coin' | 'wood' | 'joker' | 'peat' | 'grape' | 'stone'
+
+export const withRondel =
+  (func: (rondel: Rondel | undefined) => Rondel | undefined) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined) return state
+    const updatedRondel = func(state.rondel)
+    if (updatedRondel === undefined) return undefined
+    return {
+      ...state,
+      rondel: updatedRondel,
+    }
+  }
+
+export const updateRondel =
+  (token: TokenName) =>
+  (rondel: Rondel | undefined): Rondel | undefined =>
+    rondel && {
+      ...rondel,
+      [token]: rondel[token] !== undefined ? rondel.pointingBefore : rondel[token],
+    }
 
 export const pushArm = (rondel: Rondel, players: number): Rondel => {
   const next = rondel.pointingBefore + (1 % 13)
