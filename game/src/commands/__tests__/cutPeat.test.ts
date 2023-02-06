@@ -81,13 +81,21 @@ describe('commands/cutPeat', () => {
     }
 
     it('retains undefined state', () => {
-      const s1 = cutPeat({ row: 0, col: 1, useJoker: false })(undefined)
+      const s1 = cutPeat({ row: 0, col: 0, useJoker: false })(undefined)
       expect(s1).toBeUndefined()
     })
     it('wont go if main action already used', () => {
-      const s1 = { ...s0, mainActionUsed: true }
-      const s2 = cutPeat({ row: 0, col: 1, useJoker: false })(s1)!
+      const s1 = { ...s0, turn: { ...s0.turn, mainActionUsed: true } }
+      const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
+    })
+    it('if peat not on rondel, keeps token off but allows with zero peat', () => {
+      const s1 = { ...s0, rondel: { pointingBefore: 0, peat: undefined } }
+      expect(s1.players[0].peat).toBe(0)
+      expect(s1.rondel.peat).toBeUndefined()
+      const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
+      expect(s2.players[0].peat).toBe(0)
+      expect(s2.rondel.peat).toBeUndefined()
     })
 
     it('removes the peat bog', () => {

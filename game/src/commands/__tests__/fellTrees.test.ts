@@ -89,6 +89,12 @@ describe('commands/fellTrees', () => {
       const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
     })
+    it('if wood not on rondel, keeps wood off but allows with zero wood', () => {
+      const s1 = { ...s0, rondel: { pointingBefore: 0, wood: undefined } }
+      const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
+      expect(s2.rondel.wood).toBeUndefined()
+      expect(s2.players[0].wood).toBe(0)
+    })
     it('removes the forest', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(s0)!
       expect(s1.players[0]).toMatchObject({
@@ -104,9 +110,15 @@ describe('commands/fellTrees', () => {
       expect(s1).toBeUndefined()
     })
     it('moves up the joker', () => {
+      expect(s0.rondel).toMatchObject({
+        joker: 0,
+        wood: 1,
+      })
       const s1 = fellTrees({ row: 0, col: 1, useJoker: true })(s0)!
-      expect(s1.rondel.joker).toBe(2)
-      expect(s1.rondel.wood).toBe(1)
+      expect(s1.rondel).toMatchObject({
+        joker: 2,
+        wood: 1,
+      })
     })
     it('moves up the wood token', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(s0)!
