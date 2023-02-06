@@ -28,7 +28,7 @@ describe('buildings/clayMound', () => {
       const s0 = initialState
       const s1 = reducer(s0, ['CONFIG', '3', 'france', 'short'])!
       expect(s1).toBeDefined()
-      const s2 = reducer(s1, ['START', '42', 'R', 'B', 'G'])! as GameStatePlaying
+      const s2 = reducer(s1, ['START', '15', 'R', 'B', 'G'])! as GameStatePlaying
       expect(s2).toBeDefined()
       expect(s2.turn.activePlayerIndex).toBe(0)
       expect(s2.players[0].clay).toBe(1)
