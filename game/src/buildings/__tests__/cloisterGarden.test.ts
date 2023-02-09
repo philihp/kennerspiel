@@ -61,7 +61,8 @@ describe('buildings/cloisterGarden', () => {
       buildings: [],
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-      turn: {
+      frame: {
+        id: 1,
         activePlayerIndex: 0,
         settling: false,
         extraRound: false,
@@ -95,12 +96,12 @@ describe('buildings/cloisterGarden', () => {
         ],
       }
       const s2 = cloisterGarden()(s1)!
-      expect(s2.turn.usableBuildings).toHaveLength(2)
-      expect(s2.turn.usableBuildings).not.toContain('F17')
-      expect(s2.turn.usableBuildings).toContain('G16')
-      expect(s2.turn.usableBuildings).toContain('LG1')
-      expect(s2.turn.usableBuildings).not.toContain('F08')
-      expect(s2.turn.nextUse).toBe('free')
+      expect(s2.frame.usableBuildings).toHaveLength(2)
+      expect(s2.frame.usableBuildings).not.toContain('F17')
+      expect(s2.frame.usableBuildings).toContain('G16')
+      expect(s2.frame.usableBuildings).toContain('LG1')
+      expect(s2.frame.usableBuildings).not.toContain('F08')
+      expect(s2.frame.nextUse).toBe('free')
       expect(s2.players[0]).toMatchObject({
         grape: 1,
       })

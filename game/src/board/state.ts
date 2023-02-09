@@ -4,8 +4,8 @@ import { GameStatePlaying } from '../types'
 export const consumeMainAction = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
   state && {
     ...state,
-    turn: {
-      ...state.turn,
+    frame: {
+      ...state.frame,
       mainActionUsed: true,
     },
   }

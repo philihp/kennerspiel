@@ -6,20 +6,20 @@ import { settlementOnRound } from './settlements'
 export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
   match<GameCommandConfigParams, PostRoundHandler>(config)
     .with({ players: 1 }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
-      if (state.turn.round === undefined) return undefined
+      if (state.frame.round === undefined) return undefined
       if (state.config === undefined) return undefined
-      if (state.turn.startingPlayer === undefined) return undefined
+      if (state.frame.startingPlayer === undefined) return undefined
       if (state.players === undefined) return undefined
 
       let {
-        turn: { activePlayerIndex, moveInRound, extraRound, settling, round, startingPlayer },
+        frame: { activePlayerIndex, moveInRound, extraRound, settling, round, startingPlayer },
       } = state
       moveInRound = 1
 
-      if (isExtraRound(state.config, state.turn.round)) {
+      if (isExtraRound(state.config, state.frame.round)) {
         round++
         extraRound = true
-      } else if (state.turn.round === settlementOnRound(state.config, state.turn.settlementRound)) {
+      } else if (state.frame.round === settlementOnRound(state.config, state.frame.settlementRound)) {
         // 			if(neutralPlayer.isClergymenAllPlaced())
         // 				neutralPlayer.resetClergymen();
         settling = true
@@ -34,8 +34,8 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
 
       return {
         ...state,
-        turn: {
-          ...state.turn,
+        frame: {
+          ...state.frame,
           moveInRound,
           extraRound,
           settling,
@@ -46,24 +46,24 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
       }
     })
     .with({ players: 2 }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
-      if (state.turn.round === undefined) return undefined
+      if (state.frame.round === undefined) return undefined
       if (state.config === undefined) return undefined
-      if (state.turn.startingPlayer === undefined) return undefined
+      if (state.frame.startingPlayer === undefined) return undefined
       if (state.players === undefined) return undefined
 
       let {
         status,
-        turn: { moveInRound, settling, round, startingPlayer },
+        frame: { moveInRound, settling, round, startingPlayer },
       } = state
       moveInRound = 1
-      if (state.turn.round === settlementOnRound(state.config, state.turn.settlementRound)) {
+      if (state.frame.round === settlementOnRound(state.config, state.frame.settlementRound)) {
         settling = true
       } else {
         round++
       }
 
       // begin 2-player end-game detection.
-      if (!settling && state.turn.settlementRound === SettlementRound.D && state.buildings.length <= 3) {
+      if (!settling && state.frame.settlementRound === SettlementRound.D && state.buildings.length <= 3) {
         status = GameStatusEnum.FINISHED
       }
       // end 2-player end-game detection.
@@ -73,8 +73,8 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
       return {
         ...state,
         status,
-        turn: {
-          ...state.turn,
+        frame: {
+          ...state.frame,
           moveInRound,
           settling,
           round,
@@ -83,20 +83,20 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
       }
     })
     .with({ players: P.union(3, 4) }, () => (state: GameStatePlaying): GameStatePlaying | undefined => {
-      if (state.turn.round === undefined) return undefined
+      if (state.frame.round === undefined) return undefined
       if (state.config === undefined) return undefined
-      if (state.turn.startingPlayer === undefined) return undefined
+      if (state.frame.startingPlayer === undefined) return undefined
       if (state.players === undefined) return undefined
 
       let {
-        turn: { moveInRound, extraRound, settling, round, startingPlayer },
+        frame: { moveInRound, extraRound, settling, round, startingPlayer },
       } = state
       moveInRound = 1
 
-      if (isExtraRound(state.config, state.turn.round)) {
+      if (isExtraRound(state.config, state.frame.round)) {
         round++
         extraRound = true
-      } else if (state.turn.round === settlementOnRound(state.config, state.turn.settlementRound)) {
+      } else if (state.frame.round === settlementOnRound(state.config, state.frame.settlementRound)) {
         settling = true
       } else {
         round++
@@ -107,8 +107,8 @@ export const postRound = (config: GameCommandConfigParams): PostRoundHandler =>
 
       return {
         ...state,
-        turn: {
-          ...state.turn,
+        frame: {
+          ...state.frame,
           moveInRound,
           extraRound,
           settling,

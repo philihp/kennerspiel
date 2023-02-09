@@ -59,7 +59,7 @@ describe('board/player', () => {
   describe('setPlayer', () => {
     it('sets the active player only', () => {
       expect.assertions(4)
-      const src = { ...initialState, turn: { activePlayerIndex: 2 }, players: [p, p, p, p] }
+      const src = { ...initialState, frame: { activePlayerIndex: 2 }, players: [p, p, p, p] }
       const player: Tableau = { ...p, wood: 5 }
       const dst = setPlayer(src as unknown as GameStatePlaying, player)
       expect(dst?.players?.[0].wood).toBe(0)

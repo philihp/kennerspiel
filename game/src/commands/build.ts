@@ -7,7 +7,7 @@ import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, NextUseClergy, 
 
 const checkMainActionNotUsed = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
-  if (state.turn.mainActionUsed) return undefined
+  if (state.frame.mainActionUsed) return undefined
   return state
 }
 
@@ -97,8 +97,8 @@ export const allowPriorToUse =
     return (
       state && {
         ...state,
-        turn: {
-          ...state.turn,
+        frame: {
+          ...state.frame,
           nextUse: NextUseClergy.OnlyPrior,
           usableBuildings: [building],
         },

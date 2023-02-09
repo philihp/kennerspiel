@@ -26,8 +26,8 @@ describe('board/preMove', () => {
     const s2 = start(s1, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })! as GameStatePlaying
     const s3: GameStatePlaying = {
       ...s2,
-      turn: {
-        ...s2.turn,
+      frame: {
+        ...s2.frame,
         moveInRound: 1,
       },
       players: [
@@ -84,8 +84,8 @@ describe('board/preMove', () => {
     const s2 = start(s1!, { seed: 42, colors: [PlayerColor.Red, PlayerColor.Blue] })! as GameStatePlaying
     const s3: GameState = {
       ...s2!,
-      turn: {
-        ...s2.turn,
+      frame: {
+        ...s2.frame,
         moveInRound: 1,
       },
       players: [

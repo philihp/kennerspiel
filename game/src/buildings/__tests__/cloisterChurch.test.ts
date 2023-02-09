@@ -63,7 +63,8 @@ describe('buildings/cloisterChurch', () => {
       buildings: [],
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-      turn: {
+      frame: {
+        id: 1,
         activePlayerIndex: 0,
         settling: false,
         extraRound: false,

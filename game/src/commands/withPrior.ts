@@ -6,8 +6,8 @@ export const withPrior = (state?: GameStatePlaying): GameStatePlaying | undefine
   if (getPlayer(state).clergy.some(isPrior) === false) return undefined
   return {
     ...state,
-    turn: {
-      ...state.turn,
+    frame: {
+      ...state.frame,
       nextUse: NextUseClergy.OnlyPrior,
     },
   }

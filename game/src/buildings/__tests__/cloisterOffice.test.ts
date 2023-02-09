@@ -16,7 +16,7 @@ describe('buildings/clayMound', () => {
       expect(s1).toBeDefined()
       const s2 = reducer(s1, ['START', '42', 'R', 'G'])! as GameStatePlaying
       expect(s2).toBeDefined()
-      expect(s2.turn.activePlayerIndex).toBe(0)
+      expect(s2.frame.activePlayerIndex).toBe(0)
       expect(s2.players[0].penny).toBe(1)
       const s3 = reducer(s2, ['USE', 'LG3'])! as GameStatePlaying
       expect(s3.rondel.joker).not.toBe(s3.rondel.pointingBefore)
@@ -30,7 +30,7 @@ describe('buildings/clayMound', () => {
       expect(s1).toBeDefined()
       const s2 = reducer(s1, ['START', '15', 'R', 'B', 'G'])! as GameStatePlaying
       expect(s2).toBeDefined()
-      expect(s2.turn.activePlayerIndex).toBe(0)
+      expect(s2.frame.activePlayerIndex).toBe(0)
       expect(s2.players[0].clay).toBe(1)
       const s3 = reducer(s2, ['USE', 'LR3', 'Jo'])! as GameStatePlaying
       expect(s3.rondel.joker).toBe(s3.rondel.pointingBefore)

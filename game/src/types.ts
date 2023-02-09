@@ -353,7 +353,8 @@ export type Rondel = {
   stone?: number
 }
 
-export type TurnRegister = {
+export type Frame = {
+  id: number
   startingPlayer: number
   activePlayerIndex: number
   neutralBuildingPhase: boolean
@@ -402,7 +403,7 @@ export type GameStatePlaying = {
   buildings: BuildingEnum[]
   plotPurchasePrices: number[]
   districtPurchasePrices: number[]
-  turn: TurnRegister
+  frame: Frame
 }
 export type GameState = GameStateSetup | GameStatePlaying
 

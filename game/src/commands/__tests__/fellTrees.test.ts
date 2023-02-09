@@ -49,7 +49,8 @@ describe('commands/fellTrees', () => {
     const s0: GameStatePlaying = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
-      turn: {
+      frame: {
+        id: 1,
         activePlayerIndex: 0,
         settling: false,
         extraRound: false,
@@ -85,7 +86,7 @@ describe('commands/fellTrees', () => {
       expect(s1).toBeUndefined()
     })
     it('wont go if main action already used', () => {
-      const s1 = { ...s0, turn: { ...s0.turn, mainActionUsed: true } }
+      const s1 = { ...s0, frame: { ...s0.frame, mainActionUsed: true } }
       const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
     })

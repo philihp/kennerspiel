@@ -6,7 +6,7 @@ import { GameStatePlaying, GameCommandBuyPlotParams, Tile, LandEnum, BuildingEnu
 
 const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
-  if (state.turn.canBuyLandscape === false) return undefined
+  if (state.frame.canBuyLandscape === false) return undefined
   return state
 }
 
@@ -90,8 +90,8 @@ const denyBuyingAnyMoreLandscape = (state?: GameStatePlaying): GameStatePlaying 
   if (state === undefined) return undefined
   return {
     ...state,
-    turn: {
-      ...state.turn,
+    frame: {
+      ...state.frame,
       canBuyLandscape: false,
     },
   }
