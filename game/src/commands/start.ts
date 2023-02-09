@@ -28,7 +28,6 @@ export const start = (
 
   const randGen0 = newRandGen(seed)
   const [playerOrderSeed, randGen1] = randNext(randGen0)
-  const [startingPlayer, randGen2] = randRange(0, state.config.players, randGen1)
   const shuffledColors = fastShuffle(playerOrderSeed, colors)
 
   const players = new Array<Tableau>(state.config.players)
@@ -73,7 +72,7 @@ export const start = (
   const newState: GameStatePlaying = {
     ...state,
     config: state.config,
-    randGen: randGen2,
+    randGen: randGen1,
     status: GameStatusEnum.PLAYING,
     players,
     rondel: {
@@ -91,7 +90,7 @@ export const start = (
     wonders: 8,
     frame: {
       id: 1,
-      startingPlayer,
+      startingPlayer: 0,
       settlementRound: SettlementRound.S,
       workContractCost: 1,
       currentPlayerIndex: 0,
