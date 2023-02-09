@@ -44,33 +44,25 @@ import { stoneMerchant } from '../buildings/stoneMerchant'
 import { townEstate } from '../buildings/townEstate'
 import { windmill } from '../buildings/windmill'
 import { winery } from '../buildings/winery'
-import { BuildingEnum, GameStatePlaying, NextUseClergy, Tile } from '../types'
+import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, Tile } from '../types'
 
-const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
-  // mainActionUsed
-  // -> true, go for it
-  // -> false, then nextUse
-  //                -> Any: default, do not allow (but why wasn't this set to None?)
-  //                -> Free: free use allowed
-  //                -> OnlyPrior: free use allowed, but only with prior
-  //                -> None: do not allow
-  return match(state?.frame)
-    .with(undefined, () => undefined)
-    .with({ mainActionUsed: false }, () => state)
-    .with({ nextUse: NextUseClergy.Free }, () => state)
-    .with({ nextUse: NextUseClergy.OnlyPrior }, () => state)
-    .with({ nextUse: NextUseClergy.Any }, () => undefined)
-    .with({ nextUse: NextUseClergy.None }, () => undefined)
-    .exhaustive()
-}
-
-const checkBuildingUsable =
-  (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
-    if (state.frame.usableBuildings && !state.frame.usableBuildings.includes(building)) return undefined
-    return state
+const checkStateAllowsUse = (building: BuildingEnum) => (state: GameStatePlaying | undefined) => {
+  if (state === undefined) return undefined
+  if (state.frame.mainActionUsed === false) return state
+  if (state.frame.bonusActions.includes(GameCommandEnum.USE)) return state
+  if (
+    state.frame.usableBuildings.includes(building) === true &&
+    state.frame.unusableBuildings.includes(building) === false
+  ) {
+    return match(state.frame.nextUse)
+      .with(NextUseClergy.Free, () => state)
+      .with(NextUseClergy.OnlyPrior, () => state)
+      .with(NextUseClergy.Any, () => undefined)
+      .with(NextUseClergy.None, () => undefined)
+      .exhaustive()
   }
+  return undefined
+}
 
 export const findBuilding = (
   landscape: Tile[][],
@@ -126,23 +118,29 @@ const moveClergyToOwnBuilding =
     }))(state)
   }
 
-const clearUsableBuildings = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-  state && {
-    ...state,
-    frame: {
-      ...state.frame,
-      usableBuildings: [],
-    },
-  }
+const clearUsableBuildings = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  return (
+    state && {
+      ...state,
+      frame: {
+        ...state.frame,
+        usableBuildings: [],
+      },
+    }
+  )
+}
 
-const clearNextUse = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-  state && {
-    ...state,
-    frame: {
-      ...state.frame,
-      nextUse: NextUseClergy.None,
-    },
-  }
+const clearNextUse = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  return (
+    state && {
+      ...state,
+      frame: {
+        ...state.frame,
+        nextUse: NextUseClergy.None,
+      },
+    }
+  )
+}
 
 const BuildingFarmyard = P.union(
   BuildingEnum.FarmYardR,
@@ -167,8 +165,7 @@ const BuildingCloisterOffice = P.union(
 
 export const use = (building: BuildingEnum, params: string[]) =>
   pipe(
-    checkStateAllowsUse,
-    checkBuildingUsable(building),
+    checkStateAllowsUse(building),
     moveClergyToOwnBuilding(building),
     consumeMainAction,
     clearUsableBuildings,

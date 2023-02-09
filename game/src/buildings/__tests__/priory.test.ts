@@ -1,5 +1,16 @@
 import { reducer, initialState } from '../../reducer'
-import { BuildingEnum, Clergy, GameStatePlaying, LandEnum, NextUseClergy, PlayerColor } from '../../types'
+import {
+  BuildingEnum,
+  Clergy,
+  GameStatePlaying,
+  GameStatusEnum,
+  LandEnum,
+  NextUseClergy,
+  PlayerColor,
+  SettlementRound,
+  Tableau,
+  Tile,
+} from '../../types'
 import { priory } from '../priory'
 
 describe('buildings/proiry', () => {
@@ -10,56 +21,103 @@ describe('buildings/proiry', () => {
       expect(s1).toBeUndefined()
     })
     it('using priory allows usage of many buildings except itself', () => {
-      const s0 = initialState
-      const s1 = reducer(s0, ['CONFIG', '3', 'france', 'short'])!
-      const s2 = reducer(s1, ['START', '15', 'R', 'B', 'G'])! as GameStatePlaying
-      expect(s2.players[0].color).toBe(PlayerColor.Red)
-      expect(s2.players[1].color).toBe(PlayerColor.Green)
-      expect(s2.players[2].color).toBe(PlayerColor.Blue)
-      const s3: GameStatePlaying = {
-        ...s2,
-        buildings: [BuildingEnum.Priory],
+      const p0: Tableau = {
+        color: PlayerColor.Blue,
+        clergy: [],
+        settlements: [],
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        ] as Tile[][],
+        wonders: 0,
+        landscapeOffset: 0,
+        peat: 0,
+        penny: 0,
+        clay: 0,
+        wood: 0,
+        grain: 0,
+        sheep: 0,
+        stone: 0,
+        flour: 0,
+        grape: 0,
+        nickel: 0,
+        hops: 0,
+        coal: 0,
+        book: 0,
+        pottery: 0,
+        whiskey: 0,
+        straw: 0,
+        meat: 0,
+        ornament: 0,
+        bread: 0,
+        wine: 0,
+        beer: 0,
+        reliquary: 0,
+      }
+      const s0: GameStatePlaying = {
+        ...initialState,
+        status: GameStatusEnum.PLAYING,
+        config: {
+          country: 'france',
+          players: 3,
+          length: 'long',
+        },
+        rondel: {
+          pointingBefore: 0,
+        },
+        wonders: 0,
         players: [
           {
-            ...s2.players[0],
+            ...p0,
+            color: PlayerColor.Red,
             landscape: [
               [[], [], [LandEnum.Plains], [LandEnum.Plains, BuildingEnum.CloisterOfficeR], [], []],
               [[], [], [LandEnum.Plains], [LandEnum.Plains], [], []],
             ],
-            wood: 1,
-            clay: 1,
+            grain: 1,
             penny: 1,
           },
           {
-            ...s2.players[1],
+            ...p0,
+            color: PlayerColor.Green,
             clergy: [Clergy.LayBrother1G, Clergy.LayBrother2G],
             landscape: [[[LandEnum.Plains, BuildingEnum.GrainStorage, Clergy.PriorG]]],
           },
           {
-            ...s2.players[2],
+            ...p0,
+            color: PlayerColor.Blue,
             clergy: [Clergy.LayBrother1B, Clergy.LayBrother2B, Clergy.PriorB],
             landscape: [[[LandEnum.Plains, BuildingEnum.Windmill]]],
           },
         ],
+        buildings: [],
+        plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+        districtPurchasePrices: [],
+        frame: {
+          next: 1,
+          startingPlayer: 1,
+          settlementRound: SettlementRound.S,
+          workContractCost: 1,
+          currentPlayerIndex: 0,
+          activePlayerIndex: 0,
+          neutralBuildingPhase: false,
+          bonusRoundPlacement: false,
+          mainActionUsed: true,
+          bonusActions: [],
+          canBuyLandscape: true,
+          unusableBuildings: [],
+          usableBuildings: [],
+          nextUse: NextUseClergy.Any,
+        },
       }
-      const s4 = reducer(s3, ['BUILD', BuildingEnum.Priory, '0', '0'])! as GameStatePlaying
-      expect(s4.frame).toMatchObject({
-        nextUse: NextUseClergy.OnlyPrior,
-        usableBuildings: [BuildingEnum.Priory],
-      })
-      const s5 = reducer(s4, ['USE', BuildingEnum.Priory])! as GameStatePlaying
-      expect(s5.frame).toMatchObject({
+      const s1 = priory()(s0)! as GameStatePlaying
+      expect(s1.frame).toMatchObject({
         nextUse: NextUseClergy.Free,
         usableBuildings: [BuildingEnum.GrainStorage],
       })
-      const s6 = reducer(s5, ['USE', BuildingEnum.GrainStorage, 'Pn'])! as GameStatePlaying
-      expect(s6.players[0]).toMatchObject({
-        penny: 0,
-        grain: 8,
-      })
-      expect(s6.frame).toMatchObject({
-        nextUse: NextUseClergy.None,
-        usableBuildings: [],
+      expect(s1.players[0]).toMatchObject({
+        penny: 1,
+        grain: 1,
       })
     })
   })

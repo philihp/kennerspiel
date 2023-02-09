@@ -5,7 +5,6 @@ import { roundBuildings } from '../board/buildings'
 import { districtPrices, plotPrices } from '../board/landscape'
 import { makeLandscape, modeSetup } from '../board/modeSetup'
 import { clergyForColor } from '../board/player'
-import { preMove } from '../board/preMove'
 import { roundSettlements } from '../board/settlements'
 import {
   GameCommandStartParams,
@@ -29,7 +28,6 @@ export const start = (
 
   const randGen0 = newRandGen(seed)
   const [playerOrderSeed, randGen1] = randNext(randGen0)
-  const [startingPlayer, randGen2] = randRange(0, state.config.players, randGen1)
   const shuffledColors = fastShuffle(playerOrderSeed, colors)
 
   const players = new Array<Tableau>(state.config.players)
@@ -74,7 +72,7 @@ export const start = (
   const newState: GameStatePlaying = {
     ...state,
     config: state.config,
-    randGen: randGen2,
+    randGen: randGen1,
     status: GameStatusEnum.PLAYING,
     players,
     rondel: {
@@ -91,20 +89,20 @@ export const start = (
     },
     wonders: 8,
     frame: {
-      id: 1,
-      activePlayerIndex: 0,
-      startingPlayer,
-      round: 1,
-      moveInRound: 1,
-      extraRound: false,
+      next: 1,
+      startingPlayer: 0,
       settlementRound: SettlementRound.S,
+      workContractCost: 1,
+      currentPlayerIndex: 0,
+      activePlayerIndex: 0,
       neutralBuildingPhase: false,
-      usableBuildings: undefined,
-      nextUse: NextUseClergy.Any,
-      canBuyLandscape: true,
-      bonusActions: [],
+      bonusRoundPlacement: false,
       mainActionUsed: false,
-      settling: false,
+      bonusActions: [],
+      canBuyLandscape: true,
+      unusableBuildings: [],
+      usableBuildings: [],
+      nextUse: NextUseClergy.Any,
     },
     buildings: roundBuildings(state.config, SettlementRound.S),
     plotPurchasePrices: plotPrices(state.config),
@@ -112,7 +110,7 @@ export const start = (
   }
 
   return pipe(
-    modeSetup(state.config), // basically just single player stuff
-    preMove
+    modeSetup(state.config) // basically just single player stuff
+    // preMove
   )(newState)
 }

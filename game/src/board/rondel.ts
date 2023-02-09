@@ -6,11 +6,11 @@ export const withRondel =
   (func: (rondel: Rondel | undefined) => Rondel | undefined) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return state
-    const updatedRondel = func(state.rondel)
-    if (updatedRondel === undefined) return undefined
+    const rondel = func(state.rondel)
+    if (rondel === undefined) return undefined
     return {
       ...state,
-      rondel: updatedRondel,
+      rondel,
     }
   }
 
@@ -21,6 +21,16 @@ export const updateRondel =
       ...rondel,
       [token]: rondel[token] !== undefined ? rondel.pointingBefore : rondel[token],
     }
+
+export const introduceToken = (token: 'grape' | 'stone') =>
+  withRondel((rondel) => {
+    if (rondel === undefined) return undefined
+    return {
+      [token]: rondel?.pointingBefore,
+    } as Rondel
+  })
+export const introduceGrapeToken = introduceToken('grape')
+export const introduceStoneToken = introduceToken('stone')
 
 export const pushArm = (rondel: Rondel, players: number): Rondel => {
   const next = rondel.pointingBefore + (1 % 13)

@@ -1,17 +1,9 @@
-import { pipe } from 'ramda'
-import { postMove } from '../board/postMove'
-import { preMove } from '../board/preMove'
+import { identity, pipe } from 'ramda'
 import { GameCommandConfigParams, GameStatePlaying } from '../types'
 
-const runPostMove = (config?: GameCommandConfigParams) => {
-  if (config === undefined) return () => undefined
-  return postMove(config)
-}
-
-export const commit = (state: GameStatePlaying) => {
+export const commit = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
   return pipe(
     //
-    runPostMove(state.config),
-    preMove
+    identity
   )(state)
 }

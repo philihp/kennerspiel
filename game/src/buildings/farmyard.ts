@@ -50,6 +50,7 @@ export const farmyard = (param = '') => {
   const withJoker = param.includes(ResourceEnum.Joker)
   const withSheep = param.includes(ResourceEnum.Sheep)
   const withGrain = param.includes(ResourceEnum.Grain)
+  if (!withSheep && !withGrain) return () => undefined
   return pipe(
     takePlayerSheep(withSheep, withJoker),
     takePlayerGrain(withGrain, withJoker),

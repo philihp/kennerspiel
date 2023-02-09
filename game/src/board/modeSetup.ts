@@ -13,7 +13,7 @@ const startBuilding = {
   [PlayerColor.White]: [BuildingEnum.ClayMoundW, BuildingEnum.FarmYardW, BuildingEnum.CloisterOfficeW],
 }
 
-export const makeLandscape = (color: PlayerColor, isNeutral?: boolean): Tile[][] => {
+export const makeLandscape = (color: PlayerColor, isNeutral = false): Tile[][] => {
   const cm: Tile = [LandEnum.Hillside, startBuilding[color][0]]
   const fy: Tile = [LandEnum.Plains, startBuilding[color][1]]
   const co: Tile = [LandEnum.Plains, startBuilding[color][2]]
