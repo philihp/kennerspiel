@@ -91,7 +91,7 @@ export const start = (
     wonders: 8,
     frame: {
       id: 1,
-      startingPlayer: 1,
+      startingPlayer,
       settlementRound: SettlementRound.S,
       workContractCost: 1,
       currentPlayerIndex: 0,
