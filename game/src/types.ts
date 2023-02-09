@@ -355,7 +355,7 @@ export enum NextUseClergy {
 }
 
 export type Frame = {
-  id: number
+  next: number
 
   // primarily this is ornamental, display the starting player market
   startingPlayer: number

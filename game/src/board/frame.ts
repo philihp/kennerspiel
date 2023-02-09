@@ -1,5 +1,9 @@
+import { pipe, reduce, tap } from 'ramda'
 import { match, P } from 'ts-pattern'
-import { Clergy, Cost, Frame, GameStatePlaying, PlayerColor, Tableau } from '../types'
+import { Clergy, Cost, Frame, GameStatePlaying, NextUseClergy, PlayerColor, Tableau } from '../types'
+import { nextStandardLongFrame } from './frame/frameStandardLong'
+import { returnClergyIfPlaced } from './frame/returnClergyIfPlaced'
+import { rotateRondel } from './frame/rotateRondel'
 
 export const withFrame =
   (func: (frame: Frame | undefined) => Frame | undefined) =>
@@ -13,25 +17,28 @@ export const withFrame =
     }
   }
 
-// stone comes in at round 13
-// 24 rounds
-// grapes in round 8
-// stone in round 13
-// pushing past 10 keeps them at 10
-// for each player, return clergy if all are placed
-// rotate production wheel
-// if arm crosses a house, do settlement phase
-// - move the building marker
-// - starting with starting player,
-// - each player may build 1 settlement
-// - each player may buy at most 1 landscape
-// - then distribute new settlements
-// - then add new phase's buildings
-// if the arm crosses settlement E, it's now extra round
-// - each player takes prior back
-// - each player can either build or place prior onto any built building of their choice
 const nextFrameLongStandard = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  return state
+  const nextFrameIndex = state?.frame.next
+  if (nextFrameIndex === undefined) return undefined
+  const { upkeep = [], ...frameUpdates } = nextStandardLongFrame[nextFrameIndex] ?? {}
+  return pipe(
+    // first, with all of the properties on the new frame, overlay them on the current frame
+    withFrame((frame) => {
+      return {
+        ...frame,
+        mainActionUsed: false,
+        bonusActions: [],
+        canBuyLandscape: true,
+        unusableBuildings: [],
+        usableBuildings: [],
+        nextUse: NextUseClergy.Any,
+        ...frameUpdates,
+        activePlayerIndex: frame?.currentPlayerIndex,
+      } as Frame
+    }),
+    // and then if there are any upkeep reducer functions on the frame, run them
+    (state) => upkeep.reduce((accum, f) => f(accum), state)
+  )(state)
 }
 
 // 12 rounds plus a bonus round

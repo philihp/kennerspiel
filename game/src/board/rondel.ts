@@ -22,6 +22,16 @@ export const updateRondel =
       [token]: rondel[token] !== undefined ? rondel.pointingBefore : rondel[token],
     }
 
+export const introduceToken = (token: 'grape' | 'stone') =>
+  withRondel((rondel) => {
+    if (rondel === undefined) return undefined
+    return {
+      [token]: rondel?.pointingBefore,
+    } as Rondel
+  })
+export const introduceGrapeToken = introduceToken('grape')
+export const introduceStoneToken = introduceToken('stone')
+
 export const pushArm = (rondel: Rondel, players: number): Rondel => {
   const next = rondel.pointingBefore + (1 % 13)
   const bumper = (from?: number) => {

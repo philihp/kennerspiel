@@ -97,7 +97,7 @@ describe('buildings/clayMound', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       frame: {
-        id: 1,
+        next: 1,
         startingPlayer: 1,
         settlementRound: SettlementRound.S,
         workContractCost: 1,

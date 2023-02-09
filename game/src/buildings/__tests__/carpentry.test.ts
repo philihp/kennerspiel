@@ -49,7 +49,7 @@ describe('buildings/carpentry', () => {
       ...initialState,
       status: GameStatusEnum.PLAYING,
       frame: {
-        id: 1,
+        next: 1,
         startingPlayer: 1,
         settlementRound: SettlementRound.S,
         workContractCost: 1,

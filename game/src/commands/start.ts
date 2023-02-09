@@ -89,7 +89,7 @@ export const start = (
     },
     wonders: 8,
     frame: {
-      id: 1,
+      next: 1,
       startingPlayer: 0,
       settlementRound: SettlementRound.S,
       workContractCost: 1,

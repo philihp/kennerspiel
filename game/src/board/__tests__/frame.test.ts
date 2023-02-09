@@ -1,11 +1,7 @@
-import { match, P } from 'ts-pattern'
 import { initialState } from '../../reducer'
 import {
-  BuildingEnum,
-  Clergy,
   GameStatePlaying,
   GameStatusEnum,
-  LandEnum,
   NextUseClergy,
   PlayerColor,
   SettlementRound,
@@ -65,8 +61,8 @@ describe('board/frame', () => {
     plotPurchasePrices: [1, 1, 1, 1, 1, 1],
     districtPurchasePrices: [],
     frame: {
-      id: 1,
-      startingPlayer: 1,
+      next: 2,
+      startingPlayer: 0,
       settlementRound: SettlementRound.S,
       workContractCost: 1,
       currentPlayerIndex: 0,
@@ -94,8 +90,984 @@ describe('board/frame', () => {
       }
 
       it('advances through rounds', () => {
-        const s2 = nextFrame(s1)!
-        expect(s2.frame).toMatchObject({})
+        let s = s1
+        // Round 01
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 02
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 03
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 04
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 05
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Settlement A
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+
+        // Round 06
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 07
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 08
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 09
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 10
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Settlement B
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          settlementRound: 'B',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          settlementRound: 'B',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          settlementRound: 'B',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+
+        // Round 11
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 12
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 13
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 14
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Settlement C
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          settlementRound: 'C',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          settlementRound: 'C',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          settlementRound: 'C',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+
+        // Round 15
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 16
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 17
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 18
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 19
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Settlement D
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          settlementRound: 'D',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          settlementRound: 'D',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          settlementRound: 'D',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+
+        // Round 20
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 21
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 22
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 23
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 1,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Round 24
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 2,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: false,
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Bonus Round
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          bonusRoundPlacement: true,
+          settlementRound: 'D',
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          bonusRoundPlacement: true,
+          settlementRound: 'D',
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          bonusRoundPlacement: true,
+          settlementRound: 'D',
+          mainActionUsed: false,
+          bonusActions: [],
+        })
+        s = nextFrame(s)!
+
+        // Settlement D
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 0,
+          settlementRound: 'E',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 1,
+          settlementRound: 'E',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
+        expect(s.frame).toMatchObject({
+          startingPlayer: 0,
+          currentPlayerIndex: 2,
+          settlementRound: 'E',
+          mainActionUsed: true,
+          bonusActions: ['SETTLE'],
+        })
+        s = nextFrame(s)!
       })
     })
   })
