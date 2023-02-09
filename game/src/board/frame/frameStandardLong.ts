@@ -2,6 +2,8 @@ import { Frame, GameCommandEnum, GameStatePlaying, NextUseClergy, SettlementRoun
 import { introduceGrapeToken, introduceStoneToken } from '../rondel'
 import { allPriorsComeBack } from './allPriorsComeBack'
 import { gameEnd } from './gameEnd'
+import { introduceBuildings } from './introduceBuildings'
+import { rotateRondel } from './rotateRondel'
 
 export const nextStandardLongFrame: Record<
   number,
@@ -14,6 +16,7 @@ export const nextStandardLongFrame: Record<
   1: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
+    upkeep: [rotateRondel],
     next: 2,
   },
   2: {
@@ -32,6 +35,7 @@ export const nextStandardLongFrame: Record<
   5: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
+    upkeep: [rotateRondel],
     next: 6,
   },
   6: {
@@ -50,6 +54,7 @@ export const nextStandardLongFrame: Record<
   9: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
+    upkeep: [rotateRondel],
     next: 10,
   },
   10: {
@@ -68,6 +73,7 @@ export const nextStandardLongFrame: Record<
   13: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
+    upkeep: [rotateRondel],
     next: 14,
   },
   14: {
@@ -86,6 +92,7 @@ export const nextStandardLongFrame: Record<
   17: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
+    upkeep: [rotateRondel],
     next: 18,
   },
   18: {
@@ -124,6 +131,7 @@ export const nextStandardLongFrame: Record<
   // Round 6
   24: {
     currentPlayerIndex: 2,
+    upkeep: [introduceBuildings(SettlementRound.A), rotateRondel],
     next: 25,
   },
   25: {
@@ -142,6 +150,7 @@ export const nextStandardLongFrame: Record<
   28: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
+    upkeep: [rotateRondel],
     next: 29,
   },
   29: {
@@ -160,6 +169,7 @@ export const nextStandardLongFrame: Record<
   32: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
+    upkeep: [rotateRondel],
     next: 33,
   },
   33: {
@@ -178,7 +188,7 @@ export const nextStandardLongFrame: Record<
   36: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
-    upkeep: [introduceGrapeToken],
+    upkeep: [introduceGrapeToken, rotateRondel],
     next: 37,
   },
   37: {
@@ -197,6 +207,7 @@ export const nextStandardLongFrame: Record<
   40: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
+    upkeep: [rotateRondel],
     next: 41,
   },
   41: {
@@ -235,6 +246,7 @@ export const nextStandardLongFrame: Record<
   // Round 11
   47: {
     currentPlayerIndex: 1,
+    upkeep: [introduceBuildings(SettlementRound.B), rotateRondel],
     next: 48,
   },
   48: {
@@ -253,6 +265,7 @@ export const nextStandardLongFrame: Record<
   51: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
+    upkeep: [rotateRondel],
     next: 52,
   },
   52: {
@@ -271,7 +284,7 @@ export const nextStandardLongFrame: Record<
   55: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [introduceStoneToken],
+    upkeep: [introduceStoneToken, rotateRondel],
     next: 56,
   },
   56: {
@@ -290,6 +303,7 @@ export const nextStandardLongFrame: Record<
   59: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
+    upkeep: [rotateRondel],
     next: 60,
   },
   60: {
@@ -328,6 +342,7 @@ export const nextStandardLongFrame: Record<
   // Round 15
   66: {
     currentPlayerIndex: 2,
+    upkeep: [introduceBuildings(SettlementRound.C), rotateRondel],
     next: 67,
   },
   67: {
@@ -346,6 +361,7 @@ export const nextStandardLongFrame: Record<
   70: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
+    upkeep: [rotateRondel],
     next: 71,
   },
   71: {
@@ -364,6 +380,7 @@ export const nextStandardLongFrame: Record<
   74: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
+    upkeep: [rotateRondel],
     next: 75,
   },
   75: {
@@ -382,6 +399,7 @@ export const nextStandardLongFrame: Record<
   78: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
+    upkeep: [rotateRondel],
     next: 79,
   },
   79: {
@@ -400,6 +418,7 @@ export const nextStandardLongFrame: Record<
   82: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
+    upkeep: [rotateRondel],
     next: 83,
   },
   83: {
@@ -438,6 +457,7 @@ export const nextStandardLongFrame: Record<
   // Round 20
   89: {
     currentPlayerIndex: 1,
+    upkeep: [introduceBuildings(SettlementRound.D), rotateRondel],
     next: 90,
   },
   90: {
@@ -456,6 +476,7 @@ export const nextStandardLongFrame: Record<
   93: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
+    upkeep: [rotateRondel],
     next: 94,
   },
   94: {
@@ -474,6 +495,7 @@ export const nextStandardLongFrame: Record<
   97: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
+    upkeep: [rotateRondel],
     next: 98,
   },
   98: {
@@ -492,6 +514,7 @@ export const nextStandardLongFrame: Record<
   101: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
+    upkeep: [rotateRondel],
     next: 102,
   },
   102: {
@@ -510,6 +533,7 @@ export const nextStandardLongFrame: Record<
   105: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
+    upkeep: [rotateRondel],
     next: 106,
   },
   106: {
@@ -529,7 +553,7 @@ export const nextStandardLongFrame: Record<
     currentPlayerIndex: 0,
     bonusRoundPlacement: true,
     nextUse: NextUseClergy.OnlyPrior,
-    upkeep: [allPriorsComeBack],
+    upkeep: [allPriorsComeBack, rotateRondel],
     next: 110,
   },
   110: {
