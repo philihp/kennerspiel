@@ -1,24 +1,13 @@
 import { pipe } from 'ramda'
 import { withActivePlayer } from '../board/player'
+import { updateRondel, withRondel } from '../board/rondel'
 import { take } from '../board/wheel'
 import { GameStatePlaying, ResourceEnum } from '../types'
-
-const advanceClayOnRondel =
-  (withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    state && {
-      ...state,
-      rondel: {
-        ...state.rondel,
-        joker: withJoker ? state.rondel.pointingBefore : state.rondel.joker,
-        clay: !withJoker ? state.rondel.pointingBefore : state.rondel.clay,
-      },
-    }
 
 const takePlayerClay =
   (withJoker: boolean) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
+    if (state === undefined) return state
     const {
       config,
       rondel: { joker, clay, pointingBefore },
@@ -32,14 +21,13 @@ const takePlayerClay =
     )(state)
   }
 
+const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('clay'))
+
 export const clayMound = (param = '') => {
   const withJoker = param.includes(ResourceEnum.Joker)
-  return (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
-    return pipe(
-      //
-      takePlayerClay(withJoker),
-      advanceClayOnRondel(withJoker)
-    )(state)
-  }
+  return pipe(
+    //
+    takePlayerClay(withJoker),
+    withRondel(updateToken(withJoker))
+  )
 }

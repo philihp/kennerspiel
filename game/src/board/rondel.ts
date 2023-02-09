@@ -6,11 +6,11 @@ export const withRondel =
   (func: (rondel: Rondel | undefined) => Rondel | undefined) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return state
-    const updatedRondel = func(state.rondel)
-    if (updatedRondel === undefined) return undefined
+    const rondel = func(state.rondel)
+    if (rondel === undefined) return undefined
     return {
       ...state,
-      rondel: updatedRondel,
+      rondel,
     }
   }
 

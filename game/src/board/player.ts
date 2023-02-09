@@ -5,13 +5,13 @@ export const withActivePlayer =
   (func: (player: Tableau) => Tableau | undefined) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return state
-    const updatedPlayer = func(state.players[state.frame.activePlayerIndex])
-    if (updatedPlayer === undefined) return undefined
+    const player = func(state.players[state.frame.activePlayerIndex])
+    if (player === undefined) return undefined
     return {
       ...state,
       players: [
         ...state.players.slice(0, state.frame.activePlayerIndex),
-        updatedPlayer,
+        player,
         ...state.players.slice(state.frame.activePlayerIndex + 1),
       ],
     }

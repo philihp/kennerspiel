@@ -221,13 +221,6 @@ export enum BuildingEnum {
   HouseOfTheBrotherhood = 'G41',
 }
 
-export enum NextUseClergy {
-  Any = 'any', // next use can use any clergy (prefer lay)
-  OnlyPrior = 'only-prior', // next use must use prior, or it will fail
-  Free = 'free', // next use does not move a clergy
-  None = 'none', // next use must always fail
-}
-
 type UsageOfClergy = {
   usePrior?: boolean
 }
@@ -353,21 +346,76 @@ export type Rondel = {
   stone?: number
 }
 
+export enum NextUseClergy {
+  Any = 'any', // next use can use any clergy, using laybrother first
+  OnlyPrior = 'only-prior', // next use must use prior, or it will fail
+  Free = 'free', // next use does not move a clergy
+  None = 'none', // next use must always fail
+}
+
 export type Frame = {
   id: number
+
+  // primarily this is ornamental, display the starting player market
   startingPlayer: number
-  activePlayerIndex: number
-  neutralBuildingPhase: boolean
-  settling: boolean
+
+  // removing these, i think they're actually not needed
+  // moveInRound: number
+  // round: number
+
+  // also ornamental, however important for triggering end of game in 2p
   settlementRound: SettlementRound
-  extraRound: boolean
-  moveInRound: number
-  round: number
-  usableBuildings?: BuildingEnum[]
-  nextUse: NextUseClergy
-  canBuyLandscape: boolean
+
+  // this is 1 to start, and increases to 2 when winery/distillery is built.
+  // we can't just scan the landscapes because it could be overbuilt in solo play
+  workContractCost: 1 | 2
+
+  // activePlayer: this is the player we're waiting input from
+  // currentPlayer: this is the player whose turn it is.
+  // most of the time, this is going to be the same thing, however sometimes we need
+  // input from someone who isn't the current player... I'm thinking like if someone
+  // has been work contracted (and they can only give us either "COMMIT" or "WITH_PRIOR")
+  currentPlayerIndex: number
+  activePlayerIndex: number
+
+  // if this is true, then BUILDs will happen on the neutral board
+  neutralBuildingPhase: boolean
+
+  // if this is true, only settlement and conversion will be allowed
+  // removing this, settlmeent round should just add settle to bonus actions
+  // settling: boolean
+
+  // if this is true (which would be the case in a bonus round), then the prior may be placed on
+  // another player's board, and can be placed there even if it is occupied.
+  bonusRoundPlacement: boolean
+
+  // consume this first, if a main action is used by:
+  // - fell_trees
+  // - cut_peat
+  // - work_contract
+  // - build
+  // - use
   mainActionUsed: boolean
+
+  // if that's false, then check this list to see if the player can do the action
+  // if they do it, specifically remove that command from this list, which could come from:
+  // - locutory (build)
+  // - calefactory (cut-peat + fell trees)
+  // - castle (settlement)
+  // - bullwark (buy_district, buy_plot... which are free, if in this list)
   bonusActions: GameCommandEnum[]
+
+  // player can buy a landscape, but must pay cost
+  canBuyLandscape: boolean
+
+  // if mainActionUsed === true and bonusActions === [], "use" still possible, provided...
+  // the building is not in this list
+  unusableBuildings: BuildingEnum[]
+  // AND the building *IS* in this list
+  usableBuildings: BuildingEnum[]
+
+  // if the player tried to "use", then this determines if a clergy is placed
+  nextUse: NextUseClergy
 }
 
 export type GameActionCommit = { command: GameCommandEnum.COMMIT }
@@ -408,7 +456,3 @@ export type GameStatePlaying = {
 export type GameState = GameStateSetup | GameStatePlaying
 
 export type Reducer = (state: GameState, action: string[]) => GameState | undefined
-
-export type PreMoveHandler = (state: GameStatePlaying | undefined) => GameStatePlaying | undefined
-export type PostMoveHandler = (state: GameStatePlaying) => GameStatePlaying | undefined
-export type PostRoundHandler = (state: GameStatePlaying) => GameStatePlaying | undefined

@@ -137,10 +137,6 @@ describe('commands/start', () => {
         colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
         seed: 12345,
       })!
-      expect(s2.frame).toMatchObject({
-        moveInRound: 1,
-        round: 1,
-      })
       expect(s2.frame.startingPlayer).toBeGreaterThanOrEqual(0)
       expect(s2.frame.startingPlayer).toBeLessThan(4)
     })
