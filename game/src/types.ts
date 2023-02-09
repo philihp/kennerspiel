@@ -12,6 +12,7 @@ export enum GameCommandEnum {
   CONVERT = 'CONVERT',
   BUY_PLOT = 'BUY_PLOT',
   BUY_DISTRICT = 'BUY_DISTRICT',
+  SETTLE = 'SETTLE',
 }
 
 export type GameConfigPlayers = 1 | 2 | 3 | 4
