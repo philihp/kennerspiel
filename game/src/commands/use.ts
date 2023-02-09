@@ -54,7 +54,7 @@ const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   //                -> Free: free use allowed
   //                -> OnlyPrior: free use allowed, but only with prior
   //                -> None: do not allow
-  return match(state?.turn)
+  return match(state?.frame)
     .with(undefined, () => undefined)
     .with({ mainActionUsed: false }, () => state)
     .with({ nextUse: NextUseClergy.Free }, () => state)
@@ -68,7 +68,7 @@ const checkBuildingUsable =
   (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    if (state.turn.usableBuildings && !state.turn.usableBuildings.includes(building)) return undefined
+    if (state.frame.usableBuildings && !state.frame.usableBuildings.includes(building)) return undefined
     return state
   }
 
@@ -94,16 +94,16 @@ const moveClergyToOwnBuilding =
   (building: BuildingEnum) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
-    if (state.turn.nextUse === NextUseClergy.Free) return state
+    if (state.frame.nextUse === NextUseClergy.Free) return state
     const player = getPlayer(state)
     const { row, col } = findBuilding(player.landscape, player.landscapeOffset, building)
     if (row === undefined || col === undefined) return undefined
     const [land] = player.landscape[row][col]
 
     const priors = player.clergy.filter(isPrior)
-    if (state.turn.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
+    if (state.frame.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
 
-    const nextClergy = match(state.turn.nextUse)
+    const nextClergy = match(state.frame.nextUse)
       .with(NextUseClergy.Any, () => player.clergy[0])
       .with(NextUseClergy.None, () => undefined)
       .with(NextUseClergy.OnlyPrior, () => priors[0])
@@ -129,8 +129,8 @@ const moveClergyToOwnBuilding =
 const clearUsableBuildings = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
   state && {
     ...state,
-    turn: {
-      ...state.turn,
+    frame: {
+      ...state.frame,
       usableBuildings: [],
     },
   }
@@ -138,8 +138,8 @@ const clearUsableBuildings = (state: GameStatePlaying | undefined): GameStatePla
 const clearNextUse = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
   state && {
     ...state,
-    turn: {
-      ...state.turn,
+    frame: {
+      ...state.frame,
       nextUse: NextUseClergy.None,
     },
   }

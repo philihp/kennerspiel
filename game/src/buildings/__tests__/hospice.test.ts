@@ -49,7 +49,8 @@ describe('buildings/hospice', () => {
     const s0: GameStatePlaying = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
-      turn: {
+      frame: {
+        id: 1,
         activePlayerIndex: 0,
         settling: false,
         extraRound: false,
@@ -87,7 +88,7 @@ describe('buildings/hospice', () => {
 
     it('adds usable buildings and makes next use free', () => {
       const s1 = hospice()(s0)!
-      expect(s1.turn).toMatchObject({
+      expect(s1.frame).toMatchObject({
         nextUse: 'free',
         usableBuildings: ['F27', 'G28', 'F29', 'F30'],
       })

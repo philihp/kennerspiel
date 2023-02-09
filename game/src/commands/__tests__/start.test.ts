@@ -137,12 +137,12 @@ describe('commands/start', () => {
         colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
         seed: 12345,
       })!
-      expect(s2.turn).toMatchObject({
+      expect(s2.frame).toMatchObject({
         moveInRound: 1,
         round: 1,
       })
-      expect(s2.turn.startingPlayer).toBeGreaterThanOrEqual(0)
-      expect(s2.turn.startingPlayer).toBeLessThan(4)
+      expect(s2.frame.startingPlayer).toBeGreaterThanOrEqual(0)
+      expect(s2.frame.startingPlayer).toBeLessThan(4)
     })
 
     it('starts up with buildings and settlements', () => {

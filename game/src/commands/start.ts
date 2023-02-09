@@ -90,7 +90,8 @@ export const start = (
       joker: 0,
     },
     wonders: 8,
-    turn: {
+    frame: {
+      id: 1,
       activePlayerIndex: 0,
       startingPlayer,
       round: 1,

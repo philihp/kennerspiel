@@ -27,7 +27,7 @@ describe('game 29767', () => {
     const s17 = reducer(s16, ['BUILD', 'G06', '0', '0'])! as GameStatePlaying
 
     expect(s2.status).toBe('PLAYING')
-    expect(s2.turn).toMatchObject({
+    expect(s2.frame).toMatchObject({
       round: 1,
       moveInRound: 1,
       settlementRound: 'S',
@@ -40,14 +40,14 @@ describe('game 29767', () => {
     expect(s3.players[0].landscape[0][2]).toStrictEqual(['P'])
     expect(s3.rondel.peat).toBe(s3.rondel.pointingBefore)
     expect(s3.players[0].clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
-    expect(s4.turn).toMatchObject({
+    expect(s4.frame).toMatchObject({
       round: 1,
       moveInRound: 2,
     })
     expect(s4.players[0].grain).toBe(0)
     expect(s5.players[0].grain).toBe(2)
     expect(s5.players[0].clergy).toStrictEqual(['LB2R', 'PRIR'])
-    expect(s6.turn).toMatchObject({
+    expect(s6.frame).toMatchObject({
       round: 2,
       moveInRound: 1,
     })
@@ -58,7 +58,7 @@ describe('game 29767', () => {
     expect(s7.rondel.wood).toBe(2)
     expect(s7.players[0].wood).toBe(3)
 
-    expect(s8.turn).toMatchObject({
+    expect(s8.frame).toMatchObject({
       round: 2,
       moveInRound: 2,
     })
@@ -68,7 +68,7 @@ describe('game 29767', () => {
     expect(s9.players[0].peat).toBe(4)
     expect(s9.rondel.peat).toBe(2)
 
-    expect(s10.turn).toMatchObject({
+    expect(s10.frame).toMatchObject({
       round: 3,
       moveInRound: 1,
     })
@@ -79,7 +79,7 @@ describe('game 29767', () => {
     expect(s11.rondel.clay).toBe(3)
     expect(s11.players[0].clay).toBe(4)
 
-    expect(s12.turn).toMatchObject({
+    expect(s12.frame).toMatchObject({
       round: 3,
       moveInRound: 2,
     })
@@ -110,11 +110,11 @@ describe('game 29767', () => {
     })
     expect(s14.rondel.pointingBefore).toBe(3)
 
-    expect(s14.turn).toMatchObject({
+    expect(s14.frame).toMatchObject({
       round: 3,
       moveInRound: 2,
     })
-    expect(s15.turn).toMatchObject({
+    expect(s15.frame).toMatchObject({
       round: 4,
       moveInRound: 1,
     })

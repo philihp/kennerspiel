@@ -6,7 +6,7 @@ export const preRound = (config: GameCommandConfigParams): PostMoveHandler =>
     .with({ length: 'short', players: P.union(3, 4) }, () => (state: GameStatePlaying) => ({
       ...state,
       players: state.players?.map((player) => {
-        switch (state.turn.round) {
+        switch (state.frame.round) {
           case 1:
             return {
               ...player,

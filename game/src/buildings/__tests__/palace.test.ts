@@ -118,7 +118,8 @@ describe('buildings/palace', () => {
     const s0: GameStatePlaying = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
-      turn: {
+      frame: {
+        id: 1,
         activePlayerIndex: 0,
         settling: false,
         extraRound: false,
@@ -154,8 +155,8 @@ describe('buildings/palace', () => {
       expect(s1.players[0]).toMatchObject({
         wine: 0,
       })
-      expect(s1.turn.nextUse).toBe('free')
-      expect(s1.turn.usableBuildings?.sort()).toStrictEqual(['LB3', 'G26', 'LR3', 'G28', 'G19'].sort())
+      expect(s1.frame.nextUse).toBe('free')
+      expect(s1.frame.usableBuildings?.sort()).toStrictEqual(['LB3', 'G26', 'LR3', 'G28', 'G19'].sort())
     })
   })
 })

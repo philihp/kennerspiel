@@ -15,8 +15,8 @@ describe('commands/build', () => {
     it('fails when building is not available', () => {
       const s3: GameStatePlaying = {
         ...s2,
-        turn: {
-          ...s2.turn,
+        frame: {
+          ...s2.frame,
           activePlayerIndex: 0,
         },
         players: [
@@ -36,8 +36,8 @@ describe('commands/build', () => {
     it('fails when erection present', () => {
       const s3: GameStatePlaying = {
         ...s2,
-        turn: {
-          ...s2.turn,
+        frame: {
+          ...s2.frame,
           activePlayerIndex: 0,
         },
         players: [
@@ -56,8 +56,8 @@ describe('commands/build', () => {
     it('fails when player cant afford building', () => {
       const s3: GameStatePlaying = {
         ...s2,
-        turn: {
-          ...s2.turn,
+        frame: {
+          ...s2.frame,
           activePlayerIndex: 0,
         },
         players: [
@@ -78,8 +78,8 @@ describe('commands/build', () => {
     it('fails if building cloister without being neighbors to another', () => {
       const s3: GameStatePlaying = {
         ...s2,
-        turn: {
-          ...s2.turn,
+        frame: {
+          ...s2.frame,
           activePlayerIndex: 0,
         },
         players: [
@@ -99,8 +99,8 @@ describe('commands/build', () => {
     it('builds just fine', () => {
       const s3: GameStatePlaying = {
         ...s2,
-        turn: {
-          ...s2.turn,
+        frame: {
+          ...s2.frame,
           activePlayerIndex: 0,
         },
         players: [
@@ -127,8 +127,8 @@ describe('commands/build', () => {
     it('accounts for landscape Y offset', () => {
       const s3: GameStatePlaying = {
         ...s2,
-        turn: {
-          ...s2.turn,
+        frame: {
+          ...s2.frame,
           activePlayerIndex: 0,
         },
         players: [

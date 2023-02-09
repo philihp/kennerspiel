@@ -6,8 +6,8 @@ import { BuildingEnum, GameStatePlaying, NextUseClergy, Tableau, Tile } from '..
 const nextUseIsFree = (state: GameStatePlaying | undefined) =>
   state && {
     ...state,
-    turn: {
-      ...state.turn,
+    frame: {
+      ...state.frame,
       nextUse: NextUseClergy.Free,
     },
   }
@@ -32,7 +32,7 @@ const occupiedBuildingsForPlayers = (players: Tableau[]) =>
   )
 
 const allOccupiedBuildingsUsable = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-  state && { ...state, turn: { ...state.turn, usableBuildings: occupiedBuildingsForPlayers(state.players) } }
+  state && { ...state, frame: { ...state.frame, usableBuildings: occupiedBuildingsForPlayers(state.players) } }
 
 export const palace = (input = '') => {
   const { wine = 0 } = parseResourceParam(input)

@@ -10,7 +10,7 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): Ga
 
   let newState: GameStatePlaying | undefined = state
 
-  if (isExtraRound(state.config, state.turn.round)) {
+  if (isExtraRound(state.config, state.frame.round)) {
     // board.preExtraRound()
     if (isPriorSpecialInExtraRound(state.config)) {
       // TODO: return all player priors home
@@ -19,22 +19,22 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): Ga
     }
     newState = {
       ...newState,
-      turn: {
-        ...newState.turn,
+      frame: {
+        ...newState.frame,
         extraRound: true,
       },
     }
-  } else if (state.turn.settling && state.turn.moveInRound === 1) {
+  } else if (state.frame.settling && state.frame.moveInRound === 1) {
     // board.preSettling()
     newState = {
       ...newState,
-      turn: {
-        ...newState.turn,
-        settlementRound: nextSettlementRound(state.turn.settlementRound),
+      frame: {
+        ...newState.frame,
+        settlementRound: nextSettlementRound(state.frame.settlementRound),
         usableBuildings: undefined,
       },
     }
-  } else if (state.turn.moveInRound === 1) {
+  } else if (state.frame.moveInRound === 1) {
     // board.preRound()
     newState = { ...newState }
 
@@ -68,8 +68,8 @@ export const preMove: PreMoveHandler = (state: GameStatePlaying | undefined): Ga
     // if(round == mode.jokerActiveOnRound()) getWheel().getJoker().setActive(true);
   }
 
-  newState.turn = {
-    ...newState.turn,
+  newState.frame = {
+    ...newState.frame,
     // clear usableBuildings filter
     usableBuildings: undefined,
     // dont let previous player force next player into PRIOR

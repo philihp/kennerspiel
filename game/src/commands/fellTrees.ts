@@ -8,8 +8,8 @@ import { consumeMainAction } from '../board/state'
 const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   return match(state)
     .with(undefined, () => undefined)
-    .with({ turn: { mainActionUsed: false } }, () => state)
-    .with({ turn: { mainActionUsed: true } }, () => undefined)
+    .with({ frame: { mainActionUsed: false } }, () => state)
+    .with({ frame: { mainActionUsed: true } }, () => undefined)
     .exhaustive()
 }
 

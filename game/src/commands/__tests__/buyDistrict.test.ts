@@ -61,7 +61,8 @@ describe('commands/buyDistrict', () => {
       buildings: [],
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [2, 3, 4, 4, 5, 5, 6, 7, 8],
-      turn: {
+      frame: {
+        id: 1,
         activePlayerIndex: 0,
         settling: false,
         extraRound: false,
@@ -89,7 +90,7 @@ describe('commands/buyDistrict', () => {
       })
       const s1 = buyDistrict({ side: 'HILLS', y: -1 })(s0)!
       expect(s1).toMatchObject({
-        turn: {
+        frame: {
           canBuyLandscape: false,
         },
         districtPurchasePrices: [3, 4, 4, 5, 5, 6, 7, 8],
@@ -113,7 +114,7 @@ describe('commands/buyDistrict', () => {
     it('does not allow buying twice', () => {
       const s1 = buyDistrict({ side: 'HILLS', y: -1 })(s0)!
       expect(s1).toMatchObject({
-        turn: {
+        frame: {
           canBuyLandscape: false,
         },
       })
@@ -124,7 +125,7 @@ describe('commands/buyDistrict', () => {
     it('can buyDistrict to bottom', () => {
       const s1 = buyDistrict({ side: 'PLAINS', y: 2 })(s0)!
       expect(s1).toMatchObject({
-        turn: {
+        frame: {
           canBuyLandscape: false,
         },
         districtPurchasePrices: [3, 4, 4, 5, 5, 6, 7, 8],
@@ -158,7 +159,7 @@ describe('commands/buyDistrict', () => {
       }
       const s2 = buyDistrict({ side: 'PLAINS', y: 3 })(s1)!
       expect(s2).toMatchObject({
-        turn: {
+        frame: {
           canBuyLandscape: false,
         },
         districtPurchasePrices: [3, 4, 4, 5, 5, 6, 7, 8],

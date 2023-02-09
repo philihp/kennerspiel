@@ -64,7 +64,8 @@ describe('commands/cutPeat', () => {
       buildings: [],
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-      turn: {
+      frame: {
+        id: 1,
         activePlayerIndex: 0,
         settling: false,
         extraRound: false,
@@ -85,7 +86,7 @@ describe('commands/cutPeat', () => {
       expect(s1).toBeUndefined()
     })
     it('wont go if main action already used', () => {
-      const s1 = { ...s0, turn: { ...s0.turn, mainActionUsed: true } }
+      const s1 = { ...s0, frame: { ...s0.frame, mainActionUsed: true } }
       const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
     })
