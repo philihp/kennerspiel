@@ -7,7 +7,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { initialState } from '../../reducer'
+import { initialState } from '../../state'
 import { bakery } from '../bakery'
 
 describe('buildings/bakery', () => {

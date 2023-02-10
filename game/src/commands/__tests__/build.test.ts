@@ -1,4 +1,5 @@
-import { initialState, reducer } from '../../reducer'
+import { reducer } from '../../reducer'
+import { initialState } from '../../state'
 import { BuildingEnum, GameStatePlaying, LandEnum, PlayerColor } from '../../types'
 import { config } from '../config'
 import { start } from '../start'

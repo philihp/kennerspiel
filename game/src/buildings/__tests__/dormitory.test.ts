@@ -1,4 +1,5 @@
-import { reducer, initialState } from '../../reducer'
+import { reducer } from '../../reducer'
+import { initialState } from '../../state'
 import { GameStatePlaying } from '../../types'
 import { dormitory } from '../dormitory'
 

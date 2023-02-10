@@ -16,7 +16,6 @@ import {
   GameState,
   GameStatePlaying,
   GameStateSetup,
-  GameStatusEnum,
   PlayerColor,
   Reducer,
 } from './types'
@@ -24,11 +23,6 @@ import { parseResourceParam } from './board/resource'
 import { withPrior } from './commands/withPrior'
 import { buyPlot } from './commands/buyPlot'
 import { buyDistrict } from './commands/buyDistrict'
-
-export const initialState: GameStateSetup = {
-  randGen: 0n,
-  status: GameStatusEnum.SETUP,
-}
 
 const PColor = P.union(PlayerColor.Blue, PlayerColor.White, PlayerColor.Red, PlayerColor.Green)
 const PPlot = P.union('MOUNTAIN', 'COAST')
