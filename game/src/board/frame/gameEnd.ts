@@ -6,3 +6,4 @@ export const gameEnd = (state: GameStatePlaying | undefined): GameStatePlaying |
     ...state,
     status: GameStatusEnum.FINISHED,
   }
+}
