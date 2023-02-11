@@ -1,33 +1,30 @@
-import { GameStatePlaying, Rondel } from '../../types'
+import { withRondel } from '../rondel'
 
-const pushArm = (rondel: Rondel, players: number): Rondel => {
-  const next = rondel.pointingBefore + (1 % 13)
-  const bumper = (from?: number) => {
-    if (from === next) {
-      if (players === 1) return undefined
-      return (from + 1) % 13
+export const pushArm = (expireAfterTen = false) =>
+  withRondel((rondel) => {
+    if (rondel === undefined) return undefined
+    const next = rondel.pointingBefore + (1 % 13)
+    const bumper = (from?: number) => {
+      if (from === next) {
+        if (expireAfterTen) return undefined
+        return (from + 1) % 13
+      }
+      return from
     }
-    return from
-  }
-  return {
-    ...rondel,
-    pointingBefore: next,
-    grain: bumper(rondel.grain),
-    sheep: bumper(rondel.sheep),
-    clay: bumper(rondel.clay),
-    coin: bumper(rondel.coin),
-    wood: bumper(rondel.wood),
-    joker: bumper(rondel.joker),
-    peat: bumper(rondel.peat),
-    grape: bumper(rondel.grape),
-    stone: bumper(rondel.stone),
-  }
-}
+    return {
+      ...rondel,
+      pointingBefore: next,
+      grain: bumper(rondel.grain),
+      sheep: bumper(rondel.sheep),
+      clay: bumper(rondel.clay),
+      coin: bumper(rondel.coin),
+      wood: bumper(rondel.wood),
+      joker: bumper(rondel.joker),
+      peat: bumper(rondel.peat),
+      grape: bumper(rondel.grape),
+      stone: bumper(rondel.stone),
+    }
+  })
 
-export const rotateRondel = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return {
-    ...state,
-    rondel: pushArm(state.rondel, state.config.players),
-  }
-}
+export const rotateRondel = pushArm(false)
+export const rotateRondelWithExpire = pushArm(true)

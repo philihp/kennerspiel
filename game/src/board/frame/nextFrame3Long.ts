@@ -1,10 +1,11 @@
 import { Frame, GameCommandEnum, GameStatePlaying, NextUseClergy, SettlementRound, StateReducer } from '../../types'
+import { getCost, withEachPlayer } from '../player'
 import { introduceGrapeToken, introduceStoneToken } from '../rondel'
 import { allPriorsComeBack } from './allPriorsComeBack'
 import { gameEnd } from './gameEnd'
 import { introduceBuildings } from './introduceBuildings'
+import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondel } from './rotateRondel'
-import { startingResources } from './startingResources'
 
 export const nextFrame3Long: Record<
   number,
@@ -17,7 +18,12 @@ export const nextFrame3Long: Record<
   1: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel, startingResources({ clay: 1, wood: 1, peat: 1, penny: 1, grain: 1, sheep: 1 })],
+    upkeep: [
+      rotateRondel,
+      introduceBuildings(SettlementRound.S),
+      withEachPlayer(getCost({ clay: 1, wood: 1, peat: 1, penny: 1, grain: 1, sheep: 1 })),
+      returnClergyIfPlaced,
+    ],
     next: 2,
   },
   2: {
@@ -36,7 +42,7 @@ export const nextFrame3Long: Record<
   5: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 6,
   },
   6: {
@@ -55,7 +61,7 @@ export const nextFrame3Long: Record<
   9: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 10,
   },
   10: {
@@ -74,7 +80,7 @@ export const nextFrame3Long: Record<
   13: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 14,
   },
   14: {
@@ -93,7 +99,7 @@ export const nextFrame3Long: Record<
   17: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 18,
   },
   18: {
@@ -132,7 +138,7 @@ export const nextFrame3Long: Record<
   // Round 6
   24: {
     currentPlayerIndex: 2,
-    upkeep: [introduceBuildings(SettlementRound.A), rotateRondel],
+    upkeep: [introduceBuildings(SettlementRound.A), rotateRondel, returnClergyIfPlaced],
     next: 25,
   },
   25: {
@@ -151,7 +157,7 @@ export const nextFrame3Long: Record<
   28: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 29,
   },
   29: {
@@ -170,7 +176,7 @@ export const nextFrame3Long: Record<
   32: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 33,
   },
   33: {
@@ -189,7 +195,7 @@ export const nextFrame3Long: Record<
   36: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
-    upkeep: [introduceGrapeToken, rotateRondel],
+    upkeep: [introduceGrapeToken, rotateRondel, returnClergyIfPlaced],
     next: 37,
   },
   37: {
@@ -208,7 +214,7 @@ export const nextFrame3Long: Record<
   40: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 41,
   },
   41: {
@@ -247,7 +253,7 @@ export const nextFrame3Long: Record<
   // Round 11
   47: {
     currentPlayerIndex: 1,
-    upkeep: [introduceBuildings(SettlementRound.B), rotateRondel],
+    upkeep: [introduceBuildings(SettlementRound.B), rotateRondel, returnClergyIfPlaced],
     next: 48,
   },
   48: {
@@ -266,7 +272,7 @@ export const nextFrame3Long: Record<
   51: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 52,
   },
   52: {
@@ -285,7 +291,7 @@ export const nextFrame3Long: Record<
   55: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [introduceStoneToken, rotateRondel],
+    upkeep: [introduceStoneToken, rotateRondel, returnClergyIfPlaced],
     next: 56,
   },
   56: {
@@ -304,7 +310,7 @@ export const nextFrame3Long: Record<
   59: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 60,
   },
   60: {
@@ -343,7 +349,7 @@ export const nextFrame3Long: Record<
   // Round 15
   66: {
     currentPlayerIndex: 2,
-    upkeep: [introduceBuildings(SettlementRound.C), rotateRondel],
+    upkeep: [introduceBuildings(SettlementRound.C), rotateRondel, returnClergyIfPlaced],
     next: 67,
   },
   67: {
@@ -362,7 +368,7 @@ export const nextFrame3Long: Record<
   70: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 71,
   },
   71: {
@@ -381,7 +387,7 @@ export const nextFrame3Long: Record<
   74: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 75,
   },
   75: {
@@ -400,7 +406,7 @@ export const nextFrame3Long: Record<
   78: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 79,
   },
   79: {
@@ -419,7 +425,7 @@ export const nextFrame3Long: Record<
   82: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 83,
   },
   83: {
@@ -458,7 +464,7 @@ export const nextFrame3Long: Record<
   // Round 20
   89: {
     currentPlayerIndex: 1,
-    upkeep: [introduceBuildings(SettlementRound.D), rotateRondel],
+    upkeep: [introduceBuildings(SettlementRound.D), rotateRondel, returnClergyIfPlaced],
     next: 90,
   },
   90: {
@@ -477,7 +483,7 @@ export const nextFrame3Long: Record<
   93: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 94,
   },
   94: {
@@ -496,7 +502,7 @@ export const nextFrame3Long: Record<
   97: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 98,
   },
   98: {
@@ -515,7 +521,7 @@ export const nextFrame3Long: Record<
   101: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 102,
   },
   102: {
@@ -534,7 +540,7 @@ export const nextFrame3Long: Record<
   105: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 106,
   },
   106: {
@@ -554,7 +560,7 @@ export const nextFrame3Long: Record<
     currentPlayerIndex: 0,
     bonusRoundPlacement: true,
     nextUse: NextUseClergy.OnlyPrior,
-    upkeep: [allPriorsComeBack, rotateRondel],
+    upkeep: [allPriorsComeBack, rotateRondel, returnClergyIfPlaced],
     next: 110,
   },
   110: {

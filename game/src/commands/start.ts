@@ -105,7 +105,7 @@ export const start = (
       usableBuildings: [],
       nextUse: NextUseClergy.Any,
     },
-    buildings: roundBuildings(state.config, SettlementRound.S),
+    buildings: [],
     plotPurchasePrices: plotPrices(state.config),
     districtPurchasePrices: districtPrices(state.config),
   }
