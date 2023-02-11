@@ -1,6 +1,6 @@
 import { config } from '../../commands/config'
 import { start } from '../../commands/start'
-import { initialState } from '../../reducer'
+import { initialState } from '../../state'
 import { Clergy, GameStatePlaying, PlayerColor, Tableau } from '../../types'
 import { getPlayer, isLayBrother, isPrior, payCost, setPlayer, subtractCoins } from '../player'
 

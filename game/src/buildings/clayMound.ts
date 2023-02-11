@@ -1,5 +1,5 @@
 import { pipe } from 'ramda'
-import { withActivePlayer } from '../board/player'
+import { getCost, withActivePlayer } from '../board/player'
 import { updateRondel, withRondel } from '../board/rondel'
 import { take } from '../board/wheel'
 import { GameStatePlaying, ResourceEnum } from '../types'
@@ -12,13 +12,8 @@ const takePlayerClay =
       config,
       rondel: { joker, clay, pointingBefore },
     } = state
-    return withActivePlayer(
-      (player) =>
-        player && {
-          ...player,
-          clay: player.clay + take(pointingBefore, (withJoker ? joker : clay) ?? pointingBefore, config),
-        }
-    )(state)
+    const amount = take(pointingBefore, (withJoker ? joker : clay) ?? pointingBefore, config)
+    return withActivePlayer(getCost({ clay: amount }))(state)
   }
 
 const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('clay'))

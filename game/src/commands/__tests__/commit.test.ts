@@ -1,4 +1,4 @@
-import { initialState } from '../../reducer'
+import { initialState } from '../../state'
 import { PlayerColor } from '../../types'
 import { commit } from '../commit'
 import { config } from '../config'

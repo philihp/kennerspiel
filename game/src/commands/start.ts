@@ -1,7 +1,7 @@
 import fastShuffle from 'fast-shuffle'
-import { newRandGen, randNext, randRange } from 'fn-pcg'
+import { newRandGen, randNext } from 'fn-pcg'
 import { pipe } from 'ramda'
-import { roundBuildings } from '../board/buildings'
+import { nextFrame } from '../board/frame'
 import { districtPrices, plotPrices } from '../board/landscape'
 import { makeLandscape, modeSetup } from '../board/modeSetup'
 import { clergyForColor } from '../board/player'
@@ -104,13 +104,14 @@ export const start = (
       usableBuildings: [],
       nextUse: NextUseClergy.Any,
     },
-    buildings: roundBuildings(state.config, SettlementRound.S),
+    buildings: [],
     plotPurchasePrices: plotPrices(state.config),
     districtPurchasePrices: districtPrices(state.config),
   }
 
   return pipe(
-    modeSetup(state.config) // basically just single player stuff
-    // preMove
+    //
+    modeSetup(state.config), // this stuff should be moved into the frame upkeep because it's just solo stuff
+    nextFrame
   )(newState)
 }

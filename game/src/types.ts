@@ -456,4 +456,12 @@ export type GameStatePlaying = {
 }
 export type GameState = GameStateSetup | GameStatePlaying
 
-export type Reducer = (state: GameState, action: string[]) => GameState | undefined
+export type StateReducer = (state: GameStatePlaying | undefined) => GameStatePlaying | undefined
+
+export type FrameFlow = Record<
+  number,
+  {
+    upkeep?: ((state: GameStatePlaying | undefined) => GameStatePlaying | undefined)[]
+    next: number
+  } & Partial<Frame>
+>

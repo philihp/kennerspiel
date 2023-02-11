@@ -1,66 +1,113 @@
-import { reducer, initialState } from '../../reducer'
-import { BuildingEnum, GameStatePlaying } from '../../types'
+import { reducer } from '../../reducer'
+import { initialState } from '../../state'
+import {
+  BuildingEnum,
+  GameStatePlaying,
+  GameStatusEnum,
+  NextUseClergy,
+  PlayerColor,
+  SettlementRound,
+  Tableau,
+  Tile,
+} from '../../types'
 import { chamberOfWonders } from '../chamberOfWonders'
 
 describe('buildings/chamberOfWonders', () => {
   describe('chamberOfWonders', () => {
+    const p0: Tableau = {
+      color: PlayerColor.Blue,
+      clergy: [],
+      settlements: [],
+      landscape: [
+        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      ] as Tile[][],
+      wonders: 0,
+      landscapeOffset: 0,
+      peat: 0,
+      penny: 0,
+      clay: 0,
+      wood: 0,
+      grain: 0,
+      sheep: 0,
+      stone: 0,
+      flour: 0,
+      grape: 0,
+      nickel: 0,
+      hops: 0,
+      coal: 0,
+      book: 0,
+      pottery: 0,
+      whiskey: 0,
+      straw: 0,
+      meat: 0,
+      ornament: 0,
+      bread: 0,
+      wine: 0,
+      beer: 0,
+      reliquary: 0,
+    }
+    const s0: GameStatePlaying = {
+      ...initialState,
+      status: GameStatusEnum.PLAYING,
+      frame: {
+        next: 1,
+        startingPlayer: 1,
+        settlementRound: SettlementRound.S,
+        workContractCost: 1,
+        currentPlayerIndex: 0,
+        activePlayerIndex: 0,
+        neutralBuildingPhase: false,
+        bonusRoundPlacement: false,
+        mainActionUsed: false,
+        bonusActions: [],
+        canBuyLandscape: true,
+        unusableBuildings: [],
+        usableBuildings: [],
+        nextUse: NextUseClergy.Any,
+      },
+      config: {
+        country: 'france',
+        players: 3,
+        length: 'long',
+      },
+      rondel: {
+        pointingBefore: 0,
+      },
+      wonders: 8,
+      players: [
+        {
+          ...p0,
+          peat: 1,
+          penny: 1,
+          clay: 1,
+          wood: 1,
+          grain: 1,
+          sheep: 1,
+          stone: 1,
+          flour: 1,
+          grape: 1,
+          coal: 1,
+          book: 1,
+          pottery: 1,
+          straw: 1,
+        },
+        { ...p0 },
+        { ...p0 },
+      ],
+      buildings: [],
+      plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+      districtPurchasePrices: [],
+    }
+
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
-      const s1 = chamberOfWonders()(s0)
-      expect(s1).toBeUndefined()
+      const s0 = chamberOfWonders()(undefined)
+      expect(s0).toBeUndefined()
     })
     it('baseline happy path', () => {
-      const s0 = initialState
-      const s1 = reducer(s0, ['CONFIG', '4', 'france', 'long'])!
-      const s2 = reducer(s1, ['START', '42', 'R', 'B', 'G', 'W'])! as GameStatePlaying
-      const s3 = {
-        ...s2,
-        buildings: [BuildingEnum.ChamberOfWonders],
-        players: [
-          {
-            ...s2.players[0],
-            penny: 1,
-            clay: 2,
-            wood: 2,
-            grain: 1,
-            sheep: 1,
-            stone: 1,
-            flour: 1,
-            grape: 1,
-            coal: 1,
-            book: 1,
-            pottery: 1,
-            straw: 1,
-          },
-          ...s2.players.slice(1),
-        ],
-      }
-      const s4 = reducer(s3, ['BUILD', 'F25', '3', '1'])! as GameStatePlaying
-      expect(s4.players[0].landscape[1][5]).toStrictEqual(['P', 'F25'])
-      expect(s4.players[0]).toMatchObject({
-        peat: 1,
-        penny: 1,
-        clay: 1,
-        wood: 1,
-        grain: 1,
-        sheep: 1,
-        stone: 1,
-        flour: 1,
-        grape: 1,
-        coal: 1,
-        book: 1,
-        pottery: 1,
-        straw: 1,
-      })
-      expect(s4).toMatchObject({
-        buildings: [],
-      })
-      expect(s4.frame).toMatchObject({
-        nextUse: 'only-prior',
-        usableBuildings: ['F25'],
-      })
-      const s5 = reducer(s4, ['USE', 'F25', 'PtPnClWoGnShSnFlGpCoBoPoSw'])! as GameStatePlaying
-      expect(s5.players[0]).toMatchObject({
+      const s1 = chamberOfWonders('PtPnClWoGnShSnFlGpCoBoPoSw')(s0)!
+      expect(s1.wonders).toBe(7)
+      expect(s1.players[0]).toMatchObject({
         peat: 0,
         penny: 0,
         clay: 0,
@@ -74,6 +121,7 @@ describe('buildings/chamberOfWonders', () => {
         book: 0,
         pottery: 0,
         straw: 0,
+        wonders: 1,
       })
     })
   })

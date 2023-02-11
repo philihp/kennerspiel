@@ -16,25 +16,18 @@ import {
   GameState,
   GameStatePlaying,
   GameStateSetup,
-  GameStatusEnum,
   PlayerColor,
-  Reducer,
 } from './types'
 import { parseResourceParam } from './board/resource'
 import { withPrior } from './commands/withPrior'
 import { buyPlot } from './commands/buyPlot'
 import { buyDistrict } from './commands/buyDistrict'
 
-export const initialState: GameStateSetup = {
-  randGen: 0n,
-  status: GameStatusEnum.SETUP,
-}
-
 const PColor = P.union(PlayerColor.Blue, PlayerColor.White, PlayerColor.Red, PlayerColor.Green)
 const PPlot = P.union('MOUNTAIN', 'COAST')
 const PDistrict = P.union('HILLS', 'PLAINS')
 
-export const reducer: Reducer = (state, action) => {
+export const reducer = (state: GameState, action: string[]): GameState | undefined => {
   return match<string[], GameState | undefined>(action) // .
     .with(
       [GameCommandEnum.CONFIG, P.union('1', '2', '3', '4'), P.union('ireland', 'france'), P.union('short', 'long')],

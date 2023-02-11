@@ -1,6 +1,9 @@
-import { GameStatePlaying } from '../../types'
+import { GameStatePlaying, GameStatusEnum } from '../../types'
 
 export const gameEnd = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  // TODO
-  return state
+  if (state === undefined) return state
+  return {
+    ...state,
+    status: GameStatusEnum.FINISHED,
+  }
 }

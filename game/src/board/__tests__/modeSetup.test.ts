@@ -1,6 +1,6 @@
 import { config } from '../../commands/config'
 import { start } from '../../commands/start'
-import { initialState } from '../../reducer'
+import { initialState } from '../../state'
 import { PlayerColor } from '../../types'
 import { makeLandscape } from '../modeSetup'
 
