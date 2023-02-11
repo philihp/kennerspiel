@@ -5,6 +5,8 @@ import { GameCommandConfigParams, GameStatePlaying } from '../types'
 export const commit = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
   return pipe(
     //
-    nextFrame
+    (state) => {
+      return nextFrame(state)
+    }
   )(state)
 }

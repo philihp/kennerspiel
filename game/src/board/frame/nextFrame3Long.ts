@@ -1,14 +1,15 @@
-import { Frame, GameCommandEnum, GameStatePlaying, NextUseClergy, SettlementRound } from '../../types'
+import { Frame, GameCommandEnum, GameStatePlaying, NextUseClergy, SettlementRound, StateReducer } from '../../types'
 import { introduceGrapeToken, introduceStoneToken } from '../rondel'
 import { allPriorsComeBack } from './allPriorsComeBack'
 import { gameEnd } from './gameEnd'
 import { introduceBuildings } from './introduceBuildings'
 import { rotateRondel } from './rotateRondel'
+import { startingResources } from './startingResources'
 
-export const nextStandardLongFrame: Record<
+export const nextFrame3Long: Record<
   number,
   {
-    upkeep?: ((state: GameStatePlaying | undefined) => GameStatePlaying | undefined)[]
+    upkeep?: StateReducer[]
     next: number
   } & Partial<Frame>
 > = {
@@ -16,7 +17,7 @@ export const nextStandardLongFrame: Record<
   1: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel],
+    upkeep: [rotateRondel, startingResources({ clay: 1, wood: 1, peat: 1, penny: 1, grain: 1, sheep: 1 })],
     next: 2,
   },
   2: {

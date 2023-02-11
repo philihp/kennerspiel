@@ -1,9 +1,8 @@
-import { pipe, reduce, tap } from 'ramda'
+import { pipe, tap } from 'ramda'
 import { match, P } from 'ts-pattern'
-import { Clergy, Cost, Frame, GameStatePlaying, NextUseClergy, PlayerColor, Tableau } from '../types'
-import { nextStandardLongFrame } from './frame/frameStandardLong'
-import { returnClergyIfPlaced } from './frame/returnClergyIfPlaced'
-import { rotateRondel } from './frame/rotateRondel'
+import { Frame, FrameFlow, GameStatePlaying, NextUseClergy, PlayerColor, StateReducer, Tableau } from '../types'
+import { nextFrame4Long } from './frame/nextFrame4Long'
+import { nextFrame3Long } from './frame/nextFrame3Long'
 
 export const withFrame =
   (func: (frame: Frame | undefined) => Frame | undefined) =>
@@ -17,29 +16,32 @@ export const withFrame =
     }
   }
 
-const nextFrameLongStandard = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  const nextFrameIndex = state?.frame.next
-  if (nextFrameIndex === undefined) return undefined
-  const { upkeep = [], ...frameUpdates } = nextStandardLongFrame[nextFrameIndex] ?? {}
-  return pipe(
-    // first, with all of the properties on the new frame, overlay them on the current frame
-    withFrame((frame) => {
-      return {
-        ...frame,
-        mainActionUsed: false,
-        bonusActions: [],
-        canBuyLandscape: true,
-        unusableBuildings: [],
-        usableBuildings: [],
-        nextUse: NextUseClergy.Any,
-        ...frameUpdates,
-        activePlayerIndex: frame?.currentPlayerIndex,
-      } as Frame
-    }),
-    // and then if there are any upkeep reducer functions on the frame, run them
-    (state) => upkeep.reduce((accum, f) => f(accum), state)
-  )(state)
-}
+const standardProgression =
+  (withFlow: FrameFlow): StateReducer =>
+  (state) => {
+    const nextFrameIndex = state?.frame.next
+    if (nextFrameIndex === undefined) return undefined
+    const { upkeep = [], ...frameUpdates } = withFlow[nextFrameIndex] ?? {}
+    return pipe(
+      // first, with all of the properties on the new frame, overlay them on the current frame
+      withFrame((frame) => {
+        const newFrame = {
+          ...frame,
+          activePlayerIndex: frameUpdates.currentPlayerIndex,
+          mainActionUsed: false,
+          bonusActions: [],
+          canBuyLandscape: true,
+          unusableBuildings: [],
+          usableBuildings: [],
+          nextUse: NextUseClergy.Any,
+          ...frameUpdates,
+        } as Frame
+        return newFrame
+      }),
+      // and then if there are any upkeep reducer functions on the frame, run them
+      (state) => upkeep.reduce((accum: GameStatePlaying | undefined, f) => f(accum), state)
+    )(state)
+  }
 
 // 12 rounds plus a bonus round
 // Settlement at start of rounds 3, 5, 7, 9
@@ -59,14 +61,14 @@ const nextFrameLongStandard = (state: GameStatePlaying | undefined): GameStatePl
 // 11 pottery clay
 // 12 ornament wood
 // 13 bonus round, same in longer game
-const nextFrameShortStandard = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+const nextFrameShortStandard: StateReducer = (state) => {
   return state
 }
 
 // each round, starting player gets 2 actions followed by other player getting 1
 // each player can build at most 1 landscape every round
 // ending when after settlement D, when there are <= 3 buildings in display finish current round
-const nextFrameLongTwoPlayer = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+const nextFrameLongTwoPlayer: StateReducer = (state) => {
   return state
 }
 
@@ -79,7 +81,7 @@ const nextFrameLongTwoPlayer = (state: GameStatePlaying | undefined): GameStateP
 // - Active player gets 2 actions
 // Clergy return for both players at the end of each turn
 // ending when after settlement D, when there are <= 1 buildings in display. Finish current turn and other player gets 1 final action.
-const nextFrameShortTwoPlayer = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+const nextFrameShortTwoPlayer: StateReducer = (state) => {
   return state
 }
 
@@ -100,13 +102,14 @@ const nextFrameShortTwoPlayer = (state: GameStatePlaying | undefined): GameState
 // --> Optionally if neutral prior free, place the prior, pay work contract, and take that action
 // --> Return all clergymen if all placed
 // --> Player does a settlement
-const nextFrameSolitaire = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+const nextFrameSolitaire: StateReducer = (state) => {
   return state
 }
 
-export const nextFrame = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+export const nextFrame: StateReducer = (state) =>
   match(state)
-    .with({ config: { players: P.union(3, 4), length: 'long' } }, nextFrameLongStandard)
+    .with({ config: { players: 3, length: 'long' } }, standardProgression(nextFrame3Long))
+    .with({ config: { players: 4, length: 'long' } }, standardProgression(nextFrame4Long))
     .with({ config: { players: P.union(3, 4), length: 'short' } }, nextFrameShortStandard)
     .with({ config: { players: 2, length: 'long' } }, nextFrameLongTwoPlayer)
     .with({ config: { players: 2, length: 'short' } }, nextFrameShortTwoPlayer)

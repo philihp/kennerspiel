@@ -1,3 +1,4 @@
+import { any, map } from 'ramda'
 import { match } from 'ts-pattern'
 import { Clergy, Cost, GameStatePlaying, PlayerColor, Tableau } from '../types'
 
@@ -17,6 +18,18 @@ export const withActivePlayer =
     }
   }
 
+export const withEachPlayer =
+  (func: (player: Tableau) => Tableau | undefined) =>
+  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+    if (state === undefined) return state
+    const players = map(func, state.players)
+    if (any((p) => p === undefined, players)) return undefined
+    return {
+      ...state,
+      players: players as Tableau[],
+    }
+  }
+
 export const clergyForColor = (color: PlayerColor): Clergy[] =>
   match(color)
     .with(PlayerColor.Red, () => [Clergy.LayBrother1R, Clergy.LayBrother2R, Clergy.PriorR])
@@ -24,6 +37,14 @@ export const clergyForColor = (color: PlayerColor): Clergy[] =>
     .with(PlayerColor.Blue, () => [Clergy.LayBrother1B, Clergy.LayBrother2B, Clergy.PriorB])
     .with(PlayerColor.White, () => [Clergy.LayBrother1W, Clergy.LayBrother2W, Clergy.PriorW])
     .exhaustive()
+
+export const priors = (state: GameStatePlaying | undefined): Clergy[] =>
+  (state &&
+    state.players
+      .map(({ color }) => color)
+      .map(clergyForColor)
+      .map(([, , prior]) => prior)) ??
+  []
 
 export const getPlayer = (state: GameStatePlaying, playerIndex?: number): Tableau => {
   const index = playerIndex ?? state?.frame?.activePlayerIndex
@@ -44,8 +65,8 @@ export const setPlayerCurried =
   (state: GameStatePlaying): GameStatePlaying | undefined =>
     player && setPlayer(state, player)
 
-export const isPrior = (clergy: Clergy | undefined) =>
-  clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy)
+export const isPrior = (clergy: Clergy | undefined): boolean =>
+  !!(clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy))
 
 export const isLayBrother = (clergy: Clergy | undefined) => clergy && !isPrior(clergy)
 

@@ -2,6 +2,7 @@ import fastShuffle from 'fast-shuffle'
 import { newRandGen, randNext, randRange } from 'fn-pcg'
 import { pipe } from 'ramda'
 import { roundBuildings } from '../board/buildings'
+import { nextFrame } from '../board/frame'
 import { districtPrices, plotPrices } from '../board/landscape'
 import { makeLandscape, modeSetup } from '../board/modeSetup'
 import { clergyForColor } from '../board/player'
@@ -110,7 +111,8 @@ export const start = (
   }
 
   return pipe(
-    modeSetup(state.config) // basically just single player stuff
+    modeSetup(state.config), // basically just single player stuff
     // preMove
+    nextFrame
   )(newState)
 }

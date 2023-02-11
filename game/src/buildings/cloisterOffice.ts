@@ -1,19 +1,10 @@
 import { pipe } from 'ramda'
-import { withActivePlayer } from '../board/player'
+import { getCost, withActivePlayer } from '../board/player'
+import { updateRondel, withRondel } from '../board/rondel'
 import { take } from '../board/wheel'
 import { GameStatePlaying, ResourceEnum } from '../types'
 
-const advanceCoinOnRondel =
-  (withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-    state && {
-      ...state,
-      rondel: {
-        ...state.rondel,
-        joker: withJoker ? state.rondel.pointingBefore : state.rondel.joker,
-        coin: !withJoker ? state.rondel.pointingBefore : state.rondel.coin,
-      },
-    }
+const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('coin'))
 
 const takePlayerCoin =
   (withJoker: boolean) =>
@@ -23,23 +14,15 @@ const takePlayerCoin =
       config,
       rondel: { joker, coin, pointingBefore },
     } = state
-    return withActivePlayer(
-      (player) =>
-        player && {
-          ...player,
-          penny: player.penny + take(pointingBefore, (withJoker ? joker : coin) ?? pointingBefore, config),
-        }
-    )(state)
+    const amount = take(pointingBefore, (withJoker ? joker : coin) ?? pointingBefore, config)
+    return withActivePlayer(getCost({ penny: amount }))(state)
   }
 
 export const cloisterOffice = (param = '') => {
   const withJoker = param.includes(ResourceEnum.Joker)
-  return (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
-    return pipe(
-      //
-      takePlayerCoin(withJoker),
-      advanceCoinOnRondel(withJoker)
-    )(state)
-  }
+  return pipe(
+    //
+    takePlayerCoin(withJoker),
+    withRondel(updateToken(withJoker))
+  )
 }
