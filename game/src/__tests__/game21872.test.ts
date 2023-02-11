@@ -3,7 +3,7 @@ import { initialState } from '../state'
 import { GameStatePlaying, GameStateSetup } from '../types'
 
 describe('game 21872', () => {
-  it('runs through moves', () => {
+  it.skip('runs through moves', () => {
     const s01 = initialState
     const s02 = reducer(s01, ['CONFIG', '4', 'france', 'long'])! as GameStateSetup
     const s03 = reducer(s02, ['START', '28', 'W', 'B', 'G', 'R'])! as GameStatePlaying

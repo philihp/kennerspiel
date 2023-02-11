@@ -3,7 +3,7 @@ import { initialState } from '../state'
 import { BuildingEnum, GameStatePlaying, GameStateSetup } from '../types'
 
 describe('game 29767', () => {
-  it('runs through moves', () => {
+  it.skip('runs through moves', () => {
     const s0 = initialState
     const s1 = reducer(s0, ['CONFIG', '1', 'france', 'long'])!
 

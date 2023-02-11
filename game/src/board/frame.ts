@@ -1,6 +1,5 @@
-import { pipe } from 'ramda'
-import { match } from 'ts-pattern'
-import { Frame, FrameFlow, GameStatePlaying, NextUseClergy, PlayerColor, StateReducer, Tableau } from '../types'
+import { pipe, reduce, tap } from 'ramda'
+import { match, P } from 'ts-pattern'
 import { nextFrame4Long } from './frame/nextFrame4Long'
 import { nextFrame3Long } from './frame/nextFrame3Long'
 import { nextFrameSolo } from './frame/nextFrameSolo'
@@ -8,6 +7,17 @@ import { nextFrame3Short } from './frame/nextFrame3Short'
 import { nextFrame4Short } from './frame/nextFrame4Short'
 import { nextFrame2Long } from './frame/nextFrame2Long'
 import { nextFrame2Short } from './frame/nextFrame2Short'
+import {
+  Clergy,
+  Cost,
+  Frame,
+  FrameFlow,
+  GameStatePlaying,
+  NextUseClergy,
+  PlayerColor,
+  StateReducer,
+  Tableau,
+} from '../types'
 
 export const withFrame =
   (func: (frame: Frame | undefined) => Frame | undefined) =>
