@@ -342,7 +342,7 @@ export const nextFrame3Short: FrameFlow = {
     currentPlayerIndex: 0,
     bonusRoundPlacement: true,
     nextUse: NextUseClergy.OnlyPrior,
-    upkeep: [allPriorsComeBack, rotateRondel, returnClergyIfPlaced],
+    upkeep: [returnClergyIfPlaced, allPriorsComeBack, rotateRondel],
     next: 63,
   },
   63: {
