@@ -1,4 +1,4 @@
-import { pipe } from 'ramda'
+import { identity, pipe } from 'ramda'
 import { getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
 import { Cost, Tableau } from '../types'
@@ -9,6 +9,7 @@ const checkWorthOneCoin =
     costMoney(input) >= 1 ? player : undefined
 
 export const financedEstate = (param = '') => {
+  if (param === '') return identity
   const inputs = parseResourceParam(param)
   return withActivePlayer(
     pipe(

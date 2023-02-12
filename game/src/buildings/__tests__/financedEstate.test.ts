@@ -89,6 +89,17 @@ describe('buildings/financedEstate', () => {
         flour: 2,
       })
     })
+
+    it('allows a noop', () => {
+      const s1 = financedEstate('')(s0)!
+      expect(s1.players[0]).toStrictEqual(s0.players[0])
+    })
+
+    it('allows a noop with undefined', () => {
+      const s1 = financedEstate()(s0)!
+      expect(s1.players[0]).toStrictEqual(s0.players[0])
+    })
+
     it('can pay with wine', () => {
       const s1 = { ...s0, players: [{ ...s0.players[0], penny: 0, wine: 1 }, ...s0.players.slice(1)] }
       const s2 = financedEstate('Wn')(s1)! as GameStatePlaying
@@ -100,6 +111,12 @@ describe('buildings/financedEstate', () => {
         grape: 2,
         flour: 2,
       })
+    })
+
+    it('cant pay with clay', () => {
+      const s1 = { ...s0, players: [{ ...s0.players[0], penny: 0, clay: 1 }, ...s0.players.slice(1)] }
+      const s2 = financedEstate('Cl')(s1)! as GameStatePlaying
+      expect(s2).toBeUndefined()
     })
   })
 })

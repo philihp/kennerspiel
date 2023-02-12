@@ -79,6 +79,16 @@ describe('buildings/shipyard', () => {
       districtPurchasePrices: [],
     }
 
+    it('allows a noop', () => {
+      const s1 = shipyard('')(s0)!
+      expect(s1.players[0]).toStrictEqual(s0.players[0])
+    })
+
+    it('allows a noop with undefined', () => {
+      const s1 = shipyard()(s0)!
+      expect(s1.players[0]).toStrictEqual(s0.players[0])
+    })
+
     it('turns two wood into 1 ornament and 1 nickel', () => {
       const s1 = shipyard('WoWo')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
