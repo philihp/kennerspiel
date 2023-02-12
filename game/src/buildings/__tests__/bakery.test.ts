@@ -84,6 +84,23 @@ describe('buildings/bakery', () => {
       const s1 = bakery()(s0)
       expect(s1).toBeUndefined()
     })
+    it('fails if you give it more flour than energy', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            grain: 10,
+            flour: 10,
+            wood: 10,
+            bread: 10,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const s2 = bakery('WoFlFlFl')(s1)!
+      expect(s2).toBeUndefined()
+    })
     it('bakes bread using wood, then converts to coins', () => {
       const s1 = {
         ...s0,

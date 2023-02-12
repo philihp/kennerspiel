@@ -81,6 +81,16 @@ describe('buildings/forgersWorkshop', () => {
       districtPurchasePrices: [],
     }
 
+    it('can do a noop', () => {
+      const s1 = forgersWorkshop()(undefined)!
+      expect(s1).toBeUndefined()
+    })
+
+    it('can do a noop with no input', () => {
+      const s1 = forgersWorkshop('')(undefined)!
+      expect(s1).toBeUndefined()
+    })
+
     it('can do both things', () => {
       const s1 = forgersWorkshop('NiNiNi')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({

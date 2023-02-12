@@ -80,6 +80,11 @@ describe('buildings/cloisterGarden', () => {
       },
     }
 
+    it('retains undefined state', () => {
+      const s1 = cloisterGarden()(undefined)!
+      expect(s1).toBeUndefined()
+    })
+
     it('goes through a happy path', () => {
       const s1 = {
         ...s0,
@@ -106,6 +111,29 @@ describe('buildings/cloisterGarden', () => {
       expect(s2.frame.nextUse).toBe('free')
       expect(s2.players[0]).toMatchObject({
         grape: 1,
+      })
+    })
+
+    it('if used but not built, nothing can be used as a result', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [[], [], ['P'], ['P'], ['P', 'G16'], ['P'], ['P', 'LG1'], [], []],
+              [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'F08', 'LB1R'], ['P', 'LG3'], [], []],
+            ] as Tile[][],
+            landscapeOffset: 0,
+            grape: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const s2 = cloisterGarden()(s1)!
+      expect(s2).toBeDefined()
+      expect(s2.frame).toMatchObject({
+        usableBuildings: [],
       })
     })
   })
