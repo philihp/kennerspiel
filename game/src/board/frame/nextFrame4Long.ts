@@ -6,6 +6,7 @@ import { gameEnd } from './gameEnd'
 import { introduceBuildings } from './introduceBuildings'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondel } from './rotateRondel'
+import { standardResources } from './standardResources'
 
 export const nextFrame4Long: FrameFlow = {
   // Round 1
@@ -13,11 +14,7 @@ export const nextFrame4Long: FrameFlow = {
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
-    upkeep: [
-      rotateRondel,
-      introduceBuildings,
-      withEachPlayer(getCost({ clay: 1, wood: 1, peat: 1, penny: 1, grain: 1, sheep: 1 })),
-    ],
+    upkeep: [rotateRondel, introduceBuildings, standardResources],
     next: 2,
   },
   2: {

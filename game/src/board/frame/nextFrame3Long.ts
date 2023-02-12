@@ -1,11 +1,11 @@
-import { Frame, GameCommandEnum, GameStatePlaying, NextUseClergy, SettlementRound, StateReducer } from '../../types'
-import { getCost, withEachPlayer } from '../player'
+import { Frame, GameCommandEnum, NextUseClergy, SettlementRound, StateReducer } from '../../types'
 import { introduceGrapeToken, introduceStoneToken } from '../rondel'
 import { allPriorsComeBack } from './allPriorsComeBack'
 import { gameEnd } from './gameEnd'
 import { introduceBuildings } from './introduceBuildings'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondel } from './rotateRondel'
+import { standardResources } from './standardResources'
 
 export const nextFrame3Long: Record<
   number,
@@ -19,12 +19,7 @@ export const nextFrame3Long: Record<
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
-    upkeep: [
-      rotateRondel,
-      introduceBuildings,
-      withEachPlayer(getCost({ clay: 1, wood: 1, peat: 1, penny: 1, grain: 1, sheep: 1 })),
-      returnClergyIfPlaced,
-    ],
+    upkeep: [rotateRondel, introduceBuildings, standardResources, returnClergyIfPlaced],
     next: 2,
   },
   2: {
