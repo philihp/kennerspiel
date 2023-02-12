@@ -1,5 +1,5 @@
 import { FrameFlow, GameCommandEnum, NextUseClergy, SettlementRound } from '../../types'
-import { getCost, withActivePlayer } from '../player'
+import { getCost, withEachPlayer } from '../player'
 import { introduceGrapeToken, introduceStoneToken } from '../rondel'
 import { allPriorsComeBack } from './allPriorsComeBack'
 import { gameEnd } from './gameEnd'
@@ -16,7 +16,7 @@ export const nextFrame4Long: FrameFlow = {
     upkeep: [
       rotateRondel,
       introduceBuildings,
-      withActivePlayer(getCost({ clay: 1, wood: 1, peat: 1, penny: 1, grain: 1, sheep: 1 })),
+      withEachPlayer(getCost({ clay: 1, wood: 1, peat: 1, penny: 1, grain: 1, sheep: 1 })),
     ],
     next: 2,
   },

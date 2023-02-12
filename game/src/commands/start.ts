@@ -2,8 +2,7 @@ import fastShuffle from 'fast-shuffle'
 import { newRandGen, randNext } from 'fn-pcg'
 import { pipe } from 'ramda'
 import { nextFrame } from '../board/frame'
-import { districtPrices, plotPrices } from '../board/landscape'
-import { makeLandscape, modeSetup } from '../board/modeSetup'
+import { districtPrices, makeLandscape, plotPrices } from '../board/landscape'
 import { clergyForColor } from '../board/player'
 import { roundSettlements } from '../board/settlements'
 import {
@@ -38,12 +37,12 @@ export const start = (
       landscapeOffset: 0,
       settlements: [],
       wonders: 0,
-      peat: 1,
-      penny: 1,
-      clay: 1,
-      wood: 1,
-      grain: 1,
-      sheep: 1,
+      peat: 0,
+      penny: 0,
+      clay: 0,
+      wood: 0,
+      grain: 0,
+      sheep: 0,
       stone: 0,
       flour: 0,
       grape: 0,
@@ -111,7 +110,6 @@ export const start = (
 
   return pipe(
     //
-    modeSetup(state.config), // this stuff should be moved into the frame upkeep because it's just solo stuff
     nextFrame
   )(newState)
 }

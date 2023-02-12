@@ -1,4 +1,5 @@
 import { FrameFlow, GameCommandEnum, SettlementRound } from '../../types'
+import { addNeutralPlayer } from './addNeutralPlayer'
 import { gameEnd } from './gameEnd'
 import { introduceBuildings } from './introduceBuildings'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
@@ -27,7 +28,7 @@ export const nextFrameSolo: FrameFlow = {
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings, addNeutralPlayer],
     next: 2,
   },
   2: { next: 3 },
