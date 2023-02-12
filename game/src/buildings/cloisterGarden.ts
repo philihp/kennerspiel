@@ -1,8 +1,7 @@
-import { filter, map, pipe, reduce } from 'ramda'
-import { isCloisterBuilding } from '../board/buildings'
+import { pipe, reduce } from 'ramda'
 import { findBuilding } from '../board/landscape'
-import { withActivePlayer } from '../board/player'
-import { BuildingEnum, GameStatePlaying, NextUseClergy, Tile } from '../types'
+import { getCost, withActivePlayer } from '../board/player'
+import { BuildingEnum, StateReducer, NextUseClergy, Tile } from '../types'
 
 const whichIndexHasBuilding =
   (building: BuildingEnum) =>
@@ -21,10 +20,10 @@ const ADJACENT = [
   [0, 1],
 ]
 
-export const setNeighboringCloisterToGarden = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
+export const setNeighboringCloisterToGarden: StateReducer = (state) => {
+  if (state === undefined) return state
   const location = whichIndexHasBuilding(BuildingEnum.CloisterGarden)(state.players.map((p) => p.landscape))
-  if (location === undefined) return undefined
+  if (location === undefined) return state
   const [player, row, col] = location
   const checkLocations: [number, number, number][] = ADJACENT.map(([rowMod, colMod]) => [
     player,
@@ -56,12 +55,7 @@ export const setNeighboringCloisterToGarden = (state: GameStatePlaying | undefin
 
 export const cloisterGarden = () =>
   pipe(
-    withActivePlayer(
-      (player) =>
-        player && {
-          ...player,
-          grape: player.grape + 1,
-        }
-    ),
+    //
+    withActivePlayer(getCost({ grape: 1 })),
     setNeighboringCloisterToGarden
   )
