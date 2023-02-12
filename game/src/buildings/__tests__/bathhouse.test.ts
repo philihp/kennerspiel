@@ -123,6 +123,27 @@ describe('buildings/bathhouse', () => {
       ])
     })
 
+    it('does not change array identity if nothing to change', () => {
+      // this would only really happen if you work contract someone else, and have no clergy out
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: ['LB1B', 'LB2B', 'PRIB'] as Clergy[],
+            landscape: [
+              [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], [], []],
+              [[], [], ['P'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
+            ] as Tile[][],
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const s2 = bathhouse()(s1)! as GameStatePlaying
+      expect(s1.players[0].clergy).toBe(s2.players[0].clergy)
+      expect(s1.players[0].landscape).toBe(s2.players[0].landscape)
+    })
+
     it('fails if no pennies', () => {
       const s1 = { ...s0, players: [{ ...s0.players[0], penny: 0 }, ...s0.players.slice(1)] }
       const s2 = bathhouse()(s1)! as GameStatePlaying
