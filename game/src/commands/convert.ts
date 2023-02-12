@@ -1,6 +1,6 @@
 import { pipe } from 'ramda'
-import { getPlayer, setPlayer, subtractCoins, withActivePlayer } from '../board/player'
-import { GameCommandConvertParams, GameStatePlaying, Tile, BuildingEnum, Tableau } from '../types'
+import { subtractCoins, withActivePlayer } from '../board/player'
+import { GameCommandConvertParams, Tableau } from '../types'
 
 const convertGrain =
   (amount = 0) =>

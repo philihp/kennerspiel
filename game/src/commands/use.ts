@@ -1,6 +1,6 @@
 import { filter, pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
-import { getPlayer, isPrior, withActivePlayer } from '../board/player'
+import { isPrior, withActivePlayer } from '../board/player'
 import { consumeMainAction } from '../board/state'
 import { bakery } from '../buildings/bakery'
 import { bathhouse } from '../buildings/bathhouse'
@@ -87,7 +87,7 @@ const moveClergyToOwnBuilding =
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return undefined
     if (state.frame.nextUse === NextUseClergy.Free) return state
-    const player = getPlayer(state)
+    const player = state.players[state.frame.activePlayerIndex]
     const { row, col } = findBuilding(player.landscape, player.landscapeOffset, building)
     if (row === undefined || col === undefined) return undefined
     const [land] = player.landscape[row][col]
