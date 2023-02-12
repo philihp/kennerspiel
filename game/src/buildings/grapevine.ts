@@ -1,6 +1,6 @@
 import { pipe } from 'ramda'
 import { withActivePlayer } from '../board/player'
-import { take } from '../board/wheel'
+import { take } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum } from '../types'
 
 const advanceGrapeOnRondel =

@@ -2,9 +2,8 @@ import { pipe } from 'ramda'
 import { match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
 import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum } from '../types'
-import { take } from '../board/wheel'
+import { take, updateRondel, withRondel } from '../board/rondel'
 import { consumeMainAction } from '../board/state'
-import { updateRondel, withRondel } from '../board/rondel'
 
 const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
   return match(state)

@@ -2,7 +2,7 @@ import { pipe } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, multiplyGoods } from '../board/resource'
-import { take } from '../board/wheel'
+import { take } from '../board/rondel'
 import { Cost, GameStatePlaying } from '../types'
 
 const takePlayerJoker = (unitCost: Cost) => (state: GameStatePlaying | undefined) => {

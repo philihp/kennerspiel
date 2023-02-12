@@ -2,7 +2,7 @@ import { match } from 'ts-pattern'
 import { pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
 import { GameCommandFellTreesParams, GameStatePlaying, Tile, BuildingEnum, Tableau } from '../types'
-import { take } from '../board/wheel'
+import { take } from '../board/rondel'
 import { consumeMainAction } from '../board/state'
 
 const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
