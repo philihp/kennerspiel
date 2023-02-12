@@ -26,7 +26,8 @@ export const nextFrameSolo: FrameFlow = {
   1: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings(SettlementRound.S)],
+    settlementRound: SettlementRound.S,
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
     next: 2,
   },
   2: { next: 3 },
@@ -131,7 +132,7 @@ export const nextFrameSolo: FrameFlow = {
 
   // Round 12
   24: {
-    upkeep: [introduceBuildings(SettlementRound.A), rotateRondelWithExpire, returnClergyIfPlaced],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
     next: 25,
   },
   25: {
@@ -175,7 +176,7 @@ export const nextFrameSolo: FrameFlow = {
 
   // Round 16
   33: {
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
     next: 34,
   },
   34: {
@@ -237,7 +238,7 @@ export const nextFrameSolo: FrameFlow = {
 
   // Round 22
   46: {
-    upkeep: [introduceBuildings(SettlementRound.C), rotateRondelWithExpire, returnClergyIfPlaced],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
     next: 47,
   },
   47: {
@@ -281,7 +282,7 @@ export const nextFrameSolo: FrameFlow = {
 
   // Round 25
   55: {
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
     next: 56,
   },
   56: {

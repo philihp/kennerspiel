@@ -14,7 +14,8 @@ export const nextFrame3Short: FrameFlow = {
   1: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel, withEachPlayer(getCost({ grain: 1, sheep: 1 })), introduceBuildings(SettlementRound.S)],
+    settlementRound: SettlementRound.S,
+    upkeep: [rotateRondel, withEachPlayer(getCost({ grain: 1, sheep: 1 })), introduceBuildings],
     next: 2,
   },
   2: {
@@ -76,12 +77,7 @@ export const nextFrame3Short: FrameFlow = {
   13: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
-    upkeep: [
-      rotateRondel,
-      returnClergyIfPlaced,
-      withEachPlayer(getCost({ grain: 1, wood: 1 })),
-      introduceBuildings(SettlementRound.A),
-    ],
+    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ grain: 1, wood: 1 })), introduceBuildings],
     next: 14,
   },
   14: {
@@ -143,12 +139,7 @@ export const nextFrame3Short: FrameFlow = {
   24: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [
-      rotateRondel,
-      returnClergyIfPlaced,
-      withEachPlayer(getCost({ peat: 1, stone: 1 })),
-      introduceBuildings(SettlementRound.B),
-    ],
+    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ peat: 1, stone: 1 })), introduceBuildings],
     next: 25,
   },
   25: {
@@ -209,12 +200,7 @@ export const nextFrame3Short: FrameFlow = {
   // Round 7
   35: {
     currentPlayerIndex: 0,
-    upkeep: [
-      rotateRondel,
-      returnClergyIfPlaced,
-      withEachPlayer(getCost({ wood: 1, stone: 1 })),
-      introduceBuildings(SettlementRound.C),
-    ],
+    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ wood: 1, stone: 1 })), introduceBuildings],
     next: 36,
   },
   36: {
@@ -275,12 +261,7 @@ export const nextFrame3Short: FrameFlow = {
   // Round 9
   46: {
     currentPlayerIndex: 2,
-    upkeep: [
-      rotateRondel,
-      returnClergyIfPlaced,
-      withEachPlayer(getCost({ stone: 1, meat: 1 })),
-      introduceBuildings(SettlementRound.D),
-    ],
+    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ stone: 1, meat: 1 })), introduceBuildings],
     next: 47,
   },
   47: {

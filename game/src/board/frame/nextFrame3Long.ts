@@ -18,9 +18,10 @@ export const nextFrame3Long: Record<
   1: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
+    settlementRound: SettlementRound.S,
     upkeep: [
       rotateRondel,
-      introduceBuildings(SettlementRound.S),
+      introduceBuildings,
       withEachPlayer(getCost({ clay: 1, wood: 1, peat: 1, penny: 1, grain: 1, sheep: 1 })),
       returnClergyIfPlaced,
     ],
@@ -138,7 +139,7 @@ export const nextFrame3Long: Record<
   // Round 6
   24: {
     currentPlayerIndex: 2,
-    upkeep: [introduceBuildings(SettlementRound.A), rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
     next: 25,
   },
   25: {
@@ -253,7 +254,7 @@ export const nextFrame3Long: Record<
   // Round 11
   47: {
     currentPlayerIndex: 1,
-    upkeep: [introduceBuildings(SettlementRound.B), rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
     next: 48,
   },
   48: {
@@ -349,7 +350,7 @@ export const nextFrame3Long: Record<
   // Round 15
   66: {
     currentPlayerIndex: 2,
-    upkeep: [introduceBuildings(SettlementRound.C), rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
     next: 67,
   },
   67: {
@@ -464,7 +465,7 @@ export const nextFrame3Long: Record<
   // Round 20
   89: {
     currentPlayerIndex: 1,
-    upkeep: [introduceBuildings(SettlementRound.D), rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
     next: 90,
   },
   90: {

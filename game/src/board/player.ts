@@ -6,7 +6,9 @@ export const withActivePlayer =
   (func: (player: Tableau) => Tableau | undefined) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return state
-    const player = func(state.players[state.frame.activePlayerIndex])
+    const oldPlayer = state.players[state.frame.activePlayerIndex]
+    const player = func(oldPlayer)
+    if (player === oldPlayer) return state // dont create another state if nothing changes
     if (player === undefined) return undefined
     return {
       ...state,
@@ -22,7 +24,13 @@ export const withEachPlayer =
   (func: (player: Tableau) => Tableau | undefined) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return state
-    const players = map(func, state.players)
+    let dirty = false
+    const players = map((p) => {
+      const q = func(p)
+      if (p !== q) dirty = true
+      return q
+    }, state.players)
+    if (!dirty) return state
     if (any((p) => p === undefined, players)) return undefined
     return {
       ...state,

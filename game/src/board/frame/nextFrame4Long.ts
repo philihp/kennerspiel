@@ -12,9 +12,10 @@ export const nextFrame4Long: FrameFlow = {
   1: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
+    settlementRound: SettlementRound.S,
     upkeep: [
       rotateRondel,
-      introduceBuildings(SettlementRound.S),
+      introduceBuildings,
       withActivePlayer(getCost({ clay: 1, wood: 1, peat: 1, penny: 1, grain: 1, sheep: 1 })),
     ],
     next: 2,
@@ -187,7 +188,7 @@ export const nextFrame4Long: FrameFlow = {
   // Round 7
   37: {
     currentPlayerIndex: 2,
-    upkeep: [introduceBuildings(SettlementRound.A), rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
     next: 38,
   },
   38: {
@@ -286,7 +287,7 @@ export const nextFrame4Long: FrameFlow = {
   // Round 10
   56: {
     currentPlayerIndex: 2,
-    upkeep: [introduceBuildings(SettlementRound.B), rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
     next: 57,
   },
   57: {
@@ -456,7 +457,7 @@ export const nextFrame4Long: FrameFlow = {
   // Round 16
   90: {
     currentPlayerIndex: 3,
-    upkeep: [introduceBuildings(SettlementRound.C), rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
     next: 91,
   },
   91: {
@@ -555,7 +556,7 @@ export const nextFrame4Long: FrameFlow = {
   // Round 19
   109: {
     currentPlayerIndex: 2,
-    upkeep: [introduceBuildings(SettlementRound.D), rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
     next: 110,
   },
   110: {
