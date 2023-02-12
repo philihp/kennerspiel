@@ -1,7 +1,6 @@
 import { pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
-import { updateRondel, withRondel } from '../board/rondel'
-import { take } from '../board/wheel'
+import { updateRondel, withRondel, take } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum } from '../types'
 
 const takePlayerClay =

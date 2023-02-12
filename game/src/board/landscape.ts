@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern'
-import { BuildingEnum, Clergy, GameCommandConfigParams, Tile } from '../types'
+import { LandEnum, PlayerColor, Tile, BuildingEnum, Clergy, GameCommandConfigParams } from '../types'
 
 export const districtPrices = (config: GameCommandConfigParams): number[] =>
   match(config)
@@ -42,3 +42,24 @@ export const findClergy =
     })
     return locationsFound
   }
+
+const PP: Tile = [LandEnum.Plains, BuildingEnum.Peat]
+const PF: Tile = [LandEnum.Plains, BuildingEnum.Forest]
+const P: Tile = [LandEnum.Plains]
+
+const startBuilding = {
+  [PlayerColor.Red]: [BuildingEnum.ClayMoundR, BuildingEnum.FarmYardR, BuildingEnum.CloisterOfficeR],
+  [PlayerColor.Green]: [BuildingEnum.ClayMoundG, BuildingEnum.FarmYardG, BuildingEnum.CloisterOfficeG],
+  [PlayerColor.Blue]: [BuildingEnum.ClayMoundB, BuildingEnum.FarmYardB, BuildingEnum.CloisterOfficeB],
+  [PlayerColor.White]: [BuildingEnum.ClayMoundW, BuildingEnum.FarmYardW, BuildingEnum.CloisterOfficeW],
+}
+
+export const makeLandscape = (color: PlayerColor): Tile[][] => {
+  const cm: Tile = [LandEnum.Hillside, startBuilding[color][0]]
+  const fy: Tile = [LandEnum.Plains, startBuilding[color][1]]
+  const co: Tile = [LandEnum.Plains, startBuilding[color][2]]
+  return [
+    [[], [], PP, PF, PF, P, cm, [], []],
+    [[], [], PP, PF, fy, P, co, [], []],
+  ]
+}

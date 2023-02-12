@@ -1,6 +1,6 @@
-import { take } from '../wheel'
+import { take } from '../rondel'
 
-describe('board/wheel', () => {
+describe('board/rondel', () => {
   describe('take', () => {
     it('can take from zero', () => {
       expect(take(0, 0, { country: 'france', length: 'long', players: 4 })).toBe(0)
@@ -19,6 +19,10 @@ describe('board/wheel', () => {
     })
     it('uses arm lookup, wrapping around', () => {
       expect(take(3, 10, { country: 'france', length: 'long', players: 4 })).toBe(6)
+    })
+
+    it('uses different numbers for 2p short', () => {
+      expect(take(1, 0, { country: 'france', length: 'short', players: 2 })).toBe(1)
     })
   })
 })

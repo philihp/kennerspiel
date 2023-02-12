@@ -1,8 +1,7 @@
 import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { withActivePlayer } from '../board/player'
-import { updateRondel, withRondel } from '../board/rondel'
-import { take } from '../board/wheel'
+import { updateRondel, withRondel, take } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum } from '../types'
 
 const takePlayerSheep =
