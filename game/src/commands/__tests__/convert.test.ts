@@ -1,5 +1,5 @@
 import { initialState } from '../../state'
-import { GameStatePlaying, GameStatusEnum, PlayerColor } from '../../types'
+import { PlayerColor } from '../../types'
 import { config } from '../config'
 import { convert } from '../convert'
 import { start } from '../start'

@@ -1,6 +1,6 @@
-import { pipe } from 'ramda'
+import { any, pipe, filter } from 'ramda'
 import { costForBuilding, isCloisterBuilding, terrainForBuilding } from '../board/buildings'
-import { getPlayer, setPlayer, withActivePlayer } from '../board/player'
+import { payCost, withActivePlayer } from '../board/player'
 import { canAfford } from '../board/resource'
 import { consumeMainAction } from '../board/state'
 import { BuildingEnum, GameCommandBuildParams, GameStatePlaying, NextUseClergy, Tableau, Tile } from '../types'
@@ -32,21 +32,20 @@ const checkLandTypeMatches = (row: number, col: number, building: BuildingEnum) 
     return player
   })
 
-const checkPlayerHasBuildingCost =
-  (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    return state && canAfford(costForBuilding(building))(getPlayer(state)) ? state : undefined
-  }
+const checkPlayerHasBuildingCost = (building: BuildingEnum) => withActivePlayer(canAfford(costForBuilding(building)))
 
 const checkBuildingCloister = (row: number, col: number, building: BuildingEnum) => {
   if (isCloisterBuilding(building) === false) return (state: GameStatePlaying | undefined) => state
   return withActivePlayer((player) => {
     const { landscape, landscapeOffset } = player
-    if (isCloisterBuilding(landscape[row + landscapeOffset + 1]?.[col + 2]?.[1])) return player
-    if (isCloisterBuilding(landscape[row + landscapeOffset - 1]?.[col + 2]?.[1])) return player
-    if (isCloisterBuilding(landscape[row + landscapeOffset]?.[col + 3]?.[1])) return player
-    if (isCloisterBuilding(landscape[row + landscapeOffset]?.[col + 1]?.[1])) return player
-    return undefined
+    return any(isCloisterBuilding, [
+      landscape[row + landscapeOffset + 1]?.[col + 2]?.[1],
+      landscape[row + landscapeOffset - 1]?.[col + 2]?.[1],
+      landscape[row + landscapeOffset]?.[col + 3]?.[1],
+      landscape[row + landscapeOffset]?.[col + 1]?.[1],
+    ])
+      ? player
+      : undefined
   })
 }
 
@@ -55,7 +54,7 @@ const removeBuildingFromUnbuilt =
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
     state && {
       ...state,
-      buildings: state?.buildings.filter((b) => b !== building),
+      buildings: filter((b) => b !== building, state?.buildings),
     }
 
 const addBuildingAtLandscape = (row: number, col: number, building: BuildingEnum) =>
@@ -76,20 +75,7 @@ const addBuildingAtLandscape = (row: number, col: number, building: BuildingEnum
     }
   })
 
-const removeBuildingCost =
-  (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-    if (state === undefined) return undefined
-    const player = Object.entries(costForBuilding(building)).reduce(
-      (p: Tableau, [type, amountNeeded]) => ({
-        ...p,
-        // ugh typescript, don't make it weird.
-        [type]: (p[type as keyof Tableau] as number) - amountNeeded,
-      }),
-      getPlayer(state)
-    )
-    return setPlayer(state, player)
-  }
+const removeBuildingCost = (building: BuildingEnum) => withActivePlayer(payCost(costForBuilding(building)))
 
 export const allowPriorToUse =
   (building: BuildingEnum) =>

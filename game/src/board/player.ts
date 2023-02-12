@@ -54,25 +54,6 @@ export const priors = (state: GameStatePlaying | undefined): Clergy[] =>
       .map(([, , prior]) => prior)) ??
   []
 
-export const getPlayer = (state: GameStatePlaying, playerIndex?: number): Tableau => {
-  const index = playerIndex ?? state?.frame?.activePlayerIndex
-  return state.players[index]
-}
-
-export const setPlayer = (state: GameStatePlaying, player: Tableau, playerIndex?: number): GameStatePlaying => {
-  if (state.players === undefined) return state
-  const i = playerIndex || state.frame.activePlayerIndex
-  return {
-    ...state,
-    players: [...state.players.slice(0, i), player, ...state.players.slice(i + 1)],
-  }
-}
-
-export const setPlayerCurried =
-  (player?: Tableau) =>
-  (state: GameStatePlaying): GameStatePlaying | undefined =>
-    player && setPlayer(state, player)
-
 export const isPrior = (clergy: Clergy | undefined): boolean =>
   !!(clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy))
 
@@ -82,7 +63,7 @@ export const payCost =
   (cost: Cost) =>
   (player: Tableau | undefined): Tableau | undefined => {
     if (player === undefined) return undefined
-    const newPlayer: Tableau | undefined = { ...player }
+    const newPlayer: Tableau = { ...player }
     const fields = Object.entries(cost)
     for (let i = 0; i < fields.length; i++) {
       const [type, amount] = fields[i]
@@ -97,13 +78,13 @@ export const getCost =
   (cost: Cost) =>
   (player: Tableau | undefined): Tableau | undefined =>
     player &&
-    Object.entries(cost).reduce(
-      (player, [type, amount]) => ({
+    Object.entries(cost).reduce((player, [type, amount]) => {
+      if (amount === 0) return player
+      return {
         ...player,
         [type]: (player[type as keyof Tableau] as number) + amount,
-      }),
-      player
-    )
+      }
+    }, player)
 
 export const subtractCoins =
   (amount: number) =>
