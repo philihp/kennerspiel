@@ -63,14 +63,17 @@ export const payCost =
   (cost: Cost) =>
   (player: Tableau | undefined): Tableau | undefined => {
     if (player === undefined) return undefined
+    let dirty = false
     const newPlayer: Tableau = { ...player }
     const fields = Object.entries(cost)
     for (let i = 0; i < fields.length; i++) {
       const [type, amount] = fields[i]
+      if (amount !== 0) dirty = true
       const newValue = (newPlayer[type as keyof Tableau] as number) - amount
       if (newValue < 0) return undefined
       newPlayer[type as keyof Cost] = newValue
     }
+    if (!dirty) return player
     return newPlayer
   }
 
@@ -112,4 +115,15 @@ export const subtractCoins =
     if (p.penny < 0 || p.nickel < 0 || p.wine < 0 || p.whiskey < 0) return undefined
 
     return p
+  }
+
+export const getWonder =
+  (amount = 1) =>
+  (player: Tableau | undefined): Tableau | undefined => {
+    return (
+      player && {
+        ...player,
+        wonders: player.wonders + amount,
+      }
+    )
   }

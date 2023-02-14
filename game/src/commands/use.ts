@@ -228,7 +228,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.Priory, []], priory)
       .with([BuildingEnum.QuarryA, [P._]], [BuildingEnum.QuarryA, []], ([_, params]) => quarry(params[0]))
       .with([BuildingEnum.QuarryB, [P._]], [BuildingEnum.QuarryB, []], ([_, params]) => quarry(params[0]))
-      .with([BuildingEnum.Sacristy, []], sacristy)
+      .with([BuildingEnum.Sacristy, [P._]], ([_, params]) => sacristy(params[0]))
       .with([BuildingEnum.ShippingCompany, [P._, P._]], ([_, params]) => shippingCompany(params[0], params[1]))
       .with([BuildingEnum.Shipyard, [P._]], ([_, params]) => shipyard(params[0]))
       .with([BuildingEnum.Slaughterhouse, [P._]], ([_, params]) => slaughterhouse(params[0]))
