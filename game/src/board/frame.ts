@@ -7,20 +7,10 @@ import { nextFrame3Short } from './frame/nextFrame3Short'
 import { nextFrame4Short } from './frame/nextFrame4Short'
 import { nextFrame2Long } from './frame/nextFrame2Long'
 import { nextFrame2Short } from './frame/nextFrame2Short'
-import {
-  Clergy,
-  Cost,
-  Frame,
-  FrameFlow,
-  GameStatePlaying,
-  NextUseClergy,
-  PlayerColor,
-  StateReducer,
-  Tableau,
-} from '../types'
+import { Frame, FrameFlow, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 export const withFrame =
-  (func: (frame: Frame | undefined) => Frame | undefined) =>
+  (func: (frame: Frame) => Frame | undefined) =>
   (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
     if (state === undefined) return state
     const frame = func(state.frame)
