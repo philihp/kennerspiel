@@ -7,7 +7,7 @@ import { nextFrame3Short } from './frame/nextFrame3Short'
 import { nextFrame4Short } from './frame/nextFrame4Short'
 import { nextFrame2Long } from './frame/nextFrame2Long'
 import { nextFrame2Short } from './frame/nextFrame2Short'
-import { Frame, FrameFlow, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { Frame, FrameFlow, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 export const withFrame =
   (func: (frame: Frame) => Frame | undefined) =>
@@ -60,3 +60,14 @@ export const nextFrame: StateReducer = (state) =>
     .with({ config: { players: 1 } }, runProgression(nextFrameSolo))
     .with(undefined, () => undefined)
     .exhaustive()
+
+export const oncePerFrame = (command: GameCommandEnum) =>
+  withFrame((frame) => {
+    if (frame.mainActionUsed === false) return { ...frame, mainActionUsed: true }
+    if (frame.bonusActions.includes(command))
+      return {
+        ...frame,
+        bonusActions: frame.bonusActions.filter((a) => a === command),
+      }
+    return undefined
+  })

@@ -1,17 +1,8 @@
-import { match } from 'ts-pattern'
 import { pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
-import { GameCommandFellTreesParams, GameStatePlaying, Tile, BuildingEnum, Tableau } from '../types'
+import { GameCommandFellTreesParams, GameStatePlaying, Tile, BuildingEnum, Tableau, GameCommandEnum } from '../types'
 import { take } from '../board/rondel'
-import { consumeMainAction } from '../board/state'
-
-const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
-  return match(state)
-    .with(undefined, () => undefined)
-    .with({ frame: { mainActionUsed: false } }, () => state)
-    .with({ frame: { mainActionUsed: true } }, () => undefined)
-    .exhaustive()
-}
+import { oncePerFrame, withFrame } from '../board/frame'
 
 const removeForestAt = (row: number, col: number) =>
   withActivePlayer((player) => {
@@ -65,8 +56,7 @@ const updateJokerRondel = (state: GameStatePlaying | undefined): GameStatePlayin
 export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams) =>
   pipe(
     //
-    checkStateAllowsUse,
-    consumeMainAction,
+    oncePerFrame(GameCommandEnum.FELL_TREES),
     givePlayerWood(useJoker),
     removeForestAt(row, col),
     useJoker ? updateJokerRondel : updateWoodRondel
