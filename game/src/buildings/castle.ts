@@ -1,15 +1,11 @@
-import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
-
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
+import { withFrame } from '../board/frame'
+import { GameCommandEnum, GameStatePlaying } from '../types'
 
 export const castle = () =>
-  pipe(
-    //
-    buildingStub,
-    buildingStub,
-    buildingStub
+  withFrame(
+    (frame) =>
+      frame && {
+        ...frame,
+        bonusActions: [GameCommandEnum.SETTLE],
+      }
   )
