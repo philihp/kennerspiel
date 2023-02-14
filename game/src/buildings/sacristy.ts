@@ -1,15 +1,28 @@
 import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
+import { getWonder, payCost, withActivePlayer } from '../board/player'
+import { parseResourceParam } from '../board/resource'
+import { removeWonder } from '../board/state'
 
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
-
-export const sacristy = () =>
-  pipe(
-    //
-    buildingStub,
-    buildingStub,
-    buildingStub
+export const sacristy = (param = '') => {
+  const input = parseResourceParam(param)
+  const iterations = Math.min(
+    1,
+    Math.max(
+      //
+      input.book ?? 0,
+      input.pottery ?? 0,
+      input.ornament ?? 0,
+      input.reliquary ?? 0
+    )
   )
+  return pipe(
+    withActivePlayer(
+      pipe(
+        //
+        payCost(input),
+        getWonder(iterations)
+      )
+    ),
+    removeWonder
+  )
+}
