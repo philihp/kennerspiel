@@ -1,5 +1,5 @@
-import { pipe, reduce, tap } from 'ramda'
-import { match, P } from 'ts-pattern'
+import { findIndex, pipe, remove } from 'ramda'
+import { match } from 'ts-pattern'
 import { nextFrame4Long } from './frame/nextFrame4Long'
 import { nextFrame3Long } from './frame/nextFrame3Long'
 import { nextFrameSolo } from './frame/nextFrameSolo'
@@ -7,7 +7,7 @@ import { nextFrame3Short } from './frame/nextFrame3Short'
 import { nextFrame4Short } from './frame/nextFrame4Short'
 import { nextFrame2Long } from './frame/nextFrame2Long'
 import { nextFrame2Short } from './frame/nextFrame2Short'
-import { Frame, FrameFlow, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { Frame, FrameFlow, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 export const withFrame =
   (func: (frame: Frame) => Frame | undefined) =>
@@ -60,3 +60,19 @@ export const nextFrame: StateReducer = (state) =>
     .with({ config: { players: 1 } }, runProgression(nextFrameSolo))
     .with(undefined, () => undefined)
     .exhaustive()
+
+export const oncePerFrame = (command: GameCommandEnum) =>
+  withFrame((frame) => {
+    // first try to remove the proposed command from bonusActions
+    const bonusIndex = findIndex((a) => a === command)(frame.bonusActions)
+    if (bonusIndex !== -1) {
+      const bonusActions = remove(bonusIndex, 1, frame.bonusActions) as GameCommandEnum[]
+      return {
+        ...frame,
+        bonusActions,
+      }
+    }
+    // then if it couldn't be, consume the main action, if available
+    if (frame.mainActionUsed === false) return { ...frame, mainActionUsed: true }
+    return undefined
+  })

@@ -1,17 +1,9 @@
 import { pipe } from 'ramda'
-import { match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
-import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum } from '../types'
+import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum, GameCommandEnum } from '../types'
 import { take, updateRondel, withRondel } from '../board/rondel'
 import { consumeMainAction } from '../board/state'
-
-const checkStateAllowsUse = (state: GameStatePlaying | undefined) => {
-  return match(state)
-    .with(undefined, () => undefined)
-    .with({ frame: { mainActionUsed: false } }, () => state)
-    .with({ frame: { mainActionUsed: true } }, () => undefined)
-    .exhaustive()
-}
+import { oncePerFrame } from '../board/frame'
 
 const removePeatAt = (row: number, col: number) =>
   withActivePlayer((player) => {
@@ -46,8 +38,7 @@ const givePlayerPeat =
 export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams) =>
   pipe(
     //
-    checkStateAllowsUse,
-    consumeMainAction,
+    oncePerFrame(GameCommandEnum.CUT_PEAT),
     givePlayerPeat(useJoker),
     removePeatAt(row, col),
     withRondel(updateRondel(useJoker ? 'joker' : 'peat'))

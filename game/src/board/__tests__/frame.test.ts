@@ -1,5 +1,6 @@
 import { initialState } from '../../state'
 import {
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -8,7 +9,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { nextFrame } from '../frame'
+import { nextFrame, oncePerFrame } from '../frame'
 
 describe('board/frame', () => {
   const p0: Tableau = {
@@ -78,6 +79,72 @@ describe('board/frame', () => {
     },
   }
 
+  describe('oncePerFrame', () => {
+    it('consumes the main action if still true', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: false,
+        },
+      }
+      const s2 = oncePerFrame(GameCommandEnum.FELL_TREES)(s1)!
+      expect(s2).toBeDefined()
+      expect(s2.frame.mainActionUsed).toBeTruthy()
+    })
+    it('removes command from bonus actions', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          // this could result from using the Calefactory,
+          // or the Bulwark in the case of buying landscape
+          // but I want to allow for a generalized "these actions are still allowed"
+          bonusActions: [GameCommandEnum.FELL_TREES, GameCommandEnum.CUT_PEAT],
+        },
+      }
+      const s2 = oncePerFrame(GameCommandEnum.FELL_TREES)(s1)!
+      expect(s2).toBeDefined()
+      expect(s2.frame.bonusActions).toStrictEqual([GameCommandEnum.CUT_PEAT])
+    })
+    it('prefer to use mainAction, if it is available', () => {
+      // hard to imagine a situation where this happens, but if it does, i want to
+      // assume that the bonusAction will be consumed first
+      const s1: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: false,
+          bonusActions: [GameCommandEnum.BUILD],
+        },
+      }
+      const s2 = oncePerFrame(GameCommandEnum.BUILD)(s1)!
+      expect(s2).toBeDefined()
+      expect(s2.frame.mainActionUsed).toBeFalsy()
+      expect(s2.frame.bonusActions).toStrictEqual([])
+    })
+    it('only removes one copy of the command', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          // this is a bit of future proofing, since no existing buildings would
+          // give you a way of getting multiple bonus runs of the same command, but
+          // it is possible that a building might say "you can build twice", and I
+          // want to be able to express that without a big overhaul.
+          bonusActions: [GameCommandEnum.BUILD, GameCommandEnum.CUT_PEAT, GameCommandEnum.BUILD],
+        },
+      }
+      const s2 = oncePerFrame(GameCommandEnum.BUILD)(s1)!
+      expect(s2).toBeDefined()
+      expect(s2.frame.bonusActions).toHaveLength(2)
+      expect(s2.frame.bonusActions).toContain(GameCommandEnum.BUILD)
+      expect(s2.frame.bonusActions).toContain(GameCommandEnum.CUT_PEAT)
+    })
+  })
+
   describe('nextFrame', () => {
     describe('3 player long', () => {
       const s1: GameStatePlaying = {
@@ -88,6 +155,11 @@ describe('board/frame', () => {
           length: 'long',
         },
       }
+
+      it('retains undefined state on nextFrame', () => {
+        const s = nextFrame(undefined)!
+        expect(s).toBeUndefined()
+      })
 
       it('advances through rounds', () => {
         let s = s1
