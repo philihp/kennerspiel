@@ -1,5 +1,5 @@
-import { pipe, reduce, tap } from 'ramda'
-import { match, P } from 'ts-pattern'
+import { findIndex, pipe, remove } from 'ramda'
+import { match } from 'ts-pattern'
 import { nextFrame4Long } from './frame/nextFrame4Long'
 import { nextFrame3Long } from './frame/nextFrame3Long'
 import { nextFrameSolo } from './frame/nextFrameSolo'
@@ -63,11 +63,16 @@ export const nextFrame: StateReducer = (state) =>
 
 export const oncePerFrame = (command: GameCommandEnum) =>
   withFrame((frame) => {
-    if (frame.mainActionUsed === false) return { ...frame, mainActionUsed: true }
-    if (frame.bonusActions.includes(command))
+    // first try to remove the proposed command from bonusActions
+    const bonusIndex = findIndex((a) => a === command)(frame.bonusActions)
+    if (bonusIndex !== -1) {
+      const bonusActions = remove(bonusIndex, 1, frame.bonusActions) as GameCommandEnum[]
       return {
         ...frame,
-        bonusActions: frame.bonusActions.filter((a) => a === command),
+        bonusActions,
       }
+    }
+    // then if it couldn't be, consume the main action, if available
+    if (frame.mainActionUsed === false) return { ...frame, mainActionUsed: true }
     return undefined
   })
