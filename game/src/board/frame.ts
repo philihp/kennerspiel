@@ -21,6 +21,12 @@ export const withFrame =
     }
   }
 
+export const addBonusAction = (command: GameCommandEnum) =>
+  withFrame((frame) => ({
+    ...frame,
+    bonusActions: [...frame.bonusActions, command],
+  }))
+
 const runProgression =
   (withFlow: FrameFlow): StateReducer =>
   (state) => {

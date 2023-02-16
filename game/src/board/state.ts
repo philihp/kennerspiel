@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern'
-import { GameStatePlaying } from '../types'
+import { GameStatePlaying, GameStatusEnum } from '../types'
 
 export const consumeMainAction = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
   state && {
@@ -22,3 +22,11 @@ export const removeWonder = (state?: GameStatePlaying): GameStatePlaying | undef
 
 // export const roundInit = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
 //   match(state)
+
+export const gameEnd = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  if (state === undefined) return state
+  return {
+    ...state,
+    status: GameStatusEnum.FINISHED,
+  }
+}

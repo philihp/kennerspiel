@@ -1,8 +1,4 @@
-import { withFrame } from '../board/frame'
-import { GameCommandEnum, GameStatePlaying } from '../types'
+import { addBonusAction } from '../board/frame'
+import { GameCommandEnum } from '../types'
 
-export const castle = () =>
-  withFrame((frame) => ({
-    ...frame,
-    bonusActions: [GameCommandEnum.SETTLE],
-  }))
+export const castle = () => addBonusAction(GameCommandEnum.SETTLE)

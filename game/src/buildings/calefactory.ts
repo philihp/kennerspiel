@@ -2,7 +2,7 @@ import { identity, pipe } from 'ramda'
 import { parseResourceParam, costMoney } from '../board/resource'
 import { withActivePlayer, payCost } from '../board/player'
 import { GameCommandEnum } from '../types'
-import { addBonusAction } from '../board/frame/addBonusAction'
+import { addBonusAction } from '../board/frame'
 
 export const calefactory = (coin = '') => {
   const input = parseResourceParam(coin)

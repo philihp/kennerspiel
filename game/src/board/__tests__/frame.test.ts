@@ -10,6 +10,7 @@ import {
   Tile,
 } from '../../types'
 import { nextFrame, oncePerFrame } from '../frame'
+import { gameEnd } from '../state'
 
 describe('board/frame', () => {
   const p0: Tableau = {
@@ -78,6 +79,21 @@ describe('board/frame', () => {
       nextUse: NextUseClergy.Any,
     },
   }
+
+  describe('gameEnd', () => {
+    it('retains undefined state', () => {
+      const s1 = gameEnd(undefined)!
+      expect(s1).toBeUndefined()
+    })
+
+    it('retain everything about previous state but set status to finished', () => {
+      const s1 = gameEnd(s0)!
+      expect(s1).toMatchObject({
+        ...s0,
+        status: GameStatusEnum.FINISHED,
+      })
+    })
+  })
 
   describe('oncePerFrame', () => {
     it('consumes the main action if still true', () => {

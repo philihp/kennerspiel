@@ -1,5 +1,7 @@
-import { P, match } from 'ts-pattern'
-import { PlayerColor, SettlementEnum, SettlementRound } from '../types'
+import { union } from 'ramda'
+import { match } from 'ts-pattern'
+import { GameStatePlaying, PlayerColor, SettlementEnum, SettlementRound } from '../types'
+import { withEachPlayer } from './player'
 
 export const roundSettlements = (color: PlayerColor, round: SettlementRound): SettlementEnum[] =>
   match<[PlayerColor, SettlementRound], SettlementEnum[]>([color, round])
@@ -44,3 +46,12 @@ export const roundSettlements = (color: PlayerColor, round: SettlementRound): Se
     .with([PlayerColor.Blue, SettlementRound.D], () => [SettlementEnum.HilltopVillageB])
     .with([PlayerColor.White, SettlementRound.D], () => [SettlementEnum.HilltopVillageW])
     .otherwise(() => [])
+
+export const introduceSettlements = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+  withEachPlayer(
+    (player) =>
+      state && {
+        ...player,
+        settlements: union(player.settlements, roundSettlements(player.color, state.frame.settlementRound)),
+      }
+  )(state)

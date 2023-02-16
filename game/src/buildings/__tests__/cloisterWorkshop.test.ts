@@ -79,14 +79,47 @@ describe('buildings/cloisterWorkshop', () => {
       },
     }
 
-    it('goes through a happy path', () => {
-      const s1 = cloisterWorkshop('ClClClCoCoSn')(s0)! as GameStatePlaying
+    it('allows noop with null', () => {
+      const s1 = cloisterWorkshop()(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        pottery: 0,
+        ornament: 0,
+        clay: 10,
+        stone: 10,
+        coal: 10,
+      })
+    })
+
+    it('allows noop with empty string', () => {
+      const s1 = cloisterWorkshop('')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        pottery: 0,
+        ornament: 0,
+        clay: 10,
+        stone: 10,
+        coal: 10,
+      })
+    })
+
+    it('plenty of coal, make three pottery and 1 ornament', () => {
+      const s1 = cloisterWorkshop('ClClClSnCoCoCoCo')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
         pottery: 3,
         ornament: 1,
         clay: 7,
         stone: 9,
-        coal: 8,
+        coal: 6,
+      })
+    })
+
+    it('when abundant clay/stone, prefer to make an ornament', () => {
+      const s1 = cloisterWorkshop('ClClClSnCo')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        pottery: 2,
+        ornament: 1,
+        clay: 7, // but still everything it is given is consumed
+        stone: 9,
+        coal: 9,
       })
     })
 
@@ -97,6 +130,17 @@ describe('buildings/cloisterWorkshop', () => {
         ornament: 1,
         clay: 10,
         stone: 9,
+        coal: 9,
+      })
+    })
+
+    it('can be used for only pottery', () => {
+      const s1 = cloisterWorkshop('CoClCl')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        pottery: 2,
+        ornament: 0,
+        clay: 8,
+        stone: 10,
         coal: 9,
       })
     })

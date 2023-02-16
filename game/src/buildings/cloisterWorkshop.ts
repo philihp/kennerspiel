@@ -1,26 +1,19 @@
 import { pipe } from 'ramda'
 import { getCost, payCost, withActivePlayer } from '../board/player'
 import { costEnergy, parseResourceParam } from '../board/resource'
-import { Tableau } from '../types'
-
-const checkEnoughEnergy =
-  ({ clay = 0, stone = 0 }, energy: number) =>
-  (player: Tableau | undefined) => {
-    if (clay + stone > energy) return undefined
-    return player
-  }
 
 export const cloisterWorkshop = (clayStoneEnergy = '') => {
   const inputs = parseResourceParam(clayStoneEnergy)
   const energy = costEnergy(inputs)
-  const clay = Math.min(inputs.clay ?? 0, 3)
-  const stone = Math.min(inputs.stone ?? 0, 1)
+  const { clay = 0, stone = 0 } = inputs
+  // this will prefer to make an ornament, when energy is short but clay/stone is abundant
+  const ornament = Math.min(stone, energy, 1)
+  const pottery = Math.min(clay, 3, energy - ornament)
   return withActivePlayer(
     pipe(
       //
-      checkEnoughEnergy({ clay, stone }, energy),
       payCost(inputs),
-      getCost({ pottery: clay, ornament: stone })
+      getCost({ pottery, ornament })
     )
   )
 }

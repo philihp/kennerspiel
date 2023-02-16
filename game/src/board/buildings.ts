@@ -1,5 +1,5 @@
-import { match, P } from 'ts-pattern'
-import { BuildingEnum, Cost, GameCommandConfigParams, LandEnum, SettlementRound } from '../types'
+import { match } from 'ts-pattern'
+import { BuildingEnum, Cost, GameCommandConfigParams, LandEnum, SettlementRound, StateReducer } from '../types'
 
 export const terrainForBuilding = (building: BuildingEnum) =>
   // TODO: this should be comprehensive
@@ -131,7 +131,7 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.CloisterGarden,
       BuildingEnum.HarborPromenade,
       BuildingEnum.StoneMerchant,
-      BuildingEnum.BuildersMarket,
+      // BuildingEnum.BuildersMarket, // this automatically gets spawned on neutral player
     ])
     .with([{ country: 'ireland', players: 4 }, SettlementRound.S], () => [
       BuildingEnum.Priory,
@@ -182,7 +182,7 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Cottage,
       BuildingEnum.Houseboat,
       BuildingEnum.StoneMerchant,
-      BuildingEnum.BuildersMarket,
+      // BuildingEnum.BuildersMarket, // this gets automatically spawned on neutral player
     ])
     .with([{ country: 'france', players: 4 }, SettlementRound.A], () => [
       BuildingEnum.GrapevineA,
@@ -200,6 +200,7 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Slaughterhouse,
     ])
     .with([{ country: 'france', players: 2 }, SettlementRound.A], () => [
+      BuildingEnum.GrapevineA,
       BuildingEnum.CloisterLibrary,
       BuildingEnum.CloisterWorkshop,
       BuildingEnum.Slaughterhouse,
@@ -437,3 +438,11 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.HouseOfTheBrotherhood,
     ])
     .otherwise(() => [])
+
+export const introduceBuildings: StateReducer = (state) => {
+  if (state === undefined) return undefined
+  return {
+    ...state,
+    buildings: roundBuildings(state.config, state.frame.settlementRound),
+  }
+}

@@ -84,7 +84,7 @@ describe('buildings/castle', () => {
       const s1 = castle()(undefined)
       expect(s1).toBeUndefined()
     })
-    it('baseline happy path', () => {
+    it('adds a settlement bonus action', () => {
       const s1 = castle()(s0)!
       expect(s1.frame.bonusActions).toContain('SETTLE')
     })
