@@ -1,9 +1,9 @@
 import { FrameFlow, GameCommandEnum, NextUseClergy, SettlementRound } from '../../types'
+import { introduceBuildings } from '../buildings'
 import { getCost, withEachPlayer } from '../player'
 import { introduceGrapeToken, introduceStoneToken } from '../rondel'
 import { allPriorsComeBack } from './allPriorsComeBack'
-import { gameEnd } from './gameEnd'
-import { introduceBuildings } from './introduceBuildings'
+import { gameEnd } from '../state'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondel } from './rotateRondel'
 

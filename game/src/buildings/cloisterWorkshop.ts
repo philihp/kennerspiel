@@ -1,7 +1,6 @@
 import { pipe } from 'ramda'
 import { getCost, payCost, withActivePlayer } from '../board/player'
 import { costEnergy, parseResourceParam } from '../board/resource'
-import { Tableau } from '../types'
 
 export const cloisterWorkshop = (clayStoneEnergy = '') => {
   const inputs = parseResourceParam(clayStoneEnergy)

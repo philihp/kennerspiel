@@ -1,5 +1,5 @@
-import { match, P } from 'ts-pattern'
-import { BuildingEnum, Cost, GameCommandConfigParams, LandEnum, SettlementRound } from '../types'
+import { match } from 'ts-pattern'
+import { BuildingEnum, Cost, GameCommandConfigParams, LandEnum, SettlementRound, StateReducer } from '../types'
 
 export const terrainForBuilding = (building: BuildingEnum) =>
   // TODO: this should be comprehensive
@@ -437,3 +437,11 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.HouseOfTheBrotherhood,
     ])
     .otherwise(() => [])
+
+export const introduceBuildings: StateReducer = (state) => {
+  if (state === undefined) return undefined
+  return {
+    ...state,
+    buildings: roundBuildings(state.config, state.frame.settlementRound),
+  }
+}
