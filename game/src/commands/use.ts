@@ -177,12 +177,7 @@ export const use = (building: BuildingEnum, params: string[]) =>
       .with([BuildingEnum.Bakery, [P._]], ([_, params]) => bakery(params[0]))
       .with([BuildingEnum.Bathhouse, []], bathhouse)
       .with([BuildingEnum.BuildersMarket, [P._]], ([_, params]) => buildersMarket(params[0]))
-      .with(
-        [BuildingEnum.Calefactory, []], // called with nothing to cut or fell.
-        [BuildingEnum.Calefactory, [P._, P._]], // called with one cut peat or one fell trees
-        [BuildingEnum.Calefactory, [P._, P._, P._, P._]], // called with one cut peat AND one fell trees
-        ([_, params]) => calefactory(...params)
-      )
+      .with([BuildingEnum.Calefactory, [P._]], ([_, params]) => calefactory(params[0]))
       .with([BuildingEnum.Carpentry, [P._, P._]], ([_, [row, col]]) =>
         carpentry(Number.parseInt(row ?? '', 10), Number.parseInt(col ?? '', 10))
       )
