@@ -34,18 +34,16 @@ const PLength = P.union('short', 'long')
 export const reducer = (state: GameState, action: string[]): GameState | undefined => {
   const [command, ...params] = action
   return match<[string, string[]], GameState | undefined>([command, params])
-    .with([GameCommandEnum.CONFIG, [PPlayerCount, PCountry, PLength]], ([_, [players, country, length]]) =>
-      config(state as GameStateSetup, {
-        players: Number.parseInt(players, 10) as GameConfigPlayers,
-        length: length as GameConfigLength,
-        country: country as GameConfigCountry,
-      })
+    .with([GameCommandEnum.COMMIT, []], () => commit(state as GameStatePlaying))
+    .with([GameCommandEnum.USE, P.array(P.string)], ([_command, [building, ...params]]) =>
+      use(building as BuildingEnum, params)(state as GameStatePlaying)
     )
-    .with([GameCommandEnum.START, P.array(P.string)], ([_, [unparsedSeed, ...colors]]) =>
-      start(state as GameStateSetup, {
-        seed: Number.parseInt(unparsedSeed, 10),
-        colors: colors as PlayerColor[],
-      })
+    .with([GameCommandEnum.BUILD, P.array(P.string)], ([_, [building, col, row]]) =>
+      build({
+        building: building as BuildingEnum,
+        col: Number.parseInt(col, 10),
+        row: Number.parseInt(row, 10),
+      })(state as GameStatePlaying)
     )
     .with([GameCommandEnum.CUT_PEAT, P.array(P.string)], ([_, [col, row, useJoker]]) =>
       cutPeat({
@@ -61,17 +59,7 @@ export const reducer = (state: GameState, action: string[]): GameState | undefin
         useJoker: useJoker === 'Jo',
       })(state as GameStatePlaying)
     )
-    .with([GameCommandEnum.BUILD, P.array(P.string)], ([_, [building, col, row]]) =>
-      build({
-        building: building as BuildingEnum,
-        col: Number.parseInt(col, 10),
-        row: Number.parseInt(row, 10),
-      })(state as GameStatePlaying)
-    )
     .with([GameCommandEnum.WITH_PRIOR, []], () => withPrior(state as GameStatePlaying))
-    .with([GameCommandEnum.USE, P.array(P.string)], ([_command, [building, ...params]]) =>
-      use(building as BuildingEnum, params)(state as GameStatePlaying)
-    )
     .with([GameCommandEnum.BUY_PLOT, [P._, PPlot]], ([_, [y, side]]) =>
       buyPlot({
         y: Number.parseInt(y, 10),
@@ -87,7 +75,19 @@ export const reducer = (state: GameState, action: string[]): GameState | undefin
     .with([GameCommandEnum.CONVERT, [P.select('resources')]], ({ resources }) =>
       convert(parseResourceParam(resources))(state as GameStatePlaying)
     )
-    .with([GameCommandEnum.COMMIT, []], () => commit(state as GameStatePlaying))
+    .with([GameCommandEnum.CONFIG, [PPlayerCount, PCountry, PLength]], ([_, [players, country, length]]) =>
+      config(state as GameStateSetup, {
+        players: Number.parseInt(players, 10) as GameConfigPlayers,
+        length: length as GameConfigLength,
+        country: country as GameConfigCountry,
+      })
+    )
+    .with([GameCommandEnum.START, P.array(P.string)], ([_, [unparsedSeed, ...colors]]) =>
+      start(state as GameStateSetup, {
+        seed: Number.parseInt(unparsedSeed, 10),
+        colors: colors as PlayerColor[],
+      })
+    )
     .otherwise((command) => {
       throw new Error(`Unable to parse [${command.join(',')}]`)
     })
