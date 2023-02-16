@@ -1,15 +1,16 @@
-import { pipe } from 'ramda'
-import { GameStatePlaying } from '../types'
+import { identity, pipe } from 'ramda'
+import { parseResourceParam, costMoney } from '../board/resource'
+import { withActivePlayer, payCost } from '../board/player'
+import { GameCommandEnum } from '../types'
+import { addBonusAction } from '../board/frame/addBonusAction'
 
-const buildingStub = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  if (state === undefined) return undefined
-  return state
-}
-
-export const calefactory = (row1 = '', col1 = '', row2 = '', col2 = '') =>
-  pipe(
+export const calefactory = (coin = '') => {
+  const input = parseResourceParam(coin)
+  if (costMoney(input) < 1) return identity
+  return pipe(
     //
-    buildingStub,
-    buildingStub,
-    buildingStub
+    withActivePlayer(payCost(input)),
+    addBonusAction(GameCommandEnum.FELL_TREES),
+    addBonusAction(GameCommandEnum.CUT_PEAT)
   )
+}
