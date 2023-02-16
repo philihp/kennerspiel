@@ -3,11 +3,19 @@ import { costForBuilding, isCloisterBuilding, terrainForBuilding } from '../boar
 import { oncePerFrame } from '../board/frame'
 import { payCost, withActivePlayer } from '../board/player'
 import { canAfford } from '../board/resource'
-import { BuildingEnum, GameCommandBuildParams, GameCommandEnum, GameStatePlaying, NextUseClergy, Tile } from '../types'
+import {
+  BuildingEnum,
+  GameCommandBuildParams,
+  GameCommandEnum,
+  GameStatePlaying,
+  NextUseClergy,
+  StateReducer,
+  Tile,
+} from '../types'
 
 const checkBuildingUnbuilt =
-  (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
     return state?.buildings.includes(building) ? state : undefined
   }
 
@@ -44,8 +52,8 @@ const checkBuildingCloister = (row: number, col: number, building: BuildingEnum)
 }
 
 const removeBuildingFromUnbuilt =
-  (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+  (building: BuildingEnum): StateReducer =>
+  (state) =>
     state && {
       ...state,
       buildings: filter((b) => b !== building, state?.buildings),
@@ -72,8 +80,8 @@ const addBuildingAtLandscape = (row: number, col: number, building: BuildingEnum
 const removeBuildingCost = (building: BuildingEnum) => withActivePlayer(payCost(costForBuilding(building)))
 
 export const allowPriorToUse =
-  (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
     return (
       state && {
         ...state,

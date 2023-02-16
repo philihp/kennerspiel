@@ -1,7 +1,7 @@
 import { pipe, reduce } from 'ramda'
 import { payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
-import { BuildingEnum, GameStatePlaying, NextUseClergy, Tableau, Tile } from '../types'
+import { BuildingEnum, GameStatePlaying, NextUseClergy, StateReducer, Tableau, Tile } from '../types'
 
 const nextUseIsFree = (state: GameStatePlaying | undefined) =>
   state && {
@@ -31,7 +31,7 @@ const occupiedBuildingsForPlayers = (players: Tableau[]) =>
     players
   )
 
-const allOccupiedBuildingsUsable = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+const allOccupiedBuildingsUsable: StateReducer = (state) =>
   state && { ...state, frame: { ...state.frame, usableBuildings: occupiedBuildingsForPlayers(state.players) } }
 
 export const palace = (input = '') => {

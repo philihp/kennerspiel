@@ -1,7 +1,7 @@
 import { pipe } from 'ramda'
-import { GameStatePlaying, NextUseClergy } from '../types'
+import { StateReducer, NextUseClergy } from '../types'
 
-const allowUseAnyUnbuiltBuilding = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+const allowUseAnyUnbuiltBuilding: StateReducer = (state) => {
   if (state === undefined) return undefined
   return {
     ...state,

@@ -1,10 +1,10 @@
-import { GameStatePlaying, Rondel, GameCommandConfigParams } from '../types'
+import { Rondel, GameCommandConfigParams, StateReducer } from '../types'
 
 type TokenName = 'grain' | 'sheep' | 'clay' | 'coin' | 'wood' | 'joker' | 'peat' | 'grape' | 'stone'
 
 export const withRondel =
-  (func: (rondel: Rondel | undefined) => Rondel | undefined) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (func: (rondel: Rondel | undefined) => Rondel | undefined): StateReducer =>
+  (state) => {
     if (state === undefined) return state
     const rondel = func(state.rondel)
     if (rondel === undefined) return undefined

@@ -10,8 +10,8 @@ import { nextFrame2Short } from './frame/nextFrame2Short'
 import { Frame, FrameFlow, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 export const withFrame =
-  (func: (frame: Frame) => Frame | undefined) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (func: (frame: Frame) => Frame | undefined): StateReducer =>
+  (state) => {
     if (state === undefined) return state
     const frame = func(state.frame)
     if (frame === undefined) return undefined

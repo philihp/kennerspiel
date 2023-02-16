@@ -1,10 +1,10 @@
 import { any, map } from 'ramda'
 import { match } from 'ts-pattern'
-import { Clergy, Cost, GameStatePlaying, PlayerColor, Tableau } from '../types'
+import { Clergy, Cost, GameStatePlaying, PlayerColor, StateReducer, Tableau } from '../types'
 
 export const withActivePlayer =
-  (func: (player: Tableau) => Tableau | undefined) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (func: (player: Tableau) => Tableau | undefined): StateReducer =>
+  (state) => {
     if (state === undefined) return state
     const oldPlayer = state.players[state.frame.activePlayerIndex]
     const player = func(oldPlayer)
@@ -21,8 +21,8 @@ export const withActivePlayer =
   }
 
 export const withEachPlayer =
-  (func: (player: Tableau) => Tableau | undefined) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (func: (player: Tableau) => Tableau | undefined): StateReducer =>
+  (state) => {
     if (state === undefined) return state
     let dirty = false
     const players = map((p) => {

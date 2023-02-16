@@ -1,11 +1,11 @@
 import { withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { StateReducer } from '../types'
 
-export const windmill = (param = '') => {
+export const windmill = (param = ''): StateReducer => {
   const { grain = 0 } = parseResourceParam(param)
   const iterations = Math.min(grain, 7)
-  return (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+  return (state) =>
     state &&
     withActivePlayer((player) => ({
       ...player,

@@ -44,7 +44,7 @@ import { stoneMerchant } from '../buildings/stoneMerchant'
 import { townEstate } from '../buildings/townEstate'
 import { windmill } from '../buildings/windmill'
 import { winery } from '../buildings/winery'
-import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, Tile } from '../types'
+import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer, Tile } from '../types'
 
 const checkStateAllowsUse = (building: BuildingEnum) => (state: GameStatePlaying | undefined) => {
   if (state === undefined) return undefined
@@ -83,8 +83,8 @@ export const findBuilding = (
 }
 
 const moveClergyToOwnBuilding =
-  (building: BuildingEnum) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
     if (state === undefined) return undefined
     if (state.frame.nextUse === NextUseClergy.Free) return state
     const player = state.players[state.frame.activePlayerIndex]
@@ -118,7 +118,7 @@ const moveClergyToOwnBuilding =
     }))(state)
   }
 
-const clearUsableBuildings = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+const clearUsableBuildings: StateReducer = (state) => {
   return (
     state && {
       ...state,
@@ -130,7 +130,7 @@ const clearUsableBuildings = (state: GameStatePlaying | undefined): GameStatePla
   )
 }
 
-const clearNextUse = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+const clearNextUse: StateReducer = (state) => {
   return (
     state && {
       ...state,
@@ -170,10 +170,8 @@ export const use = (building: BuildingEnum, params: string[]) =>
     consumeMainAction,
     clearUsableBuildings,
     clearNextUse,
-    match<[BuildingEnum, string[]], (state: GameStatePlaying | undefined) => GameStatePlaying | undefined>([
-      building,
-      params,
-    ])
+    clearNextUse,
+    match<[BuildingEnum, string[]], StateReducer>([building, params])
       .with([BuildingEnum.Bakery, [P._]], ([_, params]) => bakery(params[0]))
       .with([BuildingEnum.Bathhouse, []], bathhouse)
       .with([BuildingEnum.BuildersMarket, [P._]], ([_, params]) => buildersMarket(params[0]))

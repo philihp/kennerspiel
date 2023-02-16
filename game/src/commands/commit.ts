@@ -1,10 +1,8 @@
 import { pipe } from 'ramda'
 import { nextFrame } from '../board/frame'
-import { GameStatePlaying } from '../types'
+import { StateReducer } from '../types'
 
-export const commit = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
-  return pipe(
-    //
-    nextFrame
-  )(state)
-}
+export const commit: StateReducer = pipe(
+  // is this really all we need to do?
+  nextFrame
+)
