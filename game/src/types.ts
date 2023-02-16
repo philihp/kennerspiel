@@ -170,7 +170,7 @@ export enum BuildingEnum {
   StoneMerchant = 'G12',
   BuildersMarket = 'G13',
   // A
-  GrapevineA = 'F12',
+  GrapevineA = 'F14',
   SacredSite = 'I14',
   FinancedEstate = 'F15',
   DruidsHouse = 'I15',
