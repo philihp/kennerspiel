@@ -1,4 +1,3 @@
-import { reducer } from '../../reducer'
 import { initialState } from '../../state'
 import {
   BuildingEnum,
