@@ -1,6 +1,6 @@
 import { reducer } from '../reducer'
 import { initialState } from '../state'
-import { BuildingEnum, GameStatePlaying, GameStateSetup } from '../types'
+import { GameStatePlaying } from '../types'
 
 describe('game 29767', () => {
   it('runs through moves', () => {
