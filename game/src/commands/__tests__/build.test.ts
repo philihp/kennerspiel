@@ -1,16 +1,86 @@
-import { reducer } from '../../reducer'
 import { initialState } from '../../state'
-import { BuildingEnum, GameStatePlaying, LandEnum, PlayerColor } from '../../types'
-import { config } from '../config'
-import { start } from '../start'
+import {
+  BuildingEnum,
+  GameStatePlaying,
+  GameStatusEnum,
+  LandEnum,
+  NextUseClergy,
+  PlayerColor,
+  SettlementRound,
+  Tableau,
+  Tile,
+} from '../../types'
+import { build } from '../build'
 
 describe('commands/build', () => {
-  const s0 = initialState
-  const s1 = config(s0, { country: 'france', players: 3, length: 'long' })!
-  const s2 = start(s1, {
-    seed: 42,
-    colors: [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green],
-  })! as GameStatePlaying
+  const p0: Tableau = {
+    color: PlayerColor.Blue,
+    clergy: [],
+    settlements: [],
+    landscape: [
+      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+    ] as Tile[][],
+    wonders: 0,
+    landscapeOffset: 0,
+    peat: 0,
+    penny: 0,
+    clay: 0,
+    wood: 0,
+    grain: 0,
+    sheep: 0,
+    stone: 0,
+    flour: 0,
+    grape: 0,
+    nickel: 0,
+    hops: 0,
+    coal: 0,
+    book: 0,
+    pottery: 0,
+    whiskey: 0,
+    straw: 0,
+    meat: 0,
+    ornament: 0,
+    bread: 0,
+    wine: 0,
+    beer: 0,
+    reliquary: 0,
+  }
+  const s2: GameStatePlaying = {
+    ...initialState,
+    status: GameStatusEnum.PLAYING,
+    frame: {
+      next: 1,
+      startingPlayer: 1,
+      settlementRound: SettlementRound.S,
+      workContractCost: 1,
+      currentPlayerIndex: 0,
+      activePlayerIndex: 0,
+      neutralBuildingPhase: false,
+      bonusRoundPlacement: false,
+      mainActionUsed: false,
+      bonusActions: [],
+      canBuyLandscape: true,
+      unusableBuildings: [],
+      usableBuildings: [],
+      nextUse: NextUseClergy.Any,
+    },
+    config: {
+      country: 'france',
+      players: 3,
+      length: 'long',
+    },
+    rondel: {
+      pointingBefore: 3,
+      stone: 1,
+      joker: 2,
+    },
+    wonders: 0,
+    players: [{ ...p0 }, { ...p0 }, { ...p0 }],
+    buildings: [],
+    plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+    districtPurchasePrices: [],
+  }
 
   describe('build', () => {
     it('fails when building is not available', () => {
@@ -31,7 +101,7 @@ describe('commands/build', () => {
         ],
         buildings: s2.buildings.filter((b) => b !== 'G07'),
       }
-      const s4 = reducer(s3, ['BUILD', 'G07', '3', '1'])! as GameStatePlaying
+      const s4 = build({ row: 1, col: 3, building: BuildingEnum.Calefactory })(s3)!
       expect(s4).toBeUndefined()
     })
     it('fails when erection present', () => {
@@ -50,8 +120,9 @@ describe('commands/build', () => {
           },
           ...s2.players.slice(1),
         ],
+        buildings: [BuildingEnum.Calefactory],
       }
-      const s4 = reducer(s3, ['BUILD', 'G07', '0', '1'])! as GameStatePlaying
+      const s4 = build({ row: 1, col: 0, building: BuildingEnum.Calefactory })(s3)!
       expect(s4).toBeUndefined()
     })
     it('fails when player cant afford building', () => {
@@ -72,8 +143,9 @@ describe('commands/build', () => {
           },
           ...s2.players.slice(1),
         ],
+        buildings: [BuildingEnum.PeatCoalKiln],
       }
-      const s4 = reducer(s3, ['BUILD', 'G07', '3', '1'])! as GameStatePlaying
+      const s4 = build({ row: 1, col: 3, building: BuildingEnum.PeatCoalKiln })(s3)!
       expect(s4).toBeUndefined()
     })
     it('fails if building cloister without being neighbors to another', () => {
@@ -93,8 +165,9 @@ describe('commands/build', () => {
           },
           ...s2.players.slice(1),
         ],
+        buildings: [BuildingEnum.Priory],
       }
-      const s4 = reducer(s3, ['BUILD', BuildingEnum.Priory, '3', '0'])! as GameStatePlaying
+      const s4 = build({ row: 0, col: 3, building: BuildingEnum.Priory })(s3)!
       expect(s4).toBeUndefined()
     })
     it('builds just fine', () => {
@@ -115,8 +188,9 @@ describe('commands/build', () => {
           },
           ...s2.players.slice(1),
         ],
+        buildings: [BuildingEnum.Windmill],
       }
-      const s4 = reducer(s3, ['BUILD', BuildingEnum.Windmill, '3', '1'])! as GameStatePlaying
+      const s4 = build({ row: 1, col: 3, building: BuildingEnum.Windmill })(s3)!
       expect(s4).toBeDefined()
       expect(s4.buildings).not.toContain(BuildingEnum.Windmill)
       expect(s4.players[0].landscape[1][5][1]).toBe(BuildingEnum.Windmill)
@@ -149,8 +223,9 @@ describe('commands/build', () => {
           },
           ...s2.players.slice(1),
         ],
+        buildings: [BuildingEnum.Windmill],
       }
-      const s4 = reducer(s3, ['BUILD', BuildingEnum.Windmill, '1', '-1'])! as GameStatePlaying
+      const s4 = build({ row: -1, col: 1, building: BuildingEnum.Windmill })(s3)!
       expect(s4).toBeDefined()
       expect(s4.buildings).not.toContain(BuildingEnum.Windmill)
       expect(s4.players[0]).toMatchObject({
