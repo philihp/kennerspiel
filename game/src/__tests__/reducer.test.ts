@@ -1,104 +1,127 @@
+import { identity } from 'ramda'
 import { reducer } from '../reducer'
 import { initialState } from '../state'
-import { GameStatePlaying, GameStatusEnum, NextUseClergy, PlayerColor, SettlementRound, Tableau, Tile } from '../types'
+import {
+  build,
+  commit,
+  config,
+  convert,
+  cutPeat,
+  fellTrees,
+  start,
+  use,
+  withPrior,
+  buyPlot,
+  buyDistrict,
+} from '../commands'
+
+jest.mock('../commands', () => {
+  return {
+    ...jest.requireActual('../commands'),
+    build: jest.fn().mockReturnValue(identity),
+    commit: jest.fn().mockReturnValue(identity),
+    config: jest.fn().mockReturnValue(identity),
+    convert: jest.fn().mockReturnValue(identity),
+    cutPeat: jest.fn().mockReturnValue(identity),
+    fellTrees: jest.fn().mockReturnValue(identity),
+    start: jest.fn().mockReturnValue(identity),
+    use: jest.fn().mockReturnValue(identity),
+    withPrior: jest.fn().mockReturnValue(identity),
+    buyPlot: jest.fn().mockReturnValue(identity),
+    buyDistrict: jest.fn().mockReturnValue(identity),
+  }
+})
 
 describe('reducer', () => {
-  describe('initialState', () => {
-    const p0: Tableau = {
-      color: PlayerColor.Blue,
-      clergy: [],
-      settlements: [],
-      landscape: [
-        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
-        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
-      ] as Tile[][],
-      wonders: 0,
-      landscapeOffset: 0,
-      peat: 0,
-      penny: 100,
-      clay: 0,
-      wood: 0,
-      grain: 0,
-      sheep: 0,
-      stone: 0,
-      flour: 0,
-      grape: 0,
-      nickel: 0,
-      hops: 0,
-      coal: 0,
-      book: 0,
-      pottery: 0,
-      whiskey: 0,
-      straw: 0,
-      meat: 0,
-      ornament: 0,
-      bread: 0,
-      wine: 0,
-      beer: 0,
-      reliquary: 0,
-    }
-    const s0: GameStatePlaying = {
-      ...initialState,
-      status: GameStatusEnum.PLAYING,
-      frame: {
-        next: 1,
-        startingPlayer: 1,
-        settlementRound: SettlementRound.S,
-        workContractCost: 1,
-        currentPlayerIndex: 0,
-        activePlayerIndex: 0,
-        neutralBuildingPhase: false,
-        bonusRoundPlacement: false,
-        mainActionUsed: false,
-        bonusActions: [],
-        canBuyLandscape: true,
-        unusableBuildings: [],
-        usableBuildings: [],
-        nextUse: NextUseClergy.Any,
-      },
-      config: {
-        country: 'france',
-        players: 3,
-        length: 'long',
-      },
-      rondel: {
-        pointingBefore: 0,
-      },
-      wonders: 0,
-      players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      buildings: [],
-      plotPurchasePrices: [1],
-      districtPurchasePrices: [1],
-    }
+  const s0 = {
+    ...initialState,
+  }
 
+  it('handles unfound commands', () => {
+    expect(() => reducer(s0, ['FOFOFOFOFOFO'])).toThrow()
+  })
+
+  describe('initialState', () => {
     it('exposes an initial state', () => {
       expect.assertions(1)
       expect(initialState).toBeDefined()
     })
+  })
 
-    it('handles unfound commands', () => {
-      expect(() => reducer(s0, ['FOFOFOFOFOFO'])).toThrow()
+  describe('config', () => {
+    it('calls config', () => {
+      reducer(s0, ['CONFIG', '3', 'france', 'long'])!
+      expect(config).toHaveBeenCalled()
     })
+  })
 
+  describe('start', () => {
+    it('calls start', () => {
+      reducer(s0, ['START', '42', 'R', 'G', 'B'])!
+      expect(start).toHaveBeenCalled()
+    })
+  })
+
+  describe('cutPeat', () => {
+    it('calls cutPeat', () => {
+      reducer(s0, ['CUT_PEAT', '0', '0', 'Jo'])!
+      expect(cutPeat).toHaveBeenCalled()
+    })
+  })
+
+  describe('fellTrees', () => {
+    it('calls fellTrees', () => {
+      reducer(s0, ['FELL_TREES', '1', '0', 'Jo'])!
+      expect(fellTrees).toHaveBeenCalled()
+    })
+  })
+
+  describe('build', () => {
+    it('calls build', () => {
+      reducer(s0, ['BUILD', 'G01', '3', '0'])!
+      expect(build).toHaveBeenCalled()
+    })
+  })
+
+  describe('withPrior', () => {
+    it('calls withPrior', () => {
+      reducer(s0, ['WITH_PRIOR'])!
+      expect(withPrior).toHaveBeenCalled()
+    })
+  })
+
+  describe('use', () => {
+    it('calls use', () => {
+      reducer(s0, ['USE', 'LR1', 'Jo'])!
+      expect(use).toHaveBeenCalled()
+    })
+  })
+
+  describe('convert', () => {
+    it('calls convert', () => {
+      reducer(s0, ['CONVERT', 'Gn'])!
+      expect(convert).toHaveBeenCalled()
+    })
+  })
+
+  describe('commit', () => {
+    it('calls commit', () => {
+      reducer(s0, ['COMMIT'])!
+      expect(commit).toHaveBeenCalled()
+    })
+  })
+
+  describe('buyDistrict', () => {
     it('calls buyDistrict', () => {
-      const s1 = reducer(s0, ['BUY_DISTRICT', '-1', 'HILLS'])! as GameStatePlaying
-      expect(s1.players[0]).toMatchObject({
-        landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
-          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
-          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
-        ],
-      })
+      reducer(s0, ['BUY_DISTRICT', '-1', 'HILLS'])!
+      expect(buyDistrict).toHaveBeenCalled()
     })
+  })
 
+  describe('buyPlot', () => {
     it('calls buyPlot', () => {
-      const s1 = reducer(s0, ['BUY_PLOT', '0', 'COAST'])! as GameStatePlaying
-      expect(s1.players[0]).toMatchObject({
-        landscape: [
-          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
-          [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
-        ],
-      })
+      reducer(s0, ['BUY_PLOT', '1', 'COAST'])!
+      expect(buyPlot).toHaveBeenCalled()
     })
   })
 })

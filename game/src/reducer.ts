@@ -1,12 +1,4 @@
 import { match, P } from 'ts-pattern'
-import { build } from './commands/build'
-import { commit } from './commands/commit'
-import { config } from './commands/config'
-import { convert } from './commands/convert'
-import { cutPeat } from './commands/cutPeat'
-import { fellTrees } from './commands/fellTrees'
-import { start } from './commands/start'
-import { use } from './commands/use'
 import {
   BuildingEnum,
   GameCommandEnum,
@@ -19,9 +11,19 @@ import {
   PlayerColor,
 } from './types'
 import { parseResourceParam } from './board/resource'
-import { withPrior } from './commands/withPrior'
-import { buyPlot } from './commands/buyPlot'
-import { buyDistrict } from './commands/buyDistrict'
+import {
+  build,
+  commit,
+  config,
+  convert,
+  cutPeat,
+  fellTrees,
+  start,
+  use,
+  withPrior,
+  buyPlot,
+  buyDistrict,
+} from './commands'
 
 const PPlot = P.union('MOUNTAIN', 'COAST')
 const PDistrict = P.union('HILLS', 'PLAINS')
@@ -67,9 +69,9 @@ export const reducer = (state: GameState, action: string[]): GameState | undefin
       })(state as GameStatePlaying)
     )
     .with([GameCommandEnum.WITH_PRIOR, []], () => withPrior(state as GameStatePlaying))
-    .with([GameCommandEnum.USE, P.array(P.string)], ([_command, [building, ...params]]) => {
-      return use(building as BuildingEnum, params)(state as GameStatePlaying)
-    })
+    .with([GameCommandEnum.USE, P.array(P.string)], ([_command, [building, ...params]]) =>
+      use(building as BuildingEnum, params)(state as GameStatePlaying)
+    )
     .with([GameCommandEnum.BUY_PLOT, [P._, PPlot]], ([_, [y, side]]) =>
       buyPlot({
         y: Number.parseInt(y, 10),
