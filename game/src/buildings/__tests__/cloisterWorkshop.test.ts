@@ -101,14 +101,25 @@ describe('buildings/cloisterWorkshop', () => {
       })
     })
 
-    it('goes through a happy path', () => {
-      const s1 = cloisterWorkshop('ClClClCoCoSn')(s0)! as GameStatePlaying
+    it('plenty of coal, make three pottery and 1 ornament', () => {
+      const s1 = cloisterWorkshop('ClClClSnCoCoCoCo')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
         pottery: 3,
         ornament: 1,
         clay: 7,
         stone: 9,
-        coal: 8,
+        coal: 6,
+      })
+    })
+
+    it('when abundant clay/stone, prefer to make an ornament', () => {
+      const s1 = cloisterWorkshop('ClClClSnCo')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        pottery: 2,
+        ornament: 1,
+        clay: 7, // but still everything it is given is consumed
+        stone: 9,
+        coal: 9,
       })
     })
 
