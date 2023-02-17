@@ -11,6 +11,7 @@ import {
   settle,
   start,
   use,
+  withLaybrother,
   withPrior,
   workContract,
   buyPlot,
@@ -30,6 +31,7 @@ jest.mock('../commands', () => {
     start: jest.fn().mockReturnValue(identity),
     use: jest.fn().mockReturnValue(identity),
     withPrior: jest.fn().mockReturnValue(identity),
+    withLaybrother: jest.fn().mockReturnValue(identity),
     workContract: jest.fn().mockReturnValue(identity),
     buyPlot: jest.fn().mockReturnValue(identity),
     buyDistrict: jest.fn().mockReturnValue(identity),
@@ -84,6 +86,13 @@ describe('reducer', () => {
     it('calls build', () => {
       reducer(s0, ['BUILD', 'G01', '3', '0'])!
       expect(build).toHaveBeenCalled()
+    })
+  })
+
+  describe('withLaybrother', () => {
+    it('calls withLaybrother', () => {
+      reducer(s0, ['WITH_LAYBROTHER'])!
+      expect(withLaybrother).toHaveBeenCalled()
     })
   })
 
