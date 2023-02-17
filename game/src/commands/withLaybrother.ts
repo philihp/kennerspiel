@@ -20,6 +20,7 @@ const checkHasExactlyOneUsableBuilding: StateReducer = withFrame((frame) => {
 
 export const withLaybrother: StateReducer = (state) => {
   if (state === undefined) return undefined
+  if (state.frame.usableBuildings.length !== 1) return undefined
   return pipe(
     //
     checkActivePlayerIsNotCurrent,

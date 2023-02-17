@@ -1,6 +1,6 @@
-import { all, find, pipe, range, without } from 'ramda'
-import { payCost, getCost, withActivePlayer, isLayBrother, isPrior } from '../board/player'
+import { all, any, find, identity, map, pipe, range, without } from 'ramda'
 import { findBuildingWithoutOffset, moveClergyToOwnBuilding } from '../board/landscape'
+import { payCost, getCost, withActivePlayer, isLayBrother, isPrior } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
 import { oncePerFrame, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import { BuildingEnum, Cost, Frame, GameCommandEnum, SettlementRound, StateReducer, Tableau } from '../types'
@@ -26,8 +26,9 @@ const transferActiveToOwnerOf =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    // this makes it so we dont look at the current player's landscape... prevent work contract on yourself
     const playerIndexes: number[] = without([state.frame.activePlayerIndex], range(0, state.config.players))
+
+    // this makes it so we dont look at the current player's landscape... prevent work contract on yourself
     const foundWithPlayer = find(
       (i) => !!findBuildingWithoutOffset(building)(state.players[i].landscape),
       playerIndexes
