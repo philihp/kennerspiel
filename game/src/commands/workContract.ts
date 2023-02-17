@@ -1,9 +1,9 @@
-import { all, any, find, identity, map, pipe, range, without } from 'ramda'
-import { payCost, getCost, withActivePlayer, clergyForColor, isLayBrother, isPrior } from '../board/player'
+import { all, find, pipe, range, without } from 'ramda'
+import { payCost, getCost, withActivePlayer, isLayBrother, isPrior } from '../board/player'
 import { moveClergyToOwnBuilding } from '../board/landscape'
 import { costMoney, parseResourceParam } from '../board/resource'
 import { oncePerFrame, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
-import { BuildingEnum, Cost, Frame, GameCommandEnum, NextUseClergy, StateReducer, Tableau } from '../types'
+import { BuildingEnum, Cost, Frame, GameCommandEnum, StateReducer, Tableau } from '../types'
 
 const checkWorkContractPayment =
   (payment: Cost): StateReducer =>
@@ -68,7 +68,7 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
   const { penny } = input
   return pipe(
     // Only allow if mainAction not consumed, and consume it
-    // TODO
+    oncePerFrame(GameCommandEnum.WORK_CONTRACT),
 
     // <-- check to make sure payment is enough
     checkWorkContractPayment(input),

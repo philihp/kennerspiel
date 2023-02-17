@@ -1,8 +1,7 @@
-import { filter, pipe } from 'ramda'
+import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
+import { oncePerFrame, withFrame } from '../board/frame'
 import { moveClergyToOwnBuilding } from '../board/landscape'
-import { isPrior, withActivePlayer } from '../board/player'
-import { consumeMainAction } from '../board/state'
 import { bakery } from '../buildings/bakery'
 import { bathhouse } from '../buildings/bathhouse'
 import { buildersMarket } from '../buildings/buildersMarket'
@@ -47,10 +46,15 @@ import { windmill } from '../buildings/windmill'
 import { winery } from '../buildings/winery'
 import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer, Tile } from '../types'
 
-const checkStateAllowsUse = (building: BuildingEnum) => (state: GameStatePlaying | undefined) => {
+const checkIfUseCanHappen = (building: BuildingEnum) => (state: GameStatePlaying | undefined) => {
   if (state === undefined) return undefined
-  if (state.frame.mainActionUsed === false) return state
-  if (state.frame.bonusActions.includes(GameCommandEnum.USE)) return state
+
+  // try to consume bonusAction and mainAction first
+  const usedAction = oncePerFrame(GameCommandEnum.USE)(state)
+  if (usedAction) return usedAction
+
+  // but if mainActionUsed and bonusAction don't allow, still it is possible to use if
+  // usableBuildings allows AND the building in question isn't in unusableBuildings
   if (
     state.frame.usableBuildings.includes(building) === true &&
     state.frame.unusableBuildings.includes(building) === false
@@ -59,35 +63,17 @@ const checkStateAllowsUse = (building: BuildingEnum) => (state: GameStatePlaying
       .with(NextUseClergy.Free, () => state)
       .with(NextUseClergy.OnlyPrior, () => state)
       .with(NextUseClergy.Any, () => undefined)
-      .with(NextUseClergy.None, () => undefined)
       .exhaustive()
   }
+
+  // otherwise dont allow
   return undefined
 }
 
-const clearUsableBuildings: StateReducer = (state) => {
-  return (
-    state && {
-      ...state,
-      frame: {
-        ...state.frame,
-        usableBuildings: [],
-      },
-    }
-  )
-}
-
-const clearNextUse: StateReducer = (state) => {
-  return (
-    state && {
-      ...state,
-      frame: {
-        ...state.frame,
-        nextUse: NextUseClergy.None,
-      },
-    }
-  )
-}
+const clearUsableBuildings: StateReducer = withFrame((frame) => ({
+  ...frame,
+  usableBuildings: [],
+}))
 
 const BuildingFarmyard = P.union(
   BuildingEnum.FarmYardR,
@@ -112,12 +98,9 @@ const BuildingCloisterOffice = P.union(
 
 export const use = (building: BuildingEnum, params: string[]) =>
   pipe(
-    checkStateAllowsUse(building),
+    checkIfUseCanHappen(building),
     moveClergyToOwnBuilding(building),
-    consumeMainAction,
     clearUsableBuildings,
-    clearNextUse,
-    clearNextUse,
     match<[BuildingEnum, string[]], StateReducer>([building, params])
       .with([BuildingEnum.Bakery, [P._]], ([_, params]) => bakery(params[0]))
       .with([BuildingEnum.Bathhouse, []], bathhouse)

@@ -126,7 +126,6 @@ export const moveClergyToOwnBuilding =
 
     const nextClergy = match(state.frame.nextUse)
       .with(NextUseClergy.Any, () => player.clergy[0])
-      .with(NextUseClergy.None, () => undefined)
       .with(NextUseClergy.OnlyPrior, () => priors[0])
       .exhaustive()
 

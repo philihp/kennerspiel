@@ -367,7 +367,6 @@ export enum NextUseClergy {
   Any = 'any', // next use can use any clergy, using laybrother first
   OnlyPrior = 'only-prior', // next use must use prior, or it will fail
   Free = 'free', // next use does not move a clergy
-  None = 'none', // next use must always fail
 }
 
 export type Frame = {
