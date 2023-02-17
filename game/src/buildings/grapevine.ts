@@ -1,11 +1,11 @@
 import { pipe } from 'ramda'
 import { withActivePlayer } from '../board/player'
 import { take } from '../board/rondel'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { StateReducer, ResourceEnum } from '../types'
 
 const advanceGrapeOnRondel =
-  (withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+  (withJoker: boolean): StateReducer =>
+  (state) =>
     state && {
       ...state,
       rondel: {
@@ -16,8 +16,8 @@ const advanceGrapeOnRondel =
     }
 
 const takePlayerGrape =
-  (withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (withJoker: boolean): StateReducer =>
+  (state) => {
     if (state === undefined) return undefined
     const {
       config,
@@ -32,7 +32,7 @@ const takePlayerGrape =
     )(state)
   }
 
-export const grapevine = (param = '') => {
+export const grapevine = (param = ''): StateReducer => {
   const withJoker = param.includes(ResourceEnum.Joker)
   return pipe(
     //

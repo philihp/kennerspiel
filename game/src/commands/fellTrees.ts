@@ -1,6 +1,6 @@
 import { pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
-import { GameCommandFellTreesParams, GameStatePlaying, Tile, BuildingEnum, Tableau, GameCommandEnum } from '../types'
+import { GameCommandFellTreesParams, Tile, BuildingEnum, GameCommandEnum, StateReducer } from '../types'
 import { take } from '../board/rondel'
 import { oncePerFrame, withFrame } from '../board/frame'
 
@@ -27,15 +27,15 @@ const removeForestAt = (row: number, col: number) =>
   })
 
 export const givePlayerWood =
-  (useJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (useJoker: boolean): StateReducer =>
+  (state) => {
     if (state === undefined) return undefined
     const { joker, wood, pointingBefore } = state.rondel
     const amount = take(pointingBefore, (useJoker ? joker : wood) ?? pointingBefore, state.config)
     return withActivePlayer(getCost({ wood: amount }))(state)
   }
 
-const updateWoodRondel = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+const updateWoodRondel: StateReducer = (state) =>
   state && {
     ...state,
     rondel: {
@@ -44,7 +44,7 @@ const updateWoodRondel = (state: GameStatePlaying | undefined): GameStatePlaying
     },
   }
 
-const updateJokerRondel = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+const updateJokerRondel: StateReducer = (state) =>
   state && {
     ...state,
     rondel: {

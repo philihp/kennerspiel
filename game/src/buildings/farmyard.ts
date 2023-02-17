@@ -2,11 +2,11 @@ import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { withActivePlayer } from '../board/player'
 import { updateRondel, withRondel, take } from '../board/rondel'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { ResourceEnum, StateReducer } from '../types'
 
 const takePlayerSheep =
-  (shouldTake: boolean, withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (shouldTake: boolean, withJoker: boolean): StateReducer =>
+  (state) => {
     if (state === undefined || !shouldTake) return state
     const {
       config,
@@ -22,8 +22,8 @@ const takePlayerSheep =
   }
 
 const takePlayerGrain =
-  (shouldTake: boolean, withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (shouldTake: boolean, withJoker: boolean): StateReducer =>
+  (state) => {
     if (state === undefined || !shouldTake) return state
     const {
       config,
@@ -45,7 +45,7 @@ const updateToken = (withJoker: boolean, withSheep: boolean, withGrain: boolean)
     .with([false, false, true], () => updateRondel('grain'))
     .otherwise(() => () => undefined)
 
-export const farmyard = (param = '') => {
+export const farmyard = (param = ''): StateReducer => {
   const withJoker = param.includes(ResourceEnum.Joker)
   const withSheep = param.includes(ResourceEnum.Sheep)
   const withGrain = param.includes(ResourceEnum.Grain)

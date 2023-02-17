@@ -1,5 +1,7 @@
 import { match } from 'ts-pattern'
-import { LandEnum, PlayerColor, Tile, BuildingEnum, Clergy, GameCommandConfigParams } from '../types'
+import { LandEnum, PlayerColor, Tile, BuildingEnum, Clergy, GameCommandConfigParams, ErectionEnum } from '../types'
+import { terrainForErection } from './erections'
+import { withActivePlayer } from './player'
 
 export const districtPrices = (config: GameCommandConfigParams): number[] =>
   match(config)
@@ -62,4 +64,19 @@ export const makeLandscape = (color: PlayerColor): Tile[][] => {
     [[], [], PP, PF, PF, P, cm, [], []],
     [[], [], PP, PF, fy, P, co, [], []],
   ]
+}
+
+export const checkLandTypeMatches = (row: number, col: number, erection: ErectionEnum) =>
+  withActivePlayer((player) => {
+    const landAtSpot = player.landscape[row + player.landscapeOffset][col + 2][0]
+    if (landAtSpot && !terrainForErection(erection).includes(landAtSpot)) return undefined
+    return player
+  })
+
+export const checkLandscapeFree = (row: number, col: number) => {
+  return withActivePlayer((player) => {
+    const [, erection] = player.landscape[row + player.landscapeOffset][col + 2]
+    if (erection !== undefined) return undefined
+    return player
+  })
 }

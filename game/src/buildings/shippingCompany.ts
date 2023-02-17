@@ -3,19 +3,21 @@ import { P, match } from 'ts-pattern'
 import { getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, multiplyGoods } from '../board/resource'
 import { take } from '../board/rondel'
-import { Cost, GameStatePlaying } from '../types'
+import { Cost, StateReducer } from '../types'
 
-const takePlayerJoker = (unitCost: Cost) => (state: GameStatePlaying | undefined) => {
-  if (state === undefined) return undefined
-  const {
-    rondel: { pointingBefore, joker },
-    config,
-  } = state
-  const takeValue = take(pointingBefore, joker ?? pointingBefore, config)
-  return withActivePlayer(getCost(multiplyGoods(takeValue)(unitCost)))(state)
-}
+const takePlayerJoker =
+  (unitCost: Cost): StateReducer =>
+  (state) => {
+    if (state === undefined) return undefined
+    const {
+      rondel: { pointingBefore, joker },
+      config,
+    } = state
+    const takeValue = take(pointingBefore, joker ?? pointingBefore, config)
+    return withActivePlayer(getCost(multiplyGoods(takeValue)(unitCost)))(state)
+  }
 
-const advanceJokerOnRondel = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+const advanceJokerOnRondel: StateReducer = (state) =>
   state && {
     ...state,
     rondel: {
@@ -24,7 +26,7 @@ const advanceJokerOnRondel = (state: GameStatePlaying | undefined): GameStatePla
     },
   }
 
-export const shippingCompany = (fuel = '', product = '') => {
+export const shippingCompany = (fuel = '', product = ''): StateReducer => {
   const input = parseResourceParam(fuel)
   const output = match(parseResourceParam(product))
     .with({ meat: P.when((n) => n > 0) }, () => ({ meat: 1 }))

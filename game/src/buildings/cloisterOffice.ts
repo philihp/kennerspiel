@@ -1,13 +1,13 @@
 import { pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
 import { updateRondel, withRondel, take } from '../board/rondel'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { ResourceEnum, StateReducer } from '../types'
 
 const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('coin'))
 
 const takePlayerCoin =
-  (withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (withJoker: boolean): StateReducer =>
+  (state) => {
     if (state === undefined) return undefined
     const {
       config,

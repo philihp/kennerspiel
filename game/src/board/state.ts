@@ -1,7 +1,6 @@
-import { match } from 'ts-pattern'
-import { GameStatePlaying, GameStatusEnum } from '../types'
+import { GameStatusEnum, StateReducer } from '../types'
 
-export const consumeMainAction = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+export const consumeMainAction: StateReducer = (state) =>
   state && {
     ...state,
     frame: {
@@ -10,7 +9,7 @@ export const consumeMainAction = (state: GameStatePlaying | undefined): GameStat
     },
   }
 
-export const removeWonder = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+export const removeWonder: StateReducer = (state) => {
   if (state === undefined) return state
   const { wonders } = state
   if (wonders === 0) return undefined
@@ -20,10 +19,7 @@ export const removeWonder = (state?: GameStatePlaying): GameStatePlaying | undef
   }
 }
 
-// export const roundInit = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
-//   match(state)
-
-export const gameEnd = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+export const gameEnd: StateReducer = (state) => {
   if (state === undefined) return state
   return {
     ...state,

@@ -1,8 +1,7 @@
 import { pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
-import { GameCommandCutPeatParams, GameStatePlaying, Tile, BuildingEnum, GameCommandEnum } from '../types'
+import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer } from '../types'
 import { take, updateRondel, withRondel } from '../board/rondel'
-import { consumeMainAction } from '../board/state'
 import { oncePerFrame } from '../board/frame'
 
 const removePeatAt = (row: number, col: number) =>
@@ -27,8 +26,8 @@ const removePeatAt = (row: number, col: number) =>
   })
 
 const givePlayerPeat =
-  (useJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (useJoker: boolean): StateReducer =>
+  (state) => {
     if (state === undefined) return undefined
     const { joker, peat, pointingBefore } = state.rondel
     const amount = take(pointingBefore, (useJoker ? joker : peat) ?? pointingBefore, state.config)

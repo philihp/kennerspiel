@@ -1,9 +1,9 @@
 import { any, map } from 'ramda'
-import { GameStatePlaying } from '../../types'
+import { StateReducer } from '../../types'
 import { clergyForColor, isLayBrother, isPrior, priors, withEachPlayer } from '../player'
 import { tileWithoutClergy } from '../tile'
 
-export const allPriorsComeBack = (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+export const allPriorsComeBack: StateReducer = (state) =>
   withEachPlayer((player) => {
     // short circuit if player already has unplaced prior
     if (any(isPrior, player.clergy)) return player

@@ -1,5 +1,5 @@
 import { randRange } from 'fn-pcg'
-import { BuildingEnum, GameStatePlaying, LandEnum, PlayerColor, Tile } from '../../types'
+import { BuildingEnum, LandEnum, PlayerColor, StateReducer, Tile } from '../../types'
 import { makeLandscape } from '../landscape'
 
 const neutralColor = (playerColor: PlayerColor, neutralColorIndex: number) =>
@@ -11,7 +11,7 @@ const neutralColor = (playerColor: PlayerColor, neutralColorIndex: number) =>
     PlayerColor.White,
   ].filter((c) => c !== playerColor)[neutralColorIndex]
 
-export const addNeutralPlayer = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+export const addNeutralPlayer: StateReducer = (state) => {
   if (state === undefined) return state
 
   const [neutralColorIndex, randGen] = randRange(0, 3, state.randGen)

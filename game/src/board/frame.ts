@@ -10,8 +10,8 @@ import { nextFrame2Short } from './frame/nextFrame2Short'
 import { Frame, FrameFlow, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 export const withFrame =
-  (func: (frame: Frame) => Frame | undefined) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (func: (frame: Frame) => Frame | undefined): StateReducer =>
+  (state) => {
     if (state === undefined) return state
     const frame = func(state.frame)
     if (frame === undefined) return undefined
@@ -67,9 +67,10 @@ export const nextFrame: StateReducer = (state) =>
     .with(undefined, () => undefined)
     .exhaustive()
 
-export const oncePerFrame = (command: GameCommandEnum) =>
-  withFrame((frame) => {
-    // first try to remove the proposed command from bonusActions
+const consumeCommandFromBonus =
+  (command: GameCommandEnum) =>
+  (frame: Frame | undefined): Frame | undefined => {
+    if (frame === undefined) return undefined
     const bonusIndex = findIndex((a) => a === command)(frame.bonusActions)
     if (bonusIndex !== -1) {
       const bonusActions = remove(bonusIndex, 1, frame.bonusActions) as GameCommandEnum[]
@@ -78,6 +79,17 @@ export const oncePerFrame = (command: GameCommandEnum) =>
         bonusActions,
       }
     }
+    return undefined
+  }
+
+export const onlyViaBonusActions = (command: GameCommandEnum) => withFrame(consumeCommandFromBonus(command))
+
+export const oncePerFrame = (command: GameCommandEnum) =>
+  withFrame((frame) => {
+    // first try to remove the proposed command from bonusActions
+    const bonusFrame = consumeCommandFromBonus(command)(frame)
+    if (bonusFrame !== undefined) return bonusFrame
+
     // then if it couldn't be, consume the main action, if available
     if (frame.mainActionUsed === false) return { ...frame, mainActionUsed: true }
     return undefined

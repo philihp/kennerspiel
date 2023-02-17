@@ -1,11 +1,11 @@
 import { pipe } from 'ramda'
 import { withActivePlayer } from '../board/player'
 import { take } from '../board/rondel'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { ResourceEnum, StateReducer } from '../types'
 
 const advanceStoneOnRondel =
-  (withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+  (withJoker: boolean): StateReducer =>
+  (state) =>
     state && {
       ...state,
       rondel: {
@@ -16,8 +16,8 @@ const advanceStoneOnRondel =
     }
 
 const takePlayerStone =
-  (withJoker: boolean) =>
-  (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+  (withJoker: boolean): StateReducer =>
+  (state) => {
     if (state === undefined) return undefined
     const {
       config,
@@ -32,7 +32,7 @@ const takePlayerStone =
     )(state)
   }
 
-export const quarry = (param = '') => {
+export const quarry = (param = ''): StateReducer => {
   const withJoker = param.includes(ResourceEnum.Joker)
   return pipe(
     //

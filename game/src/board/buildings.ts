@@ -1,15 +1,6 @@
+import { filter } from 'ramda'
 import { match } from 'ts-pattern'
-import { BuildingEnum, Cost, GameCommandConfigParams, LandEnum, SettlementRound, StateReducer } from '../types'
-
-export const terrainForBuilding = (building: BuildingEnum) =>
-  // TODO: this should be comprehensive
-  match<BuildingEnum, LandEnum[]>(building).otherwise(() => [
-    LandEnum.Coast,
-    LandEnum.Hillside,
-    LandEnum.Mountain,
-    LandEnum.Plains,
-    LandEnum.Water,
-  ])
+import { BuildingEnum, Cost, GameCommandConfigParams, SettlementRound, StateReducer } from '../types'
 
 export const costForBuilding = (building: BuildingEnum): Cost =>
   // TODO: needs ireland buildings
@@ -446,3 +437,16 @@ export const introduceBuildings: StateReducer = (state) => {
     buildings: roundBuildings(state.config, state.frame.settlementRound),
   }
 }
+
+export const removeBuildingFromUnbuilt =
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
+    if (state === undefined) return undefined
+    if (!state.buildings.includes(building)) return undefined
+    return (
+      state && {
+        ...state,
+        buildings: filter((b) => b !== building, state?.buildings),
+      }
+    )
+  }

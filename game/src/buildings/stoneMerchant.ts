@@ -1,13 +1,13 @@
 import { pipe } from 'ramda'
 import { getCost, withActivePlayer, payCost } from '../board/player'
 import { costEnergy, costFood, parseResourceParam } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { StateReducer } from '../types'
 
-export const stoneMerchant = (param = '') => {
+export const stoneMerchant = (param = ''): StateReducer => {
   const inputs = parseResourceParam(param)
   const payCostOfInputs = payCost(inputs)
   const getStoneInPower = getCost({ stone: Math.floor(Math.min(costEnergy(inputs), costFood(inputs) / 2, 5)) })
-  return (state: GameStatePlaying | undefined): GameStatePlaying | undefined =>
+  return (state) =>
     state &&
     withActivePlayer(
       //

@@ -46,7 +46,7 @@ describe('commands/build', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s2: GameStatePlaying = {
+  const s0: GameStatePlaying = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -85,40 +85,40 @@ describe('commands/build', () => {
   describe('build', () => {
     it('fails when building is not available', () => {
       const s3: GameStatePlaying = {
-        ...s2,
+        ...s0,
         frame: {
-          ...s2.frame,
+          ...s0.frame,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             wood: 10,
             penny: 10,
             clay: 10,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
-        buildings: s2.buildings.filter((b) => b !== 'G07'),
+        buildings: s0.buildings.filter((b) => b !== 'G07'),
       }
       const s4 = build({ row: 1, col: 3, building: BuildingEnum.Calefactory })(s3)!
       expect(s4).toBeUndefined()
     })
     it('fails when erection present', () => {
       const s3: GameStatePlaying = {
-        ...s2,
+        ...s0,
         frame: {
-          ...s2.frame,
+          ...s0.frame,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             wood: 10,
             penny: 10,
             clay: 10,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
         buildings: [BuildingEnum.Calefactory],
       }
@@ -127,21 +127,21 @@ describe('commands/build', () => {
     })
     it('fails when player cant afford building', () => {
       const s3: GameStatePlaying = {
-        ...s2,
+        ...s0,
         frame: {
-          ...s2.frame,
+          ...s0.frame,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             wood: 0,
             penny: 0,
             clay: 0,
             stone: 0,
             straw: 0,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
         buildings: [BuildingEnum.PeatCoalKiln],
       }
@@ -150,20 +150,20 @@ describe('commands/build', () => {
     })
     it('fails if building cloister without being neighbors to another', () => {
       const s3: GameStatePlaying = {
-        ...s2,
+        ...s0,
         frame: {
-          ...s2.frame,
+          ...s0.frame,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             wood: 10,
             penny: 10,
             clay: 10,
             stone: 10,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
         buildings: [BuildingEnum.Priory],
       }
@@ -172,43 +172,52 @@ describe('commands/build', () => {
     })
     it('builds just fine', () => {
       const s3: GameStatePlaying = {
-        ...s2,
+        ...s0,
         frame: {
-          ...s2.frame,
+          ...s0.frame,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
+            landscape: [
+              [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+            ] as Tile[][],
             wood: 10,
             penny: 10,
             clay: 10,
             stone: 10,
             straw: 10,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
         buildings: [BuildingEnum.Windmill],
       }
-      const s4 = build({ row: 1, col: 3, building: BuildingEnum.Windmill })(s3)!
+      const s4 = build({ row: 1, col: -1, building: BuildingEnum.Windmill })(s3)!
       expect(s4).toBeDefined()
       expect(s4.buildings).not.toContain(BuildingEnum.Windmill)
-      expect(s4.players[0].landscape[1][5][1]).toBe(BuildingEnum.Windmill)
-      expect(s4.players[0].wood).toBe(7)
-      expect(s4.players[0].clay).toBe(8)
-      expect(s4.players[0].stone).toBe(10)
-      expect(s4.players[0].straw).toBe(10)
+      expect(s4.players[0]).toMatchObject({
+        wood: 7,
+        clay: 8,
+        stone: 10,
+        straw: 10,
+        landscape: [
+          [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+          [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+        ],
+      })
     })
     it('accounts for landscape Y offset', () => {
       const s3: GameStatePlaying = {
-        ...s2,
+        ...s0,
         frame: {
-          ...s2.frame,
+          ...s0.frame,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             wood: 10,
             penny: 10,
             clay: 10,
@@ -221,20 +230,16 @@ describe('commands/build', () => {
               [[], [], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [], []],
             ],
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
-        buildings: [BuildingEnum.Windmill],
+        buildings: [BuildingEnum.GrainStorage],
       }
-      const s4 = build({ row: -1, col: 1, building: BuildingEnum.Windmill })(s3)!
+      const s4 = build({ row: -1, col: 1, building: BuildingEnum.GrainStorage })(s3)!
       expect(s4).toBeDefined()
-      expect(s4.buildings).not.toContain(BuildingEnum.Windmill)
+      expect(s4.buildings).not.toContain(BuildingEnum.GrainStorage)
       expect(s4.players[0]).toMatchObject({
-        wood: 7,
-        clay: 8,
-        stone: 10,
-        straw: 10,
         landscape: [
-          [[], [], ['P'], ['P', 'F04'], ['P'], [], []],
+          [[], [], ['P'], ['P', 'F03'], ['P'], [], []],
           [[], [], ['P'], ['P'], ['P'], [], []],
           [[], [], ['P'], ['P'], ['P'], [], []],
         ],

@@ -1,8 +1,8 @@
 import { findClergy } from '../board/landscape'
 import { priors } from '../board/player'
-import { BuildingEnum, GameStatePlaying, NextUseClergy } from '../types'
+import { BuildingEnum, NextUseClergy, StateReducer } from '../types'
 
-const allowBuildingWithPriorUsable = (state: GameStatePlaying | undefined): GameStatePlaying | undefined => {
+const allowBuildingWithPriorUsable: StateReducer = (state) => {
   if (state === undefined) return undefined
   const landscapes = state.players.map(({ landscape }) => landscape)
   const clergyLocation = landscapes.map(findClergy(priors(state))).filter((l) => l.length > 0)
