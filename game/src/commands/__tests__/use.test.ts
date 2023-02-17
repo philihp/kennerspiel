@@ -198,5 +198,32 @@ describe('commands/use', () => {
         grain: 0,
       })
     })
+    it('can not use if nextUse=any and mainActionUsed and no bonus actions', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+          usableBuildings: [],
+          nextUse: NextUseClergy.Any,
+        },
+      }
+      const s2 = use(BuildingEnum.ClayMoundR, [])(s1)!
+      expect(s2).toBeUndefined()
+    })
+    it('does not allow usage if mainActionUsed and no bonus actions', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+          usableBuildings: [],
+        },
+      }
+      const s2 = use(BuildingEnum.ClayMoundR, [])(s1)!
+      expect(s2).toBeUndefined()
+    })
   })
 })
