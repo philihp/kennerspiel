@@ -123,6 +123,10 @@ describe('commands/use', () => {
     it('throws errors on invalid building', () => {
       expect(() => use('XXX' as unknown as BuildingEnum, [])(s0)).toThrow()
     })
+    it('retains undefined state', () => {
+      const s1 = use(BuildingEnum.ClayMoundR, ['Jo'])(undefined)!
+      expect(s1).toBeUndefined()
+    })
     it('moves next clergyman to the building', () => {
       const s1 = {
         ...s0,

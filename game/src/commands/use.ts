@@ -44,31 +44,33 @@ import { stoneMerchant } from '../buildings/stoneMerchant'
 import { townEstate } from '../buildings/townEstate'
 import { windmill } from '../buildings/windmill'
 import { winery } from '../buildings/winery'
-import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer, Tile } from '../types'
+import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
-const checkIfUseCanHappen = (building: BuildingEnum) => (state: GameStatePlaying | undefined) => {
-  if (state === undefined) return undefined
+const checkIfUseCanHappen =
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
+    if (state === undefined) return undefined
 
-  // try to consume bonusAction and mainAction first
-  const usedAction = oncePerFrame(GameCommandEnum.USE)(state)
-  if (usedAction) return usedAction
+    // try to consume bonusAction and mainAction first
+    const usedAction = oncePerFrame(GameCommandEnum.USE)(state)
+    if (usedAction) return usedAction
 
-  // but if mainActionUsed and bonusAction don't allow, still it is possible to use if
-  // usableBuildings allows AND the building in question isn't in unusableBuildings
-  if (
-    state.frame.usableBuildings.includes(building) === true &&
-    state.frame.unusableBuildings.includes(building) === false
-  ) {
-    return match(state.frame.nextUse)
-      .with(NextUseClergy.Free, () => state)
-      .with(NextUseClergy.OnlyPrior, () => state)
-      .with(NextUseClergy.Any, () => undefined)
-      .exhaustive()
+    // but if mainActionUsed and bonusAction don't allow, still it is possible to use if
+    // usableBuildings allows AND the building in question isn't in unusableBuildings
+    if (
+      state.frame.usableBuildings.includes(building) === true &&
+      state.frame.unusableBuildings.includes(building) === false
+    ) {
+      return match(state.frame.nextUse)
+        .with(NextUseClergy.Free, () => state)
+        .with(NextUseClergy.OnlyPrior, () => state)
+        .with(NextUseClergy.Any, () => undefined)
+        .exhaustive()
+    }
+
+    // otherwise dont allow
+    return undefined
   }
-
-  // otherwise dont allow
-  return undefined
-}
 
 const clearUsableBuildings: StateReducer = withFrame((frame) => ({
   ...frame,
