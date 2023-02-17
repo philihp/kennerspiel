@@ -8,6 +8,7 @@ import {
   convert,
   cutPeat,
   fellTrees,
+  settle,
   start,
   use,
   withPrior,
@@ -24,6 +25,7 @@ jest.mock('../commands', () => {
     convert: jest.fn().mockReturnValue(identity),
     cutPeat: jest.fn().mockReturnValue(identity),
     fellTrees: jest.fn().mockReturnValue(identity),
+    settle: jest.fn().mockReturnValue(identity),
     start: jest.fn().mockReturnValue(identity),
     use: jest.fn().mockReturnValue(identity),
     withPrior: jest.fn().mockReturnValue(identity),
@@ -101,6 +103,13 @@ describe('reducer', () => {
     it('calls convert', () => {
       reducer(s0, ['CONVERT', 'Gn'])!
       expect(convert).toHaveBeenCalled()
+    })
+  })
+
+  describe('settle', () => {
+    it('calls settle', () => {
+      reducer(s0, ['SETTLE', 'SB1', '0', '0', 'MtCoCo'])!
+      expect(settle).toHaveBeenCalled()
     })
   })
 

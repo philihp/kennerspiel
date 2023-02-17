@@ -19,13 +19,13 @@ import {
   convert,
   cutPeat,
   fellTrees,
+  settle,
   start,
   use,
   withPrior,
   buyPlot,
   buyDistrict,
 } from './commands'
-import { settle } from './commands/settle'
 
 const PPlot = P.union('MOUNTAIN', 'COAST')
 const PDistrict = P.union('HILLS', 'PLAINS')
