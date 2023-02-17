@@ -22,19 +22,16 @@ const checkWorkContractPayment =
     return state
   }
 
-const doesBuildingExistInPlayersLandscape =
-  (building: BuildingEnum) =>
-  (player: Tableau): boolean => {
-    return false
-  }
-
 const transferActiveToOwnerOf =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
     // this makes it so we dont look at the current player's landscape... prevent work contract on yourself
     const playerIndexes: number[] = without([state.frame.activePlayerIndex], range(0, state.config.players))
-    const foundWithPlayer = find((i) => doesBuildingExistInPlayersLandscape(building)(state.players[i]), playerIndexes)
+    const foundWithPlayer = find(
+      (i) => !!findBuildingWithoutOffset(building)(state.players[i].landscape),
+      playerIndexes
+    )
     if (foundWithPlayer === undefined) return undefined
     return withFrame((frame: Frame) => ({ ...frame, activePlayerIndex: foundWithPlayer }))(state)
   }
