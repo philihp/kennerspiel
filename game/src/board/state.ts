@@ -1,14 +1,5 @@
 import { GameStatusEnum, StateReducer } from '../types'
 
-export const consumeMainAction: StateReducer = (state) =>
-  state && {
-    ...state,
-    frame: {
-      ...state.frame,
-      mainActionUsed: true,
-    },
-  }
-
 export const removeWonder: StateReducer = (state) => {
   if (state === undefined) return state
   const { wonders } = state
