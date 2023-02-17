@@ -1,5 +1,5 @@
 import { Clergy, PlayerColor, Tableau } from '../../types'
-import { isLayBrother, isPrior, payCost, subtractCoins } from '../player'
+import { getCost, isLayBrother, isPrior, payCost, subtractCoins } from '../player'
 
 const p: Tableau = {
   color: PlayerColor.Red,
@@ -108,12 +108,78 @@ describe('board/player', () => {
         wood: 0,
       })
     })
+    it('if cost is passed in with undefined, ignore it', () => {
+      expect(payCost({ straw: undefined })(player)).toMatchObject({
+        clay: 4,
+        wood: 2,
+        straw: 6,
+      })
+    })
 
     it('fails if player cant pay', () => {
       expect(player).toMatchObject({
         clay: 4,
       })
       expect(payCost({ clay: 5 })(player)).toBeUndefined()
+    })
+  })
+
+  describe('getCost', () => {
+    const player: Tableau = {
+      color: PlayerColor.Blue,
+      clergy: [],
+      settlements: [],
+      landscape: [[]],
+      wonders: 0,
+      landscapeOffset: 0,
+      peat: 0,
+      penny: 0,
+      clay: 4,
+      wood: 2,
+      grain: 3,
+      sheep: 0,
+      stone: 0,
+      flour: 0,
+      grape: 0,
+      nickel: 4,
+      hops: 0,
+      coal: 0,
+      book: 0,
+      pottery: 0,
+      whiskey: 0,
+      straw: 6,
+      meat: 0,
+      ornament: 0,
+      bread: 1,
+      wine: 0,
+      beer: 0,
+      reliquary: 0,
+    }
+
+    it('adds to the existing amount', () => {
+      expect(player).toMatchObject({
+        clay: 4,
+      })
+      expect(getCost({ clay: 3 })(player)).toMatchObject({
+        clay: 7,
+      })
+    })
+    it('accepts multiple things as cost', () => {
+      expect(player).toMatchObject({
+        clay: 4,
+        wood: 2,
+      })
+      expect(getCost({ clay: 3, wood: 2 })(player)).toMatchObject({
+        clay: 7,
+        wood: 4,
+      })
+    })
+    it('if a cost is passed in with undefined, ignore it', () => {
+      expect(getCost({ wood: 1, straw: undefined, clay: 1 })(player)).toMatchObject({
+        clay: 5,
+        wood: 3,
+        straw: 6,
+      })
     })
   })
 
