@@ -1,4 +1,4 @@
-import { all, any, find, identity, map, pipe, range, without } from 'ramda'
+import { all, find, pipe, range, without } from 'ramda'
 import { findBuildingWithoutOffset, moveClergyToOwnBuilding } from '../board/landscape'
 import { payCost, getCost, withActivePlayer, isLayBrother, isPrior } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
