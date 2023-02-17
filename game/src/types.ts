@@ -382,10 +382,6 @@ export type Frame = {
   // also ornamental, however important for triggering end of game in 2p
   settlementRound: SettlementRound
 
-  // this is 1 to start, and increases to 2 when winery/distillery is built.
-  // we can't just scan the landscapes because it could be overbuilt in solo play
-  workContractCost: 1 | 2
-
   // activePlayer: this is the player we're waiting input from
   // currentPlayer: this is the player whose turn it is.
   // most of the time, this is going to be the same thing, however sometimes we need

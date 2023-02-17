@@ -100,7 +100,6 @@ describe('buildings/clayMound', () => {
         next: 1,
         startingPlayer: 1,
         settlementRound: SettlementRound.S,
-        workContractCost: 1,
         currentPlayerIndex: 0,
         activePlayerIndex: 0,
         neutralBuildingPhase: false,
