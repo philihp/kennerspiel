@@ -5,13 +5,65 @@ import {
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
+  SettlementEnum,
   SettlementRound,
   Tableau,
   Tile,
 } from '../../types'
-import { roundSettlements, introduceSettlements } from '../settlements'
+import { roundSettlements, introduceSettlements, costForSettlement } from '../settlements'
 
 describe('board/settlements', () => {
+  describe('costForSettlement', () => {
+    it('has the proper cost for shanty town', () => {
+      expect(costForSettlement(SettlementEnum.ShantyTownB)).toMatchObject({
+        energy: 1,
+        food: 1,
+      })
+    })
+    it('has the proper cost for farming village', () => {
+      expect(costForSettlement(SettlementEnum.FarmingVillageB)).toMatchObject({
+        energy: 3,
+        food: 3,
+      })
+    })
+    it('has the proper cost for market town', () => {
+      expect(costForSettlement(SettlementEnum.MarketTownB)).toMatchObject({
+        energy: 0,
+        food: 7,
+      })
+    })
+    it('has the proper cost for fishing village', () => {
+      expect(costForSettlement(SettlementEnum.FishingVillageB)).toMatchObject({
+        energy: 3,
+        food: 8,
+      })
+    })
+    it('has the proper cost for artists colony', () => {
+      expect(costForSettlement(SettlementEnum.ArtistsColonyB)).toMatchObject({
+        energy: 1,
+        food: 5,
+      })
+    })
+    it('has the proper cost for hamlet', () => {
+      expect(costForSettlement(SettlementEnum.HamletB)).toMatchObject({
+        energy: 6,
+        food: 5,
+      })
+    })
+    it('has the proper cost for village', () => {
+      expect(costForSettlement(SettlementEnum.VillageB)).toMatchObject({
+        energy: 9,
+        food: 15,
+      })
+    })
+    it('has the proper cost for hilltop village', () => {
+      expect(costForSettlement(SettlementEnum.HilltopVillageB)).toMatchObject({
+        energy: 3,
+        food: 30,
+      })
+    })
+  })
+
   describe('roundSettlements', () => {
     it('returns list for settlement L', () => {
       expect.assertions(4)
