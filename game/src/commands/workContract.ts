@@ -1,16 +1,24 @@
 import { all, find, pipe, range, without } from 'ramda'
 import { payCost, getCost, withActivePlayer, isLayBrother, isPrior } from '../board/player'
-import { moveClergyToOwnBuilding } from '../board/landscape'
+import { findBuildingWithoutOffset, moveClergyToOwnBuilding } from '../board/landscape'
 import { costMoney, parseResourceParam } from '../board/resource'
 import { oncePerFrame, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
-import { BuildingEnum, Cost, Frame, GameCommandEnum, StateReducer, Tableau } from '../types'
+import { BuildingEnum, Cost, Frame, GameCommandEnum, SettlementRound, StateReducer, Tableau } from '../types'
 
 const checkWorkContractPayment =
   (payment: Cost): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    // TODO: this should go up if the winery or distillery is built, and should allow for Wine instead
-    if (costMoney(payment) < 1) return undefined
+    if (payment.whiskey ?? 0 > 1) return state
+    if (payment.wine ?? 0 > 1) return state
+    const cost =
+      state.frame.settlementRound === SettlementRound.S ||
+      state.frame.settlementRound === SettlementRound.A ||
+      state.buildings.includes(BuildingEnum.WhiskeyDistillery) ||
+      state.buildings.includes(BuildingEnum.Winery)
+        ? 1
+        : 2
+    if (costMoney(payment) < cost) return undefined
     return state
   }
 
@@ -24,21 +32,23 @@ const transferActiveToOwnerOf =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
+    // this makes it so we dont look at the current player's landscape... prevent work contract on yourself
     const playerIndexes: number[] = without([state.frame.activePlayerIndex], range(0, state.config.players))
     const foundWithPlayer = find((i) => doesBuildingExistInPlayersLandscape(building)(state.players[i]), playerIndexes)
     if (foundWithPlayer === undefined) return undefined
-    // if you DID find it, set the active player to be that player... they need to have an option to pick prior or go with default
-    // TODO: what if they dont have a prior?
-    // TODO: what if they dont have any people??
     return withFrame((frame: Frame) => ({ ...frame, activePlayerIndex: foundWithPlayer }))(state)
   }
 
-const checkModalPlayerBuildingUnoccupied =
-  (building: BuildingEnum): StateReducer =>
-  (state) => {
-    // TODO this should fail if the proposed building that activePlayer owns is already occupied
-    return state
-  }
+const checkModalPlayerBuildingUnoccupied = (building: BuildingEnum): StateReducer =>
+  withActivePlayer((player) => {
+    const location = findBuildingWithoutOffset(building)(player.landscape)
+    // should not actually ever get this
+    if (location === undefined) return undefined
+    const [row, col] = location
+    const [, , clergy] = player.landscape[row][col]
+    if (clergy !== undefined) return undefined
+    return player
+  })
 
 const checkModalPlayerHasPriorOption =
   (building: BuildingEnum): StateReducer =>
