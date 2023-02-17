@@ -1,43 +1,13 @@
-import { any, pipe, filter } from 'ramda'
-import { costForBuilding, isCloisterBuilding, terrainForBuilding } from '../board/buildings'
+import { any, pipe, identity } from 'ramda'
+import { costForBuilding, isCloisterBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
+import { addErectionAtLandscape } from '../board/erections'
 import { oncePerFrame } from '../board/frame'
+import { checkLandscapeFree, checkLandTypeMatches } from '../board/landscape'
 import { payCost, withActivePlayer } from '../board/player'
-import { canAfford } from '../board/resource'
-import {
-  BuildingEnum,
-  GameCommandBuildParams,
-  GameCommandEnum,
-  GameStatePlaying,
-  NextUseClergy,
-  StateReducer,
-  Tile,
-} from '../types'
+import { BuildingEnum, GameCommandBuildParams, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
-const checkBuildingUnbuilt =
-  (building: BuildingEnum): StateReducer =>
-  (state) => {
-    return state?.buildings.includes(building) ? state : undefined
-  }
-
-const checkLandscapeFree = (row: number, col: number) => {
-  return withActivePlayer((player) => {
-    const [, erection] = player.landscape[row + player.landscapeOffset][col + 2]
-    if (erection !== undefined) return undefined
-    return player
-  })
-}
-
-const checkLandTypeMatches = (row: number, col: number, building: BuildingEnum) =>
-  withActivePlayer((player) => {
-    const landAtSpot = player.landscape[row + player.landscapeOffset][col + 2][0]
-    if (landAtSpot && !terrainForBuilding(building).includes(landAtSpot)) return undefined
-    return player
-  })
-
-const checkPlayerHasBuildingCost = (building: BuildingEnum) => withActivePlayer(canAfford(costForBuilding(building)))
-
-const checkBuildingCloister = (row: number, col: number, building: BuildingEnum) => {
-  if (isCloisterBuilding(building) === false) return (state: GameStatePlaying | undefined) => state
+const checkCloisterAdjacency = (row: number, col: number, building: BuildingEnum) => {
+  if (isCloisterBuilding(building) === false) return identity
   return withActivePlayer((player) => {
     const { landscape, landscapeOffset } = player
     return any(isCloisterBuilding, [
@@ -51,33 +21,7 @@ const checkBuildingCloister = (row: number, col: number, building: BuildingEnum)
   })
 }
 
-const removeBuildingFromUnbuilt =
-  (building: BuildingEnum): StateReducer =>
-  (state) =>
-    state && {
-      ...state,
-      buildings: filter((b) => b !== building, state?.buildings),
-    }
-
-const addBuildingAtLandscape = (row: number, col: number, building: BuildingEnum) =>
-  withActivePlayer((player) => {
-    const rowOff = row + player.landscapeOffset
-    const landscape = [
-      ...player.landscape.slice(0, rowOff),
-      [
-        ...player.landscape[rowOff].slice(0, col + 2),
-        [player.landscape[rowOff][col + 2][0], building] as Tile,
-        ...player.landscape[rowOff].slice(col + 2 + 1),
-      ],
-      ...player.landscape.slice(rowOff + 1),
-    ]
-    return {
-      ...player,
-      landscape,
-    }
-  })
-
-const removeBuildingCost = (building: BuildingEnum) => withActivePlayer(payCost(costForBuilding(building)))
+const payBuildingCost = (building: BuildingEnum) => withActivePlayer(payCost(costForBuilding(building)))
 
 export const allowPriorToUse =
   (building: BuildingEnum): StateReducer =>
@@ -96,14 +40,13 @@ export const allowPriorToUse =
 
 export const build = ({ row, col, building }: GameCommandBuildParams) =>
   pipe(
+    // any of these not defined here are probably shared with SETTLE
     oncePerFrame(GameCommandEnum.BUILD),
-    checkBuildingUnbuilt(building),
     checkLandscapeFree(row, col),
     checkLandTypeMatches(row, col, building),
-    checkPlayerHasBuildingCost(building),
-    checkBuildingCloister(row, col, building),
+    checkCloisterAdjacency(row, col, building),
+    payBuildingCost(building),
     removeBuildingFromUnbuilt(building),
-    addBuildingAtLandscape(row, col, building),
-    removeBuildingCost(building),
+    addErectionAtLandscape(row, col, building),
     allowPriorToUse(building)
   )

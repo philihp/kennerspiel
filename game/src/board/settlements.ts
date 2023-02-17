@@ -1,7 +1,61 @@
 import { union } from 'ramda'
 import { match } from 'ts-pattern'
-import { PlayerColor, SettlementEnum, SettlementRound, StateReducer } from '../types'
+import { PlayerColor, SettlementCost, SettlementEnum, SettlementRound, StateReducer } from '../types'
 import { withEachPlayer } from './player'
+
+export const costForSettlement = (settlement: SettlementEnum): SettlementCost =>
+  match<SettlementEnum, SettlementCost>(settlement)
+    .with(
+      SettlementEnum.ShantyTownR,
+      SettlementEnum.ShantyTownG,
+      SettlementEnum.ShantyTownB,
+      SettlementEnum.ShantyTownW,
+      () => ({ food: 1, energy: 1 })
+    )
+    .with(
+      SettlementEnum.FarmingVillageR,
+      SettlementEnum.FarmingVillageG,
+      SettlementEnum.FarmingVillageB,
+      SettlementEnum.FarmingVillageW,
+      () => ({ food: 3, energy: 3 })
+    )
+    .with(
+      SettlementEnum.MarketTownR,
+      SettlementEnum.MarketTownG,
+      SettlementEnum.MarketTownB,
+      SettlementEnum.MarketTownW,
+      () => ({ food: 7, energy: 0 })
+    )
+    .with(
+      SettlementEnum.FishingVillageR,
+      SettlementEnum.FishingVillageG,
+      SettlementEnum.FishingVillageB,
+      SettlementEnum.FishingVillageW,
+      () => ({ food: 8, energy: 3 })
+    )
+    .with(
+      SettlementEnum.ArtistsColonyR,
+      SettlementEnum.ArtistsColonyG,
+      SettlementEnum.ArtistsColonyB,
+      SettlementEnum.ArtistsColonyW,
+      () => ({ food: 5, energy: 1 })
+    )
+    .with(SettlementEnum.HamletR, SettlementEnum.HamletG, SettlementEnum.HamletB, SettlementEnum.HamletW, () => ({
+      food: 5,
+      energy: 6,
+    }))
+    .with(SettlementEnum.VillageR, SettlementEnum.VillageG, SettlementEnum.VillageB, SettlementEnum.VillageW, () => ({
+      food: 15,
+      energy: 9,
+    }))
+    .with(
+      SettlementEnum.HilltopVillageR,
+      SettlementEnum.HilltopVillageG,
+      SettlementEnum.HilltopVillageB,
+      SettlementEnum.HilltopVillageW,
+      () => ({ food: 30, energy: 3 })
+    )
+    .otherwise(() => ({ food: Infinity, energy: Infinity }))
 
 export const roundSettlements = (color: PlayerColor, round: SettlementRound): SettlementEnum[] =>
   match<[PlayerColor, SettlementRound], SettlementEnum[]>([color, round])

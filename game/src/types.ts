@@ -222,6 +222,8 @@ export enum BuildingEnum {
   HouseOfTheBrotherhood = 'G41',
 }
 
+export type ErectionEnum = SettlementEnum | BuildingEnum
+
 type UsageOfClergy = {
   usePrior?: boolean
 }
@@ -250,6 +252,13 @@ export type GameCommandBuildParams = {
   row: number
   col: number
   building: BuildingEnum
+}
+
+export type GameCommandSettleParams = {
+  row: number
+  col: number
+  settlement: SettlementEnum
+  resources: string
 }
 
 export type GameCommandFellTreesParams = {
@@ -281,6 +290,11 @@ export type Cost = {
   wine?: number
   beer?: number
   reliquary?: number
+}
+
+export type SettlementCost = {
+  food: number
+  energy: number
 }
 
 export type GameCommandConvertParams = Cost

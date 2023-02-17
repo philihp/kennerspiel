@@ -9,6 +9,7 @@ import {
   GameStatePlaying,
   GameStateSetup,
   PlayerColor,
+  SettlementEnum,
 } from './types'
 import { parseResourceParam } from './board/resource'
 import {
@@ -24,6 +25,7 @@ import {
   buyPlot,
   buyDistrict,
 } from './commands'
+import { settle } from './commands/settle'
 
 const PPlot = P.union('MOUNTAIN', 'COAST')
 const PDistrict = P.union('HILLS', 'PLAINS')
@@ -31,8 +33,7 @@ const PPlayerCount = P.union('1', '2', '3', '4')
 const PCountry = P.union('ireland', 'france')
 const PLength = P.union('short', 'long')
 
-export const reducer = (state: GameState, action: string[]): GameState | undefined => {
-  const [command, ...params] = action
+export const reducer = (state: GameState, [command, ...params]: string[]): GameState | undefined => {
   return match<[string, string[]], GameState | undefined>([command, params])
     .with([GameCommandEnum.COMMIT, []], () => commit(state as GameStatePlaying))
     .with([GameCommandEnum.USE, P.array(P.string)], ([_command, [building, ...params]]) =>
@@ -74,6 +75,14 @@ export const reducer = (state: GameState, action: string[]): GameState | undefin
     )
     .with([GameCommandEnum.CONVERT, [P.select('resources')]], ({ resources }) =>
       convert(parseResourceParam(resources))(state as GameStatePlaying)
+    )
+    .with([GameCommandEnum.SETTLE, P.array(P.string)], ([_, [settlement, col, row, resources]]) =>
+      settle({
+        row: Number.parseInt(row, 10),
+        col: Number.parseInt(col, 10),
+        settlement: settlement as SettlementEnum,
+        resources,
+      })(state as GameStatePlaying)
     )
     .with([GameCommandEnum.CONFIG, [PPlayerCount, PCountry, PLength]], ([_, [players, country, length]]) =>
       config(state as GameStateSetup, {
