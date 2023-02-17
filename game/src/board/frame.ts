@@ -7,7 +7,15 @@ import { nextFrame3Short } from './frame/nextFrame3Short'
 import { nextFrame4Short } from './frame/nextFrame4Short'
 import { nextFrame2Long } from './frame/nextFrame2Long'
 import { nextFrame2Short } from './frame/nextFrame2Short'
-import { Frame, FrameFlow, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import {
+  BuildingEnum,
+  Frame,
+  FrameFlow,
+  GameCommandEnum,
+  GameStatePlaying,
+  NextUseClergy,
+  StateReducer,
+} from '../types'
 
 export const withFrame =
   (func: (frame: Frame) => Frame | undefined): StateReducer =>
@@ -67,6 +75,11 @@ export const nextFrame: StateReducer = (state) =>
     .with(undefined, () => undefined)
     .exhaustive()
 
+export const revertActivePlayerToCurrent: StateReducer = withFrame((frame) => ({
+  ...frame,
+  activePlayerIndex: frame.currentPlayerIndex,
+}))
+
 const consumeCommandFromBonus =
   (command: GameCommandEnum) =>
   (frame: Frame | undefined): Frame | undefined => {
@@ -84,7 +97,7 @@ const consumeCommandFromBonus =
 
 export const onlyViaBonusActions = (command: GameCommandEnum) => withFrame(consumeCommandFromBonus(command))
 
-export const oncePerFrame = (command: GameCommandEnum) =>
+export const oncePerFrame = (command: GameCommandEnum): StateReducer =>
   withFrame((frame) => {
     // first try to remove the proposed command from bonusActions
     const bonusFrame = consumeCommandFromBonus(command)(frame)
@@ -94,3 +107,10 @@ export const oncePerFrame = (command: GameCommandEnum) =>
     if (frame.mainActionUsed === false) return { ...frame, mainActionUsed: true }
     return undefined
   })
+
+export const setFrameToAllowFreeUsage = (building: BuildingEnum[]): StateReducer =>
+  withFrame((frame) => ({
+    ...frame,
+    usableBuildings: building,
+    nextUse: NextUseClergy.Free,
+  }))

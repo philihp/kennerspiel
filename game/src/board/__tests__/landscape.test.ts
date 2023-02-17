@@ -1,8 +1,8 @@
 import { BuildingEnum, Clergy, LandEnum, Tile } from '../../types'
-import { districtPrices, findBuilding, findClergy, plotPrices } from '../landscape'
+import { findBuildingWithoutOffset, districtPrices, findBuilding, findClergy, plotPrices } from '../landscape'
 
 describe('board/landscape', () => {
-  describe('findBuilding', () => {
+  describe('findBuildingWithoutOffset', () => {
     const landscape: Tile[][] = [
       [
         [LandEnum.Plains, BuildingEnum.Bathhouse],
@@ -20,10 +20,10 @@ describe('board/landscape', () => {
       ],
     ]
     it('finds the building', () => {
-      expect(findBuilding(BuildingEnum.FarmYardB)(landscape)).toStrictEqual([1, 2])
+      expect(findBuildingWithoutOffset(BuildingEnum.FarmYardB)(landscape)).toStrictEqual([1, 2])
     })
     it('returns undefined if not found', () => {
-      expect(findBuilding(BuildingEnum.Alehouse)(landscape)).toBeUndefined()
+      expect(findBuildingWithoutOffset(BuildingEnum.Alehouse)(landscape)).toBeUndefined()
     })
   })
   describe('findClergy', () => {
@@ -73,6 +73,31 @@ describe('board/landscape', () => {
     })
     it('gives an array small to large for multiplayer', () => {
       expect(plotPrices({ players: 3, country: 'ireland', length: 'long' })).toStrictEqual([3, 4, 4, 5, 5, 5, 6, 6, 7])
+    })
+  })
+
+  describe('findBuilding', () => {
+    const landscape: Tile[][] = [
+      [
+        [LandEnum.Plains, BuildingEnum.Bathhouse],
+        [LandEnum.Plains],
+        [LandEnum.Plains, BuildingEnum.Camera],
+        [LandEnum.Hillside, BuildingEnum.CloisterLibrary],
+        [LandEnum.Hillside, BuildingEnum.ChamberOfWonders, Clergy.LayBrother1B],
+      ],
+      [
+        [LandEnum.Plains, BuildingEnum.Peat],
+        [LandEnum.Plains, BuildingEnum.Forest],
+        [LandEnum.Hillside, BuildingEnum.FarmYardB, Clergy.PriorB],
+        [LandEnum.Hillside],
+        [LandEnum.Hillside],
+      ],
+    ]
+    it('finds the building', () => {
+      expect(findBuilding(landscape, 0, BuildingEnum.FarmYardB)).toStrictEqual({ row: 1, col: 2 })
+    })
+    it('returns undefined if not found', () => {
+      expect(findBuilding(landscape, 0, BuildingEnum.Alehouse)).toStrictEqual({ row: undefined, col: undefined })
     })
   })
 })

@@ -11,7 +11,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { findBuilding, use } from '../use'
+import { use } from '../use'
 
 describe('commands/use', () => {
   const p0: Tableau = {
@@ -193,31 +193,6 @@ describe('commands/use', () => {
         joker: 3,
         sheep: 1,
         grain: 0,
-      })
-    })
-
-    describe('findBuilding', () => {
-      const landscape: Tile[][] = [
-        [
-          [LandEnum.Plains, BuildingEnum.Bathhouse],
-          [LandEnum.Plains],
-          [LandEnum.Plains, BuildingEnum.Camera],
-          [LandEnum.Hillside, BuildingEnum.CloisterLibrary],
-          [LandEnum.Hillside, BuildingEnum.ChamberOfWonders, Clergy.LayBrother1B],
-        ],
-        [
-          [LandEnum.Plains, BuildingEnum.Peat],
-          [LandEnum.Plains, BuildingEnum.Forest],
-          [LandEnum.Hillside, BuildingEnum.FarmYardB, Clergy.PriorB],
-          [LandEnum.Hillside],
-          [LandEnum.Hillside],
-        ],
-      ]
-      it('finds the building', () => {
-        expect(findBuilding(landscape, 0, BuildingEnum.FarmYardB)).toStrictEqual({ row: 1, col: 2 })
-      })
-      it('returns undefined if not found', () => {
-        expect(findBuilding(landscape, 0, BuildingEnum.Alehouse)).toStrictEqual({ row: undefined, col: undefined })
       })
     })
   })

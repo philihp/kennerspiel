@@ -12,6 +12,7 @@ import {
   start,
   use,
   withPrior,
+  workContract,
   buyPlot,
   buyDistrict,
 } from '../commands'
@@ -29,6 +30,7 @@ jest.mock('../commands', () => {
     start: jest.fn().mockReturnValue(identity),
     use: jest.fn().mockReturnValue(identity),
     withPrior: jest.fn().mockReturnValue(identity),
+    workContract: jest.fn().mockReturnValue(identity),
     buyPlot: jest.fn().mockReturnValue(identity),
     buyDistrict: jest.fn().mockReturnValue(identity),
   }
@@ -89,6 +91,13 @@ describe('reducer', () => {
     it('calls withPrior', () => {
       reducer(s0, ['WITH_PRIOR'])!
       expect(withPrior).toHaveBeenCalled()
+    })
+  })
+
+  describe('workContract', () => {
+    it('calls workContract', () => {
+      reducer(s0, ['WORK_CONTRACT', 'G01', 'Wn'])!
+      expect(workContract).toHaveBeenCalled()
     })
   })
 

@@ -34,7 +34,7 @@ const givePlayerPeat =
     return withActivePlayer(getCost({ peat: amount }))(state)
   }
 
-export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams) =>
+export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): StateReducer =>
   pipe(
     //
     oncePerFrame(GameCommandEnum.CUT_PEAT),

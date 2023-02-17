@@ -1,5 +1,6 @@
 import { filter, pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
+import { moveClergyToOwnBuilding } from '../board/landscape'
 import { isPrior, withActivePlayer } from '../board/player'
 import { consumeMainAction } from '../board/state'
 import { bakery } from '../buildings/bakery'
@@ -63,60 +64,6 @@ const checkStateAllowsUse = (building: BuildingEnum) => (state: GameStatePlaying
   }
   return undefined
 }
-
-export const findBuilding = (
-  landscape: Tile[][],
-  landscapeOffset: number,
-  building: BuildingEnum
-): { row?: number; col?: number } => {
-  let row
-  let col
-  landscape.forEach((landRow, r) => {
-    landRow.forEach(([_l, b, _c], c) => {
-      if (building === b) {
-        row = r - landscapeOffset
-        col = c
-      }
-    })
-  })
-  return { row, col }
-}
-
-const moveClergyToOwnBuilding =
-  (building: BuildingEnum): StateReducer =>
-  (state) => {
-    if (state === undefined) return undefined
-    if (state.frame.nextUse === NextUseClergy.Free) return state
-    const player = state.players[state.frame.activePlayerIndex]
-    const { row, col } = findBuilding(player.landscape, player.landscapeOffset, building)
-    if (row === undefined || col === undefined) return undefined
-    const [land] = player.landscape[row][col]
-
-    const priors = player.clergy.filter(isPrior)
-    if (state.frame.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
-
-    const nextClergy = match(state.frame.nextUse)
-      .with(NextUseClergy.Any, () => player.clergy[0])
-      .with(NextUseClergy.None, () => undefined)
-      .with(NextUseClergy.OnlyPrior, () => priors[0])
-      .exhaustive()
-
-    if (nextClergy === undefined) return undefined
-
-    return withActivePlayer((player) => ({
-      ...player,
-      landscape: [
-        ...player.landscape.slice(0, row + player.landscapeOffset),
-        [
-          ...player.landscape[row + player.landscapeOffset].slice(0, col),
-          [land, building, nextClergy] as Tile,
-          ...player.landscape[row + player.landscapeOffset].slice(col + 1),
-        ],
-        ...player.landscape.slice(row + player.landscapeOffset + 1),
-      ],
-      clergy: filter((c) => c !== nextClergy)(player.clergy),
-    }))(state)
-  }
 
 const clearUsableBuildings: StateReducer = (state) => {
   return (

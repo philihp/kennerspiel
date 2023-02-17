@@ -22,9 +22,11 @@ import {
   settle,
   start,
   use,
+  withLaybrother,
   withPrior,
   buyPlot,
   buyDistrict,
+  workContract,
 } from './commands'
 
 const PPlot = P.union('MOUNTAIN', 'COAST')
@@ -60,7 +62,11 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
         useJoker: useJoker === 'Jo',
       })(state as GameStatePlaying)
     )
+    .with([GameCommandEnum.WORK_CONTRACT, [P.string, P.string]], ([_, [building, paymentGift]]) =>
+      workContract(building as BuildingEnum, paymentGift)(state as GameStatePlaying)
+    )
     .with([GameCommandEnum.WITH_PRIOR, []], () => withPrior(state as GameStatePlaying))
+    .with([GameCommandEnum.WITH_LAYBROTHER, []], () => withLaybrother(state as GameStatePlaying))
     .with([GameCommandEnum.BUY_PLOT, [P._, PPlot]], ([_, [y, side]]) =>
       buyPlot({
         y: Number.parseInt(y, 10),

@@ -1,6 +1,6 @@
 import { any, map } from 'ramda'
 import { match } from 'ts-pattern'
-import { Clergy, Cost, GameStatePlaying, PlayerColor, StateReducer, Tableau } from '../types'
+import { Clergy, Cost, GameStatePlaying, PlayerColor, StateReducer, Tableau, Tile } from '../types'
 
 export const withActivePlayer =
   (func: (player: Tableau) => Tableau | undefined): StateReducer =>
@@ -57,7 +57,7 @@ export const priors = (state: GameStatePlaying | undefined): Clergy[] =>
 export const isPrior = (clergy: Clergy | undefined): boolean =>
   !!(clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy))
 
-export const isLayBrother = (clergy: Clergy | undefined) => clergy && !isPrior(clergy)
+export const isLayBrother = (clergy: Clergy | undefined): boolean => !!(clergy && !isPrior(clergy))
 
 export const payCost =
   (cost: Cost) =>

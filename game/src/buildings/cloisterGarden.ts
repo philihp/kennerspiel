@@ -1,13 +1,14 @@
 import { pipe, reduce } from 'ramda'
-import { findBuilding } from '../board/landscape'
+import { setFrameToAllowFreeUsage } from '../board/frame'
+import { findBuildingWithoutOffset } from '../board/landscape'
 import { getCost, withActivePlayer } from '../board/player'
-import { BuildingEnum, StateReducer, NextUseClergy, Tile } from '../types'
+import { BuildingEnum, StateReducer, Tile } from '../types'
 
 const whichIndexHasBuilding =
   (building: BuildingEnum) =>
   (landscapes: Tile[][][]): [number, number, number] | undefined => {
     for (let i = 0; i < landscapes.length; i++) {
-      const location = findBuilding(building)(landscapes[i])
+      const location = findBuildingWithoutOffset(building)(landscapes[i])
       if (location) return [i, ...location]
     }
     return undefined
@@ -30,7 +31,6 @@ export const setNeighboringCloisterToGarden: StateReducer = (state) => {
     row + rowMod,
     col + colMod,
   ])
-
   const cloisterNeighbors = pipe(
     reduce((accum, curr: [number, number, number]) => {
       const [p, r, c] = curr
@@ -43,14 +43,8 @@ export const setNeighboringCloisterToGarden: StateReducer = (state) => {
       return accum
     }, [] as BuildingEnum[])
   )(checkLocations)
-  return {
-    ...state,
-    frame: {
-      ...state.frame,
-      usableBuildings: cloisterNeighbors,
-      nextUse: NextUseClergy.Free,
-    },
-  }
+
+  return setFrameToAllowFreeUsage(cloisterNeighbors)(state)
 }
 
 export const cloisterGarden = () =>

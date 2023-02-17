@@ -53,7 +53,7 @@ const updateJokerRondel: StateReducer = (state) =>
     },
   }
 
-export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams) =>
+export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): StateReducer =>
   pipe(
     //
     oncePerFrame(GameCommandEnum.FELL_TREES),
