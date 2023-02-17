@@ -1,11 +1,13 @@
-import { GameCommandConfigParams, GameState, GameStateSetup } from '../types'
+import { GameCommandConfigParams, GameStateSetup } from '../types'
 
-export const config = (state: GameStateSetup, params: GameCommandConfigParams): GameStateSetup | undefined => {
-  return {
-    ...state,
-    config: params,
-    rondel: {
-      pointingBefore: 0,
-    },
+export const config =
+  (params: GameCommandConfigParams) =>
+  (state: GameStateSetup): GameStateSetup | undefined => {
+    return {
+      ...state,
+      config: params,
+      rondel: {
+        pointingBefore: 0,
+      },
+    }
   }
-}

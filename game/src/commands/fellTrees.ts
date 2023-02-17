@@ -2,7 +2,7 @@ import { pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
 import { GameCommandFellTreesParams, Tile, BuildingEnum, GameCommandEnum, StateReducer } from '../types'
 import { take } from '../board/rondel'
-import { oncePerFrame, withFrame } from '../board/frame'
+import { oncePerFrame } from '../board/frame'
 
 const removeForestAt = (row: number, col: number) =>
   withActivePlayer((player) => {
@@ -53,7 +53,7 @@ const updateJokerRondel: StateReducer = (state) =>
     },
   }
 
-export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams) =>
+export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): StateReducer =>
   pipe(
     //
     oncePerFrame(GameCommandEnum.FELL_TREES),

@@ -1,7 +1,18 @@
+import { filter } from 'ramda'
 import { match } from 'ts-pattern'
-import { LandEnum, PlayerColor, Tile, BuildingEnum, Clergy, GameCommandConfigParams, ErectionEnum } from '../types'
+import {
+  LandEnum,
+  PlayerColor,
+  Tile,
+  BuildingEnum,
+  Clergy,
+  GameCommandConfigParams,
+  ErectionEnum,
+  NextUseClergy,
+  StateReducer,
+} from '../types'
 import { terrainForErection } from './erections'
-import { withActivePlayer } from './player'
+import { isPrior, withActivePlayer } from './player'
 
 export const districtPrices = (config: GameCommandConfigParams): number[] =>
   match(config)
@@ -13,7 +24,8 @@ export const plotPrices = (config: GameCommandConfigParams): number[] =>
     .with({ players: 1 }, () => [7, 6, 6, 5, 5, 5, 4, 4, 3])
     .otherwise(() => [3, 4, 4, 5, 5, 5, 6, 6, 7])
 
-export const findBuilding =
+// TODO: combine findBuilding with findBuildingOffset somehow
+export const findBuildingWithoutOffset =
   (building: BuildingEnum) =>
   (landscape: Tile[][]): [number, number] | undefined => {
     let row
@@ -29,6 +41,24 @@ export const findBuilding =
     if (row === undefined || col === undefined) return undefined
     return [row, col]
   }
+
+export const findBuilding = (
+  landscape: Tile[][],
+  landscapeOffset: number,
+  building: BuildingEnum
+): { row?: number; col?: number } => {
+  let row
+  let col
+  landscape.forEach((landRow, r) => {
+    landRow.forEach(([_l, b, _c], c) => {
+      if (building === b) {
+        row = r - landscapeOffset
+        col = c
+      }
+    })
+  })
+  return { row, col }
+}
 
 export const findClergy =
   (clergy: Clergy[]) =>
@@ -80,3 +110,38 @@ export const checkLandscapeFree = (row: number, col: number) => {
     return player
   })
 }
+
+export const moveClergyToOwnBuilding =
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
+    if (state === undefined) return undefined
+    if (state.frame.nextUse === NextUseClergy.Free) return state
+    const player = state.players[state.frame.activePlayerIndex]
+    const { row, col } = findBuilding(player.landscape, player.landscapeOffset, building)
+    if (row === undefined || col === undefined) return undefined
+    const [land] = player.landscape[row][col]
+
+    const priors = player.clergy.filter(isPrior)
+    if (state.frame.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
+
+    const nextClergy = match(state.frame.nextUse)
+      .with(NextUseClergy.Any, () => player.clergy[0])
+      .with(NextUseClergy.OnlyPrior, () => priors[0])
+      .exhaustive()
+
+    if (nextClergy === undefined) return undefined
+
+    return withActivePlayer((player) => ({
+      ...player,
+      landscape: [
+        ...player.landscape.slice(0, row + player.landscapeOffset),
+        [
+          ...player.landscape[row + player.landscapeOffset].slice(0, col),
+          [land, building, nextClergy] as Tile,
+          ...player.landscape[row + player.landscapeOffset].slice(col + 1),
+        ],
+        ...player.landscape.slice(row + player.landscapeOffset + 1),
+      ],
+      clergy: filter((c) => c !== nextClergy)(player.clergy),
+    }))(state)
+  }

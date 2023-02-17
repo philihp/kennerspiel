@@ -3,6 +3,8 @@ import { GameStatusEnum, PlayerColor } from '../../types'
 import { config } from '../config'
 import { start } from '../start'
 
+// TODO: Refactor so this test works independently of "config"
+
 describe('commands/start', () => {
   describe('start', () => {
     it('cannot start before configured', () => {
@@ -132,7 +134,7 @@ describe('commands/start', () => {
 
     it('sets round, and moveInRound, and a starting player', () => {
       const s0 = initialState
-      const s1 = config(s0!, { country: 'france', players: 4, length: 'long' })
+      const s1 = config({ country: 'france', players: 4, length: 'long' })(s0)!
       const s2 = start(s1!, {
         colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
         seed: 12345,
@@ -143,7 +145,7 @@ describe('commands/start', () => {
 
     it('starts up with buildings and settlements', () => {
       const s0 = initialState
-      const s1 = config(s0, { country: 'france', players: 4, length: 'long' })!
+      const s1 = config({ country: 'france', players: 4, length: 'long' })(s0)!
       const s2 = start(s1, {
         colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
         seed: 12345,

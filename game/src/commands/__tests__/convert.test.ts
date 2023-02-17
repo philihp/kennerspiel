@@ -1,141 +1,211 @@
 import { initialState } from '../../state'
-import { PlayerColor } from '../../types'
-import { config } from '../config'
+import {
+  GameStatePlaying,
+  GameStatusEnum,
+  NextUseClergy,
+  PlayerColor,
+  SettlementRound,
+  Tableau,
+  Tile,
+} from '../../types'
 import { convert } from '../convert'
-import { start } from '../start'
 
 describe('commands/convert', () => {
-  const s0 = initialState
-  const s1 = config(s0, { country: 'ireland', players: 1, length: 'long' })!
-  const s2 = start(s1, { seed: 420, colors: [PlayerColor.White] })!
+  const p0: Tableau = {
+    color: PlayerColor.Blue,
+    clergy: [],
+    settlements: [],
+    landscape: [
+      [['W'], ['C'], [], [], [], [], [], [], []],
+      [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+    ] as Tile[][],
+    wonders: 0,
+    landscapeOffset: 1,
+    peat: 0,
+    penny: 10,
+    clay: 0,
+    wood: 0,
+    grain: 10,
+    sheep: 0,
+    stone: 0,
+    flour: 0,
+    grape: 0,
+    nickel: 10,
+    hops: 0,
+    coal: 0,
+    book: 0,
+    pottery: 0,
+    whiskey: 10,
+    straw: 0,
+    meat: 0,
+    ornament: 0,
+    bread: 0,
+    wine: 10,
+    beer: 0,
+    reliquary: 0,
+  }
+  const s0: GameStatePlaying = {
+    ...initialState,
+    status: GameStatusEnum.PLAYING,
+    frame: {
+      next: 1,
+      startingPlayer: 1,
+      settlementRound: SettlementRound.S,
+      currentPlayerIndex: 0,
+      activePlayerIndex: 0,
+      neutralBuildingPhase: false,
+      bonusRoundPlacement: false,
+      mainActionUsed: false,
+      bonusActions: [],
+      canBuyLandscape: true,
+      unusableBuildings: [],
+      usableBuildings: [],
+      nextUse: NextUseClergy.Any,
+    },
+    config: {
+      country: 'france',
+      players: 3,
+      length: 'long',
+    },
+    rondel: {
+      pointingBefore: 2,
+      wood: 1,
+      joker: 0,
+    },
+    wonders: 0,
+    players: [{ ...p0 }, { ...p0 }, { ...p0 }],
+    buildings: [],
+    plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+    districtPurchasePrices: [],
+  }
 
   describe('convert', () => {
     it('cannot convert undefined state', () => {
       expect(convert({})(undefined)).toBeUndefined()
     })
     it('accepts a noop', () => {
-      const s3 = convert({})(s2)
-      expect(s3).toMatchObject(s2)
+      const s1 = convert({})(s0)
+      expect(s1).toMatchObject(s0)
     })
     it('converts nickel to pennies', () => {
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             nickel: 1,
             penny: 1,
             wine: 1,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
       }
-      const s4 = convert({ nickel: 1 })(s3)!
-      expect(s4.players[0]).toMatchObject({
+      const s2 = convert({ nickel: 1 })(s1)!
+      expect(s2.players[0]).toMatchObject({
         nickel: 0,
         penny: 6,
         wine: 1,
       })
     })
     it('converts pennies to nickel', () => {
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             nickel: 2,
             penny: 6,
             wine: 1,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
       }
-      const s4 = convert({ penny: 5 })(s3)!
-      expect(s4.players[0]).toMatchObject({
+      const s2 = convert({ penny: 5 })(s1)!
+      expect(s2.players[0]).toMatchObject({
         nickel: 3,
         penny: 1,
         wine: 1,
       })
     })
     it('converts wine to coins', () => {
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             nickel: 10,
             penny: 10,
             wine: 10,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
       }
-      const s4 = convert({ wine: 3 })(s3)!
-      expect(s4.players[0]).toMatchObject({
+      const s2 = convert({ wine: 3 })(s1)!
+      expect(s2.players[0]).toMatchObject({
         nickel: 10,
         penny: 13,
         wine: 7,
       })
     })
     it('converts whiskey to coins', () => {
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             nickel: 10,
             penny: 10,
             whiskey: 10,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
       }
-      const s4 = convert({ whiskey: 3 })(s3)!
-      expect(s4.players[0]).toMatchObject({
+      const s2 = convert({ whiskey: 3 })(s1)!
+      expect(s2.players[0]).toMatchObject({
         nickel: 10,
         penny: 16,
         whiskey: 7,
       })
     })
     it('converts wine if needed to uptoken to nickel', () => {
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             nickel: 0,
             penny: 2,
             wine: 4,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
       }
-      const s4 = convert({ penny: 5 })(s3)!
-      expect(s4.players[0]).toMatchObject({
+      const s2 = convert({ penny: 5 })(s1)!
+      expect(s2.players[0]).toMatchObject({
         nickel: 1,
         penny: 0,
         wine: 1,
       })
     })
     it('converts whiskey if needed to uptoken to nickel', () => {
-      const s3 = {
-        ...s2,
+      const s1 = {
+        ...s0,
         players: [
           {
-            ...s2.players[0],
+            ...s0.players[0],
             nickel: 0,
             penny: 2,
             whiskey: 4,
           },
-          ...s2.players.slice(1),
+          ...s0.players.slice(1),
         ],
       }
-      const s4 = convert({ penny: 5 })(s3)!
-
-      expect(s4.players[0]).toMatchObject({
+      const s2 = convert({ penny: 5 })(s1)!
+      expect(s2.players[0]).toMatchObject({
         nickel: 1,
-        penny: 1,
-        whiskey: 2,
+        penny: 0,
+        whiskey: 4,
       })
     })
   })

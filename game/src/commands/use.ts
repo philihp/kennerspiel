@@ -1,7 +1,7 @@
-import { filter, pipe } from 'ramda'
+import { pipe } from 'ramda'
 import { match, P } from 'ts-pattern'
-import { isPrior, withActivePlayer } from '../board/player'
-import { consumeMainAction } from '../board/state'
+import { oncePerFrame, withFrame } from '../board/frame'
+import { moveClergyToOwnBuilding } from '../board/landscape'
 import { bakery } from '../buildings/bakery'
 import { bathhouse } from '../buildings/bathhouse'
 import { buildersMarket } from '../buildings/buildersMarket'
@@ -44,103 +44,38 @@ import { stoneMerchant } from '../buildings/stoneMerchant'
 import { townEstate } from '../buildings/townEstate'
 import { windmill } from '../buildings/windmill'
 import { winery } from '../buildings/winery'
-import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer, Tile } from '../types'
+import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
-const checkStateAllowsUse = (building: BuildingEnum) => (state: GameStatePlaying | undefined) => {
-  if (state === undefined) return undefined
-  if (state.frame.mainActionUsed === false) return state
-  if (state.frame.bonusActions.includes(GameCommandEnum.USE)) return state
-  if (
-    state.frame.usableBuildings.includes(building) === true &&
-    state.frame.unusableBuildings.includes(building) === false
-  ) {
-    return match(state.frame.nextUse)
-      .with(NextUseClergy.Free, () => state)
-      .with(NextUseClergy.OnlyPrior, () => state)
-      .with(NextUseClergy.Any, () => undefined)
-      .with(NextUseClergy.None, () => undefined)
-      .exhaustive()
-  }
-  return undefined
-}
-
-export const findBuilding = (
-  landscape: Tile[][],
-  landscapeOffset: number,
-  building: BuildingEnum
-): { row?: number; col?: number } => {
-  let row
-  let col
-  landscape.forEach((landRow, r) => {
-    landRow.forEach(([_l, b, _c], c) => {
-      if (building === b) {
-        row = r - landscapeOffset
-        col = c
-      }
-    })
-  })
-  return { row, col }
-}
-
-const moveClergyToOwnBuilding =
+const checkIfUseCanHappen =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    if (state.frame.nextUse === NextUseClergy.Free) return state
-    const player = state.players[state.frame.activePlayerIndex]
-    const { row, col } = findBuilding(player.landscape, player.landscapeOffset, building)
-    if (row === undefined || col === undefined) return undefined
-    const [land] = player.landscape[row][col]
 
-    const priors = player.clergy.filter(isPrior)
-    if (state.frame.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
+    // try to consume bonusAction and mainAction first
+    const usedAction = oncePerFrame(GameCommandEnum.USE)(state)
+    if (usedAction) return usedAction
 
-    const nextClergy = match(state.frame.nextUse)
-      .with(NextUseClergy.Any, () => player.clergy[0])
-      .with(NextUseClergy.None, () => undefined)
-      .with(NextUseClergy.OnlyPrior, () => priors[0])
-      .exhaustive()
+    // but if mainActionUsed and bonusAction don't allow, still it is possible to use if
+    // usableBuildings allows AND the building in question isn't in unusableBuildings
+    if (
+      state.frame.usableBuildings.includes(building) === true &&
+      state.frame.unusableBuildings.includes(building) === false
+    ) {
+      return match(state.frame.nextUse)
+        .with(NextUseClergy.Free, () => state)
+        .with(NextUseClergy.OnlyPrior, () => state)
+        .with(NextUseClergy.Any, () => undefined)
+        .exhaustive()
+    }
 
-    if (nextClergy === undefined) return undefined
-
-    return withActivePlayer((player) => ({
-      ...player,
-      landscape: [
-        ...player.landscape.slice(0, row + player.landscapeOffset),
-        [
-          ...player.landscape[row + player.landscapeOffset].slice(0, col),
-          [land, building, nextClergy] as Tile,
-          ...player.landscape[row + player.landscapeOffset].slice(col + 1),
-        ],
-        ...player.landscape.slice(row + player.landscapeOffset + 1),
-      ],
-      clergy: filter((c) => c !== nextClergy)(player.clergy),
-    }))(state)
+    // otherwise dont allow
+    return undefined
   }
 
-const clearUsableBuildings: StateReducer = (state) => {
-  return (
-    state && {
-      ...state,
-      frame: {
-        ...state.frame,
-        usableBuildings: [],
-      },
-    }
-  )
-}
-
-const clearNextUse: StateReducer = (state) => {
-  return (
-    state && {
-      ...state,
-      frame: {
-        ...state.frame,
-        nextUse: NextUseClergy.None,
-      },
-    }
-  )
-}
+const clearUsableBuildings: StateReducer = withFrame((frame) => ({
+  ...frame,
+  usableBuildings: [],
+}))
 
 const BuildingFarmyard = P.union(
   BuildingEnum.FarmYardR,
@@ -165,12 +100,9 @@ const BuildingCloisterOffice = P.union(
 
 export const use = (building: BuildingEnum, params: string[]) =>
   pipe(
-    checkStateAllowsUse(building),
+    checkIfUseCanHappen(building),
     moveClergyToOwnBuilding(building),
-    consumeMainAction,
     clearUsableBuildings,
-    clearNextUse,
-    clearNextUse,
     match<[BuildingEnum, string[]], StateReducer>([building, params])
       .with([BuildingEnum.Bakery, [P._]], ([_, params]) => bakery(params[0]))
       .with([BuildingEnum.Bathhouse, []], bathhouse)

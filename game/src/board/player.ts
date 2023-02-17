@@ -1,6 +1,6 @@
 import { any, map } from 'ramda'
 import { match } from 'ts-pattern'
-import { Clergy, Cost, GameStatePlaying, PlayerColor, StateReducer, Tableau } from '../types'
+import { Clergy, Cost, GameStatePlaying, PlayerColor, StateReducer, Tableau, Tile } from '../types'
 
 export const withActivePlayer =
   (func: (player: Tableau) => Tableau | undefined): StateReducer =>
@@ -57,7 +57,7 @@ export const priors = (state: GameStatePlaying | undefined): Clergy[] =>
 export const isPrior = (clergy: Clergy | undefined): boolean =>
   !!(clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy))
 
-export const isLayBrother = (clergy: Clergy | undefined) => clergy && !isPrior(clergy)
+export const isLayBrother = (clergy: Clergy | undefined): boolean => !!(clergy && !isPrior(clergy))
 
 export const payCost =
   (cost: Cost) =>
@@ -66,12 +66,15 @@ export const payCost =
     let dirty = false
     const newPlayer: Tableau = { ...player }
     const fields = Object.entries(cost)
+    // TODO: do better
     for (let i = 0; i < fields.length; i++) {
       const [type, amount] = fields[i]
-      if (amount !== 0) dirty = true
-      const newValue = (newPlayer[type as keyof Tableau] as number) - amount
-      if (newValue < 0) return undefined
-      newPlayer[type as keyof Cost] = newValue
+      if (amount) {
+        dirty = true
+        const newValue = (newPlayer[type as keyof Tableau] as number) - (amount ?? 0)
+        if (newValue < 0) return undefined
+        newPlayer[type as keyof Cost] = newValue
+      }
     }
     if (!dirty) return player
     return newPlayer
@@ -82,7 +85,8 @@ export const getCost =
   (player: Tableau | undefined): Tableau | undefined =>
     player &&
     Object.entries(cost).reduce((player, [type, amount]) => {
-      if (amount === 0) return player
+      // TODO: write test to ensure this works with amount === undefined
+      if (!amount) return player
       return {
         ...player,
         [type]: (player[type as keyof Tableau] as number) + amount,

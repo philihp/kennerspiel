@@ -4,7 +4,9 @@ export enum GameCommandEnum {
   CONFIG = 'CONFIG',
   START = 'START',
   COMMIT = 'COMMIT',
+  WORK_CONTRACT = 'WORK_CONTRACT',
   WITH_PRIOR = 'WITH_PRIOR',
+  WITH_LAYBROTHER = 'WITH_LAYBROTHER',
   USE = 'USE',
   CUT_PEAT = 'CUT_PEAT',
   FELL_TREES = 'FELL_TREES',
@@ -365,7 +367,6 @@ export enum NextUseClergy {
   Any = 'any', // next use can use any clergy, using laybrother first
   OnlyPrior = 'only-prior', // next use must use prior, or it will fail
   Free = 'free', // next use does not move a clergy
-  None = 'none', // next use must always fail
 }
 
 export type Frame = {
@@ -380,10 +381,6 @@ export type Frame = {
 
   // also ornamental, however important for triggering end of game in 2p
   settlementRound: SettlementRound
-
-  // this is 1 to start, and increases to 2 when winery/distillery is built.
-  // we can't just scan the landscapes because it could be overbuilt in solo play
-  workContractCost: 1 | 2
 
   // activePlayer: this is the player we're waiting input from
   // currentPlayer: this is the player whose turn it is.

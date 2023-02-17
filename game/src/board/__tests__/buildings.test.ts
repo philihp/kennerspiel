@@ -67,7 +67,6 @@ describe('build/buildings', () => {
         next: 1,
         startingPlayer: 1,
         settlementRound: SettlementRound.S,
-        workContractCost: 1,
         currentPlayerIndex: 0,
         activePlayerIndex: 0,
         neutralBuildingPhase: false,
@@ -195,6 +194,24 @@ describe('build/buildings', () => {
     })
     it('has appropriate building materials for Shipping Company', () => {
       expect(costForBuilding(BuildingEnum.ShippingCompany)).toStrictEqual({ wood: 3, clay: 3 })
+    })
+    it('has appropriate building materials for Bathhouse', () => {
+      expect(costForBuilding(BuildingEnum.Bathhouse)).toStrictEqual({ stone: 1, straw: 1 })
+    })
+    it('has appropriate building materials for Chamber Of Wonders', () => {
+      expect(costForBuilding(BuildingEnum.ChamberOfWonders)).toStrictEqual({ wood: 1, clay: 1 })
+    })
+    it('has appropriate building materials for Castle', () => {
+      expect(costForBuilding(BuildingEnum.Castle)).toStrictEqual({ wood: 6, stone: 5 })
+    })
+    it('has appropriate building materials for Dormitory', () => {
+      expect(costForBuilding(BuildingEnum.Dormitory)).toStrictEqual({ clay: 3 })
+    })
+    it('has appropriate building materials for Printing Office', () => {
+      expect(costForBuilding(BuildingEnum.PrintingOffice)).toStrictEqual({ stone: 2, wood: 1 })
+    })
+    it('has appropriate building materials for Sacristy', () => {
+      expect(costForBuilding(BuildingEnum.Sacristy)).toStrictEqual({ stone: 3, straw: 2 })
     })
   })
   describe('roundBuildings', () => {

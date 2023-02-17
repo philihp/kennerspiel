@@ -1,16 +1,8 @@
 import { pipe, reduce } from 'ramda'
+import { setFrameToAllowFreeUsage } from '../board/frame'
 import { payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
 import { BuildingEnum, GameStatePlaying, NextUseClergy, StateReducer, Tableau, Tile } from '../types'
-
-const nextUseIsFree = (state: GameStatePlaying | undefined) =>
-  state && {
-    ...state,
-    frame: {
-      ...state.frame,
-      nextUse: NextUseClergy.Free,
-    },
-  }
 
 // given a row of tiles, return all of the buildings where there is a building AND a clergy
 const occupiedBuildingsInRow = reduce(
@@ -31,8 +23,10 @@ const occupiedBuildingsForPlayers = (players: Tableau[]) =>
     players
   )
 
-const allOccupiedBuildingsUsable: StateReducer = (state) =>
-  state && { ...state, frame: { ...state.frame, usableBuildings: occupiedBuildingsForPlayers(state.players) } }
+const allOccupiedBuildingsUsable: StateReducer = (state) => {
+  if (state === undefined) return state
+  return setFrameToAllowFreeUsage(occupiedBuildingsForPlayers(state.players))(state)
+}
 
 export const palace = (input = '') => {
   const { wine = 0 } = parseResourceParam(input)
@@ -40,7 +34,6 @@ export const palace = (input = '') => {
   return pipe(
     //
     withActivePlayer(payCost({ wine })),
-    nextUseIsFree,
     allOccupiedBuildingsUsable
   )
 }
