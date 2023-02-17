@@ -55,7 +55,7 @@ export const costForSettlement = (settlement: SettlementEnum): SettlementCost =>
       SettlementEnum.HilltopVillageW,
       () => ({ food: 30, energy: 3 })
     )
-    .otherwise(() => ({ food: Infinity, energy: Infinity }))
+    .exhaustive()
 
 export const roundSettlements = (color: PlayerColor, round: SettlementRound): SettlementEnum[] =>
   match<[PlayerColor, SettlementRound], SettlementEnum[]>([color, round])
