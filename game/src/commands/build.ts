@@ -3,7 +3,7 @@ import { costForBuilding, isCloisterBuilding, removeBuildingFromUnbuilt } from '
 import { addErectionAtLandscape } from '../board/erections'
 import { oncePerFrame } from '../board/frame'
 import { checkLandscapeFree, checkLandTypeMatches } from '../board/landscape'
-import { payCost, withActivePlayer } from '../board/player'
+import { payCost, subtractCoins, withActivePlayer } from '../board/player'
 import { BuildingEnum, GameCommandBuildParams, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
 const checkCloisterAdjacency = (row: number, col: number, building: BuildingEnum) => {
@@ -21,7 +21,14 @@ const checkCloisterAdjacency = (row: number, col: number, building: BuildingEnum
   })
 }
 
-const payBuildingCost = (building: BuildingEnum) => withActivePlayer(payCost(costForBuilding(building)))
+const payBuildingCost = (building: BuildingEnum) => {
+  const cost = costForBuilding(building)
+  const buyCost = (cost.penny ?? 0) + (cost.nickel ?? 0) * 5
+  if (buyCost) {
+    return withActivePlayer(subtractCoins(buyCost))
+  }
+  return withActivePlayer(payCost(cost))
+}
 
 export const allowPriorToUse =
   (building: BuildingEnum): StateReducer =>
@@ -31,6 +38,7 @@ export const allowPriorToUse =
         ...state,
         frame: {
           ...state.frame,
+          bonusActions: [GameCommandEnum.USE, ...state.frame.bonusActions],
           nextUse: NextUseClergy.OnlyPrior,
           usableBuildings: [building],
         },
