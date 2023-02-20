@@ -1,5 +1,5 @@
 import { pipe } from 'ramda'
-import { match, P } from 'ts-pattern'
+import { match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
 import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
 import { bakery } from '../buildings/bakery'
@@ -77,87 +77,78 @@ const clearUsableBuildings: StateReducer = withFrame((frame) => ({
   usableBuildings: [],
 }))
 
-const BuildingFarmyard = P.union(
-  BuildingEnum.FarmYardR,
-  BuildingEnum.FarmYardG,
-  BuildingEnum.FarmYardB,
-  BuildingEnum.FarmYardW
-)
-
-const BuildingClaymound = P.union(
-  BuildingEnum.ClayMoundR,
-  BuildingEnum.ClayMoundG,
-  BuildingEnum.ClayMoundB,
-  BuildingEnum.ClayMoundW
-)
-
-const BuildingCloisterOffice = P.union(
-  BuildingEnum.CloisterOfficeR,
-  BuildingEnum.CloisterOfficeG,
-  BuildingEnum.CloisterOfficeB,
-  BuildingEnum.CloisterOfficeW
-)
-
-export const use =
-  (building: BuildingEnum, params: string[]): StateReducer =>
+const moveClergyTo =
+  (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    return pipe(
-      checkIfUseCanHappen(building),
-      state.frame.bonusRoundPlacement //
-        ? moveClergyInBonusRoundTo(building)
-        : moveClergyToOwnBuilding(building),
-      clearUsableBuildings,
-      match<BuildingEnum, StateReducer>(building)
-        .with(BuildingEnum.Bakery, () => bakery(params[0]))
-        .with(BuildingEnum.Bathhouse, () => bathhouse(params[0]))
-        .with(BuildingEnum.BuildersMarket, () => buildersMarket(params[0]))
-        .with(BuildingEnum.Calefactory, () => calefactory(params[0]))
-        .with(BuildingEnum.Carpentry, () =>
-          carpentry(Number.parseInt(params[0] ?? '', 10), Number.parseInt(params[1] ?? '', 10))
-        )
-        .with(BuildingEnum.Castle, castle)
-        .with(BuildingEnum.ChamberOfWonders, () => chamberOfWonders(params[0]))
-        .with(BuildingClaymound, () => clayMound(params[0]))
-        .with(BuildingEnum.CloisterChapterHouse, cloisterChapterHouse)
-        .with(BuildingEnum.CloisterChurch, () => cloisterChurch(params[0]))
-        .with(BuildingEnum.CloisterCourtyard, () => cloisterCourtyard(params[0], params[1]))
-        .with(BuildingEnum.CloisterGarden, cloisterGarden)
-        .with(BuildingEnum.CloisterLibrary, () => cloisterLibrary(params[0], params[1]))
-        .with(BuildingCloisterOffice, () => cloisterOffice(params[0]))
-        .with(BuildingEnum.CloisterWorkshop, () => cloisterWorkshop(params[0]))
-        .with(BuildingEnum.Dormitory, () => dormitory(params[0]))
-        .with(BuildingEnum.Estate, () => estate(params[0]))
-        .with(BuildingFarmyard, () => farmyard(params[0]))
-        .with(BuildingEnum.FinancedEstate, () => {
-          return financedEstate(params[0])
-        })
-        .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
-        .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
-        .with(BuildingEnum.GrainStorage, () => grainStorage(params[0]))
-        .with(BuildingEnum.GrapevineA, BuildingEnum.GrapevineA, () => grapevine(params[0]))
-        .with(BuildingEnum.GrapevineB, BuildingEnum.GrapevineB, () => grapevine(params[0]))
-        .with(BuildingEnum.HarborPromenade, harborPromenade)
-        .with(BuildingEnum.Hospice, hospice)
-        .with(BuildingEnum.HouseOfTheBrotherhood, () => houseOfTheBrotherhood(params[0], params[1]))
-        .with(BuildingEnum.Inn, () => inn(params[0]))
-        .with(BuildingEnum.Market, () => market(params[0]))
-        .with(BuildingEnum.Palace, () => palace(params[0]))
-        .with(BuildingEnum.PeatCoalKiln, BuildingEnum.PeatCoalKiln, () => peatCoalKiln(params[0]))
-        .with(BuildingEnum.PilgrimageSite, () => pilgrimageSite(params[0], params[1]))
-        .with(BuildingEnum.PrintingOffice, () => printingOffice(...params))
-        .with(BuildingEnum.Priory, priory)
-        .with(BuildingEnum.QuarryA, BuildingEnum.QuarryB, () => quarry(params[0]))
-        .with(BuildingEnum.Sacristy, () => sacristy(params[0]))
-        .with(BuildingEnum.ShippingCompany, () => shippingCompany(params[0], params[1]))
-        .with(BuildingEnum.Shipyard, () => shipyard(params[0]))
-        .with(BuildingEnum.Slaughterhouse, () => slaughterhouse(params[0]))
-        .with(BuildingEnum.StoneMerchant, () => stoneMerchant(params[0]))
-        .with(BuildingEnum.TownEstate, () => townEstate(params[0]))
-        .with(BuildingEnum.Windmill, () => windmill(params[0]))
-        .with(BuildingEnum.Winery, () => winery(params[0], params[1]))
-        .otherwise(() => () => {
-          throw new Error(`Invalid params [${params}] for building ${building}`)
-        })
-    )(state)
+    if (state.frame.bonusRoundPlacement) return moveClergyInBonusRoundTo(building)(state)
+    return moveClergyToOwnBuilding(building)(state)
   }
+
+export const use = (building: BuildingEnum, params: string[]): StateReducer =>
+  pipe(
+    checkIfUseCanHappen(building),
+    moveClergyTo(building),
+    clearUsableBuildings,
+    match<BuildingEnum, StateReducer>(building)
+      .with(BuildingEnum.Bakery, () => bakery(params[0]))
+      .with(BuildingEnum.Bathhouse, () => bathhouse(params[0]))
+      .with(BuildingEnum.BuildersMarket, () => buildersMarket(params[0]))
+      .with(BuildingEnum.Calefactory, () => calefactory(params[0]))
+      .with(BuildingEnum.Carpentry, () =>
+        carpentry(Number.parseInt(params[0] ?? '', 10), Number.parseInt(params[1] ?? '', 10))
+      )
+      .with(BuildingEnum.Castle, castle)
+      .with(BuildingEnum.ChamberOfWonders, () => chamberOfWonders(params[0]))
+      .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () =>
+        clayMound(params[0])
+      )
+      .with(BuildingEnum.CloisterChapterHouse, cloisterChapterHouse)
+      .with(BuildingEnum.CloisterChurch, () => cloisterChurch(params[0]))
+      .with(BuildingEnum.CloisterCourtyard, () => cloisterCourtyard(params[0], params[1]))
+      .with(BuildingEnum.CloisterGarden, cloisterGarden)
+      .with(BuildingEnum.CloisterLibrary, () => cloisterLibrary(params[0], params[1]))
+      .with(
+        BuildingEnum.CloisterOfficeR,
+        BuildingEnum.CloisterOfficeG,
+        BuildingEnum.CloisterOfficeB,
+        BuildingEnum.CloisterOfficeW,
+        () => cloisterOffice(params[0])
+      )
+      .with(BuildingEnum.CloisterWorkshop, () => cloisterWorkshop(params[0]))
+      .with(BuildingEnum.Dormitory, () => dormitory(params[0]))
+      .with(BuildingEnum.Estate, () => estate(params[0]))
+      .with(BuildingEnum.FarmYardR, BuildingEnum.FarmYardG, BuildingEnum.FarmYardB, BuildingEnum.FarmYardW, () =>
+        farmyard(params[0])
+      )
+      .with(BuildingEnum.FinancedEstate, () => {
+        return financedEstate(params[0])
+      })
+      .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
+      .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
+      .with(BuildingEnum.GrainStorage, () => grainStorage(params[0]))
+      .with(BuildingEnum.GrapevineA, BuildingEnum.GrapevineA, () => grapevine(params[0]))
+      .with(BuildingEnum.GrapevineB, BuildingEnum.GrapevineB, () => grapevine(params[0]))
+      .with(BuildingEnum.HarborPromenade, harborPromenade)
+      .with(BuildingEnum.Hospice, hospice)
+      .with(BuildingEnum.HouseOfTheBrotherhood, () => houseOfTheBrotherhood(params[0], params[1]))
+      .with(BuildingEnum.Inn, () => inn(params[0]))
+      .with(BuildingEnum.Market, () => market(params[0]))
+      .with(BuildingEnum.Palace, () => palace(params[0]))
+      .with(BuildingEnum.PeatCoalKiln, BuildingEnum.PeatCoalKiln, () => peatCoalKiln(params[0]))
+      .with(BuildingEnum.PilgrimageSite, () => pilgrimageSite(params[0], params[1]))
+      .with(BuildingEnum.PrintingOffice, () => printingOffice(...params))
+      .with(BuildingEnum.Priory, priory)
+      .with(BuildingEnum.QuarryA, BuildingEnum.QuarryB, () => quarry(params[0]))
+      .with(BuildingEnum.Sacristy, () => sacristy(params[0]))
+      .with(BuildingEnum.ShippingCompany, () => shippingCompany(params[0], params[1]))
+      .with(BuildingEnum.Shipyard, () => shipyard(params[0]))
+      .with(BuildingEnum.Slaughterhouse, () => slaughterhouse(params[0]))
+      .with(BuildingEnum.StoneMerchant, () => stoneMerchant(params[0]))
+      .with(BuildingEnum.TownEstate, () => townEstate(params[0]))
+      .with(BuildingEnum.Windmill, () => windmill(params[0]))
+      .with(BuildingEnum.Winery, () => winery(params[0], params[1]))
+      .otherwise(() => () => {
+        throw new Error(`Invalid params [${params}] for building ${building}`)
+      })
+  )
