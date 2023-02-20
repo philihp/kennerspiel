@@ -1,4 +1,4 @@
-import { filter } from 'ramda'
+import { filter, union } from 'ramda'
 import { match } from 'ts-pattern'
 import { BuildingEnum, Cost, GameCommandConfigParams, SettlementRound, StateReducer } from '../types'
 
@@ -434,7 +434,7 @@ export const introduceBuildings: StateReducer = (state) => {
   if (state === undefined) return undefined
   return {
     ...state,
-    buildings: roundBuildings(state.config, state.frame.settlementRound),
+    buildings: union(state.buildings, roundBuildings(state.config, state.frame.settlementRound)),
   }
 }
 
