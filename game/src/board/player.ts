@@ -20,6 +20,21 @@ export const withActivePlayer =
     }
   }
 
+export const withPlayer =
+  (playerIndex: number) =>
+  (func: (player: Tableau) => Tableau | undefined): StateReducer =>
+  (state) => {
+    if (state === undefined) return state
+    const oldPlayer = state.players[playerIndex]
+    const player = func(oldPlayer)
+    if (player === oldPlayer) return state // dont create another state if nothing changes
+    if (player === undefined) return undefined
+    return {
+      ...state,
+      players: [...state.players.slice(0, playerIndex), player, ...state.players.slice(playerIndex + 1)],
+    }
+  }
+
 export const withEachPlayer =
   (func: (player: Tableau) => Tableau | undefined): StateReducer =>
   (state) => {

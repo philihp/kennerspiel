@@ -6,6 +6,7 @@ import { allPriorsComeBack } from './allPriorsComeBack'
 import { gameEnd } from '../state'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondel } from './rotateRondel'
+import { introduceSettlements } from '../settlements'
 
 // TODO: only 2 clergymen
 
@@ -15,7 +16,7 @@ export const nextFrame3Short: FrameFlow = {
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
-    upkeep: [rotateRondel, withEachPlayer(getCost({ grain: 1, sheep: 1 })), introduceBuildings],
+    upkeep: [rotateRondel, withEachPlayer(getCost({ grain: 1, sheep: 1 })), introduceBuildings, introduceSettlements],
     next: 2,
   },
   2: {
@@ -77,7 +78,13 @@ export const nextFrame3Short: FrameFlow = {
   13: {
     startingPlayer: 2,
     currentPlayerIndex: 2,
-    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ grain: 1, wood: 1 })), introduceBuildings],
+    upkeep: [
+      rotateRondel,
+      returnClergyIfPlaced,
+      withEachPlayer(getCost({ grain: 1, wood: 1 })),
+      introduceBuildings,
+      introduceSettlements,
+    ],
     next: 14,
   },
   14: {
@@ -139,7 +146,13 @@ export const nextFrame3Short: FrameFlow = {
   24: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ peat: 1, stone: 1 })), introduceBuildings],
+    upkeep: [
+      rotateRondel,
+      returnClergyIfPlaced,
+      withEachPlayer(getCost({ peat: 1, stone: 1 })),
+      introduceBuildings,
+      introduceSettlements,
+    ],
     next: 25,
   },
   25: {
@@ -200,7 +213,13 @@ export const nextFrame3Short: FrameFlow = {
   // Round 7
   35: {
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ wood: 1, stone: 1 })), introduceBuildings],
+    upkeep: [
+      rotateRondel,
+      returnClergyIfPlaced,
+      withEachPlayer(getCost({ wood: 1, stone: 1 })),
+      introduceBuildings,
+      introduceSettlements,
+    ],
     next: 36,
   },
   36: {
@@ -261,7 +280,13 @@ export const nextFrame3Short: FrameFlow = {
   // Round 9
   46: {
     currentPlayerIndex: 2,
-    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ stone: 1, meat: 1 })), introduceBuildings],
+    upkeep: [
+      rotateRondel,
+      returnClergyIfPlaced,
+      withEachPlayer(getCost({ stone: 1, meat: 1 })),
+      introduceBuildings,
+      introduceSettlements,
+    ],
     next: 47,
   },
   47: {

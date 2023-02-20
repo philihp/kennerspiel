@@ -1,6 +1,6 @@
-import { identity, map, pipe, reduce, splitEvery, take } from 'ramda'
+import { map, pipe, reduce, splitEvery, take } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
-import { BuildingEnum, GameStatePlaying, Tableau, Tile } from '../types'
+import { BuildingEnum, Tableau, Tile } from '../types'
 
 const removeForestAt = (player: Tableau | undefined, [col, row]: [number, number]): Tableau | undefined => {
   if (player === undefined) return undefined

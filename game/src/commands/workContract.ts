@@ -28,6 +28,8 @@ const transferActiveToOwnerOf =
     if (state === undefined) return undefined
     // this makes it so we dont look at the current player's landscape... prevent work contract on yourself
     const playerIndexes: number[] = without([state.frame.activePlayerIndex], range(0, state.config.players))
+
+    // this makes it so we dont look at the current player's landscape... prevent work contract on yourself
     const foundWithPlayer = find(
       (i) => !!findBuildingWithoutOffset(building)(state.players[i].landscape),
       playerIndexes

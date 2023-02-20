@@ -1,5 +1,6 @@
-import { pipe } from 'ramda'
-import { clergyForColor, getCost, subtractCoins, withActivePlayer } from '../board/player'
+import { identity, pipe } from 'ramda'
+import { clergyForColor, getCost, payCost, withActivePlayer } from '../board/player'
+import { costMoney, parseResourceParam } from '../board/resource'
 import { Tableau, Tile } from '../types'
 
 const takeBackAllClergy = (player: Tableau | undefined): Tableau | undefined => {
@@ -24,12 +25,16 @@ const takeBackAllClergy = (player: Tableau | undefined): Tableau | undefined => 
   }
 }
 
-export const bathhouse = () =>
-  withActivePlayer(
+export const bathhouse = (param = '') => {
+  if (param === '') return identity
+  const input = parseResourceParam(param)
+  if (costMoney(input) < 1) return identity
+  return withActivePlayer(
     pipe(
       //
-      subtractCoins(1),
+      payCost(input),
       getCost({ book: 1, pottery: 1 }),
       takeBackAllClergy
     )
   )
+}

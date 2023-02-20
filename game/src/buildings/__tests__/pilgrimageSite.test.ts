@@ -95,40 +95,35 @@ describe('buildings/pilgrimageSite', () => {
       })
     })
     it('can do one conversion', () => {
-      const s1 = pilgrimageSite('OrBoRqPo')(s0)!
+      const s1 = pilgrimageSite('Bo')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 9,
         ornament: 10,
-        pottery: 10,
-        reliquary: 11,
+        pottery: 11,
+        reliquary: 10,
       })
     })
     it('can do two conversions', () => {
-      const s1 = pilgrimageSite('BoOrPoRqBoOrPoRq')(s0)!
+      const s1 = pilgrimageSite('Or', 'Or')(s0)!
       expect(s1.players[0]).toMatchObject({
-        book: 8,
-        ornament: 10,
+        book: 10,
+        ornament: 8,
         pottery: 10,
         reliquary: 12,
       })
     })
-    it('three conversions just get eaten', () => {
-      const s1 = pilgrimageSite('BoBoBoPoPoPoOrOrOr')(s0)!
+    it('can do two conversions on the same thing', () => {
+      const s1 = pilgrimageSite('Bo', 'Po')(s0)!
       expect(s1.players[0]).toMatchObject({
-        book: 7,
-        ornament: 9,
-        pottery: 9,
-        reliquary: 12,
+        book: 9,
+        ornament: 11,
+        pottery: 10,
+        reliquary: 10,
       })
     })
-    it('handles unbalanced input', () => {
-      const s1 = pilgrimageSite('BoBoPoOrOr')(s0)!
-      expect(s1.players[0]).toMatchObject({
-        book: 8,
-        ornament: 9,
-        pottery: 10,
-        reliquary: 11,
-      })
+    it('two conversions on first param will just fail', () => {
+      const s1 = pilgrimageSite('BoBoBo')(s0)!
+      expect(s1).toBeUndefined()
     })
   })
 })

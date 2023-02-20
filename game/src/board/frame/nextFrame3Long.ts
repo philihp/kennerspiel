@@ -1,6 +1,7 @@
 import { Frame, GameCommandEnum, NextUseClergy, SettlementRound, StateReducer } from '../../types'
 import { introduceBuildings } from '../buildings'
 import { introduceGrapeToken, introduceStoneToken } from '../rondel'
+import { introduceSettlements } from '../settlements'
 import { gameEnd } from '../state'
 import { allPriorsComeBack } from './allPriorsComeBack'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
@@ -19,7 +20,7 @@ export const nextFrame3Long: Record<
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
-    upkeep: [rotateRondel, introduceBuildings, standardResources, returnClergyIfPlaced],
+    upkeep: [rotateRondel, introduceBuildings, introduceSettlements, standardResources, returnClergyIfPlaced],
     next: 2,
   },
   2: {
@@ -134,7 +135,7 @@ export const nextFrame3Long: Record<
   // Round 6
   24: {
     currentPlayerIndex: 2,
-    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
     next: 25,
   },
   25: {
@@ -249,7 +250,7 @@ export const nextFrame3Long: Record<
   // Round 11
   47: {
     currentPlayerIndex: 1,
-    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
     next: 48,
   },
   48: {
@@ -345,7 +346,7 @@ export const nextFrame3Long: Record<
   // Round 15
   66: {
     currentPlayerIndex: 2,
-    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
     next: 67,
   },
   67: {
@@ -460,7 +461,7 @@ export const nextFrame3Long: Record<
   // Round 20
   89: {
     currentPlayerIndex: 1,
-    upkeep: [introduceBuildings, rotateRondel, returnClergyIfPlaced],
+    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
     next: 90,
   },
   90: {

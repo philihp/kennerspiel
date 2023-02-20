@@ -1,4 +1,4 @@
-import { filter } from 'ramda'
+import { filter, pipe, range, reduce, reduced } from 'ramda'
 import { match } from 'ts-pattern'
 import {
   LandEnum,
@@ -12,7 +12,7 @@ import {
   StateReducer,
 } from '../types'
 import { terrainForErection } from './erections'
-import { isPrior, withActivePlayer } from './player'
+import { isLayBrother, isPrior, withActivePlayer, withPlayer } from './player'
 
 export const districtPrices = (config: GameCommandConfigParams): number[] =>
   match(config)
@@ -117,13 +117,14 @@ export const moveClergyToOwnBuilding =
     if (state === undefined) return undefined
     if (state.frame.nextUse === NextUseClergy.Free) return state
     const player = state.players[state.frame.activePlayerIndex]
-    const { row, col } = findBuilding(player.landscape, player.landscapeOffset, building)
-    if (row === undefined || col === undefined) return undefined
-    const [land] = player.landscape[row][col]
+    const matrixLocation = findBuildingWithoutOffset(building)(player.landscape)
+    if (matrixLocation === undefined) return undefined
+    const [row, col] = matrixLocation
+    const [land, ,] = player.landscape[row][col]
 
     const priors = player.clergy.filter(isPrior)
     if (state.frame.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
-
+    // ^this line unnecessary
     const nextClergy = match(state.frame.nextUse)
       .with(NextUseClergy.Any, () => player.clergy[0])
       .with(NextUseClergy.OnlyPrior, () => priors[0])
@@ -134,14 +135,85 @@ export const moveClergyToOwnBuilding =
     return withActivePlayer((player) => ({
       ...player,
       landscape: [
-        ...player.landscape.slice(0, row + player.landscapeOffset),
+        ...player.landscape.slice(0, row),
         [
-          ...player.landscape[row + player.landscapeOffset].slice(0, col),
+          ...player.landscape[row].slice(0, col),
           [land, building, nextClergy] as Tile,
-          ...player.landscape[row + player.landscapeOffset].slice(col + 1),
+          ...player.landscape[row].slice(col + 1),
         ],
-        ...player.landscape.slice(row + player.landscapeOffset + 1),
+        ...player.landscape.slice(row + 1),
       ],
       clergy: filter((c) => c !== nextClergy)(player.clergy),
     }))(state)
+  }
+
+const removeClergyFromActivePlayer = (clergy: Clergy): StateReducer =>
+  withActivePlayer((player) => {
+    return {
+      ...player,
+      clergy: filter(isLayBrother, player.clergy),
+    }
+  })
+
+const addClergyToTile =
+  (clergy: Clergy) =>
+  (playerIndex: number, row: number, col: number): StateReducer =>
+    withPlayer(playerIndex)((player) => {
+      if (player === undefined) return undefined
+      const [land, building, _] = player.landscape[row][col]
+      return {
+        ...player,
+        landscape: [
+          ...player.landscape.slice(0, row),
+          [
+            ...player.landscape[row].slice(0, col),
+            // what to do about existingClergy? Just overwrite it for now, but
+            // it might be nice to make it stack when multiple players go there
+            [land, building, clergy],
+            ...player.landscape[row].slice(col + 1),
+          ],
+          ...player.landscape.slice(row + 1),
+        ],
+      }
+    })
+
+const clearBonusRoundPlacement: StateReducer = (state) => {
+  if (state === undefined) return undefined
+  return {
+    ...state,
+    frame: {
+      ...state.frame,
+      bonusRoundPlacement: false,
+    },
+  }
+}
+
+export const moveClergyInBonusRoundTo =
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
+    if (state === undefined) return undefined
+
+    const playerIndexes = range(0, state.config.players)
+    const foundWithPlayer = reduce(
+      (accum: [number, number, number] | undefined, elem: number) => {
+        const searchResult = findBuildingWithoutOffset(building)(state.players[elem].landscape)
+        if (searchResult === undefined) return accum
+        const [searchRow, searchCol] = searchResult
+        const result: [number, number, number] = [elem, searchRow, searchCol]
+        return reduced(result)
+      },
+      undefined as [number, number, number] | undefined,
+      playerIndexes
+    )
+    if (foundWithPlayer === undefined) return undefined
+
+    const [p, r, c] = foundWithPlayer
+    const [prior] = state.players[state.frame.activePlayerIndex].clergy.filter(isPrior)
+
+    return pipe(
+      //
+      removeClergyFromActivePlayer(prior),
+      addClergyToTile(prior)(p, r, c),
+      clearBonusRoundPlacement
+    )(state)
   }

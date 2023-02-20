@@ -16,21 +16,29 @@ export const withRondel =
 
 export const updateRondel =
   (token: TokenName) =>
-  (rondel: Rondel | undefined): Rondel | undefined =>
-    rondel && {
+  (rondel: Rondel | undefined): Rondel | undefined => {
+    if (rondel === undefined) return undefined
+    if (rondel[token] === undefined) return rondel
+    return {
       ...rondel,
       [token]: rondel[token] !== undefined ? rondel.pointingBefore : rondel[token],
     }
+  }
 
-export const introduceToken = (token: 'grape' | 'stone') =>
+const introduceToken = (token: 'grape' | 'stone') =>
   withRondel((rondel) => {
     if (rondel === undefined) return undefined
+    if (rondel[token] !== undefined) return rondel
     return {
-      [token]: rondel?.pointingBefore,
+      ...rondel,
+      [token]: rondel.pointingBefore,
     } as Rondel
   })
-export const introduceGrapeToken = introduceToken('grape')
-export const introduceStoneToken = introduceToken('stone')
+export const introduceGrapeToken: StateReducer = (state) => {
+  if (state?.config?.country !== 'france') return state
+  return introduceToken('grape')(state)
+}
+export const introduceStoneToken: StateReducer = introduceToken('stone')
 
 export const armValues = ({ length, players }: GameCommandConfigParams) => {
   if (players === 2 && length === 'short') {
