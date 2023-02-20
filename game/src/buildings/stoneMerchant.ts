@@ -5,16 +5,12 @@ import { StateReducer } from '../types'
 
 export const stoneMerchant = (param = ''): StateReducer => {
   const inputs = parseResourceParam(param)
-  const payCostOfInputs = payCost(inputs)
-  const getStoneInPower = getCost({ stone: Math.floor(Math.min(costEnergy(inputs), costFood(inputs) / 2, 5)) })
-  return (state) =>
-    state &&
-    withActivePlayer(
+  const stone = Math.floor(Math.min(costEnergy(inputs), costFood(inputs) / 2, 5))
+  return withActivePlayer(
+    pipe(
       //
-      pipe(
-        //
-        payCostOfInputs,
-        getStoneInPower
-      )
-    )(state)
+      payCost(inputs),
+      getCost({ stone })
+    )
+  )
 }
