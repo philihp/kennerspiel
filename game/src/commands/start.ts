@@ -4,7 +4,6 @@ import { pipe } from 'ramda'
 import { nextFrame } from '../board/frame'
 import { districtPrices, makeLandscape, plotPrices } from '../board/landscape'
 import { clergyForColor } from '../board/player'
-import { roundSettlements } from '../board/settlements'
 import {
   GameCommandStartParams,
   GameStatePlaying,
@@ -65,7 +64,7 @@ export const start = (
       color: shuffledColors[i],
       landscape: makeLandscape(shuffledColors[i]),
       clergy: clergyForColor(shuffledColors[i]),
-      settlements: roundSettlements(player.color, SettlementRound.S),
+      settlements: [],
     }))
 
   const newState: GameStatePlaying = {
@@ -82,8 +81,6 @@ export const start = (
       clay: 0,
       coin: 0,
       wood: 0,
-      grape: 0,
-      stone: 0,
       joker: 0,
     },
     wonders: 8,
