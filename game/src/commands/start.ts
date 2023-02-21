@@ -6,6 +6,7 @@ import { districtPrices, makeLandscape, plotPrices } from '../board/landscape'
 import { clergyForColor } from '../board/player'
 import {
   GameCommandStartParams,
+  GameConfigPlayers,
   GameStatePlaying,
   GameStateSetup,
   GameStatusEnum,
@@ -21,8 +22,12 @@ export const start = (
 ): GameStatePlaying | undefined => {
   if (state.rondel === undefined) return undefined
   if (state.config === undefined) return undefined
-  if (state.config.players === undefined) return undefined
-  if (colors.length !== state.config.players) return undefined
+
+  if (colors.length <= 0 || colors.length > 3) return undefined
+  const config = {
+    ...state.config,
+    players: (colors.length + 1) as GameConfigPlayers,
+  }
 
   const randGen0 = newRandGen(seed)
   const [playerOrderSeed, randGen1] = randNext(randGen0)
@@ -69,7 +74,7 @@ export const start = (
 
   const newState: GameStatePlaying = {
     ...state,
-    config: state.config,
+    config,
     randGen: randGen1,
     status: GameStatusEnum.PLAYING,
     players,
