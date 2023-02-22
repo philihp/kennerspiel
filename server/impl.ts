@@ -1,7 +1,7 @@
 import { Methods, Context } from "./.hathora/methods";
 import { Response } from "../api/base";
 import {
-  EngineStatus,
+  EngineStatus,EngineTableau,
   Color,
   Country,
   Length,
@@ -15,14 +15,8 @@ import {
   IMoveRequest,
 } from "../api/types";
 import {
-  GameState,
-  GameCommandEnum,
-  GameStatusEnum,
-  GameConfigCountry
-} from '../game/src/types'
-import {
-  reducer, initialState
-} from '../game/src';
+  reducer, initialState, GameState, Tableau, Tile
+} from 'hathora-et-labora-game';
 
 type InternalUser = {
   id: UserId
@@ -34,16 +28,46 @@ type InternalState = {
   users: InternalUser[]
 }
 
-const engineStatusAdapter = (status: GameStatusEnum): EngineStatus => {
+const statusDongle = (status: string): EngineStatus => {
   switch(status) {
-    case GameStatusEnum.SETUP:
+    case 'SETUP':
       return EngineStatus.SETUP;
-    case GameStatusEnum.PLAYING:
-      return EngineStatus.PLAYING;
-    case GameStatusEnum.FINISHED:
+    case 'FINISHED':
       return EngineStatus.FINISHED;
+    case 'PLAYING':
+    default:
+      return EngineStatus.PLAYING;
   }
 }
+const colorDongle = (color: string): Color => {
+  switch(color) {
+    case 'R':
+      return Color.Red;
+    case 'G':
+      return Color.Green;
+    case 'B':
+      return Color.Blue;
+    case 'W':
+    default:
+      return Color.White;
+  }
+}
+
+const tileDongle = (tile: Tile): string[] => {
+  return tile as string[]
+}
+
+const tableauDongle = (player: Tableau):EngineTableau => {
+  return {
+    ...player,
+    color: colorDongle(player.color),
+    landscape: player.landscape.map(
+      (landscapeRow) => landscapeRow.map(tileDongle)
+    )
+  }
+}
+
+
 export class Impl implements Methods<InternalState> {
   initialize(ctx: Context, request: IInitializeRequest): InternalState {
     return {
@@ -53,9 +77,7 @@ export class Impl implements Methods<InternalState> {
   }
   join(state: InternalState, userId: UserId, ctx: Context, request: IJoinRequest): Response {
     const { color } = request
-    if(state.users.length >= 4) return Response.error("Game already has 4 players")
-    if(state.users.filter(u => u.color === color).length > 0) return Response.error("Color already taken")
-    state.users = state.users.filter(u => u.id !== userId).concat({
+    state.users = state.users.filter(u => u.id !== userId && u.color !== color).concat({
       id: userId, color
     })
     return Response.ok()
@@ -65,7 +87,7 @@ export class Impl implements Methods<InternalState> {
     if(request.country !== Country.france) return Response.error('Only the France variant is implemented');
     const country = 'france'
     const length = request.length === Length.long ? 'long' : 'short'
-    const newState = reducer(state.game, [GameCommandEnum.CONFIG, players, country, length])
+    const newState = reducer(state.game, ['CONFIG', players, country, length])
     if(newState === undefined) return Response.error('Invalid config')
     state.game = newState
     return Response.ok()
@@ -84,7 +106,7 @@ export class Impl implements Methods<InternalState> {
           return 'W'
       }
     })
-    const command = [GameCommandEnum.START, seed, ...colors]
+    const command = ['START', seed, ...colors]
     const newState = reducer(state.game, command)
     if(newState === undefined) return Response.error(`Invalid command ${JSON.stringify(command, undefined, 2)}`)
     state.game = newState
@@ -97,22 +119,35 @@ export class Impl implements Methods<InternalState> {
     state.game = newState
     return Response.ok()
   }
-  getUserState(state: InternalState, userId: UserId): EngineState {  
+  getUserState(state: InternalState, userId: UserId): EngineState {
+    if(state.game.status === 'PLAYING') {
+      return {
+        users: state.users as User[],
+        status: statusDongle(state.game.status),
+        config: {
+          country: Country.france,
+          length: state.game.config?.length === 'short' ? Length.short : Length.long,
+        },
+        rondel: state.game.rondel,
+        wonders:state.game.wonders,
+        players: state.game.players.map(tableauDongle),
+        neutralPlayer: undefined,
+        buildings: state.game.buildings,
+        plotPurchasePrices: state.game.plotPurchasePrices,
+        districtPurchasePrices: state.game.districtPurchasePrices,
+        frame: state.game.frame
+        // this game has fully open info, specifically, do not leak randGen...
+        // currently it's just used for player order and neutral player color,
+        // it is concievable that a new variant could have a stochastic element,
+        // such as the stage cards in Agricola
+      }
+    }
     return {
       users: state.users as User[],
-      status: engineStatusAdapter(state.game.status),
-      config: {
-        country: Country.france,
-        length: state.game.config?.length === 'short' ? Length.short : Length.long,
-      },
-      rondel: undefined, 
-      wonders: undefined,
-      players: undefined,
-      neutralPlayer: undefined,
+      status: statusDongle(state.game.status),
       buildings: [],
       plotPurchasePrices: [],
       districtPurchasePrices: [],
-      frame: undefined
     }
   }
 }
