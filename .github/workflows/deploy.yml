@@ -20,7 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm ci
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
       - run: npm install hathora -g
       - run: APP_SECRET=${{ secrets.HATHORA_APP_SECRET }} hathora build --only client
       - run: echo '/* /index.html 200' > client/web/dist/_redirects;
