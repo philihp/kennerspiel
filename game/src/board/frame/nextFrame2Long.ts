@@ -1,4 +1,4 @@
-import { Frame, StateReducer } from '../../types'
+import { Frame, FrameFlow, StateReducer } from '../../types'
 
 // 2p long game...
 // each round:
@@ -14,13 +14,7 @@ import { Frame, StateReducer } from '../../types'
 // each player can build at most 1 landscape every round
 // ending when after settlement D, when there are <= 3 buildings in display finish current round
 
-export const nextFrame2Long: Record<
-  number,
-  {
-    upkeep?: StateReducer[]
-    next: number
-  } & Partial<Frame>
-> = {
+export const nextFrame2Long: FrameFlow = {
   // TODO
   1: {
     next: 1,

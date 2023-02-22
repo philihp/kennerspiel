@@ -1,4 +1,4 @@
-import { Frame, GameCommandEnum, NextUseClergy, SettlementRound, StateReducer } from '../../types'
+import { Frame, FrameFlow, GameCommandEnum, NextUseClergy, SettlementRound, StateReducer } from '../../types'
 import { introduceBuildings } from '../buildings'
 import { introduceGrapeToken, introduceStoneToken } from '../rondel'
 import { introduceSettlements } from '../settlements'
@@ -8,13 +8,7 @@ import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondel } from './rotateRondel'
 import { standardResources } from './standardResources'
 
-export const nextFrame3Long: Record<
-  number,
-  {
-    upkeep?: StateReducer[]
-    next: number
-  } & Partial<Frame>
-> = {
+export const nextFrame3Long: FrameFlow = {
   // Round 1
   1: {
     startingPlayer: 0,
