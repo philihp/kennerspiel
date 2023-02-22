@@ -1,5 +1,5 @@
 import { initialState } from '../../state'
-import { GameStatusEnum, PlayerColor } from '../../types'
+import { GameCommandConfigParams, GameStatusEnum, PlayerColor } from '../../types'
 import { config } from '../config'
 import { start } from '../start'
 
@@ -8,7 +8,6 @@ import { start } from '../start'
 describe('commands/start', () => {
   describe('start', () => {
     it('cannot start before configured', () => {
-      expect.assertions(1)
       const dst = start(
         {
           ...initialState,
@@ -20,7 +19,6 @@ describe('commands/start', () => {
     })
 
     it('cannot start without config', () => {
-      expect.assertions(1)
       const dst = start(
         {
           ...initialState,
@@ -35,7 +33,6 @@ describe('commands/start', () => {
     })
 
     it('can start after being configured', () => {
-      expect.assertions(2)
       const dst = start(
         {
           ...initialState,
@@ -55,8 +52,26 @@ describe('commands/start', () => {
       expect(dst?.players).toHaveLength(2)
     })
 
+    it('will create a game with 3 players only', () => {
+      const dst = start(
+        {
+          ...initialState,
+          status: GameStatusEnum.SETUP,
+          rondel: {
+            pointingBefore: 0,
+          },
+          config: {
+            country: 'france',
+            length: 'long',
+            // players will be filled in by the number of colors given
+          } as GameCommandConfigParams,
+        },
+        { seed: 1, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue] }
+      )
+      expect(dst?.players).toHaveLength(3)
+    })
+
     it('creates a tableau for every player', () => {
-      expect.assertions(10)
       const dst = start(
         {
           ...initialState,
@@ -97,7 +112,6 @@ describe('commands/start', () => {
     })
 
     it('responds to alternate starting color order', () => {
-      expect.assertions(8)
       const dst = start(
         {
           ...initialState,

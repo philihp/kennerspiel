@@ -1,4 +1,4 @@
-import { Frame, StateReducer } from '../../types'
+import { Frame, FrameFlow, StateReducer } from '../../types'
 
 // 2p short game...
 // alternate turns:
@@ -27,13 +27,7 @@ import { Frame, StateReducer } from '../../types'
 // Clergy return for both players at the end of each turn
 // ending when after settlement D, when there are <= 1 buildings in display. Finish current turn and other player gets 1 final action.
 
-export const nextFrame2Short: Record<
-  number,
-  {
-    upkeep?: StateReducer[]
-    next: number
-  } & Partial<Frame>
-> = {
+export const nextFrame2Short: FrameFlow = {
   // TODO
   1: {
     next: 1,

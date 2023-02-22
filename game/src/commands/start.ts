@@ -1,18 +1,17 @@
 import fastShuffle from 'fast-shuffle'
 import { newRandGen, randNext } from 'fn-pcg'
-import { pipe } from 'ramda'
+import { pipe, range } from 'ramda'
 import { nextFrame } from '../board/frame'
 import { districtPrices, makeLandscape, plotPrices } from '../board/landscape'
 import { clergyForColor } from '../board/player'
 import {
   GameCommandStartParams,
+  GameConfigPlayers,
   GameStatePlaying,
   GameStateSetup,
   GameStatusEnum,
   NextUseClergy,
-  PlayerColor,
   SettlementRound,
-  Tableau,
 } from '../types'
 
 export const start = (
@@ -21,20 +20,21 @@ export const start = (
 ): GameStatePlaying | undefined => {
   if (state.rondel === undefined) return undefined
   if (state.config === undefined) return undefined
-  if (state.config.players === undefined) return undefined
-  if (colors.length !== state.config.players) return undefined
+
+  if (colors.length < 1 || colors.length > 4) return undefined
+  const config = {
+    ...state.config,
+    players: colors.length as GameConfigPlayers,
+  }
 
   const randGen0 = newRandGen(seed)
   const [playerOrderSeed, randGen1] = randNext(randGen0)
   const shuffledColors = fastShuffle(playerOrderSeed, colors)
 
-  const players = new Array<Tableau>(state.config.players)
-    .fill({
-      color: PlayerColor.Red, // placeholder
-      clergy: [],
-      landscape: [[]],
+  const playerIndexes = range(0, colors.length)
+  const players = playerIndexes.map((i) => {
+    return {
       landscapeOffset: 0,
-      settlements: [],
       wonders: 0,
       peat: 0,
       penny: 0,
@@ -58,18 +58,16 @@ export const start = (
       wine: 0,
       beer: 0,
       reliquary: 0,
-    })
-    .map((player, i) => ({
-      ...player,
       color: shuffledColors[i],
       landscape: makeLandscape(shuffledColors[i]),
       clergy: clergyForColor(shuffledColors[i]),
       settlements: [],
-    }))
+    }
+  })
 
   const newState: GameStatePlaying = {
     ...state,
-    config: state.config,
+    config,
     randGen: randGen1,
     status: GameStatusEnum.PLAYING,
     players,
