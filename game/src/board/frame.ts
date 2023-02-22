@@ -63,6 +63,7 @@ const runProgression =
       }
     )(state)
   }
+
 export const nextFrame: StateReducer = (state) =>
   match(state)
     .with({ config: { players: 3, length: 'long' } }, runProgression(nextFrame3Long))

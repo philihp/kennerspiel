@@ -1,86 +1,153 @@
 import { Methods, Context } from "./.hathora/methods";
 import { Response } from "../api/base";
 import {
-  GameStatus,
-  Player,
-  State,
+  EngineStatus,EngineTableau,
   Color,
+  Country,
+  Length,
+  User,
+  EngineState,
   UserId,
   IInitializeRequest,
-  IResetGameRequest,
-  IJoinGameRequest,
-  IStartGameRequest,
-  IEndGameRequest,
-  IMakeMoveRequest,
+  IJoinRequest,
+  IConfigRequest,
+  IStartRequest,
+  IMoveRequest,
 } from "../api/types";
+import {
+  reducer, initialState, GameState, Tableau, Tile
+} from 'hathora-et-labora-game';
 
-type InternalState = State;
+type InternalUser = {
+  id: UserId
+  color: Color
+}
 
-export class Impl implements Methods<State> {
-  initialize(ctx: Context, request: IInitializeRequest): State {
+type InternalState = {
+  game: GameState
+  users: InternalUser[]
+}
+
+const statusDongle = (status: string): EngineStatus => {
+  switch(status) {
+    case 'SETUP':
+      return EngineStatus.SETUP;
+    case 'FINISHED':
+      return EngineStatus.FINISHED;
+    case 'PLAYING':
+    default:
+      return EngineStatus.PLAYING;
+  }
+}
+const colorDongle = (color: string): Color => {
+  switch(color) {
+    case 'R':
+      return Color.Red;
+    case 'G':
+      return Color.Green;
+    case 'B':
+      return Color.Blue;
+    case 'W':
+    default:
+      return Color.White;
+  }
+}
+
+const tileDongle = (tile: Tile): string[] => {
+  return tile as string[]
+}
+
+const tableauDongle = (player: Tableau):EngineTableau => {
+  return {
+    ...player,
+    color: colorDongle(player.color),
+    landscape: player.landscape.map(
+      (landscapeRow) => landscapeRow.map(tileDongle)
+    )
+  }
+}
+
+
+export class Impl implements Methods<InternalState> {
+  initialize(ctx: Context, request: IInitializeRequest): InternalState {
     return {
-      status: GameStatus.SEATING,
-      players: [],
-      active: undefined,
-      moves: [],
+      game: initialState,
+      users: []
     }
   }
-
-  resetGame(state: State, userId: UserId, ctx: Context, request: IResetGameRequest): Response {
-    if (state.status === GameStatus.STARTED) return Response.error('Cannot reset a game currently in progress')
-    state.status = GameStatus.SEATING
-    state.players = []
-    state.active = undefined
-    state.moves = []
+  join(state: InternalState, userId: UserId, ctx: Context, request: IJoinRequest): Response {
+    const { color } = request
+    state.users = state.users.filter(u => u.id !== userId && u.color !== color).concat({
+      id: userId, color
+    })
     return Response.ok()
   }
-
-  joinGame(state: State, userId: string, ctx: Context, request: IJoinGameRequest): Response {
-    if (state.players.find((p) => p.id === userId)) {
-      return Response.error('Already joined')
-    }
-    if (state.status === GameStatus.STARTED) {
-      return Response.error('Game has started')
-    }
-    if (state.players.some((player: Player) => player.color === request.color)) {
-      return Response.error('Someone is already that color')
-    }
-    state.players.push({ id: userId, color: request.color, pending: [] })
+  config(state: InternalState, userId: UserId, ctx: Context, request: IConfigRequest): Response {
+    const players = `${state.users.length+1}`
+    if(request.country !== Country.france) return Response.error('Only the France variant is implemented');
+    const country = 'france'
+    const length = request.length === Length.long ? 'long' : 'short'
+    const newState = reducer(state.game, ['CONFIG', players, country, length])
+    if(newState === undefined) return Response.error('Invalid config')
+    state.game = newState
     return Response.ok()
   }
-
-  endGame(state: State, userId: string, ctx: Context, request: IEndGameRequest): Response {
-    if (state.status === GameStatus.SEATING) {
-      return Response.error('Game has not started yet.')
-    }
-    state.status = GameStatus.FINISHED
+  start(state: InternalState, userId: UserId, ctx: Context, request: IStartRequest): Response {
+    const seed = `${ctx.chance.natural({min: 1, max: 999999999})}`
+    const colors = state.users.map(({color}) => {
+      switch(color) {
+        case Color.Red:
+          return 'R'
+        case Color.Blue:
+          return 'B'
+        case Color.Green:
+          return 'G'
+        case Color.White:
+          return 'W'
+      }
+    })
+    const command = ['START', seed, ...colors]
+    const newState = reducer(state.game, command)
+    if(newState === undefined) return Response.error(`Invalid command ${JSON.stringify(command, undefined, 2)}`)
+    state.game = newState
     return Response.ok()
   }
-
-  startGame(state: State, userId: string, ctx: Context, request: IStartGameRequest): Response {
-    if (state.players.length === 0) {
-      return Response.error('At least one player must join before the game can begin')
-    }
-    if (state.status === GameStatus.STARTED) {
-      return Response.error('Game has already started')
-    }
-    if (state.status === GameStatus.FINISHED) {
-      return Response.error('Game has already finished')
-    }
-    state.status = GameStatus.STARTED
+  move(state: InternalState, userId: UserId, ctx: Context, request: IMoveRequest): Response {
+    const command = request.command.split(/\s+/)
+    const newState = reducer(state.game, command)
+    if(newState === undefined) return Response.error(`Invalid command ${command}`)
+    state.game = newState
     return Response.ok()
   }
-
-  makeMove(state: State, userId: UserId, ctx: Context, request: IMakeMoveRequest): Response {
-    const thisPlayer = state.players.find(({ id }) => id === userId)
-    if (thisPlayer === undefined) {
-      return Response.error(`${userId} is not a player of this game`)
+  getUserState(state: InternalState, userId: UserId): EngineState {
+    if(state.game.status === 'PLAYING') {
+      return {
+        users: state.users as User[],
+        status: statusDongle(state.game.status),
+        config: {
+          country: Country.france,
+          length: state.game.config?.length === 'short' ? Length.short : Length.long,
+        },
+        rondel: state.game.rondel,
+        wonders:state.game.wonders,
+        players: state.game.players.map(tableauDongle),
+        neutralPlayer: undefined,
+        buildings: state.game.buildings,
+        plotPurchasePrices: state.game.plotPurchasePrices,
+        districtPurchasePrices: state.game.districtPurchasePrices,
+        frame: state.game.frame
+        // this game has fully open info, specifically, do not leak randGen...
+        // currently it's just used for player order and neutral player color,
+        // it is concievable that a new variant could have a stochastic element,
+        // such as the stage cards in Agricola
+      }
     }
-    thisPlayer.pending.push(request.command)
-    return Response.ok()
-  }
-
-  getUserState(state: State, userId: UserId): State {
-    return state
+    return {
+      users: state.users as User[],
+      status: statusDongle(state.game.status),
+      buildings: [],
+      plotPurchasePrices: [],
+      districtPurchasePrices: [],
+    }
   }
 }

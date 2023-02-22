@@ -26,5 +26,5 @@ export const pushArm = (expireAfterTen = false) =>
     }
   })
 
-export const rotateRondel = pushArm(false)
+export const rotateRondel = pushArm()
 export const rotateRondelWithExpire = pushArm(true)
