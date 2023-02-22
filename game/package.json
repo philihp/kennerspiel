@@ -1,6 +1,20 @@
 {
-  "name": "hathora-et-labora-game",
   "version": "0.0.8",
+  "name": "hathora-et-labora-game",
+  "description": "Plays Uwe Rosenberg's Ora et Labora for the Hathora engine. It reduces a list of moves into a board game state.",
+  "keywords": [
+    "boardgame",
+    "hathora",
+    "ora-et-labora",
+    "uwe-rosenberg"
+  ],
+  "homepage": "https://ora-et-labora.kennerspiel.com",
+  "license": "GPL-3.0",
+  "author": {
+    "name": "Philihp Busby",
+    "email": "philihp@gmail.com",
+    "url": "https://philihp.com"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "test": "jest",
@@ -20,9 +34,9 @@
   "devDependencies": {
     "@philihp/eslint-config": "6.0.2",
     "@philihp/prettier-config": "1.0.0",
-    "@tsconfig/node16": "^1.0.3",
+    "@tsconfig/node16": "1.0.3",
     "@types/jest": "29.4.0",
-    "@types/ramda": "^0.28.20",
+    "@types/ramda": "0.28.20",
     "@typescript-eslint/eslint-plugin": "5.52.0",
     "@typescript-eslint/parser": "5.52.0",
     "eslint": "8.34.0",
