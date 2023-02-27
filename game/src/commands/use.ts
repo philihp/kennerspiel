@@ -2,48 +2,50 @@ import { pipe } from 'ramda'
 import { match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
 import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
-import { bakery } from '../buildings/bakery'
-import { bathhouse } from '../buildings/bathhouse'
-import { buildersMarket } from '../buildings/buildersMarket'
-import { calefactory } from '../buildings/calefactory'
-import { carpentry } from '../buildings/carpentry'
-import { castle } from '../buildings/castle'
-import { chamberOfWonders } from '../buildings/chamberOfWonders'
-import { clayMound } from '../buildings/clayMound'
-import { cloisterChapterHouse } from '../buildings/cloisterChapterHouse'
-import { cloisterChurch } from '../buildings/cloisterChurch'
-import { cloisterCourtyard } from '../buildings/cloisterCourtyard'
-import { cloisterGarden } from '../buildings/cloisterGarden'
-import { cloisterLibrary } from '../buildings/cloisterLibrary'
-import { cloisterOffice } from '../buildings/cloisterOffice'
-import { cloisterWorkshop } from '../buildings/cloisterWorkshop'
-import { dormitory } from '../buildings/dormitory'
-import { estate } from '../buildings/estate'
-import { farmyard } from '../buildings/farmyard'
-import { financedEstate } from '../buildings/financedEstate'
-import { forgersWorkshop } from '../buildings/forgersWorkshop'
-import { fuelMerchant } from '../buildings/fuelMerchant'
-import { grainStorage } from '../buildings/grainStorage'
-import { grapevine } from '../buildings/grapevine'
-import { harborPromenade } from '../buildings/harborPromenade'
-import { hospice } from '../buildings/hospice'
-import { houseOfTheBrotherhood } from '../buildings/houseOfTheBrotherhood'
-import { inn } from '../buildings/inn'
-import { market } from '../buildings/market'
-import { palace } from '../buildings/palace'
-import { peatCoalKiln } from '../buildings/peatCoalKiln'
-import { pilgrimageSite } from '../buildings/pilgrimageSite'
-import { printingOffice } from '../buildings/printingOffice'
-import { priory } from '../buildings/priory'
-import { quarry } from '../buildings/quarry'
-import { sacristy } from '../buildings/sacristy'
-import { shippingCompany } from '../buildings/shippingCompany'
-import { shipyard } from '../buildings/shipyard'
-import { slaughterhouse } from '../buildings/slaughterhouse'
-import { stoneMerchant } from '../buildings/stoneMerchant'
-import { townEstate } from '../buildings/townEstate'
-import { windmill } from '../buildings/windmill'
-import { winery } from '../buildings/winery'
+import {
+  bakery,
+  bathhouse,
+  buildersMarket,
+  calefactory,
+  carpentry,
+  castle,
+  chamberOfWonders,
+  clayMound,
+  cloisterChapterHouse,
+  cloisterChurch,
+  cloisterCourtyard,
+  cloisterGarden,
+  cloisterLibrary,
+  cloisterOffice,
+  cloisterWorkshop,
+  dormitory,
+  estate,
+  farmyard,
+  financedEstate,
+  forgersWorkshop,
+  fuelMerchant,
+  grainStorage,
+  grapevine,
+  harborPromenade,
+  hospice,
+  houseOfTheBrotherhood,
+  inn,
+  market,
+  palace,
+  peatCoalKiln,
+  pilgrimageSite,
+  printingOffice,
+  priory,
+  quarry,
+  sacristy,
+  shippingCompany,
+  shipyard,
+  slaughterhouse,
+  stoneMerchant,
+  townEstate,
+  windmill,
+  winery,
+} from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
 const checkIfUseCanHappen =
@@ -100,9 +102,9 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       )
       .with(BuildingEnum.Castle, castle)
       .with(BuildingEnum.ChamberOfWonders, () => chamberOfWonders(params[0]))
-      .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () =>
-        clayMound(params[0])
-      )
+      .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () => {
+        return clayMound(params[0])
+      })
       .with(BuildingEnum.CloisterChapterHouse, cloisterChapterHouse)
       .with(BuildingEnum.CloisterChurch, () => cloisterChurch(params[0]))
       .with(BuildingEnum.CloisterCourtyard, () => cloisterCourtyard(params[0], params[1]))
