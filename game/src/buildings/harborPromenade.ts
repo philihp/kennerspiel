@@ -6,6 +6,6 @@ export const harborPromenade = () =>
       wood: 1,
       wine: 1,
       penny: 1,
-      pottery: 1,
+      ceramic: 1,
     })
   )

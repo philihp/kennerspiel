@@ -32,10 +32,10 @@ describe('buildings/cloisterWorkshop', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 10,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -81,7 +81,7 @@ describe('buildings/cloisterWorkshop', () => {
     it('allows noop with null', () => {
       const s1 = cloisterWorkshop()(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        pottery: 0,
+        ceramic: 0,
         ornament: 0,
         clay: 10,
         stone: 10,
@@ -92,7 +92,7 @@ describe('buildings/cloisterWorkshop', () => {
     it('allows noop with empty string', () => {
       const s1 = cloisterWorkshop('')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        pottery: 0,
+        ceramic: 0,
         ornament: 0,
         clay: 10,
         stone: 10,
@@ -100,10 +100,10 @@ describe('buildings/cloisterWorkshop', () => {
       })
     })
 
-    it('plenty of coal, make three pottery and 1 ornament', () => {
+    it('plenty of coal, make three ceramic and 1 ornament', () => {
       const s1 = cloisterWorkshop('ClClClSnCoCoCoCo')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        pottery: 3,
+        ceramic: 3,
         ornament: 1,
         clay: 7,
         stone: 9,
@@ -114,7 +114,7 @@ describe('buildings/cloisterWorkshop', () => {
     it('when abundant clay/stone, prefer to make an ornament', () => {
       const s1 = cloisterWorkshop('ClClClSnCo')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        pottery: 2,
+        ceramic: 2,
         ornament: 1,
         clay: 7, // but still everything it is given is consumed
         stone: 9,
@@ -125,7 +125,7 @@ describe('buildings/cloisterWorkshop', () => {
     it('eats all the energy', () => {
       const s1 = cloisterWorkshop('CoSn')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        pottery: 0,
+        ceramic: 0,
         ornament: 1,
         clay: 10,
         stone: 9,
@@ -133,10 +133,10 @@ describe('buildings/cloisterWorkshop', () => {
       })
     })
 
-    it('can be used for only pottery', () => {
+    it('can be used for only ceramic', () => {
       const s1 = cloisterWorkshop('CoClCl')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        pottery: 2,
+        ceramic: 2,
         ornament: 0,
         clay: 8,
         stone: 10,

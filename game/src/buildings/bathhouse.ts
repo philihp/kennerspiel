@@ -33,7 +33,7 @@ export const bathhouse = (param = '') => {
     pipe(
       //
       payCost(input),
-      getCost({ book: 1, pottery: 1 }),
+      getCost({ book: 1, ceramic: 1 }),
       takeBackAllClergy
     )
   )

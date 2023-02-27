@@ -9,7 +9,7 @@ export const dormitory = (param = '') => {
     pipe(
       //
       payCost(input),
-      getCost({ pottery: 1, book: iterations })
+      getCost({ ceramic: 1, book: iterations })
     )
   )
 }

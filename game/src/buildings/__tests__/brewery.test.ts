@@ -29,13 +29,13 @@ describe('buildings/brewery', () => {
       grain: 0,
       sheep: 0,
       stone: 0,
-      hops: 0,
+      malt: 0,
       grape: 0,
       nickel: 0,
       flour: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -89,7 +89,7 @@ describe('buildings/brewery', () => {
           {
             ...s0.players[0],
             grain: 10,
-            hops: 10,
+            malt: 10,
             wood: 10,
             beer: 10,
           },
@@ -106,7 +106,7 @@ describe('buildings/brewery', () => {
           {
             ...s0.players[0],
             grain: 10,
-            hops: 10,
+            malt: 10,
             wood: 10,
             beer: 10,
           },
@@ -116,7 +116,7 @@ describe('buildings/brewery', () => {
       const s2 = brewery('WoHoHoBeBe')(s1)!
       expect(s2.players[0]).toMatchObject({
         grain: 10,
-        hops: 8,
+        malt: 8,
         wood: 9,
         beer: 10,
         penny: 3,
@@ -130,7 +130,7 @@ describe('buildings/brewery', () => {
           {
             ...s0.players[0],
             grain: 10,
-            hops: 10,
+            malt: 10,
             wood: 10,
             beer: 10,
           },
@@ -140,7 +140,7 @@ describe('buildings/brewery', () => {
       const s2 = brewery('WoHoHoBeBe')(s1)!
       const s3 = brewery('WoHoHoBe')(s2)!
       expect(s3.players[0]).toMatchObject({
-        hops: 6,
+        malt: 6,
         wood: 8,
         beer: 11,
         nickel: 1,
@@ -154,7 +154,7 @@ describe('buildings/brewery', () => {
           {
             ...s0.players[0],
             grain: 10,
-            hops: 10,
+            malt: 10,
             wood: 10,
             beer: 10,
           },
@@ -164,7 +164,7 @@ describe('buildings/brewery', () => {
       const s2 = brewery('WoHoHoBeBe')(s1)!
       expect(s2.players[0]).toMatchObject({
         grain: 10,
-        hops: 8,
+        malt: 8,
         wood: 9,
         beer: 10,
         penny: 3,
@@ -172,7 +172,7 @@ describe('buildings/brewery', () => {
       })
       const s3 = brewery('WoHoHo')(s2)!
       expect(s3.players[0]).toMatchObject({
-        hops: 6,
+        malt: 6,
         wood: 8,
         beer: 12,
         nickel: 1,
@@ -186,7 +186,7 @@ describe('buildings/brewery', () => {
           {
             ...s0.players[0],
             grain: 10,
-            hops: 10,
+            malt: 10,
             wood: 10,
             beer: 10,
           },
@@ -196,7 +196,7 @@ describe('buildings/brewery', () => {
       const s2 = brewery('WoHoHoBeBe')(s1)!
       expect(s2.players[0]).toMatchObject({
         grain: 10,
-        hops: 8,
+        malt: 8,
         wood: 9,
         beer: 10,
         penny: 3,
@@ -205,7 +205,7 @@ describe('buildings/brewery', () => {
       const s3 = brewery('WoHo')(s2)!
       expect(s3.players[0]).toMatchObject({
         beer: 11,
-        hops: 7,
+        malt: 7,
         nickel: 1,
         penny: 3,
         wood: 8,
@@ -218,7 +218,7 @@ describe('buildings/brewery', () => {
           {
             ...s0.players[0],
             grain: 10,
-            hops: 10,
+            malt: 10,
             wood: 10,
             beer: 10,
           },
@@ -228,7 +228,7 @@ describe('buildings/brewery', () => {
       const s2 = brewery('BeBe')(s1)!
       expect(s2.players[0]).toMatchObject({
         grain: 10,
-        hops: 10,
+        malt: 10,
         wood: 10,
         beer: 8,
         nickel: 1,
@@ -242,7 +242,7 @@ describe('buildings/brewery', () => {
           {
             ...s0.players[0],
             grain: 10,
-            hops: 10,
+            malt: 10,
             wood: 10,
             beer: 10,
           },
@@ -252,7 +252,7 @@ describe('buildings/brewery', () => {
       const s2 = brewery('WoHoBeBe')(s1)!
       expect(s2.players[0]).toMatchObject({
         grain: 10,
-        hops: 9,
+        malt: 9,
         wood: 9,
         beer: 9,
         nickel: 1,
@@ -266,7 +266,7 @@ describe('buildings/brewery', () => {
           {
             ...s0.players[0],
             grain: 10,
-            hops: 10,
+            malt: 10,
             wood: 10,
             beer: 0,
           },

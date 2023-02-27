@@ -32,10 +32,10 @@ describe('buildings/pilgrimageSite', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 10,
-      pottery: 10,
+      ceramic: 10,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -90,7 +90,7 @@ describe('buildings/pilgrimageSite', () => {
       expect(s1.players[0]).toMatchObject({
         book: 10,
         ornament: 10,
-        pottery: 10,
+        ceramic: 10,
         reliquary: 10,
       })
     })
@@ -99,7 +99,7 @@ describe('buildings/pilgrimageSite', () => {
       expect(s1.players[0]).toMatchObject({
         book: 9,
         ornament: 10,
-        pottery: 11,
+        ceramic: 11,
         reliquary: 10,
       })
     })
@@ -108,7 +108,7 @@ describe('buildings/pilgrimageSite', () => {
       expect(s1.players[0]).toMatchObject({
         book: 10,
         ornament: 8,
-        pottery: 10,
+        ceramic: 10,
         reliquary: 12,
       })
     })
@@ -117,7 +117,7 @@ describe('buildings/pilgrimageSite', () => {
       expect(s1.players[0]).toMatchObject({
         book: 9,
         ornament: 11,
-        pottery: 10,
+        ceramic: 10,
         reliquary: 10,
       })
     })

@@ -8,12 +8,12 @@ export const cloisterWorkshop = (clayStoneEnergy = '') => {
   const { clay = 0, stone = 0 } = inputs
   // this will prefer to make an ornament, when energy is short but clay/stone is abundant
   const ornament = Math.min(stone, energy, 1)
-  const pottery = Math.min(clay, 3, energy - ornament)
+  const ceramic = Math.min(clay, 3, energy - ornament)
   return withActivePlayer(
     pipe(
       //
       payCost(inputs),
-      getCost({ pottery, ornament })
+      getCost({ ceramic, ornament })
     )
   )
 }

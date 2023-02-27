@@ -33,10 +33,10 @@ describe('buildings/bathhouse', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -86,7 +86,7 @@ describe('buildings/bathhouse', () => {
       expect(s1.players[0]).toMatchObject({
         penny: 0,
         book: 1,
-        pottery: 1,
+        ceramic: 1,
       })
       expect(s1.players[0].clergy).toContain('PRIB')
       expect(s1.players[0].clergy).toContain('LB1B')

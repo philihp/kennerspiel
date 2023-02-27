@@ -34,10 +34,10 @@ describe('buildings/houseOfTheBrotherhood', () => {
       flour: 0,
       grape: 0,
       nickel: 1,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -68,10 +68,10 @@ describe('buildings/houseOfTheBrotherhood', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -102,10 +102,10 @@ describe('buildings/houseOfTheBrotherhood', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -163,15 +163,22 @@ describe('buildings/houseOfTheBrotherhood', () => {
     })
 
     it('can request 5 when entitled to 6', () => {
-      const s1 = houseOfTheBrotherhood('Ni', 'BoPo')(s0)!
+      const s1 = houseOfTheBrotherhood('Ni', 'BoCe')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 1,
-        pottery: 1,
+        ceramic: 1,
+      })
+    })
+
+    it('can request 6 when entitled to 6', () => {
+      const s1 = houseOfTheBrotherhood('Ni', 'CeCe')(s0)!
+      expect(s1.players[0]).toMatchObject({
+        ceramic: 2,
       })
     })
 
     it('does not allow requesting too much', () => {
-      const s1 = houseOfTheBrotherhood('Ni', 'OrPo')(s0)!
+      const s1 = houseOfTheBrotherhood('Ni', 'OrOr')(s0)!
       expect(s1).toBeUndefined()
     })
   })
@@ -198,10 +205,10 @@ describe('buildings/houseOfTheBrotherhood', () => {
       flour: 0,
       grape: 0,
       nickel: 1,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -232,10 +239,10 @@ describe('buildings/houseOfTheBrotherhood', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -286,8 +293,8 @@ describe('buildings/houseOfTheBrotherhood', () => {
         book: 2,
       })
     })
-    it('3 cloisters gets 4.5 points, so you cant get a book and a pottery', () => {
-      const s1 = houseOfTheBrotherhood('Ni', 'BoPo')(s0)!
+    it('3 cloisters gets 4.5 points, so you cant get a book and a ceramic', () => {
+      const s1 = houseOfTheBrotherhood('Ni', 'BoCe')(s0)!
       expect(s1).toBeUndefined()
     })
   })
@@ -314,10 +321,10 @@ describe('buildings/houseOfTheBrotherhood', () => {
       flour: 0,
       grape: 0,
       nickel: 1,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -366,16 +373,16 @@ describe('buildings/houseOfTheBrotherhood', () => {
       const s1 = houseOfTheBrotherhood('Ni', 'Bo')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 1,
-        pottery: 0,
+        ceramic: 0,
         nickel: 0,
       })
     })
 
     it('gets 1 point per cloister, so 3 can be requested', () => {
-      const s1 = houseOfTheBrotherhood('Ni', 'Po')(s0)!
+      const s1 = houseOfTheBrotherhood('Ni', 'Ce')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 0,
-        pottery: 1,
+        ceramic: 1,
       })
     })
 
@@ -388,7 +395,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
       const s1 = houseOfTheBrotherhood('', '')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 0,
-        pottery: 0,
+        ceramic: 0,
       })
     })
 
@@ -396,7 +403,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
       const s1 = houseOfTheBrotherhood('PnPnPnPnPn', '')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 0,
-        pottery: 0,
+        ceramic: 0,
         nickel: 0,
         penny: 0,
       })

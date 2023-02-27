@@ -326,7 +326,7 @@ export const nextFrame3Short: FrameFlow = {
   54: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ pottery: 1, clay: 1 }))],
+    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ ceramic: 1, clay: 1 }))],
     next: 55,
   },
   55: {

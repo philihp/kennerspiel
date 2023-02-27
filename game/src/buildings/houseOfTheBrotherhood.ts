@@ -3,7 +3,7 @@ import { match } from 'ts-pattern'
 import { isCloisterBuilding } from '../board/buildings'
 import { getCost, subtractCoins, withActivePlayer } from '../board/player'
 import { costMoney, costPoints, parseResourceParam } from '../board/resource'
-import { BuildingEnum, GameCommandConfigParams, GameStatePlaying, Tile } from '../types'
+import { GameCommandConfigParams, GameStatePlaying, Tile } from '../types'
 
 const pointsPerCloister = (config: GameCommandConfigParams) =>
   match(config)

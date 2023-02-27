@@ -388,7 +388,7 @@ export const nextFrame4Short: FrameFlow = {
   // Round 11
   67: {
     currentPlayerIndex: 2,
-    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ pottery: 1, clay: 1 }))],
+    upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ ceramic: 1, clay: 1 }))],
     next: 68,
   },
   68: {

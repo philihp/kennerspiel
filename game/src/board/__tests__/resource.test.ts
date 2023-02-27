@@ -23,6 +23,22 @@ describe('board/resource', () => {
         stone: 1,
       })
     })
+    it('supports backward compatibility of Po to Ce', () => {
+      const res = 'Po'
+      expect(parseResourceParam(res)).toMatchObject({
+        ceramic: 1,
+      })
+    })
+    it('supports backward compatibility of Ho to Ma', () => {
+      const res = 'Ho'
+      expect(parseResourceParam(res)).toMatchObject({
+        malt: 1,
+      })
+    })
+    it('ignores weird values', () => {
+      const res = 'Xx'
+      expect(parseResourceParam(res)).toStrictEqual({})
+    })
     it('handles an empty string', () => {
       const res = ''
       expect(parseResourceParam(res)).toMatchObject({})
