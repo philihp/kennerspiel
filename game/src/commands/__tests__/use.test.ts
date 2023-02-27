@@ -14,6 +14,7 @@ import {
 import {
   bakery,
   bathhouse,
+  brewery,
   buildersMarket,
   calefactory,
   carpentry,
@@ -63,6 +64,7 @@ jest.mock('../../buildings', () => {
     ...jest.requireActual('../../buildings'),
     bakery: jest.fn().mockReturnValue(identity),
     bathhouse: jest.fn().mockReturnValue(identity),
+    brewery: jest.fn().mockReturnValue(identity),
     buildersMarket: jest.fn().mockReturnValue(identity),
     calefactory: jest.fn().mockReturnValue(identity),
     carpentry: jest.fn().mockReturnValue(identity),
@@ -261,6 +263,35 @@ describe('commands/use', () => {
       }
       use(BuildingEnum.ClayMoundR, [])(s1)!
       expect(clayMound).toHaveBeenCalledWith(undefined)
+    })
+    it('can use a building if it is in usableBuildings and nextUse is free and building not forbidden', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+          usableBuildings: [BuildingEnum.Brewery],
+          nextUse: NextUseClergy.Free,
+        },
+      }
+      use(BuildingEnum.Brewery, [])(s1)!
+      expect(brewery).toHaveBeenCalled()
+    })
+    it('does not allow forbidden buildings', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+          usableBuildings: [BuildingEnum.CloisterGarden],
+          unusableBuildings: [BuildingEnum.CloisterGarden],
+          nextUse: NextUseClergy.Free,
+        },
+      }
+      use(BuildingEnum.CloisterGarden, [])(s1)!
+      expect(cloisterGarden).toHaveBeenCalledWith(undefined)
     })
     it('does not allow usage if mainActionUsed and no bonus actions', () => {
       const s1 = {

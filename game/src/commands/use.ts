@@ -5,6 +5,7 @@ import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/land
 import {
   bakery,
   bathhouse,
+  brewery,
   buildersMarket,
   calefactory,
   carpentry,
@@ -61,13 +62,10 @@ const checkIfUseCanHappen =
     // usableBuildings allows AND the building in question isn't in unusableBuildings
     if (
       state.frame.usableBuildings.includes(building) === true &&
-      state.frame.unusableBuildings.includes(building) === false
+      state.frame.unusableBuildings.includes(building) === false &&
+      [NextUseClergy.Free, NextUseClergy.OnlyPrior].includes(state.frame.nextUse)
     ) {
-      return match(state.frame.nextUse)
-        .with(NextUseClergy.Free, () => state)
-        .with(NextUseClergy.OnlyPrior, () => state)
-        .with(NextUseClergy.Any, () => undefined)
-        .exhaustive()
+      return state
     }
 
     // otherwise dont allow
@@ -95,6 +93,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
     match<BuildingEnum, StateReducer>(building)
       .with(BuildingEnum.Bakery, () => bakery(params[0]))
       .with(BuildingEnum.Bathhouse, () => bathhouse(params[0]))
+      .with(BuildingEnum.Brewery, () => brewery(params[0]))
       .with(BuildingEnum.BuildersMarket, () => buildersMarket(params[0]))
       .with(BuildingEnum.Calefactory, () => calefactory(params[0]))
       .with(BuildingEnum.Carpentry, () =>

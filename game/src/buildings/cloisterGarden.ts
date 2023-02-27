@@ -4,6 +4,8 @@ import { findBuildingWithoutOffset } from '../board/landscape'
 import { getCost, withActivePlayer } from '../board/player'
 import { BuildingEnum, StateReducer, Tile } from '../types'
 
+// TODO: this needs to add itself to unusableBuildings
+
 const whichIndexHasBuilding =
   (building: BuildingEnum) =>
   (landscapes: Tile[][][]): [number, number, number] | undefined => {

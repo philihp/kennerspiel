@@ -1,5 +1,6 @@
 export { bakery } from './bakery'
 export { bathhouse } from './bathhouse'
+export { brewery } from './brewery'
 export { buildersMarket } from './buildersMarket'
 export { calefactory } from './calefactory'
 export { carpentry } from './carpentry'
