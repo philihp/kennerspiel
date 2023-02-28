@@ -109,12 +109,23 @@ describe('buildings/cloisterLibrary', () => {
     })
 
     it('can consume a nickel instead', () => {
-      const s1 = { ...s0, players: [{ ...s0.players[0], nickel: 1, penny: 0 }, ...s0.players.slice(1)] }
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 1,
+            penny: 0,
+            book: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
       const s2 = cloisterLibrary('Ni', '')(s1)! as GameStatePlaying
       expect(s2.players[0]).toMatchObject({
         nickel: 0,
-        penny: 2,
-        book: 13,
+        penny: 0,
+        book: 3,
         meat: 0,
         wine: 0,
       })
