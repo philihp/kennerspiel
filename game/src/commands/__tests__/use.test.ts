@@ -291,7 +291,7 @@ describe('commands/use', () => {
         },
       }
       use(BuildingEnum.CloisterGarden, [])(s1)!
-      expect(cloisterGarden).toHaveBeenCalledWith(undefined)
+      expect(cloisterGarden).toHaveBeenCalledWith()
     })
     it('does not allow usage if mainActionUsed and no bonus actions', () => {
       const s1 = {

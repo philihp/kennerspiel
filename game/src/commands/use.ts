@@ -101,13 +101,13 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       )
       .with(BuildingEnum.Castle, castle)
       .with(BuildingEnum.ChamberOfWonders, () => chamberOfWonders(params[0]))
-      .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () => {
-        return clayMound(params[0])
-      })
+      .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () =>
+        clayMound(params[0])
+      )
       .with(BuildingEnum.CloisterChapterHouse, cloisterChapterHouse)
       .with(BuildingEnum.CloisterChurch, () => cloisterChurch(params[0]))
       .with(BuildingEnum.CloisterCourtyard, () => cloisterCourtyard(params[0], params[1]))
-      .with(BuildingEnum.CloisterGarden, cloisterGarden)
+      .with(BuildingEnum.CloisterGarden, () => cloisterGarden())
       .with(BuildingEnum.CloisterLibrary, () => cloisterLibrary(params[0], params[1]))
       .with(
         BuildingEnum.CloisterOfficeR,
