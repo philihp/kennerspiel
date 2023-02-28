@@ -1,13 +1,14 @@
-import { pipe } from 'ramda'
-import { getCost, subtractCoins, withActivePlayer } from '../board/player'
-import { GameStatePlaying } from '../types'
+import { identity, pipe } from 'ramda'
+import { getCost, payCost, withActivePlayer } from '../board/player'
+import { costMoney, parseResourceParam } from '../board/resource'
 
 export const grainStorage = (param = '') => {
-  if (param === '') return (state: GameStatePlaying | undefined) => state
+  const input = parseResourceParam(param)
+  if (costMoney(input) < 1) return identity
   return withActivePlayer(
     pipe(
       //
-      subtractCoins(1),
+      payCost(input),
       getCost({ grain: 6 })
     )
   )
