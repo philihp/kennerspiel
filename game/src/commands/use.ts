@@ -51,6 +51,7 @@ import {
   windmill,
   winery,
   cottage,
+  granary,
 } from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
@@ -133,6 +134,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
       .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
       .with(BuildingEnum.GrainStorage, () => grainStorage(params[0]))
+      .with(BuildingEnum.Granary, () => granary(params[0]))
       .with(BuildingEnum.GrapevineA, BuildingEnum.GrapevineA, () => grapevine(params[0]))
       .with(BuildingEnum.GrapevineB, BuildingEnum.GrapevineB, () => grapevine(params[0]))
       .with(BuildingEnum.HarborPromenade, harborPromenade)
