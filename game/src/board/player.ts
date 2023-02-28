@@ -92,6 +92,19 @@ export const payCost =
       }
     }
     if (!dirty) return player
+
+    while (newPlayer.penny < 0 && newPlayer.nickel > 0) {
+      newPlayer.penny += 5
+      newPlayer.nickel -= 1
+    }
+    if (newPlayer.penny < 0 && newPlayer.penny + newPlayer.wine >= 0) {
+      newPlayer.wine += newPlayer.penny
+      newPlayer.penny = 0
+    }
+    while (newPlayer.penny < 0 && newPlayer.whiskey > 0) {
+      newPlayer.penny += 2
+      newPlayer.whiskey -= 1
+    }
     return newPlayer
   }
 
