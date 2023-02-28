@@ -78,6 +78,26 @@ describe('buildings/cloisterLibrary', () => {
       },
     }
 
+    it('supports a noop with empty strings', () => {
+      const s1 = cloisterLibrary('', '')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        penny: 10,
+        book: 10,
+        meat: 0,
+        wine: 0,
+      })
+    })
+
+    it('supports a noop with no params', () => {
+      const s1 = cloisterLibrary()(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        penny: 10,
+        book: 10,
+        meat: 0,
+        wine: 0,
+      })
+    })
+
     it('goes through a happy path', () => {
       const s1 = cloisterLibrary('PnPnPn', 'Bo')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({

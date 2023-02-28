@@ -1118,7 +1118,8 @@ describe('game 21872', () => {
 
     const s347 = reducer(s346, ['WORK_CONTRACT', 'F17', 'PnPn'])! as GameStatePlaying
     const s348 = reducer(s347, ['WITH_LAYBROTHER'])! as GameStatePlaying
-    const s349 = reducer(s348, ['USE', 'F17', 'PnPnPn', 'Bo'])! as GameStatePlaying
+    const s34X = reducer(s348, ['CONVERT', 'Ni'])! as GameStatePlaying
+    const s349 = reducer(s34X, ['USE', 'F17', 'PnPnPn', 'Bo'])! as GameStatePlaying
     const s350 = reducer(s349, ['COMMIT'])! as GameStatePlaying
     expect(s350.frame).toMatchObject({
       activePlayerIndex: 2,
