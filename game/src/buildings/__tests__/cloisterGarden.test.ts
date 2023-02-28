@@ -8,7 +8,7 @@ import {
   Tile,
   GameStatePlaying,
 } from '../../types'
-import { cloisterGarden } from '../cloisterGarden'
+import { cloisterGarden } from '..'
 
 describe('buildings/cloisterGarden', () => {
   describe('cloisterGarden', () => {

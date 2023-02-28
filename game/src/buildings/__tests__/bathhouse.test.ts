@@ -9,7 +9,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { bathhouse } from '../bathhouse'
+import { bathhouse } from '..'
 
 describe('buildings/bathhouse', () => {
   describe('bathhouse', () => {

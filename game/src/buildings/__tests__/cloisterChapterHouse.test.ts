@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { cloisterChapterHouse } from '../cloisterChapterHouse'
+import { cloisterChapterHouse } from '..'
 
 describe('buildings/cloisterChapterHouse', () => {
   describe('cloisterChapterHouse', () => {

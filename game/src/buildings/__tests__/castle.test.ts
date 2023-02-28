@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { castle } from '../castle'
+import { castle } from '..'
 
 describe('buildings/castle', () => {
   const p0: Tableau = {

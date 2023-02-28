@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { fuelMerchant } from '../fuelMerchant'
+import { fuelMerchant } from '..'
 
 describe('buildings/fuelMerchant', () => {
   describe('fuelMerchant', () => {

@@ -9,7 +9,7 @@ import {
   Tile,
 } from '../../types'
 
-import { sacristy } from '../sacristy'
+import { sacristy } from '..'
 
 describe('buildings/sacristy', () => {
   describe('use', () => {

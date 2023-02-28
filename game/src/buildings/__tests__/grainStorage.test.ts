@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { grainStorage } from '../grainStorage'
+import { grainStorage } from '..'
 
 describe('buildings/grainStorage', () => {
   describe('grainStorage', () => {

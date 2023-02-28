@@ -11,7 +11,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { priory } from '../priory'
+import { priory } from '..'
 
 describe('buildings/proiry', () => {
   describe('use', () => {

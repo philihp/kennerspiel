@@ -9,7 +9,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { cloisterOffice } from '../cloisterOffice'
+import { cloisterOffice } from '..'
 
 describe('buildings/cloisterOffice', () => {
   describe('use', () => {

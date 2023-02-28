@@ -8,7 +8,7 @@ import {
   Tile,
 } from '../../types'
 import { initialState } from '../../state'
-import { brewery } from '../brewery'
+import { brewery } from '..'
 
 describe('buildings/brewery', () => {
   describe('brewery', () => {

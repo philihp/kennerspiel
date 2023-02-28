@@ -9,7 +9,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { hospice } from '../hospice'
+import { hospice } from '..'
 
 describe('buildings/hospice', () => {
   describe('hospice', () => {

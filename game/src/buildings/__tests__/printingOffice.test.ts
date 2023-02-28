@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { printingOffice } from '../printingOffice'
+import { printingOffice } from '..'
 
 describe('buildings/printingOffice', () => {
   describe('use', () => {
