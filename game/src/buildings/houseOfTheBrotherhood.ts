@@ -1,7 +1,7 @@
 import { flatten, identity, map, pipe, reduce, sum } from 'ramda'
 import { match } from 'ts-pattern'
 import { isCloisterBuilding } from '../board/buildings'
-import { getCost, subtractCoins, withActivePlayer } from '../board/player'
+import { getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, costPoints, parseResourceParam } from '../board/resource'
 import { GameCommandConfigParams, GameStatePlaying, Tile } from '../types'
 
@@ -36,7 +36,7 @@ export const houseOfTheBrotherhood = (param1 = '', param2 = '') => {
     withActivePlayer(
       pipe(
         //
-        subtractCoins(5),
+        payCost(input),
         getCost(output)
       )
     )

@@ -400,7 +400,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
     })
 
     it('will take free money', () => {
-      const s1 = houseOfTheBrotherhood('PnPnPnPnPn', '')(s0)!
+      const s1 = houseOfTheBrotherhood('Ni', '')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 0,
         ceramic: 0,
