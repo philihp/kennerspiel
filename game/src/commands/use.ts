@@ -52,6 +52,7 @@ import {
   winery,
   cottage,
   granary,
+  sacredSite,
 } from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
@@ -151,6 +152,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.Priory, priory)
       .with(BuildingEnum.QuarryA, BuildingEnum.QuarryB, () => quarry(params[0]))
       .with(BuildingEnum.Sacristy, () => sacristy(params[0]))
+      .with(BuildingEnum.SacredSite, () => sacredSite(params[0]))
       .with(BuildingEnum.ShippingCompany, () => shippingCompany(params[0], params[1]))
       .with(BuildingEnum.Shipyard, () => shipyard(params[0]))
       .with(BuildingEnum.Slaughterhouse, () => slaughterhouse(params[0]))
