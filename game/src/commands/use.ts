@@ -22,6 +22,7 @@ import {
   dormitory,
   estate,
   farmyard,
+  falseLighthouse,
   financedEstate,
   forgersWorkshop,
   fuelMerchant,
@@ -122,9 +123,8 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.FarmYardR, BuildingEnum.FarmYardG, BuildingEnum.FarmYardB, BuildingEnum.FarmYardW, () =>
         farmyard(params[0])
       )
-      .with(BuildingEnum.FinancedEstate, () => {
-        return financedEstate(params[0])
-      })
+      .with(BuildingEnum.FalseLighthouse, () => falseLighthouse(params[0]))
+      .with(BuildingEnum.FinancedEstate, () => financedEstate(params[0]))
       .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
       .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
       .with(BuildingEnum.GrainStorage, () => grainStorage(params[0]))

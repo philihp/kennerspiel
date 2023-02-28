@@ -31,6 +31,7 @@ import {
   dormitory,
   estate,
   farmyard,
+  falseLighthouse,
   financedEstate,
   forgersWorkshop,
   fuelMerchant,
@@ -81,6 +82,7 @@ jest.mock('../../buildings', () => {
     dormitory: jest.fn().mockReturnValue(identity),
     estate: jest.fn().mockReturnValue(identity),
     farmyard: jest.fn().mockReturnValue(identity),
+    falseLighthouse: jest.fn().mockReturnValue(identity),
     financedEstate: jest.fn().mockReturnValue(identity),
     forgersWorkshop: jest.fn().mockReturnValue(identity),
     fuelMerchant: jest.fn().mockReturnValue(identity),
@@ -324,8 +326,8 @@ describe('commands/use', () => {
       expect(calefactory).toHaveBeenCalled()
     })
     it('calls the carpentry', () => {
-      use(BuildingEnum.Carpentry, [])(s0)!
-      expect(carpentry).toHaveBeenCalled()
+      use(BuildingEnum.Carpentry, ['2', '-1'])(s0)!
+      expect(carpentry).toHaveBeenCalledWith(2, -1)
     })
     it('calls the castle', () => {
       use(BuildingEnum.Castle, [])(s0)!
@@ -366,6 +368,10 @@ describe('commands/use', () => {
     it('calls the estate', () => {
       use(BuildingEnum.Estate, [])(s0)!
       expect(estate).toHaveBeenCalled()
+    })
+    it('calls the falseLighthouse', () => {
+      use(BuildingEnum.FalseLighthouse, ['Be'])(s0)!
+      expect(falseLighthouse).toHaveBeenCalledWith('Be')
     })
     it('calls the financedEstate', () => {
       use(BuildingEnum.FinancedEstate, [])(s0)!
