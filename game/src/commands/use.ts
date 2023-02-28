@@ -33,6 +33,7 @@ import {
   houseboat,
   houseOfTheBrotherhood,
   inn,
+  malthouse,
   market,
   palace,
   peatCoalKiln,
@@ -44,11 +45,11 @@ import {
   shippingCompany,
   shipyard,
   slaughterhouse,
+  spinningMill,
   stoneMerchant,
   townEstate,
   windmill,
   winery,
-  malthouse,
 } from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
@@ -149,6 +150,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.ShippingCompany, () => shippingCompany(params[0], params[1]))
       .with(BuildingEnum.Shipyard, () => shipyard(params[0]))
       .with(BuildingEnum.Slaughterhouse, () => slaughterhouse(params[0]))
+      .with(BuildingEnum.SpinningMill, () => spinningMill())
       .with(BuildingEnum.StoneMerchant, () => stoneMerchant(params[0]))
       .with(BuildingEnum.TownEstate, () => townEstate(params[0]))
       .with(BuildingEnum.Windmill, () => windmill(params[0]))

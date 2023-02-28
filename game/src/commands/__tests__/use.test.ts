@@ -54,6 +54,7 @@ import {
   shippingCompany,
   shipyard,
   slaughterhouse,
+  spinningMill,
   stoneMerchant,
   townEstate,
   windmill,
@@ -107,6 +108,7 @@ jest.mock('../../buildings', () => {
     shippingCompany: jest.fn().mockReturnValue(identity),
     shipyard: jest.fn().mockReturnValue(identity),
     slaughterhouse: jest.fn().mockReturnValue(identity),
+    spinningMill: jest.fn().mockReturnValue(identity),
     stoneMerchant: jest.fn().mockReturnValue(identity),
     townEstate: jest.fn().mockReturnValue(identity),
     windmill: jest.fn().mockReturnValue(identity),
@@ -472,6 +474,10 @@ describe('commands/use', () => {
     it('calls the slaughterhouse', () => {
       use(BuildingEnum.Slaughterhouse, [])(s0)!
       expect(slaughterhouse).toHaveBeenCalled()
+    })
+    it('calls the spinningMill', () => {
+      use(BuildingEnum.SpinningMill, [])(s0)!
+      expect(spinningMill).toHaveBeenCalled()
     })
     it('calls the stoneMerchant', () => {
       use(BuildingEnum.StoneMerchant, [])(s0)!
