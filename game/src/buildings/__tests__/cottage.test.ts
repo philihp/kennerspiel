@@ -8,10 +8,10 @@ import {
   Tile,
   GameStatePlaying,
 } from '../../types'
-import { cloisterGarden } from '../cloisterGarden'
+import { cottage } from '../cottage'
 
-describe('buildings/cloisterGarden', () => {
-  describe('cloisterGarden', () => {
+describe('buildings/cottage', () => {
+  describe('cottage', () => {
     const p0: Tableau = {
       color: PlayerColor.Blue,
       clergy: [],
@@ -79,7 +79,7 @@ describe('buildings/cloisterGarden', () => {
     }
 
     it('retains undefined state', () => {
-      const s1 = cloisterGarden()(undefined)!
+      const s1 = cottage()(undefined)!
       expect(s1).toBeUndefined()
     })
 
@@ -91,7 +91,7 @@ describe('buildings/cloisterGarden', () => {
             ...s0.players[0],
             landscape: [
               [[], [], ['P'], ['P'], ['P', 'F04'], ['P', 'F17', 'PRIR'], ['P', 'G01'], [], []],
-              [[], [], ['P'], ['P'], ['P', 'G16'], ['P', 'F09'], ['P', 'LG1'], [], []],
+              [[], [], ['P'], ['P'], ['P', 'G16'], ['P', 'I10'], ['P', 'LG1'], [], []],
               [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'F08', 'LB1R'], ['P', 'LG3'], [], []],
             ] as Tile[][],
             landscapeOffset: 1,
@@ -100,16 +100,16 @@ describe('buildings/cloisterGarden', () => {
           ...s0.players.slice(1),
         ],
       }
-      const s2 = cloisterGarden()(s1)!
+      const s2 = cottage()(s1)!
       expect(s2.frame.usableBuildings).toHaveLength(2)
       expect(s2.frame.usableBuildings).not.toContain('F17')
       expect(s2.frame.usableBuildings).toContain('G16')
       expect(s2.frame.usableBuildings).toContain('LG1')
       expect(s2.frame.usableBuildings).not.toContain('F08')
-      expect(s2.frame.unusableBuildings).toContain('F09')
+      expect(s2.frame.unusableBuildings).toContain('I10')
       expect(s2.frame.nextUse).toBe('free')
       expect(s2.players[0]).toMatchObject({
-        grape: 1,
+        malt: 1,
       })
     })
 
@@ -124,17 +124,17 @@ describe('buildings/cloisterGarden', () => {
               [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'F08', 'LB1R'], ['P', 'LG3'], [], []],
             ] as Tile[][],
             landscapeOffset: 0,
-            grape: 0,
+            malt: 0,
           },
           ...s0.players.slice(1),
         ],
       }
-      const s2 = cloisterGarden()(s1)!
+      const s2 = cottage()(s1)!
       expect(s2).toBeDefined()
       expect(s2.frame).toMatchObject({
         usableBuildings: [],
       })
-      expect(s2.players[0].grape).toBe(1)
+      expect(s2.players[0].malt).toBe(1)
     })
   })
 })

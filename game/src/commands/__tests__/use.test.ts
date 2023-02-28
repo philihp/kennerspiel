@@ -28,6 +28,7 @@ import {
   cloisterLibrary,
   cloisterOffice,
   cloisterWorkshop,
+  cottage,
   dormitory,
   estate,
   farmyard,
@@ -73,6 +74,7 @@ jest.mock('../../buildings', () => {
     calefactory: jest.fn().mockReturnValue(identity),
     carpentry: jest.fn().mockReturnValue(identity),
     castle: jest.fn().mockReturnValue(identity),
+    cottage: jest.fn().mockReturnValue(identity),
     chamberOfWonders: jest.fn().mockReturnValue(identity),
     clayMound: jest.fn().mockReturnValue(identity),
     cloisterChapterHouse: jest.fn().mockReturnValue(identity),
@@ -366,6 +368,10 @@ describe('commands/use', () => {
     it('calls the cloisterWorkshop', () => {
       use(BuildingEnum.CloisterWorkshop, [])(s0)!
       expect(cloisterWorkshop).toHaveBeenCalled()
+    })
+    it('calls the cottage', () => {
+      use(BuildingEnum.Cottage, [])(s0)!
+      expect(cottage).toHaveBeenCalled()
     })
     it('calls the dormitory', () => {
       use(BuildingEnum.Dormitory, [])(s0)!
