@@ -30,6 +30,7 @@ import {
   grapevine,
   harborPromenade,
   hospice,
+  houseboat,
   houseOfTheBrotherhood,
   inn,
   market,
@@ -132,6 +133,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.GrapevineB, BuildingEnum.GrapevineB, () => grapevine(params[0]))
       .with(BuildingEnum.HarborPromenade, harborPromenade)
       .with(BuildingEnum.Hospice, hospice)
+      .with(BuildingEnum.Houseboat, () => houseboat())
       .with(BuildingEnum.HouseOfTheBrotherhood, () => houseOfTheBrotherhood(params[0], params[1]))
       .with(BuildingEnum.Inn, () => inn(params[0]))
       .with(BuildingEnum.Market, () => market(params[0]))
