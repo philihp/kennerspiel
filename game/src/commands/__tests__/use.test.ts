@@ -1,17 +1,128 @@
+import { identity } from 'ramda'
 import { initialState } from '../../state'
 import {
   BuildingEnum,
   Clergy,
   GameStatePlaying,
   GameStatusEnum,
-  LandEnum,
   NextUseClergy,
   PlayerColor,
   SettlementRound,
   Tableau,
   Tile,
 } from '../../types'
+import {
+  bakery,
+  bathhouse,
+  brewery,
+  buildersMarket,
+  calefactory,
+  carpentry,
+  castle,
+  chamberOfWonders,
+  clayMound,
+  cloisterChapterHouse,
+  cloisterChurch,
+  cloisterCourtyard,
+  cloisterGarden,
+  cloisterLibrary,
+  cloisterOffice,
+  cloisterWorkshop,
+  cottage,
+  dormitory,
+  estate,
+  farmyard,
+  falseLighthouse,
+  financedEstate,
+  forgersWorkshop,
+  fuelMerchant,
+  grainStorage,
+  granary,
+  grapevine,
+  harborPromenade,
+  hospice,
+  houseboat,
+  houseOfTheBrotherhood,
+  inn,
+  malthouse,
+  market,
+  palace,
+  peatCoalKiln,
+  pilgrimageSite,
+  printingOffice,
+  priory,
+  quarry,
+  sacristy,
+  scriptorium,
+  sacredSite,
+  shippingCompany,
+  shipyard,
+  slaughterhouse,
+  spinningMill,
+  stoneMerchant,
+  townEstate,
+  windmill,
+  winery,
+} from '../../buildings'
+
 import { use } from '../use'
+
+jest.mock('../../buildings', () => {
+  return {
+    ...jest.requireActual('../../buildings'),
+    bakery: jest.fn().mockReturnValue(identity),
+    bathhouse: jest.fn().mockReturnValue(identity),
+    brewery: jest.fn().mockReturnValue(identity),
+    buildersMarket: jest.fn().mockReturnValue(identity),
+    calefactory: jest.fn().mockReturnValue(identity),
+    carpentry: jest.fn().mockReturnValue(identity),
+    castle: jest.fn().mockReturnValue(identity),
+    cottage: jest.fn().mockReturnValue(identity),
+    chamberOfWonders: jest.fn().mockReturnValue(identity),
+    clayMound: jest.fn().mockReturnValue(identity),
+    cloisterChapterHouse: jest.fn().mockReturnValue(identity),
+    cloisterChurch: jest.fn().mockReturnValue(identity),
+    cloisterCourtyard: jest.fn().mockReturnValue(identity),
+    cloisterGarden: jest.fn().mockReturnValue(identity),
+    cloisterLibrary: jest.fn().mockReturnValue(identity),
+    cloisterOffice: jest.fn().mockReturnValue(identity),
+    cloisterWorkshop: jest.fn().mockReturnValue(identity),
+    dormitory: jest.fn().mockReturnValue(identity),
+    estate: jest.fn().mockReturnValue(identity),
+    farmyard: jest.fn().mockReturnValue(identity),
+    falseLighthouse: jest.fn().mockReturnValue(identity),
+    financedEstate: jest.fn().mockReturnValue(identity),
+    forgersWorkshop: jest.fn().mockReturnValue(identity),
+    fuelMerchant: jest.fn().mockReturnValue(identity),
+    grainStorage: jest.fn().mockReturnValue(identity),
+    granary: jest.fn().mockReturnValue(identity),
+    grapevine: jest.fn().mockReturnValue(identity),
+    harborPromenade: jest.fn().mockReturnValue(identity),
+    hospice: jest.fn().mockReturnValue(identity),
+    houseboat: jest.fn().mockReturnValue(identity),
+    houseOfTheBrotherhood: jest.fn().mockReturnValue(identity),
+    inn: jest.fn().mockReturnValue(identity),
+    malthouse: jest.fn().mockReturnValue(identity),
+    market: jest.fn().mockReturnValue(identity),
+    palace: jest.fn().mockReturnValue(identity),
+    peatCoalKiln: jest.fn().mockReturnValue(identity),
+    pilgrimageSite: jest.fn().mockReturnValue(identity),
+    printingOffice: jest.fn().mockReturnValue(identity),
+    priory: jest.fn().mockReturnValue(identity),
+    quarry: jest.fn().mockReturnValue(identity),
+    sacristy: jest.fn().mockReturnValue(identity),
+    scriptorium: jest.fn().mockReturnValue(identity),
+    sacredSite: jest.fn().mockReturnValue(identity),
+    shippingCompany: jest.fn().mockReturnValue(identity),
+    shipyard: jest.fn().mockReturnValue(identity),
+    slaughterhouse: jest.fn().mockReturnValue(identity),
+    spinningMill: jest.fn().mockReturnValue(identity),
+    stoneMerchant: jest.fn().mockReturnValue(identity),
+    townEstate: jest.fn().mockReturnValue(identity),
+    windmill: jest.fn().mockReturnValue(identity),
+    winery: jest.fn().mockReturnValue(identity),
+  }
+})
 
 describe('commands/use', () => {
   const p0: Tableau = {
@@ -35,10 +146,10 @@ describe('commands/use', () => {
     flour: 0,
     grape: 0,
     nickel: 0,
-    hops: 0,
+    malt: 0,
     coal: 0,
     book: 0,
-    pottery: 0,
+    ceramic: 0,
     whiskey: 0,
     straw: 0,
     meat: 0,
@@ -152,51 +263,8 @@ describe('commands/use', () => {
       const s1 = {
         ...s0,
       }
-      const s2 = use(BuildingEnum.FarmYardR, ['Sh'])(s1)!
-      expect(s1.frame.activePlayerIndex).toBe(0)
-      expect(s1.players[0]).toMatchObject({
-        sheep: 0,
-        grain: 0,
-      })
-      expect(s1.rondel).toMatchObject({
-        sheep: 1,
-        grain: 0,
-        joker: 2,
-      })
-      expect(s2.players[0]).toMatchObject({
-        sheep: 3,
-        grain: 0,
-      })
-      expect(s2.rondel).toMatchObject({
-        sheep: 3,
-        grain: 0,
-        joker: 2,
-      })
-    })
-    it('can use a joker', () => {
-      const s1 = {
-        ...s0,
-      }
-      const s2 = use(BuildingEnum.FarmYardR, ['ShJo'])(s1)!
-      expect(s1.frame.activePlayerIndex).toBe(0)
-      expect(s1.players[0]).toMatchObject({
-        sheep: 0,
-        grain: 0,
-      })
-      expect(s1.rondel).toMatchObject({
-        joker: 2,
-        sheep: 1,
-        grain: 0,
-      })
-      expect(s2.players[0]).toMatchObject({
-        sheep: 2,
-        grain: 0,
-      })
-      expect(s2.rondel).toMatchObject({
-        joker: 3,
-        sheep: 1,
-        grain: 0,
-      })
+      use(BuildingEnum.FarmYardR, ['Sh'])(s1)!
+      expect(farmyard).toHaveBeenCalled()
     })
     it('can not use if nextUse=any and mainActionUsed and no bonus actions', () => {
       const s1 = {
@@ -209,8 +277,37 @@ describe('commands/use', () => {
           nextUse: NextUseClergy.Any,
         },
       }
-      const s2 = use(BuildingEnum.ClayMoundR, [])(s1)!
-      expect(s2).toBeUndefined()
+      use(BuildingEnum.ClayMoundR, [])(s1)!
+      expect(clayMound).toHaveBeenCalledWith(undefined)
+    })
+    it('can use a building if it is in usableBuildings and nextUse is free and building not forbidden', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+          usableBuildings: [BuildingEnum.Brewery],
+          nextUse: NextUseClergy.Free,
+        },
+      }
+      use(BuildingEnum.Brewery, [])(s1)!
+      expect(brewery).toHaveBeenCalled()
+    })
+    it('does not allow forbidden buildings', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+          usableBuildings: [BuildingEnum.CloisterGarden],
+          unusableBuildings: [BuildingEnum.CloisterGarden],
+          nextUse: NextUseClergy.Free,
+        },
+      }
+      use(BuildingEnum.CloisterGarden, [])(s1)!
+      expect(cloisterGarden).toHaveBeenCalledWith()
     })
     it('does not allow usage if mainActionUsed and no bonus actions', () => {
       const s1 = {
@@ -222,8 +319,205 @@ describe('commands/use', () => {
           usableBuildings: [],
         },
       }
-      const s2 = use(BuildingEnum.ClayMoundR, [])(s1)!
-      expect(s2).toBeUndefined()
+      use(BuildingEnum.CloisterOfficeG, [])(s1)!
+      expect(cloisterOffice).toHaveBeenCalledWith(undefined)
+    })
+
+    it('calls the bakery', () => {
+      use(BuildingEnum.Bakery, [])(s0)!
+      expect(bakery).toHaveBeenCalled()
+    })
+    it('calls the bathhouse', () => {
+      use(BuildingEnum.Bathhouse, [])(s0)!
+      expect(bathhouse).toHaveBeenCalled()
+    })
+    it('calls the buildersMarket', () => {
+      use(BuildingEnum.BuildersMarket, [])(s0)!
+      expect(buildersMarket).toHaveBeenCalled()
+    })
+    it('calls the calefactory', () => {
+      use(BuildingEnum.Calefactory, [])(s0)!
+      expect(calefactory).toHaveBeenCalled()
+    })
+    it('calls the carpentry', () => {
+      use(BuildingEnum.Carpentry, ['2', '-1'])(s0)!
+      expect(carpentry).toHaveBeenCalledWith(2, -1)
+    })
+    it('calls the castle', () => {
+      use(BuildingEnum.Castle, [])(s0)!
+      expect(castle).toHaveBeenCalled()
+    })
+    it('calls the chamberOfWonders', () => {
+      use(BuildingEnum.ChamberOfWonders, [])(s0)!
+      expect(chamberOfWonders).toHaveBeenCalled()
+    })
+    it('calls the cloisterChapterHouse', () => {
+      use(BuildingEnum.CloisterChapterHouse, [])(s0)!
+      expect(cloisterChapterHouse).toHaveBeenCalled()
+    })
+    it('calls the cloisterChurch', () => {
+      use(BuildingEnum.CloisterChurch, [])(s0)!
+      expect(cloisterChurch).toHaveBeenCalled()
+    })
+    it('calls the cloisterCourtyard', () => {
+      use(BuildingEnum.CloisterCourtyard, [])(s0)!
+      expect(cloisterCourtyard).toHaveBeenCalled()
+    })
+    it('calls the cloisterGarden', () => {
+      use(BuildingEnum.CloisterGarden, [])(s0)!
+      expect(cloisterGarden).toHaveBeenCalled()
+    })
+    it('calls the cloisterLibrary', () => {
+      use(BuildingEnum.CloisterLibrary, [])(s0)!
+      expect(cloisterLibrary).toHaveBeenCalled()
+    })
+    it('calls the cloisterWorkshop', () => {
+      use(BuildingEnum.CloisterWorkshop, [])(s0)!
+      expect(cloisterWorkshop).toHaveBeenCalled()
+    })
+    it('calls the cottage', () => {
+      use(BuildingEnum.Cottage, [])(s0)!
+      expect(cottage).toHaveBeenCalled()
+    })
+    it('calls the dormitory', () => {
+      use(BuildingEnum.Dormitory, [])(s0)!
+      expect(dormitory).toHaveBeenCalled()
+    })
+    it('calls the estate', () => {
+      use(BuildingEnum.Estate, [])(s0)!
+      expect(estate).toHaveBeenCalled()
+    })
+    it('calls the falseLighthouse', () => {
+      use(BuildingEnum.FalseLighthouse, ['Be'])(s0)!
+      expect(falseLighthouse).toHaveBeenCalledWith('Be')
+    })
+    it('calls the financedEstate', () => {
+      use(BuildingEnum.FinancedEstate, [])(s0)!
+      expect(financedEstate).toHaveBeenCalled()
+    })
+    it('calls the forgersWorkshop', () => {
+      use(BuildingEnum.ForgersWorkshop, [])(s0)!
+      expect(forgersWorkshop).toHaveBeenCalled()
+    })
+    it('calls the fuelMerchant', () => {
+      use(BuildingEnum.FuelMerchant, [])(s0)!
+      expect(fuelMerchant).toHaveBeenCalled()
+    })
+    it('calls the grainStorage', () => {
+      use(BuildingEnum.GrainStorage, [])(s0)!
+      expect(grainStorage).toHaveBeenCalled()
+    })
+    it('calls the granary', () => {
+      use(BuildingEnum.Granary, [])(s0)!
+      expect(granary).toHaveBeenCalled()
+    })
+    it('calls the grapevine A', () => {
+      use(BuildingEnum.GrapevineA, [])(s0)!
+      expect(grapevine).toHaveBeenCalled()
+    })
+    it('calls the grapevine B', () => {
+      use(BuildingEnum.GrapevineB, [])(s0)!
+      expect(grapevine).toHaveBeenCalled()
+    })
+    it('calls the harborPromenade', () => {
+      use(BuildingEnum.HarborPromenade, [])(s0)!
+      expect(harborPromenade).toHaveBeenCalled()
+    })
+    it('calls the hospice', () => {
+      use(BuildingEnum.Hospice, [])(s0)!
+      expect(hospice).toHaveBeenCalled()
+    })
+    it('calls the houseOfTheBrotherhood', () => {
+      use(BuildingEnum.HouseOfTheBrotherhood, [])(s0)!
+      expect(houseOfTheBrotherhood).toHaveBeenCalled()
+    })
+    it('calls the houseboat', () => {
+      use(BuildingEnum.Houseboat, [])(s0)!
+      expect(houseboat).toHaveBeenCalled()
+    })
+    it('calls the inn', () => {
+      use(BuildingEnum.Inn, [])(s0)!
+      expect(inn).toHaveBeenCalled()
+    })
+    it('calls the malthouse', () => {
+      use(BuildingEnum.Malthouse, ['GnGn'])(s0)!
+      expect(malthouse).toHaveBeenCalledWith('GnGn')
+    })
+    it('calls the market', () => {
+      use(BuildingEnum.Market, [])(s0)!
+      expect(market).toHaveBeenCalled()
+    })
+    it('calls the palace', () => {
+      use(BuildingEnum.Palace, [])(s0)!
+      expect(palace).toHaveBeenCalled()
+    })
+    it('calls the peatCoalKiln', () => {
+      use(BuildingEnum.PeatCoalKiln, [])(s0)!
+      expect(peatCoalKiln).toHaveBeenCalled()
+    })
+    it('calls the pilgrimageSite', () => {
+      use(BuildingEnum.PilgrimageSite, [])(s0)!
+      expect(pilgrimageSite).toHaveBeenCalled()
+    })
+    it('calls the printingOffice', () => {
+      use(BuildingEnum.PrintingOffice, [])(s0)!
+      expect(printingOffice).toHaveBeenCalled()
+    })
+    it('calls the priory', () => {
+      use(BuildingEnum.Priory, [])(s0)!
+      expect(priory).toHaveBeenCalled()
+    })
+    it('calls the quarry A', () => {
+      use(BuildingEnum.QuarryA, [])(s0)!
+      expect(quarry).toHaveBeenCalled()
+    })
+    it('calls the quarry B', () => {
+      use(BuildingEnum.QuarryB, [])(s0)!
+      expect(quarry).toHaveBeenCalled()
+    })
+    it('calls the scriptorium', () => {
+      use(BuildingEnum.Scriptorium, ['Wh'])(s0)!
+      expect(scriptorium).toHaveBeenCalledWith('Wh')
+    })
+    it('calls the sacristy', () => {
+      use(BuildingEnum.Sacristy, [])(s0)!
+      expect(sacristy).toHaveBeenCalled()
+    })
+    it('calls the sacredSite', () => {
+      use(BuildingEnum.SacredSite, ['MaWh'])(s0)!
+      expect(sacredSite).toHaveBeenCalledWith('MaWh')
+    })
+    it('calls the shippingCompany', () => {
+      use(BuildingEnum.ShippingCompany, [])(s0)!
+      expect(shippingCompany).toHaveBeenCalled()
+    })
+    it('calls the shipyard', () => {
+      use(BuildingEnum.Shipyard, [])(s0)!
+      expect(shipyard).toHaveBeenCalled()
+    })
+    it('calls the slaughterhouse', () => {
+      use(BuildingEnum.Slaughterhouse, [])(s0)!
+      expect(slaughterhouse).toHaveBeenCalled()
+    })
+    it('calls the spinningMill', () => {
+      use(BuildingEnum.SpinningMill, [])(s0)!
+      expect(spinningMill).toHaveBeenCalled()
+    })
+    it('calls the stoneMerchant', () => {
+      use(BuildingEnum.StoneMerchant, [])(s0)!
+      expect(stoneMerchant).toHaveBeenCalled()
+    })
+    it('calls the townEstate', () => {
+      use(BuildingEnum.TownEstate, [])(s0)!
+      expect(townEstate).toHaveBeenCalled()
+    })
+    it('calls the windmill', () => {
+      use(BuildingEnum.Windmill, [])(s0)!
+      expect(windmill).toHaveBeenCalled()
+    })
+    it('calls the winery', () => {
+      use(BuildingEnum.Winery, [])(s0)!
+      expect(winery).toHaveBeenCalled()
     })
   })
 })

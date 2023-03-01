@@ -1,4 +1,4 @@
-import { findIndex, pipe, remove } from 'ramda'
+import { findIndex, map, pipe, reduce, remove } from 'ramda'
 import { match } from 'ts-pattern'
 import { nextFrame4Long } from './frame/nextFrame4Long'
 import { nextFrame3Long } from './frame/nextFrame3Long'
@@ -15,7 +15,9 @@ import {
   GameStatePlaying,
   NextUseClergy,
   StateReducer,
+  Tile,
 } from '../types'
+import { findBuildingWithoutOffset } from './landscape'
 
 export const withFrame =
   (func: (frame: Frame) => Frame | undefined): StateReducer =>
@@ -115,3 +117,54 @@ export const setFrameToAllowFreeUsage = (building: BuildingEnum[]): StateReducer
     usableBuildings: building,
     nextUse: NextUseClergy.Free,
   }))
+
+export const disableFurtherUsage = (building: BuildingEnum): StateReducer =>
+  withFrame(
+    (frame) =>
+      frame && {
+        ...frame,
+        unusableBuildings: [building],
+      }
+  )
+
+const whichIndexHasBuilding =
+  (building: BuildingEnum) =>
+  (landscapes: Tile[][][]): [number, number, number] | undefined => {
+    for (let i = 0; i < landscapes.length; i++) {
+      const location = findBuildingWithoutOffset(building)(landscapes[i])
+      if (location) return [i, ...location]
+    }
+    return undefined
+  }
+
+const ADJACENT = [
+  [-1, 0],
+  [1, 0],
+  [0, -1],
+  [0, 1],
+]
+
+export const allowFreeUsageToNeighborsOf =
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
+    if (state === undefined) return state
+    const location = whichIndexHasBuilding(building)(state.players.map((p) => p.landscape))
+    if (location === undefined) return state
+    const [player, row, col] = location
+    return setFrameToAllowFreeUsage(
+      reduce(
+        (accum, curr: [number, number, number]) => {
+          const [p, r, c] = curr
+          const landStack = state.players[p].landscape?.[r]?.[c]
+          if (landStack === undefined) return accum
+          const [_, building, clergy] = landStack
+          if (building === undefined) return accum
+          if (clergy !== undefined) return accum
+          accum.push(building)
+          return accum
+        },
+        [] as BuildingEnum[],
+        map(([rowMod, colMod]) => [player, row + rowMod, col + colMod], ADJACENT) as [number, number, number][]
+      )
+    )(state)
+  }

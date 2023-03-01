@@ -10,7 +10,7 @@ export const sacristy = (param = '') => {
     Math.max(
       //
       input.book ?? 0,
-      input.pottery ?? 0,
+      input.ceramic ?? 0,
       input.ornament ?? 0,
       input.reliquary ?? 0
     )

@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { cloisterLibrary } from '../cloisterLibrary'
+import { cloisterLibrary } from '..'
 
 describe('buildings/cloisterLibrary', () => {
   describe('cloisterLibrary', () => {
@@ -32,10 +32,10 @@ describe('buildings/cloisterLibrary', () => {
       flour: 0,
       grape: 0,
       nickel: 1,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 10,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -78,6 +78,26 @@ describe('buildings/cloisterLibrary', () => {
       },
     }
 
+    it('supports a noop with empty strings', () => {
+      const s1 = cloisterLibrary('', '')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        penny: 10,
+        book: 10,
+        meat: 0,
+        wine: 0,
+      })
+    })
+
+    it('supports a noop with no params', () => {
+      const s1 = cloisterLibrary()(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        penny: 10,
+        book: 10,
+        meat: 0,
+        wine: 0,
+      })
+    })
+
     it('goes through a happy path', () => {
       const s1 = cloisterLibrary('PnPnPn', 'Bo')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
@@ -109,12 +129,23 @@ describe('buildings/cloisterLibrary', () => {
     })
 
     it('can consume a nickel instead', () => {
-      const s1 = { ...s0, players: [{ ...s0.players[0], nickel: 1, penny: 0 }, ...s0.players.slice(1)] }
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 1,
+            penny: 0,
+            book: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
       const s2 = cloisterLibrary('Ni', '')(s1)! as GameStatePlaying
       expect(s2.players[0]).toMatchObject({
         nickel: 0,
-        penny: 2,
-        book: 13,
+        penny: 0,
+        book: 3,
         meat: 0,
         wine: 0,
       })

@@ -87,11 +87,26 @@ export const payCost =
       if (amount) {
         dirty = true
         const newValue = (newPlayer[type as keyof Tableau] as number) - (amount ?? 0)
-        if (newValue < 0) return undefined
+        if (newValue < 0 && type !== 'penny') return undefined
         newPlayer[type as keyof Cost] = newValue
       }
     }
     if (!dirty) return player
+
+    while (newPlayer.penny < 0 && newPlayer.nickel > 0) {
+      newPlayer.penny += 5
+      newPlayer.nickel -= 1
+    }
+    while (newPlayer.penny < 0 && newPlayer.whiskey > 0) {
+      newPlayer.penny += 2
+      newPlayer.whiskey -= 1
+    }
+    while (newPlayer.penny < 0 && newPlayer.wine > 0) {
+      newPlayer.wine -= 1
+      newPlayer.penny += 1
+    }
+    if (newPlayer.penny < 0) return undefined
+
     return newPlayer
   }
 

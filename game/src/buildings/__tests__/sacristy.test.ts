@@ -9,7 +9,7 @@ import {
   Tile,
 } from '../../types'
 
-import { sacristy } from '../sacristy'
+import { sacristy } from '..'
 
 describe('buildings/sacristy', () => {
   describe('use', () => {
@@ -33,10 +33,10 @@ describe('buildings/sacristy', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 2,
-      pottery: 2,
+      ceramic: 2,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -87,7 +87,7 @@ describe('buildings/sacristy', () => {
       const s1 = sacristy('')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 2,
-        pottery: 2,
+        ceramic: 2,
         ornament: 2,
         reliquary: 2,
         wonders: 0,
@@ -97,7 +97,7 @@ describe('buildings/sacristy', () => {
       const s1 = sacristy()(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 2,
-        pottery: 2,
+        ceramic: 2,
         ornament: 2,
         reliquary: 2,
         wonders: 0,
@@ -107,7 +107,7 @@ describe('buildings/sacristy', () => {
       const s1 = sacristy('BoPoOrRq')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 1,
-        pottery: 1,
+        ceramic: 1,
         ornament: 1,
         reliquary: 1,
         wonders: 1,
@@ -115,10 +115,10 @@ describe('buildings/sacristy', () => {
       expect(s1.wonders).toBe(7)
     })
     it('swallows up extra but does not give more than one wonder', () => {
-      const s1 = sacristy('BoPoOrRqBoPoOrRq')(s0)!
+      const s1 = sacristy('BoCeOrRqBoCeOrRq')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 0,
-        pottery: 0,
+        ceramic: 0,
         ornament: 0,
         reliquary: 0,
         wonders: 1,

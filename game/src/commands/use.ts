@@ -2,48 +2,59 @@ import { pipe } from 'ramda'
 import { match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
 import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
-import { bakery } from '../buildings/bakery'
-import { bathhouse } from '../buildings/bathhouse'
-import { buildersMarket } from '../buildings/buildersMarket'
-import { calefactory } from '../buildings/calefactory'
-import { carpentry } from '../buildings/carpentry'
-import { castle } from '../buildings/castle'
-import { chamberOfWonders } from '../buildings/chamberOfWonders'
-import { clayMound } from '../buildings/clayMound'
-import { cloisterChapterHouse } from '../buildings/cloisterChapterHouse'
-import { cloisterChurch } from '../buildings/cloisterChurch'
-import { cloisterCourtyard } from '../buildings/cloisterCourtyard'
-import { cloisterGarden } from '../buildings/cloisterGarden'
-import { cloisterLibrary } from '../buildings/cloisterLibrary'
-import { cloisterOffice } from '../buildings/cloisterOffice'
-import { cloisterWorkshop } from '../buildings/cloisterWorkshop'
-import { dormitory } from '../buildings/dormitory'
-import { estate } from '../buildings/estate'
-import { farmyard } from '../buildings/farmyard'
-import { financedEstate } from '../buildings/financedEstate'
-import { forgersWorkshop } from '../buildings/forgersWorkshop'
-import { fuelMerchant } from '../buildings/fuelMerchant'
-import { grainStorage } from '../buildings/grainStorage'
-import { grapevine } from '../buildings/grapevine'
-import { harborPromenade } from '../buildings/harborPromenade'
-import { hospice } from '../buildings/hospice'
-import { houseOfTheBrotherhood } from '../buildings/houseOfTheBrotherhood'
-import { inn } from '../buildings/inn'
-import { market } from '../buildings/market'
-import { palace } from '../buildings/palace'
-import { peatCoalKiln } from '../buildings/peatCoalKiln'
-import { pilgrimageSite } from '../buildings/pilgrimageSite'
-import { printingOffice } from '../buildings/printingOffice'
-import { priory } from '../buildings/priory'
-import { quarry } from '../buildings/quarry'
-import { sacristy } from '../buildings/sacristy'
-import { shippingCompany } from '../buildings/shippingCompany'
-import { shipyard } from '../buildings/shipyard'
-import { slaughterhouse } from '../buildings/slaughterhouse'
-import { stoneMerchant } from '../buildings/stoneMerchant'
-import { townEstate } from '../buildings/townEstate'
-import { windmill } from '../buildings/windmill'
-import { winery } from '../buildings/winery'
+import {
+  bakery,
+  bathhouse,
+  brewery,
+  buildersMarket,
+  calefactory,
+  carpentry,
+  castle,
+  chamberOfWonders,
+  clayMound,
+  cloisterChapterHouse,
+  cloisterChurch,
+  cloisterCourtyard,
+  cloisterGarden,
+  cloisterLibrary,
+  cloisterOffice,
+  cloisterWorkshop,
+  dormitory,
+  estate,
+  farmyard,
+  falseLighthouse,
+  financedEstate,
+  forgersWorkshop,
+  fuelMerchant,
+  grainStorage,
+  grapevine,
+  harborPromenade,
+  hospice,
+  houseboat,
+  houseOfTheBrotherhood,
+  inn,
+  malthouse,
+  market,
+  palace,
+  peatCoalKiln,
+  pilgrimageSite,
+  printingOffice,
+  priory,
+  quarry,
+  sacristy,
+  shippingCompany,
+  shipyard,
+  slaughterhouse,
+  spinningMill,
+  stoneMerchant,
+  townEstate,
+  windmill,
+  winery,
+  cottage,
+  granary,
+  sacredSite,
+  scriptorium,
+} from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
 const checkIfUseCanHappen =
@@ -59,13 +70,10 @@ const checkIfUseCanHappen =
     // usableBuildings allows AND the building in question isn't in unusableBuildings
     if (
       state.frame.usableBuildings.includes(building) === true &&
-      state.frame.unusableBuildings.includes(building) === false
+      state.frame.unusableBuildings.includes(building) === false &&
+      [NextUseClergy.Free, NextUseClergy.OnlyPrior].includes(state.frame.nextUse)
     ) {
-      return match(state.frame.nextUse)
-        .with(NextUseClergy.Free, () => state)
-        .with(NextUseClergy.OnlyPrior, () => state)
-        .with(NextUseClergy.Any, () => undefined)
-        .exhaustive()
+      return state
     }
 
     // otherwise dont allow
@@ -93,6 +101,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
     match<BuildingEnum, StateReducer>(building)
       .with(BuildingEnum.Bakery, () => bakery(params[0]))
       .with(BuildingEnum.Bathhouse, () => bathhouse(params[0]))
+      .with(BuildingEnum.Brewery, () => brewery(params[0]))
       .with(BuildingEnum.BuildersMarket, () => buildersMarket(params[0]))
       .with(BuildingEnum.Calefactory, () => calefactory(params[0]))
       .with(BuildingEnum.Carpentry, () =>
@@ -106,7 +115,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.CloisterChapterHouse, cloisterChapterHouse)
       .with(BuildingEnum.CloisterChurch, () => cloisterChurch(params[0]))
       .with(BuildingEnum.CloisterCourtyard, () => cloisterCourtyard(params[0], params[1]))
-      .with(BuildingEnum.CloisterGarden, cloisterGarden)
+      .with(BuildingEnum.CloisterGarden, () => cloisterGarden())
       .with(BuildingEnum.CloisterLibrary, () => cloisterLibrary(params[0], params[1]))
       .with(
         BuildingEnum.CloisterOfficeR,
@@ -116,34 +125,40 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
         () => cloisterOffice(params[0])
       )
       .with(BuildingEnum.CloisterWorkshop, () => cloisterWorkshop(params[0]))
+      .with(BuildingEnum.Cottage, () => cottage())
       .with(BuildingEnum.Dormitory, () => dormitory(params[0]))
       .with(BuildingEnum.Estate, () => estate(params[0]))
       .with(BuildingEnum.FarmYardR, BuildingEnum.FarmYardG, BuildingEnum.FarmYardB, BuildingEnum.FarmYardW, () =>
         farmyard(params[0])
       )
-      .with(BuildingEnum.FinancedEstate, () => {
-        return financedEstate(params[0])
-      })
+      .with(BuildingEnum.FalseLighthouse, () => falseLighthouse(params[0]))
+      .with(BuildingEnum.FinancedEstate, () => financedEstate(params[0]))
       .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
       .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
       .with(BuildingEnum.GrainStorage, () => grainStorage(params[0]))
+      .with(BuildingEnum.Granary, () => granary(params[0]))
       .with(BuildingEnum.GrapevineA, BuildingEnum.GrapevineA, () => grapevine(params[0]))
       .with(BuildingEnum.GrapevineB, BuildingEnum.GrapevineB, () => grapevine(params[0]))
       .with(BuildingEnum.HarborPromenade, harborPromenade)
       .with(BuildingEnum.Hospice, hospice)
+      .with(BuildingEnum.Houseboat, () => houseboat())
       .with(BuildingEnum.HouseOfTheBrotherhood, () => houseOfTheBrotherhood(params[0], params[1]))
       .with(BuildingEnum.Inn, () => inn(params[0]))
       .with(BuildingEnum.Market, () => market(params[0]))
+      .with(BuildingEnum.Malthouse, () => malthouse(params[0]))
       .with(BuildingEnum.Palace, () => palace(params[0]))
       .with(BuildingEnum.PeatCoalKiln, BuildingEnum.PeatCoalKiln, () => peatCoalKiln(params[0]))
       .with(BuildingEnum.PilgrimageSite, () => pilgrimageSite(params[0], params[1]))
       .with(BuildingEnum.PrintingOffice, () => printingOffice(...params))
       .with(BuildingEnum.Priory, priory)
       .with(BuildingEnum.QuarryA, BuildingEnum.QuarryB, () => quarry(params[0]))
+      .with(BuildingEnum.Scriptorium, () => scriptorium(params[0]))
       .with(BuildingEnum.Sacristy, () => sacristy(params[0]))
+      .with(BuildingEnum.SacredSite, () => sacredSite(params[0]))
       .with(BuildingEnum.ShippingCompany, () => shippingCompany(params[0], params[1]))
       .with(BuildingEnum.Shipyard, () => shipyard(params[0]))
       .with(BuildingEnum.Slaughterhouse, () => slaughterhouse(params[0]))
+      .with(BuildingEnum.SpinningMill, () => spinningMill())
       .with(BuildingEnum.StoneMerchant, () => stoneMerchant(params[0]))
       .with(BuildingEnum.TownEstate, () => townEstate(params[0]))
       .with(BuildingEnum.Windmill, () => windmill(params[0]))

@@ -17,7 +17,7 @@ const takePlayerClay =
 
 const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('clay'))
 
-export const clayMound = (param = '') => {
+export const clayMound = (param = ''): StateReducer => {
   const withJoker = param.includes(ResourceEnum.Joker)
   return pipe(
     //

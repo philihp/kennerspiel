@@ -81,7 +81,7 @@ export enum ResourceEnum {
   Sheep = 'Sh',
   Meat = 'Mt',
   Clay = 'Cl',
-  Pottery = 'Po',
+  Ceramic = 'Ce', // used to be Pottery/Po
   Peat = 'Pt',
   Coal = 'Co',
   Penny = 'Pn',
@@ -94,7 +94,7 @@ export enum ResourceEnum {
   Wine = 'Wn',
   Nickel = 'Ni',
   Reliquary = 'Rq',
-  Hops = 'Ho',
+  Malt = 'Ma', // used to be Hops/Ho
   Beer = 'Be',
   BonusPoint = 'Bp',
   Joker = 'Jo', // Use the Joker
@@ -280,10 +280,10 @@ export type Cost = {
   flour?: number
   grape?: number
   nickel?: number
-  hops?: number
+  malt?: number
   coal?: number
   book?: number
-  pottery?: number
+  ceramic?: number
   whiskey?: number
   straw?: number
   meat?: number
@@ -336,10 +336,10 @@ export type Tableau = {
   flour: number
   grape: number
   nickel: number
-  hops: number
+  malt: number
   coal: number
   book: number
-  pottery: number
+  ceramic: number
   whiskey: number
   straw: number
   meat: number

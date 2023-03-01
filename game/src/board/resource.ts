@@ -1,12 +1,9 @@
 import { match, P } from 'ts-pattern'
 import { Cost, ResourceEnum, Tableau } from '../types'
 
-const ResourceValues = Object.values(ResourceEnum)
-
 function* resourceSlicer(s: string): Generator<ResourceEnum> {
   for (let i = 0; i + 1 < s.length; i += 2) {
-    const scanned = s.slice(i, i + 2) as ResourceEnum
-    if (ResourceValues.includes(scanned)) yield scanned
+    yield s.slice(i, i + 2) as ResourceEnum
   }
 }
 
@@ -18,7 +15,7 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
   const cost: Cost = {}
   if (p === undefined) return cost
   for (const r of resourceSlicer(p)) {
-    match(r)
+    match<ResourceEnum | 'Po' | 'Ho', void>(r)
       .with(ResourceEnum.Wood, add('wood', cost))
       .with(ResourceEnum.Whiskey, add('whiskey', cost))
       .with(ResourceEnum.Grain, add('grain', cost))
@@ -26,7 +23,8 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
       .with(ResourceEnum.Sheep, add('sheep', cost))
       .with(ResourceEnum.Meat, add('meat', cost))
       .with(ResourceEnum.Clay, add('clay', cost))
-      .with(ResourceEnum.Pottery, add('pottery', cost))
+      .with('Po', add('ceramic', cost))
+      .with(ResourceEnum.Ceramic, add('ceramic', cost))
       .with(ResourceEnum.Peat, add('peat', cost))
       .with(ResourceEnum.Coal, add('coal', cost))
       .with(ResourceEnum.Penny, add('penny', cost))
@@ -39,13 +37,15 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
       .with(ResourceEnum.Wine, add('wine', cost))
       .with(ResourceEnum.Nickel, add('nickel', cost))
       .with(ResourceEnum.Reliquary, add('reliquary', cost))
-      .with(ResourceEnum.Hops, add('hops', cost))
+      .with('Ho', add('malt', cost))
+      .with(ResourceEnum.Malt, add('malt', cost))
       .with(ResourceEnum.Beer, add('beer', cost))
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       .with(ResourceEnum.BonusPoint, () => {})
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       .with(ResourceEnum.Joker, () => {})
-      .exhaustive()
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      .otherwise(() => {})
   }
   return cost
 }
@@ -86,7 +86,7 @@ export const costFood = ({
   flour = 0,
   grape = 0,
   nickel = 0,
-  hops = 0,
+  malt = 0,
   whiskey = 0,
   meat = 0,
   bread = 0,
@@ -97,14 +97,14 @@ export const costFood = ({
   2 * sheep +
   flour +
   grape +
-  hops +
+  malt +
   5 * meat +
   3 * bread +
   5 * beer +
   costMoney({ penny, nickel, wine, whiskey })
 
-export const costPoints = ({ nickel = 0, whiskey = 0, pottery = 0, book = 0, reliquary = 0, ornament = 0, wine = 0 }) =>
-  2 * nickel + 1 * whiskey + 3 * pottery + 2 * book + 8 * reliquary + 4 * ornament + 1 * wine
+export const costPoints = ({ nickel = 0, whiskey = 0, ceramic = 0, book = 0, reliquary = 0, ornament = 0, wine = 0 }) =>
+  2 * nickel + 1 * whiskey + 3 * ceramic + 2 * book + 8 * reliquary + 4 * ornament + 1 * wine
 
 export const canAfford =
   (cost: Cost) =>

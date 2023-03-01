@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { winery } from '../winery'
+import { winery } from '..'
 
 describe('buildings/winery', () => {
   describe('winery', () => {
@@ -32,10 +32,10 @@ describe('buildings/winery', () => {
       flour: 0,
       grape: 10,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 5,
       meat: 0,

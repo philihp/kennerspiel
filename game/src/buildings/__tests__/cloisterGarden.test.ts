@@ -8,7 +8,7 @@ import {
   Tile,
   GameStatePlaying,
 } from '../../types'
-import { cloisterGarden } from '../cloisterGarden'
+import { cloisterGarden } from '..'
 
 describe('buildings/cloisterGarden', () => {
   describe('cloisterGarden', () => {
@@ -32,10 +32,10 @@ describe('buildings/cloisterGarden', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -106,6 +106,7 @@ describe('buildings/cloisterGarden', () => {
       expect(s2.frame.usableBuildings).toContain('G16')
       expect(s2.frame.usableBuildings).toContain('LG1')
       expect(s2.frame.usableBuildings).not.toContain('F08')
+      expect(s2.frame.unusableBuildings).toContain('F09')
       expect(s2.frame.nextUse).toBe('free')
       expect(s2.players[0]).toMatchObject({
         grape: 1,
@@ -133,6 +134,7 @@ describe('buildings/cloisterGarden', () => {
       expect(s2.frame).toMatchObject({
         usableBuildings: [],
       })
+      expect(s2.players[0].grape).toBe(1)
     })
   })
 })

@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { printingOffice } from '../printingOffice'
+import { printingOffice } from '..'
 
 describe('buildings/printingOffice', () => {
   describe('use', () => {
@@ -41,10 +41,10 @@ describe('buildings/printingOffice', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,

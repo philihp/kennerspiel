@@ -9,7 +9,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { hospice } from '../hospice'
+import { hospice } from '..'
 
 describe('buildings/hospice', () => {
   describe('hospice', () => {
@@ -33,10 +33,10 @@ describe('buildings/hospice', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 10,
       book: 0,
-      pottery: 3,
+      ceramic: 3,
       whiskey: 0,
       straw: 0,
       meat: 10,

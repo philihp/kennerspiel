@@ -4,12 +4,12 @@ import { parseResourceParam } from '../board/resource'
 import { GameStatePlaying } from '../types'
 
 export const townEstate = (param = '') => {
-  const { pottery = 0 } = parseResourceParam(param)
-  if (pottery === 0) return (state: GameStatePlaying | undefined) => state
+  const { ceramic = 0 } = parseResourceParam(param)
+  if (ceramic === 0) return (state: GameStatePlaying | undefined) => state
   return withActivePlayer(
     pipe(
       //
-      payCost({ pottery }),
+      payCost({ ceramic }),
       getCost({ nickel: 2, penny: 2 })
     )
   )

@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { harborPromenade } from '../harborPromenade'
+import { harborPromenade } from '..'
 
 describe('buildings/harborPromenade', () => {
   describe('harborPromenade', () => {
@@ -32,10 +32,10 @@ describe('buildings/harborPromenade', () => {
       flour: 0,
       grape: 0,
       nickel: 0,
-      hops: 0,
+      malt: 0,
       coal: 0,
       book: 0,
-      pottery: 0,
+      ceramic: 0,
       whiskey: 0,
       straw: 0,
       meat: 0,
@@ -84,7 +84,7 @@ describe('buildings/harborPromenade', () => {
         wood: 1,
         wine: 1,
         penny: 1,
-        pottery: 1,
+        ceramic: 1,
       })
     })
   })
