@@ -122,6 +122,76 @@ describe('board/player', () => {
       })
       expect(payCost({ clay: 5 })(player)).toBeUndefined()
     })
+    it('pays out from nickels if not enough pennies', () => {
+      const p0 = {
+        ...player,
+        penny: 0,
+        nickel: 2,
+        wine: 0,
+        whiskey: 0,
+      }
+      const p1 = payCost({ penny: 8 })(p0)
+      expect(p1).toMatchObject({
+        penny: 2,
+        nickel: 0,
+      })
+    })
+    it('pays out from wine if not enough pennies', () => {
+      const p0 = {
+        ...player,
+        penny: 1,
+        nickel: 0,
+        wine: 4,
+        whiskey: 0,
+      }
+      const p1 = payCost({ penny: 3 })(p0)
+      expect(p1).toMatchObject({
+        penny: 0,
+        wine: 2,
+      })
+    })
+    it('pays out from whiskey if not enough pennies', () => {
+      const p0 = {
+        ...player,
+        penny: 3,
+        nickel: 0,
+        wine: 0,
+        whiskey: 2,
+      }
+      const p1 = payCost({ penny: 4 })(p0)
+      expect(p1).toMatchObject({
+        penny: 1,
+        whiskey: 1,
+      })
+    })
+    it('prefers nickels over whiskey', () => {
+      const p0 = {
+        ...player,
+        penny: 1,
+        nickel: 1,
+        whiskey: 7,
+      }
+      const p1 = payCost({ penny: 7 })(p0)
+      expect(p1).toMatchObject({
+        penny: 1,
+        nickel: 0,
+        whiskey: 6,
+      })
+    })
+    it('prefers nickels over wine', () => {
+      const p0 = {
+        ...player,
+        penny: 1,
+        nickel: 1,
+        wine: 7,
+      }
+      const p1 = payCost({ penny: 8 })(p0)
+      expect(p1).toMatchObject({
+        penny: 0,
+        nickel: 0,
+        wine: 5,
+      })
+    })
   })
 
   describe('getCost', () => {
