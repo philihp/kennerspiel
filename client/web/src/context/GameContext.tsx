@@ -4,7 +4,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, u
 
 import { ConnectionFailure } from "../../../.hathora/failures";
 import { HathoraClient, HathoraConnection } from "../../../.hathora/client";
-import { Card, PlayerState, IInitializeRequest } from "../../../../api/types";
+import { EngineState, IInitializeRequest } from "../../../../api/types";
 import { lookupUser, UserData, Response } from "../../../../api/base";
 
 interface GameContext {
@@ -13,12 +13,12 @@ interface GameContext {
   connect: (gameId: string) => Promise<HathoraConnection>;
   disconnect: () => void;
   createGame: () => Promise<string>;
-  joinGame: (gameId: string) => Promise<void>;
-  startGame: () => Promise<void>;
-  playerState?: PlayerState;
+  // joinGame: (gameId: string) => Promise<void>;
+  // startGame: () => Promise<void>;
+  engineState?: EngineState;
   connectionError?: ConnectionFailure;
-  playCard: (card: Card) => Promise<void>;
-  drawCard: () => Promise<void>;
+  // playCard: (card: Card) => Promise<void>;
+  // drawCard: () => Promise<void>;
   endGame: () => void;
   getUserName: (id: string) => string;
   user?: UserData;
@@ -51,10 +51,10 @@ const handleResponse = async (prom: Promise<Response>) => {
   return response;
 };
 
-export default function HathoraContextProvider({ children }: HathoraContextProviderProps) {
+export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
   const [token, setToken] = useSessionstorageState<string>(client.appId);
   const [connection, setConnection] = useState<HathoraConnection>();
-  const [playerState, setPlayerState] = useState<PlayerState>();
+  const [engineState, setEngineState] = useState<EngineState>();
   const [events, setEvents] = useState<string[]>();
   const [connectionError, setConnectionError] = useState<ConnectionFailure>();
   const [connecting, setConnecting] = useState<boolean>();
@@ -91,7 +91,7 @@ export default function HathoraContextProvider({ children }: HathoraContextProvi
   const connect = useCallback(
     async (stateId: string) => {
       setConnecting(true);
-      const connection = await client.connect(token, stateId, ({ state }) => setPlayerState(state), setConnectionError);
+      const connection = await client.connect(token, stateId, ({ state }) => setEngineState(state), setConnectionError);
       setConnection(connection);
       setConnecting(false);
       return connection;
@@ -103,7 +103,7 @@ export default function HathoraContextProvider({ children }: HathoraContextProvi
     if (connection !== undefined) {
       connection.disconnect();
       setConnection(undefined);
-      setPlayerState(undefined);
+      setEngineState(undefined);
       setEvents(undefined);
       setConnectionError(undefined);
     }
@@ -118,37 +118,37 @@ export default function HathoraContextProvider({ children }: HathoraContextProvi
     }
   }, [token]);
 
-  const joinGame = useCallback(
-    async (gameId: string) => {
-      const connection = await connect(gameId);
-      await connection.joinGame({});
-    },
-    [token, connect]
-  );
+  // const joinGame = useCallback(
+  //   async (gameId: string) => {
+  //     const connection = await connect(gameId);
+  //     await connection.joinGame({});
+  //   },
+  //   [token, connect]
+  // );
 
-  const startGame = useCallback(async () => {
-    if (connection) {
-      await handleResponse(connection.startGame({}));
-    }
-  }, [token, connection]);
+  // const startGame = useCallback(async () => {
+  //   if (connection) {
+  //     await handleResponse(connection.startGame({}));
+  //   }
+  // }, [token, connection]);
 
-  const playCard = useCallback(
-    async (card: Card) => {
-      if (connection) {
-        await handleResponse(connection.playCard({ card }));
-      }
-    },
-    [connection]
-  );
+  // const playCard = useCallback(
+  //   async (card: Card) => {
+  //     if (connection) {
+  //       await handleResponse(connection.playCard({ card }));
+  //     }
+  //   },
+  //   [connection]
+  // );
 
-  const drawCard = useCallback(async () => {
-    if (connection) {
-      await handleResponse(connection.drawCard({}));
-    }
-  }, [connection]);
+  // const drawCard = useCallback(async () => {
+  //   if (connection) {
+  //     await handleResponse(connection.drawCard({}));
+  //   }
+  // }, [connection]);
 
   const endGame = () => {
-    setPlayerState(undefined);
+    setEngineState(undefined);
     connection?.disconnect();
   };
 
@@ -178,15 +178,15 @@ export default function HathoraContextProvider({ children }: HathoraContextProvi
     }
   }, [token]);
 
-  useEffect(() => {
-    if (playerState?.turn) {
-      if (playerState?.turn === user?.id) {
-        toast.success("It's your turn", { position: "top-center", hideProgressBar: true });
-      } else {
-        toast.info(`it is ${getUserName(playerState?.turn)}'s turn`, { position: "top-center", hideProgressBar: true });
-      }
-    }
-  }, [playerState?.turn]);
+  // useEffect(() => {
+  //   if (EngineState?.turn) {
+  //     if (EngineState?.turn === user?.id) {
+  //       toast.success("It's your turn", { position: "top-center", hideProgressBar: true });
+  //     } else {
+  //       toast.info(`it is ${getUserName(EngineState?.turn)}'s turn`, { position: "top-center", hideProgressBar: true });
+  //     }
+  //   }
+  // }, [EngineState?.turn]);
 
   return (
     <HathoraContext.Provider
@@ -195,14 +195,10 @@ export default function HathoraContextProvider({ children }: HathoraContextProvi
         login,
         connect,
         connecting,
-        joinGame,
         disconnect,
         createGame,
-        playerState,
+        engineState,
         connectionError,
-        startGame,
-        playCard,
-        drawCard,
         loggingIn,
         user,
         endGame,
