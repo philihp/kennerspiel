@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ClipboardCopyIcon } from "@heroicons/react/outline";
 
 import { useHathoraContext } from "../context/GameContext";
@@ -14,13 +13,11 @@ export default function Lobby() {
     <>
       <div className="flex flex-col h-full justify-center items-center mb-2">
         <h2 className="text-xl tracking-tight font-bold text-gray-900 mb-2">Invite Friends</h2>
-        <CopyToClipboard text={window.location.href} onCopy={() => toast.success("Copied room link to clipboard!")}>
           <div className="cursor-pointer">
             <div className="pl-5 mt-3 mb-3 text-md font-semibold flex items-center cursor-pointer">
               Room Code: {gameId} <ClipboardCopyIcon height={20} className={"h-fit mx-2"} />
             </div>
           </div>
-        </CopyToClipboard>
         <h2 className="text-xl tracking-tight font-bold text-gray-900 mt-3">Players in lobby</h2>
         <PlayerList />
         <button
