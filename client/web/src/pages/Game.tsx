@@ -5,7 +5,6 @@ import { useHathoraContext } from "../context/GameContext";
 import WinModal from "../components/WinModal";
 import Lobby from "../components/Lobby";
 import ActiveGame from "../components/ActiveGame";
-import Logo from "../assets/hathora-hammer-logo-light.png";
 
 export default function Game() {
   const { gameId } = useParams();
@@ -46,9 +45,6 @@ export default function Game() {
       <div className="flex flex-col h-full overflow-hidden ">
         <div className="flex flex-row bg-slate-200 p-2 md:p-5">
           <div className="flex flex-row justify-center items-center">
-            <Link to={"/"}>
-              <img src={Logo} style={{ height: 50 }} />
-            </Link>
             <div>
               Powered By{" "}
               <strong>

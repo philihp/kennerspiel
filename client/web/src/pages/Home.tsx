@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { useHathoraContext } from "../context/GameContext";
-import Logo from "../assets/hathora-hammer-logo-light.png";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -13,7 +12,6 @@ export default function Home() {
     <div className="h-full bg-slate-400  flex justify-center items-center">
       <div className="flex flex-col rounded bg-gray-100 h-3/5 w-5/6 sm:w-2/3 lg:w-1/2 xl:w-2/5 shadow drop-shadow">
         <div className="flex flex-col justify-center items-center h-4/6 w-full text-2xl lg:text-4xl md:text-2xl font-semibold">
-          <img src={Logo} style={{ width: 150 }} />
           <div>
             <strong>UNO</strong>
           </div>
