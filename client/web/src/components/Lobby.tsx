@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import QRCode from "react-qr-code";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ClipboardCopyIcon } from "@heroicons/react/outline";
 
@@ -17,8 +16,6 @@ export default function Lobby() {
         <h2 className="text-xl tracking-tight font-bold text-gray-900 mb-2">Invite Friends</h2>
         <CopyToClipboard text={window.location.href} onCopy={() => toast.success("Copied room link to clipboard!")}>
           <div className="cursor-pointer">
-            <QRCode value={window.location.href} />
-
             <div className="pl-5 mt-3 mb-3 text-md font-semibold flex items-center cursor-pointer">
               Room Code: {gameId} <ClipboardCopyIcon height={20} className={"h-fit mx-2"} />
             </div>
