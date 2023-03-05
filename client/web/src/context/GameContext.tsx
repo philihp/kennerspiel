@@ -1,11 +1,12 @@
 import { ToastContainer, toast } from 'react-toastify'
-import React, { createContext, ReactNode, useContext,  useState } from 'react'
+import React, { createContext, ReactNode, useCallback, useContext,  useState } from 'react'
 
 import { HathoraClient } from '../../../.hathora/client'
 import { EngineState } from '../../../../api/types'
 
 interface GameContext {
-    engineState?: EngineState
+    engineState?: EngineState,
+    createGame: () => Promise<string>,
 }
 
 interface HathoraContextProviderProps {
@@ -18,10 +19,18 @@ const HathoraContext = createContext<GameContext | null>(null)
 export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
   const [engineState] = useState<EngineState>()
 
+  const createGame = useCallback(async () => new Promise<string>((fulfill, _reject) => {
+    setTimeout(() => {
+      fulfill("ok")
+    }, 500)
+  }),
+  [])
+
   return (
     <HathoraContext.Provider
       value={{
         engineState,
+        createGame,
       }}
     >
       {children}

@@ -23,10 +23,9 @@ export default function Home() {
       </p>
       <p>
         <button
-          onClick={() => {
-            createGame().then((stateId) => {
-              navigate(`/game/${stateId}`)
-            })
+          onClick={async () => {
+            const stateId = await createGame()
+            navigate(`/game/${stateId}`)
           }}
         >
           Create Game
