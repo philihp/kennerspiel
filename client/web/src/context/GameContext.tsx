@@ -1,5 +1,5 @@
-import { ToastContainer, toast } from 'react-toastify'
-import { createContext, ReactNode, useCallback, useContext, useRef, useState } from 'react'
+import { ToastContainer } from 'react-toastify'
+import { createContext, ReactNode, useCallback, useContext, useMemo, useRef, useState } from 'react'
 
 import { HathoraClient, HathoraConnection } from '../../../.hathora/client'
 import { EngineState, IInitializeRequest } from '../../../../api/types'
@@ -32,39 +32,26 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   const [connection, setConnection] = useState<HathoraConnection>()
   const [connectionError, setConnectionError] = useState<ConnectionFailure>()
 
-  console.log({ token })
-
   const login = useCallback(async (): Promise<string> => {
-    console.log('login...')
     const token = await client.loginAnonymous()
     localStorage.setItem('token', token)
     setToken(token)
     const user = HathoraClient.getUserFromToken(token)
     setUserInfo(user)
-    console.log('login done!')
     return token
   }, [])
 
   const createGame = useCallback(async (): Promise<string> => {
-    console.log('createGame')
-    if (token) {
-      return client.create(token, IInitializeRequest.default())
+    let currentToken = token
+    if (currentToken) {
+      return client.create(currentToken, IInitializeRequest.default())
     }
-    const token = await login()!
-    return client.create(token!, IInitializeRequest.default())
-  }, [token])
-  // {
-  //   new Promise<string>((fulfill, _reject) => {
-  //   setTimeout(() => {
-  //     fulfill("ok")
-  //   }, 500)
-  // }
-  // ),
-  // [])
+    currentToken = await login()
+    return client.create(currentToken, IInitializeRequest.default())
+  }, [token, login])
 
   const connect = useCallback(
     async (stateId: string) => {
-      console.log('connect...')
       setConnecting(true)
       let currentToken = token
       if (!currentToken) {
@@ -83,17 +70,20 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     [token, login]
   )
 
+  const exported = useMemo(
+    () => ({
+      token,
+      engineState,
+      user,
+      login,
+      connect,
+      createGame,
+    }),
+    [token, engineState, user, login, connect, createGame]
+  )
+
   return (
-    <HathoraContext.Provider
-      value={{
-        token,
-        engineState,
-        user,
-        login,
-        connect,
-        createGame,
-      }}
-    >
+    <HathoraContext.Provider value={exported}>
       {children}
       <ToastContainer
         autoClose={1000}
