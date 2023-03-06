@@ -1,12 +1,20 @@
 import { ToastContainer, toast } from 'react-toastify'
-import React, { createContext, ReactNode, useCallback, useContext,  useState } from 'react'
+import { createContext, ReactNode, useCallback, useContext, useRef, useState } from 'react'
 
-import { HathoraClient } from '../../../.hathora/client'
-import { EngineState } from '../../../../api/types'
+import { HathoraClient, HathoraConnection } from '../../../.hathora/client'
+import { EngineState, IInitializeRequest } from '../../../../api/types'
+import { UserData } from '../../../../api/base'
+import { ConnectionFailure } from '../../../.hathora/failures'
 
 interface GameContext {
-    engineState?: EngineState,
-    createGame: () => Promise<string>,
+  token?: string
+  engineState?: EngineState
+  user?: UserData
+  connecting?: boolean
+  connectionError?: ConnectionFailure
+  login: () => Promise<string>
+  connect: (gameId: string) => Promise<HathoraConnection>
+  createGame: () => Promise<string>
 }
 
 interface HathoraContextProviderProps {
@@ -17,19 +25,72 @@ const client = new HathoraClient()
 const HathoraContext = createContext<GameContext | null>(null)
 
 export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
-  const [engineState] = useState<EngineState>()
+  const [token, setToken] = useState<string | undefined>(localStorage.getItem('token') || '')
+  const [engineState, setEngineState] = useState<EngineState>()
+  const [user, setUserInfo] = useState<UserData>()
+  const [connecting, setConnecting] = useState<boolean>()
+  const [connection, setConnection] = useState<HathoraConnection>()
+  const [connectionError, setConnectionError] = useState<ConnectionFailure>()
 
-  const createGame = useCallback(async () => new Promise<string>((fulfill, _reject) => {
-    setTimeout(() => {
-      fulfill("ok")
-    }, 500)
-  }),
-  [])
+  console.log({ token })
+
+  const login = useCallback(async (): Promise<string> => {
+    console.log('login...')
+    const token = await client.loginAnonymous()
+    localStorage.setItem('token', token)
+    setToken(token)
+    const user = HathoraClient.getUserFromToken(token)
+    setUserInfo(user)
+    console.log('login done!')
+    return token
+  }, [])
+
+  const createGame = useCallback(async (): Promise<string> => {
+    console.log('createGame')
+    if (token) {
+      return client.create(token, IInitializeRequest.default())
+    }
+    const token = await login()!
+    return client.create(token!, IInitializeRequest.default())
+  }, [token])
+  // {
+  //   new Promise<string>((fulfill, _reject) => {
+  //   setTimeout(() => {
+  //     fulfill("ok")
+  //   }, 500)
+  // }
+  // ),
+  // [])
+
+  const connect = useCallback(
+    async (stateId: string) => {
+      console.log('connect...')
+      setConnecting(true)
+      let currentToken = token
+      if (!currentToken) {
+        currentToken = await login()
+      }
+      const connection = await client.connect(
+        currentToken,
+        stateId,
+        ({ state }) => setEngineState(state),
+        setConnectionError
+      )
+      setConnection(connection)
+      setConnecting(false)
+      return connection
+    },
+    [token, login]
+  )
 
   return (
     <HathoraContext.Provider
       value={{
+        token,
         engineState,
+        user,
+        login,
+        connect,
         createGame,
       }}
     >
