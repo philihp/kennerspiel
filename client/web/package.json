@@ -10,14 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "@headlessui/react": "1.7.13",
-    "@heroicons/react": "1.0.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.8.2",
-    "react-toastify": "9.1.1",
-    "rooks": "5.14.1",
-    "styled-components": "5.3.8"
+    "react-toastify": "9.1.1"
   },
   "devDependencies": {
     "@philihp/eslint-config": "6.0.2",
