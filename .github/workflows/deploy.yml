@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 16.x
       - run: npm install hathora -g
-      - run: APP_SECRET=${{ secrets.HATHORA_APP_SECRET }} hathora build --only client
+      - run: APP_SECRET=${{ secrets.HATHORA_APP_SECRET }} APP_ID=app-c90ca9cf-ab67-42e0-ae7d-ada07e5616fd hathora build --only client
       - uses: jsmrcaga/action-netlify-deploy@v1.1.0
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
