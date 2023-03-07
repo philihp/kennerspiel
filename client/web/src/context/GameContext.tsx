@@ -8,7 +8,7 @@ import { ConnectionFailure } from '../../../.hathora/failures'
 
 interface GameContext {
   token?: string
-  engineState?: EngineState
+  state?: EngineState
   user?: UserData
   loading?: boolean
   error?: ConnectionFailure
@@ -26,7 +26,7 @@ const HathoraContext = createContext<GameContext | null>(null)
 
 export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
   const [token, setToken] = useState<string | undefined>(localStorage.getItem('token') || '')
-  const [engineState, setEngineState] = useState<EngineState>()
+  const [state, setEngineState] = useState<EngineState>()
   const [user, setUserInfo] = useState<UserData>()
   const [loading, setLoading] = useState<boolean>(false)
   const [connection, setConnection] = useState<HathoraConnection>()
@@ -80,7 +80,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   const exported = useMemo(
     () => ({
       token,
-      engineState,
+      state,
       user,
       loading,
       error,
@@ -88,7 +88,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       connect,
       createGame,
     }),
-    [token, engineState, user, loading, error, login, connect, createGame]
+    [token, state, user, loading, error, login, connect, createGame]
   )
 
   return (
