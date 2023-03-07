@@ -1,5 +1,5 @@
 import { ToastContainer } from 'react-toastify'
-import { createContext, ReactNode, useCallback, useContext, useMemo, useRef, useState } from 'react'
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { HathoraClient, HathoraConnection } from '../../../.hathora/client'
 import { EngineState, IInitializeRequest } from '../../../../api/types'
@@ -8,10 +8,10 @@ import { ConnectionFailure } from '../../../.hathora/failures'
 
 interface GameContext {
   token?: string
-  engineState?: EngineState
+  state?: EngineState
   user?: UserData
-  connecting?: boolean
-  connectionError?: ConnectionFailure
+  loading?: boolean
+  error?: ConnectionFailure
   login: () => Promise<string>
   connect: (gameId: string) => Promise<HathoraConnection>
   createGame: () => Promise<string>
@@ -26,11 +26,18 @@ const HathoraContext = createContext<GameContext | null>(null)
 
 export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
   const [token, setToken] = useState<string | undefined>(localStorage.getItem('token') || '')
-  const [engineState, setEngineState] = useState<EngineState>()
+  const [state, setEngineState] = useState<EngineState>()
   const [user, setUserInfo] = useState<UserData>()
-  const [connecting, setConnecting] = useState<boolean>()
+  const [loading, setLoading] = useState<boolean>(false)
   const [connection, setConnection] = useState<HathoraConnection>()
-  const [connectionError, setConnectionError] = useState<ConnectionFailure>()
+  const [error, setError] = useState<ConnectionFailure>()
+
+  // if we have a stored token, immediately use that to load things
+  useEffect(() => {
+    if (!token) return
+    const user = HathoraClient.getUserFromToken(token)
+    setUserInfo(user)
+  }, [token])
 
   const login = useCallback(async (): Promise<string> => {
     const token = await client.loginAnonymous()
@@ -52,34 +59,36 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
 
   const connect = useCallback(
     async (stateId: string) => {
-      setConnecting(true)
-      let currentToken = token
-      if (!currentToken) {
-        currentToken = await login()
-      }
+      setLoading(true)
+      if (!token) throw new Error('Unable to connect, no token')
       const connection = await client.connect(
-        currentToken,
+        token,
         stateId,
         ({ state }) => setEngineState(state),
-        setConnectionError
+        (error) => {
+          setLoading(false)
+          return setError(error)
+        }
       )
       setConnection(connection)
-      setConnecting(false)
+      setLoading(false)
       return connection
     },
-    [token, login]
+    [token, setLoading]
   )
 
   const exported = useMemo(
     () => ({
       token,
-      engineState,
+      state,
       user,
+      loading,
+      error,
       login,
       connect,
       createGame,
     }),
-    [token, engineState, user, login, connect, createGame]
+    [token, state, user, loading, error, login, connect, createGame]
   )
 
   return (
