@@ -83,7 +83,7 @@ export class Impl implements Methods<InternalState> {
     return Response.ok()
   }
   config(state: InternalState, userId: UserId, ctx: Context, request: IConfigRequest): Response {
-    const players = `${state.users.length+1}`
+    const players = `${state.users.length}`
     if(request.country !== Country.france) return Response.error('Only the France variant is implemented');
     const country = 'france'
     const length = request.length === Length.long ? 'long' : 'short'
@@ -145,6 +145,10 @@ export class Impl implements Methods<InternalState> {
     return {
       users: state.users as User[],
       status: statusDongle(state.game.status),
+      config: {
+        country: Country.france,
+        length: state.game.config?.length === 'short' ? Length.short : Length.long,
+      },
       buildings: [],
       plotPurchasePrices: [],
       districtPurchasePrices: [],
