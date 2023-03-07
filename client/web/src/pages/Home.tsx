@@ -5,17 +5,17 @@ import { useHathoraContext } from '../context/GameContext'
 
 const Home = () => {
   const navigate = useNavigate()
-  const { token, user, connecting, connectionError, createGame, login } = useHathoraContext()
+  const { token, user, createGame, login } = useHathoraContext()
 
   return (
     <>
-      <pre>{JSON.stringify({ token, user, connecting, connectionError }, undefined, 2)}</pre>
+      <pre>{JSON.stringify({ token, user }, undefined, 2)}</pre>
       <h1>Hathora et Labora</h1>
       <p>
         <button
           type="button"
           onClick={async () => {
-            const stateId = await login()
+            await login()
           }}
         >
           Login

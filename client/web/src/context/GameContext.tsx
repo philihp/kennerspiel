@@ -2,7 +2,7 @@ import { ToastContainer } from 'react-toastify'
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { HathoraClient, HathoraConnection } from '../../../.hathora/client'
-import { EngineState, IInitializeRequest } from '../../../../api/types'
+import { Color, Country, EngineState, IInitializeRequest, Length } from '../../../../api/types'
 import { UserData } from '../../../../api/base'
 import { ConnectionFailure } from '../../../.hathora/failures'
 
@@ -15,6 +15,10 @@ interface GameContext {
   login: () => Promise<string>
   connect: (gameId: string) => Promise<HathoraConnection>
   createGame: () => Promise<string>
+  join: (color: Color) => Promise<void>
+  config: (country: Country, length: Length) => Promise<void>
+  start: () => Promise<void>
+  move: (command: string) => Promise<void>
 }
 
 interface HathoraContextProviderProps {
@@ -77,6 +81,28 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     [token, setLoading]
   )
 
+  const join = useCallback(
+    async (color: Color) => {
+      await connection?.join({ color })
+    },
+    [connection]
+  )
+  const config = useCallback(
+    async (country: Country, length: Length) => {
+      await connection?.config({ country, length })
+    },
+    [connection]
+  )
+  const start = useCallback(async () => {
+    await connection?.start({})
+  }, [connection])
+  const move = useCallback(
+    async (command: string) => {
+      await connection?.move({ command })
+    },
+    [connection]
+  )
+
   const exported = useMemo(
     () => ({
       token,
@@ -87,8 +113,12 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       login,
       connect,
       createGame,
+      join,
+      config,
+      start,
+      move,
     }),
-    [token, state, user, loading, error, login, connect, createGame]
+    [token, state, user, loading, error, login, connect, createGame, join, config, start, move]
   )
 
   return (
