@@ -5,11 +5,11 @@ import { useHathoraContext } from '../context/GameContext'
 
 const Home = () => {
   const navigate = useNavigate()
-  const { user, connect, createGame, login } = useHathoraContext()
-  const [gameId, setGameId] = useState<string>()
+  const { token, user, connecting, connectionError, createGame, login } = useHathoraContext()
 
   return (
     <>
+      <pre>{JSON.stringify({ token, user, connecting, connectionError }, undefined, 2)}</pre>
       <h1>Hathora et Labora</h1>
       <p>
         <button
@@ -19,18 +19,6 @@ const Home = () => {
           }}
         >
           Login
-        </button>
-      </p>
-      <pre>{JSON.stringify(user)}</pre>
-      <p>
-        <input onChange={(e) => setGameId(e.target.value)} placeholder="Room code" />
-        <button
-          type="button"
-          onClick={() => {
-            navigate(`/game/${gameId}`)
-          }}
-        >
-          Join Existing Game
         </button>
       </p>
       <p>

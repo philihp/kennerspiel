@@ -5,7 +5,7 @@
   "scripts": {
     "build": "vite build",
     "lint": "eslint --ext=.ts,.tsx src/",
-    "prepare": "cd .. && husky install game/.husky",
+    "prepare": "cd ../.. && husky install client/web/.husky",
     "start": "vite",
     "test": "jest"
   },
