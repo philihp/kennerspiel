@@ -1,6 +1,7 @@
 import { randRange } from 'fn-pcg'
 import { BuildingEnum, LandEnum, PlayerColor, StateReducer, Tile } from '../../types'
 import { makeLandscape } from '../landscape'
+import { clergyForColor } from '../player'
 
 const neutralColor = (playerColor: PlayerColor, neutralColorIndex: number) =>
   [
@@ -16,6 +17,7 @@ export const addNeutralPlayer: StateReducer = (state) => {
 
   const [neutralColorIndex, randGen] = randRange(0, 3, state.randGen)
   const color = neutralColor(state.players[0].color, neutralColorIndex)
+  const clergy = clergyForColor(color)
   const [row0, row1] = makeLandscape(color)
   const landscape: Tile[][] = [
     [
@@ -49,6 +51,7 @@ export const addNeutralPlayer: StateReducer = (state) => {
       ...state.players,
       {
         ...state.players[0],
+        clergy,
         color,
         landscape,
       },
