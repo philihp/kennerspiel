@@ -52,10 +52,10 @@ types:
     flour: int
     grape: int
     nickel: int
-    hops: int
+    malt: int
     coal: int
     book: int
-    pottery: int
+    ceramic: int
     whiskey: int
     straw: int
     meat: int
