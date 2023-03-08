@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "hathora-et-labora-game",
   "description": "Plays Uwe Rosenberg's Ora et Labora for the Hathora engine. It reduces a list of moves into a board game state.",
   "keywords": [
