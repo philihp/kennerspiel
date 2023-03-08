@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Color, Country, Length } from '../../../../api/types'
+import { Header } from '../components/Header'
+import { Loading } from '../components/Loading'
+import { Player } from '../components/Player'
+import { StatePlaying } from '../components/StatePlaying'
+import { StateSetup } from '../components/StateSetup'
+import { Color, Country, EngineStatus, Length } from '../../../../api/types'
 
 import { useHathoraContext } from '../context/GameContext'
 
@@ -28,45 +33,11 @@ const Game = () => {
 
   return (
     <>
-      <pre>{JSON.stringify({ token, user, loading, error }, undefined, 2)}</pre>
-      <>
-        Join
-        <button type="button" onClick={() => join(Color.Red)}>
-          R
-        </button>
-        <button type="button" onClick={() => join(Color.Green)}>
-          G
-        </button>
-        <button type="button" onClick={() => join(Color.Blue)}>
-          B
-        </button>
-        <button type="button" onClick={() => join(Color.White)}>
-          W
-        </button>
-        | Config
-        <button type="button" onClick={() => config(Country.france, Length.long)}>
-          France Long
-        </button>
-        <button type="button" onClick={() => config(Country.france, Length.short)}>
-          France Short
-        </button>
-        <button type="button" disabled>
-          Ireland Long
-        </button>
-        <button type="button" disabled>
-          Ireland Long
-        </button>
-        |
-        <button type="button" onClick={() => start()}>
-          Start
-        </button>
-        |
-        <input type="text" placeholder="command" onChange={(e) => setCommand(e.target.value)} />
-        <button type="button" onClick={handleSubmit}>
-          Submit
-        </button>
-      </>
-      <pre>STATE: {JSON.stringify(state, undefined, 2)}</pre>
+      <Header />
+      <hr />
+      {loading && <Loading />}
+      {state?.status === EngineStatus.SETUP && <StateSetup />}
+      {state?.status === EngineStatus.PLAYING && <StatePlaying />}
     </>
   )
 }

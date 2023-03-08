@@ -127,6 +127,7 @@ export class Impl implements Methods<InternalState> {
         config: {
           country: Country.france,
           length: state.game.config?.length === 'short' ? Length.short : Length.long,
+          players: state.game.config?.players
         },
         rondel: state.game.rondel,
         wonders:state.game.wonders,
@@ -145,9 +146,10 @@ export class Impl implements Methods<InternalState> {
     return {
       users: state.users as User[],
       status: statusDongle(state.game.status),
-      config: {
+      config: state.game.config && {
         country: Country.france,
         length: state.game.config?.length === 'short' ? Length.short : Length.long,
+        players: state.users.length
       },
       buildings: [],
       plotPurchasePrices: [],
