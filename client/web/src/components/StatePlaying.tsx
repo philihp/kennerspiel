@@ -15,8 +15,7 @@ export const StatePlaying = () => {
   if (state === undefined) return <div>Error, missing state</div>
 
   const handleSubmit = () => {
-    // move(command)
-    console.log({ command })
+    move(command)
     setCommand('')
   }
 

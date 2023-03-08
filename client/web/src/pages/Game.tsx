@@ -26,11 +26,6 @@ const Game = () => {
     }
   }, [gameId, token, connect])
 
-  const handleSubmit = () => {
-    move(command)
-    setCommand('')
-  }
-
   return (
     <>
       <Header />
