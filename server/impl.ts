@@ -83,7 +83,7 @@ export class Impl implements Methods<InternalState> {
     return Response.ok()
   }
   config(state: InternalState, userId: UserId, ctx: Context, request: IConfigRequest): Response {
-    const players = `${state.users.length+1}`
+    const players = `${state.users.length}`
     if(request.country !== Country.france) return Response.error('Only the France variant is implemented');
     const country = 'france'
     const length = request.length === Length.long ? 'long' : 'short'

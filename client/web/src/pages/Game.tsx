@@ -1,17 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Color, Country, EngineStatus, Length } from '../../../../api/types'
 import { Header } from '../components/Header'
 import { Loading } from '../components/Loading'
 import { Player } from '../components/Player'
 import { StatePlaying } from '../components/StatePlaying'
 import { StateSetup } from '../components/StateSetup'
+import { Color, Country, EngineStatus, Length } from '../../../../api/types'
 
 import { useHathoraContext } from '../context/GameContext'
 
 const Game = () => {
   const { gameId } = useParams()
-  const { state, loading, token, login, connect } = useHathoraContext()
+  const { user, loading, error, state, token, login, connect, join, config, start, move } = useHathoraContext()
+  const [command, setCommand] = useState<string>('')
 
   useEffect(() => {
     if (!token) {
@@ -24,6 +25,11 @@ const Game = () => {
       connect(gameId)
     }
   }, [gameId, token, connect])
+
+  const handleSubmit = () => {
+    move(command)
+    setCommand('')
+  }
 
   return (
     <>
