@@ -19,6 +19,7 @@
     "build": "tsc -p tsconfig.build.json",
     "test": "jest",
     "lint": "eslint --ext .ts src/",
+    "prepack": "npm run build",
     "prepare": "cd .. && husky install game/.husky"
   },
   "main": "./dist/index.js",
