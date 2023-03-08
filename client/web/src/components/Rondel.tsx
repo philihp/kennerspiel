@@ -6,7 +6,8 @@ interface Props {
   config: EngineConfig
 }
 
-const tokens = ['wood', 'clay', 'coin', 'grain', 'peat', 'sheep', 'joker']
+const tokens = ['wood', 'clay', 'coin', 'grain', 'peat', 'sheep', 'joker', 'grape', 'stone']
+const emojis = ['🪵', '🧱', '🪙', '🌾', '💩', '🐑', '🃏', '🍇', '🪨']
 
 export const Rondel = ({ rondel, config }: Props) => {
   const armValues =
@@ -14,10 +15,10 @@ export const Rondel = ({ rondel, config }: Props) => {
       ? [0, 1, 2, 2, 3, 4, 4, 5, 6, 6, 7, 8, 10]
       : [0, 2, 3, 4, 5, 6, 6, 7, 7, 8, 8, 9, 10]
   return (
-    <table>
+    <table style={{ borderCollapse: 'collapse' }}>
       <thead>
         <tr>
-          <th>token</th>
+          <td />
           {addIndex(map)(
             (value, i) => (
               <th key={i}>{value as number}</th>
@@ -27,25 +28,25 @@ export const Rondel = ({ rondel, config }: Props) => {
         </tr>
       </thead>
       <tbody>
-        {tokens.map((token) => (
-          <tr key={token}>
+        {tokens.map((token, tokenIndex) => (
+          <tr key={token} style={rondel[token as keyof EngineRondel] === undefined ? { opacity: '20%' } : {}}>
             <td>{token}</td>
             {map((i) => {
-              const thisToken = rondel[token as keyof EngineRondel] ?? rondel.pointingBefore
-              const difference = (rondel.pointingBefore - thisToken) % 13
+              const thisToken = rondel[token as keyof EngineRondel]
+              const difference = (rondel.pointingBefore - (thisToken ?? rondel.pointingBefore)) % 13
               return (
                 <td
                   style={{
                     border: 1,
                     borderStyle: 'solid',
                     borderColor: '#DDD',
-                    width: 16,
-                    height: 16,
+                    width: 32,
+                    height: 32,
                     textAlign: 'center',
                   }}
                   key={i}
                 >
-                  {difference === i ? '*' : ''}
+                  {difference === i ? emojis[tokenIndex] : ''}
                 </td>
               )
             }, range(0, 13))}

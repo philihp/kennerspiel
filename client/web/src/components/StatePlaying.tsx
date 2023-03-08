@@ -6,6 +6,7 @@ import { Rondel } from './Rondel'
 import { UnbuiltBuildings } from './UnbuiltBuildings'
 import { UnbuiltPlots } from './UnbuiltPlots'
 import { UnbuiltDistricts } from './UnbuiltDistricts'
+import { UnbuiltWonders } from './UnbuiltWonders'
 
 export const StatePlaying = () => {
   const { state, move } = useHathoraContext()
@@ -19,7 +20,8 @@ export const StatePlaying = () => {
     setCommand('')
   }
 
-  const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, ...elseState } = state
+  const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders, ...elseState } =
+    state
 
   return (
     <>
@@ -32,6 +34,7 @@ export const StatePlaying = () => {
       {buildings && <UnbuiltBuildings buildings={buildings} />}
       {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
       {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
+      {wonders && <UnbuiltWonders wonders={wonders} />}
       {players && map((player) => <Player key={player.color} player={player} />, players)}
       <pre>{JSON.stringify(elseState, undefined, 2)}</pre>
     </>

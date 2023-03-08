@@ -71,3 +71,20 @@ code {
     transform: rotate(360deg);
   }
 }
+
+.red {
+  background-color: #fb8072;
+  border-color: #ad574d;
+}
+.green {
+  background-color: #b3de69;
+  border-color: #87a74f;
+}
+.blue {
+  background-color: #80b1d3;
+  border-color: #5f849e;
+}
+.white {
+  background-color: #d9d9d9;
+  border-color: #b1b1b1;
+}
