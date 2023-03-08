@@ -13,12 +13,14 @@ types:
     - FINISHED
   Country:
     - france
+    - ireland
   Length:
     - short
     - long
   EngineConfig:
     country: Country
     length: Length
+    players: int
   EngineFrame:
     next: int
     startingPlayer: int
