@@ -1,5 +1,6 @@
 import { addIndex, map, range } from 'ramda'
 import { EngineRondel, EngineConfig, Length } from '../../../../api/types'
+import { Erection } from './Erection'
 
 interface Props {
   landscape: string[][][]
@@ -41,15 +42,15 @@ export const PlayerLandscape = ({ landscape, offset }: Props) => {
                       border: 1,
                       borderStyle: 'solid',
                       borderColor: '#555',
-                      width: 32,
-                      height: 32,
+                      width: 70,
+                      height: 100,
                       textAlign: 'center',
                       backgroundColor: landToColor(land),
                     }}
                     // eslint-disable-next-line react/no-array-index-key
                     key={`${rowIndex}:${colIndex}`}
                   >
-                    {building}
+                    {building && <Erection key={building} id={building} />}
                   </td>
                 )
               })}
