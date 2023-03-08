@@ -1,5 +1,3 @@
-import { EngineTableau } from '../../../../api/types'
-
 interface Props {
   clergy: string[]
 }
@@ -37,7 +35,7 @@ const colorToStyle = (color: string) => {
 }
 
 const Prior = ({ color }: WorkerProps) => {
-  return <span style={{ ...colorToStyle(color), borderWidth: 3 }} />
+  return <span style={{ ...colorToStyle(color), borderWidth: 2, height: 17, width: 17 }} />
 }
 
 const LayBrother = ({ color }: WorkerProps) => {
