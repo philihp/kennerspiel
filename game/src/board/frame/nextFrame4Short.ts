@@ -7,6 +7,7 @@ import { gameEnd } from '../state'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondel } from './rotateRondel'
 import { introduceSettlements } from '../settlements'
+import { removeHomelandForestMoor } from './removeHomelandForestMoor'
 
 // TODO: only 2 clergymen
 
@@ -16,7 +17,13 @@ export const nextFrame4Short: FrameFlow = {
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
-    upkeep: [rotateRondel, withEachPlayer(getCost({ grain: 1, sheep: 1 })), introduceBuildings, introduceSettlements],
+    upkeep: [
+      rotateRondel,
+      withEachPlayer(getCost({ grain: 1, sheep: 1 })),
+      introduceBuildings,
+      introduceSettlements,
+      withEachPlayer(removeHomelandForestMoor),
+    ],
     next: 2,
   },
   2: {
