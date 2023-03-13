@@ -25,12 +25,10 @@ jobs:
         with:
           node-version: 16.x
       - run: npm install hathora -g
+      - run: npm install --global vercel@latest
       - run: APP_SECRET=${{ secrets.HATHORA_APP_SECRET }} hathora build --only client
       - run: echo '/* /index.html 200' > client/web/dist/_redirects;
-      - uses: jsmrcaga/action-netlify-deploy@v1.6.0
-        with:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_DEPLOY_MESSAGE: "Prod deploy ${{ github.ref }}"
-          NETLIFY_DEPLOY_TO_PROD: true
-          build_directory: client/web/dist
+      - run: npm install --global vercel@canary
+      - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
