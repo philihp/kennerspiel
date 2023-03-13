@@ -27,7 +27,7 @@ jobs:
       - run: npm install hathora -g
       - run: APP_SECRET=${{ secrets.HATHORA_APP_SECRET }} hathora build --only client
       - run: echo '/* /index.html 200' > client/web/dist/_redirects;
-      - uses: jsmrcaga/action-netlify-deploy@v1.5.0
+      - uses: jsmrcaga/action-netlify-deploy@v1.6.0
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
