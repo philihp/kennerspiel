@@ -19,6 +19,8 @@ interface GameContext {
   config: (country: Country, length: Length) => Promise<void>
   start: () => Promise<void>
   move: (command: string) => Promise<void>
+  undo: () => Promise<void>
+  redo: () => Promise<void>
 }
 
 interface HathoraContextProviderProps {
@@ -102,6 +104,18 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     },
     [connection]
   )
+  const undo = useCallback(
+    async (command: string) => {
+      await connection?.undo({ command })
+    },
+    [connection]
+  )
+  const redo = useCallback(
+    async (command: string) => {
+      await connection?.redo({ command })
+    },
+    [connection]
+  )
 
   const exported = useMemo(
     () => ({
@@ -117,8 +131,10 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       config,
       start,
       move,
+      undo,
+      redo,
     }),
-    [token, state, user, loading, error, login, connect, createGame, join, config, start, move]
+    [token, state, user, loading, error, login, connect, createGame, join, config, start, move, undo, redo]
   )
 
   return (
@@ -136,7 +152,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   )
 }
 
-export function useHathoraContext() {
+export const useHathoraContext = () => {
   const context = useContext(HathoraContext)
   if (!context) {
     throw new Error('Component must be within the HathoraContext')
