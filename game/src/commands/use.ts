@@ -20,19 +20,22 @@ import {
   cloisterLibrary,
   cloisterOffice,
   cloisterWorkshop,
+  cottage,
   dormitory,
   estate,
-  farmyard,
   falseLighthouse,
+  farmyard,
+  filialChurch,
   financedEstate,
   forgersWorkshop,
   fuelMerchant,
   grainStorage,
+  granary,
   grapevine,
   harborPromenade,
   hospice,
-  houseboat,
   houseOfTheBrotherhood,
+  houseboat,
   inn,
   malthouse,
   market,
@@ -42,20 +45,18 @@ import {
   printingOffice,
   priory,
   quarry,
+  sacredSite,
   sacristy,
+  scriptorium,
   shippingCompany,
   shipyard,
   slaughterhouse,
   spinningMill,
   stoneMerchant,
   townEstate,
+  whiskeyDistillery,
   windmill,
   winery,
-  cottage,
-  granary,
-  sacredSite,
-  scriptorium,
-  filialChurch,
 } from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
@@ -165,6 +166,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.SpinningMill, () => spinningMill())
       .with(BuildingEnum.StoneMerchant, () => stoneMerchant(params[0]))
       .with(BuildingEnum.TownEstate, () => townEstate(params[0]))
+      .with(BuildingEnum.WhiskeyDistillery, () => whiskeyDistillery(params[0]))
       .with(BuildingEnum.Windmill, () => windmill(params[0]))
       .with(BuildingEnum.Winery, () => winery(params[0], params[1]))
       .otherwise(() => () => {
