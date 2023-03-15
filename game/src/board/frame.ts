@@ -17,7 +17,7 @@ import {
   StateReducer,
   Tile,
 } from '../types'
-import { findBuildingWithoutOffset } from './landscape'
+import { findBuildingWithoutOffset, occupiedBuildingsForPlayers } from './landscape'
 
 export const withFrame =
   (func: (frame: Frame) => Frame | undefined): StateReducer =>
@@ -168,3 +168,8 @@ export const allowFreeUsageToNeighborsOf =
       )
     )(state)
   }
+
+export const allOccupiedBuildingsUsable: StateReducer = (state) => {
+  if (state === undefined) return state
+  return setFrameToAllowFreeUsage(occupiedBuildingsForPlayers(state.players))(state)
+}

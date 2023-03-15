@@ -3,12 +3,12 @@ import { allOccupiedBuildingsUsable } from '../board/frame'
 import { payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
 
-export const palace = (input = '') => {
-  const { wine = 0 } = parseResourceParam(input)
-  if (wine === 0) return identity
+export const grandManor = (input = '') => {
+  const { whiskey = 0 } = parseResourceParam(input)
+  if (whiskey === 0) return identity
   return pipe(
     //
-    withActivePlayer(payCost({ wine })),
+    withActivePlayer(payCost({ whiskey })),
     allOccupiedBuildingsUsable
   )
 }
