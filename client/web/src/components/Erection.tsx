@@ -13,11 +13,16 @@ const decolor = (id: string) => {
 const multiplier = 0.4
 
 export const Erection = ({ id }: Props) => (
-  <img
-    alt={id}
-    style={{ display: 'inline' }}
-    src={`http://hathora-et-labora.s3-us-west-2.amazonaws.com/${decolor(id)}.jpg`}
-    width={150 * multiplier}
-    height={250 * multiplier}
-  />
+  <div style={{ display: 'inline-block' }}>
+    {id}
+    <br />
+    <img
+      alt={id}
+      title={id}
+      style={{ display: 'inline' }}
+      src={`http://hathora-et-labora.s3-us-west-2.amazonaws.com/${decolor(id)}.jpg`}
+      width={150 * multiplier}
+      height={250 * multiplier}
+    />
+  </div>
 )
