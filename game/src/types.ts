@@ -420,6 +420,9 @@ export type Frame = {
   // player can buy a landscape, but must pay cost
   canBuyLandscape: boolean
 
+  // player can "buy" a landscape, however they get it for free (as in from Bulwark)
+  canGrantLandscape: number
+
   // if mainActionUsed === true and bonusActions === [], "use" still possible, provided...
   // the building is not in this list
   unusableBuildings: BuildingEnum[]
