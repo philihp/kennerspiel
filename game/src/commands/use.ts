@@ -39,6 +39,7 @@ import {
   houseOfTheBrotherhood,
   houseboat,
   inn,
+  locutory,
   malthouse,
   market,
   palace,
@@ -154,6 +155,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.Houseboat, () => houseboat())
       .with(BuildingEnum.HouseOfTheBrotherhood, () => houseOfTheBrotherhood(params[0], params[1]))
       .with(BuildingEnum.Inn, () => inn(params[0]))
+      .with(BuildingEnum.Locutory, () => locutory(params[0]))
       .with(BuildingEnum.Market, () => market(params[0]))
       .with(BuildingEnum.Malthouse, () => malthouse(params[0]))
       .with(BuildingEnum.Palace, () => palace(params[0]))
