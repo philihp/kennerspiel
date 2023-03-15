@@ -11,6 +11,7 @@ import {
   carpentry,
   castle,
   chamberOfWonders,
+  chapel,
   clayMound,
   cloisterChapterHouse,
   cloisterChurch,
@@ -19,19 +20,22 @@ import {
   cloisterLibrary,
   cloisterOffice,
   cloisterWorkshop,
+  cottage,
   dormitory,
   estate,
-  farmyard,
   falseLighthouse,
+  farmyard,
+  filialChurch,
   financedEstate,
   forgersWorkshop,
   fuelMerchant,
   grainStorage,
+  granary,
   grapevine,
   harborPromenade,
   hospice,
-  houseboat,
   houseOfTheBrotherhood,
+  houseboat,
   inn,
   malthouse,
   market,
@@ -41,20 +45,18 @@ import {
   printingOffice,
   priory,
   quarry,
+  sacredSite,
   sacristy,
+  scriptorium,
   shippingCompany,
   shipyard,
   slaughterhouse,
   spinningMill,
   stoneMerchant,
   townEstate,
+  whiskeyDistillery,
   windmill,
   winery,
-  cottage,
-  granary,
-  sacredSite,
-  scriptorium,
-  whiskeyDistillery,
 } from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
@@ -110,6 +112,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       )
       .with(BuildingEnum.Castle, castle)
       .with(BuildingEnum.ChamberOfWonders, () => chamberOfWonders(params[0]))
+      .with(BuildingEnum.Chapel, () => chapel(params[0]))
       .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () =>
         clayMound(params[0])
       )
@@ -133,6 +136,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
         farmyard(params[0])
       )
       .with(BuildingEnum.FalseLighthouse, () => falseLighthouse(params[0]))
+      .with(BuildingEnum.FilialChurch, () => filialChurch(params[0]))
       .with(BuildingEnum.FinancedEstate, () => financedEstate(params[0]))
       .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
       .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
