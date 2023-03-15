@@ -3,6 +3,7 @@ import { match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
 import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
 import {
+  alehouse,
   bakery,
   bathhouse,
   brewery,
@@ -99,6 +100,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
     moveClergyTo(building),
     clearUsableBuildings,
     match<BuildingEnum, StateReducer>(building)
+      .with(BuildingEnum.Alehouse, () => alehouse(params[0]))
       .with(BuildingEnum.Bakery, () => bakery(params[0]))
       .with(BuildingEnum.Bathhouse, () => bathhouse(params[0]))
       .with(BuildingEnum.Brewery, () => brewery(params[0]))
