@@ -39,6 +39,7 @@ import {
   farmyard,
   falseLighthouse,
   financedEstate,
+  forestHut,
   forgersWorkshop,
   fuelMerchant,
   grainStorage,
@@ -109,6 +110,7 @@ jest.mock('../../buildings', () => {
     falseLighthouse: jest.fn().mockReturnValue(identity),
     filialChurch: jest.fn().mockReturnValue(identity),
     financedEstate: jest.fn().mockReturnValue(identity),
+    forestHut: jest.fn().mockReturnValue(identity),
     forgersWorkshop: jest.fn().mockReturnValue(identity),
     fuelMerchant: jest.fn().mockReturnValue(identity),
     grainStorage: jest.fn().mockReturnValue(identity),
@@ -440,6 +442,10 @@ describe('commands/use', () => {
     it('calls the financedEstate', () => {
       use(BuildingEnum.FinancedEstate, [])(s0)!
       expect(financedEstate).toHaveBeenCalled()
+    })
+    it('calls the forestHut', () => {
+      use(BuildingEnum.ForestHut, [])(s0)!
+      expect(forestHut).toHaveBeenCalled()
     })
     it('calls the forgersWorkshop', () => {
       use(BuildingEnum.ForgersWorkshop, [])(s0)!
