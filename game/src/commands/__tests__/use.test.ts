@@ -61,6 +61,7 @@ import {
   spinningMill,
   stoneMerchant,
   townEstate,
+  whiskeyDistillery,
   windmill,
   winery,
 } from '../../buildings'
@@ -119,6 +120,7 @@ jest.mock('../../buildings', () => {
     spinningMill: jest.fn().mockReturnValue(identity),
     stoneMerchant: jest.fn().mockReturnValue(identity),
     townEstate: jest.fn().mockReturnValue(identity),
+    whiskeyDistillery: jest.fn().mockReturnValue(identity),
     windmill: jest.fn().mockReturnValue(identity),
     winery: jest.fn().mockReturnValue(identity),
   }
@@ -510,6 +512,10 @@ describe('commands/use', () => {
     it('calls the townEstate', () => {
       use(BuildingEnum.TownEstate, [])(s0)!
       expect(townEstate).toHaveBeenCalled()
+    })
+    it('calls the whiskeyDistillery', () => {
+      use(BuildingEnum.WhiskeyDistillery, ['WoPtMa'])(s0)!
+      expect(whiskeyDistillery).toHaveBeenCalled()
     })
     it('calls the windmill', () => {
       use(BuildingEnum.Windmill, [])(s0)!
