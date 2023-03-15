@@ -11,6 +11,7 @@ import {
   carpentry,
   castle,
   chamberOfWonders,
+  chapel,
   clayMound,
   cloisterChapterHouse,
   cloisterChurch,
@@ -109,6 +110,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       )
       .with(BuildingEnum.Castle, castle)
       .with(BuildingEnum.ChamberOfWonders, () => chamberOfWonders(params[0]))
+      .with(BuildingEnum.Chapel, () => chapel(params[0]))
       .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () =>
         clayMound(params[0])
       )
