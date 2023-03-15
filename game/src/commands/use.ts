@@ -26,8 +26,6 @@ import {
   dormitory,
   druidsHouse,
   estate,
-  granary,
-  farmyard,
   falseLighthouse,
   farmyard,
   filialChurch,
@@ -64,8 +62,6 @@ import {
   whiskeyDistillery,
   windmill,
   winery,
-  sacredSite,
-  scriptorium,
 } from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
