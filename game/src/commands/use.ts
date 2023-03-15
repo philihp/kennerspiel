@@ -22,6 +22,7 @@ import {
   cloisterOffice,
   cloisterWorkshop,
   coalHarbor,
+  cooperage,
   cottage,
   dormitory,
   druidsHouse,
@@ -50,6 +51,7 @@ import {
   printingOffice,
   priory,
   quarry,
+  refectory,
   sacredSite,
   sacristy,
   scriptorium,
@@ -136,6 +138,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       )
       .with(BuildingEnum.CloisterWorkshop, () => cloisterWorkshop(params[0]))
       .with(BuildingEnum.CoalHarbor, () => coalHarbor(params[0]))
+      .with(BuildingEnum.Cooperage, () => cooperage(params[0], params[1]))
       .with(BuildingEnum.Cottage, () => cottage())
       .with(BuildingEnum.Dormitory, () => dormitory(params[0]))
       .with(BuildingEnum.DruidsHouse, () => druidsHouse(params[0], params[1]))
@@ -167,6 +170,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.PrintingOffice, () => printingOffice(...params))
       .with(BuildingEnum.Priory, priory)
       .with(BuildingEnum.QuarryA, BuildingEnum.QuarryB, () => quarry(params[0]))
+      .with(BuildingEnum.Refectory, () => refectory(params[0]))
       .with(BuildingEnum.Scriptorium, () => scriptorium(params[0]))
       .with(BuildingEnum.Sacristy, () => sacristy(params[0]))
       .with(BuildingEnum.SacredSite, () => sacredSite(params[0]))

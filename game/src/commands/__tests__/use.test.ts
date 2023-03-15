@@ -31,6 +31,7 @@ import {
   cloisterOffice,
   cloisterWorkshop,
   coalHarbor,
+  cooperage,
   cottage,
   dormitory,
   druidsHouse,
@@ -58,6 +59,7 @@ import {
   printingOffice,
   priory,
   quarry,
+  refectory,
   sacristy,
   scriptorium,
   sacredSite,
@@ -87,6 +89,7 @@ jest.mock('../../buildings', () => {
     carpentry: jest.fn().mockReturnValue(identity),
     castle: jest.fn().mockReturnValue(identity),
     coalHarbor: jest.fn().mockReturnValue(identity),
+    cooperage: jest.fn().mockReturnValue(identity),
     cottage: jest.fn().mockReturnValue(identity),
     chamberOfWonders: jest.fn().mockReturnValue(identity),
     chapel: jest.fn().mockReturnValue(identity),
@@ -125,6 +128,7 @@ jest.mock('../../buildings', () => {
     printingOffice: jest.fn().mockReturnValue(identity),
     priory: jest.fn().mockReturnValue(identity),
     quarry: jest.fn().mockReturnValue(identity),
+    refectory: jest.fn().mockReturnValue(identity),
     sacristy: jest.fn().mockReturnValue(identity),
     scriptorium: jest.fn().mockReturnValue(identity),
     sacredSite: jest.fn().mockReturnValue(identity),
@@ -399,6 +403,10 @@ describe('commands/use', () => {
       use(BuildingEnum.CloisterWorkshop, [])(s0)!
       expect(cloisterWorkshop).toHaveBeenCalled()
     })
+    it('calls the cooperage', () => {
+      use(BuildingEnum.Cooperage, ['WoWoWo', 'Wh'])(s0)!
+      expect(cooperage).toHaveBeenCalled()
+    })
     it('calls the cottage', () => {
       use(BuildingEnum.Cottage, [])(s0)!
       expect(cottage).toHaveBeenCalled()
@@ -518,6 +526,10 @@ describe('commands/use', () => {
     it('calls the quarry B', () => {
       use(BuildingEnum.QuarryB, [])(s0)!
       expect(quarry).toHaveBeenCalled()
+    })
+    it('calls the refectory', () => {
+      use(BuildingEnum.Refectory, [])(s0)!
+      expect(refectory).toHaveBeenCalled()
     })
     it('calls the scriptorium', () => {
       use(BuildingEnum.Scriptorium, ['Wh'])(s0)!
