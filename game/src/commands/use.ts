@@ -34,6 +34,7 @@ import {
   fuelMerchant,
   grainStorage,
   granary,
+  grandManor,
   grapevine,
   harborPromenade,
   hospice,
@@ -151,6 +152,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
       .with(BuildingEnum.GrainStorage, () => grainStorage(params[0]))
       .with(BuildingEnum.Granary, () => granary(params[0]))
+      .with(BuildingEnum.GrandManor, () => grandManor(params[0]))
       .with(BuildingEnum.GrapevineA, BuildingEnum.GrapevineA, () => grapevine(params[0]))
       .with(BuildingEnum.GrapevineB, BuildingEnum.GrapevineB, () => grapevine(params[0]))
       .with(BuildingEnum.HarborPromenade, harborPromenade)

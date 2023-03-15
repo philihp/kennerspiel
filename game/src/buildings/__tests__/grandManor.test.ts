@@ -9,10 +9,10 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { palace } from '..'
+import { grandManor } from '../grandManor'
 
-describe('buildings/palace', () => {
-  describe('palace', () => {
+describe('buildings/grandManor', () => {
+  describe('grandManor', () => {
     const p0: Tableau = {
       color: PlayerColor.Blue,
       clergy: ['PRIB'] as Clergy[],
@@ -38,12 +38,12 @@ describe('buildings/palace', () => {
       coal: 0,
       book: 0,
       ceramic: 0,
-      whiskey: 0,
+      whiskey: 1,
       straw: 0,
       meat: 0,
       ornament: 0,
       bread: 0,
-      wine: 1,
+      wine: 0,
       beer: 0,
       reliquary: 0,
     }
@@ -150,10 +150,10 @@ describe('buildings/palace', () => {
       districtPurchasePrices: [],
     }
 
-    it('can take wine', () => {
-      const s1 = palace('Wn')(s0)! as GameStatePlaying
+    it('can take whiskey', () => {
+      const s1 = grandManor('Wh')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        wine: 0,
+        whiskey: 0,
       })
       expect(s1.frame.nextUse).toBe('free')
       expect(s1.frame.usableBuildings?.sort()).toStrictEqual(['LB3', 'G26', 'LR3', 'G28', 'G19'].sort())
