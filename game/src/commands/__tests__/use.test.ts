@@ -51,6 +51,7 @@ import {
   palace,
   peatCoalKiln,
   pilgrimageSite,
+  portico,
   printingOffice,
   priory,
   quarry,
@@ -115,6 +116,7 @@ jest.mock('../../buildings', () => {
     palace: jest.fn().mockReturnValue(identity),
     peatCoalKiln: jest.fn().mockReturnValue(identity),
     pilgrimageSite: jest.fn().mockReturnValue(identity),
+    portico: jest.fn().mockReturnValue(identity),
     printingOffice: jest.fn().mockReturnValue(identity),
     priory: jest.fn().mockReturnValue(identity),
     quarry: jest.fn().mockReturnValue(identity),
@@ -480,6 +482,10 @@ describe('commands/use', () => {
     it('calls the pilgrimageSite', () => {
       use(BuildingEnum.PilgrimageSite, [])(s0)!
       expect(pilgrimageSite).toHaveBeenCalled()
+    })
+    it('calls the portico', () => {
+      use(BuildingEnum.Portico, ['Rq'])(s0)!
+      expect(portico).toHaveBeenCalled()
     })
     it('calls the printingOffice', () => {
       use(BuildingEnum.PrintingOffice, [])(s0)!
