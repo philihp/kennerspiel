@@ -8,8 +8,8 @@ interface TimesProps {
 
 const Times = ({ n, children }: TimesProps) => (
   <>
-    {range(0, n).map(() => (
-      <span>{children}</span>
+    {range(0, n).map((i) => (
+      <span key={`${i}:${children}`}>{children}</span>
     ))}
   </>
 )
