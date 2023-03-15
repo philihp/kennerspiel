@@ -91,6 +91,10 @@ describe('buildings/shippingCompany', () => {
         wood: 7,
       })
     })
+    it('no output specified errors', () => {
+      const s1 = shippingCompany('WoWoWo', '')(s0)!
+      expect(s1).toBeUndefined()
+    })
     it('burns peat and makes bread', () => {
       const s1 = shippingCompany('PtPt', 'Br')(s0)!
       expect(s1.players[0]).toMatchObject({
