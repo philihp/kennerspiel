@@ -9,7 +9,7 @@ import { UnbuiltDistricts } from './UnbuiltDistricts'
 import { UnbuiltWonders } from './UnbuiltWonders'
 
 export const StatePlaying = () => {
-  const { state, move } = useHathoraContext()
+  const { state, move, undo, redo } = useHathoraContext()
   const [command, setCommand] = useState<string>('')
 
   if (state === undefined) return <div>Error, missing state</div>
@@ -18,12 +18,23 @@ export const StatePlaying = () => {
     move(command)
     setCommand('')
   }
-
   const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders, ...elseState } =
     state
 
   return (
     <>
+      <ul>
+        {state.moves.slice(-3).map((move, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <li key={`${i}:${move}`}>{move}</li>
+        ))}
+      </ul>
+      <button type="button" onClick={undo}>
+        &lt;
+      </button>
+      <button type="button" onClick={redo}>
+        &gt;
+      </button>
       <input type="text" placeholder="command" value={command} onChange={(e) => setCommand(e.target.value)} />
       <button type="submit" onClick={handleSubmit}>
         Explore
