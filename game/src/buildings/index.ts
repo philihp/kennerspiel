@@ -1,3 +1,4 @@
+export { alehouse } from './alehouse'
 export { bakery } from './bakery'
 export { bathhouse } from './bathhouse'
 export { brewery } from './brewery'

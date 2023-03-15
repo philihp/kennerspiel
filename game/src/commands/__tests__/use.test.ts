@@ -12,6 +12,7 @@ import {
   Tile,
 } from '../../types'
 import {
+  alehouse,
   bakery,
   bathhouse,
   brewery,
@@ -75,6 +76,7 @@ import { use } from '../use'
 jest.mock('../../buildings', () => {
   return {
     ...jest.requireActual('../../buildings'),
+    alehouse: jest.fn().mockReturnValue(identity),
     bakery: jest.fn().mockReturnValue(identity),
     bathhouse: jest.fn().mockReturnValue(identity),
     brewery: jest.fn().mockReturnValue(identity),
@@ -336,6 +338,10 @@ describe('commands/use', () => {
     it('calls the bakery', () => {
       use(BuildingEnum.Bakery, [])(s0)!
       expect(bakery).toHaveBeenCalled()
+    })
+    it('calls the alehouse', () => {
+      use(BuildingEnum.Alehouse, [])(s0)!
+      expect(alehouse).toHaveBeenCalled()
     })
     it('calls the bathhouse', () => {
       use(BuildingEnum.Bathhouse, [])(s0)!
