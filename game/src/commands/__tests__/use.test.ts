@@ -30,6 +30,7 @@ import {
   cloisterLibrary,
   cloisterOffice,
   cloisterWorkshop,
+  cooperage,
   cottage,
   dormitory,
   druidsHouse,
@@ -86,6 +87,7 @@ jest.mock('../../buildings', () => {
     calefactory: jest.fn().mockReturnValue(identity),
     carpentry: jest.fn().mockReturnValue(identity),
     castle: jest.fn().mockReturnValue(identity),
+    cooperage: jest.fn().mockReturnValue(identity),
     cottage: jest.fn().mockReturnValue(identity),
     chamberOfWonders: jest.fn().mockReturnValue(identity),
     chapel: jest.fn().mockReturnValue(identity),
@@ -398,6 +400,10 @@ describe('commands/use', () => {
     it('calls the cloisterWorkshop', () => {
       use(BuildingEnum.CloisterWorkshop, [])(s0)!
       expect(cloisterWorkshop).toHaveBeenCalled()
+    })
+    it('calls the cooperage', () => {
+      use(BuildingEnum.Cooperage, ['WoWoWo', 'Wh'])(s0)!
+      expect(cooperage).toHaveBeenCalled()
     })
     it('calls the cottage', () => {
       use(BuildingEnum.Cottage, [])(s0)!

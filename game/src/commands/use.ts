@@ -21,6 +21,7 @@ import {
   cloisterLibrary,
   cloisterOffice,
   cloisterWorkshop,
+  cooperage,
   cottage,
   dormitory,
   druidsHouse,
@@ -135,6 +136,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
         () => cloisterOffice(params[0])
       )
       .with(BuildingEnum.CloisterWorkshop, () => cloisterWorkshop(params[0]))
+      .with(BuildingEnum.Cooperage, () => cooperage(params[0], params[1]))
       .with(BuildingEnum.Cottage, () => cottage())
       .with(BuildingEnum.Dormitory, () => dormitory(params[0]))
       .with(BuildingEnum.DruidsHouse, () => druidsHouse(params[0], params[1]))
