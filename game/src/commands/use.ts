@@ -11,6 +11,7 @@ import {
   carpentry,
   castle,
   chamberOfWonders,
+  chapel,
   clayMound,
   cloisterChapterHouse,
   cloisterChurch,
@@ -21,9 +22,11 @@ import {
   cloisterWorkshop,
   cottage,
   dormitory,
+  druidsHouse,
   estate,
   falseLighthouse,
   farmyard,
+  filialChurch,
   financedEstate,
   forgersWorkshop,
   fuelMerchant,
@@ -53,6 +56,7 @@ import {
   spinningMill,
   stoneMerchant,
   townEstate,
+  whiskeyDistillery,
   windmill,
   winery,
 } from '../buildings'
@@ -110,6 +114,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       )
       .with(BuildingEnum.Castle, castle)
       .with(BuildingEnum.ChamberOfWonders, () => chamberOfWonders(params[0]))
+      .with(BuildingEnum.Chapel, () => chapel(params[0]))
       .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () =>
         clayMound(params[0])
       )
@@ -128,11 +133,13 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.CloisterWorkshop, () => cloisterWorkshop(params[0]))
       .with(BuildingEnum.Cottage, () => cottage())
       .with(BuildingEnum.Dormitory, () => dormitory(params[0]))
+      .with(BuildingEnum.DruidsHouse, () => druidsHouse(params[0], params[1]))
       .with(BuildingEnum.Estate, () => estate(params[0]))
       .with(BuildingEnum.FarmYardR, BuildingEnum.FarmYardG, BuildingEnum.FarmYardB, BuildingEnum.FarmYardW, () =>
         farmyard(params[0])
       )
       .with(BuildingEnum.FalseLighthouse, () => falseLighthouse(params[0]))
+      .with(BuildingEnum.FilialChurch, () => filialChurch(params[0]))
       .with(BuildingEnum.FinancedEstate, () => financedEstate(params[0]))
       .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
       .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
@@ -163,6 +170,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.SpinningMill, () => spinningMill())
       .with(BuildingEnum.StoneMerchant, () => stoneMerchant(params[0]))
       .with(BuildingEnum.TownEstate, () => townEstate(params[0]))
+      .with(BuildingEnum.WhiskeyDistillery, () => whiskeyDistillery(params[0]))
       .with(BuildingEnum.Windmill, () => windmill(params[0]))
       .with(BuildingEnum.Winery, () => winery(params[0], params[1]))
       .otherwise(() => () => {

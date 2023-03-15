@@ -20,6 +20,7 @@ import {
   carpentry,
   castle,
   chamberOfWonders,
+  chapel,
   clayMound,
   cloisterChapterHouse,
   cloisterChurch,
@@ -30,6 +31,7 @@ import {
   cloisterWorkshop,
   cottage,
   dormitory,
+  druidsHouse,
   estate,
   farmyard,
   falseLighthouse,
@@ -62,8 +64,10 @@ import {
   spinningMill,
   stoneMerchant,
   townEstate,
+  whiskeyDistillery,
   windmill,
   winery,
+  filialChurch,
 } from '../../buildings'
 
 import { use } from '../use'
@@ -80,6 +84,7 @@ jest.mock('../../buildings', () => {
     castle: jest.fn().mockReturnValue(identity),
     cottage: jest.fn().mockReturnValue(identity),
     chamberOfWonders: jest.fn().mockReturnValue(identity),
+    chapel: jest.fn().mockReturnValue(identity),
     clayMound: jest.fn().mockReturnValue(identity),
     cloisterChapterHouse: jest.fn().mockReturnValue(identity),
     cloisterChurch: jest.fn().mockReturnValue(identity),
@@ -89,9 +94,11 @@ jest.mock('../../buildings', () => {
     cloisterOffice: jest.fn().mockReturnValue(identity),
     cloisterWorkshop: jest.fn().mockReturnValue(identity),
     dormitory: jest.fn().mockReturnValue(identity),
+    druidsHouse: jest.fn().mockReturnValue(identity),
     estate: jest.fn().mockReturnValue(identity),
     farmyard: jest.fn().mockReturnValue(identity),
     falseLighthouse: jest.fn().mockReturnValue(identity),
+    filialChurch: jest.fn().mockReturnValue(identity),
     financedEstate: jest.fn().mockReturnValue(identity),
     forgersWorkshop: jest.fn().mockReturnValue(identity),
     fuelMerchant: jest.fn().mockReturnValue(identity),
@@ -121,6 +128,7 @@ jest.mock('../../buildings', () => {
     spinningMill: jest.fn().mockReturnValue(identity),
     stoneMerchant: jest.fn().mockReturnValue(identity),
     townEstate: jest.fn().mockReturnValue(identity),
+    whiskeyDistillery: jest.fn().mockReturnValue(identity),
     windmill: jest.fn().mockReturnValue(identity),
     winery: jest.fn().mockReturnValue(identity),
   }
@@ -353,6 +361,10 @@ describe('commands/use', () => {
       use(BuildingEnum.ChamberOfWonders, [])(s0)!
       expect(chamberOfWonders).toHaveBeenCalled()
     })
+    it('calls the chapel', () => {
+      use(BuildingEnum.Chapel, [])(s0)!
+      expect(chapel).toHaveBeenCalled()
+    })
     it('calls the cloisterChapterHouse', () => {
       use(BuildingEnum.CloisterChapterHouse, [])(s0)!
       expect(cloisterChapterHouse).toHaveBeenCalled()
@@ -385,6 +397,10 @@ describe('commands/use', () => {
       use(BuildingEnum.Dormitory, [])(s0)!
       expect(dormitory).toHaveBeenCalled()
     })
+    it('calls the druidsHouse', () => {
+      use(BuildingEnum.DruidsHouse, ['Bo', 'PnPnPnPnPnGnGnGn'])(s0)!
+      expect(druidsHouse).toHaveBeenCalled()
+    })
     it('calls the estate', () => {
       use(BuildingEnum.Estate, [])(s0)!
       expect(estate).toHaveBeenCalled()
@@ -392,6 +408,10 @@ describe('commands/use', () => {
     it('calls the falseLighthouse', () => {
       use(BuildingEnum.FalseLighthouse, ['Be'])(s0)!
       expect(falseLighthouse).toHaveBeenCalledWith('Be')
+    })
+    it('calls the filialChurch', () => {
+      use(BuildingEnum.FilialChurch, [])(s0)!
+      expect(filialChurch).toHaveBeenCalled()
     })
     it('calls the financedEstate', () => {
       use(BuildingEnum.FinancedEstate, [])(s0)!
@@ -516,6 +536,10 @@ describe('commands/use', () => {
     it('calls the townEstate', () => {
       use(BuildingEnum.TownEstate, [])(s0)!
       expect(townEstate).toHaveBeenCalled()
+    })
+    it('calls the whiskeyDistillery', () => {
+      use(BuildingEnum.WhiskeyDistillery, ['WoPtMa'])(s0)!
+      expect(whiskeyDistillery).toHaveBeenCalled()
     })
     it('calls the windmill', () => {
       use(BuildingEnum.Windmill, [])(s0)!
