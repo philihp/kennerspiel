@@ -19,8 +19,11 @@ import {
   cloisterLibrary,
   cloisterOffice,
   cloisterWorkshop,
+  coalHarbor,
+  cottage,
   dormitory,
   estate,
+  granary,
   farmyard,
   falseLighthouse,
   financedEstate,
@@ -50,11 +53,8 @@ import {
   townEstate,
   windmill,
   winery,
-  cottage,
-  granary,
   sacredSite,
   scriptorium,
-  coalHarbor,
 } from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
