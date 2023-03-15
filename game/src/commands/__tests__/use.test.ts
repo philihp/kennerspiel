@@ -20,6 +20,7 @@ import {
   carpentry,
   castle,
   chamberOfWonders,
+  chapel,
   clayMound,
   cloisterChapterHouse,
   cloisterChurch,
@@ -79,6 +80,7 @@ jest.mock('../../buildings', () => {
     castle: jest.fn().mockReturnValue(identity),
     cottage: jest.fn().mockReturnValue(identity),
     chamberOfWonders: jest.fn().mockReturnValue(identity),
+    chapel: jest.fn().mockReturnValue(identity),
     clayMound: jest.fn().mockReturnValue(identity),
     cloisterChapterHouse: jest.fn().mockReturnValue(identity),
     cloisterChurch: jest.fn().mockReturnValue(identity),
@@ -350,6 +352,10 @@ describe('commands/use', () => {
     it('calls the chamberOfWonders', () => {
       use(BuildingEnum.ChamberOfWonders, [])(s0)!
       expect(chamberOfWonders).toHaveBeenCalled()
+    })
+    it('calls the chapel', () => {
+      use(BuildingEnum.Chapel, [])(s0)!
+      expect(chapel).toHaveBeenCalled()
     })
     it('calls the cloisterChapterHouse', () => {
       use(BuildingEnum.CloisterChapterHouse, [])(s0)!
