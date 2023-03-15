@@ -469,6 +469,8 @@ export type GameState = GameStateSetup | GameStatePlaying
 
 export type StateReducer = (state: GameStatePlaying | undefined) => GameStatePlaying | undefined
 
+export type TableauReducer = (state: Tableau | undefined) => Tableau | undefined
+
 export type FrameFlow = Record<
   number,
   {
