@@ -44,6 +44,7 @@ import {
   houseboat,
   houseOfTheBrotherhood,
   inn,
+  locutory,
   malthouse,
   market,
   palace,
@@ -102,6 +103,7 @@ jest.mock('../../buildings', () => {
     houseboat: jest.fn().mockReturnValue(identity),
     houseOfTheBrotherhood: jest.fn().mockReturnValue(identity),
     inn: jest.fn().mockReturnValue(identity),
+    locutory: jest.fn().mockReturnValue(identity),
     malthouse: jest.fn().mockReturnValue(identity),
     market: jest.fn().mockReturnValue(identity),
     palace: jest.fn().mockReturnValue(identity),
@@ -438,6 +440,10 @@ describe('commands/use', () => {
     it('calls the inn', () => {
       use(BuildingEnum.Inn, [])(s0)!
       expect(inn).toHaveBeenCalled()
+    })
+    it('calls the locutory', () => {
+      use(BuildingEnum.Locutory, ['PnPn'])(s0)!
+      expect(locutory).toHaveBeenCalled()
     })
     it('calls the malthouse', () => {
       use(BuildingEnum.Malthouse, ['GnGn'])(s0)!
