@@ -1,6 +1,5 @@
 import { initialState } from '../../state'
 import {
-  BuildingEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -9,24 +8,24 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { shippingCompany } from '..'
+import { cooperage } from '../cooperage'
 
-describe('buildings/shippingCompany', () => {
-  describe('shippingCompany', () => {
+describe('buildings/cooperage', () => {
+  describe('cooperage', () => {
     const p0: Tableau = {
       color: PlayerColor.Blue,
       clergy: [],
       settlements: [],
       landscape: [
-        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
       ] as Tile[][],
       wonders: 0,
       landscapeOffset: 0,
-      peat: 10,
+      peat: 0,
       penny: 0,
       clay: 0,
-      wood: 10,
+      wood: 3,
       grain: 0,
       sheep: 0,
       stone: 0,
@@ -34,7 +33,7 @@ describe('buildings/shippingCompany', () => {
       grape: 0,
       nickel: 0,
       malt: 0,
-      coal: 10,
+      coal: 0,
       book: 0,
       ceramic: 0,
       whiskey: 0,
@@ -70,43 +69,65 @@ describe('buildings/shippingCompany', () => {
         length: 'long',
       },
       rondel: {
-        pointingBefore: 7,
-        joker: 5,
+        pointingBefore: 8,
+        joker: 4,
       },
       wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      buildings: [] as BuildingEnum[],
+      buildings: [],
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
     }
 
     it('retains undefined state', () => {
-      const s1 = shippingCompany()(undefined)!
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = cooperage()(s0)
       expect(s1).toBeUndefined()
     })
-    it('burns wood and makes meat', () => {
-      const s1 = shippingCompany('WoWoWo', 'Mt')(s0)!
+    it('allows using with no input', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = cooperage()(s0)
+      expect(s0).toBe(s1)
+    })
+    it('allows using with empty string', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = cooperage('')(s0)
+      expect(s0).toBe(s1)
+    })
+    it('uses joker to get whiskey', () => {
+      const s1 = cooperage('WoWoWo', 'Wh')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        meat: 3,
-        wood: 7,
+        wood: 0,
+        beer: 0,
+        whiskey: 5,
       })
     })
-    it('burns peat and makes bread', () => {
-      const s1 = shippingCompany('PtPt', 'Br')(s0)!
+    it('uses joker to get beer', () => {
+      const s1 = cooperage('WoWoWo', 'Be')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        peat: 8,
-        bread: 3,
+        wood: 0,
+        beer: 5,
+        whiskey: 0,
       })
     })
-    it('burns coal and makes wine', () => {
-      const s1 = shippingCompany('Co', 'Wn')(s0)!
+    it('fails if nothing specified', () => {
+      const s1 = cooperage('WoWoWo', '')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        coal: 9,
-        wine: 3,
+        wood: 0,
+        beer: 0,
+        whiskey: 0,
       })
     })
-    it('noop if not enough energy', () => {
-      const s1 = shippingCompany('Wo', 'Wn')(s0)!
+    it('prefers whiskey if both requested', () => {
+      const s1 = cooperage('WoWoWo', 'BeWh')(s0)! as GameStatePlaying
+      expect(s1.players[0]).toMatchObject({
+        wood: 0,
+        beer: 0,
+        whiskey: 5,
+      })
+    })
+    it('noop if not enough wood', () => {
+      const s1 = cooperage('WoWo', 'Wh')(s0)! as GameStatePlaying
       expect(s1).toBe(s0)
     })
   })

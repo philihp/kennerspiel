@@ -1,33 +1,13 @@
-import { pipe } from 'ramda'
+import { identity, pipe } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { getCost, payCost, withActivePlayer } from '../board/player'
-import { parseResourceParam, multiplyGoods } from '../board/resource'
-import { take } from '../board/rondel'
-import { Cost, StateReducer } from '../types'
-
-const takePlayerJoker =
-  (unitCost: Cost): StateReducer =>
-  (state) => {
-    if (state === undefined) return undefined
-    const {
-      rondel: { pointingBefore, joker },
-      config,
-    } = state
-    const takeValue = take(pointingBefore, joker ?? pointingBefore, config)
-    return withActivePlayer(getCost(multiplyGoods(takeValue)(unitCost)))(state)
-  }
-
-const advanceJokerOnRondel: StateReducer = (state) =>
-  state && {
-    ...state,
-    rondel: {
-      ...state.rondel,
-      joker: state.rondel.pointingBefore,
-    },
-  }
+import { payCost, withActivePlayer } from '../board/player'
+import { costEnergy, parseResourceParam } from '../board/resource'
+import { advanceJokerOnRondel, takePlayerJoker } from '../board/rondel'
+import { StateReducer } from '../types'
 
 export const shippingCompany = (fuel = '', product = ''): StateReducer => {
   const input = parseResourceParam(fuel)
+  if (costEnergy(input) < 3) return identity
   const output = match(parseResourceParam(product))
     .with({ meat: P.when((n) => n > 0) }, () => ({ meat: 1 }))
     .with({ bread: P.when((n) => n > 0) }, () => ({ bread: 1 }))
