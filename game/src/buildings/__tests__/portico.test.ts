@@ -1,6 +1,5 @@
 import { initialState } from '../../state'
 import {
-  BuildingEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -9,24 +8,24 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { shippingCompany } from '..'
+import { portico } from '../portico'
 
-describe('buildings/shippingCompany', () => {
-  describe('shippingCompany', () => {
+describe('buildings/portico', () => {
+  describe('portico', () => {
     const p0: Tableau = {
       color: PlayerColor.Blue,
       clergy: [],
       settlements: [],
       landscape: [
-        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
       ] as Tile[][],
       wonders: 0,
       landscapeOffset: 0,
-      peat: 10,
+      peat: 0,
       penny: 0,
       clay: 0,
-      wood: 10,
+      wood: 0,
       grain: 0,
       sheep: 0,
       stone: 0,
@@ -34,7 +33,7 @@ describe('buildings/shippingCompany', () => {
       grape: 0,
       nickel: 0,
       malt: 0,
-      coal: 10,
+      coal: 0,
       book: 0,
       ceramic: 0,
       whiskey: 0,
@@ -44,7 +43,7 @@ describe('buildings/shippingCompany', () => {
       bread: 0,
       wine: 0,
       beer: 0,
-      reliquary: 0,
+      reliquary: 10,
     }
     const s0: GameStatePlaying = {
       ...initialState,
@@ -70,48 +69,42 @@ describe('buildings/shippingCompany', () => {
         length: 'long',
       },
       rondel: {
-        pointingBefore: 7,
-        joker: 5,
+        pointingBefore: 0,
       },
       wonders: 0,
       players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      buildings: [] as BuildingEnum[],
+      buildings: [],
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
     }
 
     it('retains undefined state', () => {
-      const s1 = shippingCompany()(undefined)!
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = portico()(s0)
       expect(s1).toBeUndefined()
     })
-    it('burns wood and makes meat', () => {
-      const s1 = shippingCompany('WoWoWo', 'Mt')(s0)!
+    it('allows using with no input', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = portico()(s0)
+      expect(s0).toBe(s1)
+    })
+    it('allows using with empty string', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = portico('')(s0)
+      expect(s0).toBe(s1)
+    })
+    it('turns grain into malt and straw', () => {
+      const s1 = portico('Rq')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
-        meat: 3,
-        wood: 7,
+        reliquary: 9,
+        stone: 2,
+        clay: 2,
+        wood: 2,
+        peat: 2,
+        penny: 2,
+        grain: 2,
+        sheep: 2,
       })
-    })
-    it('no output specified errors', () => {
-      const s1 = shippingCompany('WoWoWo', '')(s0)!
-      expect(s1).toBeUndefined()
-    })
-    it('burns peat and makes bread', () => {
-      const s1 = shippingCompany('PtPt', 'Br')(s0)!
-      expect(s1.players[0]).toMatchObject({
-        peat: 8,
-        bread: 3,
-      })
-    })
-    it('burns coal and makes wine', () => {
-      const s1 = shippingCompany('Co', 'Wn')(s0)!
-      expect(s1.players[0]).toMatchObject({
-        coal: 9,
-        wine: 3,
-      })
-    })
-    it('noop if not enough energy', () => {
-      const s1 = shippingCompany('Wo', 'Wn')(s0)!
-      expect(s1).toBe(s0)
     })
   })
 })

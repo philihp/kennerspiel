@@ -1,4 +1,6 @@
-import { Rondel, GameCommandConfigParams, StateReducer } from '../types'
+import { Rondel, GameCommandConfigParams, StateReducer, Cost } from '../types'
+import { getCost, withActivePlayer } from './player'
+import { multiplyGoods } from './resource'
 
 type TokenName = 'grain' | 'sheep' | 'clay' | 'coin' | 'wood' | 'joker' | 'peat' | 'grape' | 'stone'
 
@@ -51,3 +53,24 @@ export const take = (armIndex: number, tokenIndex: number, config: GameCommandCo
   const armVals = armValues(config)
   return armVals[(armIndex - tokenIndex + armVals.length) % armVals.length]
 }
+
+export const takePlayerJoker =
+  (unitCost: Cost): StateReducer =>
+  (state) => {
+    if (state === undefined) return undefined
+    const {
+      rondel: { pointingBefore, joker },
+      config,
+    } = state
+    const takeValue = take(pointingBefore, joker ?? pointingBefore, config)
+    return withActivePlayer(getCost(multiplyGoods(takeValue)(unitCost)))(state)
+  }
+
+export const advanceJokerOnRondel: StateReducer = (state) =>
+  state && {
+    ...state,
+    rondel: {
+      ...state.rondel,
+      joker: state.rondel.pointingBefore,
+    },
+  }
