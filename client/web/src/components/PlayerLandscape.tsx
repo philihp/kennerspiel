@@ -34,7 +34,8 @@ export const PlayerLandscape = ({ landscape, offset }: Props) => {
           return (
             <tr key={JSON.stringify(row)}>
               {row.map((tile, colIndex) => {
-                if (tile.length === 0) return <td />
+                // eslint-disable-next-line react/no-array-index-key
+                if (tile.length === 0) return <td key={`${rowId}:${colIndex}`} />
                 const [land, building, clergy] = tile
                 return (
                   <td
@@ -48,9 +49,10 @@ export const PlayerLandscape = ({ landscape, offset }: Props) => {
                       backgroundColor: landToColor(land),
                     }}
                     // eslint-disable-next-line react/no-array-index-key
-                    key={`${rowIndex}:${colIndex}`}
+                    key={`${rowId}:${colIndex}`}
                   >
                     {building && <Erection key={building} id={building} />}
+                    {clergy}
                   </td>
                 )
               })}
