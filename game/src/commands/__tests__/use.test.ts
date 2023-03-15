@@ -64,6 +64,7 @@ import {
   townEstate,
   windmill,
   winery,
+  filialChurch,
 } from '../../buildings'
 
 import { use } from '../use'
@@ -93,6 +94,7 @@ jest.mock('../../buildings', () => {
     estate: jest.fn().mockReturnValue(identity),
     farmyard: jest.fn().mockReturnValue(identity),
     falseLighthouse: jest.fn().mockReturnValue(identity),
+    filialChurch: jest.fn().mockReturnValue(identity),
     financedEstate: jest.fn().mockReturnValue(identity),
     forgersWorkshop: jest.fn().mockReturnValue(identity),
     fuelMerchant: jest.fn().mockReturnValue(identity),
@@ -396,6 +398,10 @@ describe('commands/use', () => {
     it('calls the falseLighthouse', () => {
       use(BuildingEnum.FalseLighthouse, ['Be'])(s0)!
       expect(falseLighthouse).toHaveBeenCalledWith('Be')
+    })
+    it('calls the filialChurch', () => {
+      use(BuildingEnum.FilialChurch, [])(s0)!
+      expect(filialChurch).toHaveBeenCalled()
     })
     it('calls the financedEstate', () => {
       use(BuildingEnum.FinancedEstate, [])(s0)!
