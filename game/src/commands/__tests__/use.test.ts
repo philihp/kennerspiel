@@ -30,6 +30,7 @@ import {
   cloisterWorkshop,
   cottage,
   dormitory,
+  druidsHouse,
   estate,
   farmyard,
   falseLighthouse,
@@ -88,6 +89,7 @@ jest.mock('../../buildings', () => {
     cloisterOffice: jest.fn().mockReturnValue(identity),
     cloisterWorkshop: jest.fn().mockReturnValue(identity),
     dormitory: jest.fn().mockReturnValue(identity),
+    druidsHouse: jest.fn().mockReturnValue(identity),
     estate: jest.fn().mockReturnValue(identity),
     farmyard: jest.fn().mockReturnValue(identity),
     falseLighthouse: jest.fn().mockReturnValue(identity),
@@ -382,6 +384,10 @@ describe('commands/use', () => {
     it('calls the dormitory', () => {
       use(BuildingEnum.Dormitory, [])(s0)!
       expect(dormitory).toHaveBeenCalled()
+    })
+    it('calls the druidsHouse', () => {
+      use(BuildingEnum.DruidsHouse, ['Bo', 'PnPnPnPnPnGnGnGn'])(s0)!
+      expect(druidsHouse).toHaveBeenCalled()
     })
     it('calls the estate', () => {
       use(BuildingEnum.Estate, [])(s0)!

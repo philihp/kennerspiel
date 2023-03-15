@@ -54,6 +54,7 @@ import {
   granary,
   sacredSite,
   scriptorium,
+  druidsHouse,
 } from '../buildings'
 import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
 
@@ -127,6 +128,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.CloisterWorkshop, () => cloisterWorkshop(params[0]))
       .with(BuildingEnum.Cottage, () => cottage())
       .with(BuildingEnum.Dormitory, () => dormitory(params[0]))
+      .with(BuildingEnum.DruidsHouse, () => druidsHouse(params[0], params[1]))
       .with(BuildingEnum.Estate, () => estate(params[0]))
       .with(BuildingEnum.FarmYardR, BuildingEnum.FarmYardG, BuildingEnum.FarmYardB, BuildingEnum.FarmYardW, () =>
         farmyard(params[0])
