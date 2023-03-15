@@ -57,6 +57,7 @@ import {
   printingOffice,
   priory,
   quarry,
+  refectory,
   sacristy,
   scriptorium,
   sacredSite,
@@ -123,6 +124,7 @@ jest.mock('../../buildings', () => {
     printingOffice: jest.fn().mockReturnValue(identity),
     priory: jest.fn().mockReturnValue(identity),
     quarry: jest.fn().mockReturnValue(identity),
+    refectory: jest.fn().mockReturnValue(identity),
     sacristy: jest.fn().mockReturnValue(identity),
     scriptorium: jest.fn().mockReturnValue(identity),
     sacredSite: jest.fn().mockReturnValue(identity),
@@ -512,6 +514,10 @@ describe('commands/use', () => {
     it('calls the quarry B', () => {
       use(BuildingEnum.QuarryB, [])(s0)!
       expect(quarry).toHaveBeenCalled()
+    })
+    it('calls the refectory', () => {
+      use(BuildingEnum.Refectory, [])(s0)!
+      expect(refectory).toHaveBeenCalled()
     })
     it('calls the scriptorium', () => {
       use(BuildingEnum.Scriptorium, ['Wh'])(s0)!
