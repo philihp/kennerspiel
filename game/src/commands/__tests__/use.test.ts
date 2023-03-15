@@ -38,6 +38,7 @@ import {
   fuelMerchant,
   grainStorage,
   granary,
+  grandManor,
   grapevine,
   harborPromenade,
   hospice,
@@ -96,6 +97,7 @@ jest.mock('../../buildings', () => {
     fuelMerchant: jest.fn().mockReturnValue(identity),
     grainStorage: jest.fn().mockReturnValue(identity),
     granary: jest.fn().mockReturnValue(identity),
+    grandManor: jest.fn().mockReturnValue(identity),
     grapevine: jest.fn().mockReturnValue(identity),
     harborPromenade: jest.fn().mockReturnValue(identity),
     hospice: jest.fn().mockReturnValue(identity),
@@ -410,6 +412,10 @@ describe('commands/use', () => {
     it('calls the granary', () => {
       use(BuildingEnum.Granary, [])(s0)!
       expect(granary).toHaveBeenCalled()
+    })
+    it('calls the grandManor', () => {
+      use(BuildingEnum.GrandManor, [])(s0)!
+      expect(grandManor).toHaveBeenCalled()
     })
     it('calls the grapevine A', () => {
       use(BuildingEnum.GrapevineA, [])(s0)!

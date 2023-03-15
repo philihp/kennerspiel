@@ -1,6 +1,7 @@
 import { pipe } from 'ramda'
+import { addBonusAction } from '../board/frame'
 import { withActivePlayer } from '../board/player'
-import { BuildingEnum, GameStatePlaying } from '../types'
+import { BuildingEnum, GameCommandEnum, GameStatePlaying } from '../types'
 
 const checkSpotIsForest = (row: number, col: number) =>
   withActivePlayer((player) => {
@@ -25,12 +26,10 @@ const removeForestAt = (row: number, col: number) =>
       }
   )
 
-const allowBuildAction = (state: GameStatePlaying | undefined) => state
-
 export const carpentry = (row: number, col: number) =>
   pipe(
     //
     checkSpotIsForest(row, col),
     removeForestAt(row, col),
-    allowBuildAction
+    addBonusAction(GameCommandEnum.BUILD)
   )
