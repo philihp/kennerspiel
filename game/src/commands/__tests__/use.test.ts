@@ -44,6 +44,7 @@ import {
   granary,
   grandManor,
   grapevine,
+  guesthouse,
   harborPromenade,
   hospice,
   houseboat,
@@ -113,6 +114,7 @@ jest.mock('../../buildings', () => {
     granary: jest.fn().mockReturnValue(identity),
     grandManor: jest.fn().mockReturnValue(identity),
     grapevine: jest.fn().mockReturnValue(identity),
+    guesthouse: jest.fn().mockReturnValue(identity),
     harborPromenade: jest.fn().mockReturnValue(identity),
     hospice: jest.fn().mockReturnValue(identity),
     houseboat: jest.fn().mockReturnValue(identity),
@@ -462,6 +464,10 @@ describe('commands/use', () => {
     it('calls the grapevine B', () => {
       use(BuildingEnum.GrapevineB, [])(s0)!
       expect(grapevine).toHaveBeenCalled()
+    })
+    it('calls the guesthouse', () => {
+      use(BuildingEnum.Guesthouse, [])(s0)!
+      expect(guesthouse).toHaveBeenCalled()
     })
     it('calls the harborPromenade', () => {
       use(BuildingEnum.HarborPromenade, [])(s0)!
