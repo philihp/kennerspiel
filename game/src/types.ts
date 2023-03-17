@@ -469,6 +469,8 @@ export type GameState = GameStateSetup | GameStatePlaying
 
 export type StateReducer = (state: GameStatePlaying | undefined) => GameStatePlaying | undefined
 
+export type CostReducer = (cost: Cost | undefined) => Cost | undefined
+
 export type FrameFlow = Record<
   number,
   {
