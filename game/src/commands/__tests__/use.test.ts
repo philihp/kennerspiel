@@ -18,6 +18,7 @@ import {
   brewery,
   buildersMarket,
   calefactory,
+  camera,
   carpentry,
   castle,
   chamberOfWonders,
@@ -88,6 +89,7 @@ jest.mock('../../buildings', () => {
     brewery: jest.fn().mockReturnValue(identity),
     buildersMarket: jest.fn().mockReturnValue(identity),
     calefactory: jest.fn().mockReturnValue(identity),
+    camera: jest.fn().mockReturnValue(identity),
     carpentry: jest.fn().mockReturnValue(identity),
     castle: jest.fn().mockReturnValue(identity),
     coalHarbor: jest.fn().mockReturnValue(identity),
@@ -366,6 +368,10 @@ describe('commands/use', () => {
     it('calls the calefactory', () => {
       use(BuildingEnum.Calefactory, [])(s0)!
       expect(calefactory).toHaveBeenCalled()
+    })
+    it('calls the camera', () => {
+      use(BuildingEnum.Camera, ['BoBoCeCe'])(s0)!
+      expect(camera).toHaveBeenCalled()
     })
     it('calls the carpentry', () => {
       use(BuildingEnum.Carpentry, ['2', '-1'])(s0)!

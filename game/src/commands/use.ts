@@ -11,6 +11,7 @@ import {
   calefactory,
   carpentry,
   castle,
+  camera,
   chamberOfWonders,
   chapel,
   clayMound,
@@ -121,6 +122,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
         carpentry(Number.parseInt(params[0] ?? '', 10), Number.parseInt(params[1] ?? '', 10))
       )
       .with(BuildingEnum.Castle, castle)
+      .with(BuildingEnum.Camera, () => camera(params[0]))
       .with(BuildingEnum.ChamberOfWonders, () => chamberOfWonders(params[0]))
       .with(BuildingEnum.Chapel, () => chapel(params[0]))
       .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () =>
