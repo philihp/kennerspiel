@@ -39,6 +39,7 @@ import {
   granary,
   grandManor,
   grapevine,
+  guesthouse,
   harborPromenade,
   hospice,
   houseOfTheBrotherhood,
@@ -158,6 +159,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       )
       .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
       .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
+      .with(BuildingEnum.Guesthouse, () => guesthouse())
       .with(BuildingEnum.GrainStorage, () => grainStorage(params[0]))
       .with(BuildingEnum.Granary, () => granary(params[0]))
       .with(BuildingEnum.GrandManor, () => grandManor(params[0]))
