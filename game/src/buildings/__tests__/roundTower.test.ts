@@ -1,4 +1,3 @@
-import { initialState } from '../../state'
 import {
   Clergy,
   GameStatePlaying,
@@ -47,8 +46,8 @@ describe('buildings/roundTower', () => {
       beer: 0,
       reliquary: 10,
     }
-    const s0: GameStatePlaying = {
-      ...initialState,
+    const s0 = {
+      randGen: 0,
       status: GameStatusEnum.PLAYING,
       frame: {
         next: 1,
@@ -80,7 +79,7 @@ describe('buildings/roundTower', () => {
       buildings: [],
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
-    }
+    } as GameStatePlaying
 
     it('retains undefined state', () => {
       const s1 = roundTower()(undefined)
@@ -98,17 +97,46 @@ describe('buildings/roundTower', () => {
     })
 
     it('follows happy path', () => {
-      const s1 = roundTower('WhNiRqRqRqBo')(s0)!
+      const s1 = roundTower('WhNiOrOrOrBo')(s0)!
       expect(s1.players[0]).toMatchObject({
         whiskey: 9,
         nickel: 9,
         penny: 10,
+        reliquary: 10,
+        book: 9,
+        ceramic: 10,
+        ornament: 7,
+        wonders: 1,
+      })
+    })
+
+    it('can pay with pennies', () => {
+      const s1 = roundTower('WhPnPnPnPnPnRqRqRqBo')(s0)!
+      expect(s1.players[0]).toMatchObject({
+        whiskey: 9,
+        nickel: 10,
+        penny: 5,
         reliquary: 7,
         book: 9,
         ceramic: 10,
         ornament: 10,
         wonders: 1,
       })
+    })
+
+    it('noop if underpaid pennies', () => {
+      const s1 = roundTower('WhPnPnPnPnRqRqRqBo')(s0)!
+      expect(s1).toBe(s0)
+    })
+
+    it('noop if no whiskey', () => {
+      const s1 = roundTower('NiRqRqRqBo')(s0)!
+      expect(s1).toBe(s0)
+    })
+
+    it('noop if not enough points', () => {
+      const s1 = roundTower('WhNiOrOrCeBo')(s0)!
+      expect(s1.players[0]).toBe(s0.players[0])
     })
   })
 })

@@ -15,12 +15,12 @@ const removeWhiskey: CostReducer = (cost) => {
 
 const removeFiveCoins: CostReducer = (cost) => {
   if (!cost) return undefined
-  if (cost.penny ?? 0 >= 5)
+  if ((cost.penny ?? 0) >= 5)
     return {
       ...cost,
       penny: (cost.penny ?? 0) - 5,
     }
-  if (cost.nickel ?? 0 >= 5)
+  if ((cost.nickel ?? 0) >= 1)
     return {
       ...cost,
       nickel: (cost.nickel ?? 0) - 1,
