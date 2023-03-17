@@ -11,6 +11,7 @@ import {
   calefactory,
   carpentry,
   castle,
+  camera,
   chamberOfWonders,
   chapel,
   clayMound,
@@ -21,6 +22,7 @@ import {
   cloisterLibrary,
   cloisterOffice,
   cloisterWorkshop,
+  coalHarbor,
   cooperage,
   cottage,
   dormitory,
@@ -30,12 +32,14 @@ import {
   farmyard,
   filialChurch,
   financedEstate,
+  forestHut,
   forgersWorkshop,
   fuelMerchant,
   grainStorage,
   granary,
   grandManor,
   grapevine,
+  guesthouse,
   harborPromenade,
   hospice,
   houseOfTheBrotherhood,
@@ -120,6 +124,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
         carpentry(Number.parseInt(params[0] ?? '', 10), Number.parseInt(params[1] ?? '', 10))
       )
       .with(BuildingEnum.Castle, castle)
+      .with(BuildingEnum.Camera, () => camera(params[0]))
       .with(BuildingEnum.ChamberOfWonders, () => chamberOfWonders(params[0]))
       .with(BuildingEnum.Chapel, () => chapel(params[0]))
       .with(BuildingEnum.ClayMoundR, BuildingEnum.ClayMoundG, BuildingEnum.ClayMoundB, BuildingEnum.ClayMoundW, () =>
@@ -138,6 +143,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
         () => cloisterOffice(params[0])
       )
       .with(BuildingEnum.CloisterWorkshop, () => cloisterWorkshop(params[0]))
+      .with(BuildingEnum.CoalHarbor, () => coalHarbor(params[0]))
       .with(BuildingEnum.Cooperage, () => cooperage(params[0], params[1]))
       .with(BuildingEnum.Cottage, () => cottage())
       .with(BuildingEnum.Dormitory, () => dormitory(params[0]))
@@ -149,8 +155,12 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.FalseLighthouse, () => falseLighthouse(params[0]))
       .with(BuildingEnum.FilialChurch, () => filialChurch(params[0]))
       .with(BuildingEnum.FinancedEstate, () => financedEstate(params[0]))
+      .with(BuildingEnum.ForestHut, () =>
+        forestHut((Number.parseInt(params[0] ?? '', 10), Number.parseInt(params[1] ?? '', 10)))
+      )
       .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
       .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
+      .with(BuildingEnum.Guesthouse, () => guesthouse())
       .with(BuildingEnum.GrainStorage, () => grainStorage(params[0]))
       .with(BuildingEnum.Granary, () => granary(params[0]))
       .with(BuildingEnum.GrandManor, () => grandManor(params[0]))
