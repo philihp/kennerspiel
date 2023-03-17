@@ -37,6 +37,7 @@ import {
   estate,
   farmyard,
   falseLighthouse,
+  filialChurch,
   financedEstate,
   forgersWorkshop,
   fuelMerchant,
@@ -60,6 +61,7 @@ import {
   priory,
   quarry,
   refectory,
+  roundTower,
   sacristy,
   scriptorium,
   sacredSite,
@@ -72,7 +74,6 @@ import {
   whiskeyDistillery,
   windmill,
   winery,
-  filialChurch,
 } from '../../buildings'
 
 import { use } from '../use'
@@ -129,6 +130,7 @@ jest.mock('../../buildings', () => {
     priory: jest.fn().mockReturnValue(identity),
     quarry: jest.fn().mockReturnValue(identity),
     refectory: jest.fn().mockReturnValue(identity),
+    roundTower: jest.fn().mockReturnValue(identity),
     sacristy: jest.fn().mockReturnValue(identity),
     scriptorium: jest.fn().mockReturnValue(identity),
     sacredSite: jest.fn().mockReturnValue(identity),
@@ -530,6 +532,10 @@ describe('commands/use', () => {
     it('calls the refectory', () => {
       use(BuildingEnum.Refectory, [])(s0)!
       expect(refectory).toHaveBeenCalled()
+    })
+    it('calls the roundTower', () => {
+      use(BuildingEnum.RoundTower, [])(s0)!
+      expect(roundTower).toHaveBeenCalled()
     })
     it('calls the scriptorium', () => {
       use(BuildingEnum.Scriptorium, ['Wh'])(s0)!

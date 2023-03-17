@@ -37,7 +37,7 @@ describe('buildings/roundTower', () => {
       malt: 0,
       coal: 0,
       book: 10,
-      ceramic: 0,
+      ceramic: 10,
       whiskey: 10,
       straw: 0,
       meat: 0,
@@ -75,7 +75,7 @@ describe('buildings/roundTower', () => {
         grape: 1,
         joker: 2,
       },
-      wonders: 0,
+      wonders: 8,
       players: [p0],
       buildings: [],
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
@@ -107,6 +107,7 @@ describe('buildings/roundTower', () => {
         book: 9,
         ceramic: 10,
         ornament: 10,
+        wonders: 1,
       })
     })
   })

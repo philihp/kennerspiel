@@ -40,7 +40,7 @@ export const roundTower = (param = '') => {
     withActivePlayer(
       pipe(
         //
-        payCost(input),
+        payCost(rawInput),
         getWonder()
       )
     ),

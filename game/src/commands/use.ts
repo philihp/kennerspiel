@@ -52,6 +52,7 @@ import {
   priory,
   quarry,
   refectory,
+  roundTower,
   sacredSite,
   sacristy,
   scriptorium,
@@ -171,6 +172,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.Priory, priory)
       .with(BuildingEnum.QuarryA, BuildingEnum.QuarryB, () => quarry(params[0]))
       .with(BuildingEnum.Refectory, () => refectory(params[0]))
+      .with(BuildingEnum.RoundTower, () => roundTower(params[0]))
       .with(BuildingEnum.Scriptorium, () => scriptorium(params[0]))
       .with(BuildingEnum.Sacristy, () => sacristy(params[0]))
       .with(BuildingEnum.SacredSite, () => sacredSite(params[0]))
