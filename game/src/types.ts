@@ -471,6 +471,8 @@ export type StateReducer = (state: GameStatePlaying | undefined) => GameStatePla
 
 export type CostReducer = (cost: Cost | undefined) => Cost | undefined
 
+export type TableauReducer = (state: Tableau | undefined) => Tableau | undefined
+
 export type FrameFlow = Record<
   number,
   {

@@ -18,6 +18,7 @@ import {
   brewery,
   buildersMarket,
   calefactory,
+  camera,
   carpentry,
   castle,
   chamberOfWonders,
@@ -30,6 +31,7 @@ import {
   cloisterLibrary,
   cloisterOffice,
   cloisterWorkshop,
+  coalHarbor,
   cooperage,
   cottage,
   dormitory,
@@ -39,12 +41,14 @@ import {
   falseLighthouse,
   filialChurch,
   financedEstate,
+  forestHut,
   forgersWorkshop,
   fuelMerchant,
   grainStorage,
   granary,
   grandManor,
   grapevine,
+  guesthouse,
   harborPromenade,
   hospice,
   houseboat,
@@ -87,8 +91,10 @@ jest.mock('../../buildings', () => {
     brewery: jest.fn().mockReturnValue(identity),
     buildersMarket: jest.fn().mockReturnValue(identity),
     calefactory: jest.fn().mockReturnValue(identity),
+    camera: jest.fn().mockReturnValue(identity),
     carpentry: jest.fn().mockReturnValue(identity),
     castle: jest.fn().mockReturnValue(identity),
+    coalHarbor: jest.fn().mockReturnValue(identity),
     cooperage: jest.fn().mockReturnValue(identity),
     cottage: jest.fn().mockReturnValue(identity),
     chamberOfWonders: jest.fn().mockReturnValue(identity),
@@ -108,12 +114,14 @@ jest.mock('../../buildings', () => {
     falseLighthouse: jest.fn().mockReturnValue(identity),
     filialChurch: jest.fn().mockReturnValue(identity),
     financedEstate: jest.fn().mockReturnValue(identity),
+    forestHut: jest.fn().mockReturnValue(identity),
     forgersWorkshop: jest.fn().mockReturnValue(identity),
     fuelMerchant: jest.fn().mockReturnValue(identity),
     grainStorage: jest.fn().mockReturnValue(identity),
     granary: jest.fn().mockReturnValue(identity),
     grandManor: jest.fn().mockReturnValue(identity),
     grapevine: jest.fn().mockReturnValue(identity),
+    guesthouse: jest.fn().mockReturnValue(identity),
     harborPromenade: jest.fn().mockReturnValue(identity),
     hospice: jest.fn().mockReturnValue(identity),
     houseboat: jest.fn().mockReturnValue(identity),
@@ -365,6 +373,10 @@ describe('commands/use', () => {
       use(BuildingEnum.Calefactory, [])(s0)!
       expect(calefactory).toHaveBeenCalled()
     })
+    it('calls the camera', () => {
+      use(BuildingEnum.Camera, ['BoBoCeCe'])(s0)!
+      expect(camera).toHaveBeenCalled()
+    })
     it('calls the carpentry', () => {
       use(BuildingEnum.Carpentry, ['2', '-1'])(s0)!
       expect(carpentry).toHaveBeenCalledWith(2, -1)
@@ -413,6 +425,10 @@ describe('commands/use', () => {
       use(BuildingEnum.Cottage, [])(s0)!
       expect(cottage).toHaveBeenCalled()
     })
+    it('calls the coalHarbor', () => {
+      use(BuildingEnum.CoalHarbor, ['PtPtPt'])(s0)!
+      expect(coalHarbor).toHaveBeenCalled()
+    })
     it('calls the dormitory', () => {
       use(BuildingEnum.Dormitory, [])(s0)!
       expect(dormitory).toHaveBeenCalled()
@@ -436,6 +452,10 @@ describe('commands/use', () => {
     it('calls the financedEstate', () => {
       use(BuildingEnum.FinancedEstate, [])(s0)!
       expect(financedEstate).toHaveBeenCalled()
+    })
+    it('calls the forestHut', () => {
+      use(BuildingEnum.ForestHut, [])(s0)!
+      expect(forestHut).toHaveBeenCalled()
     })
     it('calls the forgersWorkshop', () => {
       use(BuildingEnum.ForgersWorkshop, [])(s0)!
@@ -464,6 +484,10 @@ describe('commands/use', () => {
     it('calls the grapevine B', () => {
       use(BuildingEnum.GrapevineB, [])(s0)!
       expect(grapevine).toHaveBeenCalled()
+    })
+    it('calls the guesthouse', () => {
+      use(BuildingEnum.Guesthouse, [])(s0)!
+      expect(guesthouse).toHaveBeenCalled()
     })
     it('calls the harborPromenade', () => {
       use(BuildingEnum.HarborPromenade, [])(s0)!
