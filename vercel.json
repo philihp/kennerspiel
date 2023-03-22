@@ -3,6 +3,6 @@
   "buildCommand": "hathora build --only client",
   "outputDirectory": "client/web/dist",
   "redirects": [
-    { "source": "/game/", "destination": "/index.html", "permanent": true }
+    { "source": "/game/:id", "destination": "/index.html", "permanent": true }
   ]
 }
