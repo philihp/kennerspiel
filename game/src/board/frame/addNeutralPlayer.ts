@@ -17,7 +17,7 @@ export const addNeutralPlayer: StateReducer = (state) => {
 
   const [neutralColorIndex, randGen] = randRange(0, 3, state.randGen)
   const color = neutralColor(state.players[0].color, neutralColorIndex)
-  const clergy = clergyForColor(color)
+  const clergy = clergyForColor(state.config)(color)
   const [row0, row1] = makeLandscape(color)
   const landscape: Tile[][] = [
     [

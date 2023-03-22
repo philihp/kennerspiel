@@ -1,5 +1,5 @@
-import { Clergy, PlayerColor, Tableau } from '../../types'
-import { getCost, isLayBrother, isPrior, payCost, subtractCoins } from '../player'
+import { Clergy, GameCommandConfigParams, PlayerColor, Tableau } from '../../types'
+import { clergyForColor, getCost, isLayBrother, isPrior, payCost, subtractCoins } from '../player'
 
 const p: Tableau = {
   color: PlayerColor.Red,
@@ -33,6 +33,44 @@ const p: Tableau = {
 }
 
 describe('board/player', () => {
+  describe('clergyForColor', () => {
+    it('gives 3 clergy for red', () => {
+      const config: GameCommandConfigParams = {
+        country: 'france',
+        length: 'long',
+        players: 3,
+      }
+      const clergy = clergyForColor(config)(PlayerColor.Red)
+      expect(clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
+    })
+    it('gives 3 clergy for 2p short', () => {
+      const config: GameCommandConfigParams = {
+        country: 'france',
+        length: 'short',
+        players: 2,
+      }
+      const clergy = clergyForColor(config)(PlayerColor.Blue)
+      expect(clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
+    })
+    it('removes a laybrother for short 3p', () => {
+      const config: GameCommandConfigParams = {
+        country: 'france',
+        length: 'short',
+        players: 3,
+      }
+      const clergy = clergyForColor(config)(PlayerColor.Red)
+      expect(clergy).toStrictEqual(['LB1R', 'PRIR'])
+    })
+    it('removes a laybrother for short 4p', () => {
+      const config: GameCommandConfigParams = {
+        country: 'ireland',
+        length: 'short',
+        players: 4,
+      }
+      const clergy = clergyForColor(config)(PlayerColor.White)
+      expect(clergy).toStrictEqual(['LB1W', 'PRIW'])
+    })
+  })
   describe('isPrior', () => {
     it('thinks priors are priors', () => {
       expect(isPrior(Clergy.PriorW)).toBeTruthy()

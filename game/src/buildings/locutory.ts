@@ -7,7 +7,7 @@ import { GameCommandEnum, StateReducer, Tableau } from '../types'
 
 const returnPrior = (player: Tableau | undefined): Tableau | undefined => {
   if (player === undefined) return undefined
-  const priors = filter(isPrior, clergyForColor(player.color))
+  const priors = filter(isPrior, clergyForColor()(player.color))
   const [[row, col, tile]] = findClergy(priors)(player.landscape)
   const [land, building, _clergy] = tile
   return {

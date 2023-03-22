@@ -60,7 +60,7 @@ export const start = (
       reliquary: 0,
       color: shuffledColors[i],
       landscape: makeLandscape(shuffledColors[i]),
-      clergy: clergyForColor(shuffledColors[i]),
+      clergy: clergyForColor(config)(shuffledColors[i]),
       settlements: [],
     }
   })
