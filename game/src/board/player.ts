@@ -1,6 +1,15 @@
 import { any, map } from 'ramda'
 import { match } from 'ts-pattern'
-import { Clergy, Cost, GameStatePlaying, PlayerColor, StateReducer, Tableau, Tile } from '../types'
+import {
+  Clergy,
+  Cost,
+  GameCommandConfigParams,
+  GameStatePlaying,
+  PlayerColor,
+  StateReducer,
+  Tableau,
+  Tile,
+} from '../types'
 
 export const withActivePlayer =
   (func: (player: Tableau) => Tableau | undefined): StateReducer =>
@@ -53,19 +62,30 @@ export const withEachPlayer =
     }
   }
 
-export const clergyForColor = (color: PlayerColor): Clergy[] =>
-  match(color)
-    .with(PlayerColor.Red, () => [Clergy.LayBrother1R, Clergy.LayBrother2R, Clergy.PriorR])
-    .with(PlayerColor.Green, () => [Clergy.LayBrother1G, Clergy.LayBrother2G, Clergy.PriorG])
-    .with(PlayerColor.Blue, () => [Clergy.LayBrother1B, Clergy.LayBrother2B, Clergy.PriorB])
-    .with(PlayerColor.White, () => [Clergy.LayBrother1W, Clergy.LayBrother2W, Clergy.PriorW])
-    .exhaustive()
+export const clergyForColor = (config?: GameCommandConfigParams) => {
+  if ((config?.players === 3 || config?.players === 4) && config?.length === 'short') {
+    return (color: PlayerColor): Clergy[] =>
+      match(color)
+        .with(PlayerColor.Red, () => [Clergy.LayBrother1R, Clergy.PriorR])
+        .with(PlayerColor.Green, () => [Clergy.LayBrother1G, Clergy.PriorG])
+        .with(PlayerColor.Blue, () => [Clergy.LayBrother1B, Clergy.PriorB])
+        .with(PlayerColor.White, () => [Clergy.LayBrother1W, Clergy.PriorW])
+        .exhaustive()
+  }
+  return (color: PlayerColor): Clergy[] =>
+    match(color)
+      .with(PlayerColor.Red, () => [Clergy.LayBrother1R, Clergy.LayBrother2R, Clergy.PriorR])
+      .with(PlayerColor.Green, () => [Clergy.LayBrother1G, Clergy.LayBrother2G, Clergy.PriorG])
+      .with(PlayerColor.Blue, () => [Clergy.LayBrother1B, Clergy.LayBrother2B, Clergy.PriorB])
+      .with(PlayerColor.White, () => [Clergy.LayBrother1W, Clergy.LayBrother2W, Clergy.PriorW])
+      .exhaustive()
+}
 
 export const priors = (state: GameStatePlaying | undefined): Clergy[] =>
   (state &&
     state.players
       .map(({ color }) => color)
-      .map(clergyForColor)
+      .map(clergyForColor(state.config))
       .map(([, , prior]) => prior)) ??
   []
 
