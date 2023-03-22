@@ -18,12 +18,7 @@ jobs:
       - run: npm install -g hathora
       - run: hathora cloud deploy --appName $APP_NAME --token ${{ secrets.HATHORA_TOKEN }}
 
-  # Vercel will watch the repo and trigger its own builds, so this is unnecessary
-  # however it is configured with...
-  # build command:
-  # npm install hathora -g && hathora build --only client && echo '/* /index.html 200' > client/web/dist/_redirects
-  # output directory:
-  # client/web/dist
+  # Vercel will deploy this by looking at vercel.json
   #
   # frontend:
   #   runs-on: ubuntu-latest
