@@ -1,4 +1,4 @@
-import { Frame, FrameFlow, GameCommandEnum, SettlementRound, StateReducer } from '../../types'
+import { FrameFlow, GameCommandEnum, SettlementRound } from '../../types'
 import { introduceBuildings } from '../buildings'
 import { introduceGrapeToken, introduceStoneToken } from '../rondel'
 import { introduceSettlements } from '../settlements'
@@ -120,91 +120,90 @@ export const nextFrame2Long: FrameFlow = {
     next: 19,
   },
 
-  // Round 7
+  // SETTLE A
   19: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [rotateRondel, returnClergyIfPlaced],
+    mainActionUsed: true,
+    bonusActions: [GameCommandEnum.SETTLE],
+    settlementRound: SettlementRound.A,
     next: 20,
   },
   20: {
-    currentPlayerIndex: 0,
+    currentPlayerIndex: 1,
+    mainActionUsed: true,
+    bonusActions: [GameCommandEnum.SETTLE],
     next: 21,
   },
+
+  // Round 7
   21: {
-    currentPlayerIndex: 1,
+    currentPlayerIndex: 0,
+    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
     next: 22,
   },
-
-  // Round 8
   22: {
-    startingPlayer: 1,
-    currentPlayerIndex: 1,
-    upkeep: [rotateRondel, returnClergyIfPlaced],
+    currentPlayerIndex: 0,
     next: 23,
   },
   23: {
     currentPlayerIndex: 1,
     next: 24,
   },
+
+  // Round 8
   24: {
-    currentPlayerIndex: 0,
+    startingPlayer: 1,
+    currentPlayerIndex: 1,
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 25,
   },
-
-  // Round 9
   25: {
-    startingPlayer: 0,
-    currentPlayerIndex: 0,
-    upkeep: [rotateRondel, returnClergyIfPlaced],
+    currentPlayerIndex: 1,
     next: 26,
   },
   26: {
     currentPlayerIndex: 0,
     next: 27,
   },
+
+  // Round 9
   27: {
-    currentPlayerIndex: 1,
+    startingPlayer: 0,
+    currentPlayerIndex: 0,
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 28,
   },
-
-  // Round 10
   28: {
-    startingPlayer: 1,
-    currentPlayerIndex: 1,
-    upkeep: [rotateRondel, returnClergyIfPlaced],
+    currentPlayerIndex: 0,
     next: 29,
   },
   29: {
     currentPlayerIndex: 1,
     next: 30,
   },
+
+  // Round 10
   30: {
-    currentPlayerIndex: 0,
+    startingPlayer: 1,
+    currentPlayerIndex: 1,
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 31,
   },
-
-  // Settlement A
-  // TODO: confirm that settlement A is before round 11, not after
   31: {
-    startingPlayer: 0,
-    currentPlayerIndex: 0,
-    mainActionUsed: true,
-    bonusActions: [GameCommandEnum.SETTLE],
-    settlementRound: SettlementRound.A,
+    currentPlayerIndex: 1,
     next: 32,
   },
   32: {
-    currentPlayerIndex: 1,
-    mainActionUsed: true,
-    bonusActions: [GameCommandEnum.SETTLE],
+    currentPlayerIndex: 0,
     next: 33,
   },
 
   // Round 11
   33: {
+    startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced, introduceGrapeToken],
+    upkeep: [rotateRondel, returnClergyIfPlaced, introduceGrapeToken],
     next: 34,
   },
   34: {
@@ -248,43 +247,42 @@ export const nextFrame2Long: FrameFlow = {
     next: 42,
   },
 
-  // Round 14
+  // Settlement B
   42: {
     startingPlayer: 1,
     currentPlayerIndex: 1,
-    upkeep: [rotateRondel, returnClergyIfPlaced],
-    next: 43,
-  },
-  43: {
-    currentPlayerIndex: 1,
-    next: 44,
-  },
-  44: {
-    currentPlayerIndex: 0,
-    next: 45,
-  },
-
-  // Settlement B
-  // TODO: confirm that settlement B is before round 15, not after
-  45: {
-    startingPlayer: 0,
-    currentPlayerIndex: 0,
     mainActionUsed: true,
     bonusActions: [GameCommandEnum.SETTLE],
     settlementRound: SettlementRound.B,
+    next: 43,
+  },
+  43: {
+    currentPlayerIndex: 0,
+    mainActionUsed: true,
+    bonusActions: [GameCommandEnum.SETTLE],
+    next: 44,
+  },
+
+  // Round 14
+  44: {
+    currentPlayerIndex: 1,
+    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
+    next: 45,
+  },
+  45: {
+    currentPlayerIndex: 1,
     next: 46,
   },
   46: {
-    currentPlayerIndex: 1,
-    mainActionUsed: true,
-    bonusActions: [GameCommandEnum.SETTLE],
+    currentPlayerIndex: 0,
     next: 47,
   },
 
   // Round 15
   47: {
+    startingPlayer: 0,
     currentPlayerIndex: 0,
-    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 48,
   },
   48: {
@@ -377,7 +375,6 @@ export const nextFrame2Long: FrameFlow = {
   },
 
   // Settlement C
-  // TODO: confirm that settlement C is before round 21, not after
   65: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
@@ -456,54 +453,100 @@ export const nextFrame2Long: FrameFlow = {
     next: 79,
   },
 
-  // Settlement D
-  // TODO: confirm that settlement D is before round 25, not after
+  // Round 25
   79: {
     startingPlayer: 0,
     currentPlayerIndex: 0,
-    mainActionUsed: true,
-    bonusActions: [GameCommandEnum.SETTLE],
-    settlementRound: SettlementRound.D,
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 80,
   },
   80: {
-    currentPlayerIndex: 1,
-    mainActionUsed: true,
-    bonusActions: [GameCommandEnum.SETTLE],
+    currentPlayerIndex: 0,
     next: 81,
   },
-
-  // Round 25
-  // This is identical to step 200, except we don't want to keep introducing
-  // the buildings. Hypothetically we could check for end-game here, but there's
-  // no way there is <= 1 unbuilt building.
   81: {
-    currentPlayerIndex: 0,
-    startingPlayer: 0,
-    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
+    currentPlayerIndex: 1,
     next: 82,
   },
+
+  // Round 26
   82: {
-    currentPlayerIndex: 0,
+    startingPlayer: 1,
+    currentPlayerIndex: 1,
+    upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 83,
   },
   83: {
     currentPlayerIndex: 1,
+    next: 84,
+  },
+  84: {
+    currentPlayerIndex: 0,
+    next: 85,
+  },
+
+  // Round 27
+  85: {
+    startingPlayer: 0,
+    currentPlayerIndex: 0,
+    upkeep: [rotateRondel, returnClergyIfPlaced],
+    next: 86,
+  },
+  86: {
+    currentPlayerIndex: 0,
+    next: 87,
+  },
+  87: {
+    currentPlayerIndex: 1,
+    next: 88,
+  },
+
+  // Settlement D
+  88: {
+    startingPlayer: 1,
+    currentPlayerIndex: 1,
+    mainActionUsed: true,
+    bonusActions: [GameCommandEnum.SETTLE],
+    settlementRound: SettlementRound.D,
+    next: 89,
+  },
+  89: {
+    currentPlayerIndex: 0,
+    mainActionUsed: true,
+    bonusActions: [GameCommandEnum.SETTLE],
+    next: 90,
+  },
+
+  // Round 28
+  // This is identical to step 200, except we don't want to keep introducing
+  // the buildings. Hypothetically we could check for end-game here, but there's
+  // no way there is <= 1 unbuilt building.
+  90: {
+    currentPlayerIndex: 1,
+    upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
+    next: 91,
+  },
+  91: {
+    currentPlayerIndex: 1,
+    next: 92,
+  },
+  92: {
+    currentPlayerIndex: 0,
     next: 97,
   },
 
   97: {
-    startingPlayer: 1,
-    currentPlayerIndex: 1,
+    startingPlayer: 0,
+    currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 98,
   },
   98: {
-    currentPlayerIndex: 1,
+    currentPlayerIndex: 0,
     next: 99,
   },
   99: {
-    currentPlayerIndex: 0,
+    currentPlayerIndex: 1,
     upkeep: [checkFinalPhase(100)],
     next: 103,
   },
@@ -512,17 +555,17 @@ export const nextFrame2Long: FrameFlow = {
     next: 100,
   },
   101: {
-    currentPlayerIndex: 1,
+    currentPlayerIndex: 0,
     upkeep: [checkFinalPhase(100)],
     next: 97,
   },
   102: {
-    currentPlayerIndex: 0,
+    currentPlayerIndex: 1,
     next: 101,
   },
   103: {
-    startingPlayer: 0,
-    currentPlayerIndex: 0,
+    startingPlayer: 1,
+    currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
     next: 102,
   },
