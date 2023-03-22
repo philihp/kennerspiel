@@ -3,6 +3,9 @@ name: game
 on:
   workflow_dispatch:
   pull_request:
+    paths:
+      - game/**
+      - .github/workflows/game.yml
   push:
     branches:
       - main
