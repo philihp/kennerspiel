@@ -20,7 +20,7 @@ export const Erection = ({ id }: Props) => (
       alt={id}
       title={id}
       style={{ display: 'inline' }}
-      src={`http://hathora-et-labora.s3-us-west-2.amazonaws.com/${decolor(id)}.jpg`}
+      src={`://hathora-et-labora.s3-us-west-2.amazonaws.com/${decolor(id)}.jpg`}
       width={150 * multiplier}
       height={250 * multiplier}
     />
