@@ -23,29 +23,42 @@ export const StatePlaying = () => {
 
   return (
     <>
-      <ul>
-        {state.moves.slice(-3).map((move, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <li key={`${i}:${move}`}>{move}</li>
-        ))}
-      </ul>
-      <button type="button" onClick={undo}>
-        &lt;
-      </button>
-      <button type="button" onClick={redo}>
-        &gt;
-      </button>
-      <input type="text" placeholder="command" value={command} onChange={(e) => setCommand(e.target.value)} />
-      <button type="submit" onClick={handleSubmit}>
-        Explore
-      </button>
-      <hr />
-      {rondel && config && <Rondel config={config} rondel={rondel} />}
-      {buildings && <UnbuiltBuildings buildings={buildings} />}
-      {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
-      {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
-      {wonders && <UnbuiltWonders wonders={wonders} />}
-      {players && map((player) => <Player key={player.color} player={player} />, players)}
+      {/* {state?.active && (
+        <>
+          <button type="button" onClick={undo}>
+            Undo
+          </button>
+          <button type="button" onClick={redo}>
+            Redo
+          </button>
+          <input type="text" placeholder="command" value={command} onChange={(e) => setCommand(e.target.value)} />
+          <button type="submit" onClick={handleSubmit}>
+            Explore
+          </button>
+        </>
+      )} */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        {rondel && config && <Rondel config={config} rondel={rondel} />}
+        <div>
+          {buildings && <UnbuiltBuildings buildings={buildings} />}
+          {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
+          {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
+          {wonders && <UnbuiltWonders wonders={wonders} />}
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
+        {players &&
+          map(
+            (player) => (
+              <Player
+                key={player.color}
+                player={player}
+                active={state?.active && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id}
+              />
+            ),
+            players
+          )}
+      </div>
       <pre>{JSON.stringify(elseState, undefined, 2)}</pre>
     </>
   )

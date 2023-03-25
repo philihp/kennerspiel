@@ -1,4 +1,8 @@
+import { Color } from '../../../../api/types'
+import { useHathoraContext } from '../context/GameContext'
+
 interface Props {
+  color: Color
   clergy: string[]
 }
 
@@ -12,10 +16,10 @@ interface WorkerProps {
 
 const colorToStyle = (color: string) => {
   const baseStyle = {
-    height: 16,
-    width: 16,
+    height: 24,
+    width: 24,
     margin: 1,
-    borderRadius: 8,
+    borderRadius: 16,
     borderWidth: 1,
     borderStyle: 'solid',
     display: 'inline-block',
@@ -35,26 +39,29 @@ const colorToStyle = (color: string) => {
 }
 
 const Prior = ({ color }: WorkerProps) => {
-  return <span style={{ ...colorToStyle(color), borderWidth: 2, height: 17, width: 17 }} />
+  return <span style={{ ...colorToStyle(color), borderWidth: 4, height: 24, width: 24 }} />
 }
 
 const LayBrother = ({ color }: WorkerProps) => {
   return <span style={colorToStyle(color)} />
 }
 
-const Clergy = ({ id }: ClergyProps) => {
+export const Clergy = ({ id }: ClergyProps) => {
   const prefix = id.substring(0, 3)
   const color = id.substring(3)
   if (prefix === 'PRI') return <Prior color={color} />
   return <LayBrother color={color} />
 }
 
-export const PlayerClergy = ({ clergy }: Props) => {
+export const PlayerClergy = ({ clergy, color }: Props) => {
+  const { state, getUserName } = useHathoraContext()
+  const user = state?.users.find((u) => u.color === color)
   return (
     <div>
       {clergy.reverse().map((id) => {
         return <Clergy key={id} id={id} />
       })}
+      {user && getUserName(user.id)}
     </div>
   )
 }
