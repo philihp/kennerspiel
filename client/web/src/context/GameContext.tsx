@@ -98,24 +98,21 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   const start = useCallback(async () => {
     await connection?.start({})
   }, [connection])
+
   const move = useCallback(
     async (command: string) => {
       await connection?.move({ command })
     },
     [connection]
   )
-  const undo = useCallback(
-    async (command: string) => {
-      await connection?.undo({ command })
-    },
-    [connection]
-  )
-  const redo = useCallback(
-    async (command: string) => {
-      await connection?.redo({ command })
-    },
-    [connection]
-  )
+
+  const undo = useCallback(async () => {
+    await connection?.undo({})
+  }, [connection])
+
+  const redo = useCallback(async () => {
+    await connection?.redo({})
+  }, [connection])
 
   const exported = useMemo(
     () => ({
