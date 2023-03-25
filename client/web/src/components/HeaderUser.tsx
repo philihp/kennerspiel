@@ -1,7 +1,7 @@
 import { useHathoraContext } from '../context/GameContext'
 
 export const HeaderUser = () => {
-  const { user, login } = useHathoraContext()
+  const { user, login, getUserName } = useHathoraContext()
   return (
     <div>
       {!user && (
@@ -9,7 +9,7 @@ export const HeaderUser = () => {
           Login
         </button>
       )}
-      {user && <span>username: {user?.name}</span>}
+      {user && <span>{getUserName(user?.id)}</span>}
     </div>
   )
 }

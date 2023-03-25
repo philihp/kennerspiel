@@ -99,11 +99,8 @@ export class Impl implements Methods<InternalState> {
 
   join(state: InternalState, userId: UserId, ctx: Context, request: IJoinRequest): Response {
     const { color } = request
-    const allColors = [Color.Red, Color.Blue, Color.Green, Color.White]
-    const colorsUsed = state.users.map((u)=> u.color)
-    const colorsFree =  allColors.filter(c => !colorsUsed.includes(c))
     state.users = state.users.filter(u => u.id !== userId && u.color !== color).concat({
-      id: userId, color: (color ?? colorsFree[0])
+      id: userId, color: (color)
     })
     return Response.ok()
   }

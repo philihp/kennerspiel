@@ -91,7 +91,7 @@ types:
 
 methods:
   join:
-    color: Color?
+    color: Color
   config:
     country: Country
     length: Length

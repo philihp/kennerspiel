@@ -13,16 +13,17 @@ interface GameContext {
   connecting?: boolean
   error?: ConnectionFailure
   login: () => Promise<string | undefined>
-  connect: (gameId: string) => Promise<HathoraConnection>
+  connect: (gameId: string) => Promise<HathoraConnection | undefined>
   disconnect: () => void
   createGame: () => Promise<string>
-  join: (gameId: string, color?: Color) => Promise<void>
+  join: (color: Color) => Promise<void>
   config: (country: Country, length: Length) => Promise<void>
   start: () => Promise<void>
   move: (command: string) => Promise<void>
   undo: () => Promise<void>
   redo: () => Promise<void>
   endGame: () => Promise<void>
+  getUserName: (userId: string) => string
 }
 
 interface HathoraContextProviderProps {
@@ -33,7 +34,7 @@ const client = new HathoraClient()
 const HathoraContext = createContext<GameContext | null>(null)
 
 export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
-  const [token, setToken] = useState<string>('')
+  const [token, setToken] = useState<string | undefined>(sessionStorage.getItem('token') || undefined)
   const [state, setEngineState] = useState<EngineState>()
   const [user, setUserInfo] = useState<UserData>()
   const [connection, setConnection] = useState<HathoraConnection>()
@@ -46,7 +47,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
 
   // if we have a stored token, immediately use that to load things
   useEffect(() => {
-    if (!token) return
+    if (token === undefined) return
     const user = HathoraClient.getUserFromToken(token)
     setUserInfo(user)
     setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
@@ -75,7 +76,11 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   }, [setToken, setPlayerNameMapping, token])
 
   const connect = useCallback(
-    async (stateId: string) => {
+    async (stateId: string): Promise<HathoraConnection | undefined> => {
+      if (!token) {
+        console.log('connect with no token, returning')
+        return undefined
+      }
       setConnecting(true)
       const connection = await client.connect(token, stateId, ({ state }) => setEngineState(state), setError)
       setConnection(connection)
@@ -104,7 +109,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   }, [token, login])
 
   const join = useCallback(
-    async (gameId: string, color?: Color) => {
+    async (color: Color) => {
       await connection?.join({ color })
     },
     [connection]
@@ -170,6 +175,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       undo,
       redo,
       endGame,
+      getUserName,
     }),
     [
       token,
@@ -188,6 +194,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       undo,
       redo,
       endGame,
+      getUserName,
     ]
   )
 

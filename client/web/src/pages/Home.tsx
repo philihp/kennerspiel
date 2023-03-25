@@ -1,12 +1,10 @@
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-
 import { useHathoraContext } from '../context/GameContext'
 import { HeaderUser } from '../components/HeaderUser'
 
 const Home = () => {
   const navigate = useNavigate()
-  const { createGame, login } = useHathoraContext()
+  const { createGame } = useHathoraContext()
 
   return (
     <>
