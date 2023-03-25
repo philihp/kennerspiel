@@ -65,6 +65,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
           setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
         }
         setToken(token)
+        sessionStorage.setItem('token', token)
       } catch (e) {
         console.error(e)
       } finally {

@@ -77,6 +77,8 @@ types:
     stone: int?
   EngineState:
     users: User[]
+    me: User?
+    active: boolean
     moves: string[]
     status: EngineStatus
     config: EngineConfig?
