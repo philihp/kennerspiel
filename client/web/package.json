@@ -104,6 +104,7 @@
           "tsx": "never"
         }
       ],
+      "no-console": "off",
       "no-restricted-syntax": "off",
       "no-unused-vars": "off",
       "react/react-in-jsx-scope": "off"

@@ -99,14 +99,17 @@ export class Impl implements Methods<InternalState> {
 
   join(state: InternalState, userId: UserId, ctx: Context, request: IJoinRequest): Response {
     const { color } = request
+    const allColors = [Color.Red, Color.Blue, Color.Green, Color.White]
+    const colorsUsed = state.users.map((u)=> u.color)
+    const colorsFree =  allColors.filter(c => !colorsUsed.includes(c))
     state.users = state.users.filter(u => u.id !== userId && u.color !== color).concat({
-      id: userId, color
+      id: userId, color: (color ?? colorsFree[0])
     })
     return Response.ok()
   }
 
   config(state: InternalState, userId: UserId, ctx: Context, request: IConfigRequest): Response {
-    const players = `${state.users.length}`
+    const players = `${Math.max(1, state.users.length)}`
     if(request.country !== Country.france) return Response.error('Only the France variant is implemented');
     const country = 'france'
     const length = request.length === Length.long ? 'long' : 'short'  

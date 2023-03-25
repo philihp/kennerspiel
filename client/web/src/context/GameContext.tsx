@@ -3,24 +3,26 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 
 import { HathoraClient, HathoraConnection } from '../../../.hathora/client'
 import { Color, Country, EngineState, IInitializeRequest, Length } from '../../../../api/types'
-import { UserData } from '../../../../api/base'
+import { lookupUser, UserData } from '../../../../api/base'
 import { ConnectionFailure } from '../../../.hathora/failures'
 
 interface GameContext {
   token?: string
   state?: EngineState
   user?: UserData
-  loading?: boolean
+  connecting?: boolean
   error?: ConnectionFailure
-  login: () => Promise<string>
+  login: () => Promise<string | undefined>
   connect: (gameId: string) => Promise<HathoraConnection>
+  disconnect: () => void
   createGame: () => Promise<string>
-  join: (color: Color) => Promise<void>
+  join: (gameId: string, color?: Color) => Promise<void>
   config: (country: Country, length: Length) => Promise<void>
   start: () => Promise<void>
   move: (command: string) => Promise<void>
   undo: () => Promise<void>
   redo: () => Promise<void>
+  endGame: () => Promise<void>
 }
 
 interface HathoraContextProviderProps {
@@ -31,60 +33,78 @@ const client = new HathoraClient()
 const HathoraContext = createContext<GameContext | null>(null)
 
 export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
-  const [token, setToken] = useState<string | undefined>(localStorage.getItem('token') || '')
+  const [token, setToken] = useState<string>('')
   const [state, setEngineState] = useState<EngineState>()
   const [user, setUserInfo] = useState<UserData>()
-  const [loading, setLoading] = useState<boolean>(false)
   const [connection, setConnection] = useState<HathoraConnection>()
+  const [events, setEvents] = useState<string[]>()
   const [error, setError] = useState<ConnectionFailure>()
+  const [connecting, setConnecting] = useState<boolean>()
+  const [loggingIn, setLoggingIn] = useState<boolean>()
+  const [playerNameMapping, setPlayerNameMapping] = useState<Record<string, UserData>>({})
+  const isLoginIn = useRef(false)
 
   // if we have a stored token, immediately use that to load things
   useEffect(() => {
     if (!token) return
     const user = HathoraClient.getUserFromToken(token)
     setUserInfo(user)
-  }, [token])
+    setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
+  }, [setPlayerNameMapping, token])
 
-  const login = useCallback(async (): Promise<string> => {
-    const token = await client.loginAnonymous()
-    localStorage.setItem('token', token)
-    setToken(token)
-    const user = HathoraClient.getUserFromToken(token)
-    setUserInfo(user)
-    return token
-  }, [])
-
-  const createGame = useCallback(async (): Promise<string> => {
-    let currentToken = token
-    if (currentToken) {
-      return client.create(currentToken, IInitializeRequest.default())
+  const login = useCallback(async (): Promise<string | undefined> => {
+    if (!isLoginIn.current) {
+      try {
+        setLoggingIn(true)
+        isLoginIn.current = true
+        const token = await client.loginAnonymous()
+        if (token) {
+          const user = HathoraClient.getUserFromToken(token)
+          setUserInfo(user)
+          setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
+        }
+        setToken(token)
+      } catch (e) {
+        console.error(e)
+      } finally {
+        isLoginIn.current = false
+        setLoggingIn(false)
+      }
     }
-    currentToken = await login()
-    return client.create(currentToken, IInitializeRequest.default())
-  }, [token, login])
+    return token
+  }, [setToken, setPlayerNameMapping, token])
 
   const connect = useCallback(
     async (stateId: string) => {
-      setLoading(true)
-      if (!token) throw new Error('Unable to connect, no token')
-      const connection = await client.connect(
-        token,
-        stateId,
-        ({ state }) => setEngineState(state),
-        (error) => {
-          setLoading(false)
-          return setError(error)
-        }
-      )
+      setConnecting(true)
+      const connection = await client.connect(token, stateId, ({ state }) => setEngineState(state), setError)
       setConnection(connection)
-      setLoading(false)
+      setConnecting(false)
       return connection
     },
-    [token, setLoading]
+    [token]
   )
 
+  const disconnect = useCallback(() => {
+    if (connection !== undefined) {
+      connection.disconnect()
+      setConnection(undefined)
+      setEngineState(undefined)
+      setEvents(undefined)
+      setError(undefined)
+    }
+  }, [connection])
+
+  const createGame = useCallback(async () => {
+    if (token) {
+      return client.create(token, IInitializeRequest.default())
+    }
+    const localToken = (await login()) ?? ''
+    return client.create(localToken, IInitializeRequest.default())
+  }, [token, login])
+
   const join = useCallback(
-    async (color: Color) => {
+    async (gameId: string, color?: Color) => {
       await connection?.join({ color })
     },
     [connection]
@@ -114,15 +134,34 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     await connection?.redo({})
   }, [connection])
 
+  const endGame = useCallback(async () => {
+    setEngineState(undefined)
+    connection?.disconnect()
+  }, [connection])
+
+  const getUserName = useCallback(
+    (userId: string) => {
+      if (playerNameMapping[userId]) {
+        return playerNameMapping[userId].name
+      }
+      lookupUser(userId).then((response) => {
+        setPlayerNameMapping((curr) => ({ ...curr, [userId]: response }))
+      })
+      return userId
+    },
+    [setPlayerNameMapping, playerNameMapping]
+  )
+
   const exported = useMemo(
     () => ({
       token,
       state,
       user,
-      loading,
+      connecting: connecting && !state,
       error,
       login,
       connect,
+      disconnect,
       createGame,
       join,
       config,
@@ -130,8 +169,26 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       move,
       undo,
       redo,
+      endGame,
     }),
-    [token, state, user, loading, error, login, connect, createGame, join, config, start, move, undo, redo]
+    [
+      token,
+      state,
+      user,
+      connecting,
+      error,
+      login,
+      connect,
+      disconnect,
+      createGame,
+      join,
+      config,
+      start,
+      move,
+      undo,
+      redo,
+      endGame,
+    ]
   )
 
   return (

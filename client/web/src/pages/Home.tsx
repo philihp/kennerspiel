@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 import { useHathoraContext } from '../context/GameContext'
-import { Header } from '../components/Header'
+import { HeaderUser } from '../components/HeaderUser'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -10,7 +10,7 @@ const Home = () => {
 
   return (
     <>
-      <Header />
+      <HeaderUser />
       <h1>Hathora et Labora</h1>
       <p>
         <button

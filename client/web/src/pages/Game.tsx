@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Header } from '../components/Header'
+import { HeaderUser } from '../components/HeaderUser'
 import { Loading } from '../components/Loading'
 import { StatePlaying } from '../components/StatePlaying'
 import { StateSetup } from '../components/StateSetup'
@@ -10,7 +10,7 @@ import { useHathoraContext } from '../context/GameContext'
 
 const Game = () => {
   const { gameId } = useParams()
-  const { loading, state, token, login, connect } = useHathoraContext()
+  const { connecting, state, token, error, login, connect } = useHathoraContext()
   useEffect(() => {
     if (!token) {
       login()
@@ -25,9 +25,9 @@ const Game = () => {
 
   return (
     <>
-      <Header />
+      <HeaderUser />
       <hr />
-      {loading && <Loading />}
+      {/* {connecting && <Loading />} */}
       {state?.status === EngineStatus.SETUP && <StateSetup />}
       {state?.status === EngineStatus.PLAYING && <StatePlaying />}
     </>
