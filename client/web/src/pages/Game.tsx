@@ -18,7 +18,6 @@ const Game = () => {
   return (
     <>
       <HeaderUser />
-      <hr />
       {connecting && <Loading />}
       {state?.status === EngineStatus.SETUP && <StateSetup />}
       {state?.status === EngineStatus.PLAYING && <StatePlaying />}

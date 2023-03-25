@@ -1,6 +1,7 @@
 import { addIndex, map, range } from 'ramda'
 import { EngineRondel, EngineConfig, Length } from '../../../../api/types'
 import { Erection } from './Erection'
+import { Clergy, PlayerClergy } from './PlayerClergy'
 
 interface Props {
   landscape: string[][][]
@@ -52,7 +53,7 @@ export const PlayerLandscape = ({ landscape, offset }: Props) => {
                     key={`${rowId}:${colIndex}`}
                   >
                     {building && <Erection key={building} id={building} />}
-                    {clergy}
+                    {clergy && <Clergy id={clergy} />}
                   </td>
                 )
               })}
