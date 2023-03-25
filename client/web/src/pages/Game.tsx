@@ -1,33 +1,25 @@
-import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Header } from '../components/Header'
+import { HeaderUser } from '../components/HeaderUser'
 import { Loading } from '../components/Loading'
 import { StatePlaying } from '../components/StatePlaying'
 import { StateSetup } from '../components/StateSetup'
 import { EngineStatus } from '../../../../api/types'
 
 import { useHathoraContext } from '../context/GameContext'
+import { useAutoLogin } from '../hooks/useAutoLogin'
+import { useAutoConnect } from '../hooks/useAutoConnect'
 
 const Game = () => {
   const { gameId } = useParams()
-  const { loading, state, token, login, connect } = useHathoraContext()
-  useEffect(() => {
-    if (!token) {
-      login()
-    }
-  }, [token, login])
-
-  useEffect(() => {
-    if (token && gameId) {
-      connect(gameId)
-    }
-  }, [gameId, token, connect])
+  const { connecting, state } = useHathoraContext()
+  useAutoLogin()
+  useAutoConnect(gameId)
 
   return (
     <>
-      <Header />
+      <HeaderUser />
       <hr />
-      {loading && <Loading />}
+      {connecting && <Loading />}
       {state?.status === EngineStatus.SETUP && <StateSetup />}
       {state?.status === EngineStatus.PLAYING && <StatePlaying />}
     </>

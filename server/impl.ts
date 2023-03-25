@@ -27,6 +27,7 @@ type InternalUser = {
 
 type InternalState = {
   users: InternalUser[]
+  active: boolean
   country?: GameConfigCountry
   length?: GameConfigLength
   gameState: GameStatePlaying[]
@@ -86,11 +87,17 @@ const tableauDongle = (player: Tableau):EngineTableau => {
   }
 }
 
+const activeUserId = (state: InternalState): string => {
+  const currState = state.gameState[state.commandIndex - 1]
+  const currColor = colorDongle(currState.players[currState.frame.activePlayerIndex].color)
+  return state.users.filter(u => u.color == currColor)?.[0]?.id
+}
 
 export class Impl implements Methods<InternalState> {
   initialize(ctx: Context, request: IInitializeRequest): InternalState {
     return {
       users: [],
+      active: false,
       gameState: [],
       commands: [],
       commandIndex: 0,
@@ -100,13 +107,13 @@ export class Impl implements Methods<InternalState> {
   join(state: InternalState, userId: UserId, ctx: Context, request: IJoinRequest): Response {
     const { color } = request
     state.users = state.users.filter(u => u.id !== userId && u.color !== color).concat({
-      id: userId, color
+      id: userId, color: (color)
     })
     return Response.ok()
   }
 
   config(state: InternalState, userId: UserId, ctx: Context, request: IConfigRequest): Response {
-    const players = `${state.users.length}`
+    const players = `${Math.max(1, state.users.length)}`
     if(request.country !== Country.france) return Response.error('Only the France variant is implemented');
     const country = 'france'
     const length = request.length === Length.long ? 'long' : 'short'  
@@ -139,6 +146,11 @@ export class Impl implements Methods<InternalState> {
 
   move(state: InternalState, userId: UserId, ctx: Context, request: IMoveRequest): Response {
     const currState = state.gameState[state.commandIndex - 1]
+    const activeUser = activeUserId(state)
+    if(activeUser !== userId) {
+      return Response.error(`Active user is ${activeUser}`)
+    }
+
     const command = request.command.split(/\s+/)
     const nextState = reducer(currState, command) as GameStatePlaying
     if(nextState === undefined) return Response.error(`Invalid command ${command}`)
@@ -155,12 +167,20 @@ export class Impl implements Methods<InternalState> {
     return Response.ok()
   }
 
-  undo(state: InternalState, userId: string, ctx: Context, request: IUndoRequest): Response {
+  undo(state: InternalState, userId: string, ctx: Context, request: IUndoRequest): Response {   
+    const activeUser = activeUserId(state)
+    if(activeUser !== userId) {
+      return Response.error(`Active user is ${activeUser}`)
+    }
     if(state.commandIndex <= 1) return Response.error('Cannot undo past beginning')
     state.commandIndex--;
     return Response.ok()
   }
   redo(state: InternalState, userId: string, ctx: Context, request: IRedoRequest): Response {
+    const activeUser = activeUserId(state)
+    if(activeUser !== userId) {
+      return Response.error(`Active user is ${activeUser}`)
+    }
     if(state.commandIndex >= state.commands.length) return Response.error('Cannot redo past end of commands')
     state.commandIndex++;
     return Response.ok()
@@ -170,6 +190,8 @@ export class Impl implements Methods<InternalState> {
     if(!state.commandIndex) {
       return {
         users: state.users as User[],
+        me: state.users.find(u => u.id === userId),
+        active: false,
         status: EngineStatus.SETUP,
         config: {
           country: state.country === 'france' ? Country.france : Country.ireland,
@@ -186,6 +208,8 @@ export class Impl implements Methods<InternalState> {
     const currState = state.gameState[state.commandIndex -1] as GameStatePlaying
     return {
         users: state.users as User[],
+        me: state.users.find(u => u.id === userId),
+        active: !!(activeUserId(state) === userId),
         moves: state.commands.slice(0, state.commandIndex),
         status: statusDongle(currState.status),
         config: {
@@ -202,6 +226,5 @@ export class Impl implements Methods<InternalState> {
         districtPurchasePrices: currState.districtPurchasePrices,
         frame: currState.frame
       }
-
   }
 }
