@@ -226,6 +226,5 @@ export class Impl implements Methods<InternalState> {
         districtPurchasePrices: currState.districtPurchasePrices,
         frame: currState.frame
       }
-
   }
 }
