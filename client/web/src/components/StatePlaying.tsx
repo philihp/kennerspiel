@@ -1,5 +1,4 @@
 import { map } from 'ramda'
-import { useState } from 'react'
 import { useHathoraContext } from '../context/GameContext'
 import { Player } from './Player'
 import { Rondel } from './Rondel'
@@ -9,34 +8,15 @@ import { UnbuiltDistricts } from './UnbuiltDistricts'
 import { UnbuiltWonders } from './UnbuiltWonders'
 
 export const StatePlaying = () => {
-  const { state, move, undo, redo } = useHathoraContext()
-  const [command, setCommand] = useState<string>('')
+  const { state } = useHathoraContext()
 
   if (state === undefined) return <div>Error, missing state</div>
 
-  const handleSubmit = () => {
-    move(command)
-    setCommand('')
-  }
   const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders, ...elseState } =
     state
 
   return (
     <>
-      {/* {state?.active && (
-        <>
-          <button type="button" onClick={undo}>
-            Undo
-          </button>
-          <button type="button" onClick={redo}>
-            Redo
-          </button>
-          <input type="text" placeholder="command" value={command} onChange={(e) => setCommand(e.target.value)} />
-          <button type="submit" onClick={handleSubmit}>
-            Explore
-          </button>
-        </>
-      )} */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         {rondel && config && <Rondel config={config} rondel={rondel} />}
         <div>
@@ -59,7 +39,6 @@ export const StatePlaying = () => {
             players
           )}
       </div>
-      <pre>{JSON.stringify(elseState, undefined, 2)}</pre>
     </>
   )
 }
