@@ -14,8 +14,11 @@ export const MoveList = () => {
   return (
     <div>
       <ul style={resetStyle}>
-        {state?.moves.map((m) => (
-          <li style={resetStyle}>{m}</li>
+        {state?.moves.map((m, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <li key={`${i}:${m}`} style={resetStyle}>
+            {m}
+          </li>
         ))}
       </ul>
     </div>

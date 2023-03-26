@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { useHathoraContext } from '../context/GameContext'
+import { ControlCommit } from './ControlCommit'
+import { ControlCutPeat } from './ControlCutPeat'
+import { ControlFellTrees } from './ControlFellTrees'
 
 export const Controls = () => {
   const [command, setCommand] = useState<string>('')
@@ -22,6 +25,10 @@ export const Controls = () => {
       <button type="submit" onClick={handleSubmit}>
         Explore
       </button>
+      <hr />
+      <ControlCutPeat />
+      <ControlFellTrees />
+      <ControlCommit />
     </>
   )
 }
