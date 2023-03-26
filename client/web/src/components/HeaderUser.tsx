@@ -53,7 +53,8 @@ export const HeaderUser = () => {
       </button> */}
       {user && (
         <>
-          <span style={colorToStyle(state?.me?.color)}>({colorToName(state?.me?.color)})</span> {getUserName(user?.id)}
+          {state?.me?.color && <span style={colorToStyle(state?.me?.color)}>({colorToName(state?.me?.color)})</span>}
+          {getUserName(user?.id)}
         </>
       )}
     </div>
