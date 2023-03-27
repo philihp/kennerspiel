@@ -4,7 +4,7 @@ import { HeaderUser } from '../components/HeaderUser'
 
 const Home = () => {
   const navigate = useNavigate()
-  const { createGame } = useHathoraContext()
+  const { createGame, user } = useHathoraContext()
 
   return (
     <>
@@ -12,6 +12,7 @@ const Home = () => {
       <h1>Hathora et Labora</h1>
       <p>
         <button
+          disabled={!user}
           type="button"
           onClick={async () => {
             const stateId = await createGame()

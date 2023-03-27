@@ -1,3 +1,4 @@
+import { GoogleLogin } from '@react-oauth/google'
 import { Color } from '../../../../api/types'
 import { useHathoraContext } from '../context/GameContext'
 
@@ -22,7 +23,8 @@ const colorToStyle = (c?: Color): ColorStyle => {
 }
 
 export const HeaderUser = () => {
-  const { user, getUserName, state } = useHathoraContext()
+  const { user, getUserName, state, login } = useHathoraContext()
+
   return (
     <div
       style={
@@ -33,9 +35,15 @@ export const HeaderUser = () => {
           : {}
       }
     >
-      {/* <button type="button" onClick={login}>
-        Login
-      </button> */}
+      {!user && (
+        <GoogleLogin
+          auto_select
+          onSuccess={login}
+          onError={() => {
+            console.log('Login Failed')
+          }}
+        />
+      )}
       {user && (
         <div
           style={{
