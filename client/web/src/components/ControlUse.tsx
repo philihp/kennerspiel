@@ -22,28 +22,27 @@ const usableBuildings = (state: EngineState): string[] => {
 
 export const ControlUse = () => {
   const [building, setBuilding] = useState<string | undefined>(undefined)
+  const [param, setParam] = useState<string>('')
   const { state, move } = useHathoraContext()
   if (state === undefined) return <div>Error: Unknown State</div>
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    move(`USE ${building}`)
+    move(`USE ${building} ${param}`)
     setBuilding(undefined)
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setBuilding(e.target.value)
+    setParam('')
   }
 
   const buildings = usableBuildings(state)
   return (
     <form onSubmit={handleSubmit}>
-      <select name="building" value={building} onChange={handleChange}>
+      <select name="building" value={building} onChange={(e) => setBuilding(e.target.value)}>
         <option value={undefined}> </option>
         {buildings.map((l) => (
           <option key={l}>{l}</option>
         ))}
       </select>
+      <input type="text" value={param} onChange={(e) => setParam(e.target.value)} />
       <button disabled={!building} type="submit">
         use
       </button>
