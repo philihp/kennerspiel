@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useHathoraContext } from '../context/GameContext'
 import { ControlBuild } from './ControlBuild'
 import { ControlCommit } from './ControlCommit'
+import { ControlConvert } from './ControlConvert'
 import { ControlCutPeat } from './ControlCutPeat'
 import { ControlFellTrees } from './ControlFellTrees'
 import { ControlUse } from './ControlUse'
@@ -30,6 +31,7 @@ export const Controls = () => {
         Explore
       </button>
       <hr />
+      <ControlConvert />
       <ControlCutPeat />
       <ControlFellTrees />
       <ControlBuild />
