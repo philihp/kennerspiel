@@ -1,21 +1,6 @@
 import { Color } from '../../../../api/types'
 import { useHathoraContext } from '../context/GameContext'
 
-const colorToName = (c?: Color): string => {
-  switch (c) {
-    case Color.Blue:
-      return 'blue'
-    case Color.Red:
-      return 'red'
-    case Color.Green:
-      return 'green'
-    case Color.White:
-      return 'white'
-    default:
-      return 'unknown'
-  }
-}
-
 type ColorStyle = {
   backgroundColor?: string
   borderColor?: string
@@ -24,13 +9,13 @@ type ColorStyle = {
 const colorToStyle = (c?: Color): ColorStyle => {
   switch (c) {
     case Color.Blue:
-      return { backgroundColor: '#80b1d3', borderColor: '#5f849e' }
+      return { borderColor: '#80b1d3' } // , borderColor: '#5f849e' }
     case Color.Red:
-      return { backgroundColor: '#fb8072', borderColor: '#ad574d' }
+      return { borderColor: '#fb8072' } // , borderColor: '#ad574d' }
     case Color.Green:
-      return { backgroundColor: '#b3de69', borderColor: '#87a74f' }
+      return { borderColor: '#b3de69' } // , borderColor: '#87a74f' }
     case Color.White:
-      return { backgroundColor: '#d9d9d9', borderColor: '#b1b1b1' }
+      return { borderColor: '#d9d9d9' } // , borderColor: '#b1b1b1' }
     default:
       return {}
   }
@@ -52,12 +37,21 @@ export const HeaderUser = () => {
         Login
       </button> */}
       {user && (
-        <>
-          {state?.me?.color !== undefined && (
-            <span style={colorToStyle(state?.me?.color)}>({colorToName(state?.me?.color)})</span>
-          )}
-          {getUserName(user?.id)}
-        </>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <img
+            src={user.picture}
+            height="32"
+            width="32"
+            alt={user.name}
+            style={{ ...colorToStyle(state?.me?.color), borderRadius: 16, borderWidth: 4, borderStyle: 'solid' }}
+          />
+          <div style={{ display: 'flex' }}>{getUserName(user?.id)}</div>
+        </div>
       )}
     </div>
   )

@@ -1,6 +1,7 @@
 import { ToastContainer } from 'react-toastify'
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
+import { useGoogleOneTapLogin } from '@react-oauth/google'
 import { HathoraClient, HathoraConnection } from '../../../.hathora/client'
 import { Color, Country, EngineState, IInitializeRequest, Length } from '../../../../api/types'
 import { lookupUser, UserData } from '../../../../api/base'
@@ -12,7 +13,6 @@ interface GameContext {
   user?: UserData
   connecting?: boolean
   error?: ConnectionFailure
-  login: () => Promise<string | undefined>
   connect: (gameId: string) => Promise<HathoraConnection | undefined>
   disconnect: () => void
   createGame: () => Promise<string>
@@ -34,16 +34,15 @@ const client = new HathoraClient()
 const HathoraContext = createContext<GameContext | null>(null)
 
 export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
-  const [token, setToken] = useState<string | undefined>(sessionStorage.getItem('token') || undefined)
+  const [token, setToken] = useState<string | undefined>(localStorage.getItem('token') || undefined)
   const [state, setEngineState] = useState<EngineState>()
   const [user, setUserInfo] = useState<UserData>()
   const [connection, setConnection] = useState<HathoraConnection>()
   const [events, setEvents] = useState<string[]>()
   const [error, setError] = useState<ConnectionFailure>()
   const [connecting, setConnecting] = useState<boolean>()
-  const [loggingIn, setLoggingIn] = useState<boolean>()
+  // const [loggingIn, setLoggingIn] = useState<boolean>()
   const [playerNameMapping, setPlayerNameMapping] = useState<Record<string, UserData>>({})
-  const isLoginIn = useRef(false)
 
   // if we have a stored token, immediately use that to load things
   useEffect(() => {
@@ -53,28 +52,25 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
   }, [setPlayerNameMapping, token])
 
-  const login = useCallback(async (): Promise<string | undefined> => {
-    if (!isLoginIn.current) {
-      try {
-        setLoggingIn(true)
-        isLoginIn.current = true
-        const token = await client.loginAnonymous()
+  useGoogleOneTapLogin({
+    cancel_on_tap_outside: false,
+    onSuccess: async (cred) => {
+      console.log('onSuccess')
+      if (cred.credential !== undefined) {
+        const token = await client.loginGoogle(cred.credential)
         if (token) {
           const user = HathoraClient.getUserFromToken(token)
           setUserInfo(user)
           setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
+          setToken(token)
+          localStorage.setItem('token', token)
         }
-        setToken(token)
-        sessionStorage.setItem('token', token)
-      } catch (e) {
-        console.error(e)
-      } finally {
-        isLoginIn.current = false
-        setLoggingIn(false)
       }
-    }
-    return token
-  }, [setToken, setPlayerNameMapping, token])
+    },
+    onError: () => {
+      console.log('Login Failed')
+    },
+  })
 
   const connect = useCallback(
     async (stateId: string): Promise<HathoraConnection | undefined> => {
@@ -101,13 +97,12 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     }
   }, [connection])
 
-  const createGame = useCallback(async () => {
+  const createGame = useCallback(async (): Promise<string> => {
     if (token) {
       return client.create(token, IInitializeRequest.default())
     }
-    const localToken = (await login()) ?? ''
-    return client.create(localToken, IInitializeRequest.default())
-  }, [token, login])
+    return ''
+  }, [token])
 
   const join = useCallback(
     async (color: Color) => {
@@ -165,7 +160,6 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       user,
       connecting: connecting && !state,
       error,
-      login,
       connect,
       disconnect,
       createGame,
@@ -184,7 +178,6 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       user,
       connecting,
       error,
-      login,
       connect,
       disconnect,
       createGame,

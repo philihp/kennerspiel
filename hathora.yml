@@ -104,7 +104,9 @@ methods:
   redo: {}
 
 auth:
-  anonymous: {}
+  nickname: {}
+  google:
+    clientId: 843500347511-jd10djb45kpf7r9gl6hial3mbds03o2f.apps.googleusercontent.com
 
 userState: EngineState
 error: string
