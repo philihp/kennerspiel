@@ -5,6 +5,7 @@ import { ControlCommit } from './ControlCommit'
 import { ControlConvert } from './ControlConvert'
 import { ControlCutPeat } from './ControlCutPeat'
 import { ControlFellTrees } from './ControlFellTrees'
+import { ControlSettle } from './ControlSettle'
 import { ControlUse } from './ControlUse'
 import { ControlWith } from './ControlWith'
 import { ControlWorkContract } from './ControlWorkContract'
@@ -38,6 +39,7 @@ export const Controls = () => {
       <ControlWorkContract />
       <ControlWith />
       <ControlUse />
+      <ControlSettle />
       <ControlCommit />
       <pre>{JSON.stringify(state?.frame, undefined, 2)}</pre>
     </>
