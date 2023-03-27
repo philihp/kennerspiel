@@ -10,22 +10,28 @@ const doesPlayerHavePrior = (state: EngineState): boolean => {
   return any((c) => ['PRIR', 'PRIG', 'PRIB', 'PRIW'].includes(c), player.clergy)
 }
 
-export const ControlWithPrior = () => {
+export const ControlWith = () => {
   const { state, move } = useHathoraContext()
   if (state === undefined) return <div>Error: Unknown State</div>
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleWithPrior = () => {
     move(`WITH_PRIOR`)
   }
+  const handleWithLaybrother = () => {
+    move(`WITH_LAYBROTHER`)
+  }
 
-  const disabled = !doesPlayerHavePrior(state) || state.frame?.nextUse === 'only-prior'
+  const priorEnable = doesPlayerHavePrior(state) && (state.frame?.nextUse === 'any' || !state.frame?.mainActionUsed)
+  const laybrotherDisabled = state?.frame?.activePlayerIndex === state?.frame?.currentPlayerIndex
 
   return (
-    <form onSubmit={handleSubmit}>
-      <button disabled={disabled} type="submit">
+    <>
+      <button disabled={!priorEnable} type="button" onClick={handleWithPrior}>
         with prior
       </button>
-    </form>
+      <button disabled={laybrotherDisabled} type="button" onClick={handleWithLaybrother}>
+        with laybrother
+      </button>
+    </>
   )
 }

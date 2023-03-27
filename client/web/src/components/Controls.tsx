@@ -5,7 +5,8 @@ import { ControlCommit } from './ControlCommit'
 import { ControlCutPeat } from './ControlCutPeat'
 import { ControlFellTrees } from './ControlFellTrees'
 import { ControlUse } from './ControlUse'
-import { ControlWithPrior } from './ControlWithPrior'
+import { ControlWith } from './ControlWith'
+import { ControlWorkContract } from './ControlWorkContract'
 
 export const Controls = () => {
   const [command, setCommand] = useState<string>('')
@@ -32,7 +33,8 @@ export const Controls = () => {
       <ControlCutPeat />
       <ControlFellTrees />
       <ControlBuild />
-      <ControlWithPrior />
+      <ControlWorkContract />
+      <ControlWith />
       <ControlUse />
       <ControlCommit />
       <pre>{JSON.stringify(state?.frame, undefined, 2)}</pre>

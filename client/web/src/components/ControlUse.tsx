@@ -10,8 +10,8 @@ const usableBuildings = (state: EngineState): string[] => {
   const peatSpots: string[] = []
   player.landscape.forEach((row, rowIndex) => {
     row.forEach((tile, colIndex) => {
-      const [, erection] = tile
-      if (erection === undefined || erection === 'LFO' || erection === 'LPE') {
+      const [, erection, clergy] = tile
+      if (erection === undefined || erection === 'LFO' || erection === 'LPE' || clergy !== undefined) {
         return
       }
       peatSpots.push(`${erection}`)
