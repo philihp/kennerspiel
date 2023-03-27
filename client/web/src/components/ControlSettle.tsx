@@ -41,8 +41,8 @@ export const ControlSettle = () => {
     setSite(e.target.value)
   }
 
-  if (state.players === undefined) return 'Error: No Players'
-  if (state.frame?.activePlayerIndex === undefined) return 'Error: No Active Player'
+  if (state.players === undefined) return <div>Error: No Players</div>
+  if (state.frame?.activePlayerIndex === undefined) return <div>Error: No Active Player</div>
   const player = state.players[state.frame?.activePlayerIndex]
   const settlements = player.settlements ?? []
   const sites = buildSpots(state)

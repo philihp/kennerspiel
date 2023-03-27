@@ -41,7 +41,6 @@ export const Controls = () => {
       <ControlUse />
       <ControlSettle />
       <ControlCommit />
-      <pre>{JSON.stringify(state?.frame, undefined, 2)}</pre>
     </>
   )
 }
