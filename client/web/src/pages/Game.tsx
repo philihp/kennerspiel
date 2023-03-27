@@ -6,13 +6,11 @@ import { StateSetup } from '../components/StateSetup'
 import { EngineStatus } from '../../../../api/types'
 
 import { useHathoraContext } from '../context/GameContext'
-import { useAutoLogin } from '../hooks/useAutoLogin'
 import { useAutoConnect } from '../hooks/useAutoConnect'
 
 const Game = () => {
   const { gameId } = useParams()
   const { connecting, state } = useHathoraContext()
-  useAutoLogin()
   useAutoConnect(gameId)
 
   return (
