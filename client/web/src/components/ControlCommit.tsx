@@ -10,9 +10,13 @@ export const ControlCommit = () => {
     move(`COMMIT`)
   }
 
+  const enabled = state?.frame?.mainActionUsed
+
   return (
     <form onSubmit={handleSubmit}>
-      <button type="submit">commit</button>
+      <button disabled={!enabled} type="submit">
+        commit
+      </button>
     </form>
   )
 }

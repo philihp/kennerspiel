@@ -37,7 +37,7 @@ const colorToStyle = (c?: Color): ColorStyle => {
 }
 
 export const HeaderUser = () => {
-  const { user, login, getUserName, state } = useHathoraContext()
+  const { user, getUserName, state } = useHathoraContext()
   return (
     <div
       style={
@@ -53,7 +53,9 @@ export const HeaderUser = () => {
       </button> */}
       {user && (
         <>
-          {state?.me?.color && <span style={colorToStyle(state?.me?.color)}>({colorToName(state?.me?.color)})</span>}
+          {state?.me?.color !== undefined && (
+            <span style={colorToStyle(state?.me?.color)}>({colorToName(state?.me?.color)})</span>
+          )}
           {getUserName(user?.id)}
         </>
       )}
