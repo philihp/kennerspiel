@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { useHathoraContext } from '../context/GameContext'
+import { ControlBuild } from './ControlBuild'
 import { ControlCommit } from './ControlCommit'
 import { ControlCutPeat } from './ControlCutPeat'
 import { ControlFellTrees } from './ControlFellTrees'
+import { ControlUse } from './ControlUse'
+import { ControlWithPrior } from './ControlWithPrior'
 
 export const Controls = () => {
   const [command, setCommand] = useState<string>('')
-  const { move, undo, redo } = useHathoraContext()
+  const { state, move, undo, redo } = useHathoraContext()
 
   const handleSubmit = () => {
     move(command)
@@ -28,7 +31,11 @@ export const Controls = () => {
       <hr />
       <ControlCutPeat />
       <ControlFellTrees />
+      <ControlBuild />
+      <ControlWithPrior />
+      <ControlUse />
       <ControlCommit />
+      <pre>{JSON.stringify(state?.frame, undefined, 2)}</pre>
     </>
   )
 }
