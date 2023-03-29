@@ -23,8 +23,8 @@ import { rotateRondelWithExpire } from './rotateRondel'
 // --> Player does a settlement
 
 export const nextFrameSolo: FrameFlow = {
-  // Round 1
   1: {
+    round: 1,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
@@ -33,8 +33,8 @@ export const nextFrameSolo: FrameFlow = {
   },
   2: { next: 3 },
 
-  // Round 2
   3: {
+    round: 2,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 4,
   },
@@ -42,8 +42,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 5,
   },
 
-  // Round 3
   5: {
+    round: 3,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 6,
   },
@@ -51,8 +51,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 7,
   },
 
-  // Round 4
   7: {
+    round: 4,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 8,
   },
@@ -60,8 +60,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 9,
   },
 
-  // Round 5
   9: {
+    round: 5,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 10,
   },
@@ -69,8 +69,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 11,
   },
 
-  // Round 6
   11: {
+    round: 6,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 12,
   },
@@ -78,8 +78,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 13,
   },
 
-  // Round 7
   13: {
+    round: 7,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 14,
   },
@@ -87,8 +87,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 15,
   },
 
-  // Round 8
   15: {
+    round: 8,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 16,
   },
@@ -96,8 +96,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 17,
   },
 
-  // Round 9
   17: {
+    round: 9,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 18,
   },
@@ -105,8 +105,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 19,
   },
 
-  // Round 10
   19: {
+    round: 10,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 20,
   },
@@ -114,8 +114,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 21,
   },
 
-  // Round 11
   21: {
+    round: 11,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 22,
   },
@@ -131,8 +131,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 24,
   },
 
-  // Round 12
   24: {
+    round: 12,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
     next: 25,
   },
@@ -140,8 +140,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 26,
   },
 
-  // Round 13
   26: {
+    round: 13,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 27,
   },
@@ -149,8 +149,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 28,
   },
 
-  // Round 14
   28: {
+    round: 14,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 29,
   },
@@ -158,8 +158,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 30,
   },
 
-  // Round 15
   30: {
+    round: 15,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 31,
   },
@@ -175,8 +175,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 33,
   },
 
-  // Round 16
   33: {
+    round: 16,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
     next: 34,
   },
@@ -184,8 +184,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 35,
   },
 
-  // Round 17
   35: {
+    round: 17,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 36,
   },
@@ -193,8 +193,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 37,
   },
 
-  // Round 18
   37: {
+    round: 18,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 38,
   },
@@ -202,8 +202,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 39,
   },
 
-  // Round 19
   39: {
+    round: 19,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 40,
   },
@@ -211,8 +211,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 41,
   },
 
-  // Round 20
   41: {
+    round: 20,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 42,
   },
@@ -220,8 +220,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 43,
   },
 
-  // Round 21
   43: {
+    round: 21,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 44,
   },
@@ -237,8 +237,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 46,
   },
 
-  // Round 22
   46: {
+    round: 22,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
     next: 47,
   },
@@ -246,8 +246,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 48,
   },
 
-  // Round 23
   48: {
+    round: 23,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 49,
   },
@@ -255,8 +255,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 50,
   },
 
-  // Round 24
   50: {
+    round: 24,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 51,
   },
@@ -264,8 +264,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 52,
   },
 
-  // Round 24
   52: {
+    round: 24,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 53,
   },
@@ -281,8 +281,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 55,
   },
 
-  // Round 25
   55: {
+    round: 25,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
     next: 56,
   },
@@ -290,8 +290,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 57,
   },
 
-  // Round 26
   57: {
+    round: 26,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 58,
   },
@@ -299,8 +299,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 59,
   },
 
-  // Round 27
   59: {
+    round: 27,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 60,
   },
@@ -308,8 +308,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 61,
   },
 
-  // Round 28
   61: {
+    round: 28,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 62,
   },
@@ -317,8 +317,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 63,
   },
 
-  // Round 29
   63: {
+    round: 29,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 64,
   },
@@ -326,8 +326,8 @@ export const nextFrameSolo: FrameFlow = {
     next: 65,
   },
 
-  // Round 30
   65: {
+    round: 30,
     upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
     next: 66,
   },

@@ -67,6 +67,7 @@ describe('commands/withPrior', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       frame: {
+        round: 1,
         next: 1,
         startingPlayer: 1,
         settlementRound: SettlementRound.S,
@@ -111,6 +112,7 @@ describe('commands/withPrior', () => {
         ...initialState,
         status: GameStatusEnum.PLAYING,
         frame: {
+          round: 1,
           next: 1,
           startingPlayer: 0,
           settlementRound: SettlementRound.S,

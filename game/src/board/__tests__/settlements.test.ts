@@ -167,6 +167,7 @@ describe('board/settlements', () => {
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
       frame: {
+        round: 1,
         next: 1,
         startingPlayer: 1,
         settlementRound: SettlementRound.S,

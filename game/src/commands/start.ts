@@ -84,6 +84,7 @@ export const start = (
     wonders: 8,
     frame: {
       next: 1,
+      round: 1,
       startingPlayer: 0,
       settlementRound: SettlementRound.S,
       currentPlayerIndex: 0,

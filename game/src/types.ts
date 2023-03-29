@@ -372,12 +372,10 @@ export enum NextUseClergy {
 export type Frame = {
   next: number
 
+  round: number
+
   // primarily this is ornamental, display the starting player market
   startingPlayer: number
-
-  // removing these, i think they're actually not needed
-  // moveInRound: number
-  // round: number
 
   // also ornamental, however important for triggering end of game in 2p
   settlementRound: SettlementRound
@@ -473,10 +471,30 @@ export type CostReducer = (cost: Cost | undefined) => Cost | undefined
 
 export type TableauReducer = (state: Tableau | undefined) => Tableau | undefined
 
-export type FrameFlow = Record<
-  number,
-  {
-    upkeep?: ((state: GameStatePlaying | undefined) => GameStatePlaying | undefined)[]
-    next: number
-  } & Partial<Frame>
->
+export type OrdinalFrame = {
+  upkeep?: ((state: GameStatePlaying | undefined) => GameStatePlaying | undefined)[]
+  next: number
+} & Partial<Frame>
+
+export type FrameFlow = Record<number, OrdinalFrame>
+
+export type Flower = {
+  player?: PlayerColor
+  settle: boolean
+  bonus: boolean
+}
+
+export type PlayerState = GameStatePlaying & {
+  flow: Flower[]
+  control: {
+    cutPeat: boolean
+    fellTrees: boolean
+    build: boolean
+    workContract: boolean
+    withPrior: boolean
+    withLaybrother: boolean
+    use: boolean
+    settle: boolean
+    commit: boolean
+  }
+}

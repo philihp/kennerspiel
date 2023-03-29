@@ -47,6 +47,7 @@ describe('commands/workContract', () => {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
+      round: 1,
       next: 1,
       startingPlayer: 0,
       settlementRound: SettlementRound.S,
