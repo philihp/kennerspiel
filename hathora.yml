@@ -23,6 +23,7 @@ types:
     players: int
   EngineFrame:
     next: int
+    round: int
     startingPlayer: int
     settlementRound: string
     currentPlayerIndex: int
@@ -75,10 +76,13 @@ types:
     sheep: int?
     grape: int?
     stone: int?
+  EngineControl:
+    active: boolean
+    partial: string?
+    completion: string[]?
   EngineState:
     users: User[]
     me: User?
-    active: boolean
     moves: string[]
     status: EngineStatus
     config: EngineConfig?
@@ -90,6 +94,7 @@ types:
     plotPurchasePrices: int[]
     districtPurchasePrices: int[]
     frame: EngineFrame?
+    control: EngineControl
 
 methods:
   join:

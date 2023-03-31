@@ -1,8 +1,8 @@
-import { view } from '../player'
+import { control } from '../control'
 import { GameCommandConfigParams, GameStatePlaying, PlayerColor } from '../types'
 
-describe('player', () => {
-  describe('player/view', () => {
+describe('control', () => {
+  describe('control/view', () => {
     it('can create a frame flower', () => {
       const config = {
         players: 3,
@@ -27,7 +27,7 @@ describe('player', () => {
         },
       } as GameStatePlaying
 
-      const s1 = view(s0, 0)
+      const s1 = control(s0, 0)
       expect(s1.flow.map((f) => f.player).slice(0, 10)).toStrictEqual([
         'R',
         'G',

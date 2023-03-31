@@ -479,22 +479,17 @@ export type OrdinalFrame = {
 export type FrameFlow = Record<number, OrdinalFrame>
 
 export type Flower = {
+  round?: number
   player?: PlayerColor
   settle: boolean
   bonus: boolean
 }
 
-export type PlayerState = GameStatePlaying & {
-  flow: Flower[]
+export type ControlState = GameStatePlaying & {
   control: {
-    cutPeat: boolean
-    fellTrees: boolean
-    build: boolean
-    workContract: boolean
-    withPrior: boolean
-    withLaybrother: boolean
-    use: boolean
-    settle: boolean
-    commit: boolean
+    flow: Flower[]
+    active: boolean
+    partial?: string
+    completion?: string[]
   }
 }
