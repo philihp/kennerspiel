@@ -1,13 +1,14 @@
-import { pipe } from 'ramda'
+import { equals, findIndex, pipe, remove } from 'ramda'
 import { match } from 'ts-pattern'
 import { costMoney } from '../board/resource'
 import { subtractCoins, withActivePlayer } from '../board/player'
-import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, BuildingEnum } from '../types'
+import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, BuildingEnum, GameCommandEnum } from '../types'
 
-const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const checkCanGetLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
-  if (state.frame.canBuyLandscape === false) return undefined
-  return state
+  if (state.frame.canBuyLandscape) return state
+  if (state.frame.bonusActions.includes(GameCommandEnum.BUY_DISTRICT)) return state
+  return undefined
 }
 
 const checkForConnection = (y: number) =>
@@ -32,6 +33,7 @@ const checkForOverlap = (y: number) =>
   })
 
 const checkCanAfford = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+  if (state?.frame.bonusActions?.includes(GameCommandEnum.BUY_DISTRICT)) return state
   const cost = state?.districtPurchasePrices[0]
   return withActivePlayer((player) => {
     if (cost === undefined) return undefined
@@ -42,11 +44,14 @@ const checkCanAfford = (state?: GameStatePlaying): GameStatePlaying | undefined 
 
 const payForDistrict = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
-  return withActivePlayer(subtractCoins(state.districtPurchasePrices[0]))(state)
+  if (state.frame.bonusActions?.includes(GameCommandEnum.BUY_DISTRICT)) return state
+  const cost = state.districtPurchasePrices[0]
+  return withActivePlayer(subtractCoins(cost))(state)
 }
 
 const removeDistrictFromPool = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
+  if (state.frame.bonusActions?.includes(GameCommandEnum.BUY_DISTRICT)) return state
   return {
     ...state,
     districtPurchasePrices: state.districtPurchasePrices.slice(1),
@@ -55,11 +60,21 @@ const removeDistrictFromPool = (state?: GameStatePlaying): GameStatePlaying | un
 
 const denyBuyingAnyMoreLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
+  const atIndex = findIndex(equals(GameCommandEnum.BUY_DISTRICT), state.frame.bonusActions)
   return {
     ...state,
     frame: {
       ...state.frame,
-      canBuyLandscape: false,
+      // if the command was found in bonusActions
+      ...(atIndex !== -1
+        ? {
+            // leave canBuyLandscape as it was
+            bonusActions: remove(atIndex, 1, state.frame.bonusActions),
+          }
+        : {
+            // otherwise set canBuyLandscape to false
+            canBuyLandscape: false,
+          }),
     },
   }
 }
@@ -120,10 +135,10 @@ const addNewDistrict = (y: number, side: 'PLAINS' | 'HILLS') =>
 export const buyDistrict = ({ side, y }: GameCommandBuyDistrictParams) =>
   pipe(
     //
-    checkCanBuyLandscape,
+    checkCanGetLandscape,
     checkForOverlap(y),
-    checkCanAfford,
     checkForConnection(y),
+    checkCanAfford,
     payForDistrict,
     removeDistrictFromPool,
     denyBuyingAnyMoreLandscape,

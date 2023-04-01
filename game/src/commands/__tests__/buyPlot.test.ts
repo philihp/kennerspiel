@@ -1,5 +1,6 @@
 import { initialState } from '../../state'
 import {
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -198,6 +199,17 @@ describe('commands/buyPlot', () => {
         landscapeOffset: 0,
       })
     })
+    it('fails if trying to position an overlap', () => {
+      const connectedCoast = [
+        [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+      ] as Tile[][]
+      const s1 = buyPlot({ side: 'COAST', y: +1 })({
+        ...s0,
+        players: [{ ...s0.players[0], landscape: connectedCoast }, ...s0.players.slice(1)],
+      })!
+      expect(s1).toBeUndefined()
+    })
 
     //-----
 
@@ -307,6 +319,57 @@ describe('commands/buyPlot', () => {
         ],
         landscapeOffset: 0,
       })
+    })
+
+    it('can buy a plot for free, if as a bonus action', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: false,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
+        },
+      }
+      const s2 = buyPlot({ side: 'MOUNTAIN', y: 0 })(s1)!
+      expect(s2.players[0]).toMatchObject({
+        penny: 100,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+        ],
+        landscapeOffset: 0,
+      })
+    })
+    it('consumes bonus action before paying with canBuyLandscape', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: true,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
+        },
+      }
+      const s2 = buyPlot({ side: 'MOUNTAIN', y: 0 })(s1)!
+      expect(s2).toMatchObject({
+        frame: {
+          canBuyLandscape: true,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT],
+        },
+        plotPurchasePrices: s1.plotPurchasePrices,
+      })
+    })
+
+    it('cannot buy if already consumed', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: false,
+          bonusActions: [],
+        },
+      }
+      const s2 = buyPlot({ side: 'MOUNTAIN', y: 0 })(s1)!
+      expect(s2).toBeUndefined()
     })
   })
 })

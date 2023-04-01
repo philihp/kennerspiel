@@ -1,13 +1,14 @@
-import { pipe } from 'ramda'
+import { equals, findIndex, pipe, remove } from 'ramda'
 import { match } from 'ts-pattern'
 import { costMoney } from '../board/resource'
 import { subtractCoins, withActivePlayer } from '../board/player'
-import { GameStatePlaying, GameCommandBuyPlotParams, Tile, LandEnum, BuildingEnum } from '../types'
+import { GameStatePlaying, GameCommandBuyPlotParams, Tile, LandEnum, BuildingEnum, GameCommandEnum } from '../types'
 
-const checkCanBuyLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const checkCanGetLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
-  if (state.frame.canBuyLandscape === false) return undefined
-  return state
+  if (state.frame.canBuyLandscape) return state
+  if (state.frame.bonusActions.includes(GameCommandEnum.BUY_PLOT)) return state
+  return undefined
 }
 
 const checkForConnection = (y: number, side: 'COAST' | 'MOUNTAIN') =>
@@ -65,6 +66,7 @@ const checkForOverlap = (y: number, side: 'COAST' | 'MOUNTAIN') =>
   })
 
 const checkCanAfford = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+  if (state?.frame?.bonusActions?.includes(GameCommandEnum.BUY_PLOT)) return state
   const cost = state?.plotPurchasePrices[0] ?? 999
   return withActivePlayer((player) => {
     if (costMoney(player) < cost) return undefined
@@ -74,12 +76,14 @@ const checkCanAfford = (state?: GameStatePlaying): GameStatePlaying | undefined 
 
 const payForPlot = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
+  if (state.frame.bonusActions?.includes(GameCommandEnum.BUY_PLOT)) return state
   const cost = state.plotPurchasePrices[0]
   return withActivePlayer(subtractCoins(cost))(state)
 }
 
 const removePlotFromPool = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
+  if (state.frame.bonusActions?.includes(GameCommandEnum.BUY_PLOT)) return state
   return {
     ...state,
     plotPurchasePrices: state.plotPurchasePrices.slice(1),
@@ -88,11 +92,21 @@ const removePlotFromPool = (state?: GameStatePlaying): GameStatePlaying | undefi
 
 const denyBuyingAnyMoreLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
+  const atIndex = findIndex(equals(GameCommandEnum.BUY_PLOT), state.frame.bonusActions)
   return {
     ...state,
     frame: {
       ...state.frame,
-      canBuyLandscape: false,
+      // if the command was found in bonusActions
+      ...(atIndex !== -1
+        ? {
+            // leave canBuyLandscape as it was
+            bonusActions: remove(atIndex, 1, state.frame.bonusActions),
+          }
+        : {
+            // otherwise set canBuyLandscape to false
+            canBuyLandscape: false,
+          }),
     },
   }
 }
@@ -157,10 +171,10 @@ const addNewPlot = (y: number, side: 'COAST' | 'MOUNTAIN') =>
 export const buyPlot = ({ side, y }: GameCommandBuyPlotParams) =>
   pipe(
     //
-    checkCanBuyLandscape,
+    checkCanGetLandscape,
     checkForOverlap(y, side),
-    checkCanAfford,
     checkForConnection(y, side),
+    checkCanAfford,
     payForPlot,
     removePlotFromPool,
     denyBuyingAnyMoreLandscape,

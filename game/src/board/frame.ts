@@ -1,4 +1,4 @@
-import { findIndex, map, pipe, reduce, remove } from 'ramda'
+import { equals, findIndex, lensProp, map, pipe, reduce, remove, set } from 'ramda'
 import { match } from 'ts-pattern'
 import { nextFrame4Long } from './frame/nextFrame4Long'
 import { nextFrame3Long } from './frame/nextFrame3Long'
@@ -87,15 +87,10 @@ const consumeCommandFromBonus =
   (command: GameCommandEnum) =>
   (frame: Frame | undefined): Frame | undefined => {
     if (frame === undefined) return undefined
-    const bonusIndex = findIndex((a) => a === command)(frame.bonusActions)
-    if (bonusIndex !== -1) {
-      const bonusActions = remove(bonusIndex, 1, frame.bonusActions) as GameCommandEnum[]
-      return {
-        ...frame,
-        bonusActions,
-      }
-    }
-    return undefined
+    const bonusIndex = findIndex(equals(command))(frame.bonusActions)
+    if (bonusIndex === -1) return undefined
+    const newValue = remove(bonusIndex, 1, frame.bonusActions)
+    return set(lensProp('bonusActions'), newValue, frame)
   }
 
 export const onlyViaBonusActions = (command: GameCommandEnum) => withFrame(consumeCommandFromBonus(command))
