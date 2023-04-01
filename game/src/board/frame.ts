@@ -89,7 +89,8 @@ const consumeCommandFromBonus =
     if (frame === undefined) return undefined
     const bonusIndex = findIndex(equals(command))(frame.bonusActions)
     if (bonusIndex === -1) return undefined
-    return set(lensProp('bonusAction' as keyof Frame), remove(bonusIndex, 1, frame.bonusActions), frame)
+    const newValue = remove(bonusIndex, 1, frame.bonusActions)
+    return set(lensProp('bonusActions' as keyof Frame), newValue, frame)
   }
 
 export const onlyViaBonusActions = (command: GameCommandEnum) => withFrame(consumeCommandFromBonus(command))
