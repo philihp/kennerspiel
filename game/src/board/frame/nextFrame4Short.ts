@@ -8,8 +8,9 @@ import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondel } from './rotateRondel'
 import { introduceSettlements } from '../settlements'
 import { removeHomelandForestMoor } from './removeHomelandForestMoor'
+import { standardResources } from './standardResources'
 
-// TODO: only 2 clergymen
+// TODO: 1 good goes to everyone when anyone uses the production wheel
 
 export const nextFrame4Short: FrameFlow = {
   // Round 1
@@ -23,6 +24,7 @@ export const nextFrame4Short: FrameFlow = {
       introduceBuildings,
       introduceSettlements,
       withEachPlayer(removeHomelandForestMoor),
+      standardResources,
     ],
     next: 2,
   },
