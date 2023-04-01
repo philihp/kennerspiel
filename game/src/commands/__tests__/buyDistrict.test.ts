@@ -107,6 +107,34 @@ describe('commands/buyDistrict', () => {
       })
     })
 
+    it('fails if overlapping', () => {
+      expect(s0.players[0]).toMatchObject({
+        nickel: 1,
+        penny: 0,
+        landscapeOffset: 0,
+        landscape: [
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+        ],
+      })
+      const s1 = buyDistrict({ side: 'HILLS', y: 0 })(s0)!
+      expect(s1).toBeUndefined()
+    })
+
+    it('fails if no connection', () => {
+      expect(s0.players[0]).toMatchObject({
+        nickel: 1,
+        penny: 0,
+        landscapeOffset: 0,
+        landscape: [
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+        ],
+      })
+      const s1 = buyDistrict({ side: 'HILLS', y: -2 })(s0)!
+      expect(s1).toBeUndefined()
+    })
+
     it('handles undefined state', () => {
       const s1 = buyDistrict({ side: 'PLAINS', y: -1 })(undefined)
       expect(s1).toBeUndefined()
@@ -182,7 +210,7 @@ describe('commands/buyDistrict', () => {
         ...s0,
         frame: {
           ...s0.frame,
-          canBuyLandscape: true,
+          canBuyLandscape: false,
           bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
         },
       }
@@ -219,6 +247,19 @@ describe('commands/buyDistrict', () => {
         },
         districtPurchasePrices: s1.districtPurchasePrices,
       })
+    })
+
+    it('cannot buy if already consumed', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: false,
+          bonusActions: [],
+        },
+      }
+      const s2 = buyDistrict({ side: 'PLAINS', y: 2 })(s1)!
+      expect(s2).toBeUndefined()
     })
   })
 })
