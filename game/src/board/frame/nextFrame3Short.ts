@@ -8,6 +8,7 @@ import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondel } from './rotateRondel'
 import { introduceSettlements } from '../settlements'
 import { removeHomelandForestMoor } from './removeHomelandForestMoor'
+import { standardResources } from './standardResources'
 
 // TODO: only 2 clergymen
 
@@ -23,6 +24,7 @@ export const nextFrame3Short: FrameFlow = {
       introduceBuildings,
       introduceSettlements,
       withEachPlayer(removeHomelandForestMoor),
+      standardResources,
     ],
     next: 2,
   },
