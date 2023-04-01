@@ -1,5 +1,6 @@
 import { initialState } from '../../state'
 import {
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -173,6 +174,50 @@ describe('commands/buyDistrict', () => {
           [['W'], ['C'], [], [], [], [], [], [], []],
           [['W'], ['C'], ['P', 'LFO'], ['P'], ['P'], ['P'], ['H'], [], []],
         ],
+      })
+    })
+
+    it('can buy a district for free, if as a bonus action', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: true,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
+        },
+      }
+      expect(s1.players[0]).toMatchObject({
+        nickel: 1,
+        penny: 0,
+      })
+      const s2 = buyDistrict({ side: 'PLAINS', y: 2 })(s1)!
+      expect(s2.players[0]).toMatchObject({
+        nickel: 1,
+        penny: 0,
+        landscape: [
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          [[], [], ['P', 'LFO'], ['P'], ['P'], ['P'], ['H'], [], []],
+        ],
+        landscapeOffset: 0,
+      })
+    })
+    it('consumes bonus action before paying with canBuyLandscape', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: true,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
+        },
+      }
+      const s2 = buyDistrict({ side: 'PLAINS', y: 2 })(s1)!
+      expect(s2).toMatchObject({
+        frame: {
+          canBuyLandscape: true,
+          bonusActions: [GameCommandEnum.BUY_PLOT],
+        },
+        districtPurchasePrices: s1.districtPurchasePrices,
       })
     })
   })

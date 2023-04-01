@@ -1,5 +1,6 @@
 import { initialState } from '../../state'
 import {
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -306,6 +307,44 @@ describe('commands/buyPlot', () => {
           [[], [], [], [], [], [], [], ['H'], ['.']],
         ],
         landscapeOffset: 0,
+      })
+    })
+
+    it('can buy a plot for free, if as a bonus action', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: true,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
+        },
+      }
+      const s2 = buyPlot({ side: 'MOUNTAIN', y: 0 })(s1)!
+      expect(s2.players[0]).toMatchObject({
+        penny: 100,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+        ],
+        landscapeOffset: 0,
+      })
+    })
+    it('consumes bonus action before paying with canBuyLandscape', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: true,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
+        },
+      }
+      const s2 = buyPlot({ side: 'MOUNTAIN', y: 0 })(s1)!
+      expect(s2).toMatchObject({
+        frame: {
+          canBuyLandscape: true,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT],
+        },
+        plotPurchasePrices: s1.plotPurchasePrices,
       })
     })
   })
