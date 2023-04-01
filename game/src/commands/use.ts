@@ -30,6 +30,7 @@ import {
   estate,
   falseLighthouse,
   farmyard,
+  festivalGround,
   filialChurch,
   financedEstate,
   forestHut,
@@ -153,6 +154,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
         farmyard(params[0])
       )
       .with(BuildingEnum.FalseLighthouse, () => falseLighthouse(params[0]))
+      .with(BuildingEnum.FestivalGround, () => festivalGround(params[0], params[1]))
       .with(BuildingEnum.FilialChurch, () => filialChurch(params[0]))
       .with(BuildingEnum.FinancedEstate, () => financedEstate(params[0]))
       .with(BuildingEnum.ForestHut, () =>

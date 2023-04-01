@@ -39,6 +39,7 @@ import {
   estate,
   farmyard,
   falseLighthouse,
+  festivalGround,
   filialChurch,
   financedEstate,
   forestHut,
@@ -112,6 +113,7 @@ jest.mock('../../buildings', () => {
     estate: jest.fn().mockReturnValue(identity),
     farmyard: jest.fn().mockReturnValue(identity),
     falseLighthouse: jest.fn().mockReturnValue(identity),
+    festivalGround: jest.fn().mockReturnValue(identity),
     filialChurch: jest.fn().mockReturnValue(identity),
     financedEstate: jest.fn().mockReturnValue(identity),
     forestHut: jest.fn().mockReturnValue(identity),
@@ -444,6 +446,10 @@ describe('commands/use', () => {
     it('calls the falseLighthouse', () => {
       use(BuildingEnum.FalseLighthouse, ['Be'])(s0)!
       expect(falseLighthouse).toHaveBeenCalledWith('Be')
+    })
+    it('calls the festivalGround', () => {
+      use(BuildingEnum.FestivalGround, ['Be', 'Bo'])(s0)!
+      expect(festivalGround).toHaveBeenCalled()
     })
     it('calls the filialChurch', () => {
       use(BuildingEnum.FilialChurch, [])(s0)!

@@ -8,6 +8,7 @@ import {
   PlayerColor,
   StateReducer,
   Tableau,
+  TableauReducer,
   Tile,
 } from '../types'
 
@@ -95,8 +96,8 @@ export const isPrior = (clergy: Clergy | undefined): boolean =>
 export const isLayBrother = (clergy: Clergy | undefined): boolean => !!(clergy && !isPrior(clergy))
 
 export const payCost =
-  (cost: Cost) =>
-  (player: Tableau | undefined): Tableau | undefined => {
+  (cost: Cost): TableauReducer =>
+  (player) => {
     if (player === undefined) return undefined
     let dirty = false
     const newPlayer: Tableau = { ...player }
@@ -131,8 +132,8 @@ export const payCost =
   }
 
 export const getCost =
-  (cost: Cost) =>
-  (player: Tableau | undefined): Tableau | undefined =>
+  (cost: Cost): TableauReducer =>
+  (player) =>
     player &&
     Object.entries(cost).reduce((player, [type, amount]) => {
       // TODO: write test to ensure this works with amount === undefined
