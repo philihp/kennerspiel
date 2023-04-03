@@ -17,6 +17,7 @@ import {
   bathhouse,
   brewery,
   buildersMarket,
+  bulwark,
   calefactory,
   camera,
   carpentry,
@@ -91,6 +92,7 @@ jest.mock('../../buildings', () => {
     bathhouse: jest.fn().mockReturnValue(identity),
     brewery: jest.fn().mockReturnValue(identity),
     buildersMarket: jest.fn().mockReturnValue(identity),
+    bulwark: jest.fn().mockReturnValue(identity),
     calefactory: jest.fn().mockReturnValue(identity),
     camera: jest.fn().mockReturnValue(identity),
     carpentry: jest.fn().mockReturnValue(identity),
@@ -371,6 +373,10 @@ describe('commands/use', () => {
     it('calls the buildersMarket', () => {
       use(BuildingEnum.BuildersMarket, [])(s0)!
       expect(buildersMarket).toHaveBeenCalled()
+    })
+    it('calls the bulwark', () => {
+      use(BuildingEnum.Bulwark, ['Bo'])(s0)!
+      expect(bulwark).toHaveBeenCalled()
     })
     it('calls the calefactory', () => {
       use(BuildingEnum.Calefactory, [])(s0)!
