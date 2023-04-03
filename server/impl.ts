@@ -16,10 +16,12 @@ import {
   IUndoRequest,
   IRedoRequest,
   IControlRequest,
+  EngineFlower,
 } from "../api/types";
 import {
   reducer, initialState, GameStatePlaying, Tableau, Tile, GameConfigCountry, GameConfigLength, control
 } from 'hathora-et-labora-game';
+import { PlayerColor } from "hathora-et-labora-game/dist/types";
 
 type InternalUser = {
   id: UserId
@@ -93,6 +95,12 @@ const activeUserId = (state: InternalState): string => {
   const currState = state.gameState[state.commandIndex - 1]
   const currColor = colorDongle(currState.players[currState.frame.activePlayerIndex].color)
   return state.users.filter(u => u.color == currColor)?.[0]?.id
+}
+
+const activePlayerIndex = (state: InternalState): number => {
+  const currState = state.gameState[state.commandIndex - 1]
+  const currColor = colorDongle(currState.players[currState.frame.activePlayerIndex].color)
+  return state.users.findIndex(u => u.color === currColor)
 }
 
 export class Impl implements Methods<InternalState> {
@@ -169,9 +177,16 @@ export class Impl implements Methods<InternalState> {
     state.commandIndex++
     return Response.ok()
   }
+
   control(state: InternalState, userId: string, ctx: Context, request: IControlRequest): Response {
-    return Response.error('not implemented')
+    const activeUser = activeUserId(state)
+    if(activeUser !== userId) {
+      return Response.error(`Active user is ${activeUser}`)
+    }
+    state.partial = request.partial
+    return Response.ok()
   }
+
   undo(state: InternalState, userId: string, ctx: Context, request: IUndoRequest): Response {   
     const activeUser = activeUserId(state)
     if(activeUser !== userId) {
@@ -179,8 +194,10 @@ export class Impl implements Methods<InternalState> {
     }
     if(state.commandIndex <= 1) return Response.error('Cannot undo past beginning')
     state.commandIndex--;
+    state.partial = ""
     return Response.ok()
   }
+  
   redo(state: InternalState, userId: string, ctx: Context, request: IRedoRequest): Response {
     const activeUser = activeUserId(state)
     if(activeUser !== userId) {
@@ -188,6 +205,7 @@ export class Impl implements Methods<InternalState> {
     }
     if(state.commandIndex >= state.commands.length) return Response.error('Cannot redo past end of commands')
     state.commandIndex++;
+    state.partial = ""
     return Response.ok()
   }
   
@@ -214,35 +232,41 @@ export class Impl implements Methods<InternalState> {
     const users: User[] = state.users
     const me = state.users.find(u => u.id === userId)
     const moves = state.commands.slice(0, state.commandIndex)
-
+    
+    const controlSurface = control(currState, state.partial.split(/\s+/), activePlayerIndex(state))
+    const controlState = !controlSurface.active ? undefined : {
+      flow: controlSurface.flow.map(flower => {
+        const engineFlower: EngineFlower = {
+          round: flower.round,
+          player: colorDongle(flower.player as PlayerColor),
+          settle: flower.settle,
+          bonus: flower.bonus
+        }
+        return engineFlower
+      }),
+      partial: controlSurface.partial && controlSurface.partial.join(' '),
+      completion: controlSurface.completion
+    }
 
     return {
-        users,
-        me,
-        moves,
-        status: statusDongle(currState.status),
-        config: {
-          country: Country.france,
-          length: currState.config?.length === 'short' ? Length.short : Length.long,
-          players: currState.config?.players
-        },
-        rondel: currState.rondel,
-        wonders:currState.wonders,
-        players: currState.players.map(tableauDongle),
-        neutralPlayer: undefined,
-        buildings: currState.buildings,
-        plotPurchasePrices: currState.plotPurchasePrices,
-        districtPurchasePrices: currState.districtPurchasePrices,
-        frame: {
-          ...currState.frame,
-          round: 0 // TODO: remove once deploying game library with round
-        },
-        control: {
-          flow: [],
-          active: !!(activeUserId(state) === userId),
-          partial: undefined,
-          completion: undefined
-        }
-      }
+      users,
+      me,
+      moves,
+      status: statusDongle(currState.status),
+      config: {
+        country: Country.france,
+        length: currState.config?.length === 'short' ? Length.short : Length.long,
+        players: currState.config?.players
+      },
+      rondel: currState.rondel,
+      wonders:currState.wonders,
+      players: currState.players.map(tableauDongle),
+      neutralPlayer: undefined,
+      buildings: currState.buildings,
+      plotPurchasePrices: currState.plotPurchasePrices,
+      districtPurchasePrices: currState.districtPurchasePrices,
+      frame: currState.frame,
+      control: controlState
+    }
   }
 }
