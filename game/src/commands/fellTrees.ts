@@ -1,6 +1,13 @@
-import { pipe } from 'ramda'
+import { curry, pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
-import { GameCommandFellTreesParams, Tile, BuildingEnum, GameCommandEnum, StateReducer } from '../types'
+import {
+  GameCommandFellTreesParams,
+  Tile,
+  BuildingEnum,
+  GameCommandEnum,
+  StateReducer,
+  GameStatePlaying,
+} from '../types'
 import { take } from '../board/rondel'
 import { oncePerFrame } from '../board/frame'
 
@@ -61,3 +68,7 @@ export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): S
     removeForestAt(row, col),
     useJoker ? updateJokerRondel : updateWoodRondel
   )
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return []
+})

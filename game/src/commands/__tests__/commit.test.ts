@@ -1,13 +1,17 @@
-import { initialState } from '../../state'
-import { PlayerColor } from '../../types'
-import { commit } from '../commit'
-import { config } from '../config'
-import { start } from '../start'
+import { GameStatePlaying } from '../../types'
+import { complete } from '../commit'
 
 describe('commands/commit', () => {
   describe('commit', () => {
     it('stub', () => {
       expect(true).toBeTruthy()
+    })
+  })
+
+  describe('complete', () => {
+    it('stub', () => {
+      const c0 = complete({} as GameStatePlaying, [])
+      expect(c0).toStrictEqual([])
     })
   })
 })

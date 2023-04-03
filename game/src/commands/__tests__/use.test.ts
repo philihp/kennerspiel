@@ -81,7 +81,7 @@ import {
   winery,
 } from '../../buildings'
 
-import { use } from '../use'
+import { complete, use } from '../use'
 
 jest.mock('../../buildings', () => {
   return {
@@ -615,6 +615,13 @@ describe('commands/use', () => {
     it('calls the winery', () => {
       use(BuildingEnum.Winery, [])(s0)!
       expect(winery).toHaveBeenCalled()
+    })
+  })
+
+  describe('complete', () => {
+    it('stub', () => {
+      const c0 = complete(s0, [])
+      expect(c0).toStrictEqual(['USE'])
     })
   })
 })

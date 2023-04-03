@@ -485,11 +485,9 @@ export type Flower = {
   bonus: boolean
 }
 
-export type ControlState = GameStatePlaying & {
-  control: {
-    flow: Flower[]
-    active: boolean
-    partial?: string
-    completion?: string[]
-  }
+export type Controls = {
+  flow: Flower[]
+  active: boolean
+  partial?: string[]
+  completion?: string[]
 }

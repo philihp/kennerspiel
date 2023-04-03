@@ -1,6 +1,6 @@
-import { pipe } from 'ramda'
+import { curry, pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
-import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer } from '../types'
+import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer, GameStatePlaying } from '../types'
 import { take, updateRondel, withRondel } from '../board/rondel'
 import { oncePerFrame } from '../board/frame'
 
@@ -42,3 +42,7 @@ export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): State
     removePeatAt(row, col),
     withRondel(updateRondel(useJoker ? 'joker' : 'peat'))
   )
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return []
+})

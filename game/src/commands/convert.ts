@@ -1,6 +1,6 @@
-import { pipe } from 'ramda'
+import { curry, pipe } from 'ramda'
 import { subtractCoins, withActivePlayer } from '../board/player'
-import { GameCommandConvertParams, Tableau } from '../types'
+import { GameCommandConvertParams, GameStatePlaying, Tableau } from '../types'
 
 const convertGrain =
   (amount = 0) =>
@@ -63,3 +63,7 @@ export const convert = ({ grain, wine, nickel, whiskey, penny }: GameCommandConv
     )
   )
 }
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return []
+})

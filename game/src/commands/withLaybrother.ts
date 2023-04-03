@@ -1,7 +1,7 @@
-import { pipe } from 'ramda'
+import { curry, pipe } from 'ramda'
 import { revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import { moveClergyToOwnBuilding } from '../board/landscape'
-import { NextUseClergy, StateReducer } from '../types'
+import { GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 const withAnyForCurrentPlayer: StateReducer = withFrame((frame) => ({
   ...frame,
@@ -30,3 +30,7 @@ export const withLaybrother: StateReducer = (state) => {
     revertActivePlayerToCurrent
   )(state)
 }
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return []
+})

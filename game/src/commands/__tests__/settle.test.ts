@@ -12,8 +12,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { build } from '../build'
-import { settle } from '../settle'
+import { complete, settle } from '../settle'
 
 describe('commands/build', () => {
   const p0: Tableau = {
@@ -140,6 +139,13 @@ describe('commands/build', () => {
         coal: 3,
         meat: 3,
       })
+    })
+  })
+
+  describe('complete', () => {
+    it('stub', () => {
+      const c0 = complete(s0, [])
+      expect(c0).toStrictEqual([])
     })
   })
 })

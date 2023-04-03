@@ -10,7 +10,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { build } from '../build'
+import { build, complete } from '../build'
 
 describe('commands/build', () => {
   const p0: Tableau = {
@@ -244,6 +244,13 @@ describe('commands/build', () => {
           [[], [], ['P'], ['P'], ['P'], [], []],
         ],
       })
+    })
+  })
+
+  describe('complete', () => {
+    it('stub', () => {
+      const c0 = complete(s0, [])
+      expect(c0).toStrictEqual([])
     })
   })
 })

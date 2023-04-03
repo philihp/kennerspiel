@@ -9,7 +9,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { buyPlot } from '../buyPlot'
+import { buyPlot, complete } from '../buyPlot'
 
 describe('commands/buyPlot', () => {
   const p0: Tableau = {
@@ -371,6 +371,13 @@ describe('commands/buyPlot', () => {
       }
       const s2 = buyPlot({ side: 'MOUNTAIN', y: 0 })(s1)!
       expect(s2).toBeUndefined()
+    })
+  })
+
+  describe('complete', () => {
+    it('stub', () => {
+      const c0 = complete(s0, [])
+      expect(c0).toStrictEqual([])
     })
   })
 })
