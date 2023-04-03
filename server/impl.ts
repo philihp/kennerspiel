@@ -15,9 +15,10 @@ import {
   IMoveRequest,
   IUndoRequest,
   IRedoRequest,
+  IControlRequest,
 } from "../api/types";
 import {
-  reducer, initialState, GameStatePlaying, Tableau, Tile, GameConfigCountry, GameConfigLength
+  reducer, initialState, GameStatePlaying, Tableau, Tile, GameConfigCountry, GameConfigLength, control
 } from 'hathora-et-labora-game';
 
 type InternalUser = {
@@ -168,7 +169,9 @@ export class Impl implements Methods<InternalState> {
     state.commandIndex++
     return Response.ok()
   }
-
+  control(state: InternalState, userId: string, ctx: Context, request: IControlRequest): Response {
+    return Response.error('not implemented')
+  }
   undo(state: InternalState, userId: string, ctx: Context, request: IUndoRequest): Response {   
     const activeUser = activeUserId(state)
     if(activeUser !== userId) {
@@ -203,19 +206,20 @@ export class Impl implements Methods<InternalState> {
         plotPurchasePrices: [],
         districtPurchasePrices: [],
         moves: [],
-        control: {
-          active: false,
-          partial: undefined,
-          completion: undefined
-        }
+        control: undefined
       }
     }
 
     const currState = state.gameState[state.commandIndex -1] as GameStatePlaying
+    const users: User[] = state.users
+    const me = state.users.find(u => u.id === userId)
+    const moves = state.commands.slice(0, state.commandIndex)
+
+
     return {
-        users: state.users as User[],
-        me: state.users.find(u => u.id === userId),
-        moves: state.commands.slice(0, state.commandIndex),
+        users,
+        me,
+        moves,
         status: statusDongle(currState.status),
         config: {
           country: Country.france,
@@ -234,6 +238,7 @@ export class Impl implements Methods<InternalState> {
           round: 0 // TODO: remove once deploying game library with round
         },
         control: {
+          flow: [],
           active: !!(activeUserId(state) === userId),
           partial: undefined,
           completion: undefined
