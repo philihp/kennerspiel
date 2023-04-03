@@ -76,8 +76,13 @@ types:
     sheep: int?
     grape: int?
     stone: int?
+  EngineFlower:
+    round: int?
+    player: Color?
+    settle: boolean
+    bonus: boolean
   EngineControl:
-    active: boolean
+    flow: EngineFlower[]
     partial: string?
     completion: string[]?
   EngineState:
@@ -94,7 +99,7 @@ types:
     plotPurchasePrices: int[]
     districtPurchasePrices: int[]
     frame: EngineFrame?
-    control: EngineControl
+    control: EngineControl?
 
 methods:
   join:
@@ -103,8 +108,12 @@ methods:
     country: Country
     length: Length
   start: {}
+  # Changes the game state with a complete command.
   move:
     command: string
+  # Changes the control portion of the state
+  control:
+    partial: string
   undo: {}
   redo: {}
 
