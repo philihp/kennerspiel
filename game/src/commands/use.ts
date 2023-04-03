@@ -8,6 +8,7 @@ import {
   bathhouse,
   brewery,
   buildersMarket,
+  bulwark,
   calefactory,
   carpentry,
   castle,
@@ -121,6 +122,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.Bathhouse, () => bathhouse(params[0]))
       .with(BuildingEnum.Brewery, () => brewery(params[0]))
       .with(BuildingEnum.BuildersMarket, () => buildersMarket(params[0]))
+      .with(BuildingEnum.Bulwark, () => bulwark(params[0]))
       .with(BuildingEnum.Calefactory, () => calefactory(params[0]))
       .with(BuildingEnum.Carpentry, () =>
         carpentry(Number.parseInt(params[0] ?? '', 10), Number.parseInt(params[1] ?? '', 10))
