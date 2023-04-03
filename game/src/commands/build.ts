@@ -1,10 +1,17 @@
-import { any, pipe, identity } from 'ramda'
+import { any, pipe, identity, curry } from 'ramda'
 import { costForBuilding, isCloisterBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
 import { addErectionAtLandscape } from '../board/erections'
 import { oncePerFrame } from '../board/frame'
 import { checkLandscapeFree, checkLandTypeMatches } from '../board/landscape'
 import { payCost, subtractCoins, withActivePlayer } from '../board/player'
-import { BuildingEnum, GameCommandBuildParams, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
+import {
+  BuildingEnum,
+  GameCommandBuildParams,
+  GameCommandEnum,
+  GameStatePlaying,
+  NextUseClergy,
+  StateReducer,
+} from '../types'
 
 const checkCloisterAdjacency = (row: number, col: number, building: BuildingEnum) => {
   if (isCloisterBuilding(building) === false) return identity
@@ -46,7 +53,7 @@ export const allowPriorToUse =
     )
   }
 
-export const build = ({ row, col, building }: GameCommandBuildParams) =>
+export const build = ({ row, col, building }: GameCommandBuildParams): StateReducer =>
   pipe(
     // any of these not defined here are probably shared with SETTLE
     oncePerFrame(GameCommandEnum.BUILD),
@@ -58,3 +65,7 @@ export const build = ({ row, col, building }: GameCommandBuildParams) =>
     addErectionAtLandscape(row, col, building),
     allowPriorToUse(building)
   )
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return []
+})

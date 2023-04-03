@@ -1,7 +1,7 @@
-import { pipe } from 'ramda'
+import { curry, pipe } from 'ramda'
 import { getCost, withActivePlayer } from '../board/player'
 import { updateRondel, withRondel, take } from '../board/rondel'
-import { ResourceEnum, StateReducer } from '../types'
+import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
 
 const takePlayerClay =
   (withJoker: boolean): StateReducer =>
@@ -25,3 +25,6 @@ export const clayMound = (param = ''): StateReducer => {
     withRondel(updateToken(withJoker))
   )
 }
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return ['', 'Jo']
+})

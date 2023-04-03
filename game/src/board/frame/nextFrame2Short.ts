@@ -36,8 +36,8 @@ import { standardResources } from './standardResources'
 // ending when after settlement D, when there are <= 1 buildings in display. Finish current turn and other player gets 1 final action.
 
 export const nextFrame2Short: FrameFlow = {
-  // Round 1
   1: {
+    round: 1,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
@@ -48,8 +48,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 3,
   },
 
-  // Round 2
   3: {
+    round: 2,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -59,8 +59,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 5,
   },
 
-  // Round 3
   5: {
+    round: 3,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -70,8 +70,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 7,
   },
 
-  // Round 4
   7: {
+    round: 4,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -81,8 +81,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 9,
   },
 
-  // Round 5
   9: {
+    round: 5,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -92,8 +92,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 11,
   },
 
-  // Round 6
   11: {
+    round: 6,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -119,8 +119,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 15,
   },
 
-  // Round 7
   15: {
+    round: 7,
     currentPlayerIndex: 0,
     upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
     next: 16,
@@ -129,8 +129,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 17,
   },
 
-  // Round 8
   17: {
+    round: 8,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -140,8 +140,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 19,
   },
 
-  // Round 9
   19: {
+    round: 9,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -151,8 +151,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 21,
   },
 
-  // Round 10
   25: {
+    round: 10,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -162,8 +162,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 27,
   },
 
-  // Round 11
   27: {
+    round: 11,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced, introduceGrapeToken],
@@ -173,8 +173,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 29,
   },
 
-  // Round 12
   29: {
+    round: 12,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -184,8 +184,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 31,
   },
 
-  // Round 13
   31: {
+    round: 13,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -211,8 +211,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 35,
   },
 
-  // Round 14
   35: {
+    round: 14,
     currentPlayerIndex: 1,
     upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
     next: 36,
@@ -221,8 +221,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 37,
   },
 
-  // Round 15
   37: {
+    round: 15,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -232,8 +232,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 39,
   },
 
-  // Round 16
   39: {
+    round: 16,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -243,8 +243,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 41,
   },
 
-  // Round 17
   41: {
+    round: 17,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -254,8 +254,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 43,
   },
 
-  // Round 18
   43: {
+    round: 18,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced, introduceStoneToken],
@@ -265,8 +265,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 45,
   },
 
-  // Round 19
   45: {
+    round: 19,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -276,8 +276,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 47,
   },
 
-  // Round 20
   47: {
+    round: 20,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -303,8 +303,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 51,
   },
 
-  // Round 21
   51: {
+    round: 21,
     currentPlayerIndex: 0,
     upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
     next: 52,
@@ -313,8 +313,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 53,
   },
 
-  // Round 22
   53: {
+    round: 22,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -324,8 +324,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 55,
   },
 
-  // Round 23
   55: {
+    round: 23,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -335,8 +335,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 57,
   },
 
-  // Round 24
   57: {
+    round: 24,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -346,8 +346,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 59,
   },
 
-  // Round 25
   59: {
+    round: 25,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -357,8 +357,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 61,
   },
 
-  // Round 26
   61: {
+    round: 26,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -368,8 +368,8 @@ export const nextFrame2Short: FrameFlow = {
     next: 63,
   },
 
-  // Round 27
   63: {
+    round: 27,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     upkeep: [rotateRondel, returnClergyIfPlaced],
@@ -395,38 +395,38 @@ export const nextFrame2Short: FrameFlow = {
     next: 67,
   },
 
-  // Round 28
   67: {
+    round: 28,
     currentPlayerIndex: 1,
     upkeep: [introduceBuildings, introduceSettlements, rotateRondel, returnClergyIfPlaced],
     next: 68,
   },
   68: {
-    next: 100,
+    next: 200,
   },
 
   100: {
-    startingPlayer: 0,
-    currentPlayerIndex: 0,
+    startingPlayer: 1,
+    currentPlayerIndex: 1,
     next: 101,
     upkeep: [rotateRondel, returnClergyIfPlaced, checkFinalPhase(999)],
   },
   101: {
-    currentPlayerIndex: 0,
+    currentPlayerIndex: 1,
     next: 200,
-  },
-  200: {
-    startingPlayer: 1,
-    currentPlayerIndex: 1,
-    next: 201,
-    upkeep: [rotateRondel, returnClergyIfPlaced, checkFinalPhase(999)],
-  },
-  201: {
-    currentPlayerIndex: 1,
-    next: 100,
   },
   999: {
     next: 999,
     upkeep: [gameEnd],
+  },
+  201: {
+    currentPlayerIndex: 0,
+    next: 100,
+  },
+  200: {
+    startingPlayer: 0,
+    currentPlayerIndex: 0,
+    next: 201,
+    upkeep: [rotateRondel, returnClergyIfPlaced, checkFinalPhase(999)],
   },
 }

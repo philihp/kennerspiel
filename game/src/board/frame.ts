@@ -11,6 +11,7 @@ import {
   BuildingEnum,
   Frame,
   FrameFlow,
+  GameCommandConfigParams,
   GameCommandEnum,
   GameStatePlaying,
   NextUseClergy,
@@ -66,17 +67,22 @@ const runProgression =
     )(state)
   }
 
-export const nextFrame: StateReducer = (state) =>
-  match(state)
-    .with({ config: { players: 3, length: 'long' } }, runProgression(nextFrame3Long))
-    .with({ config: { players: 4, length: 'long' } }, runProgression(nextFrame4Long))
-    .with({ config: { players: 3, length: 'short' } }, runProgression(nextFrame3Short))
-    .with({ config: { players: 4, length: 'short' } }, runProgression(nextFrame4Short))
-    .with({ config: { players: 2, length: 'long' } }, runProgression(nextFrame2Long))
-    .with({ config: { players: 2, length: 'short' } }, runProgression(nextFrame2Short))
-    .with({ config: { players: 1 } }, runProgression(nextFrameSolo))
-    .with(undefined, () => undefined)
+export const pickFrameFlow = (config: GameCommandConfigParams): FrameFlow =>
+  match<GameCommandConfigParams, FrameFlow>(config)
+    .with({ players: 3, length: 'long' }, () => nextFrame3Long)
+    .with({ players: 4, length: 'long' }, () => nextFrame4Long)
+    .with({ players: 3, length: 'short' }, () => nextFrame3Short)
+    .with({ players: 4, length: 'short' }, () => nextFrame4Short)
+    .with({ players: 2, length: 'long' }, () => nextFrame2Long)
+    .with({ players: 2, length: 'short' }, () => nextFrame2Short)
+    .with({ players: 1 }, () => nextFrameSolo)
     .exhaustive()
+
+export const nextFrame: StateReducer = (state) => {
+  if (state === undefined) return undefined
+  if (state.config === undefined) return undefined
+  return runProgression(pickFrameFlow(state.config))(state)
+}
 
 export const revertActivePlayerToCurrent: StateReducer = withFrame((frame) => ({
   ...frame,

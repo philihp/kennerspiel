@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { convert } from '../convert'
+import { complete, convert } from '../convert'
 
 describe('commands/convert', () => {
   const p0: Tableau = {
@@ -49,6 +49,7 @@ describe('commands/convert', () => {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
+      round: 1,
       next: 1,
       startingPlayer: 1,
       settlementRound: SettlementRound.S,
@@ -207,6 +208,13 @@ describe('commands/convert', () => {
         penny: 0,
         whiskey: 4,
       })
+    })
+  })
+
+  describe('complete', () => {
+    it('stub', () => {
+      const c0 = complete(s0, [])
+      expect(c0).toStrictEqual([])
     })
   })
 })

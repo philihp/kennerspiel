@@ -1,5 +1,5 @@
-import { pipe } from 'ramda'
-import { match } from 'ts-pattern'
+import { always, curry, pipe, reduce } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
 import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
 import {
@@ -70,8 +70,9 @@ import {
   whiskeyDistillery,
   windmill,
   winery,
+  complete as completeBuilding,
 } from '../buildings'
-import { BuildingEnum, GameCommandEnum, NextUseClergy, StateReducer } from '../types'
+import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 const checkIfUseCanHappen =
   (building: BuildingEnum): StateReducer =>
@@ -201,3 +202,53 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })
   )
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  const player = state.players[state.frame.activePlayerIndex]
+  return match<string[], string[]>(partial)
+    .with([], () => {
+      // the only way there won't be a usable building is if
+      // the player has no available clergy
+      if (player.clergy.length === 0) return []
+      return [GameCommandEnum.USE]
+    })
+    .with([GameCommandEnum.USE], () =>
+      reduce(
+        (accum, row) =>
+          reduce(
+            (accum, tile) => {
+              const [, building, clergy] = tile
+              if (
+                building !== undefined &&
+                clergy === undefined &&
+                [BuildingEnum.Forest, BuildingEnum.Peat].includes(building) === false
+              )
+                accum.push(building)
+              return accum
+            },
+            accum,
+            row
+          ),
+        [] as BuildingEnum[],
+        player.landscape
+      )
+    )
+    .with(
+      [GameCommandEnum.USE, P._],
+      [GameCommandEnum.USE, P._, P._],
+      [GameCommandEnum.USE, P._, P._, P._],
+      ([, building, param1, param2]) =>
+        match(building)
+          .with(
+            BuildingEnum.ClayMoundR,
+            BuildingEnum.ClayMoundG,
+            BuildingEnum.ClayMoundB,
+            BuildingEnum.ClayMoundW,
+            (building) => {
+              return completeBuilding[building](state)(partial)
+            }
+          )
+          .otherwise(always([]))
+    )
+    .otherwise(always([]))
+})

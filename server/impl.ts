@@ -33,6 +33,7 @@ type InternalState = {
   gameState: GameStatePlaying[]
   commands: string[]
   commandIndex: number
+  partial: string
 }
 
 const statusDongle = (status: string): EngineStatus => {
@@ -101,6 +102,7 @@ export class Impl implements Methods<InternalState> {
       gameState: [],
       commands: [],
       commandIndex: 0,
+      partial: '',
     }
   }
 
@@ -191,7 +193,6 @@ export class Impl implements Methods<InternalState> {
       return {
         users: state.users as User[],
         me: state.users.find(u => u.id === userId),
-        active: false,
         status: EngineStatus.SETUP,
         config: {
           country: state.country === 'france' ? Country.france : Country.ireland,
@@ -202,6 +203,11 @@ export class Impl implements Methods<InternalState> {
         plotPurchasePrices: [],
         districtPurchasePrices: [],
         moves: [],
+        control: {
+          active: false,
+          partial: undefined,
+          completion: undefined
+        }
       }
     }
 
@@ -209,7 +215,6 @@ export class Impl implements Methods<InternalState> {
     return {
         users: state.users as User[],
         me: state.users.find(u => u.id === userId),
-        active: !!(activeUserId(state) === userId),
         moves: state.commands.slice(0, state.commandIndex),
         status: statusDongle(currState.status),
         config: {
@@ -224,7 +229,15 @@ export class Impl implements Methods<InternalState> {
         buildings: currState.buildings,
         plotPurchasePrices: currState.plotPurchasePrices,
         districtPurchasePrices: currState.districtPurchasePrices,
-        frame: currState.frame
+        frame: {
+          ...currState.frame,
+          round: 0 // TODO: remove once deploying game library with round
+        },
+        control: {
+          active: !!(activeUserId(state) === userId),
+          partial: undefined,
+          completion: undefined
+        }
       }
   }
 }

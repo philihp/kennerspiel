@@ -8,79 +8,80 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { fellTrees } from '../fellTrees'
+import { complete, fellTrees } from '../fellTrees'
 
 describe('commands/fellTrees', () => {
-  describe('fellTrees', () => {
-    const p0: Tableau = {
-      color: PlayerColor.Blue,
-      clergy: [],
-      settlements: [],
-      landscape: [
-        [['W'], ['C'], [], [], [], [], [], [], []],
-        [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-      ] as Tile[][],
-      wonders: 0,
-      landscapeOffset: 1,
-      peat: 0,
-      penny: 1,
-      clay: 0,
-      wood: 0,
-      grain: 0,
-      sheep: 0,
-      stone: 0,
-      flour: 0,
-      grape: 0,
-      nickel: 0,
-      malt: 0,
-      coal: 0,
-      book: 0,
-      ceramic: 0,
-      whiskey: 0,
-      straw: 0,
-      meat: 0,
-      ornament: 0,
-      bread: 0,
-      wine: 0,
-      beer: 0,
-      reliquary: 0,
-    }
-    const s0: GameStatePlaying = {
-      ...initialState,
-      status: GameStatusEnum.PLAYING,
-      frame: {
-        next: 1,
-        startingPlayer: 1,
-        settlementRound: SettlementRound.S,
-        currentPlayerIndex: 0,
-        activePlayerIndex: 0,
-        neutralBuildingPhase: false,
-        bonusRoundPlacement: false,
-        mainActionUsed: false,
-        bonusActions: [],
-        canBuyLandscape: true,
-        unusableBuildings: [],
-        usableBuildings: [],
-        nextUse: NextUseClergy.Any,
-      },
-      config: {
-        country: 'france',
-        players: 3,
-        length: 'long',
-      },
-      rondel: {
-        pointingBefore: 2,
-        wood: 1,
-        joker: 0,
-      },
-      wonders: 0,
-      players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      buildings: [],
-      plotPurchasePrices: [1, 1, 1, 1, 1, 1],
-      districtPurchasePrices: [],
-    }
+  const p0: Tableau = {
+    color: PlayerColor.Blue,
+    clergy: [],
+    settlements: [],
+    landscape: [
+      [['W'], ['C'], [], [], [], [], [], [], []],
+      [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+    ] as Tile[][],
+    wonders: 0,
+    landscapeOffset: 1,
+    peat: 0,
+    penny: 1,
+    clay: 0,
+    wood: 0,
+    grain: 0,
+    sheep: 0,
+    stone: 0,
+    flour: 0,
+    grape: 0,
+    nickel: 0,
+    malt: 0,
+    coal: 0,
+    book: 0,
+    ceramic: 0,
+    whiskey: 0,
+    straw: 0,
+    meat: 0,
+    ornament: 0,
+    bread: 0,
+    wine: 0,
+    beer: 0,
+    reliquary: 0,
+  }
+  const s0: GameStatePlaying = {
+    ...initialState,
+    status: GameStatusEnum.PLAYING,
+    frame: {
+      round: 1,
+      next: 1,
+      startingPlayer: 1,
+      settlementRound: SettlementRound.S,
+      currentPlayerIndex: 0,
+      activePlayerIndex: 0,
+      neutralBuildingPhase: false,
+      bonusRoundPlacement: false,
+      mainActionUsed: false,
+      bonusActions: [],
+      canBuyLandscape: true,
+      unusableBuildings: [],
+      usableBuildings: [],
+      nextUse: NextUseClergy.Any,
+    },
+    config: {
+      country: 'france',
+      players: 3,
+      length: 'long',
+    },
+    rondel: {
+      pointingBefore: 2,
+      wood: 1,
+      joker: 0,
+    },
+    wonders: 0,
+    players: [{ ...p0 }, { ...p0 }, { ...p0 }],
+    buildings: [],
+    plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+    districtPurchasePrices: [],
+  }
 
+  describe('fellTrees', () => {
     it('retains undefined state', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(undefined)
       expect(s1).toBeUndefined()
@@ -133,6 +134,13 @@ describe('commands/fellTrees', () => {
     it('gives the active player joker-wood', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: true })(s0)!
       expect(s1.players[0].wood).toBe(3)
+    })
+  })
+
+  describe('complete', () => {
+    it('stub', () => {
+      const c0 = complete(s0, [])
+      expect(c0).toStrictEqual([])
     })
   })
 })

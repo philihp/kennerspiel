@@ -1,4 +1,4 @@
-import { equals, findIndex, pipe, remove } from 'ramda'
+import { curry, equals, findIndex, head, pipe, remove } from 'ramda'
 import { match } from 'ts-pattern'
 import { costMoney } from '../board/resource'
 import { subtractCoins, withActivePlayer } from '../board/player'
@@ -145,3 +145,13 @@ export const buyDistrict = ({ side, y }: GameCommandBuyDistrictParams) =>
     expandLandscape(y),
     addNewDistrict(y, side)
   )
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  if (!state.frame.bonusActions.includes(GameCommandEnum.BUY_DISTRICT) && !state.frame.canBuyLandscape) return []
+  const player = state.players[state.frame.activePlayerIndex]
+  const playerWealth = costMoney(player)
+  const nextDistrictCost = head(state.districtPurchasePrices)
+  if (nextDistrictCost === undefined) return []
+  if (playerWealth < nextDistrictCost) return []
+  return [GameCommandEnum.BUY_DISTRICT]
+})

@@ -1,8 +1,8 @@
-import { pipe } from 'ramda'
+import { curry, pipe } from 'ramda'
 import { revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import { moveClergyToOwnBuilding } from '../board/landscape'
 import { isPrior } from '../board/player'
-import { NextUseClergy, StateReducer } from '../types'
+import { GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 // there are two modes of this, really...
 
@@ -41,3 +41,7 @@ export const withPrior: StateReducer = (state) => {
   }
   return withPriorForWorkContract(state)
 }
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return []
+})

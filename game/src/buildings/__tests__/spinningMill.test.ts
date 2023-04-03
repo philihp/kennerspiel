@@ -49,6 +49,7 @@ describe('buildings/spinningMill', () => {
       ...initialState,
       status: GameStatusEnum.PLAYING,
       frame: {
+        round: 1,
         next: 1,
         startingPlayer: 1,
         settlementRound: SettlementRound.S,

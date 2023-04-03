@@ -1,8 +1,12 @@
-import { pipe } from 'ramda'
+import { curry, pipe } from 'ramda'
 import { nextFrame } from '../board/frame'
-import { StateReducer } from '../types'
+import { GameStatePlaying, StateReducer } from '../types'
 
 export const commit: StateReducer = pipe(
   // is this really all we need to do?
   nextFrame
 )
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return []
+})

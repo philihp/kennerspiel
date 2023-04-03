@@ -1,4 +1,4 @@
-import { equals, findIndex, pipe, remove } from 'ramda'
+import { curry, equals, findIndex, pipe, remove } from 'ramda'
 import { match } from 'ts-pattern'
 import { costMoney } from '../board/resource'
 import { subtractCoins, withActivePlayer } from '../board/player'
@@ -181,3 +181,7 @@ export const buyPlot = ({ side, y }: GameCommandBuyPlotParams) =>
     expandLandscape(y),
     addNewPlot(y, side)
   )
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return []
+})

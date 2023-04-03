@@ -13,8 +13,8 @@ import { standardResources } from './standardResources'
 // TODO: 1 good goes to everyone when anyone uses the production wheel
 
 export const nextFrame4Short: FrameFlow = {
-  // Round 1
   1: {
+    round: 1,
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
@@ -45,8 +45,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 6,
   },
 
-  // Round 2
   6: {
+    round: 2,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ grain: 1, clay: 1 }))],
@@ -97,8 +97,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 15,
   },
 
-  // Round 3
   15: {
+    round: 3,
     startingPlayer: 2,
     currentPlayerIndex: 2,
     upkeep: [
@@ -127,8 +127,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 20,
   },
 
-  // Round 4
   20: {
+    round: 4,
     startingPlayer: 3,
     currentPlayerIndex: 3,
     upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ grain: 1, stone: 1 })), introduceGrapeToken],
@@ -179,8 +179,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 29,
   },
 
-  // Round 5
   29: {
+    round: 5,
     currentPlayerIndex: 0,
     upkeep: [
       rotateRondel,
@@ -208,8 +208,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 34,
   },
 
-  // Round 6
   34: {
+    round: 6,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ clay: 1, stone: 1 })), introduceStoneToken],
@@ -260,8 +260,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 43,
   },
 
-  // Round 7
   43: {
+    round: 7,
     currentPlayerIndex: 2,
     upkeep: [
       rotateRondel,
@@ -289,8 +289,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 48,
   },
 
-  // Round 8
   48: {
+    round: 8,
     startingPlayer: 3,
     currentPlayerIndex: 3,
     upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ stone: 1, nickel: 1 }))],
@@ -341,8 +341,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 57,
   },
 
-  // Round 9
   57: {
+    round: 9,
     currentPlayerIndex: 0,
     upkeep: [
       rotateRondel,
@@ -370,8 +370,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 62,
   },
 
-  // Round 10
   62: {
+    round: 10,
     startingPlayer: 1,
     currentPlayerIndex: 1,
     upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ book: 1, grain: 1 }))],
@@ -394,8 +394,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 67,
   },
 
-  // Round 11
   67: {
+    round: 11,
     currentPlayerIndex: 2,
     upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ ceramic: 1, clay: 1 }))],
     next: 68,
@@ -417,8 +417,8 @@ export const nextFrame4Short: FrameFlow = {
     next: 72,
   },
 
-  // Round 12
   72: {
+    round: 12,
     startingPlayer: 3,
     currentPlayerIndex: 3,
     upkeep: [rotateRondel, returnClergyIfPlaced, withEachPlayer(getCost({ ornament: 1, wood: 1 }))],

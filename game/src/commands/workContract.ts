@@ -1,9 +1,9 @@
-import { all, find, pipe, range, without } from 'ramda'
+import { all, curry, find, pipe, range, without } from 'ramda'
 import { payCost, getCost, withActivePlayer, isLayBrother, isPrior } from '../board/player'
 import { findBuildingWithoutOffset, moveClergyToOwnBuilding } from '../board/landscape'
 import { costMoney, parseResourceParam } from '../board/resource'
 import { oncePerFrame, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
-import { BuildingEnum, Cost, Frame, GameCommandEnum, SettlementRound, StateReducer, Tableau } from '../types'
+import { BuildingEnum, Cost, Frame, GameCommandEnum, GameStatePlaying, SettlementRound, StateReducer } from '../types'
 
 const checkWorkContractPayment =
   (payment: Cost): StateReducer =>
@@ -99,3 +99,7 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
     checkModalPlayerHasPriorOption(building)
   )
 }
+
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
+  return []
+})

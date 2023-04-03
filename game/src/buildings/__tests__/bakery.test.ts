@@ -50,6 +50,7 @@ describe('buildings/bakery', () => {
       status: GameStatusEnum.PLAYING,
       frame: {
         next: 1,
+        round: 1,
         startingPlayer: 1,
         settlementRound: SettlementRound.S,
         currentPlayerIndex: 0,

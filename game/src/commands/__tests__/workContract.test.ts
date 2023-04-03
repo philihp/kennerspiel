@@ -10,7 +10,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { workContract } from '../workContract'
+import { complete, workContract } from '../workContract'
 
 describe('commands/workContract', () => {
   const p0: Tableau = {
@@ -47,6 +47,7 @@ describe('commands/workContract', () => {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
+      round: 1,
       next: 1,
       startingPlayer: 0,
       settlementRound: SettlementRound.S,
@@ -130,151 +131,160 @@ describe('commands/workContract', () => {
     districtPurchasePrices: [],
   }
 
-  it('can work contract someone with only laybrothers', () => {
-    const s2 = workContract('G02' as BuildingEnum, 'Pn')(s0)!
-    expect(s2.frame).toMatchObject({
-      activePlayerIndex: 0,
-      usableBuildings: ['G02'],
-      nextUse: 'free',
+  describe('use', () => {
+    it('can work contract someone with only laybrothers', () => {
+      const s2 = workContract('G02' as BuildingEnum, 'Pn')(s0)!
+      expect(s2.frame).toMatchObject({
+        activePlayerIndex: 0,
+        usableBuildings: ['G02'],
+        nextUse: 'free',
+      })
+      expect(s2.players[0]).toMatchObject({
+        penny: 3,
+        wine: 4,
+        grain: 4,
+      })
+      expect(s2.players[1]).toMatchObject({
+        landscape: [
+          [['W'], ['C'], [], [], [], [], [], ['H'], ['M']],
+          [['W'], ['C', 'F04', 'PRIB'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02', 'LB1B'], ['P', 'LB3'], [], []],
+        ],
+        clergy: ['LB2B'],
+      })
     })
-    expect(s2.players[0]).toMatchObject({
-      penny: 3,
-      wine: 4,
-      grain: 4,
-    })
-    expect(s2.players[1]).toMatchObject({
-      landscape: [
-        [['W'], ['C'], [], [], [], [], [], ['H'], ['M']],
-        [['W'], ['C', 'F04', 'PRIB'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02', 'LB1B'], ['P', 'LB3'], [], []],
-      ],
-      clergy: ['LB2B'],
-    })
-  })
 
-  it('can work contract someone with only their prior', () => {
-    const s1 = {
-      ...s0,
-      frame: {
-        ...s0.frame,
-        currentPlayerIndex: 2,
+    it('can work contract someone with only their prior', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          currentPlayerIndex: 2,
+          activePlayerIndex: 2,
+        },
+      }
+      const s2 = workContract('G01' as BuildingEnum, 'Pn')(s1)!
+      expect(s2.frame).toMatchObject({
         activePlayerIndex: 2,
-      },
-    }
-    const s2 = workContract('G01' as BuildingEnum, 'Pn')(s1)!
-    expect(s2.frame).toMatchObject({
-      activePlayerIndex: 2,
-      usableBuildings: ['G01'],
-      nextUse: 'free',
+        usableBuildings: ['G01'],
+        nextUse: 'free',
+      })
+      expect(s2.players[0]).toMatchObject({
+        wine: 4,
+        grain: 4,
+        landscape: [
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2', 'LB1R'], ['P', 'G01', 'PRIR'], ['P', 'LR3'], [], []],
+        ],
+        clergy: [],
+      })
+      expect(s2.players[2]).toMatchObject({
+        penny: 0,
+        clergy: ['LB1G', 'LB2G', 'PRIG'],
+      })
     })
-    expect(s2.players[0]).toMatchObject({
-      wine: 4,
-      grain: 4,
-      landscape: [
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2', 'LB1R'], ['P', 'G01', 'PRIR'], ['P', 'LR3'], [], []],
-      ],
-      clergy: [],
+
+    it('when work contracting someone with both laybrother and prior, gives them the choice', () => {
+      // TODO we should have tests to ensure the other player can only WITH_PRIOR or WITH_LAYBROTHER
+      // TODO and we should have tests to ensure that a WITH_PRIOR prior to a work contract does not affect things
+      const s2 = workContract('F05' as BuildingEnum, 'Pn')(s0)!
+      expect(s2.frame).toMatchObject({
+        currentPlayerIndex: 0,
+        activePlayerIndex: 2,
+        usableBuildings: ['F05'],
+      })
+      expect(s2.players[0]).toMatchObject({
+        penny: 3,
+        wine: 4,
+        grain: 4,
+      })
+      expect(s2.players[2]).toMatchObject({
+        penny: 2,
+        clergy: ['LB1G', 'LB2G', 'PRIG'] as Clergy[],
+        landscape: [
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05'], ['H', 'LG1'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
+        ] as Tile[][],
+      })
     })
-    expect(s2.players[2]).toMatchObject({
-      penny: 0,
-      clergy: ['LB1G', 'LB2G', 'PRIG'],
+    it('can not work contract someone with no clergy left', () => {
+      const s2 = workContract('F11' as BuildingEnum, 'Pn')(s0)!
+      expect(s2).toBeUndefined()
+    })
+    it('can work contract with wine, which is consumed', () => {
+      const s2 = workContract('G02' as BuildingEnum, 'Wn')(s0)!
+      expect(s2.frame).toMatchObject({
+        activePlayerIndex: 0,
+        usableBuildings: ['G02'],
+        nextUse: 'free',
+      })
+      expect(s2.players[0]).toMatchObject({
+        penny: 4,
+        wine: 3,
+        grain: 4,
+      })
+      expect(s2.players[1]).toMatchObject({
+        penny: 0,
+        wine: 0,
+        landscape: [
+          [['W'], ['C'], [], [], [], [], [], ['H'], ['M']],
+          [['W'], ['C', 'F04', 'PRIB'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02', 'LB1B'], ['P', 'LB3'], [], []],
+        ],
+        clergy: ['LB2B'],
+      })
+    })
+    it('can work contract with a penny, which is gifted', () => {
+      const s2 = workContract('G02' as BuildingEnum, 'Pn')(s0)!
+      expect(s2.players[0].penny).toBe(3)
+      expect(s2.players[1].penny).toBe(1)
+    })
+
+    it('can work contract with gifted pennies, which costs two once the winery has been built', () => {
+      const s1 = {
+        ...s0,
+        frame: { ...s0.frame, settlementRound: SettlementRound.B },
+      }
+      expect(s1.frame.settlementRound).not.toBe('S')
+      expect(s1.frame.settlementRound).not.toBe('A')
+      expect(s1.buildings).not.toContain('F21')
+      const s2 = workContract('G02' as BuildingEnum, 'PnPn')(s1)!
+      expect(s2.players[0].penny).toBe(2)
+      expect(s2.players[1].penny).toBe(2)
+    })
+
+    it('fail if payment insufficient', () => {
+      const s1 = {
+        ...s0,
+        frame: { ...s0.frame, settlementRound: SettlementRound.B },
+      }
+      const s2 = workContract('G02' as BuildingEnum, 'Pn')(s1)!
+      expect(s2).toBeUndefined()
+    })
+
+    it('gifts for the host are still 1 wine, regardless of if winery is built', () => {
+      const s1 = {
+        ...s0,
+        frame: { ...s0.frame, settlementRound: SettlementRound.B },
+      }
+      const s2 = workContract('G02' as BuildingEnum, 'Wn')(s1)!
+      expect(s2.players[0]).toMatchObject({
+        wine: 3,
+        penny: 4,
+      })
+    })
+
+    it('can not work contract yourself', () => {
+      // 'G01' is owned by the active player
+      const s2 = workContract('G01' as BuildingEnum, 'Pn')(s0)!
+      expect(s2).toBeUndefined()
     })
   })
 
-  it('when work contracting someone with both laybrother and prior, gives them the choice', () => {
-    // TODO we should have tests to ensure the other player can only WITH_PRIOR or WITH_LAYBROTHER
-    // TODO and we should have tests to ensure that a WITH_PRIOR prior to a work contract does not affect things
-    const s2 = workContract('F05' as BuildingEnum, 'Pn')(s0)!
-    expect(s2.frame).toMatchObject({
-      currentPlayerIndex: 0,
-      activePlayerIndex: 2,
-      usableBuildings: ['F05'],
+  describe('complete', () => {
+    it('stub', () => {
+      const c0 = complete(s0, [])
+      expect(c0).toStrictEqual([])
     })
-    expect(s2.players[0]).toMatchObject({
-      penny: 3,
-      wine: 4,
-      grain: 4,
-    })
-    expect(s2.players[2]).toMatchObject({
-      penny: 2,
-      clergy: ['LB1G', 'LB2G', 'PRIG'] as Clergy[],
-      landscape: [
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05'], ['H', 'LG1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
-      ] as Tile[][],
-    })
-  })
-  it('can not work contract someone with no clergy left', () => {
-    const s2 = workContract('F11' as BuildingEnum, 'Pn')(s0)!
-    expect(s2).toBeUndefined()
-  })
-  it('can work contract with wine, which is consumed', () => {
-    const s2 = workContract('G02' as BuildingEnum, 'Wn')(s0)!
-    expect(s2.frame).toMatchObject({
-      activePlayerIndex: 0,
-      usableBuildings: ['G02'],
-      nextUse: 'free',
-    })
-    expect(s2.players[0]).toMatchObject({
-      penny: 4,
-      wine: 3,
-      grain: 4,
-    })
-    expect(s2.players[1]).toMatchObject({
-      penny: 0,
-      wine: 0,
-      landscape: [
-        [['W'], ['C'], [], [], [], [], [], ['H'], ['M']],
-        [['W'], ['C', 'F04', 'PRIB'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02', 'LB1B'], ['P', 'LB3'], [], []],
-      ],
-      clergy: ['LB2B'],
-    })
-  })
-  it('can work contract with a penny, which is gifted', () => {
-    const s2 = workContract('G02' as BuildingEnum, 'Pn')(s0)!
-    expect(s2.players[0].penny).toBe(3)
-    expect(s2.players[1].penny).toBe(1)
-  })
-
-  it('can work contract with gifted pennies, which costs two once the winery has been built', () => {
-    const s1 = {
-      ...s0,
-      frame: { ...s0.frame, settlementRound: SettlementRound.B },
-    }
-    expect(s1.frame.settlementRound).not.toBe('S')
-    expect(s1.frame.settlementRound).not.toBe('A')
-    expect(s1.buildings).not.toContain('F21')
-    const s2 = workContract('G02' as BuildingEnum, 'PnPn')(s1)!
-    expect(s2.players[0].penny).toBe(2)
-    expect(s2.players[1].penny).toBe(2)
-  })
-
-  it('fail if payment insufficient', () => {
-    const s1 = {
-      ...s0,
-      frame: { ...s0.frame, settlementRound: SettlementRound.B },
-    }
-    const s2 = workContract('G02' as BuildingEnum, 'Pn')(s1)!
-    expect(s2).toBeUndefined()
-  })
-
-  it('gifts for the host are still 1 wine, regardless of if winery is built', () => {
-    const s1 = {
-      ...s0,
-      frame: { ...s0.frame, settlementRound: SettlementRound.B },
-    }
-    const s2 = workContract('G02' as BuildingEnum, 'Wn')(s1)!
-    expect(s2.players[0]).toMatchObject({
-      wine: 3,
-      penny: 4,
-    })
-  })
-
-  it('can not work contract yourself', () => {
-    // 'G01' is owned by the active player
-    const s2 = workContract('G01' as BuildingEnum, 'Pn')(s0)!
-    expect(s2).toBeUndefined()
   })
 })
