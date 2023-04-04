@@ -38,7 +38,7 @@ export const nextFrame3Short: FrameFlow = {
   },
   4: {
     currentPlayerIndex: 0,
-    next: 5,
+    next: 6,
   },
 
   6: {

@@ -10,12 +10,14 @@ const computeFlow = (state: GameStatePlaying) => {
   let frameIndex = state.frame.next
   let playerIndex = state.frame.activePlayerIndex
   let frame: OrdinalFrame = frameFlow[frameIndex]
+  let { round } = frame
   const flow: Flower[] = []
   do {
+    round = frame.round ?? round
     playerIndex = frame.currentPlayerIndex ?? playerIndex
     flow.push({
-      round: frame.round,
-      player: state.players[playerIndex].color,
+      round,
+      player: state?.players?.[playerIndex]?.color,
       settle: !!frame.bonusActions?.includes(GameCommandEnum.SETTLE),
       bonus: !!frame.bonusRoundPlacement,
     })

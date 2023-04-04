@@ -148,7 +148,7 @@ export const nextFrame2Short: FrameFlow = {
     next: 20,
   },
   20: {
-    next: 21,
+    next: 25,
   },
 
   25: {
