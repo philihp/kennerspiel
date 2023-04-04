@@ -23,7 +23,7 @@ const computeFlow = (state: GameStatePlaying) => {
     })
     frameIndex = frame.next
     frame = frameFlow[frame.next]
-  } while (frameIndex < frame.next && limit--)
+  } while (frame && frameIndex < frame.next && limit--)
   return flow
 }
 
