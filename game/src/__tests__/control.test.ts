@@ -1,6 +1,7 @@
 import { control } from '../control'
 import {
   Clergy,
+  Controls,
   Frame,
   GameCommandConfigParams,
   GameStatePlaying,
@@ -12,11 +13,11 @@ import {
 
 describe('control', () => {
   describe('control/view', () => {
-    const config = {
+    const c0 = {
       players: 3,
       length: 'long',
     } as GameCommandConfigParams
-    const frame = {
+    const f0 = {
       activePlayerIndex: 0,
       bonusActions: [],
       next: 1,
@@ -33,7 +34,7 @@ describe('control', () => {
       nextUse: NextUseClergy.Any,
     } as Frame
     const s0 = {
-      config,
+      config: c0,
       players: [
         {
           color: PlayerColor.Red,
@@ -75,7 +76,7 @@ describe('control', () => {
           color: PlayerColor.Blue,
         },
       ],
-      frame,
+      frame: f0,
       plotPurchasePrices: [7, 6, 5, 4, 3],
       districtPurchasePrices: [6, 5, 4, 3],
     } as GameStatePlaying
@@ -112,6 +113,25 @@ describe('control', () => {
       const c0 = control(s0, ['USE', 'LR1'], 0)
       expect(c0.partial).toStrictEqual(['USE', 'LR1'])
       expect(c0.completion).toStrictEqual(['', 'Jo'])
+    })
+
+    it('handles a mistake in the flow without an error or overflow', () => {
+      const f1 = {
+        ...f0,
+        next: 1,
+      } as Frame
+      const c1 = {
+        ...c0,
+        players: 2,
+        length: 'short',
+      }
+      const s1 = {
+        ...s0,
+        config: c1,
+        frame: f1,
+      } as GameStatePlaying
+      expect(() => control(s1, [], 0)).not.toThrow()
+      expect(control(s1, [], 0).flow?.length).toBeLessThan(100)
     })
   })
 })
