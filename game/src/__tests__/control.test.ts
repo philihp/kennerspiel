@@ -20,7 +20,7 @@ describe('control', () => {
     const f0 = {
       activePlayerIndex: 0,
       bonusActions: [],
-      next: 1,
+      next: 2,
       round: 0,
       startingPlayer: 0,
       settlementRound: 'S',
