@@ -100,7 +100,9 @@ describe('control', () => {
     it('gives a list of commands if no partial', () => {
       const c0 = control(s0, [], 0)
       expect(c0.partial).toStrictEqual([])
-      expect(c0.completion).toStrictEqual(['USE', 'BUY_DISTRICT'])
+      expect(c0.completion).toContain('USE')
+      expect(c0.completion).toContain('BUY_DISTRICT')
+      expect(c0.completion).toContain('FELL_TREES')
     })
 
     it('gives a list of usable buidings if partial use', () => {
