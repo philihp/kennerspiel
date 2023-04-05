@@ -11,7 +11,9 @@ describe('board/frame/nextFrame2Short', () => {
       config: c1,
       players: [{ color: PlayerColor.Red }, { color: PlayerColor.Blue }],
       frame: {
-        next: 1,
+        round: 1,
+        next: 2,
+        activePlayerIndex: 0,
       },
     } as GameStatePlaying
     const s2 = control(s1, ['CONVERT'], 0)

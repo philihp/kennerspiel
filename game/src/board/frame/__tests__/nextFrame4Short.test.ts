@@ -16,7 +16,9 @@ describe('board/frame/nextFrame4Short', () => {
         { color: PlayerColor.White },
       ],
       frame: {
-        next: 1,
+        round: 1,
+        next: 2,
+        activePlayerIndex: 0,
       },
     } as GameStatePlaying
     const s2 = control(s1, ['CONVERT'], 0)

@@ -1,17 +1,17 @@
 import { P, match } from 'ts-pattern'
 import { always, reduce, toPairs } from 'ramda'
 import { pickFrameFlow } from './board/frame'
-import { Flower, GameCommandEnum, GameStatePlaying, OrdinalFrame, Controls } from './types'
+import { Flower, GameCommandEnum, GameStatePlaying, OrdinalFrame, Controls, Frame } from './types'
 import { complete } from './commands'
 
 const computeFlow = (state: GameStatePlaying) => {
-  let limit = 200
   const frameFlow = pickFrameFlow(state.config)
-  let frameIndex = state.frame.next
-  let playerIndex = state.frame.activePlayerIndex
-  let frame: OrdinalFrame = frameFlow[frameIndex]
-  let { round } = frame
   const flow: Flower[] = []
+  let limit = 200
+  let frameIndex
+  let playerIndex = state.frame.activePlayerIndex
+  let { frame }: { frame: OrdinalFrame } = state
+  let { round } = frame
   do {
     round = frame.round ?? round
     playerIndex = frame.currentPlayerIndex ?? playerIndex
