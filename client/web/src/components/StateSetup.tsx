@@ -42,12 +42,20 @@ export const StateSetup = () => {
       Configure:
       <br />
       <input type="radio" disabled checked={configured(Country.france, Length.long, engineConfig)} />
-      <button type="button" onClick={() => config(Country.france, Length.long)}>
+      <button
+        type="button"
+        disabled={configured(Country.france, Length.long, engineConfig)}
+        onClick={() => config(Country.france, Length.long)}
+      >
         France
       </button>
       <br />
       <input type="radio" disabled checked={configured(Country.france, Length.short, engineConfig)} />
-      <button type="button" onClick={() => config(Country.france, Length.short)}>
+      <button
+        type="button"
+        disabled={configured(Country.france, Length.short, engineConfig)}
+        onClick={() => config(Country.france, Length.short)}
+      >
         France+Short
       </button>
       <br />
