@@ -1,5 +1,6 @@
 import { initialState } from '../../state'
 import {
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -18,7 +19,7 @@ describe('commands/fellTrees', () => {
     landscape: [
       [['W'], ['C'], [], [], [], [], [], [], []],
       [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [[], [], ['P'], ['P', 'LFO'], ['P'], ['P'], ['P', 'LFO'], [], []],
     ] as Tile[][],
     wonders: 0,
     landscapeOffset: 1,
@@ -103,7 +104,7 @@ describe('commands/fellTrees', () => {
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
           [['W'], ['C'], ['P', 'LPE'], ['P'], ['P', 'LFO'], ['P'], ['P'], [], []],
-          [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+          [[], [], ['P'], ['P', 'LFO'], ['P'], ['P'], ['P', 'LFO'], [], []],
         ],
       })
     })
@@ -138,8 +139,63 @@ describe('commands/fellTrees', () => {
   })
 
   describe('complete', () => {
-    it('stub', () => {
+    it('returns FELL_TREES if no partial and active player has forest', () => {
       const c0 = complete(s0, [])
+      expect(c0).toStrictEqual(['FELL_TREES'])
+    })
+    it('returns [] if active player has no forest', () => {
+      const p1 = {
+        ...p0,
+        landscape: [
+          [['W'], ['C'], [], [], [], [], [], [], []],
+          [['W'], ['C', 'F03'], ['P', 'LPE'], ['P'], ['P'], ['P'], ['P', 'LB1'], [], []],
+          [[], [], ['P', 'LPE'], ['P'], ['P'], ['P'], ['P'], [], []],
+        ] as Tile[][],
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1],
+      } as GameStatePlaying
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+    it('returns [] if frame has already consumed action', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+        },
+      } as GameStatePlaying
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+    it('returns FELL_TREES if frame has already consumed action, but allowed via bonus actions', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [GameCommandEnum.FELL_TREES],
+        },
+      } as GameStatePlaying
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['FELL_TREES'])
+    })
+    it('if partial in FELL_TREES, returns a list of locations', () => {
+      const c0 = complete(s0, [GameCommandEnum.FELL_TREES])
+      expect(c0).toStrictEqual(['0 1', '0 2', '1 1', '1 4'])
+    })
+    it('if partial in FELL_TREES has row, give cols for that row', () => {
+      const c0 = complete(s0, [GameCommandEnum.FELL_TREES, '0'])
+      expect(c0).toStrictEqual(['1', '2'])
+    })
+    it('if FELL_TREES at a location, give empty string response', () => {
+      const c0 = complete(s0, [GameCommandEnum.FELL_TREES, '0', '4'])
+      expect(c0).toStrictEqual([''])
+    })
+    it('if FELL_TREES not at a location, dont indicate this can be submitted', () => {
+      const c0 = complete(s0, [GameCommandEnum.FELL_TREES, '0', '5'])
       expect(c0).toStrictEqual([])
     })
   })
