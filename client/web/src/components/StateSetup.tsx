@@ -1,7 +1,10 @@
 import { Color, Country, EngineConfig, Length, User } from '../../../../api/types'
 import { useHathoraContext } from '../context/GameContext'
 
-const occupied = (color: Color, users?: User[]) => users && !!users.find((user) => user.color === color)
+const occupied = (color: Color, users?: User[]) => {
+  if (users === undefined) return false
+  return users.some((user) => user.color === color)
+}
 
 const configured = (country: Country, length: Length, config?: EngineConfig) =>
   config && config.country === country && config.length === length
@@ -16,22 +19,22 @@ export const StateSetup = () => {
       Colors:
       <br />
       <input type="checkbox" disabled checked={occupied(Color.Red, users)} />
-      <button type="button" onClick={() => join(Color.Red)}>
+      <button type="button" disabled={occupied(Color.Red, users)} onClick={() => join(Color.Red)}>
         Red
       </button>
       <br />
       <input type="checkbox" disabled checked={occupied(Color.Green, users)} />
-      <button type="button" onClick={() => join(Color.Green)}>
+      <button type="button" disabled={occupied(Color.Green, users)} onClick={() => join(Color.Green)}>
         Green
       </button>
       <br />
       <input type="checkbox" disabled checked={occupied(Color.Blue, users)} />
-      <button type="button" onClick={() => join(Color.Blue)}>
+      <button type="button" disabled={occupied(Color.Blue, users)} onClick={() => join(Color.Blue)}>
         Blue
       </button>
       <br />
       <input type="checkbox" disabled checked={occupied(Color.White, users)} />
-      <button type="button" onClick={() => join(Color.White)}>
+      <button type="button" disabled={occupied(Color.White, users)} onClick={() => join(Color.White)}>
         White
       </button>
       {/*-------------------------------------------*/}
@@ -39,12 +42,20 @@ export const StateSetup = () => {
       Configure:
       <br />
       <input type="radio" disabled checked={configured(Country.france, Length.long, engineConfig)} />
-      <button type="button" onClick={() => config(Country.france, Length.long)}>
+      <button
+        type="button"
+        disabled={configured(Country.france, Length.long, engineConfig)}
+        onClick={() => config(Country.france, Length.long)}
+      >
         France
       </button>
       <br />
       <input type="radio" disabled checked={configured(Country.france, Length.short, engineConfig)} />
-      <button type="button" onClick={() => config(Country.france, Length.short)}>
+      <button
+        type="button"
+        disabled={configured(Country.france, Length.short, engineConfig)}
+        onClick={() => config(Country.france, Length.short)}
+      >
         France+Short
       </button>
       <br />
