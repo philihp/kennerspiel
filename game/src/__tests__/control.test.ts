@@ -103,6 +103,7 @@ describe('control', () => {
       expect(c0.completion).toContain('USE')
       expect(c0.completion).toContain('BUY_DISTRICT')
       expect(c0.completion).toContain('FELL_TREES')
+      expect(c0.completion).toContain('CUT_PEAT')
     })
 
     it('gives a list of usable buidings if partial use', () => {
