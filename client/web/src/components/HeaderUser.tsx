@@ -28,7 +28,7 @@ export const HeaderUser = () => {
   return (
     <div
       style={
-        state?.active
+        state?.control
           ? {
               backgroundColor: '#fdb462',
             }

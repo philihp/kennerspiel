@@ -82,7 +82,6 @@ types:
     settle: boolean
     bonus: boolean
   EngineControl:
-    flow: EngineFlower[]
     partial: string?
     completion: string[]?
   EngineState:
@@ -100,6 +99,7 @@ types:
     districtPurchasePrices: int[]
     frame: EngineFrame?
     control: EngineControl?
+    flow: EngineFlower[]
 
 methods:
   join:

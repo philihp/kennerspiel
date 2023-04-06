@@ -16,6 +16,7 @@ export const Player = ({ player, active }: Props) => {
   return (
     <div>
       <PlayerClergy clergy={clergy} color={color} />
+      {JSON.stringify(active)}
       <PlayerLandscape landscape={landscape} offset={landscapeOffset} />
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <PlayerResources {...resources} />
