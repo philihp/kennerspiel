@@ -1,5 +1,6 @@
 import { initialState } from '../../state'
 import {
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -18,7 +19,7 @@ describe('commands/cutPeat', () => {
     landscape: [
       [['W'], ['C'], [], [], [], [], [], [], []],
       [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LPE'], ['P'], ['P'], [], []],
     ] as Tile[][],
     wonders: 0,
     landscapeOffset: 1,
@@ -106,7 +107,7 @@ describe('commands/cutPeat', () => {
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
           [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-          [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LPE'], ['P'], ['P'], [], []],
         ],
       })
     })
@@ -135,8 +136,63 @@ describe('commands/cutPeat', () => {
   })
 
   describe('complete', () => {
-    it('stub', () => {
+    it('returns CUT_PEAT if no partial and active player has forest', () => {
       const c0 = complete(s0, [])
+      expect(c0).toStrictEqual(['CUT_PEAT'])
+    })
+    it('returns [] if active player has no moor', () => {
+      const p1 = {
+        ...p0,
+        landscape: [
+          [['W'], ['C'], [], [], [], [], [], [], []],
+          [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+          [[], [], ['P'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
+        ] as Tile[][],
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1],
+      } as GameStatePlaying
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+    it('returns [] if frame has already consumed action', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+        },
+      } as GameStatePlaying
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+    it('returns CUT_PEAT if frame has already consumed action, but allowed via bonus actions', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [GameCommandEnum.CUT_PEAT],
+        },
+      } as GameStatePlaying
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['CUT_PEAT'])
+    })
+    it('if partial in CUT_PEAT, returns a list of locations', () => {
+      const c0 = complete(s0, [GameCommandEnum.CUT_PEAT])
+      expect(c0).toStrictEqual(['0 0', '1 0', '1 2'])
+    })
+    it('if partial in CUT_PEAT has row, give cols for that row', () => {
+      const c0 = complete(s0, [GameCommandEnum.CUT_PEAT, '0'])
+      expect(c0).toStrictEqual(['0'])
+    })
+    it('if CUT_PEAT at a location, give empty string response', () => {
+      const c0 = complete(s0, [GameCommandEnum.CUT_PEAT, '0', '4'])
+      expect(c0).toStrictEqual([''])
+    })
+    it('if CUT_PEAT not at a location, dont indicate this can be submitted', () => {
+      const c0 = complete(s0, [GameCommandEnum.CUT_PEAT, '0', '5'])
       expect(c0).toStrictEqual([])
     })
   })

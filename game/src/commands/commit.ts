@@ -1,6 +1,7 @@
-import { curry, pipe } from 'ramda'
+import { always, curry, pipe } from 'ramda'
+import { match } from 'ts-pattern'
 import { nextFrame } from '../board/frame'
-import { GameStatePlaying, StateReducer } from '../types'
+import { GameCommandEnum, GameStatePlaying, StateReducer } from '../types'
 
 export const commit: StateReducer = pipe(
   // is this really all we need to do?
@@ -8,5 +9,11 @@ export const commit: StateReducer = pipe(
 )
 
 export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  return []
+  return match<string[], string[]>(partial)
+    .with([], () => {
+      if (state.frame.mainActionUsed) return [GameCommandEnum.COMMIT]
+      return []
+    })
+    .with([GameCommandEnum.COMMIT], () => [''])
+    .otherwise(always([]))
 })
