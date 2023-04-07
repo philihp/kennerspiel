@@ -39,7 +39,6 @@ export const StatePlaying = () => {
             players
           )}
       </div>
-      <pre>{JSON.stringify(state, undefined, 2)}</pre>
     </>
   )
 }

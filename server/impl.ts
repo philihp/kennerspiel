@@ -105,6 +105,12 @@ const myPlayerIndex = (state: InternalState, userId: UserId): number | undefined
   return myIndex
 }
 
+const tokenizePartial = (partial: string): string[] => {
+  const out = partial.split(/\s+/)
+  if(out.length === 1 && out[0] === '') return []
+  return out
+}
+
 export class Impl implements Methods<InternalState> {
   initialize(ctx: Context, request: IInitializeRequest): InternalState {
     return {
@@ -189,6 +195,10 @@ export class Impl implements Methods<InternalState> {
     if(activeUser !== userId) {
       return Response.error(`Active user is ${activeUser}`)
     }
+    console.log({
+      'state.partial': state.partial,
+      'request.partial': request.partial
+    })
     state.partial = request.partial
     return Response.ok()
   }
@@ -240,7 +250,8 @@ export class Impl implements Methods<InternalState> {
     const me = state.users.find(u => u.id === userId)
     const moves = state.commands.slice(0, state.commandIndex)
     
-    const controlSurface = control(currState, state.partial.split(/\s+/), myPlayerIndex(state, userId))
+    const partial = tokenizePartial(state.partial)
+    const controlSurface = control(currState, partial, myPlayerIndex(state, userId))
     const controlState = !controlSurface.active ? undefined : {
       partial: controlSurface.partial && controlSurface.partial.join(' '),
       completion: controlSurface.completion

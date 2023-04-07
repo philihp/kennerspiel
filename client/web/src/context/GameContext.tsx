@@ -21,6 +21,7 @@ interface GameContext {
   config: (country: Country, length: Length) => Promise<void>
   start: () => Promise<void>
   move: (command: string) => Promise<void>
+  control: (partial: string) => Promise<void>
   undo: () => Promise<void>
   redo: () => Promise<void>
   endGame: () => Promise<void>
@@ -121,6 +122,13 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     [connection]
   )
 
+  const control = useCallback(
+    async (partial: string) => {
+      await connection?.control({ partial })
+    },
+    [connection]
+  )
+
   const undo = useCallback(async () => {
     await connection?.undo({})
   }, [connection])
@@ -162,6 +170,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       config,
       start,
       move,
+      control,
       undo,
       redo,
       endGame,
@@ -181,6 +190,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       config,
       start,
       move,
+      control,
       undo,
       redo,
       endGame,
