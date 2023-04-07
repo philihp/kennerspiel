@@ -97,10 +97,18 @@ const activeUserId = (state: InternalState): string => {
   return state.users.filter(u => u.color == currColor)?.[0]?.id
 }
 
-const activePlayerIndex = (state: InternalState): number => {
+const myPlayerIndex = (state: InternalState, userId: UserId): number | undefined => {
   const currState = state.gameState[state.commandIndex - 1]
-  const currColor = colorDongle(currState.players[currState.frame.activePlayerIndex].color)
-  return state.users.findIndex(u => u.color === currColor)
+  const myColor = state.users.find(u => u.id === userId)?.color
+  const myIndex = currState.players.findIndex((p: Tableau) => colorDongle(p.color) === (myColor))
+  if(myIndex === -1) return undefined
+  return myIndex
+}
+
+const tokenizePartial = (partial: string): string[] => {
+  const out = partial.split(/\s+/)
+  if(out.length === 1 && out[0] === '') return []
+  return out
 }
 
 export class Impl implements Methods<InternalState> {
@@ -187,6 +195,10 @@ export class Impl implements Methods<InternalState> {
     if(activeUser !== userId) {
       return Response.error(`Active user is ${activeUser}`)
     }
+    console.log({
+      'state.partial': state.partial,
+      'request.partial': request.partial
+    })
     state.partial = request.partial
     return Response.ok()
   }
@@ -228,7 +240,8 @@ export class Impl implements Methods<InternalState> {
         plotPurchasePrices: [],
         districtPurchasePrices: [],
         moves: [],
-        control: undefined
+        control: undefined,
+        flow: [],
       }
     }
 
@@ -237,17 +250,9 @@ export class Impl implements Methods<InternalState> {
     const me = state.users.find(u => u.id === userId)
     const moves = state.commands.slice(0, state.commandIndex)
     
-    const controlSurface = control(currState, state.partial.split(/\s+/), activePlayerIndex(state))
+    const partial = tokenizePartial(state.partial)
+    const controlSurface = control(currState, partial, myPlayerIndex(state, userId))
     const controlState = !controlSurface.active ? undefined : {
-      flow: controlSurface.flow.map(flower => {
-        const engineFlower: EngineFlower = {
-          round: flower.round,
-          player: colorDongle(flower.player as PlayerColor),
-          settle: flower.settle,
-          bonus: flower.bonus
-        }
-        return engineFlower
-      }),
       partial: controlSurface.partial && controlSurface.partial.join(' '),
       completion: controlSurface.completion
     }
@@ -270,7 +275,17 @@ export class Impl implements Methods<InternalState> {
       plotPurchasePrices: currState.plotPurchasePrices,
       districtPurchasePrices: currState.districtPurchasePrices,
       frame: currState.frame,
-      control: controlState
+      control: controlState,
+      flow: controlSurface.flow.map(flower => {
+        const engineFlower: EngineFlower = {
+          round: flower.round,
+          player: colorDongle(flower.player as PlayerColor),
+          settle: flower.settle,
+          bonus: flower.bonus
+        }
+        return engineFlower
+      }),
+
     }
   }
 }

@@ -26,14 +26,14 @@ export const StatePlaying = () => {
           {wonders && <UnbuiltWonders wonders={wonders} />}
         </div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         {players &&
           map(
             (player) => (
               <Player
                 key={player.color}
                 player={player}
-                active={state?.active && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id}
+                active={!!state?.control && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id}
               />
             ),
             players

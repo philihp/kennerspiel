@@ -7,7 +7,7 @@ interface Props {
 export const PlayerSettlements = ({ settlements }: Props) => (
   <div style={{ margin: 10 }}>
     {settlements.map((settlement) => (
-      <Erection id={settlement} />
+      <Erection key={settlement} id={settlement} />
     ))}
   </div>
 )
