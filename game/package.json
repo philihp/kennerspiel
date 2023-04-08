@@ -32,7 +32,7 @@
   "dependencies": {
     "fast-shuffle": "5.0.2",
     "fn-pcg": "1.2.0",
-    "ramda": "0.28.0",
+    "ramda": "0.29.0",
     "ts-pattern": "4.2.2"
   },
   "devDependencies": {
