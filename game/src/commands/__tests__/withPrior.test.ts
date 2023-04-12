@@ -272,8 +272,40 @@ describe('commands/withPrior', () => {
   })
 
   describe('complete', () => {
-    it('stub', () => {
-      const c0 = complete(s0, [])
+    it('if the player has a prior', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [Clergy.LayBrother1B, Clergy.PriorB],
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['WITH_PRIOR'])
+    })
+    it('if the player does not have a prior', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [Clergy.LayBrother1B, Clergy.LayBrother2B],
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+    it('completes the command', () => {
+      const c0 = complete(s0, ['WITH_PRIOR'])
+      expect(c0).toStrictEqual([''])
+    })
+    it('doesnt know what this is', () => {
+      const c0 = complete(s0, ['WITH_PRIOR', 'Pn'])
       expect(c0).toStrictEqual([])
     })
   })
