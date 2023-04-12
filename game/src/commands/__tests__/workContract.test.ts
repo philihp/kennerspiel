@@ -475,5 +475,15 @@ describe('commands/workContract', () => {
       const c0 = complete(s1, ['WORK_CONTRACT', 'G02'])
       expect(c0).toStrictEqual(['Wn', 'Wh', 'PnPn'])
     })
+
+    it('terminates when enough options', () => {
+      const c0 = complete(s0, ['WORK_CONTRACT', 'G02', 'Pn'])
+      expect(c0).toStrictEqual([''])
+    })
+
+    it('empty completions when weird params', () => {
+      const c0 = complete(s0, ['WORK_CONTRACT', 'G02', 'Pn', 'Pn'])
+      expect(c0).toStrictEqual([])
+    })
   })
 })
