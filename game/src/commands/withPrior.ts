@@ -1,8 +1,9 @@
-import { curry, pipe } from 'ramda'
+import { any, curry, pipe, view } from 'ramda'
+import { match } from 'ts-pattern'
 import { revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import { moveClergyToOwnBuilding } from '../board/landscape'
-import { isPrior } from '../board/player'
-import { GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { activeLens, isPrior } from '../board/player'
+import { GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 // there are two modes of this, really...
 
@@ -42,6 +43,15 @@ export const withPrior: StateReducer = (state) => {
   return withPriorForWorkContract(state)
 }
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  return []
-})
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] =>
+  match<string[], string[]>(partial)
+    .with([], () => {
+      const player = view(activeLens(state), state)
+      if (any(isPrior, player.clergy)) return [GameCommandEnum.WITH_PRIOR]
+      return []
+    })
+    .with([GameCommandEnum.WITH_PRIOR], () => {
+      return ['']
+    })
+    .otherwise(() => [])
+)
