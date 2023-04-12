@@ -13,7 +13,7 @@ import {
   Tableau,
 } from '../types'
 import { terrainForErection } from './erections'
-import { isLayBrother, isPrior, withActivePlayer, withPlayer } from './player'
+import { isLayBrother, isPrior, withActivePlayer, withPlayerIndex } from './player'
 
 export const districtPrices = (config: GameCommandConfigParams): number[] =>
   match(config)
@@ -159,7 +159,7 @@ const removeClergyFromActivePlayer = (clergy: Clergy): StateReducer =>
 const addClergyToTile =
   (clergy: Clergy) =>
   (playerIndex: number, row: number, col: number): StateReducer =>
-    withPlayer(playerIndex)((player) => {
+    withPlayerIndex(playerIndex)((player) => {
       if (player === undefined) return undefined
       const [land, building, _] = player.landscape[row][col]
       return {

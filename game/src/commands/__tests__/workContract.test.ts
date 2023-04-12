@@ -2,6 +2,7 @@ import { initialState } from '../../state'
 import {
   BuildingEnum,
   Clergy,
+  Frame,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -17,7 +18,7 @@ describe('commands/workContract', () => {
     color: PlayerColor.Blue,
     clergy: [],
     settlements: [],
-    landscape: [[]] as Tile[][],
+    landscape: [] as Tile[][],
     wonders: 0,
     landscapeOffset: 1,
     peat: 0,
@@ -127,8 +128,8 @@ describe('commands/workContract', () => {
       },
     ],
     buildings: ['F09', 'F10', 'G12', 'G13', 'G06'] as BuildingEnum[],
-    plotPurchasePrices: [1, 1, 1, 1, 1, 1],
-    districtPurchasePrices: [],
+    plotPurchasePrices: [1, 2, 3, 4, 5],
+    districtPurchasePrices: [3, 4, 5, 6],
   }
 
   describe('use', () => {
@@ -282,8 +283,206 @@ describe('commands/workContract', () => {
   })
 
   describe('complete', () => {
-    it('stub', () => {
-      const c0 = complete(s0, [])
+    it('can work contract if they have 1 penny in early game', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 1,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['WORK_CONTRACT'])
+    })
+    it('can work contract if they have 1 wine', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 0,
+            wine: 1,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['WORK_CONTRACT'])
+    })
+    it('can work contract if they have 1 whiskey', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 0,
+            wine: 0,
+            whiskey: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['WORK_CONTRACT'])
+    })
+    it('can not work contract if no money', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+    it('can work contract if they have 2 penny in late game', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 2,
+            wine: 0,
+            whiskey: 0,
+            landscape: [
+              [['P', 'F21'], ...s0.players[0].landscape[0].slice(1)],
+              ...s0.players[0].landscape.slice(1),
+            ] as Tile[][],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          settlementRound: SettlementRound.C,
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['WORK_CONTRACT'])
+    })
+    it('can not work contract if insufficient money', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 1,
+            wine: 0,
+            whiskey: 0,
+            landscape: [
+              [['P', 'F21'], ...s0.players[0].landscape[0].slice(1)],
+              ...s0.players[0].landscape.slice(1),
+            ] as Tile[][],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          settlementRound: SettlementRound.C,
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+
+    it('work contract lists available buildings', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 1,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, ['WORK_CONTRACT'])
+      expect(c0).toStrictEqual(['LB1', 'LB2', 'G02', 'LB3', 'F05', 'LG1', 'LG2', 'F08', 'LG3'])
+    })
+
+    it('work contract lists available buildings if we are second player', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          s0.players[0],
+          {
+            ...s0.players[1],
+            penny: 1,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(2),
+        ],
+        frame: {
+          ...s0.frame,
+          activePlayerIndex: 1,
+        },
+      }
+      const c0 = complete(s1, ['WORK_CONTRACT'])
+      expect(c0).toStrictEqual(['G01', 'LR3', 'F05', 'LG1', 'LG2', 'F08', 'LG3'])
+    })
+
+    it('gives early game options for paying', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 1,
+            wine: 1,
+            whiskey: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, ['WORK_CONTRACT', 'G02'])
+      expect(c0).toStrictEqual(['Wn', 'Wh', 'Pn'])
+    })
+    it('gives late game options for paying', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 2,
+            wine: 2,
+            whiskey: 2,
+            landscape: [
+              [['P', 'F21'], ...s0.players[0].landscape[0].slice(1)],
+              ...s0.players[0].landscape.slice(1),
+            ] as Tile[][],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          settlementRound: SettlementRound.C,
+        },
+      }
+      const c0 = complete(s1, ['WORK_CONTRACT', 'G02'])
+      expect(c0).toStrictEqual(['Wn', 'Wh', 'PnPn'])
+    })
+
+    it('terminates when enough options', () => {
+      const c0 = complete(s0, ['WORK_CONTRACT', 'G02', 'Pn'])
+      expect(c0).toStrictEqual([''])
+    })
+
+    it('empty completions when weird params', () => {
+      const c0 = complete(s0, ['WORK_CONTRACT', 'G02', 'Pn', 'Pn'])
       expect(c0).toStrictEqual([])
     })
   })

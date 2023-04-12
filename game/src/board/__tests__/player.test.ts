@@ -1,5 +1,16 @@
-import { Clergy, GameCommandConfigParams, PlayerColor, Tableau } from '../../types'
-import { clergyForColor, getCost, isLayBrother, isPrior, payCost, subtractCoins } from '../player'
+import { view } from 'ramda'
+import { Clergy, GameCommandConfigParams, GameStatePlaying, PlayerColor, Tableau } from '../../types'
+import {
+  activeLens,
+  clergyForColor,
+  getCost,
+  indexLens,
+  isLayBrother,
+  isPrior,
+  payCost,
+  subtractCoins,
+  withActivePlayer,
+} from '../player'
 
 const p: Tableau = {
   color: PlayerColor.Red,
@@ -395,6 +406,135 @@ describe('board/player', () => {
         penny: 4,
         wine: 1,
       })
+    })
+  })
+
+  describe('withActivePlayer', () => {
+    const p0 = {
+      ...p,
+      color: PlayerColor.Red,
+    } as Tableau
+    const p1 = {
+      ...p,
+      color: PlayerColor.Green,
+    } as Tableau
+    const p2 = {
+      ...p,
+      color: PlayerColor.White,
+    } as Tableau
+    const s0 = {
+      players: [p0, p1, p2],
+      frame: {
+        activePlayerIndex: 1,
+      },
+    } as GameStatePlaying
+
+    it('will read from activePlayer', () => {
+      const fn = jest.fn()
+      withActivePlayer(fn)(s0)
+      expect(fn).toHaveBeenCalledWith(p1)
+    })
+    it('returns undefined if player returns undefined', () => {
+      const s1 = withActivePlayer(() => undefined)(s0)
+      expect(s1).toBeUndefined()
+    })
+    it('mutates the player in question', () => {
+      const s1 = withActivePlayer((player) => ({
+        ...player,
+        sheep: 5,
+      }))(s0)
+      expect(s1?.players?.[1]).toMatchObject({
+        sheep: 5,
+      })
+    })
+    it('does nothing if nothing changed', () => {
+      const fn = jest.fn()
+      const s1 = withActivePlayer((player) => {
+        fn(player)
+        return player
+      })(s0)
+      expect(s0).toBe(s1)
+      expect(fn).toHaveBeenCalledWith(p1)
+    })
+  })
+
+  describe('activeLens', () => {
+    const s0 = {
+      players: [
+        {
+          ...p,
+          color: PlayerColor.Red,
+        },
+        {
+          ...p,
+          color: PlayerColor.Green,
+        },
+        {
+          ...p,
+          color: PlayerColor.White,
+        },
+      ],
+      frame: {
+        activePlayerIndex: 1,
+      },
+    } as GameStatePlaying
+    it('can work on a state', () => {
+      const p1 = view(activeLens(s0), s0)
+      expect(p1?.color).toBe('G')
+    })
+    it('is fine on an undefined state', () => {
+      const p1 = view(activeLens(undefined), undefined)
+      expect(p1).toBeUndefined()
+    })
+    it('returns undefined if no active player in frame', () => {
+      const s1 = {
+        ...s0,
+        frame: {},
+      } as GameStatePlaying
+
+      const p1 = view(activeLens(s1), s1)
+      expect(p1?.color).toBeUndefined()
+    })
+    it('returns undefined if active player does not exist', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          activePlayerIndex: 4,
+        },
+      } as GameStatePlaying
+
+      const p1 = view(activeLens(s1), s1)
+      expect(p1?.color).toBeUndefined()
+    })
+  })
+
+  describe('indexLens', () => {
+    const s0 = {
+      players: [
+        {
+          ...p,
+          color: PlayerColor.Red,
+        },
+        {
+          ...p,
+          color: PlayerColor.Green,
+        },
+        {
+          ...p,
+          color: PlayerColor.White,
+        },
+      ],
+      frame: {
+        activePlayerIndex: 1,
+      },
+    } as GameStatePlaying
+    it('gives the second player', () => {
+      const p1 = view(indexLens(2), s0)
+      expect(p1?.color).toBe('W')
+    })
+    it('gives undefined if player doesnt exist', () => {
+      const p1 = view(indexLens(42), undefined)
+      expect(p1).toBeUndefined()
     })
   })
 })

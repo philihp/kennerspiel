@@ -318,36 +318,13 @@ export enum Clergy {
 
 export type Tile = [LandEnum?, BuildingEnum?, Clergy?]
 
-// TODO: try to Required<Cost> &
-export type Tableau = {
+export type Tableau = Required<Cost> & {
   color: PlayerColor
   clergy: Clergy[]
   settlements: SettlementEnum[]
   landscape: Tile[][]
   landscapeOffset: number
   wonders: number
-  peat: number
-  penny: number
-  clay: number
-  wood: number
-  grain: number
-  sheep: number
-  stone: number
-  flour: number
-  grape: number
-  nickel: number
-  malt: number
-  coal: number
-  book: number
-  ceramic: number
-  whiskey: number
-  straw: number
-  meat: number
-  ornament: number
-  bread: number
-  wine: number
-  beer: number
-  reliquary: number
 }
 
 export type Rondel = {
