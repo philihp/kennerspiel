@@ -1,4 +1,4 @@
-import { any, map } from 'ramda'
+import { Lens, any, lensPath, map, set, view } from 'ramda'
 import { match } from 'ts-pattern'
 import {
   Clergy,
@@ -9,41 +9,37 @@ import {
   StateReducer,
   Tableau,
   TableauReducer,
-  Tile,
 } from '../types'
+
+export const activeLens = (state?: GameStatePlaying): Lens<GameStatePlaying | undefined, Tableau> =>
+  lensPath(['players', view(lensPath(['frame', 'activePlayerIndex']), state)])
+
+const withPlayer =
+  (lens: Lens<GameStatePlaying | undefined, Tableau>) =>
+  (func: (player: Tableau) => Tableau | undefined): StateReducer =>
+  (state) => {
+    if (state === undefined) return state
+    const oldPlayer = view(lens, state)
+    if (oldPlayer === undefined) return undefined
+    const newPlayer = func(oldPlayer)
+    if (newPlayer === oldPlayer) return state // dont create another state if nothing changes
+    if (newPlayer === undefined) return undefined // dont just set the one player to undefined
+    return set(lens, newPlayer, state)
+  }
 
 export const withActivePlayer =
   (func: (player: Tableau) => Tableau | undefined): StateReducer =>
-  (state) => {
-    if (state === undefined) return state
-    const oldPlayer = state.players[state.frame.activePlayerIndex]
-    const player = func(oldPlayer)
-    if (player === oldPlayer) return state // dont create another state if nothing changes
-    if (player === undefined) return undefined
-    return {
-      ...state,
-      players: [
-        ...state.players.slice(0, state.frame.activePlayerIndex),
-        player,
-        ...state.players.slice(state.frame.activePlayerIndex + 1),
-      ],
-    }
-  }
+  (state) =>
+    withPlayer(activeLens(state))(func)(state)
 
-export const withPlayer =
+export const indexLens = (playerIndex: number): Lens<GameStatePlaying | undefined, Tableau> =>
+  lensPath(['players', playerIndex])
+
+export const withPlayerIndex =
   (playerIndex: number) =>
   (func: (player: Tableau) => Tableau | undefined): StateReducer =>
-  (state) => {
-    if (state === undefined) return state
-    const oldPlayer = state.players[playerIndex]
-    const player = func(oldPlayer)
-    if (player === oldPlayer) return state // dont create another state if nothing changes
-    if (player === undefined) return undefined
-    return {
-      ...state,
-      players: [...state.players.slice(0, playerIndex), player, ...state.players.slice(playerIndex + 1)],
-    }
-  }
+  (state) =>
+    withPlayer(indexLens(playerIndex))(func)(state)
 
 export const withEachPlayer =
   (func: (player: Tableau) => Tableau | undefined): StateReducer =>

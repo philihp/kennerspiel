@@ -71,9 +71,11 @@ describe('control', () => {
         } as Tableau,
         {
           color: PlayerColor.Green,
+          clergy: [],
         },
         {
           color: PlayerColor.Blue,
+          clergy: [],
         },
       ],
       frame: f0,
