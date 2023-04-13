@@ -1,6 +1,7 @@
 import { curry, pipe } from 'ramda'
+import { match } from 'ts-pattern'
 import { subtractCoins, withActivePlayer } from '../board/player'
-import { GameCommandConvertParams, GameStatePlaying, Tableau } from '../types'
+import { GameCommandConvertParams, GameCommandEnum, GameStatePlaying, Tableau } from '../types'
 
 const convertGrain =
   (amount = 0) =>
@@ -64,6 +65,23 @@ export const convert = ({ grain, wine, nickel, whiskey, penny }: GameCommandConv
   )
 }
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  return []
-})
+export const complete = curry((state: GameStatePlaying, partial: string[]): string[] =>
+  match<string[], string[]>(partial)
+    .with([], () => {
+      if (
+        withActivePlayer((player) => {
+          if (!player) return player
+          const { penny, grain, wine, nickel, whiskey } = player
+          if (penny >= 5 || grain || wine || nickel || whiskey) return player
+          return undefined
+        })(state)
+      ) {
+        return [GameCommandEnum.CONVERT]
+      }
+      return []
+    })
+    .with([GameCommandEnum.CONVERT], () => {
+      return []
+    })
+    .otherwise(() => [])
+)
