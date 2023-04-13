@@ -2,6 +2,8 @@ import { initialState } from '../../state'
 import {
   BuildingEnum,
   Clergy,
+  Frame,
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -201,9 +203,33 @@ describe('commands/withLaybrother', () => {
   })
 
   describe('complete', () => {
-    it('stub', () => {
-      const c0 = complete(s0, [])
+    it('is possible if active player is not current player', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          activePlayerIndex: 1,
+          currentPlayerIndex: 2,
+        },
+      } as GameStatePlaying
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['WITH_LAYBROTHER'])
+    })
+    it('is not possible if active player is current player', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          activePlayerIndex: 2,
+          currentPlayerIndex: 2,
+        },
+      } as GameStatePlaying
+      const c0 = complete(s1, [])
       expect(c0).toStrictEqual([])
+    })
+    it('has no other parameters', () => {
+      const c0 = complete(s0, [GameCommandEnum.WITH_LAYBROTHER])
+      expect(c0).toStrictEqual([''])
     })
   })
 })
