@@ -231,5 +231,10 @@ describe('commands/withLaybrother', () => {
       const c0 = complete(s0, [GameCommandEnum.WITH_LAYBROTHER])
       expect(c0).toStrictEqual([''])
     })
+
+    it('returns [] on anything else', () => {
+      const c0 = complete(s0, ['HELLO'])
+      expect(c0).toStrictEqual([])
+    })
   })
 })
