@@ -51,7 +51,7 @@ describe('commands/convert', () => {
     frame: {
       round: 1,
       next: 1,
-      startingPlayer: 1,
+      startingPlayer: 0,
       settlementRound: SettlementRound.S,
       currentPlayerIndex: 0,
       activePlayerIndex: 0,
@@ -212,8 +212,134 @@ describe('commands/convert', () => {
   })
 
   describe('complete', () => {
-    it('stub', () => {
-      const c0 = complete(s0, [])
+    it('does not allow convert if nothing to convert', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 0,
+            penny: 0,
+            grain: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+    it('allows convert if they have nickels', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 1,
+            penny: 0,
+            grain: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['CONVERT'])
+    })
+    it('does not allow convert if they have four pennies', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 0,
+            penny: 4,
+            grain: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+    it('allows convert if they have five pennies', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 0,
+            penny: 5,
+            grain: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['CONVERT'])
+    })
+    it('does not allow convert if they have grain', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 0,
+            penny: 0,
+            grain: 1,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['CONVERT'])
+    })
+    it('does not allow convert if they have wine', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 0,
+            penny: 0,
+            grain: 0,
+            wine: 1,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['CONVERT'])
+    })
+    it('does not allow convert if they have whiskey', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 0,
+            penny: 0,
+            grain: 0,
+            wine: 0,
+            whiskey: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['CONVERT'])
+    })
+    it('returns [] if weird partial', () => {
+      const c0 = complete(s0, ['CONVERT', 'TWO', 'APPLES'])
       expect(c0).toStrictEqual([])
     })
   })
