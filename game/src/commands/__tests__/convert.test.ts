@@ -51,7 +51,7 @@ describe('commands/convert', () => {
     frame: {
       round: 1,
       next: 1,
-      startingPlayer: 1,
+      startingPlayer: 0,
       settlementRound: SettlementRound.S,
       currentPlayerIndex: 0,
       activePlayerIndex: 0,
@@ -245,7 +245,7 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s0, [])
+      const c0 = complete(s1, [])
       expect(c0).toStrictEqual(['CONVERT'])
     })
     it('does not allow convert if they have four pennies', () => {
@@ -263,8 +263,8 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s0, [])
-      expect(c0).toStrictEqual(['CONVERT'])
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
     })
     it('allows convert if they have five pennies', () => {
       const s1 = {
@@ -281,7 +281,7 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s0, [])
+      const c0 = complete(s1, [])
       expect(c0).toStrictEqual(['CONVERT'])
     })
     it('does not allow convert if they have grain', () => {
@@ -337,6 +337,10 @@ describe('commands/convert', () => {
       }
       const c0 = complete(s1, [])
       expect(c0).toStrictEqual(['CONVERT'])
+    })
+    it('returns [] if weird partial', () => {
+      const c0 = complete(s0, ['CONVERT', 'TWO', 'APPLES'])
+      expect(c0).toStrictEqual([])
     })
   })
 })
