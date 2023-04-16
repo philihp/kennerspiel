@@ -184,14 +184,14 @@ describe('commands/fellTrees', () => {
     })
     it('if partial in FELL_TREES, returns a list of locations', () => {
       const c0 = complete(s0, [GameCommandEnum.FELL_TREES])
-      expect(c0).toStrictEqual(['0 1', '0 2', '1 1', '1 4'])
+      expect(c0).toStrictEqual(['1 0', '2 0', '1 1', '4 1'])
     })
     it('if partial in FELL_TREES has row, give cols for that row', () => {
-      const c0 = complete(s0, [GameCommandEnum.FELL_TREES, '0'])
-      expect(c0).toStrictEqual(['1', '2'])
+      const c0 = complete(s0, [GameCommandEnum.FELL_TREES, '2'])
+      expect(c0).toStrictEqual(['0'])
     })
     it('if FELL_TREES at a location, give empty string response', () => {
-      const c0 = complete(s0, [GameCommandEnum.FELL_TREES, '0', '4'])
+      const c0 = complete(s0, [GameCommandEnum.FELL_TREES, '2', '0'])
       expect(c0).toStrictEqual([''])
     })
     it('if FELL_TREES not at a location, dont indicate this can be submitted', () => {
