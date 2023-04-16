@@ -36,18 +36,17 @@ const removeForestAt = (row: number, col: number) =>
   })
 
 const hasAForest = (landscape: Tile[][]): boolean =>
-  any(
-    any((tile: Tile) => {
+  any((landRow: Tile[]) => {
+    return any((tile: Tile): boolean => {
       return tile?.[1] === BuildingEnum.Forest
-    }),
-    landscape
-  )
+    }, landRow)
+  }, landscape)
 
 const forestLocationsForRow = (player: Tableau, rawRow: string): string[] => {
   const row = Number.parseInt(rawRow, 10)
   const rowOfTiles = player.landscape[row + player.landscapeOffset]
   return addIndex(reduce<Tile, string[]>)(
-    (accum, tile, colIndex) => {
+    (accum: string[], tile: Tile, colIndex: number) => {
       if (tile?.[1] === BuildingEnum.Forest) accum.push(`${colIndex - 2}`)
       return accum
     },

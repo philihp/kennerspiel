@@ -35,12 +35,11 @@ const removePeatAt = (row: number, col: number) =>
   })
 
 const hasAMoor = (landscape: Tile[][]): boolean =>
-  any(
-    any((tile: Tile) => {
+  any((landRow: Tile[]) => {
+    return any((tile: Tile): boolean => {
       return tile?.[1] === BuildingEnum.Peat
-    }),
-    landscape
-  )
+    }, landRow)
+  }, landscape)
 
 const moorLocationsForRow = (player: Tableau, rawRow: string): string[] => {
   const row = Number.parseInt(rawRow, 10)

@@ -1,5 +1,5 @@
 import { match, P } from 'ts-pattern'
-import { add, curry, flatten, head, join, lift, liftN, map, pipe, range, reduce, repeat } from 'ramda'
+import { add, any, curry, flatten, keys, head, join, lift, liftN, map, pipe, range, reduce, repeat } from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
 
 function* resourceSlicer(s: string): Generator<ResourceEnum> {
@@ -55,8 +55,9 @@ const stringRepeater = curry((repeated: string, count: number): string => pipe(r
 
 type Tracer = [resources: string, foodNeeded: number]
 
-const amountCostOptions = curry(
-  (outputs: string[], token: string, foodValue: number, totalCount: number, incompletes: Tracer[]): Tracer[] =>
+const amountCostOptions =
+  (outputs: string[], token: string, foodValue: number, totalCount: number) =>
+  (incompletes: Tracer[]): Tracer[] =>
     reduce(
       (accum, prevTrace) => {
         const [prevPrefix, prevFood] = prevTrace
@@ -74,7 +75,6 @@ const amountCostOptions = curry(
       [] as Tracer[],
       incompletes
     )
-)
 
 export const foodCostOptions = (food: number, player: Cost): string[] => {
   const output: string[] = []
@@ -182,6 +182,10 @@ export const settlementCost = (cost: Cost): SettlementCost => ({
 export const canAfford =
   (cost: Cost) =>
   (player: Tableau): Tableau | undefined =>
-    Object.entries(cost).every(([type, amountNeeded]) => player[type as keyof Cost] >= amountNeeded)
+    any<keyof Cost>(
+      //
+      (key) => player[key] >= (cost[key] ?? 0),
+      keys(cost)
+    )
       ? player
       : undefined

@@ -40,7 +40,7 @@
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/node16": "1.0.3",
     "@types/jest": "29.5.0",
-    "@types/ramda": "0.28.23",
+    "@types/ramda": "0.29.0",
     "@typescript-eslint/eslint-plugin": "5.58.0",
     "@typescript-eslint/parser": "5.58.0",
     "eslint": "8.38.0",
