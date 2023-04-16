@@ -302,7 +302,7 @@ describe('commands/build', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, ['SETTLE', 'SR6', '-1', ' 0'])
+      const c0 = complete(s1, ['SETTLE', 'SR6', '-1', '0'])
       // 5 food 6 energy
       expect(c0).toStrictEqual([
         // this sort is intentional, because people probably want to eat meat first
@@ -315,6 +315,53 @@ describe('commands/build', () => {
         'ShShPnCoCo',
         'ShShPnCoWoWoWo',
       ])
+    })
+
+    it('gives a termination if the command is complete', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
+              [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['P', 'LB1'], [], []],
+              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
+            ] as Tile[][],
+            landscapeOffset: 1,
+            peat: 0,
+            penny: 1,
+            clay: 0,
+            wood: 5,
+            grain: 1,
+            sheep: 5,
+            stone: 0,
+            flour: 0,
+            grape: 0,
+            nickel: 0,
+            malt: 0,
+            coal: 5,
+            book: 0,
+            ceramic: 0,
+            whiskey: 0,
+            straw: 0,
+            meat: 5,
+            ornament: 0,
+            bread: 0,
+            wine: 0,
+            beer: 0,
+            reliquary: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1, ['SETTLE', 'SR6', '-1', '0', 'MtCoCo'])
+      expect(c0).toStrictEqual([''])
+    })
+
+    it('doesnt continue anything else', () => {
+      const c0 = complete(s0, ['HELLO'])
+      expect(c0).toStrictEqual([])
     })
   })
 })
