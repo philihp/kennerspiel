@@ -55,8 +55,9 @@ const stringRepeater = curry((repeated: string, count: number): string => pipe(r
 
 type Tracer = [resources: string, foodNeeded: number]
 
-const amountCostOptions = curry(
-  (outputs: string[], token: string, foodValue: number, totalCount: number, incompletes: Tracer[]): Tracer[] =>
+const amountCostOptions =
+  (outputs: string[], token: string, foodValue: number, totalCount: number) =>
+  (incompletes: Tracer[]): Tracer[] =>
     reduce(
       (accum, prevTrace) => {
         const [prevPrefix, prevFood] = prevTrace
@@ -74,7 +75,6 @@ const amountCostOptions = curry(
       [] as Tracer[],
       incompletes
     )
-)
 
 export const foodCostOptions = (food: number, player: Cost): string[] => {
   const output: string[] = []
