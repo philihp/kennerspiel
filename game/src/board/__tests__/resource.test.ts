@@ -1,4 +1,14 @@
-import { costEnergy, differentGoods, maskGoods, multiplyGoods, parseResourceParam, totalGoods } from '../resource'
+import { Cost } from '../../types'
+import {
+  costEnergy,
+  differentGoods,
+  foodCostOptions,
+  maskGoods,
+  multiplyGoods,
+  parseResourceParam,
+  settlementCostOptions,
+  totalGoods,
+} from '../resource'
 
 describe('board/resource', () => {
   describe('parseResourceParam', () => {
@@ -42,6 +52,59 @@ describe('board/resource', () => {
     it('handles an empty string', () => {
       const res = ''
       expect(parseResourceParam(res)).toMatchObject({})
+    })
+  })
+
+  describe('foodCostOptions', () => {
+    it('when sheep and grain, gives exact without overpay on sheep', () => {
+      const options = foodCostOptions(2, { sheep: 1, grain: 1, grape: 1 })
+      expect(options).toStrictEqual(['Sh', 'GnGp'])
+      // notably it does not try GnSh or GpSh
+    })
+    it('will possibly pay 1 sheep for 1 food', () => {
+      const options = foodCostOptions(1, { sheep: 1, grain: 1, grape: 1 })
+      // overpays are allowed, if it must happen
+      expect(options).toStrictEqual(['Sh', 'Gn', 'Gp'])
+    })
+    it('would pay two sheep for 3 food, or combine with others', () => {
+      const options = foodCostOptions(3, { sheep: 2, grain: 1, grape: 1 })
+      // overpays are allowed, if it must happen
+      expect(options).toStrictEqual(['ShSh', 'ShGn', 'ShGp'])
+    })
+    it('possibilities for 3 food, infinite grape', () => {
+      const options = foodCostOptions(3, { sheep: 2, grain: 1, grape: 3 })
+      expect(options).toStrictEqual(['ShSh', 'ShGn', 'GpGpGp', 'GnGpGp', 'ShGp'])
+    })
+    it('possibilities for 3 food with only pennies', () => {
+      const options = foodCostOptions(3, { penny: 4 })
+      expect(options).toStrictEqual(['PnPnPn'])
+    })
+    it('lots of stuff for lots of food', () => {
+      const options = foodCostOptions(10, { meat: 3, sheep: 2, grain: 4, penny: 2 })
+      expect(options).toStrictEqual([
+        'MtMt',
+        'MtShGnGnGn',
+        'MtShShGn',
+        'ShShGnGnGnGnPnPn',
+        'MtGnGnGnPnPn',
+        'MtGnGnGnGnPn',
+        'MtShGnPnPn',
+        'MtShGnGnPn',
+        'MtShShPn',
+      ])
+    })
+  })
+
+  describe('settlementCostOptions', () => {
+    it('mutates', () => {
+      const options = settlementCostOptions({ food: 2, energy: 1 }, {
+        peat: 1,
+        wood: 1,
+        sheep: 2,
+        grain: 1,
+        penny: 1,
+      } as Cost)
+      expect(options).toStrictEqual(['ShPt', 'ShWo', 'GnPnPt', 'GnPnWo'])
     })
   })
 

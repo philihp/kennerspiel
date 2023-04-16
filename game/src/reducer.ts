@@ -84,9 +84,9 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
     )
     .with([GameCommandEnum.SETTLE, P.array(P.string)], ([_, [settlement, col, row, resources]]) =>
       settle({
-        row: Number.parseInt(row, 10),
-        col: Number.parseInt(col, 10),
         settlement: settlement as SettlementEnum,
+        col: Number.parseInt(col, 10),
+        row: Number.parseInt(row, 10),
         resources,
       })(state as GameStatePlaying)
     )
