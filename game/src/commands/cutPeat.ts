@@ -41,30 +41,30 @@ const hasAMoor = (landscape: Tile[][]): boolean =>
     }, landRow)
   }, landscape)
 
-const moorLocationsForRow = (player: Tableau, rawRow: string): string[] => {
-  const row = Number.parseInt(rawRow, 10)
-  const rowOfTiles = player.landscape[row + player.landscapeOffset]
-  return addIndex(reduce<Tile, string[]>)(
-    (accum, tile, colIndex) => {
-      if (tile?.[1] === BuildingEnum.Peat) accum.push(`${colIndex - 2}`)
+const moorLocationsForCol = (rawCol: string, player: Tableau): string[] => {
+  const col = Number.parseInt(rawCol, 10) + 2
+  const colsAtRow = map((row: Tile[]) => row[col], player.landscape)
+  return addIndex<Tile, string[]>(reduce<Tile, string[]>)(
+    (accum: string[], tile: Tile, rowIndex: number) => {
+      if (tile[1] === BuildingEnum.Peat) accum.push(`${rowIndex - player.landscapeOffset}`)
       return accum
     },
     [] as string[],
-    rowOfTiles
+    colsAtRow
   )
 }
 
 const moorLocations = (player: Tableau): string[] =>
   addIndex(reduce<Tile[], string[]>)(
-    (accum, _, rowIndex) => {
-      accum.push(
-        ...map(
-          (colIndex) => `${rowIndex - player.landscapeOffset} ${colIndex}`,
-          moorLocationsForRow(player, `${rowIndex - player.landscapeOffset}`)
-        )
-      )
-      return accum
-    },
+    (accum: string[], row: Tile[], rowIndex: number) =>
+      addIndex(reduce<Tile, string[]>)(
+        (innerAccum: string[], tile: Tile, colIndex: number) => {
+          if (tile[1] === BuildingEnum.Peat) innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
+          return innerAccum
+        },
+        accum,
+        row
+      ),
     [] as string[],
     player.landscape
   )
@@ -98,12 +98,12 @@ export const complete = curry((state: GameStatePlaying, partial: string[]): stri
       })
       .with([GameCommandEnum.CUT_PEAT], () => moorLocations(player))
       // shouldnt actually ever see this, but i think its important for completeness
-      .with([GameCommandEnum.CUT_PEAT, P._], (_, [, r]) => moorLocationsForRow(player, r))
-      .with([GameCommandEnum.CUT_PEAT, P._, P._], (_, [, r, c]) => {
-        const row = Number.parseInt(r, 10)
-        const col = Number.parseInt(c, 10) - 2
-        const tile = player.landscape[row + player.landscapeOffset][col + 2]
-        if (tile?.[1] === BuildingEnum.Forest) return ['']
+      .with([GameCommandEnum.CUT_PEAT, P._], (_, [, c]) => moorLocationsForCol(c, player))
+      .with([GameCommandEnum.CUT_PEAT, P._, P._], (_, [, c, r]) => {
+        const row = Number.parseInt(r, 10) + player.landscapeOffset
+        const col = Number.parseInt(c, 10) + 2
+        const tile = player.landscape?.[row]?.[col]
+        if (tile?.[1] === BuildingEnum.Peat) return ['']
         return []
       })
       .otherwise(always([]))

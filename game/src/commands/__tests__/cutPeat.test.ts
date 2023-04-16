@@ -181,14 +181,14 @@ describe('commands/cutPeat', () => {
     })
     it('if partial in CUT_PEAT, returns a list of locations', () => {
       const c0 = complete(s0, [GameCommandEnum.CUT_PEAT])
-      expect(c0).toStrictEqual(['0 0', '1 0', '1 2'])
+      expect(c0).toStrictEqual(['0 0', '0 1', '2 1'])
     })
     it('if partial in CUT_PEAT has row, give cols for that row', () => {
       const c0 = complete(s0, [GameCommandEnum.CUT_PEAT, '0'])
-      expect(c0).toStrictEqual(['0'])
+      expect(c0).toStrictEqual(['0', '1'])
     })
     it('if CUT_PEAT at a location, give empty string response', () => {
-      const c0 = complete(s0, [GameCommandEnum.CUT_PEAT, '0', '4'])
+      const c0 = complete(s0, [GameCommandEnum.CUT_PEAT, '0', '1'])
       expect(c0).toStrictEqual([''])
     })
     it('if CUT_PEAT not at a location, dont indicate this can be submitted', () => {
