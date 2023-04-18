@@ -2,6 +2,8 @@ import { always } from 'ramda'
 import { BuildingEnum, GameStatePlaying } from '../types'
 import { complete as completeClayMound } from './clayMound'
 import { complete as completeFarmyard } from './farmyard'
+import { complete as completeCloisterOffice } from './cloisterOffice'
+import { complete as completePriory } from './priory'
 
 export { alehouse } from './alehouse'
 export { bakery } from './bakery'
@@ -85,11 +87,11 @@ export const complete: Record<BuildingEnum, (partial: string[]) => (state: GameS
   [BuildingEnum.FarmYardG]: completeFarmyard,
   [BuildingEnum.FarmYardB]: completeFarmyard,
   [BuildingEnum.FarmYardW]: completeFarmyard,
-  [BuildingEnum.CloisterOfficeR]: always(always([])),
-  [BuildingEnum.CloisterOfficeG]: always(always([])),
-  [BuildingEnum.CloisterOfficeB]: always(always([])),
-  [BuildingEnum.CloisterOfficeW]: always(always([])),
-  [BuildingEnum.Priory]: always(always([])),
+  [BuildingEnum.CloisterOfficeR]: completeCloisterOffice,
+  [BuildingEnum.CloisterOfficeG]: completeCloisterOffice,
+  [BuildingEnum.CloisterOfficeB]: completeCloisterOffice,
+  [BuildingEnum.CloisterOfficeW]: completeCloisterOffice,
+  [BuildingEnum.Priory]: completePriory,
   [BuildingEnum.CloisterCourtyard]: always(always([])),
   [BuildingEnum.GrainStorage]: always(always([])),
   [BuildingEnum.Granary]: always(always([])),

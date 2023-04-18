@@ -1,7 +1,9 @@
+import { always, curry } from 'ramda'
+import { match } from 'ts-pattern'
 import { setFrameToAllowFreeUsage } from '../board/frame'
 import { findClergy } from '../board/landscape'
 import { priors } from '../board/player'
-import { BuildingEnum, StateReducer } from '../types'
+import { BuildingEnum, GameStatePlaying, StateReducer } from '../types'
 
 export const priory = (): StateReducer => (state) => {
   if (state === undefined) return undefined
@@ -11,3 +13,9 @@ export const priory = (): StateReducer => (state) => {
   const usableBuildings = clergyBuildings.filter((b) => b !== BuildingEnum.Priory) as BuildingEnum[]
   return setFrameToAllowFreeUsage(usableBuildings)(state)
 }
+
+export const complete = curry((partial: string[], _state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always(['']))
+    .otherwise(always([]))
+)
