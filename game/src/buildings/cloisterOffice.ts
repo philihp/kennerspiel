@@ -1,7 +1,8 @@
-import { pipe } from 'ramda'
+import { always, curry, pipe } from 'ramda'
+import { match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
 import { updateRondel, withRondel, take } from '../board/rondel'
-import { ResourceEnum, StateReducer } from '../types'
+import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
 
 const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('coin'))
 
@@ -25,3 +26,10 @@ export const cloisterOffice = (param = '') => {
     withRondel(updateToken(withJoker))
   )
 }
+
+export const complete = curry((partial: string[], _state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], () => ['', 'Jo'])
+    .with(['Jo'], () => [''])
+    .otherwise(always([]))
+)
