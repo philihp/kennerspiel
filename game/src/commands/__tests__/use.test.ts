@@ -81,8 +81,15 @@ import {
   windmill,
   winery,
 } from '../../buildings'
+import { complete as clayMoundComplete } from '../../buildings/clayMound'
 
 import { complete, use } from '../use'
+
+jest.mock('../../buildings/clayMound', () => {
+  return {
+    complete: jest.fn().mockReturnValue(() => ['foo']),
+  }
+})
 
 jest.mock('../../buildings', () => {
   return {
@@ -625,9 +632,113 @@ describe('commands/use', () => {
   })
 
   describe('complete', () => {
-    it('stub', () => {
+    it('allows USE when main action available', () => {
       const c0 = complete(s0, [])
       expect(c0).toStrictEqual(['USE'])
+    })
+    it('does not allow use main action already used', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+
+    it('does not allow use when main action free but no clergy', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: false,
+          nextUse: NextUseClergy.Any,
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+
+    it('allows when main action unavailable, but next use is free, maybe from being constructed', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          nextUse: NextUseClergy.OnlyPrior,
+          usableBuildings: [BuildingEnum.Priory],
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['USE'])
+    })
+
+    it('allows when main action unavailable, prior use but no prior', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [Clergy.LayBrother1R, Clergy.LayBrother2R],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          nextUse: NextUseClergy.OnlyPrior,
+          usableBuildings: [BuildingEnum.Priory],
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+
+    it('allows when main action unavailable, but usage is allowed maybe from Priory, but no clergy', () => {
+      const s1 = {
+        ...s0,
+        players: s0.players.map((p) => ({
+          ...p,
+          clergy: [],
+        })),
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          nextUse: NextUseClergy.Free,
+          usableBuildings: [BuildingEnum.GrainStorage, BuildingEnum.BuildersMarket],
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['USE'])
+    })
+
+    it('gives a list of buildings that are free', () => {
+      const c0 = complete(s0, ['USE'])
+      expect(c0).toStrictEqual(['LR1', 'LR2', 'LR3'])
+    })
+
+    it('calls the buildingComplete with all the params', () => {
+      const c0 = complete(s0, ['USE', 'LR1', 'Jo'])
+      expect(clayMoundComplete).toHaveBeenCalledWith(['Jo'])
+    })
+
+    it('gives back [] if weird building being used', () => {
+      const c0 = complete(s0, ['USE', 'PRIR'])
+      expect(c0).toStrictEqual([])
+    })
+
+    it('gives back [] if weird command, how did we get here?', () => {
+      const c0 = complete(s0, ['YUZU'])
+      expect(c0).toStrictEqual([])
     })
   })
 })
