@@ -1,4 +1,5 @@
-import { curry, pipe } from 'ramda'
+import { always, curry, pipe } from 'ramda'
+import { match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
 import { updateRondel, withRondel, take } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
@@ -25,6 +26,10 @@ export const clayMound = (param = ''): StateReducer => {
     withRondel(updateToken(withJoker))
   )
 }
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  return ['', 'Jo']
-})
+
+export const complete = curry((partial: string[], _state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], () => ['', 'Jo'])
+    .with(['Jo'], () => [''])
+    .otherwise(always([]))
+)
