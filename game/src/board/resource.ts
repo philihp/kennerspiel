@@ -91,7 +91,9 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
   return cost
 }
 
-const stringRepeater = curry((repeated: string, count: number): string => pipe(repeat(repeated), join(''))(count))
+export const stringRepeater = curry((repeated: string, count: number): string =>
+  pipe(repeat(repeated), join(''))(count)
+)
 
 type Tracer = [resources: string, foodNeeded: number]
 
