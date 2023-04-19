@@ -116,7 +116,7 @@ describe('buildings/cloisterCourtyard', () => {
         ],
       }
       const c0 = complete([])(s1)
-      expect(c0).toStrictEqual([])
+      expect(c0).toStrictEqual([''])
     })
     it('shows all options of 3 unique goods', () => {
       const s1 = {
