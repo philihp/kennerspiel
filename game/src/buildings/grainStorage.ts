@@ -1,6 +1,8 @@
-import { identity, pipe } from 'ramda'
-import { getCost, payCost, withActivePlayer } from '../board/player'
+import { always, curry, identity, pipe, view } from 'ramda'
+import { P, match } from 'ts-pattern'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
+import { GameStatePlaying } from '../types'
 
 export const grainStorage = (param = '') => {
   const input = parseResourceParam(param)
@@ -13,3 +15,10 @@ export const grainStorage = (param = '') => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], () => (view(activeLens(state), state).penny ? ['Pn', ''] : ['']))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)
