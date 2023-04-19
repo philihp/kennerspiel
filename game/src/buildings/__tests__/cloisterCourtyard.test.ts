@@ -152,6 +152,7 @@ describe('buildings/cloisterCourtyard', () => {
       }
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([
+        '',
         'PtPnGn',
         'PtPnCo',
         'PtPnCe',

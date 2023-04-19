@@ -33,17 +33,20 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
   match<string[], string[]>(partial)
     .with([], () => {
       const player = view(activeLens(state), state)
-      return combinations(
-        3,
-        reduce(
-          (accum, [key, token]) => {
-            if (player[key]) accum.push(token)
-            return accum
-          },
-          [] as string[],
-          allResource
-        )
-      )
+      return [
+        '',
+        ...combinations(
+          3,
+          reduce(
+            (accum, [key, token]) => {
+              if (player[key]) accum.push(token)
+              return accum
+            },
+            [] as string[],
+            allResource
+          )
+        ),
+      ]
     })
     .with([P._], () => {
       // return 1 of every basic good, as output
