@@ -117,11 +117,11 @@ describe('buildings/malthouse', () => {
   })
 
   describe('complete', () => {
-    it('allows for sending penny or nothing, if player has a penny', () => {
+    it('allows for sending grain or nothing, if player has a grain', () => {
       const c0 = complete([])(s0)
       expect(c0).toStrictEqual(['Gn', ''])
     })
-    it('still allows noop if player has no penny', () => {
+    it('still allows noop if player has no grain', () => {
       const s1 = {
         ...s0,
         players: [
