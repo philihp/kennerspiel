@@ -1,6 +1,46 @@
-import { match, P } from 'ts-pattern'
-import { add, any, curry, flatten, keys, head, join, lift, liftN, map, pipe, range, reduce, repeat } from 'ramda'
+import { match } from 'ts-pattern'
+import { any, curry, keys, join, lift, map, pipe, range, reduce, repeat, addIndex } from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
+
+export const allResource: [key: keyof Cost, token: string][] = [
+  ['peat', ResourceEnum.Peat],
+  ['penny', ResourceEnum.Penny],
+  ['grain', ResourceEnum.Grain],
+  ['clay', ResourceEnum.Clay],
+  ['wood', ResourceEnum.Wood],
+  ['sheep', ResourceEnum.Sheep],
+  ['stone', ResourceEnum.Stone],
+  ['flour', ResourceEnum.Flour],
+  ['grape', ResourceEnum.Grape],
+  ['nickel', ResourceEnum.Nickel],
+  ['malt', ResourceEnum.Malt],
+  ['coal', ResourceEnum.Coal],
+  ['book', ResourceEnum.Book],
+  ['ceramic', ResourceEnum.Ceramic],
+  ['whiskey', ResourceEnum.Whiskey],
+  ['straw', ResourceEnum.Straw],
+  ['meat', ResourceEnum.Meat],
+  ['ornament', ResourceEnum.Ornament],
+  ['bread', ResourceEnum.Bread],
+  ['wine', ResourceEnum.Wine],
+  ['beer', ResourceEnum.Beer],
+  ['reliquary', ResourceEnum.Reliquary],
+]
+
+export const combinations = (maxLength: number, tokens: string[], prefix = [] as string[]): string[] => {
+  if (prefix.length >= maxLength) {
+    if (prefix.length === 0) return []
+    return [join('', prefix)]
+  }
+  return addIndex(reduce<string, string[]>)(
+    (accum: string[], item: string, ndx: number): string[] => {
+      accum.push(...combinations(maxLength, tokens.slice(ndx + 1), [...prefix, item]))
+      return accum
+    },
+    [] as string[],
+    tokens
+  )
+}
 
 function* resourceSlicer(s: string): Generator<ResourceEnum> {
   for (let i = 0; i + 1 < s.length; i += 2) {

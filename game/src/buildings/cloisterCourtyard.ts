@@ -1,7 +1,16 @@
-import { pipe } from 'ramda'
-import { getCost, payCost, withActivePlayer } from '../board/player'
-import { parseResourceParam, totalGoods, differentGoods, multiplyGoods, maskGoods } from '../board/resource'
-import { Cost } from '../types'
+import { addIndex, always, curry, filter, join, keys, map, pipe, reduce, view } from 'ramda'
+import { P, match } from 'ts-pattern'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
+import {
+  parseResourceParam,
+  totalGoods,
+  differentGoods,
+  multiplyGoods,
+  maskGoods,
+  allResource,
+  combinations,
+} from '../board/resource'
+import { Cost, GameStatePlaying, ResourceEnum } from '../types'
 
 const ALLOWED_OUTPUT: (keyof Cost)[] = ['peat', 'clay', 'wood', 'sheep', 'grain', 'penny']
 
@@ -19,3 +28,34 @@ export const cloisterCourtyard = (input = '', output = '') => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match<string[], string[]>(partial)
+    .with([], () => {
+      const player = view(activeLens(state), state)
+      return combinations(
+        3,
+        reduce(
+          (accum, [key, token]) => {
+            if (player[key]) accum.push(token)
+            return accum
+          },
+          [] as string[],
+          allResource
+        )
+      )
+    })
+    .with([P._], () => {
+      // return 1 of every basic good, as output
+      return [
+        ResourceEnum.Peat,
+        ResourceEnum.Sheep,
+        ResourceEnum.Wood,
+        ResourceEnum.Clay,
+        ResourceEnum.Penny,
+        ResourceEnum.Grain,
+      ]
+    })
+    .with([P._, P._], always(['']))
+    .otherwise(always([]))
+)
