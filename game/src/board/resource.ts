@@ -118,7 +118,7 @@ const amountCostOptions =
       incompletes
     )
 
-export const foodCostOptions = (food: number, player: Cost): string[] => {
+export const foodCostOptions = curry((food: number, player: Cost): string[] => {
   const output: string[] = []
   pipe(
     // first try eating the big stuff, which is most likely food
@@ -139,9 +139,9 @@ export const foodCostOptions = (food: number, player: Cost): string[] => {
     amountCostOptions(output, 'Wh', 1, player.whiskey ?? 0)
   )([['', food]])
   return output
-}
+})
 
-export const energyCostOptions = (energy: number, player: Cost): string[] => {
+export const energyCostOptions = curry((energy: number, player: Cost): string[] => {
   const output: string[] = []
   pipe(
     // first try eating the big stuff, which is most likely energy
@@ -151,7 +151,7 @@ export const energyCostOptions = (energy: number, player: Cost): string[] => {
     amountCostOptions(output, 'St', 0.5, player.straw ?? 0)
   )([['', energy]])
   return output
-}
+})
 
 export const settlementCostOptions = curry(({ food, energy }: SettlementCost, player: Cost): string[] =>
   lift((foodPayment, energyPayment) => `${foodPayment}${energyPayment}`)(
