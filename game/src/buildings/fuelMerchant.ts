@@ -1,7 +1,8 @@
-import { pipe } from 'ramda'
-import { payCost, withActivePlayer } from '../board/player'
-import { canAfford, costEnergy, parseResourceParam } from '../board/resource'
-import { Cost, Tableau } from '../types'
+import { always, append, curry, flip, map, pipe, reverse, unnest, view } from 'ramda'
+import { P, match } from 'ts-pattern'
+import { activeLens, payCost, withActivePlayer } from '../board/player'
+import { canAfford, costEnergy, energyCostOptions, parseResourceParam } from '../board/resource'
+import { Cost, GameStatePlaying, Tableau } from '../types'
 
 const addProceeds = (fuel: Cost) => {
   const energy = costEnergy(fuel)
@@ -41,3 +42,19 @@ export const fuelMerchant = (param = '') => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], () => {
+      return unnest(
+        map(
+          // TODO: id like to flip energyCostOptions and then curry out the n, but it doesnt seem to work...
+          (n) => energyCostOptions(n, view(activeLens(state), state)),
+          // flip<number, Cost, string>(energyCostOptions)(view(activeLens(state), state)),
+          [9, 6, 3, 0]
+        )
+      )
+    })
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)
