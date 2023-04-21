@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { castle } from '..'
+import { castle, complete } from '../castle'
 
 describe('buildings/castle', () => {
   const p0: Tableau = {
@@ -86,6 +86,17 @@ describe('buildings/castle', () => {
     it('adds a settlement bonus action', () => {
       const s1 = castle()(s0)!
       expect(s1.frame.bonusActions).toContain('SETTLE')
+    })
+  })
+
+  describe('complete', () => {
+    it('takes no parameters', () => {
+      const c0 = complete([])(s0)
+      expect(c0).toStrictEqual([''])
+    })
+    it('does not complete anything with a param', () => {
+      const c0 = complete([''])(s0)
+      expect(c0).toStrictEqual([])
     })
   })
 })
