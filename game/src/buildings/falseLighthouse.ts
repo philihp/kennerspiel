@@ -1,7 +1,8 @@
-import { xor } from 'ramda'
+import { always, curry, xor } from 'ramda'
+import { match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
-import { StateReducer } from '../types'
+import { GameStatePlaying, StateReducer } from '../types'
 
 export const falseLighthouse = (param = ''): StateReducer => {
   const { whiskey = 0, beer = 0 } = parseResourceParam(param)
@@ -14,3 +15,9 @@ export const falseLighthouse = (param = ''): StateReducer => {
     })
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always(['']))
+    .otherwise(always([]))
+)

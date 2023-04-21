@@ -1,18 +1,52 @@
-import { pipe } from 'ramda'
-import { getCost, payCost, withActivePlayer } from '../board/player'
-import { canAfford, costEnergy, parseResourceParam } from '../board/resource'
+import { always, concat, curry, equals, filter, lift, map, not, pipe, range, view } from 'ramda'
+import { P, match } from 'ts-pattern'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
+import { parseResourceParam, stringRepeater } from '../board/resource'
+import { GameStatePlaying } from '../types'
 
 export const brewery = (param = '') => {
-  const { malt = 0, wood = 0, coal = 0, straw = 0, peat = 0, beer = 0 } = parseResourceParam(param)
-  if (malt > costEnergy({ wood, coal, straw, peat }) / 0.5) return () => undefined
+  const { malt = 0, grain = 0, beer = 0 } = parseResourceParam(param)
+  const brewIterations = Math.min(malt, grain)
+  const sellIterations = Math.min(beer, 1)
   return withActivePlayer(
     pipe(
       //
-      canAfford({ malt, wood, coal, straw, peat, beer: beer - malt }),
-      payCost({ malt, wood, coal, straw, peat }),
-      getCost({ beer: malt }),
-      payCost({ beer }),
-      getCost({ penny: (Math.min(beer, 2) * 4) % 5, nickel: Math.floor((Math.min(beer, 2) * 4) / 5) })
+      payCost({ malt, grain }),
+      getCost({ beer: brewIterations }),
+      payCost({ beer: sellIterations }),
+      getCost({ penny: 2 * sellIterations, nickel: sellIterations })
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], () => {
+      const { malt = 0, grain = 0, beer = 0 } = view(activeLens(state), state)
+
+      // step 1: figure out the maximum number of iterations
+      const maxBrewIterations = Math.min(malt, grain)
+      const maxSellIterations = Math.min(Math.max(beer, maxBrewIterations), 1)
+
+      // step 2: for each iteration, repeat the inputs
+      const brewOptions: string[] = map(
+        (n) => `${stringRepeater('Gn', n)}${stringRepeater('Ma', n)}`,
+        range(0, 1 + maxBrewIterations)
+      )
+      const sellOptions: string[] = map((n) => stringRepeater('Be')(n), range(0, 1 + maxSellIterations))
+
+      const removeBeer: (s: string) => boolean = (s) => {
+        const noBeer = not(equals(beer, 0))
+        const onlySell = not(equals(s, 'Be'))
+        const res = noBeer || onlySell
+        return res
+      }
+      const concatStr = (a: string, b: string) => concat(a, b)
+
+      // step 3: then cartesian join them together, but also remove the entry for 1 beer without brewing
+      // if the playerhas no beer available to sell
+      return filter(removeBeer, lift(concatStr)(brewOptions, sellOptions))
+    })
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)

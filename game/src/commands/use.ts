@@ -1,4 +1,4 @@
-import { always, curry, pipe, reduce } from 'ramda'
+import { all, always, any, curry, identity, includes, map, pipe, reduce, values, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
 import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
@@ -74,9 +74,10 @@ import {
   complete as completeBuilding,
 } from '../buildings'
 import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { activeLens, isPrior } from '../board/player'
 
 const checkIfUseCanHappen =
-  (building: BuildingEnum): StateReducer =>
+  (building?: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
 
@@ -87,8 +88,9 @@ const checkIfUseCanHappen =
     // but if mainActionUsed and bonusAction don't allow, still it is possible to use if
     // usableBuildings allows AND the building in question isn't in unusableBuildings
     if (
-      state.frame.usableBuildings.includes(building) === true &&
-      state.frame.unusableBuildings.includes(building) === false &&
+      (!building ||
+        (state.frame.usableBuildings.includes(building) === true &&
+          state.frame.unusableBuildings.includes(building) === false)) &&
       [NextUseClergy.Free, NextUseClergy.OnlyPrior].includes(state.frame.nextUse)
     ) {
       return state
@@ -209,9 +211,15 @@ export const complete = curry((state: GameStatePlaying, partial: string[]): stri
   const player = state.players[state.frame.activePlayerIndex]
   return match<string[], string[]>(partial)
     .with([], () => {
-      // the only way there won't be a usable building is if
-      // the player has no available clergy
-      if (player.clergy.length === 0) return []
+      if (checkIfUseCanHappen()(state) === undefined) return []
+      const hasClergyAvailable = view(activeLens(state), state).clergy?.length > 0
+      const hasPriorAvailable = any(identity, map(isPrior, view(activeLens(state), state).clergy))
+      if (
+        state.frame.bonusRoundPlacement === false &&
+        ((state.frame.nextUse === NextUseClergy.Any && !hasClergyAvailable) ||
+          (state.frame.nextUse === NextUseClergy.OnlyPrior && !hasPriorAvailable))
+      )
+        return []
       return [GameCommandEnum.USE]
     })
     .with([GameCommandEnum.USE], () =>
@@ -236,21 +244,10 @@ export const complete = curry((state: GameStatePlaying, partial: string[]): stri
       )
     )
     .with(
-      [GameCommandEnum.USE, P._],
-      [GameCommandEnum.USE, P._, P._],
-      [GameCommandEnum.USE, P._, P._, P._],
-      ([, building, param1, param2]) =>
-        match(building)
-          .with(
-            BuildingEnum.ClayMoundR,
-            BuildingEnum.ClayMoundG,
-            BuildingEnum.ClayMoundB,
-            BuildingEnum.ClayMoundW,
-            (building) => {
-              return completeBuilding[building](state)(partial)
-            }
-          )
-          .otherwise(always([]))
+      P.when(([command, building]) => command === GameCommandEnum.USE && includes(building, values(BuildingEnum))),
+      ([, building, ...params]) => completeBuilding[building as BuildingEnum](params)(state)
     )
-    .otherwise(always([]))
+    .otherwise(() => {
+      return []
+    })
 })

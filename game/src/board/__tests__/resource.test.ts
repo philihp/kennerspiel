@@ -1,5 +1,6 @@
 import { Cost } from '../../types'
 import {
+  combinations,
   costEnergy,
   differentGoods,
   foodCostOptions,
@@ -11,6 +12,25 @@ import {
 } from '../resource'
 
 describe('board/resource', () => {
+  describe('combinations', () => {
+    it('gives all combinations of two', () => {
+      const c = combinations(2, ['a', 'b', 'c', 'd'])
+      expect(c).toStrictEqual(['ab', 'ac', 'ad', 'bc', 'bd', 'cd'])
+    })
+    it('works on an empty array', () => {
+      const c = combinations(3, [])
+      expect(c).toStrictEqual([])
+    })
+    it('max length 1 returns same thing', () => {
+      const c = combinations(1, ['a', 'b', 'c', 'd'])
+      expect(c).toStrictEqual(['a', 'b', 'c', 'd'])
+    })
+    it('max length 0 returns empty', () => {
+      const c = combinations(0, ['a', 'b', 'c', 'd'])
+      expect(c).toStrictEqual([])
+    })
+  })
+
   describe('parseResourceParam', () => {
     it('parses a string of only one thing', () => {
       const res = 'Cl'

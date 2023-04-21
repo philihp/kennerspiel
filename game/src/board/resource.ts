@@ -1,6 +1,46 @@
-import { match, P } from 'ts-pattern'
-import { add, any, curry, flatten, keys, head, join, lift, liftN, map, pipe, range, reduce, repeat } from 'ramda'
+import { match } from 'ts-pattern'
+import { any, curry, keys, join, lift, map, pipe, range, reduce, repeat, addIndex } from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
+
+export const allResource: [key: keyof Cost, token: string][] = [
+  ['peat', ResourceEnum.Peat],
+  ['penny', ResourceEnum.Penny],
+  ['grain', ResourceEnum.Grain],
+  ['clay', ResourceEnum.Clay],
+  ['wood', ResourceEnum.Wood],
+  ['sheep', ResourceEnum.Sheep],
+  ['stone', ResourceEnum.Stone],
+  ['flour', ResourceEnum.Flour],
+  ['grape', ResourceEnum.Grape],
+  ['nickel', ResourceEnum.Nickel],
+  ['malt', ResourceEnum.Malt],
+  ['coal', ResourceEnum.Coal],
+  ['book', ResourceEnum.Book],
+  ['ceramic', ResourceEnum.Ceramic],
+  ['whiskey', ResourceEnum.Whiskey],
+  ['straw', ResourceEnum.Straw],
+  ['meat', ResourceEnum.Meat],
+  ['ornament', ResourceEnum.Ornament],
+  ['bread', ResourceEnum.Bread],
+  ['wine', ResourceEnum.Wine],
+  ['beer', ResourceEnum.Beer],
+  ['reliquary', ResourceEnum.Reliquary],
+]
+
+export const combinations = (maxLength: number, tokens: string[], prefix = [] as string[]): string[] => {
+  if (prefix.length >= maxLength) {
+    if (prefix.length === 0) return []
+    return [join('', prefix)]
+  }
+  return addIndex(reduce<string, string[]>)(
+    (accum: string[], item: string, ndx: number): string[] => {
+      accum.push(...combinations(maxLength, tokens.slice(ndx + 1), [...prefix, item]))
+      return accum
+    },
+    [] as string[],
+    tokens
+  )
+}
 
 function* resourceSlicer(s: string): Generator<ResourceEnum> {
   for (let i = 0; i + 1 < s.length; i += 2) {
@@ -51,7 +91,9 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
   return cost
 }
 
-const stringRepeater = curry((repeated: string, count: number): string => pipe(repeat(repeated), join(''))(count))
+export const stringRepeater = curry((repeated: string, count: number): string =>
+  pipe(repeat(repeated), join(''))(count)
+)
 
 type Tracer = [resources: string, foodNeeded: number]
 
@@ -76,7 +118,7 @@ const amountCostOptions =
       incompletes
     )
 
-export const foodCostOptions = (food: number, player: Cost): string[] => {
+export const foodCostOptions = curry((food: number, player: Cost): string[] => {
   const output: string[] = []
   pipe(
     // first try eating the big stuff, which is most likely food
@@ -97,9 +139,9 @@ export const foodCostOptions = (food: number, player: Cost): string[] => {
     amountCostOptions(output, 'Wh', 1, player.whiskey ?? 0)
   )([['', food]])
   return output
-}
+})
 
-export const energyCostOptions = (energy: number, player: Cost): string[] => {
+export const energyCostOptions = curry((energy: number, player: Cost): string[] => {
   const output: string[] = []
   pipe(
     // first try eating the big stuff, which is most likely energy
@@ -109,7 +151,7 @@ export const energyCostOptions = (energy: number, player: Cost): string[] => {
     amountCostOptions(output, 'St', 0.5, player.straw ?? 0)
   )([['', energy]])
   return output
-}
+})
 
 export const settlementCostOptions = curry(({ food, energy }: SettlementCost, player: Cost): string[] =>
   lift((foodPayment, energyPayment) => `${foodPayment}${energyPayment}`)(

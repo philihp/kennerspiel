@@ -8,77 +8,77 @@ import {
   Tile,
 } from '../../types'
 import { initialState } from '../../state'
-import { bakery } from '..'
+import { bakery, complete } from '../bakery'
 
 describe('buildings/bakery', () => {
-  describe('bakery', () => {
-    const p0: Tableau = {
-      color: PlayerColor.Blue,
-      clergy: [],
-      settlements: [],
-      landscape: [
-        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
-        [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
-      ] as Tile[][],
-      wonders: 0,
-      landscapeOffset: 0,
-      peat: 0,
-      penny: 0,
-      clay: 0,
-      wood: 0,
-      grain: 0,
-      sheep: 0,
-      stone: 0,
-      flour: 0,
-      grape: 0,
-      nickel: 0,
-      malt: 0,
-      coal: 0,
-      book: 0,
-      ceramic: 0,
-      whiskey: 0,
-      straw: 0,
-      meat: 0,
-      ornament: 0,
-      bread: 0,
-      wine: 0,
-      beer: 0,
-      reliquary: 0,
-    }
-    const s0: GameStatePlaying = {
-      ...initialState,
-      status: GameStatusEnum.PLAYING,
-      frame: {
-        next: 1,
-        round: 1,
-        startingPlayer: 1,
-        settlementRound: SettlementRound.S,
-        currentPlayerIndex: 0,
-        activePlayerIndex: 0,
-        neutralBuildingPhase: false,
-        bonusRoundPlacement: false,
-        mainActionUsed: false,
-        bonusActions: [],
-        canBuyLandscape: true,
-        unusableBuildings: [],
-        usableBuildings: [],
-        nextUse: NextUseClergy.Any,
-      },
-      config: {
-        country: 'france',
-        players: 3,
-        length: 'long',
-      },
-      rondel: {
-        pointingBefore: 0,
-      },
-      wonders: 0,
-      players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      buildings: [],
-      plotPurchasePrices: [1, 1, 1, 1, 1, 1],
-      districtPurchasePrices: [],
-    }
+  const p0: Tableau = {
+    color: PlayerColor.Blue,
+    clergy: [],
+    settlements: [],
+    landscape: [
+      [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+      [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+    ] as Tile[][],
+    wonders: 0,
+    landscapeOffset: 0,
+    peat: 0,
+    penny: 0,
+    clay: 0,
+    wood: 0,
+    grain: 0,
+    sheep: 0,
+    stone: 0,
+    flour: 0,
+    grape: 0,
+    nickel: 0,
+    malt: 0,
+    coal: 0,
+    book: 0,
+    ceramic: 0,
+    whiskey: 0,
+    straw: 0,
+    meat: 0,
+    ornament: 0,
+    bread: 0,
+    wine: 0,
+    beer: 0,
+    reliquary: 0,
+  }
+  const s0: GameStatePlaying = {
+    ...initialState,
+    status: GameStatusEnum.PLAYING,
+    frame: {
+      next: 1,
+      round: 1,
+      startingPlayer: 1,
+      settlementRound: SettlementRound.S,
+      currentPlayerIndex: 0,
+      activePlayerIndex: 0,
+      neutralBuildingPhase: false,
+      bonusRoundPlacement: false,
+      mainActionUsed: false,
+      bonusActions: [],
+      canBuyLandscape: true,
+      unusableBuildings: [],
+      usableBuildings: [],
+      nextUse: NextUseClergy.Any,
+    },
+    config: {
+      country: 'france',
+      players: 3,
+      length: 'long',
+    },
+    rondel: {
+      pointingBefore: 0,
+    },
+    wonders: 0,
+    players: [{ ...p0 }, { ...p0 }, { ...p0 }],
+    buildings: [],
+    plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+    districtPurchasePrices: [],
+  }
 
+  describe('bakery', () => {
     it('retains undefined state', () => {
       const s0: GameStatePlaying | undefined = undefined
       const s1 = bakery()(s0)
@@ -277,6 +277,105 @@ describe('buildings/bakery', () => {
       }
       const s2 = bakery('BrBr')(s1)!
       expect(s2).toBeUndefined()
+    })
+  })
+
+  describe('complete', () => {
+    it('if no bread can be made, can still use with no input', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            flour: 0,
+            wood: 1,
+            coal: 1,
+            peat: 0,
+            straw: 1,
+            bread: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual([''])
+    })
+    it('gives multiple ways of making bread with lots of flour', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            flour: 3,
+            wood: 1,
+            coal: 1,
+            peat: 0,
+            straw: 1,
+            bread: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual([
+        'FlFlFlCoBrBr',
+        'FlFlFlCoBr',
+        'FlFlFlCo',
+        'FlFlFlWoStBrBr',
+        'FlFlFlWoStBr',
+        'FlFlFlWoSt',
+        'FlFlCoBrBr',
+        'FlFlCoBr',
+        'FlFlCo',
+        'FlFlWoBrBr',
+        'FlFlWoBr',
+        'FlFlWo',
+        'FlCoBr',
+        'FlCo',
+        'FlWoBr',
+        'FlWo',
+        'FlStBr',
+        'FlSt',
+        '',
+      ])
+    })
+    it('offers only to sell 1 bread if we make only 1', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            flour: 1,
+            wood: 0,
+            coal: 0,
+            peat: 0,
+            straw: 1,
+            bread: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual(['FlStBr', 'FlSt', ''])
+    })
+    it('offers only to sell 2 bread if we make none but have 2', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            flour: 0,
+            wood: 2,
+            coal: 1,
+            peat: 0,
+            straw: 3,
+            bread: 2,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual(['BrBr', 'Br', ''])
     })
   })
 })

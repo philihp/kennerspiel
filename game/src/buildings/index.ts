@@ -1,6 +1,9 @@
 import { always } from 'ramda'
 import { BuildingEnum, GameStatePlaying } from '../types'
 import { complete as completeClayMound } from './clayMound'
+import { complete as completeFarmyard } from './farmyard'
+import { complete as completeCloisterOffice } from './cloisterOffice'
+import { complete as completePriory } from './priory'
 
 export { alehouse } from './alehouse'
 export { bakery } from './bakery'
@@ -73,22 +76,22 @@ export { winery } from './winery'
 
 // could just have an array, but this will make sure every command is covered, and
 // direct lookups are faster, and i could just directly import, too, i guess
-export const complete: Record<BuildingEnum, (state: GameStatePlaying) => (partial: string[]) => string[]> = {
+export const complete: Record<BuildingEnum, (partial: string[]) => (state: GameStatePlaying) => string[]> = {
   [BuildingEnum.Peat]: always(always([])),
   [BuildingEnum.Forest]: always(always([])),
   [BuildingEnum.ClayMoundR]: completeClayMound,
   [BuildingEnum.ClayMoundG]: completeClayMound,
   [BuildingEnum.ClayMoundB]: completeClayMound,
   [BuildingEnum.ClayMoundW]: completeClayMound,
-  [BuildingEnum.FarmYardR]: always(always([])),
-  [BuildingEnum.FarmYardG]: always(always([])),
-  [BuildingEnum.FarmYardB]: always(always([])),
-  [BuildingEnum.FarmYardW]: always(always([])),
-  [BuildingEnum.CloisterOfficeR]: always(always([])),
-  [BuildingEnum.CloisterOfficeG]: always(always([])),
-  [BuildingEnum.CloisterOfficeB]: always(always([])),
-  [BuildingEnum.CloisterOfficeW]: always(always([])),
-  [BuildingEnum.Priory]: always(always([])),
+  [BuildingEnum.FarmYardR]: completeFarmyard,
+  [BuildingEnum.FarmYardG]: completeFarmyard,
+  [BuildingEnum.FarmYardB]: completeFarmyard,
+  [BuildingEnum.FarmYardW]: completeFarmyard,
+  [BuildingEnum.CloisterOfficeR]: completeCloisterOffice,
+  [BuildingEnum.CloisterOfficeG]: completeCloisterOffice,
+  [BuildingEnum.CloisterOfficeB]: completeCloisterOffice,
+  [BuildingEnum.CloisterOfficeW]: completeCloisterOffice,
+  [BuildingEnum.Priory]: completePriory,
   [BuildingEnum.CloisterCourtyard]: always(always([])),
   [BuildingEnum.GrainStorage]: always(always([])),
   [BuildingEnum.Granary]: always(always([])),

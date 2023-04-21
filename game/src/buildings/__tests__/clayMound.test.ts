@@ -9,8 +9,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { clayMound } from '..'
-import { complete } from '../clayMound'
+import { clayMound, complete } from '../clayMound'
 
 describe('buildings/clayMound', () => {
   const p0: Tableau = {
@@ -160,9 +159,17 @@ describe('buildings/clayMound', () => {
 
   describe('complete', () => {
     it('returns empty string and Jo', () => {
-      const c0 = complete(s0, ['USE', 'LR1'])
+      const c0 = complete([])(s0)
       expect(c0).toContain('')
       expect(c0).toContain('Jo')
+    })
+    it('no params beyond Jo', () => {
+      const c0 = complete(['Jo'])(s0)
+      expect(c0).toStrictEqual([''])
+    })
+    it('returns [] on weird param', () => {
+      const c0 = complete(['Wo'])(s0)
+      expect(c0).toStrictEqual([])
     })
   })
 })

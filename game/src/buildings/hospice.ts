@@ -1,4 +1,12 @@
+import { always, curry } from 'ramda'
+import { match } from 'ts-pattern'
 import { setFrameToAllowFreeUsage } from '../board/frame'
-import { StateReducer } from '../types'
+import { GameStatePlaying, StateReducer } from '../types'
 
 export const hospice = (): StateReducer => (state) => state && setFrameToAllowFreeUsage(state.buildings)(state)
+
+export const complete = curry((partial: string[], _state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always(['']))
+    .otherwise(always([]))
+)
