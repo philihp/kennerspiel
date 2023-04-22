@@ -23,7 +23,7 @@
     "@tsconfig/vite-react": "1.0.1",
     "@types/jest": "29.5.1",
     "@types/ramda": "0.29.0",
-    "@types/react": "18.0.35",
+    "@types/react": "18.0.38",
     "@types/react-dom": "18.0.11",
     "@types/react-router-dom": "5.3.3",
     "@types/styled-components": "5.1.26",
