@@ -1,3 +1,4 @@
+import { createPcg32 } from 'fn-pcg'
 import {
   GameStatePlaying,
   GameStatusEnum,
@@ -45,7 +46,7 @@ describe('buildings/filialChurch', () => {
       reliquary: 0,
     }
     const s0: GameStatePlaying = {
-      randGen: undefined,
+      randGen: createPcg32({}, 42, 56),
       status: GameStatusEnum.PLAYING,
       frame: {
         round: 1,

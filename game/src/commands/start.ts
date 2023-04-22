@@ -1,5 +1,5 @@
 import fastShuffle from 'fast-shuffle'
-import { newRandGen, randNext } from 'fn-pcg'
+import { createPcg32, randomInt } from 'fn-pcg'
 import { pipe, range } from 'ramda'
 import { nextFrame } from '../board/frame'
 import { districtPrices, makeLandscape, plotPrices } from '../board/landscape'
@@ -27,8 +27,8 @@ export const start = (
     players: colors.length as GameConfigPlayers,
   }
 
-  const randGen0 = newRandGen(seed)
-  const [playerOrderSeed, randGen1] = randNext(randGen0)
+  const randGen0 = createPcg32({}, seed, 42069)
+  const [playerOrderSeed, randGen1] = randomInt(0, 2 ** 32 - 1, randGen0)
   const shuffledColors = fastShuffle(playerOrderSeed, colors)
 
   const playerIndexes = range(0, colors.length)

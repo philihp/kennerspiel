@@ -1,3 +1,4 @@
+import { createPcg32 } from 'fn-pcg'
 import { initialState } from '../../state'
 import {
   Clergy,
@@ -48,7 +49,7 @@ describe('buildings/locutory', () => {
     } as Tableau
     const s0: GameStatePlaying = {
       ...initialState,
-      randGen: undefined,
+      randGen: createPcg32({}, 42, 56),
       status: GameStatusEnum.PLAYING,
       frame: {
         round: 1,
