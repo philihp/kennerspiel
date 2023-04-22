@@ -1,7 +1,8 @@
-import { pipe } from 'ramda'
+import { always, curry, pipe } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { withActivePlayer } from '../board/player'
 import { take } from '../board/rondel'
-import { StateReducer, ResourceEnum } from '../types'
+import { StateReducer, ResourceEnum, GameStatePlaying } from '../types'
 
 const advanceGrapeOnRondel =
   (withJoker: boolean): StateReducer =>
@@ -40,3 +41,10 @@ export const grapevine = (param = ''): StateReducer => {
     advanceGrapeOnRondel(withJoker)
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always(['', 'Jo']))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)
