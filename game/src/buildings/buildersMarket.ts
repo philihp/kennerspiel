@@ -1,7 +1,8 @@
-import { pipe } from 'ramda'
-import { getCost, payCost, withActivePlayer } from '../board/player'
+import { always, curry, pipe, view } from 'ramda'
+import { P, match } from 'ts-pattern'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
-import { Cost, Tableau } from '../types'
+import { Cost, GameStatePlaying, Tableau } from '../types'
 
 const checkWorthTwoCoins =
   (input: Cost) =>
@@ -19,3 +20,13 @@ export const buildersMarket = (param = '') => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], () => {
+      if (costMoney(view(activeLens(state), state)) < 2) return ['']
+      return ['PnPn', '']
+    })
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)
