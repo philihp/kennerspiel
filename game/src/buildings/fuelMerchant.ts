@@ -1,44 +1,21 @@
-import { always, append, curry, flip, map, pipe, reverse, unnest, view } from 'ramda'
+import { T, __, always, cond, curry, gte, identity, map, pipe, unnest, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { activeLens, payCost, withActivePlayer } from '../board/player'
-import { canAfford, costEnergy, energyCostOptions, parseResourceParam } from '../board/resource'
-import { Cost, GameStatePlaying, Tableau } from '../types'
-
-const addProceeds = (fuel: Cost) => {
-  const energy = costEnergy(fuel)
-  return (player: Tableau | undefined): Tableau | undefined => {
-    if (player === undefined) return undefined
-    if (energy >= 9) {
-      return {
-        ...player,
-        nickel: player.nickel + 2,
-      }
-    }
-    if (energy >= 6) {
-      return {
-        ...player,
-        nickel: player.nickel + 1,
-        penny: player.penny + 3,
-      }
-    }
-    if (energy >= 3) {
-      return {
-        ...player,
-        nickel: player.nickel + 1,
-      }
-    }
-    return player
-  }
-}
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
+import { costEnergy, energyCostOptions, parseResourceParam } from '../board/resource'
+import { GameStatePlaying } from '../types'
 
 export const fuelMerchant = (param = '') => {
   const inputs = parseResourceParam(param)
   return withActivePlayer(
     pipe(
       //
-      (p) => (canAfford(inputs)(p) ? p : undefined),
       payCost(inputs),
-      addProceeds(inputs)
+      cond([
+        [gte(__, 9), always(getCost({ nickel: 2 }))],
+        [gte(__, 6), always(getCost({ nickel: 1, penny: 3 }))],
+        [gte(__, 3), always(getCost({ nickel: 1 }))],
+        [T, always(identity)],
+      ])(costEnergy(inputs))
     )
   )
 }

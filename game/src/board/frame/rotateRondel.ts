@@ -2,7 +2,6 @@ import { withRondel } from '../rondel'
 
 const pushArm = (expireAfterTen = false) =>
   withRondel((rondel) => {
-    if (rondel === undefined) return undefined
     const next = (rondel.pointingBefore + 1) % 13
     const bumper = (from?: number) => {
       if (from === next) {
