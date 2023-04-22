@@ -12,6 +12,7 @@ import {
 } from '../types'
 import { take } from '../board/rondel'
 import { oncePerFrame } from '../board/frame'
+import { forestLocations, forestLocationsForCol } from '../board/landscape'
 
 const removeForestAt = (row: number, col: number) =>
   withActivePlayer((player) => {
@@ -41,34 +42,6 @@ const hasAForest = (landscape: Tile[][]): boolean =>
       return tile?.[1] === BuildingEnum.Forest
     }, landRow)
   }, landscape)
-
-const forestLocationsForCol = (rawCol: string, player: Tableau): string[] => {
-  const col = Number.parseInt(rawCol, 10) + 2
-  const colsAtRow = map((row: Tile[]) => row[col], player.landscape)
-  return addIndex<Tile, string[]>(reduce<Tile, string[]>)(
-    (accum: string[], tile: Tile, rowIndex: number) => {
-      if (tile[1] === BuildingEnum.Forest) accum.push(`${rowIndex - player.landscapeOffset}`)
-      return accum
-    },
-    [] as string[],
-    colsAtRow
-  )
-}
-
-const forestLocations = (player: Tableau): string[] =>
-  addIndex(reduce<Tile[], string[]>)(
-    (accum: string[], row: Tile[], rowIndex: number) =>
-      addIndex(reduce<Tile, string[]>)(
-        (innerAccum: string[], tile: Tile, colIndex: number) => {
-          if (tile[1] === BuildingEnum.Forest) innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
-          return innerAccum
-        },
-        accum,
-        row
-      ),
-    [] as string[],
-    player.landscape
-  )
 
 export const givePlayerWood =
   (useJoker: boolean): StateReducer =>
