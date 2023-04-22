@@ -5,7 +5,7 @@ import { multiplyGoods } from './resource'
 type TokenName = 'grain' | 'sheep' | 'clay' | 'coin' | 'wood' | 'joker' | 'peat' | 'grape' | 'stone'
 
 export const withRondel =
-  (func: (rondel: Rondel | undefined) => Rondel | undefined): StateReducer =>
+  (func: (rondel: Rondel) => Rondel | undefined): StateReducer =>
   (state) => {
     if (state === undefined) return state
     const rondel = func(state.rondel)

@@ -201,7 +201,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.TownEstate, () => townEstate(params[0]))
       .with(BuildingEnum.WhiskeyDistillery, () => whiskeyDistillery(params[0]))
       .with(BuildingEnum.Windmill, () => windmill(params[0]))
-      .with(BuildingEnum.Winery, () => winery(params[0], params[1]))
+      .with(BuildingEnum.Winery, () => winery(params[0]))
       .otherwise(() => () => {
         throw new Error(`Invalid params [${params}] for building ${building}`)
       })
