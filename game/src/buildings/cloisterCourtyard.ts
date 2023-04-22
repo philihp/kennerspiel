@@ -9,6 +9,7 @@ import {
   maskGoods,
   allResource,
   combinations,
+  basicResources,
 } from '../board/resource'
 import { Cost, GameStatePlaying, ResourceEnum } from '../types'
 
@@ -48,17 +49,7 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
         ),
       ]
     })
-    .with([P._], () => {
-      // return 1 of every basic good, as output
-      return [
-        ResourceEnum.Peat,
-        ResourceEnum.Sheep,
-        ResourceEnum.Wood,
-        ResourceEnum.Clay,
-        ResourceEnum.Penny,
-        ResourceEnum.Grain,
-      ]
-    })
+    .with([P._], () => basicResources)
     .with([P._, P._], always(['']))
     .otherwise(always([]))
 )

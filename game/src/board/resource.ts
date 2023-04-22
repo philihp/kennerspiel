@@ -2,6 +2,15 @@ import { match } from 'ts-pattern'
 import { any, curry, keys, join, lift, map, pipe, range, reduce, repeat, addIndex } from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
 
+export const basicResources = [
+  ResourceEnum.Peat,
+  ResourceEnum.Sheep,
+  ResourceEnum.Wood,
+  ResourceEnum.Clay,
+  ResourceEnum.Penny,
+  ResourceEnum.Grain,
+]
+
 export const allResource: [key: keyof Cost, token: string][] = [
   ['peat', ResourceEnum.Peat],
   ['penny', ResourceEnum.Penny],
