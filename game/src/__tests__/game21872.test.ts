@@ -501,7 +501,7 @@ describe('game 21872', () => {
 
     const s136 = reducer(s135, ['CONVERT', 'Gn'])! as GameStatePlaying
     const s137 = reducer(s136, ['BUILD', 'F21', '2', '0'])! as GameStatePlaying
-    const s138 = reducer(s137, ['USE', 'F21', 'GpGp', 'Wn'])! as GameStatePlaying
+    const s138 = reducer(s137, ['USE', 'F21', 'GpGpWn'])! as GameStatePlaying
     const s139 = reducer(s138, ['BUY_PLOT', '-2', 'MOUNTAIN'])! as GameStatePlaying
     const s140 = reducer(s139, ['COMMIT'])! as GameStatePlaying
     expect(s140.frame).toMatchObject({
@@ -510,7 +510,7 @@ describe('game 21872', () => {
     })
 
     const s141 = reducer(s140, ['USE', 'G01'])! as GameStatePlaying
-    const s142 = reducer(s141, ['USE', 'F21', 'GpGpGp', 'Wn'])! as GameStatePlaying
+    const s142 = reducer(s141, ['USE', 'F21', 'GpGpGpWn'])! as GameStatePlaying
     const s143 = reducer(s142, ['COMMIT'])! as GameStatePlaying
     expect(s143.players[1].clergy).toStrictEqual([])
     expect(s143.frame).toMatchObject({
@@ -807,7 +807,7 @@ describe('game 21872', () => {
       next: 95,
     })
 
-    const s238 = reducer(s237, ['USE', 'F21', 'GpGpGpGpGpGpGpGpGp', 'Wn'])! as GameStatePlaying
+    const s238 = reducer(s237, ['USE', 'F21', 'GpGpGpGpGpGpGpGpGpWn'])! as GameStatePlaying
     const s239 = reducer(s238, ['COMMIT'])! as GameStatePlaying
     expect(s239.frame).toMatchObject({
       activePlayerIndex: 0,

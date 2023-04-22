@@ -80,7 +80,7 @@ describe('buildings/winery', () => {
     }
 
     it('goes through a happy path', () => {
-      const s1 = winery('GpGpGp', 'Wn')(s0)! as GameStatePlaying
+      const s1 = winery('GpGpGpWn')(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
         grape: 7,
         wine: 12,
@@ -95,7 +95,7 @@ describe('buildings/winery', () => {
         players: [{ ...s0.players[0], grape: 1, wine: 0, penny: 0, nickel: 0 }, ...s0.players.slice(1)],
       }
 
-      const s2 = winery('Gp', 'Wn')(s1)! as GameStatePlaying
+      const s2 = winery('GpWn')(s1)! as GameStatePlaying
       expect(s2.players[0]).toMatchObject({
         grape: 0,
         wine: 0,
@@ -109,7 +109,7 @@ describe('buildings/winery', () => {
         ...s0,
         players: [{ ...s0.players[0], grape: 0, wine: 1, penny: 0, nickel: 0 }, ...s0.players.slice(1)],
       }
-      const s2 = winery('', 'Wn')(s1)! as GameStatePlaying
+      const s2 = winery('Wn')(s1)! as GameStatePlaying
       expect(s2.players[0]).toMatchObject({
         wine: 0,
         penny: 2,
