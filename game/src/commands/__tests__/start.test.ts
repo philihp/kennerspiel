@@ -85,7 +85,7 @@ describe('commands/start', () => {
             length: 'short',
           },
         },
-        { seed: 3, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue, PlayerColor.White] }
+        { seed: 744362, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue, PlayerColor.White] }
       )
       expect(dst).toBeDefined()
       expect(dst?.players).toHaveLength(4)

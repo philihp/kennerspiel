@@ -6,7 +6,7 @@ describe('game 21872', () => {
   it('runs through moves', () => {
     const s01 = initialState
     const s02 = reducer(s01, ['CONFIG', '4', 'france', 'long'])! as GameStateSetup
-    const s03 = reducer(s02, ['START', '3', 'W', 'B', 'G', 'R'])! as GameStatePlaying
+    const s03 = reducer(s02, ['START', '41303', 'W', 'B', 'G', 'R'])! as GameStatePlaying
     expect(s03.buildings).toContain('G07')
     expect(s03.players[0].color).toBe('R')
     expect(s03.players[1].color).toBe('G')
