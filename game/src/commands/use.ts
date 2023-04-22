@@ -140,7 +140,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.CloisterChurch, () => cloisterChurch(params[0]))
       .with(BuildingEnum.CloisterCourtyard, () => cloisterCourtyard(params[0], params[1]))
       .with(BuildingEnum.CloisterGarden, () => cloisterGarden())
-      .with(BuildingEnum.CloisterLibrary, () => cloisterLibrary(params[0], params[1]))
+      .with(BuildingEnum.CloisterLibrary, () => cloisterLibrary(params[0]))
       .with(
         BuildingEnum.CloisterOfficeR,
         BuildingEnum.CloisterOfficeG,

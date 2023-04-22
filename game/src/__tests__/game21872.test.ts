@@ -609,7 +609,7 @@ describe('game 21872', () => {
 
     const s174 = reducer(s173, ['BUILD', 'F17', '5', '1'])! as GameStatePlaying
     const s17X = reducer(s174, ['WITH_PRIOR'])! as GameStatePlaying
-    const s175 = reducer(s17X, ['USE', 'F17', 'Pn', 'Bo'])! as GameStatePlaying
+    const s175 = reducer(s17X, ['USE', 'F17', 'PnBo'])! as GameStatePlaying
     const s176 = reducer(s175, ['COMMIT'])! as GameStatePlaying
     expect(s176.frame).toMatchObject({
       activePlayerIndex: 3,
@@ -1119,7 +1119,7 @@ describe('game 21872', () => {
     const s347 = reducer(s346, ['WORK_CONTRACT', 'F17', 'PnPn'])! as GameStatePlaying
     const s348 = reducer(s347, ['WITH_LAYBROTHER'])! as GameStatePlaying
     const s34X = reducer(s348, ['CONVERT', 'Ni'])! as GameStatePlaying
-    const s349 = reducer(s34X, ['USE', 'F17', 'PnPnPn', 'Bo'])! as GameStatePlaying
+    const s349 = reducer(s34X, ['USE', 'F17', 'PnPnPnBo'])! as GameStatePlaying
     const s350 = reducer(s349, ['COMMIT'])! as GameStatePlaying
     expect(s350.frame).toMatchObject({
       activePlayerIndex: 2,
