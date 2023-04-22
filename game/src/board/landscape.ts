@@ -1,4 +1,4 @@
-import { filter, pipe, range, reduce, reduced } from 'ramda'
+import { addIndex, filter, map, pipe, range, reduce, reduced } from 'ramda'
 import { match } from 'ts-pattern'
 import {
   LandEnum,
@@ -236,4 +236,32 @@ export const occupiedBuildingsForPlayers = (players: Tableau[]) =>
     (pAccum, { landscape }) => [...pAccum, ...occupiedBuildingsForLandscape(landscape)],
     [] as BuildingEnum[],
     players
+  )
+
+export const forestLocationsForCol = (rawCol: string, player: Tableau): string[] => {
+  const col = Number.parseInt(rawCol, 10) + 2
+  const colsAtRow = map((row: Tile[]) => row[col], player.landscape)
+  return addIndex<Tile, string[]>(reduce<Tile, string[]>)(
+    (accum: string[], tile: Tile, rowIndex: number) => {
+      if (tile[1] === BuildingEnum.Forest) accum.push(`${rowIndex - player.landscapeOffset}`)
+      return accum
+    },
+    [] as string[],
+    colsAtRow
+  )
+}
+
+export const forestLocations = (player: Tableau): string[] =>
+  addIndex(reduce<Tile[], string[]>)(
+    (accum: string[], row: Tile[], rowIndex: number) =>
+      addIndex(reduce<Tile, string[]>)(
+        (innerAccum: string[], tile: Tile, colIndex: number) => {
+          if (tile[1] === BuildingEnum.Forest) innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
+          return innerAccum
+        },
+        accum,
+        row
+      ),
+    [] as string[],
+    player.landscape
   )

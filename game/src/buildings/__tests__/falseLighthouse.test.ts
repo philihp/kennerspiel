@@ -118,12 +118,16 @@ describe('buildings/falseLighthouse', () => {
   })
 
   describe('complete', () => {
-    it('takes no parameters', () => {
+    it('just wants to know whiskey or beer', () => {
       const c0 = complete([])(s0)
+      expect(c0).toStrictEqual(['Be', 'Wh'])
+    })
+    it('once it knows, that is it', () => {
+      const c0 = complete(['Be'])(s0)
       expect(c0).toStrictEqual([''])
     })
     it('does not complete anything with a param', () => {
-      const c0 = complete([''])(s0)
+      const c0 = complete(['Be', 'Wh'])(s0)
       expect(c0).toStrictEqual([])
     })
   })

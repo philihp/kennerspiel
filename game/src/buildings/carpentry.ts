@@ -1,7 +1,9 @@
-import { pipe } from 'ramda'
+import { always, curry, pipe, view } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { addBonusAction } from '../board/frame'
-import { withActivePlayer } from '../board/player'
+import { activeLens, withActivePlayer } from '../board/player'
 import { BuildingEnum, GameCommandEnum, GameStatePlaying } from '../types'
+import { forestLocations, forestLocationsForCol } from '../board/landscape'
 
 const checkSpotIsForest = (row: number, col: number) =>
   withActivePlayer((player) => {
@@ -33,3 +35,14 @@ export const carpentry = (row: number, col: number) =>
     removeForestAt(row, col),
     addBonusAction(GameCommandEnum.BUILD)
   )
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] => {
+  const player = view(activeLens(state), state)
+  return match(partial)
+    .with([], () => [...forestLocations(player), ''])
+    .with([P._], ([c]) => {
+      return [...forestLocationsForCol(c, player)]
+    })
+    .with([P._, P._], always(['']))
+    .otherwise(always([]))
+})
