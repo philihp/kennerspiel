@@ -1,4 +1,4 @@
-import { newRandGen } from 'fn-pcg'
+import { createPcg32 } from 'fn-pcg'
 import { times } from 'ramda'
 import { initialState } from '../../../state'
 import {
@@ -50,7 +50,7 @@ describe('board/frame/addNeutralPlayer', () => {
     }
     const s0: GameStatePlaying = {
       ...initialState,
-      randGen: newRandGen(42),
+      randGen: createPcg32({}, 42, 1),
       status: GameStatusEnum.PLAYING,
       config: {
         country: 'france',
@@ -107,7 +107,7 @@ describe('board/frame/addNeutralPlayer', () => {
         colors.forEach((color) => {
           const s1 = {
             ...s0,
-            randGen: newRandGen(seed),
+            randGen: createPcg32({}, 42, 56),
             players: [{ ...s0.players[0], color }],
           }
           const s2 = addNeutralPlayer(s1)!
