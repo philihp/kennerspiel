@@ -8,7 +8,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { winery } from '..'
+import { winery } from '../winery'
 
 describe('buildings/winery', () => {
   describe('winery', () => {
@@ -114,6 +114,19 @@ describe('buildings/winery', () => {
         wine: 0,
         penny: 2,
         nickel: 1,
+      })
+    })
+
+    it('can have a noop', () => {
+      const s1 = {
+        ...s0,
+        players: [{ ...s0.players[0], grape: 0, wine: 0, penny: 0, nickel: 0 }, ...s0.players.slice(1)],
+      }
+      const s2 = winery()(s1)! as GameStatePlaying
+      expect(s2.players[0]).toMatchObject({
+        wine: 0,
+        penny: 0,
+        nickel: 0,
       })
     })
   })
