@@ -85,7 +85,7 @@ describe('commands/start', () => {
             length: 'short',
           },
         },
-        { seed: 28, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue, PlayerColor.White] }
+        { seed: 3, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue, PlayerColor.White] }
       )
       expect(dst).toBeDefined()
       expect(dst?.players).toHaveLength(4)
@@ -125,7 +125,7 @@ describe('commands/start', () => {
             length: 'short',
           },
         },
-        { seed: 15, colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue] }
+        { seed: 1, colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue] }
       )
       expect(dst).toBeDefined()
       expect(dst?.players).toHaveLength(3)
@@ -162,7 +162,7 @@ describe('commands/start', () => {
       const s1 = config({ country: 'france', players: 4, length: 'long' })(s0)!
       const s2 = start(s1, {
         colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
-        seed: 14,
+        seed: 11,
       })!
       const buildings = ['G01', 'G02', 'F03', 'F04', 'F05', 'G06', 'G07', 'F08', 'F09', 'F10', 'F11', 'G12', 'G13']
       expect(s2.buildings).toStrictEqual(buildings)
