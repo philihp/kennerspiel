@@ -1,6 +1,8 @@
-import { pipe } from 'ramda'
-import { getCost, payCost, withActivePlayer } from '../board/player'
-import { costEnergy, parseResourceParam } from '../board/resource'
+import { always, concat, curry, lift, map, pipe, unnest, view } from 'ramda'
+import { P, match } from 'ts-pattern'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
+import { costEnergy, energyCostOptions, parseResourceParam, resourceArray } from '../board/resource'
+import { GameStatePlaying, ResourceEnum } from '../types'
 
 export const cloisterWorkshop = (clayStoneEnergy = '') => {
   const inputs = parseResourceParam(clayStoneEnergy)
@@ -17,3 +19,26 @@ export const cloisterWorkshop = (clayStoneEnergy = '') => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], () => {
+      const player = view(activeLens(state), state)
+      return unnest(
+        map(
+          (inputs: string): string[] =>
+            map(
+              //
+              concat(inputs),
+              energyCostOptions(Math.floor(inputs.length / 2), player)
+            ),
+          lift((a: string, b: string) => a + b)(
+            resourceArray(ResourceEnum.Clay, 3)(player.clay),
+            resourceArray(ResourceEnum.Stone, 1)(player.stone)
+          )
+        )
+      )
+    })
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)

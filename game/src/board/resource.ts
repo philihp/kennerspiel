@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern'
-import { any, curry, keys, join, lift, map, pipe, range, reduce, repeat, addIndex } from 'ramda'
+import { any, curry, keys, join, lift, map, pipe, range, reduce, repeat, addIndex, min, add, reverse } from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
 
 export const basicResources = [
@@ -103,6 +103,16 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
 export const stringRepeater = curry((repeated: string, count: number): string =>
   pipe(repeat(repeated), join(''))(count)
 )
+
+export const resourceArray = (resource: ResourceEnum, maxAmount = Infinity) =>
+  pipe(
+    //
+    min(maxAmount),
+    add(1),
+    range(0),
+    reverse<number>,
+    map<number, string>(stringRepeater(resource))
+  )
 
 type Tracer = [resources: string, foodNeeded: number]
 
