@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "type": "module",
   "devDependencies": {
-    "typescript": "4.9.5"
+    "typescript": "5.0.4"
   },
   "dependencies": {
     "hathora-et-labora-game": "0.6.0"
