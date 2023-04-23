@@ -9,9 +9,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - game/**
-      - .github/workflows/game.yml
 
 env:
   CI: true
