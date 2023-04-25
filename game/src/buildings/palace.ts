@@ -1,7 +1,7 @@
-import { always, curry, identity, pipe } from 'ramda'
+import { always, curry, identity, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { allOccupiedBuildingsUsable } from '../board/frame'
-import { payCost, withActivePlayer } from '../board/player'
+import { activeLens, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
 import { GameStatePlaying } from '../types'
 
@@ -17,7 +17,11 @@ export const palace = (input = '') => {
 
 export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
-    .with([], always([]))
+    .with([], () => {
+      const { wine = 0 } = view(activeLens(state), state)
+      if (wine) return ['Wn', '']
+      return ['']
+    })
     .with([P._], always(['']))
     .otherwise(always([]))
 )
