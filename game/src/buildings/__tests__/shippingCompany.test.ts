@@ -9,78 +9,78 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { shippingCompany } from '..'
+import { shippingCompany, complete } from '../shippingCompany'
 
 describe('buildings/shippingCompany', () => {
-  describe('shippingCompany', () => {
-    const p0: Tableau = {
-      color: PlayerColor.Blue,
-      clergy: [],
-      settlements: [],
-      landscape: [
-        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-        [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-      ] as Tile[][],
-      wonders: 0,
-      landscapeOffset: 0,
-      peat: 10,
-      penny: 0,
-      clay: 0,
-      wood: 10,
-      grain: 0,
-      sheep: 0,
-      stone: 0,
-      flour: 0,
-      grape: 0,
-      nickel: 0,
-      malt: 0,
-      coal: 10,
-      book: 0,
-      ceramic: 0,
-      whiskey: 0,
-      straw: 0,
-      meat: 0,
-      ornament: 0,
-      bread: 0,
-      wine: 0,
-      beer: 0,
-      reliquary: 0,
-    }
-    const s0: GameStatePlaying = {
-      ...initialState,
-      status: GameStatusEnum.PLAYING,
-      frame: {
-        round: 1,
-        next: 1,
-        startingPlayer: 1,
-        settlementRound: SettlementRound.S,
-        currentPlayerIndex: 0,
-        activePlayerIndex: 0,
-        neutralBuildingPhase: false,
-        bonusRoundPlacement: false,
-        mainActionUsed: false,
-        bonusActions: [],
-        canBuyLandscape: true,
-        unusableBuildings: [],
-        usableBuildings: [],
-        nextUse: NextUseClergy.Any,
-      },
-      config: {
-        country: 'france',
-        players: 3,
-        length: 'long',
-      },
-      rondel: {
-        pointingBefore: 7,
-        joker: 5,
-      },
-      wonders: 0,
-      players: [{ ...p0 }, { ...p0 }, { ...p0 }],
-      buildings: [] as BuildingEnum[],
-      plotPurchasePrices: [1, 1, 1, 1, 1, 1],
-      districtPurchasePrices: [],
-    }
+  const p0: Tableau = {
+    color: PlayerColor.Blue,
+    clergy: [],
+    settlements: [],
+    landscape: [
+      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+    ] as Tile[][],
+    wonders: 0,
+    landscapeOffset: 0,
+    peat: 10,
+    penny: 0,
+    clay: 0,
+    wood: 10,
+    grain: 0,
+    sheep: 0,
+    stone: 0,
+    flour: 0,
+    grape: 0,
+    nickel: 0,
+    malt: 0,
+    coal: 10,
+    book: 0,
+    ceramic: 0,
+    whiskey: 0,
+    straw: 0,
+    meat: 0,
+    ornament: 0,
+    bread: 0,
+    wine: 0,
+    beer: 0,
+    reliquary: 0,
+  }
+  const s0: GameStatePlaying = {
+    ...initialState,
+    status: GameStatusEnum.PLAYING,
+    frame: {
+      round: 1,
+      next: 1,
+      startingPlayer: 1,
+      settlementRound: SettlementRound.S,
+      currentPlayerIndex: 0,
+      activePlayerIndex: 0,
+      neutralBuildingPhase: false,
+      bonusRoundPlacement: false,
+      mainActionUsed: false,
+      bonusActions: [],
+      canBuyLandscape: true,
+      unusableBuildings: [],
+      usableBuildings: [],
+      nextUse: NextUseClergy.Any,
+    },
+    config: {
+      country: 'france',
+      players: 3,
+      length: 'long',
+    },
+    rondel: {
+      pointingBefore: 7,
+      joker: 5,
+    },
+    wonders: 0,
+    players: [{ ...p0 }, { ...p0 }, { ...p0 }],
+    buildings: [] as BuildingEnum[],
+    plotPurchasePrices: [1, 1, 1, 1, 1, 1],
+    districtPurchasePrices: [],
+  }
 
+  describe('shippingCompany', () => {
     it('retains undefined state', () => {
       const s1 = shippingCompany()(undefined)!
       expect(s1).toBeUndefined()
@@ -113,6 +113,57 @@ describe('buildings/shippingCompany', () => {
     it('noop if not enough energy', () => {
       const s1 = shippingCompany('Wo', 'Wn')(s0)!
       expect(s1).toBe(s0)
+    })
+  })
+
+  describe('complete', () => {
+    it('noop if no fuel', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            peat: 0,
+            wood: 0,
+            coal: 0,
+          },
+          s0.players.slice(1),
+        ],
+      } as GameStatePlaying
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual([''])
+    })
+    it('coal fuel and pick any of the following', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            peat: 0,
+            wood: 0,
+            coal: 1,
+          },
+          s0.players.slice(1),
+        ],
+      } as GameStatePlaying
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual(['MtCo', 'BrCo', 'WnCo', ''])
+    })
+    it('shows options with other fuel sources', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            peat: 1,
+            wood: 1,
+            coal: 1,
+          },
+          s0.players.slice(1),
+        ],
+      } as GameStatePlaying
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual(['MtCo', 'MtPtWo', 'BrCo', 'BrPtWo', 'WnCo', 'WnPtWo', ''])
     })
   })
 })
