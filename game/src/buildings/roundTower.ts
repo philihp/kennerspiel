@@ -1,8 +1,9 @@
-import { identity, pipe } from 'ramda'
+import { always, curry, identity, pipe } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { getWonder, payCost, withActivePlayer } from '../board/player'
 import { costPoints, parseResourceParam } from '../board/resource'
 import { removeWonder } from '../board/state'
-import { CostReducer } from '../types'
+import { CostReducer, GameStatePlaying } from '../types'
 
 const removeWhiskey: CostReducer = (cost) => {
   if (!cost) return undefined
@@ -47,3 +48,10 @@ export const roundTower = (param = '') => {
     removeWonder
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always([]))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)

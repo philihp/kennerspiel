@@ -1,7 +1,8 @@
-import { identity, pipe, reduce } from 'ramda'
+import { always, curry, identity, pipe, reduce } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { getCost, payCost, withActivePlayer } from '../board/player'
 import { costPoints, parseResourceParam } from '../board/resource'
-import { BuildingEnum, Cost, StateReducer, Tableau, TableauReducer, Tile } from '../types'
+import { BuildingEnum, Cost, GameStatePlaying, StateReducer, Tableau, TableauReducer, Tile } from '../types'
 
 // TODO: refactor this with houseOfTheBrotherhood
 
@@ -39,3 +40,10 @@ export const festivalGround = (input = '', output = ''): StateReducer => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always([]))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)

@@ -1,6 +1,8 @@
-import { pipe } from 'ramda'
+import { always, curry, pipe } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
+import { GameStatePlaying } from '../types'
 
 export const pilgrimageSite = (param1 = '', param2 = '') => {
   const { book: book1 = 0, ceramic: ceramic1 = 0, ornament: ornament1 = 0 } = parseResourceParam(param1)
@@ -16,3 +18,10 @@ export const pilgrimageSite = (param1 = '', param2 = '') => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always([]))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)

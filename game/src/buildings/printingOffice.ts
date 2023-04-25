@@ -1,6 +1,7 @@
-import { map, pipe, reduce, splitEvery, take } from 'ramda'
+import { always, curry, map, pipe, reduce, splitEvery, take } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
-import { BuildingEnum, Tableau, Tile } from '../types'
+import { BuildingEnum, GameStatePlaying, Tableau, Tile } from '../types'
 
 const removeForestAt = (player: Tableau | undefined, [col, row]: [number, number]): Tableau | undefined => {
   if (player === undefined) return undefined
@@ -35,3 +36,10 @@ export const printingOffice = (...coords: string[]) => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always([]))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)

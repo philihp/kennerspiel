@@ -1,7 +1,8 @@
-import { identity, pipe } from 'ramda'
+import { always, curry, identity, pipe } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { parseResourceParam } from '../board/resource'
 import { withActivePlayer, payCost } from '../board/player'
-import { GameCommandEnum } from '../types'
+import { GameCommandEnum, GameStatePlaying } from '../types'
 import { addBonusAction } from '../board/frame'
 
 export const bulwark = (coin = '') => {
@@ -14,3 +15,10 @@ export const bulwark = (coin = '') => {
     addBonusAction(GameCommandEnum.BUY_PLOT)
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always([]))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)

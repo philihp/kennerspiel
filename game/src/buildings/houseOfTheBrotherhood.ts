@@ -1,5 +1,5 @@
-import { flatten, identity, map, pipe, reduce, sum } from 'ramda'
-import { match } from 'ts-pattern'
+import { always, curry, flatten, identity, map, pipe, reduce, sum } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { isCloisterBuilding } from '../board/buildings'
 import { getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, costPoints, parseResourceParam } from '../board/resource'
@@ -42,3 +42,10 @@ export const houseOfTheBrotherhood = (param1 = '', param2 = '') => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always([]))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)
