@@ -1,8 +1,8 @@
-import { always, curry, pipe } from 'ramda'
+import { always, curry, map, min, pipe, range, reverse, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { getCost, payCost, withActivePlayer } from '../board/player'
-import { parseResourceParam } from '../board/resource'
-import { GameStatePlaying, StateReducer } from '../types'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
+import { parseResourceParam, stringRepeater } from '../board/resource'
+import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
 
 export const coalHarbor = (param = ''): StateReducer => {
   const { peat = 0 } = parseResourceParam(param)
@@ -22,7 +22,10 @@ export const coalHarbor = (param = ''): StateReducer => {
 
 export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
-    .with([], always([]))
+    .with([], () => {
+      const { coal = 0 } = view(activeLens(state), state)
+      return map<number, string>(stringRepeater(ResourceEnum.Coal), reverse(range(0, 1 + min(3, coal))))
+    })
     .with([P._], always(['']))
     .otherwise(always([]))
 )
