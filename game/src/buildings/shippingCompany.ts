@@ -1,9 +1,9 @@
-import { always, curry, identity, pipe } from 'ramda'
+import { always, ap, concat, curry, identity, map, pipe, unnest, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { payCost, withActivePlayer } from '../board/player'
-import { costEnergy, costFood, parseResourceParam } from '../board/resource'
+import { activeLens, payCost, withActivePlayer } from '../board/player'
+import { costEnergy, costFood, energyCostOptions, parseResourceParam } from '../board/resource'
 import { advanceJokerOnRondel, takePlayerJoker } from '../board/rondel'
-import { GameStatePlaying, StateReducer } from '../types'
+import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
 
 export const shippingCompany = (fuel = '', product = ''): StateReducer => {
   const input = parseResourceParam(fuel)
@@ -26,7 +26,18 @@ export const shippingCompany = (fuel = '', product = ''): StateReducer => {
 
 export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
-    .with([], always([]))
+    .with([], () => [
+      ...ap(
+        [
+          //
+          concat(ResourceEnum.Meat),
+          concat(ResourceEnum.Bread),
+          concat(ResourceEnum.Wine),
+        ],
+        energyCostOptions(3, view(activeLens(state), state))
+      ),
+      '',
+    ])
     .with([P._], always(['']))
     .otherwise(always([]))
 )
