@@ -1,9 +1,9 @@
-import { identity, pipe } from 'ramda'
+import { always, curry, identity, pipe } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { payCost, withActivePlayer } from '../board/player'
 import { costEnergy, costFood, parseResourceParam } from '../board/resource'
 import { advanceJokerOnRondel, takePlayerJoker } from '../board/rondel'
-import { StateReducer } from '../types'
+import { GameStatePlaying, StateReducer } from '../types'
 
 export const shippingCompany = (fuel = '', product = ''): StateReducer => {
   const input = parseResourceParam(fuel)
@@ -23,3 +23,10 @@ export const shippingCompany = (fuel = '', product = ''): StateReducer => {
     advanceJokerOnRondel
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always([]))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)

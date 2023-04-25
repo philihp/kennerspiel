@@ -1,6 +1,7 @@
-import { identity, pipe } from 'ramda'
+import { always, curry, identity, pipe } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
-import { BuildingEnum, StateReducer, TableauReducer } from '../types'
+import { BuildingEnum, GameStatePlaying, StateReducer, TableauReducer } from '../types'
 
 // TODO: refactor this with carpentry
 
@@ -39,3 +40,10 @@ export const forestHut = (row?: number, col?: number): StateReducer => {
     )
   )
 }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], always([]))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)
