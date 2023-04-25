@@ -35,7 +35,6 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
     .with([], () => {
       const player = view(activeLens(state), state)
       return [
-        '',
         ...combinations(
           3,
           reduce(
@@ -47,6 +46,7 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
             allResource
           )
         ),
+        '',
       ]
     })
     .with([P._], () => basicResources)

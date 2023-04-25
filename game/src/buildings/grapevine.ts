@@ -42,7 +42,7 @@ export const grapevine = (param = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], _state: GameStatePlaying): string[] =>
   match(partial)
     .with([], always(['', 'Jo']))
     .with([P._], always(['']))

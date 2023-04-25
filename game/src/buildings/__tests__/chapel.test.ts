@@ -1,39 +1,39 @@
 import { GameStatePlaying, Tableau } from '../../types'
-import { chapel } from '../chapel'
+import { chapel, complete } from '../chapel'
 
 describe('buildings/chapel', () => {
-  describe('chapel', () => {
-    const p0 = {
-      peat: 0,
-      penny: 0,
-      clay: 0,
-      wood: 0,
-      grain: 0,
-      sheep: 0,
-      stone: 0,
-      flour: 0,
-      grape: 0,
-      nickel: 0,
-      malt: 0,
-      coal: 0,
-      book: 0,
-      ceramic: 0,
-      whiskey: 0,
-      straw: 0,
-      meat: 0,
-      ornament: 0,
-      bread: 0,
-      wine: 0,
-      beer: 0,
-      reliquary: 0,
-    } as Tableau
-    const s0 = {
-      frame: {
-        activePlayerIndex: 0,
-      },
-      players: [{ ...p0 }],
-    } as GameStatePlaying
+  const p0 = {
+    peat: 0,
+    penny: 0,
+    clay: 0,
+    wood: 0,
+    grain: 0,
+    sheep: 0,
+    stone: 0,
+    flour: 0,
+    grape: 0,
+    nickel: 0,
+    malt: 0,
+    coal: 0,
+    book: 0,
+    ceramic: 0,
+    whiskey: 0,
+    straw: 0,
+    meat: 0,
+    ornament: 0,
+    bread: 0,
+    wine: 0,
+    beer: 0,
+    reliquary: 0,
+  } as Tableau
+  const s0 = {
+    frame: {
+      activePlayerIndex: 0,
+    },
+    players: [{ ...p0 }],
+  } as GameStatePlaying
 
+  describe('chapel', () => {
     it('goes through a happy path', () => {
       const s1 = {
         ...s0,
@@ -135,6 +135,57 @@ describe('buildings/chapel', () => {
         book: 0,
         reliquary: 1,
       })
+    })
+  })
+
+  describe('complete', () => {
+    it('gives a max of one coin and three beer and whiskey', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            beer: 4,
+            whiskey: 4,
+            penny: 4,
+          },
+          s0.players.slice(1),
+        ],
+      } as GameStatePlaying
+      const c0 = complete([], s1)
+      expect(c0).toStrictEqual(['BeBeBeWhWhWhPn', 'BeBeBeWhWhWh', 'BeBeWhWhPn', 'BeBeWhWh', 'BeWhPn', 'BeWh', 'Pn', ''])
+    })
+    it('only does pennies if thats all they can do', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            beer: 4,
+            whiskey: 0,
+            penny: 4,
+          },
+          s0.players.slice(1),
+        ],
+      } as GameStatePlaying
+      const c0 = complete([], s1)
+      expect(c0).toStrictEqual(['Pn', ''])
+    })
+    it('does the max of beer and whiskey', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            beer: 2,
+            whiskey: 3,
+            penny: 0,
+          },
+          s0.players.slice(1),
+        ],
+      } as GameStatePlaying
+      const c0 = complete([], s1)
+      expect(c0).toStrictEqual(['BeBeWhWh', 'BeWh', ''])
     })
   })
 })

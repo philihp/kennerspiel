@@ -1,5 +1,22 @@
 import { match } from 'ts-pattern'
-import { any, curry, keys, join, lift, map, pipe, range, reduce, repeat, addIndex, min, add, reverse } from 'ramda'
+import {
+  any,
+  curry,
+  keys,
+  join,
+  lift,
+  map,
+  pipe,
+  range,
+  reduce,
+  repeat,
+  addIndex,
+  min,
+  add,
+  reverse,
+  zipWith,
+  zip,
+} from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
 
 export const basicResources = [
@@ -113,6 +130,10 @@ export const resourceArray = (resource: ResourceEnum, maxAmount = Infinity) =>
     reverse<number>,
     map<number, string>(stringRepeater(resource))
   )
+
+// would have been nice if zip took > 2 arrays
+export const zip3 = (arrA: string[], arrB: string[], arrC: string[]): string[] =>
+  zipWith<[string, string], string, string>(([a, b], c) => a + b + c)(zip(arrA, arrB), arrC)
 
 type Tracer = [resources: string, foodNeeded: number]
 
