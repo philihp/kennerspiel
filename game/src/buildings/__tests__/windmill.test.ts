@@ -106,10 +106,6 @@ describe('buildings/windmill', () => {
   })
 
   describe('complete', () => {
-    it('allows for sending grain or nothing, if player has a grain', () => {
-      const c0 = complete([])(s0)
-      expect(c0).toStrictEqual(['Gn', ''])
-    })
     it('still allows noop if player has no grain', () => {
       const s1 = {
         ...s0,
@@ -123,6 +119,34 @@ describe('buildings/windmill', () => {
       }
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
+    })
+    it('still allows up to 3 grain if player has it', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            grain: 3,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual(['GnGnGn', 'GnGn', 'Gn', ''])
+    })
+    it('still allows up to 7 grain when any amount', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            grain: 100,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual(['GnGnGnGnGnGnGn', 'GnGnGnGnGnGn', 'GnGnGnGnGn', 'GnGnGnGn', 'GnGnGn', 'GnGn', 'Gn', ''])
     })
     it('completes the command if we have a param', () => {
       const c0 = complete(['Gn'])(s0)
