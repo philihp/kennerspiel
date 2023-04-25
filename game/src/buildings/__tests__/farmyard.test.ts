@@ -120,6 +120,16 @@ describe('buildings/farmyard', () => {
       const s1 = farmyard()(s0)
       expect(s1).toBeUndefined()
     })
+    it('retains undefined state given sheep', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = farmyard('Sh')(s0)
+      expect(s1).toBeUndefined()
+    })
+    it('retains undefined state given grain', () => {
+      const s0: GameStatePlaying | undefined = undefined
+      const s1 = farmyard('Gn')(s0)
+      expect(s1).toBeUndefined()
+    })
     it('fails if no good is specified', () => {
       const s1 = farmyard()(s0)!
       expect(s1).toBeUndefined()

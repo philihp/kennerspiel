@@ -1,4 +1,4 @@
-import { always, curry, pipe } from 'ramda'
+import { always, cond, curry, pipe, when } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { withActivePlayer } from '../board/player'
 import { updateRondel, withRondel, take } from '../board/rondel'
@@ -6,9 +6,9 @@ import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
 import { parseResourceParam } from '../board/resource'
 
 const takePlayerSheep =
-  (shouldTake: boolean, withJoker: boolean): StateReducer =>
+  (withJoker: boolean): StateReducer =>
   (state) => {
-    if (state === undefined || !shouldTake) return state
+    if (state === undefined) return state
     const {
       config,
       rondel: { joker, sheep, pointingBefore },
@@ -23,9 +23,9 @@ const takePlayerSheep =
   }
 
 const takePlayerGrain =
-  (shouldTake: boolean, withJoker: boolean): StateReducer =>
+  (withJoker: boolean): StateReducer =>
   (state) => {
-    if (state === undefined || !shouldTake) return state
+    if (state === undefined) return state
     const {
       config,
       rondel: { joker, grain, pointingBefore },
@@ -39,22 +39,21 @@ const takePlayerGrain =
     )(state)
   }
 
-const updateToken = (withJoker: boolean, withSheep: boolean, withGrain: boolean) =>
-  match([withJoker, withSheep, withGrain])
-    .with([true, P.boolean, P.boolean], () => updateRondel('joker'))
-    .with([false, true, false], () => updateRondel('sheep'))
-    .with([false, false, true], () => updateRondel('grain'))
-    .otherwise(() => () => undefined)
-
 export const farmyard = (param = ''): StateReducer => {
   const withJoker = param.includes(ResourceEnum.Joker)
   const withSheep = param.includes(ResourceEnum.Sheep)
   const withGrain = param.includes(ResourceEnum.Grain)
-  if (!withSheep && !withGrain) return () => undefined
+  if (!withSheep && !withGrain) return always(undefined)
   return pipe(
-    takePlayerSheep(withSheep, withJoker),
-    takePlayerGrain(withGrain, withJoker),
-    withRondel(updateToken(withJoker, withSheep, withGrain))
+    when(always(withSheep), takePlayerSheep(withJoker)),
+    when(always(withGrain), takePlayerGrain(withJoker)),
+    withRondel(
+      cond([
+        [always(withJoker), updateRondel('joker')],
+        [always(withSheep), updateRondel('sheep')],
+        [always(withGrain), updateRondel('grain')],
+      ])
+    )
   )
 }
 
