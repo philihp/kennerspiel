@@ -946,6 +946,9 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.D)).toContain('G41')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.D)).toContain('G41')
     })
+    it('returns empty otherwise', () => {
+      expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.E)).toHaveLength(0)
+    })
   })
   describe('isCloisterBuilding', () => {
     it('considers Priory as a cloister', () => {

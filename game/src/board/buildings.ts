@@ -428,7 +428,7 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Guesthouse,
       BuildingEnum.HouseOfTheBrotherhood,
     ])
-    .exhaustive()
+    .otherwise(() => [])
 
 export const introduceBuildings: StateReducer = (state) => {
   if (state === undefined) return undefined
