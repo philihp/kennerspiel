@@ -1,7 +1,8 @@
-import { pipe } from 'ramda'
-import { clergyForColor, getCost, payCost, withActivePlayer } from '../board/player'
+import { always, curry, pipe, view } from 'ramda'
+import { P, match } from 'ts-pattern'
+import { activeLens, clergyForColor, getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
-import { GameCommandConfigParams, StateReducer, Tableau, Tile } from '../types'
+import { GameCommandConfigParams, GameStatePlaying, StateReducer, Tableau, Tile } from '../types'
 
 const takeBackAllClergy =
   (config: GameCommandConfigParams) =>
@@ -43,3 +44,10 @@ export const bathhouse =
       )
     )(state)
   }
+
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+  match(partial)
+    .with([], () => (view(activeLens(state), state).penny ? ['Pn', ''] : ['']))
+    .with([P._], always(['']))
+    .otherwise(always([]))
+)
