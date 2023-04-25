@@ -262,5 +262,13 @@ describe('buildings/inn', () => {
         '',
       ])
     })
+    it('complete if given a param', () => {
+      const c0 = complete(['Pn'])(s0)
+      expect(c0).toStrictEqual([''])
+    })
+    it('dont allow complete with two params', () => {
+      const c0 = complete(['Pn', 'Pn'])(s0)
+      expect(c0).toStrictEqual([])
+    })
   })
 })

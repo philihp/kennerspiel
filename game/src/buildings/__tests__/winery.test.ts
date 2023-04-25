@@ -189,5 +189,14 @@ describe('buildings/winery', () => {
         '',
       ])
     })
+
+    it('complete if given a param', () => {
+      const c0 = complete(['GpWn'])(s0)
+      expect(c0).toStrictEqual([''])
+    })
+    it('dont allow complete with two params', () => {
+      const c0 = complete(['Gp', 'Wn'])(s0)
+      expect(c0).toStrictEqual([])
+    })
   })
 })
