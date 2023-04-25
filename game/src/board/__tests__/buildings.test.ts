@@ -214,6 +214,9 @@ describe('build/buildings', () => {
     it('has appropriate building materials for Sacristy', () => {
       expect(costForBuilding(BuildingEnum.Sacristy)).toStrictEqual({ stone: 3, straw: 2 })
     })
+    it('returns empty cost for unknown building', () => {
+      expect(costForBuilding('XXX' as BuildingEnum)).toStrictEqual({})
+    })
   })
   describe('roundBuildings', () => {
     it('returns a list of buildings given a round', () => {
@@ -267,6 +270,20 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F03')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F03')
     })
+    it('introduces granary', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I03')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I03')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.S)).not.toContain(
+        'I03'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.S)).not.toContain('I03')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.S)).not.toContain(
+        'I03'
+      )
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.S)).not.toContain('I03')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I03')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I03')
+    })
     it('introduces windmill', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F04')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F04')
@@ -277,6 +294,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F04')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F04')
     })
+    it('introduces malthouse', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I04')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I04')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I04')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I04')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I04')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I04')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I04')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I04')
+    })
     it('introduces bakery', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F05')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F05')
@@ -286,6 +313,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F05')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F05')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F05')
+    })
+    it('introduces brewery', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I05')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I05')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I05')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I05')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I05')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I05')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I05')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I05')
     })
     it('introduces fuel merchant', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.S)).toContain('G06')
@@ -317,6 +354,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F08')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F08')
     })
+    it('introduces false lighthouse', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I08')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I08')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I08')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I08')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I08')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I08')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I08')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I08')
+    })
     it('introduces cloister garden', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F09')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F09')
@@ -326,6 +373,18 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F09')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F09')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F09')
+    })
+    it('introduces spinning mill', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I09')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I09')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.S)).not.toContain(
+        'I09'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.S)).not.toContain('I09')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I09')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I09')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I09')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I09')
     })
     it('introduces carpentry', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.S)).not.toContain('F10')
@@ -337,6 +396,20 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F10')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F10')
     })
+    it('introduces cottage', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I10')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I10')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.S)).not.toContain(
+        'I10'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.S)).not.toContain('I10')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.S)).not.toContain(
+        'I10'
+      )
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.S)).not.toContain('I10')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I10')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I10')
+    })
     it('introduces harbor promenade', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F11')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F11')
@@ -346,6 +419,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F11')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.S)).toContain('F11')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.S)).toContain('F11')
+    })
+    it('introduces houseboat', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I11')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I11')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I11')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I11')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I11')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I11')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.S)).toContain('I11')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.S)).toContain('I11')
     })
     it('introduces stone merchant', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.S)).toContain('G12')
@@ -377,6 +460,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.A)).toContain('F14')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.A)).toContain('F14')
     })
+    it('introduces sacred site', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I14')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I14')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I14')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I14')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I14')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I14')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I14')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I14')
+    })
     it('introduces financed estate', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.A)).toContain('F15')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.A)).toContain('F15')
@@ -386,6 +479,20 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.A)).not.toContain('F15')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.A)).toContain('F15')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.A)).toContain('F15')
+    })
+    it('introduces druids house', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I15')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I15')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.A)).not.toContain(
+        'I15'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.A)).not.toContain('I15')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.A)).not.toContain(
+        'I15'
+      )
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.A)).not.toContain('I15')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I15')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I15')
     })
     it('introduces cloister chapter house', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.A)).toContain('G16')
@@ -406,6 +513,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.A)).toContain('F17')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.A)).toContain('F17')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.A)).toContain('F17')
+    })
+    it('introduces scriptorium', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I17')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I17')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I17')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I17')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I17')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I17')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.A)).toContain('I17')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.A)).toContain('I17')
     })
     it('introduces cloister workshop', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.A)).toContain('G18')
@@ -437,6 +554,18 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.B)).toContain('F20')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.B)).toContain('F20')
     })
+    it('introduces alehouse', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I20')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I20')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.B)).not.toContain(
+        'I20'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.B)).not.toContain('I20')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I20')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I20')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I20')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I20')
+    })
     it('introduces winery', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.B)).toContain('F21')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.B)).toContain('F21')
@@ -446,6 +575,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.B)).toContain('F21')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.B)).toContain('F21')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.B)).toContain('F21')
+    })
+    it('introduces whiskey distillery', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I21')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I21')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I21')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I21')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I21')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I21')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I21')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I21')
     })
     it('introduces quarry A', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.B)).toContain('G22')
@@ -467,6 +606,20 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.B)).toContain('F23')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.B)).toContain('F23')
     })
+    it('introduces locutory', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I23')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I23')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.B)).not.toContain(
+        'I23'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.B)).not.toContain('I23')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.B)).not.toContain(
+        'I23'
+      )
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.B)).not.toContain('I23')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I23')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I23')
+    })
     it('introduces cloister church', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.B)).toContain('F24')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.B)).toContain('F24')
@@ -477,6 +630,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.B)).toContain('F24')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.B)).toContain('F24')
     })
+    it('introduces chapel', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I24')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I24')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I24')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I24')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I24')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I24')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I24')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I24')
+    })
     it('introduces chamber of wonders', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.B)).toContain('F25')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.B)).toContain('F25')
@@ -486,6 +649,20 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.B)).not.toContain('F25')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.B)).toContain('F25')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.B)).toContain('F25')
+    })
+    it('introduces portico', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I25')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I25')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.B)).not.toContain(
+        'I25'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.B)).not.toContain('I25')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.B)).not.toContain(
+        'I25'
+      )
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.B)).not.toContain('I25')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.B)).toContain('I25')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.B)).toContain('I25')
     })
     it('introduces shipyard', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.B)).toContain('G26')
@@ -507,6 +684,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.C)).toContain('F27')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F27')
     })
+    it('introduces grand manor', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I27')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I27')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I27')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I27')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I27')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I27')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I27')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I27')
+    })
     it('introduces castle', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.C)).toContain('G28')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.C)).toContain('G28')
@@ -527,6 +714,18 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.C)).toContain('F29')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F29')
     })
+    it('introduces forest hut', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I29')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I29')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.C)).not.toContain(
+        'I29'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.C)).not.toContain('I29')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I29')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I29')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I29')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I29')
+    })
     it('introduces town estate', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.C)).toContain('F30')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F30')
@@ -536,6 +735,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F30')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.C)).toContain('F30')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F30')
+    })
+    it('introduces refectory', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I30')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I30')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I30')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I30')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I30')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I30')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I30')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I30')
     })
     it('introduces grapevine B', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.C)).not.toContain('F31')
@@ -547,6 +756,20 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.C)).toContain('F31')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F31')
     })
+    it('introduces coal harbor', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I31')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I31')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.C)).not.toContain(
+        'I31'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.C)).not.toContain('I31')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.C)).not.toContain(
+        'I31'
+      )
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.C)).not.toContain('I31')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I31')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I31')
+    })
     it('introduces calefactory', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.C)).toContain('F32')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F32')
@@ -557,6 +780,18 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.C)).toContain('F32')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F32')
     })
+    it('introduces filial church', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I32')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I32')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.C)).not.toContain(
+        'I32'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.C)).not.toContain('I32')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I32')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I32')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I32')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I32')
+    })
     it('introduces shipping company', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.C)).toContain('F33')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F33')
@@ -566,6 +801,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F33')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.C)).toContain('F33')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.C)).toContain('F33')
+    })
+    it('introduces cooperage', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I33')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I33')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I33')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I33')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I33')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I33')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.C)).toContain('I33')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.C)).toContain('I33')
     })
     it('introduces sacristy', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.D)).toContain('G34')
@@ -587,6 +832,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.D)).toContain('F35')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F35')
     })
+    it('introduces round tower', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I35')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I35')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I35')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I35')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I35')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I35')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I35')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I35')
+    })
     it('introduces pilgrimage site', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.D)).toContain('F36')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F36')
@@ -596,6 +851,18 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F36')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.D)).toContain('F36')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F36')
+    })
+    it('introduces camera', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I36')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I36')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.D)).not.toContain(
+        'I36'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.D)).not.toContain('I36')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I36')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I36')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I36')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I36')
     })
     it('introduces dormitory', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.D)).toContain('F37')
@@ -607,6 +874,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.D)).toContain('F37')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F37')
     })
+    it('introduces bulwark', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I37')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I37')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I37')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I37')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I37')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I37')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I37')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I37')
+    })
     it('introduces printing office', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.D)).toContain('F38')
       expect(roundBuildings({ players: 1, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F38')
@@ -616,6 +893,16 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F38')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.D)).toContain('F38')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F38')
+    })
+    it('introduces festival ground', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I38')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I38')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I38')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I38')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I38')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I38')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I38')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I38')
     })
     it('introduces estate', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.D)).toContain('G39')
@@ -636,6 +923,18 @@ describe('build/buildings', () => {
       expect(roundBuildings({ players: 3, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F40')
       expect(roundBuildings({ players: 4, country: 'france', length: 'short' }, SettlementRound.D)).toContain('F40')
       expect(roundBuildings({ players: 4, country: 'france', length: 'long' }, SettlementRound.D)).toContain('F40')
+    })
+    it('introduces guesthouse', () => {
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I40')
+      expect(roundBuildings({ players: 1, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I40')
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'short' }, SettlementRound.D)).not.toContain(
+        'I40'
+      )
+      expect(roundBuildings({ players: 2, country: 'ireland', length: 'long' }, SettlementRound.D)).not.toContain('I40')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I40')
+      expect(roundBuildings({ players: 3, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I40')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'short' }, SettlementRound.D)).toContain('I40')
+      expect(roundBuildings({ players: 4, country: 'ireland', length: 'long' }, SettlementRound.D)).toContain('I40')
     })
     it('introduces house of the brotherhood', () => {
       expect(roundBuildings({ players: 1, country: 'france', length: 'short' }, SettlementRound.D)).toContain('G41')
