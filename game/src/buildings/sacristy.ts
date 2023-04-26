@@ -1,9 +1,9 @@
-import { always, curry, pipe } from 'ramda'
+import { always, curry, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { getWonder, payCost, withActivePlayer } from '../board/player'
+import { activeLens, getWonder, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
 import { removeWonder } from '../board/state'
-import { GameStatePlaying } from '../types'
+import { GameStatePlaying, ResourceEnum } from '../types'
 
 export const sacristy = (param = '') => {
   const input = parseResourceParam(param)
@@ -31,7 +31,12 @@ export const sacristy = (param = '') => {
 
 export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
-    .with([], always([]))
+    .with([], () => {
+      const { book = 0, ceramic = 0, ornament = 0, reliquary = 0 } = view(activeLens(state), state)
+      if (book && ceramic && ornament && reliquary)
+        return [`${ResourceEnum.Book}${ResourceEnum.Ceramic}${ResourceEnum.Ornament}${ResourceEnum.Reliquary}`, '']
+      return ['']
+    })
     .with([P._], always(['']))
     .otherwise(always([]))
 )
