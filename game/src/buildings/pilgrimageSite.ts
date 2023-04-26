@@ -1,8 +1,8 @@
-import { always, curry, pipe } from 'ramda'
+import { always, curry, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { getCost, payCost, withActivePlayer } from '../board/player'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { GameStatePlaying, ResourceEnum } from '../types'
 
 export const pilgrimageSite = (param1 = '', param2 = '') => {
   const { book: book1 = 0, ceramic: ceramic1 = 0, ornament: ornament1 = 0 } = parseResourceParam(param1)
@@ -21,7 +21,25 @@ export const pilgrimageSite = (param1 = '', param2 = '') => {
 
 export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
-    .with([], always([]))
-    .with([P._], always(['']))
+    .with([], () => {
+      const { book = 0, ceramic = 0, ornament = 0 } = view(activeLens(state), state)
+      return [
+        ...(book ? [ResourceEnum.Book] : []),
+        ...(ceramic ? [ResourceEnum.Ceramic] : []),
+        ...(ornament ? [ResourceEnum.Ornament] : []),
+        '',
+      ]
+    })
+    .with([P._], ([param1]) => {
+      const { book: usedBook = 0, ceramic: usedCeramic = 0, ornament: usedOrnament = 0 } = parseResourceParam(param1)
+      const { book: hasBook = 0, ceramic: hasCeramic = 0, ornament: hasOrnament = 0 } = view(activeLens(state), state)
+      return [
+        ...(hasBook - usedBook > 0 ? [ResourceEnum.Book] : []),
+        ...(hasCeramic - usedCeramic + usedBook > 0 ? [ResourceEnum.Ceramic] : []),
+        ...(hasOrnament - usedOrnament + usedCeramic > 0 ? [ResourceEnum.Ornament] : []),
+        '',
+      ]
+    })
+    .with([P._, P._], always(['']))
     .otherwise(always([]))
 )
