@@ -16,6 +16,7 @@ import {
   reverse,
   zipWith,
   zip,
+  concat,
 } from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
 
@@ -218,11 +219,10 @@ export const pointCostOptions = curry((points: number, player: Cost): string[] =
   return output
 })
 
+export const concatStr = (a: string, b: string): string => `${a}${b}`
+
 export const settlementCostOptions = curry(({ food, energy }: SettlementCost, player: Cost): string[] =>
-  lift((foodPayment, energyPayment) => `${foodPayment}${energyPayment}`)(
-    foodCostOptions(food, player),
-    energyCostOptions(energy, player)
-  )
+  lift(concatStr)(foodCostOptions(food, player), energyCostOptions(energy, player))
 )
 
 export const differentGoods = (cost: Cost) => Object.keys(cost).filter((k) => cost[k as keyof Cost] ?? 0 >= 1).length
