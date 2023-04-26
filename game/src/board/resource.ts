@@ -162,21 +162,21 @@ export const foodCostOptions = curry((food: number, player: Cost): string[] => {
   const output: string[] = []
   pipe(
     // first try eating the big stuff, which is most likely food
-    amountCostOptions(output, 'Mt', 5, player.meat ?? 0),
-    amountCostOptions(output, 'Be', 5, player.beer ?? 0),
-    amountCostOptions(output, 'Br', 3, player.bread ?? 0),
-    amountCostOptions(output, 'Sh', 2, player.sheep ?? 0),
+    amountCostOptions(output, ResourceEnum.Meat, 5, player.meat ?? 0),
+    amountCostOptions(output, ResourceEnum.Beer, 5, player.beer ?? 0),
+    amountCostOptions(output, ResourceEnum.Bread, 3, player.bread ?? 0),
+    amountCostOptions(output, ResourceEnum.Sheep, 2, player.sheep ?? 0),
     // try eating small food, raw stuff first
-    amountCostOptions(output, 'Gn', 1, player.grain ?? 0),
-    amountCostOptions(output, 'Fl', 1, player.flour ?? 0),
-    amountCostOptions(output, 'Ma', 1, player.malt ?? 0),
-    amountCostOptions(output, 'Gp', 1, player.grape ?? 0),
+    amountCostOptions(output, ResourceEnum.Grain, 1, player.grain ?? 0),
+    amountCostOptions(output, ResourceEnum.Flour, 1, player.flour ?? 0),
+    amountCostOptions(output, ResourceEnum.Malt, 1, player.malt ?? 0),
+    amountCostOptions(output, ResourceEnum.Grape, 1, player.grape ?? 0),
     // then try eating money, which they might be saving for land
-    amountCostOptions(output, 'Ni', 1, player.nickel ?? 0),
-    amountCostOptions(output, 'Pn', 1, player.penny ?? 0),
+    amountCostOptions(output, ResourceEnum.Nickel, 1, player.nickel ?? 0),
+    amountCostOptions(output, ResourceEnum.Penny, 1, player.penny ?? 0),
     // then try eating wine/whiskey, which has more utility than money
-    amountCostOptions(output, 'Wn', 1, player.wine ?? 0),
-    amountCostOptions(output, 'Wh', 1, player.whiskey ?? 0)
+    amountCostOptions(output, ResourceEnum.Wine, 1, player.wine ?? 0),
+    amountCostOptions(output, ResourceEnum.Whiskey, 1, player.whiskey ?? 0)
   )([['', food]])
   return output
 })
@@ -185,11 +185,36 @@ export const energyCostOptions = curry((energy: number, player: Cost): string[] 
   const output: string[] = []
   pipe(
     // first try eating the big stuff, which is most likely energy
-    amountCostOptions(output, 'Co', 3, player.coal ?? 0),
-    amountCostOptions(output, 'Pt', 2, player.peat ?? 0),
-    amountCostOptions(output, 'Wo', 1, player.wood ?? 0),
-    amountCostOptions(output, 'St', 0.5, player.straw ?? 0)
+    amountCostOptions(output, ResourceEnum.Coal, 3, player.coal ?? 0),
+    amountCostOptions(output, ResourceEnum.Peat, 2, player.peat ?? 0),
+    amountCostOptions(output, ResourceEnum.Wood, 1, player.wood ?? 0),
+    amountCostOptions(output, ResourceEnum.Straw, 0.5, player.straw ?? 0)
   )([['', energy]])
+  return output
+})
+
+export const coinCostOptions = curry((coins: number, player: Cost): string[] => {
+  const output: string[] = []
+  pipe(
+    amountCostOptions(output, ResourceEnum.Nickel, 5, player.nickel ?? 0),
+    amountCostOptions(output, ResourceEnum.Penny, 1, player.penny ?? 0),
+    amountCostOptions(output, ResourceEnum.Whiskey, 2, player.whiskey ?? 0),
+    amountCostOptions(output, ResourceEnum.Wine, 1, player.wine ?? 0)
+  )([['', coins]])
+  return output
+})
+
+export const pointCostOptions = curry((points: number, player: Cost): string[] => {
+  const output: string[] = []
+  pipe(
+    amountCostOptions(output, ResourceEnum.Reliquary, 8, player.reliquary ?? 0),
+    amountCostOptions(output, ResourceEnum.Ornament, 4, player.ornament ?? 0),
+    amountCostOptions(output, ResourceEnum.Ceramic, 3, player.ceramic ?? 0),
+    amountCostOptions(output, ResourceEnum.Book, 2, player.book ?? 0),
+    amountCostOptions(output, ResourceEnum.Nickel, 2, player.nickel ?? 0),
+    amountCostOptions(output, ResourceEnum.Whiskey, 1, player.whiskey ?? 0),
+    amountCostOptions(output, ResourceEnum.Wine, 1, player.wine ?? 0)
+  )([['', points]])
   return output
 })
 
