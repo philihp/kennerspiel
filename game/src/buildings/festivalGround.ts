@@ -1,8 +1,9 @@
-import { always, curry, identity, pipe, reduce } from 'ramda'
+import { always, curry, identity, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { getCost, payCost, withActivePlayer } from '../board/player'
-import { costPoints, parseResourceParam } from '../board/resource'
-import { BuildingEnum, Cost, GameStatePlaying, StateReducer, Tableau, TableauReducer, Tile } from '../types'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
+import { costPoints, parseResourceParam, rewardCostOptions } from '../board/resource'
+import { BuildingEnum, Cost, GameStatePlaying, StateReducer, TableauReducer, Tile } from '../types'
+import { forestLocations, moorLocations } from '../board/landscape'
 
 // TODO: refactor this with houseOfTheBrotherhood
 
@@ -41,9 +42,14 @@ export const festivalGround = (input = '', output = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
-  match(partial)
-    .with([], always([]))
-    .with([P._], always(['']))
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] => {
+  const player = view(activeLens(state), state)
+  return match(partial)
+    .with([], () => {
+      if (player.beer) return ['Be', '']
+      return ['']
+    })
+    .with([P._], () => rewardCostOptions(forestLocations(player).length + moorLocations(player).length))
+    .with([P._, P._], always(['']))
     .otherwise(always([]))
-)
+})

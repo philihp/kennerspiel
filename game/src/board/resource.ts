@@ -16,7 +16,11 @@ import {
   reverse,
   zipWith,
   zip,
-  concat,
+  uniq,
+  sortBy,
+  tap,
+  comparator,
+  sort,
 } from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
 
@@ -136,7 +140,7 @@ export const resourceArray = (resource: ResourceEnum, maxAmount = Infinity) =>
 export const zip3 = (arrA: string[], arrB: string[], arrC: string[]): string[] =>
   zipWith<[string, string], string, string>(([a, b], c) => a + b + c)(zip(arrA, arrB), arrC)
 
-type Tracer = [resources: string, foodNeeded: number]
+type Tracer = [resources: string, amount: number]
 
 const amountCostOptions =
   (outputs: string[], token: string, foodValue: number, totalCount: number) =>
@@ -158,6 +162,29 @@ const amountCostOptions =
       [] as Tracer[],
       incompletes
     )
+
+const rewardOptions =
+  (outputs: string[], token: string, points: number, pointsNext: number) =>
+  (incompletes: Tracer[]): Tracer[] => {
+    return reduce(
+      (accum, prevTrace) => {
+        const [prevPrefix, prevFood] = prevTrace
+        map((numSheep) => {
+          const nextFood = prevFood - numSheep * points
+          const nextPrefix = `${prevPrefix}${stringRepeater(token, numSheep)}`
+          if (nextFood >= 0) {
+            outputs.push(nextPrefix)
+          }
+          if (nextFood >= pointsNext) {
+            accum.push([nextPrefix, nextFood])
+          }
+        }, reverse(range(0, 1 + Math.floor(prevFood / points))))
+        return accum
+      },
+      [] as Tracer[],
+      incompletes
+    )
+  }
 
 export const foodCostOptions = curry((food: number, player: Cost): string[] => {
   const output: string[] = []
@@ -296,3 +323,21 @@ export const canAfford =
     )
       ? player
       : undefined
+
+const byPoints = comparator<string>((a: string, b: string) => {
+  return costPoints(parseResourceParam(a)) > costPoints(parseResourceParam(b))
+})
+
+export const rewardCostOptions = curry((totalPoints: number): string[] => {
+  // this one is different because we want our output to be <= points, and cannot
+  // give the player money or whiskey/wine, but also there's an infinite amount of
+  // each thing they can get, so that's nice
+  const output: string[] = []
+  pipe(
+    rewardOptions(output, ResourceEnum.Reliquary, 8, 4),
+    rewardOptions(output, ResourceEnum.Ornament, 4, 3),
+    rewardOptions(output, ResourceEnum.Ceramic, 3, 2),
+    rewardOptions(output, ResourceEnum.Book, 2, Infinity)
+  )([['', totalPoints]])
+  return uniq(sort(byPoints, output))
+})
