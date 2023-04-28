@@ -186,13 +186,13 @@ describe('buildings/fuelMerchant', () => {
       expect(c0).toStrictEqual([
         'CoCoCo',
         'CoCoWoWoWo',
-        'CoCoWoWoStSt',
+        'CoCoWoWoSwSw',
         'CoCo',
         'CoWoWoWo',
-        'CoWoWoStSt',
+        'CoWoWoSwSw',
         'Co',
         'WoWoWo',
-        'WoWoStSt',
+        'WoWoSwSw',
         '',
       ])
     })

@@ -265,3 +265,31 @@ export const forestLocations = (player: Tableau): string[] =>
     [] as string[],
     player.landscape
   )
+
+export const moorLocationsForCol = (rawCol: string, player: Tableau): string[] => {
+  const col = Number.parseInt(rawCol, 10) + 2
+  const colsAtRow = map((row: Tile[]) => row[col], player.landscape)
+  return addIndex<Tile, string[]>(reduce<Tile, string[]>)(
+    (accum: string[], tile: Tile, rowIndex: number) => {
+      if (tile[1] === BuildingEnum.Peat) accum.push(`${rowIndex - player.landscapeOffset}`)
+      return accum
+    },
+    [] as string[],
+    colsAtRow
+  )
+}
+
+export const moorLocations = (player: Tableau): string[] =>
+  addIndex(reduce<Tile[], string[]>)(
+    (accum: string[], row: Tile[], rowIndex: number) =>
+      addIndex(reduce<Tile, string[]>)(
+        (innerAccum: string[], tile: Tile, colIndex: number) => {
+          if (tile[1] === BuildingEnum.Peat) innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
+          return innerAccum
+        },
+        accum,
+        row
+      ),
+    [] as string[],
+    player.landscape
+  )

@@ -1,17 +1,10 @@
 import { addIndex, always, any, curry, map, pipe, reduce } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
-import {
-  GameCommandCutPeatParams,
-  Tile,
-  BuildingEnum,
-  GameCommandEnum,
-  StateReducer,
-  GameStatePlaying,
-  Tableau,
-} from '../types'
+import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer, GameStatePlaying } from '../types'
 import { take, updateRondel, withRondel } from '../board/rondel'
 import { oncePerFrame } from '../board/frame'
+import { moorLocations, moorLocationsForCol } from '../board/landscape'
 
 const removePeatAt = (row: number, col: number) =>
   withActivePlayer((player) => {
@@ -40,34 +33,6 @@ const hasAMoor = (landscape: Tile[][]): boolean =>
       return tile?.[1] === BuildingEnum.Peat
     }, landRow)
   }, landscape)
-
-const moorLocationsForCol = (rawCol: string, player: Tableau): string[] => {
-  const col = Number.parseInt(rawCol, 10) + 2
-  const colsAtRow = map((row: Tile[]) => row[col], player.landscape)
-  return addIndex<Tile, string[]>(reduce<Tile, string[]>)(
-    (accum: string[], tile: Tile, rowIndex: number) => {
-      if (tile[1] === BuildingEnum.Peat) accum.push(`${rowIndex - player.landscapeOffset}`)
-      return accum
-    },
-    [] as string[],
-    colsAtRow
-  )
-}
-
-const moorLocations = (player: Tableau): string[] =>
-  addIndex(reduce<Tile[], string[]>)(
-    (accum: string[], row: Tile[], rowIndex: number) =>
-      addIndex(reduce<Tile, string[]>)(
-        (innerAccum: string[], tile: Tile, colIndex: number) => {
-          if (tile[1] === BuildingEnum.Peat) innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
-          return innerAccum
-        },
-        accum,
-        row
-      ),
-    [] as string[],
-    player.landscape
-  )
 
 const givePlayerPeat =
   (useJoker: boolean): StateReducer =>
