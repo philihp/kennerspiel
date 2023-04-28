@@ -81,7 +81,10 @@ export const complete = curry((state: GameStatePlaying, partial: string[]): stri
           return playerFood >= requiredFood && playerEnergy >= requiredEnergy
         }, view(activeLens(state), state).settlements)
       })
-      .with([GameCommandEnum.SETTLE, P._], ([, settlement]) => erectableLocations(settlement as SettlementEnum, player))
+      .with([GameCommandEnum.SETTLE, P._], ([, settlement]) =>
+        // Return all the coords which match the terrain for this building...
+        erectableLocations(settlement as SettlementEnum, player)
+      )
       .with([GameCommandEnum.SETTLE, P._, P._], ([, settlement, col]) =>
         erectableLocationsCol(settlement as SettlementEnum, col, player)
       )
