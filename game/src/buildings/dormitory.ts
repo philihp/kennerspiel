@@ -1,8 +1,8 @@
-import { always, curry, pipe } from 'ramda'
+import { always, curry, map, min, pipe, range, reverse, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { getCost, payCost, withActivePlayer } from '../board/player'
-import { parseResourceParam } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
+import { parseResourceParam, stringRepeater } from '../board/resource'
+import { GameStatePlaying, ResourceEnum } from '../types'
 
 export const dormitory = (param = '') => {
   const input = parseResourceParam(param)
@@ -18,7 +18,13 @@ export const dormitory = (param = '') => {
 
 export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
-    .with([], always([]))
+    .with([], () => {
+      const { wood = 0, straw = 0 } = view(activeLens(state), state)
+      return map(
+        (n) => `${stringRepeater(ResourceEnum.Wood, n)}${stringRepeater(ResourceEnum.Straw, n)}`,
+        reverse(range(0, 1 + min(wood, straw)))
+      )
+    })
     .with([P._], always(['']))
     .otherwise(always([]))
 )
