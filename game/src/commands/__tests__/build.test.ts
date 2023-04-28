@@ -359,5 +359,65 @@ describe('commands/build', () => {
       const c0 = complete(s1, ['BUILD', BuildingEnum.HarborPromenade])
       expect(c0).toStrictEqual(['-1 -1', '-1 0', '-1 2', '-1 3'])
     })
+    it('gives all the places the given building can be built if given a col', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [['W'], ['C'], ['H'], ['P'], ['P'], ['H'], ['H'], [], []],
+              [['W'], ['C'], ['H'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H'], [], []],
+            ] as Tile[][],
+            landscapeOffset: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, ['BUILD', BuildingEnum.GrapevineA, '4'])
+      expect(c0).toStrictEqual(['-1', '1'])
+    })
+    it('complete if given all necessary params', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, ['BUILD', BuildingEnum.GrapevineA, '4', '1'])
+      expect(c0).toStrictEqual([''])
+    })
+    it('cant complete if too many params', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, ['BUILD', BuildingEnum.GrapevineA, '4', '1', 'Wo'])
+      expect(c0).toStrictEqual([])
+    })
   })
 })
