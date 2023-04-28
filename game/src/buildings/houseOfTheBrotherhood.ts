@@ -1,8 +1,8 @@
-import { always, curry, flatten, identity, map, pipe, reduce, sum } from 'ramda'
+import { always, curry, flatten, identity, map, pipe, reduce, sum, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { isCloisterBuilding } from '../board/buildings'
-import { getCost, payCost, withActivePlayer } from '../board/player'
-import { costMoney, costPoints, parseResourceParam } from '../board/resource'
+import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
+import { costMoney, costPoints, parseResourceParam, rewardCostOptions, coinCostOptions } from '../board/resource'
 import { GameCommandConfigParams, GameStatePlaying, Tile } from '../types'
 
 const pointsPerCloister = (config: GameCommandConfigParams) =>
@@ -17,11 +17,16 @@ const cloistersInRow = map(([_, building]: Tile) => (isCloisterBuilding(building
 // given a list of rows, do the thing
 const cloistersInLandscape = map((landRow: Tile[]) => cloistersInRow(landRow as Tile[]))
 
-const checkCloistersForPoints = (points: number) => (state: GameStatePlaying | undefined) => {
-  if (state === undefined) return undefined
+const entitledPointCount = (state: GameStatePlaying | undefined): number => {
+  if (state === undefined) return -1
   const multiplier = pointsPerCloister(state.config)
   const cloisters = sum(flatten(cloistersInLandscape(state.players[state.frame.activePlayerIndex].landscape)))
-  if (multiplier * cloisters < points) return undefined
+  return multiplier * cloisters
+}
+
+// TODO: turn into R.when
+const checkCloistersForPoints = (points: number) => (state: GameStatePlaying | undefined) => {
+  if (entitledPointCount(state) < points) return undefined
   return state
 }
 
@@ -43,9 +48,15 @@ export const houseOfTheBrotherhood = (param1 = '', param2 = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
-  match(partial)
-    .with([], always([]))
-    .with([P._], always(['']))
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] => {
+  const player = view(activeLens(state), state)
+  return match(partial)
+    .with([], () => [...coinCostOptions(5, player), ''])
+    .with([P._], ([paidNickels]) => {
+      const input = parseResourceParam(paidNickels)
+      if (costMoney(input) < 5) return []
+      return rewardCostOptions(entitledPointCount(state))
+    })
+    .with([P._, P._], always(['']))
     .otherwise(always([]))
-)
+})
