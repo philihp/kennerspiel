@@ -100,61 +100,62 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
   )
 }
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] =>
-  match<string[], string[]>(partial)
-    .with([], () => {
-      if (!state.frame.bonusActions.includes(GameCommandEnum.WORK_CONTRACT) && state.frame.mainActionUsed) return []
-      const activePlayer = view(activeLens(state), state)
-      // if this player can't possibly pay the work contract fee
-      if (checkWorkContractPayment(activePlayer)(state) === undefined) return []
-      // if all other players have no clergy available
-      if (
-        all(
-          (player) =>
-            player === activePlayer ||
-            //
-            player.clergy.length === 0,
-          state.players
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] =>
+    match<string[], string[]>(partial)
+      .with([], () => {
+        if (!state.frame.bonusActions.includes(GameCommandEnum.WORK_CONTRACT) && state.frame.mainActionUsed) return []
+        const activePlayer = view(activeLens(state), state)
+        // if this player can't possibly pay the work contract fee
+        if (checkWorkContractPayment(activePlayer)(state) === undefined) return []
+        // if all other players have no clergy available
+        if (
+          all(
+            (player) =>
+              player === activePlayer ||
+              //
+              player.clergy.length === 0,
+            state.players
+          )
+        )
+          return []
+        // no need to check if there are buildings to be used, each player has 3 heartland buildings
+        return [GameCommandEnum.WORK_CONTRACT]
+      })
+      .with([GameCommandEnum.WORK_CONTRACT], () =>
+        reduce(
+          (accum, i) => {
+            if (state.frame.activePlayerIndex === i) return accum
+            const player = state.players[i]
+            if (player.clergy.length === 0) return accum
+            forEach(
+              forEach((landStack) => {
+                if (landStack.length === 0) return
+                const [, erection, clergy] = landStack
+                if (
+                  erection !== undefined &&
+                  clergy === undefined &&
+                  ![BuildingEnum.Forest, BuildingEnum.Peat].includes(erection)
+                )
+                  accum.push(erection)
+              }),
+              player.landscape
+            )
+            return accum
+          },
+          [] as BuildingEnum[],
+          range(0, state.config.players)
         )
       )
-        return []
-      // no need to check if there are buildings to be used, each player has 3 heartland buildings
-      return [GameCommandEnum.WORK_CONTRACT]
-    })
-    .with([GameCommandEnum.WORK_CONTRACT], () =>
-      reduce(
-        (accum, i) => {
-          if (state.frame.activePlayerIndex === i) return accum
-          const player = state.players[i]
-          if (player.clergy.length === 0) return accum
-          forEach(
-            forEach((landStack) => {
-              if (landStack.length === 0) return
-              const [, erection, clergy] = landStack
-              if (
-                erection !== undefined &&
-                clergy === undefined &&
-                ![BuildingEnum.Forest, BuildingEnum.Peat].includes(erection)
-              )
-                accum.push(erection)
-            }),
-            player.landscape
-          )
-          return accum
-        },
-        [] as BuildingEnum[],
-        range(0, state.config.players)
-      )
-    )
-    .with([GameCommandEnum.WORK_CONTRACT, P._], () => {
-      const options = []
-      const { whiskey = 0, wine = 0, penny = 0, nickel = 0 } = view(activeLens(state), state)
-      if (wine) options.push('Wn')
-      if (whiskey) options.push('Wh')
-      if (workContractCost(state) === 1 && (penny >= 1 || nickel)) options.push('Pn')
-      if (workContractCost(state) === 2 && (penny >= 2 || nickel)) options.push('PnPn')
-      return options
-    })
-    .with([GameCommandEnum.WORK_CONTRACT, P._, P._], () => [''])
-    .otherwise(() => [])
-)
+      .with([GameCommandEnum.WORK_CONTRACT, P._], () => {
+        const options = []
+        const { whiskey = 0, wine = 0, penny = 0, nickel = 0 } = view(activeLens(state), state)
+        if (wine) options.push('Wn')
+        if (whiskey) options.push('Wh')
+        if (workContractCost(state) === 1 && (penny >= 1 || nickel)) options.push('Pn')
+        if (workContractCost(state) === 2 && (penny >= 2 || nickel)) options.push('PnPn')
+        return options
+      })
+      .with([GameCommandEnum.WORK_CONTRACT, P._, P._], () => [''])
+      .otherwise(() => [])

@@ -182,6 +182,8 @@ export const buyPlot = ({ side, y }: GameCommandBuyPlotParams) =>
     addNewPlot(y, side)
   )
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  return []
-})
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] => {
+    return []
+  }

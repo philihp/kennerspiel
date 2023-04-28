@@ -8,12 +8,14 @@ export const commit: StateReducer = pipe(
   nextFrame
 )
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  return match<string[], string[]>(partial)
-    .with([], () => {
-      if (state.frame.mainActionUsed) return [GameCommandEnum.COMMIT]
-      return []
-    })
-    .with([GameCommandEnum.COMMIT], () => [''])
-    .otherwise(always([]))
-})
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] => {
+    return match<string[], string[]>(partial)
+      .with([], () => {
+        if (state.frame.mainActionUsed) return [GameCommandEnum.COMMIT]
+        return []
+      })
+      .with([GameCommandEnum.COMMIT], () => [''])
+      .otherwise(always([]))
+  }

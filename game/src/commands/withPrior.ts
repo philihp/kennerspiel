@@ -43,16 +43,17 @@ export const withPrior: StateReducer = (state) => {
   return withPriorForWorkContract(state)
 }
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] =>
-  match<string[], string[]>(partial)
-    .with([], () => {
-      const player = view(activeLens(state), state)
-      // TODO don't show if we already have nextUse = prior only
-      if (any(isPrior, player.clergy)) return [GameCommandEnum.WITH_PRIOR]
-      return []
-    })
-    .with([GameCommandEnum.WITH_PRIOR], () => {
-      return ['']
-    })
-    .otherwise(() => [])
-)
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] =>
+    match<string[], string[]>(partial)
+      .with([], () => {
+        const player = view(activeLens(state), state)
+        // TODO don't show if we already have nextUse = prior only
+        if (any(isPrior, player.clergy)) return [GameCommandEnum.WITH_PRIOR]
+        return []
+      })
+      .with([GameCommandEnum.WITH_PRIOR], () => {
+        return ['']
+      })
+      .otherwise(() => [])

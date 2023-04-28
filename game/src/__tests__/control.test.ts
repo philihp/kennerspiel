@@ -4,6 +4,7 @@ import {
   Clergy,
   Frame,
   GameCommandConfigParams,
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -12,6 +13,40 @@ import {
   Tableau,
   Tile,
 } from '../types'
+
+import {
+  completeBuild,
+  completeCommit,
+  completeConvert,
+  completeCutPeat,
+  completeFellTrees,
+  completeSettle,
+  completeUse,
+  completeWorkContract,
+  completeWithLaybrother,
+  completeWithPrior,
+  completeBuyPlot,
+  completeBuyDistrict,
+} from '../commands'
+
+jest.mock('../commands', () => {
+  const innerUse = jest.fn().mockReturnValue(['USE'])
+  return {
+    ...jest.requireActual('../commands'),
+    completeBuild: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['BUILD'])),
+    completeCommit: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['COMMIT'])),
+    completeConvert: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['CONVERT'])),
+    completeCutPeat: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['CUT_PEAT'])),
+    completeFellTrees: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['FELL_TREES'])),
+    completeSettle: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['SETTLE'])),
+    completeUse: jest.fn().mockReturnValue(innerUse),
+    completeWorkContract: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['WORK_CONTRACT'])),
+    completeWithLaybrother: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['WITH_LAYBROTHER'])),
+    completeWithPrior: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['WITH_PRIOR'])),
+    completeBuyPlot: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['BUY_PLOT'])),
+    completeBuyDistrict: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['BUY_DISTRICT'])),
+  }
+})
 
 describe('control', () => {
   describe('control/view', () => {
@@ -106,25 +141,142 @@ describe('control', () => {
       ])
     })
 
-    it('gives a list of commands if no partial', () => {
+    it('asks the command completeBuild with no partial to see if it can be used', () => {
       const c0 = control(s0, [], 0)
-      expect(c0.partial).toStrictEqual([])
-      expect(c0.completion).toContain('USE')
-      expect(c0.completion).toContain('BUY_DISTRICT')
-      expect(c0.completion).toContain('FELL_TREES')
-      expect(c0.completion).toContain('CUT_PEAT')
+      expect(completeBuild(undefined!)).toHaveBeenCalledWith([])
+      expect(completeBuild).toHaveBeenCalledWith(s0)
     })
-
-    it('gives a list of usable buidings if partial use', () => {
-      const c0 = control(s0, ['USE'], 0)
-      expect(c0.partial).toStrictEqual(['USE'])
-      expect(c0.completion).toStrictEqual(['LR1', 'LR2', 'G01'])
+    it('delegates completion with other params to completeBuild', () => {
+      const c0 = control(s0, [GameCommandEnum.BUILD], 0)
+      expect(completeBuild(undefined!)).toHaveBeenCalledWith([])
+      expect(completeBuild).toHaveBeenCalledWith(s0)
     })
-
-    it('using LR1 can be nothing, or Jo', () => {
-      const c0 = control(s0, ['USE', 'LR1'], 0)
-      expect(c0.partial).toStrictEqual(['USE', 'LR1'])
-      expect(c0.completion).toStrictEqual(['', 'Jo'])
+    it('asks the command completeCommit with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeCommit(undefined!)).toHaveBeenCalledWith([])
+      expect(completeCommit).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeCommit', () => {
+      const c0 = control(s0, [GameCommandEnum.COMMIT], 0)
+      expect(completeCommit(undefined!)).toHaveBeenCalledWith([])
+      expect(completeCommit).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeConvert with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeConvert(undefined!)).toHaveBeenCalledWith([])
+      expect(completeConvert).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeConvert', () => {
+      const c0 = control(s0, [GameCommandEnum.CONVERT], 0)
+      expect(completeConvert(undefined!)).toHaveBeenCalledWith([])
+      expect(completeConvert).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeCutPeat with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeCutPeat(undefined!)).toHaveBeenCalledWith([])
+      expect(completeCutPeat).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeCutPeat', () => {
+      const c0 = control(s0, [GameCommandEnum.CUT_PEAT], 0)
+      expect(completeCutPeat(undefined!)).toHaveBeenCalledWith([])
+      expect(completeCutPeat).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeFellTrees with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeFellTrees(undefined!)).toHaveBeenCalledWith([])
+      expect(completeFellTrees).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeFellTrees', () => {
+      const c0 = control(s0, [GameCommandEnum.FELL_TREES], 0)
+      expect(completeFellTrees(undefined!)).toHaveBeenCalledWith([])
+      expect(completeFellTrees).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeSettle with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeSettle(undefined!)).toHaveBeenCalledWith([])
+      expect(completeSettle).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeSettle', () => {
+      const c0 = control(s0, [GameCommandEnum.SETTLE], 0)
+      expect(completeSettle(undefined!)).toHaveBeenCalledWith([])
+      expect(completeSettle).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeUse with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeUse(undefined!)).toHaveBeenCalledWith([])
+      expect(completeUse).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeUse', () => {
+      const c0 = control(s0, [GameCommandEnum.USE], 0)
+      expect(completeUse(undefined!)).toHaveBeenCalledWith([])
+      expect(completeUse).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeWorkContract with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeWorkContract(undefined!)).toHaveBeenCalledWith([])
+      expect(completeWorkContract).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeWorkContract', () => {
+      const c0 = control(s0, [GameCommandEnum.WORK_CONTRACT], 0)
+      expect(completeWorkContract(undefined!)).toHaveBeenCalledWith([])
+      expect(completeWorkContract).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeWithLaybrother with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeWithLaybrother(undefined!)).toHaveBeenCalledWith([])
+      expect(completeWithLaybrother).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeWithLaybrother', () => {
+      const c0 = control(s0, [GameCommandEnum.WITH_LAYBROTHER], 0)
+      expect(completeWithLaybrother(undefined!)).toHaveBeenCalledWith([])
+      expect(completeWithLaybrother).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeWithPrior with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeWithPrior(undefined!)).toHaveBeenCalledWith([])
+      expect(completeWithPrior).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeWithPrior', () => {
+      const c0 = control(s0, [GameCommandEnum.WITH_PRIOR], 0)
+      expect(completeWithPrior(undefined!)).toHaveBeenCalledWith([])
+      expect(completeWithPrior).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeBuyPlot with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeBuyPlot(undefined!)).toHaveBeenCalledWith([])
+      expect(completeBuyPlot).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeBuyPlot', () => {
+      const c0 = control(s0, [GameCommandEnum.BUY_PLOT], 0)
+      expect(completeBuyPlot(undefined!)).toHaveBeenCalledWith([])
+      expect(completeBuyPlot).toHaveBeenCalledWith(s0)
+    })
+    it('asks the command completeBuyDistrict with no partial to see if it can be used', () => {
+      const c0 = control(s0, [], 0)
+      expect(completeBuyDistrict(undefined!)).toHaveBeenCalledWith([])
+      expect(completeBuyDistrict).toHaveBeenCalledWith(s0)
+    })
+    it('delegates completion with other params to completeBuyDistrict', () => {
+      const c0 = control(s0, [GameCommandEnum.BUY_DISTRICT], 0)
+      expect(completeBuyDistrict(undefined!)).toHaveBeenCalledWith([])
+      expect(completeBuyDistrict).toHaveBeenCalledWith(s0)
+    })
+    it('concats root commands together into a list', () => {
+      const c0 = control(s0, [], 0)
+      expect(c0.completion).toStrictEqual([
+        'USE',
+        'BUILD',
+        'CUT_PEAT',
+        'FELL_TREES',
+        'WORK_CONTRACT',
+        'BUY_PLOT',
+        'BUY_DISTRICT',
+        'CONVERT',
+        'SETTLE',
+        'WITH_LAYBROTHER',
+        'WITH_PRIOR',
+        'COMMIT',
+      ])
     })
 
     it('handles a mistake in the flow without an error or overflow', () => {

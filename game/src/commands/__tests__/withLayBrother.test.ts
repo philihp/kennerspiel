@@ -212,7 +212,7 @@ describe('commands/withLaybrother', () => {
           currentPlayerIndex: 2,
         },
       } as GameStatePlaying
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['WITH_LAYBROTHER'])
     })
     it('is not possible if active player is current player', () => {
@@ -224,16 +224,16 @@ describe('commands/withLaybrother', () => {
           currentPlayerIndex: 2,
         },
       } as GameStatePlaying
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
     it('has no other parameters', () => {
-      const c0 = complete(s0, [GameCommandEnum.WITH_LAYBROTHER])
+      const c0 = complete(s0)([GameCommandEnum.WITH_LAYBROTHER])
       expect(c0).toStrictEqual([''])
     })
 
     it('returns [] on anything else', () => {
-      const c0 = complete(s0, ['HELLO'])
+      const c0 = complete(s0)(['HELLO'])
       expect(c0).toStrictEqual([])
     })
   })

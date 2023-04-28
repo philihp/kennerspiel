@@ -258,7 +258,7 @@ describe('commands/build', () => {
           bonusActions: [GameCommandEnum.BUILD],
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['BUILD'])
     })
     it('allows running if main action not used yet', () => {
@@ -270,7 +270,7 @@ describe('commands/build', () => {
           bonusActions: [],
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['BUILD'])
     })
     it('does not allow running if not not permitted by frame', () => {
@@ -282,7 +282,7 @@ describe('commands/build', () => {
           bonusActions: [],
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
     it('gives all the buildings which may be built', () => {
@@ -321,7 +321,7 @@ describe('commands/build', () => {
           bonusActions: [],
         },
       }
-      const c0 = complete(s1, ['BUILD'])
+      const c0 = complete(s1)(['BUILD'])
       expect(c0).toStrictEqual([
         BuildingEnum.Priory,
         BuildingEnum.GrainStorage,
@@ -353,7 +353,7 @@ describe('commands/build', () => {
         },
         buildings: [BuildingEnum.StoneMerchant],
       }
-      const c0 = complete(s1, ['BUILD', BuildingEnum.StoneMerchant])
+      const c0 = complete(s1)(['BUILD', BuildingEnum.StoneMerchant])
       expect(c0).toStrictEqual(['3 0', '3 1'])
     })
     it('considers terrain type', () => {
@@ -378,7 +378,7 @@ describe('commands/build', () => {
           bonusActions: [],
         },
       }
-      const c0 = complete(s1, ['BUILD', BuildingEnum.HarborPromenade])
+      const c0 = complete(s1)(['BUILD', BuildingEnum.HarborPromenade])
       expect(c0).toStrictEqual(['-1 -1', '-1 0', '-1 2', '-1 3'])
     })
     it('gives all the places the given building can be built if given a col', () => {
@@ -402,7 +402,7 @@ describe('commands/build', () => {
           bonusActions: [],
         },
       }
-      const c0 = complete(s1, ['BUILD', BuildingEnum.GrapevineA, '4'])
+      const c0 = complete(s1)(['BUILD', BuildingEnum.GrapevineA, '4'])
       expect(c0).toStrictEqual(['-1', '1'])
     })
     it('complete if given all necessary params', () => {
@@ -420,7 +420,7 @@ describe('commands/build', () => {
           bonusActions: [],
         },
       }
-      const c0 = complete(s1, ['BUILD', BuildingEnum.GrapevineA, '4', '1'])
+      const c0 = complete(s1)(['BUILD', BuildingEnum.GrapevineA, '4', '1'])
       expect(c0).toStrictEqual([''])
     })
     it('cant complete if too many params', () => {
@@ -438,7 +438,7 @@ describe('commands/build', () => {
           bonusActions: [],
         },
       }
-      const c0 = complete(s1, ['BUILD', BuildingEnum.GrapevineA, '4', '1', 'Wo'])
+      const c0 = complete(s1)(['BUILD', BuildingEnum.GrapevineA, '4', '1', 'Wo'])
       expect(c0).toStrictEqual([])
     })
   })

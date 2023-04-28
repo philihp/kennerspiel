@@ -1,8 +1,21 @@
-import { P, match } from 'ts-pattern'
-import { always, head, reduce, toPairs } from 'ramda'
+import { match } from 'ts-pattern'
+import { always, head, reduce, toPairs, unnest } from 'ramda'
 import { pickFrameFlow } from './board/frame'
-import { Flower, GameCommandEnum, GameStatePlaying, OrdinalFrame, Controls, Frame } from './types'
-import { complete } from './commands'
+import { Flower, GameCommandEnum, GameStatePlaying, OrdinalFrame, Controls } from './types'
+import {
+  completeBuild,
+  completeCommit,
+  completeConvert,
+  completeCutPeat,
+  completeFellTrees,
+  completeSettle,
+  completeUse,
+  completeWorkContract,
+  completeWithLaybrother,
+  completeWithPrior,
+  completeBuyPlot,
+  completeBuyDistrict,
+} from './commands'
 
 const computeFlow = (state: GameStatePlaying) => {
   const frameFlow = pickFrameFlow(state.config)
@@ -29,29 +42,35 @@ const computeFlow = (state: GameStatePlaying) => {
 
 export const control = (state: GameStatePlaying, partial: string[], player?: number): Controls => {
   const completion = match(head(partial))
-    .with(undefined, () =>
-      reduce(
-        (accum, pair) => {
-          const [_command, complete] = pair
-          accum.push(...complete(state)(partial))
-          return accum
-        },
-        [] as string[],
-        toPairs(complete) as [GameCommandEnum, (state: GameStatePlaying) => (partial: string[]) => string[]][]
-      )
-    )
+    .with(undefined, () => [
+      ...completeUse(state)([]),
+      ...completeBuild(state)([]),
+      ...completeCutPeat(state)([]),
+      ...completeFellTrees(state)([]),
+      ...completeWorkContract(state)([]),
+      ...completeBuyPlot(state)([]),
+      ...completeBuyDistrict(state)([]),
+      ...completeConvert(state)([]),
+      ...completeSettle(state)([]),
+      ...completeWithLaybrother(state)([]),
+      ...completeWithPrior(state)([]),
+      ...completeCommit(state)([]),
+    ])
     // this can be prettier with https://github.com/gvergnaud/ts-pattern/pull/139
     // git blame this line and see how it used to be, but i really want something like
     // .with([GameCommandEnum.Use, P.rest], complete.USE(state))
-    .with(GameCommandEnum.USE, () => complete.USE(state)(partial))
-    .with(GameCommandEnum.BUILD, () => complete.BUILD(state)(partial))
-    .with(GameCommandEnum.CUT_PEAT, () => complete.CUT_PEAT(state)(partial))
-    .with(GameCommandEnum.FELL_TREES, () => complete.FELL_TREES(state)(partial))
-    .with(GameCommandEnum.WORK_CONTRACT, () => complete.WORK_CONTRACT(state)(partial))
-    .with(GameCommandEnum.BUY_PLOT, () => complete.BUY_PLOT(state)(partial))
-    .with(GameCommandEnum.BUY_DISTRICT, () => complete.BUY_DISTRICT(state)(partial))
-    .with(GameCommandEnum.CONVERT, () => complete.CONVERT(state)(partial))
-    .with(GameCommandEnum.SETTLE, () => complete.SETTLE(state)(partial))
+    .with(GameCommandEnum.USE, () => completeUse(state)(partial))
+    .with(GameCommandEnum.BUILD, () => completeBuild(state)(partial))
+    .with(GameCommandEnum.CUT_PEAT, () => completeCutPeat(state)(partial))
+    .with(GameCommandEnum.FELL_TREES, () => completeFellTrees(state)(partial))
+    .with(GameCommandEnum.WORK_CONTRACT, () => completeWorkContract(state)(partial))
+    .with(GameCommandEnum.BUY_PLOT, () => completeBuyPlot(state)(partial))
+    .with(GameCommandEnum.BUY_DISTRICT, () => completeBuyDistrict(state)(partial))
+    .with(GameCommandEnum.CONVERT, () => completeConvert(state)(partial))
+    .with(GameCommandEnum.SETTLE, () => completeSettle(state)(partial))
+    .with(GameCommandEnum.WITH_LAYBROTHER, () => completeWithLaybrother(state)(partial))
+    .with(GameCommandEnum.WITH_PRIOR, () => completeWithPrior(state)(partial))
+    .with(GameCommandEnum.COMMIT, () => completeCommit(state)(partial))
     .otherwise(always([]))
 
   return {

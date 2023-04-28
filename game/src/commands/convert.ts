@@ -65,23 +65,24 @@ export const convert = ({ grain, wine, nickel, whiskey, penny }: GameCommandConv
   )
 }
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] =>
-  match<string[], string[]>(partial)
-    .with([], () => {
-      if (
-        withActivePlayer((player) => {
-          if (!player) return player
-          const { penny, grain, wine, nickel, whiskey } = player
-          if (penny >= 5 || grain || wine || nickel || whiskey) return player
-          return undefined
-        })(state)
-      ) {
-        return [GameCommandEnum.CONVERT]
-      }
-      return []
-    })
-    .with([GameCommandEnum.CONVERT], () => {
-      return []
-    })
-    .otherwise(() => [])
-)
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] =>
+    match<string[], string[]>(partial)
+      .with([], () => {
+        if (
+          withActivePlayer((player) => {
+            if (!player) return player
+            const { penny, grain, wine, nickel, whiskey } = player
+            if (penny >= 5 || grain || wine || nickel || whiskey) return player
+            return undefined
+          })(state)
+        ) {
+          return [GameCommandEnum.CONVERT]
+        }
+        return []
+      })
+      .with([GameCommandEnum.CONVERT], () => {
+        return []
+      })
+      .otherwise(() => [])

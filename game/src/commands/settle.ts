@@ -53,46 +53,48 @@ export const settle = ({ row, col, settlement, resources }: GameCommandSettlePar
   )
 }
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  const player = view(activeLens(state), state)
-  return (
-    match<string[], string[]>(partial)
-      .with([], () => {
-        if (
-          pipe(
-            //
-            onlyViaBonusActions(GameCommandEnum.SETTLE)
-            // would be cool to check, recursively, if any of the possibilities to follow
-            // this were also allowable, i.e. they complete into an array that is non-zero in length
-            //
-            // by not doing this, it's possible to go down a dead end path, and that might not be fun
-            // for the user. but also that's really hard. so maybe not right now... i'll leave this as a
-            // TODO
-          )(state) !== undefined
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] => {
+    const player = view(activeLens(state), state)
+    return (
+      match<string[], string[]>(partial)
+        .with([], () => {
+          if (
+            pipe(
+              //
+              onlyViaBonusActions(GameCommandEnum.SETTLE)
+              // would be cool to check, recursively, if any of the possibilities to follow
+              // this were also allowable, i.e. they complete into an array that is non-zero in length
+              //
+              // by not doing this, it's possible to go down a dead end path, and that might not be fun
+              // for the user. but also that's really hard. so maybe not right now... i'll leave this as a
+              // TODO
+            )(state) !== undefined
+          )
+            return [GameCommandEnum.SETTLE]
+          return []
+        })
+        .with([GameCommandEnum.SETTLE], () => {
+          return filter((settlement) => {
+            const playerFood = costFood(player)
+            const playerEnergy = costEnergy(player)
+            const { food: requiredFood, energy: requiredEnergy } = costForSettlement(settlement)
+            return playerFood >= requiredFood && playerEnergy >= requiredEnergy
+          }, view(activeLens(state), state).settlements)
+        })
+        .with([GameCommandEnum.SETTLE, P._], ([, settlement]) =>
+          // Return all the coords which match the terrain for this building...
+          erectableLocations(settlement as SettlementEnum, player)
         )
-          return [GameCommandEnum.SETTLE]
-        return []
-      })
-      .with([GameCommandEnum.SETTLE], () => {
-        return filter((settlement) => {
-          const playerFood = costFood(player)
-          const playerEnergy = costEnergy(player)
-          const { food: requiredFood, energy: requiredEnergy } = costForSettlement(settlement)
-          return playerFood >= requiredFood && playerEnergy >= requiredEnergy
-        }, view(activeLens(state), state).settlements)
-      })
-      .with([GameCommandEnum.SETTLE, P._], ([, settlement]) =>
-        // Return all the coords which match the terrain for this building...
-        erectableLocations(settlement as SettlementEnum, player)
-      )
-      .with([GameCommandEnum.SETTLE, P._, P._], ([, settlement, col]) =>
-        erectableLocationsCol(settlement as SettlementEnum, col, player)
-      )
-      .with([GameCommandEnum.SETTLE, P._, P._, P._], ([, settlement, _col, _row]) =>
-        settlementCostOptions(costForSettlement(settlement as SettlementEnum), player)
-      )
-      // TODO: only show '' if the command is ultimately valid
-      .with([GameCommandEnum.SETTLE, P._, P._, P._, P._], ([, settlement, col, row, resources]) => [''])
-      .otherwise(() => [])
-  )
-})
+        .with([GameCommandEnum.SETTLE, P._, P._], ([, settlement, col]) =>
+          erectableLocationsCol(settlement as SettlementEnum, col, player)
+        )
+        .with([GameCommandEnum.SETTLE, P._, P._, P._], ([, settlement, _col, _row]) =>
+          settlementCostOptions(costForSettlement(settlement as SettlementEnum), player)
+        )
+        // TODO: only show '' if the command is ultimately valid
+        .with([GameCommandEnum.SETTLE, P._, P._, P._, P._], ([, settlement, col, row, resources]) => [''])
+        .otherwise(() => [])
+    )
+  }

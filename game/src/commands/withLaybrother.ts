@@ -32,9 +32,10 @@ export const withLaybrother: StateReducer = (state) => {
   )(state)
 }
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] =>
-  match<string[], string[]>(partial)
-    .with([], () => (checkActivePlayerIsNotCurrent(state) ? [GameCommandEnum.WITH_LAYBROTHER] : []))
-    .with([GameCommandEnum.WITH_LAYBROTHER], () => [''])
-    .otherwise(() => [])
-)
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] =>
+    match<string[], string[]>(partial)
+      .with([], () => (checkActivePlayerIsNotCurrent(state) ? [GameCommandEnum.WITH_LAYBROTHER] : []))
+      .with([GameCommandEnum.WITH_LAYBROTHER], () => [''])
+      .otherwise(() => [])

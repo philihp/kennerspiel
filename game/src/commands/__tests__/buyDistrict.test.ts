@@ -266,7 +266,7 @@ describe('commands/buyDistrict', () => {
 
   describe('complete', () => {
     it('stub', () => {
-      const c0 = complete(s0, [])
+      const c0 = complete(s0)([])
       expect(c0).toStrictEqual(['BUY_DISTRICT'])
     })
   })

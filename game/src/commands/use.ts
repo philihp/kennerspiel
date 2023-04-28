@@ -207,47 +207,49 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       })
   )
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  const player = state.players[state.frame.activePlayerIndex]
-  return match<string[], string[]>(partial)
-    .with([], () => {
-      if (checkIfUseCanHappen()(state) === undefined) return []
-      const hasClergyAvailable = view(activeLens(state), state).clergy?.length > 0
-      const hasPriorAvailable = any(identity, map(isPrior, view(activeLens(state), state).clergy))
-      if (
-        state.frame.bonusRoundPlacement === false &&
-        ((state.frame.nextUse === NextUseClergy.Any && !hasClergyAvailable) ||
-          (state.frame.nextUse === NextUseClergy.OnlyPrior && !hasPriorAvailable))
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] => {
+    const player = state.players[state.frame.activePlayerIndex]
+    return match<string[], string[]>(partial)
+      .with([], () => {
+        if (checkIfUseCanHappen()(state) === undefined) return []
+        const hasClergyAvailable = view(activeLens(state), state).clergy?.length > 0
+        const hasPriorAvailable = any(identity, map(isPrior, view(activeLens(state), state).clergy))
+        if (
+          state.frame.bonusRoundPlacement === false &&
+          ((state.frame.nextUse === NextUseClergy.Any && !hasClergyAvailable) ||
+            (state.frame.nextUse === NextUseClergy.OnlyPrior && !hasPriorAvailable))
+        )
+          return []
+        return [GameCommandEnum.USE]
+      })
+      .with([GameCommandEnum.USE], () =>
+        reduce(
+          (accum, row) =>
+            reduce(
+              (accum, tile) => {
+                const [, building, clergy] = tile
+                if (
+                  building !== undefined &&
+                  clergy === undefined &&
+                  [BuildingEnum.Forest, BuildingEnum.Peat].includes(building) === false
+                )
+                  accum.push(building)
+                return accum
+              },
+              accum,
+              row
+            ),
+          [] as BuildingEnum[],
+          player.landscape
+        )
       )
+      .with(
+        P.when(([command, building]) => command === GameCommandEnum.USE && includes(building, values(BuildingEnum))),
+        ([, building, ...params]) => completeBuilding[building as BuildingEnum](params)(state)
+      )
+      .otherwise(() => {
         return []
-      return [GameCommandEnum.USE]
-    })
-    .with([GameCommandEnum.USE], () =>
-      reduce(
-        (accum, row) =>
-          reduce(
-            (accum, tile) => {
-              const [, building, clergy] = tile
-              if (
-                building !== undefined &&
-                clergy === undefined &&
-                [BuildingEnum.Forest, BuildingEnum.Peat].includes(building) === false
-              )
-                accum.push(building)
-              return accum
-            },
-            accum,
-            row
-          ),
-        [] as BuildingEnum[],
-        player.landscape
-      )
-    )
-    .with(
-      P.when(([command, building]) => command === GameCommandEnum.USE && includes(building, values(BuildingEnum))),
-      ([, building, ...params]) => completeBuilding[building as BuildingEnum](params)(state)
-    )
-    .otherwise(() => {
-      return []
-    })
-})
+      })
+  }
