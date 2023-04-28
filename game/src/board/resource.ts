@@ -21,6 +21,7 @@ import {
   tap,
   comparator,
   sort,
+  all,
 } from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
 
@@ -318,11 +319,13 @@ export const canAfford =
   (player: Tableau): Tableau | undefined =>
     any<keyof Cost>(
       //
-      (key) => player[key] >= (cost[key] ?? 0),
+      (key) => {
+        return player[key] < (cost[key] ?? 0)
+      },
       keys(cost)
     )
-      ? player
-      : undefined
+      ? undefined
+      : player
 
 const byPoints = comparator<string>((a: string, b: string) => {
   return costPoints(parseResourceParam(a)) > costPoints(parseResourceParam(b))
