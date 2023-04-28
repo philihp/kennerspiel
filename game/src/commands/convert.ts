@@ -1,7 +1,8 @@
-import { curry, pipe } from 'ramda'
-import { match } from 'ts-pattern'
-import { subtractCoins, withActivePlayer } from '../board/player'
-import { GameCommandConvertParams, GameCommandEnum, GameStatePlaying, Tableau } from '../types'
+import { always, lift, map, pipe, range, reverse, view } from 'ramda'
+import { P, match } from 'ts-pattern'
+import { activeLens, subtractCoins, withActivePlayer } from '../board/player'
+import { GameCommandConvertParams, GameCommandEnum, GameStatePlaying, ResourceEnum, Tableau } from '../types'
+import { stringRepeater } from '../board/resource'
 
 const convertGrain =
   (amount = 0) =>
@@ -83,6 +84,17 @@ export const complete =
         return []
       })
       .with([GameCommandEnum.CONVERT], () => {
-        return []
+        const { penny = 0, grain = 0, wine = 0, nickel = 0, whiskey = 0 } = view(activeLens(state), state)
+        const convertMoney = [
+          ...map((s) => stringRepeater(ResourceEnum.Penny, 5 * s), reverse(range(1, 1 + Math.floor(penny / 5)))),
+          ...map((s) => stringRepeater(ResourceEnum.Nickel, s), reverse(range(1, 1 + nickel))),
+          '',
+        ]
+        const convertGrain = map((s) => stringRepeater(ResourceEnum.Grain, s), reverse(range(0, 1 + grain)))
+        const convertWhiskey = map((s) => stringRepeater(ResourceEnum.Whiskey, s), reverse(range(0, 1 + whiskey)))
+        const convertWine = map((s) => stringRepeater(ResourceEnum.Wine, s), reverse(range(0, 1 + wine)))
+
+        return lift((a, b, c, d) => a + b + c + d)(convertMoney, convertGrain, convertWhiskey, convertWine)
       })
-      .otherwise(() => [])
+      .with([GameCommandEnum.CONVERT, P._], always(['']))
+      .otherwise(always([]))
