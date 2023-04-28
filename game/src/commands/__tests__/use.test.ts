@@ -633,7 +633,7 @@ describe('commands/use', () => {
 
   describe('complete', () => {
     it('allows USE when main action available', () => {
-      const c0 = complete(s0, [])
+      const c0 = complete(s0)([])
       expect(c0).toStrictEqual(['USE'])
     })
     it('does not allow use main action already used', () => {
@@ -644,7 +644,7 @@ describe('commands/use', () => {
           mainActionUsed: true,
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
 
@@ -664,7 +664,7 @@ describe('commands/use', () => {
           nextUse: NextUseClergy.Any,
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
 
@@ -678,7 +678,7 @@ describe('commands/use', () => {
           usableBuildings: [BuildingEnum.Priory],
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['USE'])
     })
 
@@ -699,7 +699,7 @@ describe('commands/use', () => {
           usableBuildings: [BuildingEnum.Priory],
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
 
@@ -717,27 +717,27 @@ describe('commands/use', () => {
           usableBuildings: [BuildingEnum.GrainStorage, BuildingEnum.BuildersMarket],
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['USE'])
     })
 
     it('gives a list of buildings that are free', () => {
-      const c0 = complete(s0, ['USE'])
+      const c0 = complete(s0)(['USE'])
       expect(c0).toStrictEqual(['LR1', 'LR2', 'LR3'])
     })
 
     it('calls the buildingComplete with all the params', () => {
-      const c0 = complete(s0, ['USE', 'LR1', 'Jo'])
+      const c0 = complete(s0)(['USE', 'LR1', 'Jo'])
       expect(clayMoundComplete).toHaveBeenCalledWith(['Jo'])
     })
 
     it('gives back [] if weird building being used', () => {
-      const c0 = complete(s0, ['USE', 'PRIR'])
+      const c0 = complete(s0)(['USE', 'PRIR'])
       expect(c0).toStrictEqual([])
     })
 
     it('gives back [] if weird command, how did we get here?', () => {
-      const c0 = complete(s0, ['YUZU'])
+      const c0 = complete(s0)(['YUZU'])
       expect(c0).toStrictEqual([])
     })
   })

@@ -67,32 +67,34 @@ export const build = ({ row, col, building }: GameCommandBuildParams): StateRedu
     allowPriorToUse(building)
   )
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  const player = view(activeLens(state), state)
-  return (
-    match<string[], string[]>(partial)
-      .with([], () => {
-        if (oncePerFrame(GameCommandEnum.BUILD)(state)) return [GameCommandEnum.BUILD]
-        return []
-      })
-      .with(
-        [GameCommandEnum.BUILD],
-        // return all buildings we have the resources for
-        always(
-          filter((building: BuildingEnum): boolean => !!payCost(costForBuilding(building))(player), state.buildings)
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] => {
+    const player = view(activeLens(state), state)
+    return (
+      match<string[], string[]>(partial)
+        .with([], () => {
+          if (oncePerFrame(GameCommandEnum.BUILD)(state)) return [GameCommandEnum.BUILD]
+          return []
+        })
+        .with(
+          [GameCommandEnum.BUILD],
+          // return all buildings we have the resources for
+          always(
+            filter((building: BuildingEnum): boolean => !!payCost(costForBuilding(building))(player), state.buildings)
+          )
         )
-      )
-      .with([GameCommandEnum.BUILD, P._], ([, building]) =>
-        // Return all the coords which match the terrain for this building...
-        erectableLocations(building as BuildingEnum, player)
-      )
-      .with([GameCommandEnum.BUILD, P._, P._], ([, building, col]) =>
-        // Return all the coords which match the terrain from the previous step, and have
-        // the same prefix as the column
-        erectableLocationsCol(building as BuildingEnum, col, player)
-      )
-      // TODO: only show '' if the command is ultimately valid
-      .with([GameCommandEnum.BUILD, P._, P._, P._], always(['']))
-      .otherwise(always([]))
-  )
-})
+        .with([GameCommandEnum.BUILD, P._], ([, building]) =>
+          // Return all the coords which match the terrain for this building...
+          erectableLocations(building as BuildingEnum, player)
+        )
+        .with([GameCommandEnum.BUILD, P._, P._], ([, building, col]) =>
+          // Return all the coords which match the terrain from the previous step, and have
+          // the same prefix as the column
+          erectableLocationsCol(building as BuildingEnum, col, player)
+        )
+        // TODO: only show '' if the command is ultimately valid
+        .with([GameCommandEnum.BUILD, P._, P._, P._], always(['']))
+        .otherwise(always([]))
+    )
+  }

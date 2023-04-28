@@ -26,15 +26,15 @@ describe('commands/commit', () => {
           mainActionUsed: false,
         } as Frame,
       } as GameStatePlaying
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
     it('allows commit if main action used', () => {
-      const c0 = complete(s0, [])
+      const c0 = complete(s0)([])
       expect(c0).toStrictEqual(['COMMIT'])
     })
     it('allows submit, because COMMIT has no parameters', () => {
-      const c0 = complete(s0, [GameCommandEnum.COMMIT])
+      const c0 = complete(s0)([GameCommandEnum.COMMIT])
       expect(c0).toStrictEqual([''])
     })
   })

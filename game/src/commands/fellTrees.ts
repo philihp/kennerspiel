@@ -79,25 +79,27 @@ export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): S
     useJoker ? updateJokerRondel : updateWoodRondel
   )
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  const player = state.players[state.frame.activePlayerIndex]
-  return (
-    match<string[], string[]>(partial)
-      .with([], () => {
-        if (!hasAForest(player.landscape)) return []
-        if (oncePerFrame(GameCommandEnum.FELL_TREES)(state) === undefined) return []
-        return [GameCommandEnum.FELL_TREES]
-      })
-      .with([GameCommandEnum.FELL_TREES], () => forestLocations(player))
-      // shouldnt actually ever see this, but i think its important for completeness
-      .with([GameCommandEnum.FELL_TREES, P._], (_, [, c]) => forestLocationsForCol(c, player))
-      .with([GameCommandEnum.FELL_TREES, P._, P._], (_, [, c, r]) => {
-        const row = Number.parseInt(r, 10) + player.landscapeOffset
-        const col = Number.parseInt(c, 10) + 2
-        const tile = player.landscape?.[row]?.[col]
-        if (tile?.[1] === BuildingEnum.Forest) return ['']
-        return []
-      })
-      .otherwise(always([]))
-  )
-})
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] => {
+    const player = state.players[state.frame.activePlayerIndex]
+    return (
+      match<string[], string[]>(partial)
+        .with([], () => {
+          if (!hasAForest(player.landscape)) return []
+          if (oncePerFrame(GameCommandEnum.FELL_TREES)(state) === undefined) return []
+          return [GameCommandEnum.FELL_TREES]
+        })
+        .with([GameCommandEnum.FELL_TREES], () => forestLocations(player))
+        // shouldnt actually ever see this, but i think its important for completeness
+        .with([GameCommandEnum.FELL_TREES, P._], (_, [, c]) => forestLocationsForCol(c, player))
+        .with([GameCommandEnum.FELL_TREES, P._, P._], (_, [, c, r]) => {
+          const row = Number.parseInt(r, 10) + player.landscapeOffset
+          const col = Number.parseInt(c, 10) + 2
+          const tile = player.landscape?.[row]?.[col]
+          if (tile?.[1] === BuildingEnum.Forest) return ['']
+          return []
+        })
+        .otherwise(always([]))
+    )
+  }

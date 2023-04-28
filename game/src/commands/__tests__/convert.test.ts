@@ -227,7 +227,7 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
     it('allows convert if they have nickels', () => {
@@ -245,7 +245,7 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['CONVERT'])
     })
     it('does not allow convert if they have four pennies', () => {
@@ -263,7 +263,7 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
     it('allows convert if they have five pennies', () => {
@@ -281,7 +281,7 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['CONVERT'])
     })
     it('does not allow convert if they have grain', () => {
@@ -299,7 +299,7 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['CONVERT'])
     })
     it('does not allow convert if they have wine', () => {
@@ -317,7 +317,7 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['CONVERT'])
     })
     it('does not allow convert if they have whiskey', () => {
@@ -335,11 +335,11 @@ describe('commands/convert', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['CONVERT'])
     })
     it('returns [] if weird partial', () => {
-      const c0 = complete(s0, ['CONVERT', 'TWO', 'APPLES'])
+      const c0 = complete(s0)(['CONVERT', 'TWO', 'APPLES'])
       expect(c0).toStrictEqual([])
     })
   })

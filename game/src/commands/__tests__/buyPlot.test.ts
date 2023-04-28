@@ -376,7 +376,7 @@ describe('commands/buyPlot', () => {
 
   describe('complete', () => {
     it('stub', () => {
-      const c0 = complete(s0, [])
+      const c0 = complete(s0)([])
       expect(c0).toStrictEqual([])
     })
   })

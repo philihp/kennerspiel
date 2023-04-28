@@ -296,8 +296,27 @@ describe('commands/workContract', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['WORK_CONTRACT'])
+    })
+    it('will not allow if nobody else has any clergy to use', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 1,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.map((p) => ({
+            ...p,
+            clergy: [],
+          })),
+        ],
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual([])
     })
     it('can work contract if they have 1 wine', () => {
       const s1 = {
@@ -312,7 +331,7 @@ describe('commands/workContract', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['WORK_CONTRACT'])
     })
     it('can work contract if they have 1 whiskey', () => {
@@ -328,7 +347,7 @@ describe('commands/workContract', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['WORK_CONTRACT'])
     })
     it('can not work contract if no money', () => {
@@ -344,7 +363,7 @@ describe('commands/workContract', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
     it('can work contract if they have 2 penny in late game', () => {
@@ -368,7 +387,7 @@ describe('commands/workContract', () => {
           settlementRound: SettlementRound.C,
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['WORK_CONTRACT'])
     })
     it('can not work contract if insufficient money', () => {
@@ -392,7 +411,7 @@ describe('commands/workContract', () => {
           settlementRound: SettlementRound.C,
         },
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
 
@@ -409,7 +428,7 @@ describe('commands/workContract', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, ['WORK_CONTRACT'])
+      const c0 = complete(s1)(['WORK_CONTRACT'])
       expect(c0).toStrictEqual(['LB1', 'LB2', 'G02', 'LB3', 'F05', 'LG1', 'LG2', 'F08', 'LG3'])
     })
 
@@ -431,7 +450,7 @@ describe('commands/workContract', () => {
           activePlayerIndex: 1,
         },
       }
-      const c0 = complete(s1, ['WORK_CONTRACT'])
+      const c0 = complete(s1)(['WORK_CONTRACT'])
       expect(c0).toStrictEqual(['G01', 'LR3', 'F05', 'LG1', 'LG2', 'F08', 'LG3'])
     })
 
@@ -448,7 +467,7 @@ describe('commands/workContract', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, ['WORK_CONTRACT', 'G02'])
+      const c0 = complete(s1)(['WORK_CONTRACT', 'G02'])
       expect(c0).toStrictEqual(['Wn', 'Wh', 'Pn'])
     })
     it('gives late game options for paying', () => {
@@ -472,17 +491,17 @@ describe('commands/workContract', () => {
           settlementRound: SettlementRound.C,
         },
       }
-      const c0 = complete(s1, ['WORK_CONTRACT', 'G02'])
+      const c0 = complete(s1)(['WORK_CONTRACT', 'G02'])
       expect(c0).toStrictEqual(['Wn', 'Wh', 'PnPn'])
     })
 
     it('terminates when enough options', () => {
-      const c0 = complete(s0, ['WORK_CONTRACT', 'G02', 'Pn'])
+      const c0 = complete(s0)(['WORK_CONTRACT', 'G02', 'Pn'])
       expect(c0).toStrictEqual([''])
     })
 
     it('empty completions when weird params', () => {
-      const c0 = complete(s0, ['WORK_CONTRACT', 'G02', 'Pn', 'Pn'])
+      const c0 = complete(s0)(['WORK_CONTRACT', 'G02', 'Pn', 'Pn'])
       expect(c0).toStrictEqual([])
     })
   })

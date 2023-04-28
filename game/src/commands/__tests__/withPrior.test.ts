@@ -283,7 +283,7 @@ describe('commands/withPrior', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['WITH_PRIOR'])
     })
     it('if the player does not have a prior', () => {
@@ -297,15 +297,15 @@ describe('commands/withPrior', () => {
           ...s0.players.slice(1),
         ],
       }
-      const c0 = complete(s1, [])
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
     it('completes the command', () => {
-      const c0 = complete(s0, ['WITH_PRIOR'])
+      const c0 = complete(s0)(['WITH_PRIOR'])
       expect(c0).toStrictEqual([''])
     })
     it('doesnt know what this is', () => {
-      const c0 = complete(s0, ['WITH_PRIOR', 'Pn'])
+      const c0 = complete(s0)(['WITH_PRIOR', 'Pn'])
       expect(c0).toStrictEqual([])
     })
   })

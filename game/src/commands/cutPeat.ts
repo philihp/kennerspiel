@@ -52,25 +52,27 @@ export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): State
     withRondel(updateRondel(useJoker ? 'joker' : 'peat'))
   )
 
-export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  const player = state.players[state.frame.activePlayerIndex]
-  return (
-    match<string[], string[]>(partial)
-      .with([], () => {
-        if (!hasAMoor(player.landscape)) return []
-        if (oncePerFrame(GameCommandEnum.CUT_PEAT)(state) === undefined) return []
-        return [GameCommandEnum.CUT_PEAT]
-      })
-      .with([GameCommandEnum.CUT_PEAT], () => moorLocations(player))
-      // shouldnt actually ever see this, but i think its important for completeness
-      .with([GameCommandEnum.CUT_PEAT, P._], (_, [, c]) => moorLocationsForCol(c, player))
-      .with([GameCommandEnum.CUT_PEAT, P._, P._], (_, [, c, r]) => {
-        const row = Number.parseInt(r, 10) + player.landscapeOffset
-        const col = Number.parseInt(c, 10) + 2
-        const tile = player.landscape?.[row]?.[col]
-        if (tile?.[1] === BuildingEnum.Peat) return ['']
-        return []
-      })
-      .otherwise(always([]))
-  )
-})
+export const complete =
+  (state: GameStatePlaying) =>
+  (partial: string[]): string[] => {
+    const player = state.players[state.frame.activePlayerIndex]
+    return (
+      match<string[], string[]>(partial)
+        .with([], () => {
+          if (!hasAMoor(player.landscape)) return []
+          if (oncePerFrame(GameCommandEnum.CUT_PEAT)(state) === undefined) return []
+          return [GameCommandEnum.CUT_PEAT]
+        })
+        .with([GameCommandEnum.CUT_PEAT], () => moorLocations(player))
+        // shouldnt actually ever see this, but i think its important for completeness
+        .with([GameCommandEnum.CUT_PEAT, P._], (_, [, c]) => moorLocationsForCol(c, player))
+        .with([GameCommandEnum.CUT_PEAT, P._, P._], (_, [, c, r]) => {
+          const row = Number.parseInt(r, 10) + player.landscapeOffset
+          const col = Number.parseInt(c, 10) + 2
+          const tile = player.landscape?.[row]?.[col]
+          if (tile?.[1] === BuildingEnum.Peat) return ['']
+          return []
+        })
+        .otherwise(always([]))
+    )
+  }
