@@ -1,12 +1,14 @@
+import { PCGState } from 'fn-pcg/dist/types'
 import { control } from '../control'
 import {
   Clergy,
-  Controls,
   Frame,
   GameCommandConfigParams,
   GameStatePlaying,
+  GameStatusEnum,
   NextUseClergy,
   PlayerColor,
+  Rondel,
   Tableau,
   Tile,
 } from '../types'
@@ -81,6 +83,11 @@ describe('control', () => {
       frame: f0,
       plotPurchasePrices: [7, 6, 5, 4, 3],
       districtPurchasePrices: [6, 5, 4, 3],
+      buildings: [],
+      status: GameStatusEnum.PLAYING,
+      rondel: {} as Rondel,
+      wonders: 0,
+      randGen: {} as PCGState,
     } as GameStatePlaying
 
     it('returns a frame flower', () => {

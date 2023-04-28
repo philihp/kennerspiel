@@ -2,7 +2,7 @@ import { addIndex, curry, filter, map, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { addErectionAtLandscape, terrainForErection } from '../board/erections'
 import { onlyViaBonusActions } from '../board/frame'
-import { checkLandscapeFree, checkLandTypeMatches } from '../board/landscape'
+import { checkLandscapeFree, checkLandTypeMatches, erectableLocations, erectableLocationsCol } from '../board/landscape'
 import { activeLens, payCost, withActivePlayer } from '../board/player'
 import { costEnergy, costFood, parseResourceParam, settlementCostOptions } from '../board/resource'
 import { costForSettlement } from '../board/settlements'
@@ -39,37 +39,6 @@ const removeSettlementFromUnbuilt = (settlement: SettlementEnum): StateReducer =
       settlements: filter((s) => s !== settlement, player.settlements),
     }
   })
-
-const settleableLocationsCol = (settlement: SettlementEnum, rawCol: string, player: Tableau): string[] => {
-  const col = Number.parseInt(rawCol, 10) + 2
-  const colsAtRow = map((row: Tile[]) => row[col], player.landscape)
-  return addIndex<Tile, string[]>(reduce<Tile, string[]>)(
-    (accum, tile, rowIndex) => {
-      if (tile[0] && terrainForErection(settlement).includes(tile[0]) && !tile[1])
-        accum.push(`${rowIndex - player.landscapeOffset}`)
-      return accum
-    },
-    [] as string[],
-    colsAtRow
-  )
-}
-
-const settleableLocations = curry((settlement: SettlementEnum, player: Tableau): string[] =>
-  addIndex(reduce<Tile[], string[]>)(
-    (accum, row, rowIndex) =>
-      addIndex(reduce<Tile, string[]>)(
-        (innerAccum, tile, colIndex) => {
-          if (tile[0] && terrainForErection(settlement).includes(tile[0]) && !tile[1])
-            innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
-          return innerAccum
-        },
-        accum,
-        row
-      ),
-    [] as string[],
-    player.landscape
-  )
-)
 
 export const settle = ({ row, col, settlement, resources }: GameCommandSettleParams) => {
   const input = parseResourceParam(resources)
@@ -112,11 +81,9 @@ export const complete = curry((state: GameStatePlaying, partial: string[]): stri
           return playerFood >= requiredFood && playerEnergy >= requiredEnergy
         }, view(activeLens(state), state).settlements)
       })
-      .with([GameCommandEnum.SETTLE, P._], ([, settlement]) =>
-        settleableLocations(settlement as SettlementEnum, player)
-      )
+      .with([GameCommandEnum.SETTLE, P._], ([, settlement]) => erectableLocations(settlement as SettlementEnum, player))
       .with([GameCommandEnum.SETTLE, P._, P._], ([, settlement, col]) =>
-        settleableLocationsCol(settlement as SettlementEnum, col, player)
+        erectableLocationsCol(settlement as SettlementEnum, col, player)
       )
       .with([GameCommandEnum.SETTLE, P._, P._, P._], ([, settlement, _col, _row]) =>
         settlementCostOptions(costForSettlement(settlement as SettlementEnum), player)

@@ -1,9 +1,10 @@
-import { any, pipe, identity, curry } from 'ramda'
+import { any, pipe, identity, curry, view, filter, always } from 'ramda'
+import { P, match } from 'ts-pattern'
 import { costForBuilding, isCloisterBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
 import { addErectionAtLandscape } from '../board/erections'
 import { oncePerFrame } from '../board/frame'
-import { checkLandscapeFree, checkLandTypeMatches } from '../board/landscape'
-import { payCost, subtractCoins, withActivePlayer } from '../board/player'
+import { checkLandscapeFree, checkLandTypeMatches, erectableLocations, erectableLocationsCol } from '../board/landscape'
+import { activeLens, payCost, subtractCoins, withActivePlayer } from '../board/player'
 import {
   BuildingEnum,
   GameCommandBuildParams,
@@ -67,5 +68,31 @@ export const build = ({ row, col, building }: GameCommandBuildParams): StateRedu
   )
 
 export const complete = curry((state: GameStatePlaying, partial: string[]): string[] => {
-  return []
+  const player = view(activeLens(state), state)
+  return (
+    match<string[], string[]>(partial)
+      .with([], () => {
+        if (oncePerFrame(GameCommandEnum.BUILD)(state)) return [GameCommandEnum.BUILD]
+        return []
+      })
+      .with(
+        [GameCommandEnum.BUILD],
+        // return all buildings we have the resources for
+        always(
+          filter((building: BuildingEnum): boolean => !!payCost(costForBuilding(building))(player), state.buildings)
+        )
+      )
+      .with([GameCommandEnum.BUILD, P._], ([, building]) =>
+        // Return all the coords which match the terrain for this building...
+        erectableLocations(building as BuildingEnum, player)
+      )
+      .with([GameCommandEnum.BUILD, P._, P._], ([, building, col]) =>
+        // Return all the coords which match the terrain from the previous step, and have
+        // the same prefix as the column
+        erectableLocationsCol(building as BuildingEnum, col, player)
+      )
+      // TODO: only show '' if the command is ultimately valid
+      .with([GameCommandEnum.BUILD, P._, P._, P._], always(['']))
+      .otherwise(always([]))
+  )
 })

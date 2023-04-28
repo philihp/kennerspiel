@@ -1,4 +1,4 @@
-import { addIndex, filter, map, pipe, range, reduce, reduced } from 'ramda'
+import { addIndex, curry, filter, map, pipe, range, reduce, reduced } from 'ramda'
 import { match } from 'ts-pattern'
 import {
   LandEnum,
@@ -293,3 +293,34 @@ export const moorLocations = (player: Tableau): string[] =>
     [] as string[],
     player.landscape
   )
+
+export const erectableLocationsCol = (erection: ErectionEnum, rawCol: string, player: Tableau): string[] => {
+  const col = Number.parseInt(rawCol, 10) + 2
+  const colsAtRow = map((row: Tile[]) => row[col], player.landscape)
+  return addIndex<Tile, string[]>(reduce<Tile, string[]>)(
+    (accum: string[], tile: Tile, rowIndex: number) => {
+      if (tile[0] && terrainForErection(erection).includes(tile[0]) && !tile[1])
+        accum.push(`${rowIndex - player.landscapeOffset}`)
+      return accum
+    },
+    [] as string[],
+    colsAtRow
+  )
+}
+
+export const erectableLocations = curry((erection: ErectionEnum, player: Tableau): string[] =>
+  addIndex(reduce<Tile[], string[]>)(
+    (accum: string[], row: Tile[], rowIndex: number) =>
+      addIndex(reduce<Tile, string[]>)(
+        (innerAccum: string[], tile: Tile, colIndex: number) => {
+          if (tile[0] && terrainForErection(erection).includes(tile[0]) && !tile[1])
+            innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
+          return innerAccum
+        },
+        accum,
+        row
+      ),
+    [] as string[],
+    player.landscape
+  )
+)

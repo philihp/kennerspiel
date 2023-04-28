@@ -1,6 +1,7 @@
 import { initialState } from '../../state'
 import {
   BuildingEnum,
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   LandEnum,
@@ -248,8 +249,174 @@ describe('commands/build', () => {
   })
 
   describe('complete', () => {
-    it('stub', () => {
-      const c0 = complete(s0, [])
+    it('allows running if BUILD is in bonus acitons', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [GameCommandEnum.BUILD],
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['BUILD'])
+    })
+    it('allows running if main action not used yet', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: false,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual(['BUILD'])
+    })
+    it('does not allow running if not not permitted by frame', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, [])
+      expect(c0).toStrictEqual([])
+    })
+    it('gives all the buildings which may be built', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        buildings: [
+          BuildingEnum.Priory, // WoCl
+          BuildingEnum.CloisterCourtyard, // WoWo
+          BuildingEnum.GrainStorage, // WoSw
+          BuildingEnum.Windmill, // WoWoWoClCl
+          BuildingEnum.Bakery, // ClClSw
+          BuildingEnum.FuelMerchant, // ClSw
+          BuildingEnum.PeatCoalKiln, // Cl
+          BuildingEnum.Market, // SnSn
+          BuildingEnum.CloisterGarden, // PnPnPn
+          BuildingEnum.Carpentry, // WoWoCl
+          BuildingEnum.HarborPromenade, // WoSn - coast only, should we catch this?
+          BuildingEnum.StoneMerchant, // Wo
+          BuildingEnum.BuildersMarket, // ClCl
+        ],
+        players: [
+          {
+            ...s0.players[0],
+            wood: 1,
+            clay: 1,
+            straw: 1,
+            stone: 1,
+            penny: 2,
+            wine: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, ['BUILD'])
+      expect(c0).toStrictEqual([
+        BuildingEnum.Priory,
+        BuildingEnum.GrainStorage,
+        BuildingEnum.FuelMerchant,
+        BuildingEnum.PeatCoalKiln,
+        BuildingEnum.CloisterGarden,
+        BuildingEnum.HarborPromenade,
+        BuildingEnum.StoneMerchant,
+        // notice no noop here
+      ])
+    })
+    it('gives all the places the given building can be built', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [['W'], ['C'], [], [], [], [], [], [], []],
+              [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [['W'], ['C'], [], [], [], [], [], [], []],
+              [['W'], ['C'], [], [], [], [], [], [], []],
+            ] as Tile[][],
+            landscapeOffset: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, ['BUILD', BuildingEnum.HarborPromenade])
+      expect(c0).toStrictEqual(['-1 -1', '-1 0', '-1 2', '-1 3'])
+    })
+    it('gives all the places the given building can be built if given a col', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [['W'], ['C'], ['H'], ['P'], ['P'], ['H'], ['H'], [], []],
+              [['W'], ['C'], ['H'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H'], [], []],
+            ] as Tile[][],
+            landscapeOffset: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, ['BUILD', BuildingEnum.GrapevineA, '4'])
+      expect(c0).toStrictEqual(['-1', '1'])
+    })
+    it('complete if given all necessary params', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, ['BUILD', BuildingEnum.GrapevineA, '4', '1'])
+      expect(c0).toStrictEqual([''])
+    })
+    it('cant complete if too many params', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1, ['BUILD', BuildingEnum.GrapevineA, '4', '1', 'Wo'])
       expect(c0).toStrictEqual([])
     })
   })
