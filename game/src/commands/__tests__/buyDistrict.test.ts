@@ -265,9 +265,133 @@ describe('commands/buyDistrict', () => {
   })
 
   describe('complete', () => {
-    it('stub', () => {
-      const c0 = complete(s0)([])
+    it('offers to do it if they havent bought landscape yet', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: true,
+        },
+      }
+      const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['BUY_DISTRICT'])
+    })
+    it('doesnt offer if landscape already bought', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: false,
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual([])
+    })
+    it('offers if there is a free bonus action to do so', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: false,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT],
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual(['BUY_DISTRICT'])
+    })
+    it('does not offer if there is no money', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 0,
+            nickel: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: true,
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual([])
+    })
+    it('offers if no money but has a bonusAction, because this indicates a free buy', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 0,
+            nickel: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: false,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT],
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual(['BUY_DISTRICT'])
+    })
+    it('does not offer if there are no districts left', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 0,
+            nickel: 1,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: true,
+          bonusActions: [GameCommandEnum.BUY_DISTRICT],
+        },
+        districtPurchasePrices: [],
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual([])
+    })
+    it('gives rows in which a new district can live', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            landscapeOffset: 2,
+            landscape: [
+              [['W'], ['C'], ['P'], ['P'], ['P'], ['H'], ['H'], ['H'], ['M']],
+              [['W'], ['C'], [], [], [], [], [], ['H'], ['.']],
+              [['W'], ['C'], ['P', 'LPE'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], ['H'], ['M']],
+              [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['H', 'LR3'], ['H'], ['.']],
+              [['W'], ['C'], [], [], [], [], [], [], []],
+              [['W'], ['C'], [], [], [], [], [], [], []],
+            ] as Tile[][],
+            nickel: 5,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          canBuyLandscape: true,
+        },
+        districtPurchasePrices: [],
+      }
+      const c0 = complete(s1)(['BUY_DISTRICT'])
+      expect(c0).toStrictEqual(['-3', '-1', '2', '3'])
     })
   })
 })
