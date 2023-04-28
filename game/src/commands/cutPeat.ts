@@ -1,6 +1,6 @@
-import { addIndex, always, any, curry, map, pipe, reduce } from 'ramda'
+import { addIndex, always, any, curry, map, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { getCost, withActivePlayer } from '../board/player'
+import { activeLens, getCost, withActivePlayer } from '../board/player'
 import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer, GameStatePlaying } from '../types'
 import { take, updateRondel, withRondel } from '../board/rondel'
 import { oncePerFrame } from '../board/frame'
@@ -55,7 +55,7 @@ export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): State
 export const complete =
   (state: GameStatePlaying) =>
   (partial: string[]): string[] => {
-    const player = state.players[state.frame.activePlayerIndex]
+    const player = view(activeLens(state), state)
     return (
       match<string[], string[]>(partial)
         .with([], () => {

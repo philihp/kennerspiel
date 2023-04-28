@@ -1,6 +1,6 @@
-import { addIndex, always, any, curry, map, pipe, reduce } from 'ramda'
+import { addIndex, always, any, curry, map, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { getCost, withActivePlayer } from '../board/player'
+import { activeLens, getCost, withActivePlayer } from '../board/player'
 import {
   GameCommandFellTreesParams,
   Tile,
@@ -82,7 +82,7 @@ export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): S
 export const complete =
   (state: GameStatePlaying) =>
   (partial: string[]): string[] => {
-    const player = state.players[state.frame.activePlayerIndex]
+    const player = view(activeLens(state), state)
     return (
       match<string[], string[]>(partial)
         .with([], () => {

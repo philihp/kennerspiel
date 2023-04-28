@@ -1,7 +1,22 @@
-import { curry, equals, findIndex, head, pipe, remove } from 'ramda'
-import { match } from 'ts-pattern'
+import {
+  always,
+  equals,
+  filter,
+  findIndex,
+  head,
+  map,
+  nth,
+  pipe,
+  range,
+  reject,
+  remove,
+  toString,
+  unless,
+  view,
+} from 'ramda'
+import { P, match } from 'ts-pattern'
 import { costMoney } from '../board/resource'
-import { subtractCoins, withActivePlayer } from '../board/player'
+import { activeLens, subtractCoins, withActivePlayer } from '../board/player'
 import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, BuildingEnum, GameCommandEnum } from '../types'
 
 const checkCanGetLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
@@ -15,20 +30,18 @@ const checkForConnection = (y: number) =>
   // new district must have an existing
   withActivePlayer((player) => {
     const { landscape, landscapeOffset } = player
-    if (
-      landscape[y + landscapeOffset]?.[-1] === undefined &&
-      landscape[y + landscapeOffset]?.[5] === undefined &&
-      landscape[y + landscapeOffset - 1]?.[0] === undefined &&
-      landscape[y + landscapeOffset + 1]?.[0] === undefined
-    )
-      return undefined
-    return player
+    const north = landscape[y + landscapeOffset - 1]?.[4]?.[0]
+    const east = landscape[y + landscapeOffset]?.[5]?.[0]
+    const west = landscape[y + landscapeOffset]?.[1]?.[0]
+    const south = landscape[y + landscapeOffset + 1]?.[4]?.[0]
+    if (north || east || west || south) return player
+    return undefined
   })
 
 const checkForOverlap = (y: number) =>
   withActivePlayer((player) => {
     const { landscape, landscapeOffset } = player
-    if (landscape[y + landscapeOffset]?.[3][0] !== undefined) return undefined
+    if (landscape[y + landscapeOffset]?.[3]?.[0] !== undefined) return undefined
     return player
   })
 
@@ -149,11 +162,27 @@ export const buyDistrict = ({ side, y }: GameCommandBuyDistrictParams) =>
 export const complete =
   (state: GameStatePlaying) =>
   (partial: string[]): string[] => {
-    if (!state.frame.bonusActions.includes(GameCommandEnum.BUY_DISTRICT) && !state.frame.canBuyLandscape) return []
-    const player = state.players[state.frame.activePlayerIndex]
-    const playerWealth = costMoney(player)
-    const nextDistrictCost = head(state.districtPurchasePrices)
-    if (nextDistrictCost === undefined) return []
-    if (playerWealth < nextDistrictCost) return []
-    return [GameCommandEnum.BUY_DISTRICT]
+    const player = view(activeLens(state), state)
+    return match<string[], string[]>(partial)
+      .with([], () => {
+        if (state.frame.bonusActions.includes(GameCommandEnum.BUY_DISTRICT) && head(state.districtPurchasePrices))
+          return [GameCommandEnum.BUY_DISTRICT]
+        if (checkCanGetLandscape(state) === undefined) return []
+        const playerWealth = costMoney(player)
+        const nextDistrictCost = head(state.districtPurchasePrices) ?? Infinity
+        if (playerWealth < nextDistrictCost) return []
+        return [GameCommandEnum.BUY_DISTRICT]
+      })
+      .with([GameCommandEnum.BUY_DISTRICT], () =>
+        map(
+          toString,
+          reject(
+            (y: number) => !checkForConnection(y)(state) || !checkForOverlap(y)(state),
+            range(-1 - player.landscapeOffset, 1 + player.landscape.length - player.landscapeOffset)
+          )
+        )
+      )
+      .with([GameCommandEnum.BUY_DISTRICT, P._], always(['PLAINS', 'HILLS']))
+      .with([GameCommandEnum.BUY_DISTRICT, P._, P._], always(['']))
+      .otherwise(always([]))
   }

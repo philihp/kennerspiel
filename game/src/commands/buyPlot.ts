@@ -1,8 +1,22 @@
-import { curry, equals, findIndex, pipe, remove } from 'ramda'
-import { match } from 'ts-pattern'
+import {
+  always,
+  equals,
+  filter,
+  findIndex,
+  head,
+  map,
+  pipe,
+  range,
+  reduce,
+  reject,
+  remove,
+  toString,
+  view,
+} from 'ramda'
+import { P, match } from 'ts-pattern'
 import { costMoney } from '../board/resource'
-import { subtractCoins, withActivePlayer } from '../board/player'
-import { GameStatePlaying, GameCommandBuyPlotParams, Tile, LandEnum, BuildingEnum, GameCommandEnum } from '../types'
+import { activeLens, subtractCoins, withActivePlayer } from '../board/player'
+import { GameStatePlaying, GameCommandBuyPlotParams, Tile, LandEnum, GameCommandEnum } from '../types'
 
 const checkCanGetLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
@@ -20,8 +34,8 @@ const checkForConnection = (y: number, side: 'COAST' | 'MOUNTAIN') =>
           'COAST',
           () =>
             landscape[y + landscapeOffset - 1]?.[1][0] === undefined && // above
-            landscape[y + landscapeOffset]?.[3][0] === undefined && // upper-left
-            landscape[y + landscapeOffset + 1]?.[3][0] === undefined && // lower-left
+            landscape[y + landscapeOffset]?.[3][0] === undefined && // upper-right
+            landscape[y + landscapeOffset + 1]?.[3][0] === undefined && // lower-right
             landscape[y + landscapeOffset + 2]?.[1][0] === undefined // below
         )
         .with(
@@ -47,17 +61,13 @@ const checkForOverlap = (y: number, side: 'COAST' | 'MOUNTAIN') =>
           'COAST',
           () =>
             landscape[y + landscapeOffset]?.[0][0] !== undefined ||
-            landscape[y + landscapeOffset]?.[1][0] !== undefined ||
-            landscape[y + landscapeOffset + 1]?.[0][0] !== undefined ||
             landscape[y + landscapeOffset + 1]?.[1][0] !== undefined
         )
         .with(
           'MOUNTAIN',
           () =>
             landscape[y + landscapeOffset]?.[7][0] !== undefined ||
-            landscape[y + landscapeOffset]?.[8][0] !== undefined ||
-            landscape[y + landscapeOffset + 1]?.[7][0] !== undefined ||
-            landscape[y + landscapeOffset + 1]?.[8][0] !== undefined
+            landscape[y + landscapeOffset + 1]?.[7][0] !== undefined
         )
         .exhaustive()
     )
@@ -185,5 +195,34 @@ export const buyPlot = ({ side, y }: GameCommandBuyPlotParams) =>
 export const complete =
   (state: GameStatePlaying) =>
   (partial: string[]): string[] => {
-    return []
+    const player = view(activeLens(state), state)
+    return match<string[], string[]>(partial)
+      .with([], () => {
+        if (state.frame.bonusActions.includes(GameCommandEnum.BUY_PLOT) && head(state.plotPurchasePrices))
+          return [GameCommandEnum.BUY_PLOT]
+        if (checkCanGetLandscape(state) === undefined) return []
+        const playerWealth = costMoney(player)
+        const nextPlotCost = head(state.plotPurchasePrices) ?? Infinity
+        if (playerWealth < nextPlotCost) return []
+        return [GameCommandEnum.BUY_PLOT]
+      })
+      .with([GameCommandEnum.BUY_PLOT], () =>
+        map(
+          toString,
+          filter(
+            (y: number) =>
+              (!!checkForConnection(y, 'COAST')(state) && !!checkForOverlap(y, 'COAST')(state)) ||
+              (!!checkForConnection(y, 'MOUNTAIN')(state) && !!checkForOverlap(y, 'MOUNTAIN')(state)),
+            range(-2 - player.landscapeOffset, 1 + player.landscape.length - player.landscapeOffset)
+          )
+        )
+      )
+      .with([GameCommandEnum.BUY_PLOT, P._], ([, yRaw]): string[] => {
+        const y = Number.parseInt(yRaw, 10)
+        return reject<'MOUNTAIN' | 'COAST'>(
+          (side): boolean => !checkForOverlap(y, side)(state) || !checkForConnection(y, side)(state)
+        )(['COAST', 'MOUNTAIN'])
+      })
+      .with([GameCommandEnum.BUY_PLOT, P._, P._], always(['']))
+      .otherwise(always([]))
   }
