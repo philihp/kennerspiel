@@ -1,9 +1,73 @@
 import { always } from 'ramda'
 import { BuildingEnum, GameStatePlaying } from '../types'
+import { complete as completeAlehouse } from './alehouse'
+import { complete as completeBakery } from './bakery'
+import { complete as completeBathhouse } from './bathhouse'
+import { complete as completeBrewery } from './brewery'
+import { complete as completeBuildersMarket } from './buildersMarket'
+import { complete as completeBulwark } from './bulwark'
+import { complete as completeCalefactory } from './calefactory'
+import { complete as completeCamera } from './camera'
+import { complete as completeCarpentry } from './carpentry'
+import { complete as completeCastle } from './castle'
+import { complete as completeChamberOfWonders } from './chamberOfWonders'
+import { complete as completeChapel } from './chapel'
 import { complete as completeClayMound } from './clayMound'
-import { complete as completeFarmyard } from './farmyard'
+import { complete as completeCloisterChapterHouse } from './cloisterChapterHouse'
+import { complete as completeCloisterChurch } from './cloisterChurch'
+import { complete as completeCloisterCourtyard } from './cloisterCourtyard'
+import { complete as completeCloisterGarden } from './cloisterGarden'
+import { complete as completeCloisterLibrary } from './cloisterLibrary'
 import { complete as completeCloisterOffice } from './cloisterOffice'
+import { complete as completeCloisterWorkshop } from './cloisterWorkshop'
+import { complete as completeCoalHarbor } from './coalHarbor'
+import { complete as completeCooperage } from './cooperage'
+import { complete as completeCottage } from './cottage'
+import { complete as completeDormitory } from './dormitory'
+import { complete as completeDruidsHouse } from './druidsHouse'
+import { complete as completeEstate } from './estate'
+import { complete as completeFarmyard } from './farmyard'
+import { complete as completeFalseLighthouse } from './falseLighthouse'
+import { complete as completeFestivalGround } from './festivalGround'
+import { complete as completeFilialChurch } from './filialChurch'
+import { complete as completeFinancedEstate } from './financedEstate'
+import { complete as completeForestHut } from './forestHut'
+import { complete as completeForgersWorkshop } from './forgersWorkshop'
+import { complete as completeFuelMerchant } from './fuelMerchant'
+import { complete as completeGuesthouse } from './guesthouse'
+import { complete as completeGrainStorage } from './grainStorage'
+import { complete as completeGranary } from './granary'
+import { complete as completeGrapevine } from './grapevine'
+import { complete as completeGrandManor } from './grandManor'
+import { complete as completeHarborPromenade } from './harborPromenade'
+import { complete as completeHospice } from './hospice'
+import { complete as completeHouseboat } from './houseboat'
+import { complete as completeHouseOfTheBrotherhood } from './houseOfTheBrotherhood'
+import { complete as completeInn } from './inn'
+import { complete as completeLocutory } from './locutory'
+import { complete as completeMarket } from './market'
+import { complete as completeMalthouse } from './malthouse'
+import { complete as completePalace } from './palace'
+import { complete as completePeatCoalKiln } from './peatCoalKiln'
+import { complete as completePilgrimageSite } from './pilgrimageSite'
+import { complete as completePortico } from './portico'
+import { complete as completePrintingOffice } from './printingOffice'
 import { complete as completePriory } from './priory'
+import { complete as completeQuarry } from './quarry'
+import { complete as completeRefectory } from './refectory'
+import { complete as completeRoundTower } from './roundTower'
+import { complete as completeSacristy } from './sacristy'
+import { complete as completeSacredSite } from './sacredSite'
+import { complete as completeScriptorium } from './scriptorium'
+import { complete as completeShippingCompany } from './shippingCompany'
+import { complete as completeShipyard } from './shipyard'
+import { complete as completeSlaughterhouse } from './slaughterhouse'
+import { complete as completeSpinningMill } from './spinningMill'
+import { complete as completeStoneMerchant } from './stoneMerchant'
+import { complete as completeTownEstate } from './townEstate'
+import { complete as completeWhiskeyDistillery } from './whiskeyDistillery'
+import { complete as completeWindmill } from './windmill'
+import { complete as completeWinery } from './winery'
 
 export { alehouse } from './alehouse'
 export { bakery } from './bakery'
@@ -92,70 +156,70 @@ export const complete: Record<BuildingEnum, (partial: string[]) => (state: GameS
   [BuildingEnum.CloisterOfficeB]: completeCloisterOffice,
   [BuildingEnum.CloisterOfficeW]: completeCloisterOffice,
   [BuildingEnum.Priory]: completePriory,
-  [BuildingEnum.CloisterCourtyard]: always(always([])),
-  [BuildingEnum.GrainStorage]: always(always([])),
-  [BuildingEnum.Granary]: always(always([])),
-  [BuildingEnum.Windmill]: always(always([])),
-  [BuildingEnum.Malthouse]: always(always([])),
-  [BuildingEnum.Bakery]: always(always([])),
-  [BuildingEnum.Brewery]: always(always([])),
-  [BuildingEnum.FuelMerchant]: always(always([])),
-  [BuildingEnum.PeatCoalKiln]: always(always([])),
-  [BuildingEnum.Market]: always(always([])),
-  [BuildingEnum.FalseLighthouse]: always(always([])),
-  [BuildingEnum.CloisterGarden]: always(always([])),
-  [BuildingEnum.SpinningMill]: always(always([])),
-  [BuildingEnum.Carpentry]: always(always([])),
-  [BuildingEnum.Cottage]: always(always([])),
-  [BuildingEnum.HarborPromenade]: always(always([])),
-  [BuildingEnum.Houseboat]: always(always([])),
-  [BuildingEnum.StoneMerchant]: always(always([])),
-  [BuildingEnum.BuildersMarket]: always(always([])),
-  [BuildingEnum.GrapevineA]: always(always([])),
-  [BuildingEnum.SacredSite]: always(always([])),
-  [BuildingEnum.FinancedEstate]: always(always([])),
-  [BuildingEnum.DruidsHouse]: always(always([])),
-  [BuildingEnum.CloisterChapterHouse]: always(always([])),
-  [BuildingEnum.CloisterLibrary]: always(always([])),
-  [BuildingEnum.Scriptorium]: always(always([])),
-  [BuildingEnum.CloisterWorkshop]: always(always([])),
-  [BuildingEnum.Slaughterhouse]: always(always([])),
-  [BuildingEnum.Inn]: always(always([])),
-  [BuildingEnum.Alehouse]: always(always([])),
-  [BuildingEnum.Winery]: always(always([])),
-  [BuildingEnum.WhiskeyDistillery]: always(always([])),
-  [BuildingEnum.QuarryA]: always(always([])),
-  [BuildingEnum.Bathhouse]: always(always([])),
-  [BuildingEnum.Locutory]: always(always([])),
-  [BuildingEnum.CloisterChurch]: always(always([])),
-  [BuildingEnum.Chapel]: always(always([])),
-  [BuildingEnum.ChamberOfWonders]: always(always([])),
-  [BuildingEnum.Portico]: always(always([])),
-  [BuildingEnum.Shipyard]: always(always([])),
-  [BuildingEnum.Palace]: always(always([])),
-  [BuildingEnum.GrandManor]: always(always([])),
-  [BuildingEnum.Castle]: always(always([])),
-  [BuildingEnum.QuarryB]: always(always([])),
-  [BuildingEnum.ForestHut]: always(always([])),
-  [BuildingEnum.TownEstate]: always(always([])),
-  [BuildingEnum.Refectory]: always(always([])),
-  [BuildingEnum.GrapevineB]: always(always([])),
-  [BuildingEnum.CoalHarbor]: always(always([])),
-  [BuildingEnum.Calefactory]: always(always([])),
-  [BuildingEnum.FilialChurch]: always(always([])),
-  [BuildingEnum.ShippingCompany]: always(always([])),
-  [BuildingEnum.Cooperage]: always(always([])),
-  [BuildingEnum.Sacristy]: always(always([])),
-  [BuildingEnum.ForgersWorkshop]: always(always([])),
-  [BuildingEnum.RoundTower]: always(always([])),
-  [BuildingEnum.PilgrimageSite]: always(always([])),
-  [BuildingEnum.Camera]: always(always([])),
-  [BuildingEnum.Dormitory]: always(always([])),
-  [BuildingEnum.Bulwark]: always(always([])),
-  [BuildingEnum.PrintingOffice]: always(always([])),
-  [BuildingEnum.FestivalGround]: always(always([])),
-  [BuildingEnum.Estate]: always(always([])),
-  [BuildingEnum.Hospice]: always(always([])),
-  [BuildingEnum.Guesthouse]: always(always([])),
-  [BuildingEnum.HouseOfTheBrotherhood]: always(always([])),
+  [BuildingEnum.CloisterCourtyard]: completeCloisterCourtyard,
+  [BuildingEnum.GrainStorage]: completeGrainStorage,
+  [BuildingEnum.Granary]: completeGranary,
+  [BuildingEnum.Windmill]: completeWindmill,
+  [BuildingEnum.Malthouse]: completeMalthouse,
+  [BuildingEnum.Bakery]: completeBakery,
+  [BuildingEnum.Brewery]: completeBrewery,
+  [BuildingEnum.FuelMerchant]: completeFuelMerchant,
+  [BuildingEnum.PeatCoalKiln]: completePeatCoalKiln,
+  [BuildingEnum.Market]: completeMarket,
+  [BuildingEnum.FalseLighthouse]: completeFalseLighthouse,
+  [BuildingEnum.CloisterGarden]: completeCloisterGarden,
+  [BuildingEnum.SpinningMill]: completeSpinningMill,
+  [BuildingEnum.Carpentry]: completeCarpentry,
+  [BuildingEnum.Cottage]: completeCottage,
+  [BuildingEnum.HarborPromenade]: completeHarborPromenade,
+  [BuildingEnum.Houseboat]: completeHouseboat,
+  [BuildingEnum.StoneMerchant]: completeStoneMerchant,
+  [BuildingEnum.BuildersMarket]: completeBuildersMarket,
+  [BuildingEnum.GrapevineA]: completeGrapevine,
+  [BuildingEnum.SacredSite]: completeSacredSite,
+  [BuildingEnum.FinancedEstate]: completeFinancedEstate,
+  [BuildingEnum.DruidsHouse]: completeDruidsHouse,
+  [BuildingEnum.CloisterChapterHouse]: completeCloisterChapterHouse,
+  [BuildingEnum.CloisterLibrary]: completeCloisterLibrary,
+  [BuildingEnum.Scriptorium]: completeScriptorium,
+  [BuildingEnum.CloisterWorkshop]: completeCloisterWorkshop,
+  [BuildingEnum.Slaughterhouse]: completeSlaughterhouse,
+  [BuildingEnum.Inn]: completeInn,
+  [BuildingEnum.Alehouse]: completeAlehouse,
+  [BuildingEnum.Winery]: completeWinery,
+  [BuildingEnum.WhiskeyDistillery]: completeWhiskeyDistillery,
+  [BuildingEnum.QuarryA]: completeQuarry,
+  [BuildingEnum.Bathhouse]: completeBathhouse,
+  [BuildingEnum.Locutory]: completeLocutory,
+  [BuildingEnum.CloisterChurch]: completeCloisterChurch,
+  [BuildingEnum.Chapel]: completeChapel,
+  [BuildingEnum.ChamberOfWonders]: completeChamberOfWonders,
+  [BuildingEnum.Portico]: completePortico,
+  [BuildingEnum.Shipyard]: completeShipyard,
+  [BuildingEnum.Palace]: completePalace,
+  [BuildingEnum.GrandManor]: completeGrandManor,
+  [BuildingEnum.Castle]: completeCastle,
+  [BuildingEnum.QuarryB]: completeQuarry,
+  [BuildingEnum.ForestHut]: completeForestHut,
+  [BuildingEnum.TownEstate]: completeTownEstate,
+  [BuildingEnum.Refectory]: completeRefectory,
+  [BuildingEnum.GrapevineB]: completeGrapevine,
+  [BuildingEnum.CoalHarbor]: completeCoalHarbor,
+  [BuildingEnum.Calefactory]: completeCalefactory,
+  [BuildingEnum.FilialChurch]: completeFilialChurch,
+  [BuildingEnum.ShippingCompany]: completeShippingCompany,
+  [BuildingEnum.Cooperage]: completeCooperage,
+  [BuildingEnum.Sacristy]: completeSacristy,
+  [BuildingEnum.ForgersWorkshop]: completeForgersWorkshop,
+  [BuildingEnum.RoundTower]: completeRoundTower,
+  [BuildingEnum.PilgrimageSite]: completePilgrimageSite,
+  [BuildingEnum.Camera]: completeCamera,
+  [BuildingEnum.Dormitory]: completeDormitory,
+  [BuildingEnum.Bulwark]: completeBulwark,
+  [BuildingEnum.PrintingOffice]: completePrintingOffice,
+  [BuildingEnum.FestivalGround]: completeFestivalGround,
+  [BuildingEnum.Estate]: completeEstate,
+  [BuildingEnum.Hospice]: completeHospice,
+  [BuildingEnum.Guesthouse]: completeGuesthouse,
+  [BuildingEnum.HouseOfTheBrotherhood]: completeHouseOfTheBrotherhood,
 }
