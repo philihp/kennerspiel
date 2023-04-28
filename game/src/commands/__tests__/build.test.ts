@@ -340,6 +340,29 @@ describe('commands/build', () => {
           {
             ...s0.players[0],
             landscape: [
+              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
+              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['H', 'LB3'], [], []],
+            ] as Tile[][],
+            landscapeOffset: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          bonusActions: [],
+        },
+        buildings: [BuildingEnum.StoneMerchant],
+      }
+      const c0 = complete(s1, ['BUILD', BuildingEnum.StoneMerchant])
+      expect(c0).toStrictEqual(['3 0', '3 1'])
+    })
+    it('considers terrain type', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
               [['W'], ['C'], [], [], [], [], [], [], []],
               [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
               [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -352,7 +375,6 @@ describe('commands/build', () => {
         ],
         frame: {
           ...s0.frame,
-          mainActionUsed: true,
           bonusActions: [],
         },
       }
