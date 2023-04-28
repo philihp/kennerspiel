@@ -338,6 +338,79 @@ describe('commands/convert', () => {
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['CONVERT'])
     })
+    it('offers ways of converting what the player has', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 1,
+            penny: 5,
+            grain: 2,
+            wine: 1,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1)(['CONVERT'])
+      expect(c0).toStrictEqual([
+        'PnPnPnPnPnGnGnWn',
+        'PnPnPnPnPnGnGn',
+        'PnPnPnPnPnGnWn',
+        'PnPnPnPnPnGn',
+        'PnPnPnPnPnWn',
+        'PnPnPnPnPn',
+        'NiGnGnWn',
+        'NiGnGn',
+        'NiGnWn',
+        'NiGn',
+        'NiWn',
+        'Ni',
+        'GnGnWn',
+        'GnGn',
+        'GnWn',
+        'Gn',
+        'Wn',
+        '',
+      ])
+    })
+    it('only convert either nickel or pennies, and only chunks of 5 pennies', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 1,
+            penny: 8,
+            grain: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s1)(['CONVERT'])
+      expect(c0).toStrictEqual(['PnPnPnPnPn', 'Ni', ''])
+    })
+    it('completes command if given a param', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 0,
+            penny: 8,
+            grain: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete(s0)(['CONVERT', 'PnPnPnPnPn'])
+      expect(c0).toStrictEqual([''])
+    })
     it('returns [] if weird partial', () => {
       const c0 = complete(s0)(['CONVERT', 'TWO', 'APPLES'])
       expect(c0).toStrictEqual([])
