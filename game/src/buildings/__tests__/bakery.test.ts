@@ -321,9 +321,9 @@ describe('buildings/bakery', () => {
         'FlFlFlCoBrBr',
         'FlFlFlCoBr',
         'FlFlFlCo',
-        'FlFlFlWoStBrBr',
-        'FlFlFlWoStBr',
-        'FlFlFlWoSt',
+        'FlFlFlWoSwBrBr',
+        'FlFlFlWoSwBr',
+        'FlFlFlWoSw',
         'FlFlCoBrBr',
         'FlFlCoBr',
         'FlFlCo',
@@ -334,8 +334,8 @@ describe('buildings/bakery', () => {
         'FlCo',
         'FlWoBr',
         'FlWo',
-        'FlStBr',
-        'FlSt',
+        'FlSwBr',
+        'FlSw',
         '',
       ])
     })
@@ -356,7 +356,7 @@ describe('buildings/bakery', () => {
         ],
       }
       const c0 = complete([])(s1)
-      expect(c0).toStrictEqual(['FlStBr', 'FlSt', ''])
+      expect(c0).toStrictEqual(['FlSwBr', 'FlSw', ''])
     })
     it('offers only to sell 2 bread if we make none but have 2', () => {
       const s1 = {

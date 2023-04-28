@@ -1,7 +1,7 @@
 import { always, concat, curry, lift, map, pipe, unnest, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
-import { costEnergy, energyCostOptions, parseResourceParam, resourceArray } from '../board/resource'
+import { concatStr, costEnergy, energyCostOptions, parseResourceParam, resourceArray } from '../board/resource'
 import { GameStatePlaying, ResourceEnum } from '../types'
 
 export const cloisterWorkshop = (clayStoneEnergy = '') => {
@@ -32,7 +32,7 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
               concat(inputs),
               energyCostOptions(Math.floor(inputs.length / 2), player)
             ),
-          lift((a: string, b: string) => a + b)(
+          lift(concatStr)(
             resourceArray(ResourceEnum.Clay, 3)(player.clay),
             resourceArray(ResourceEnum.Stone, 1)(player.stone)
           )
