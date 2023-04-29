@@ -4,7 +4,16 @@ import { payCost, getCost, withActivePlayer, isLayBrother, isPrior, activeLens }
 import { findBuildingWithoutOffset, moveClergyToOwnBuilding } from '../board/landscape'
 import { costMoney, parseResourceParam } from '../board/resource'
 import { oncePerFrame, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
-import { BuildingEnum, Cost, Frame, GameCommandEnum, GameStatePlaying, SettlementRound, StateReducer } from '../types'
+import {
+  BuildingEnum,
+  Cost,
+  Frame,
+  GameCommandEnum,
+  GameStatePlaying,
+  SettlementRound,
+  StateReducer,
+  Tile,
+} from '../types'
 
 const workContractCost = (state: GameStatePlaying | undefined): number =>
   state?.frame?.settlementRound === SettlementRound.S ||
@@ -124,13 +133,13 @@ export const complete =
         return [GameCommandEnum.WORK_CONTRACT]
       })
       .with([GameCommandEnum.WORK_CONTRACT], () =>
-        reduce(
-          (accum, i) => {
+        reduce<number, string[]>(
+          (accum: string[], i: number) => {
             if (state.frame.activePlayerIndex === i) return accum
             const player = state.players[i]
             if (player.clergy.length === 0) return accum
-            forEach(
-              forEach((landStack) => {
+            forEach<Tile[], Tile[][]>(
+              forEach((landStack: Tile) => {
                 if (landStack.length === 0) return
                 const [, erection, clergy] = landStack
                 if (
