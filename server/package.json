@@ -6,6 +6,6 @@
     "typescript": "5.0.4"
   },
   "dependencies": {
-    "hathora-et-labora-game": "0.9.0"
+    "hathora-et-labora-game": "0.10.0"
   }
 }
