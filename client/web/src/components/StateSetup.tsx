@@ -11,13 +11,25 @@ const configured = (country: Country, length: Length, config?: EngineConfig) =>
 
 export const StateSetup = () => {
   const { state, join, config, start } = useHathoraContext()
-  const users = state?.users
+  const users = state?.users ?? []
   const engineConfig = state?.config
   return (
     <>
+      <h1>Game Setup</h1>
+      <p>
+        Share the URL of this page with all players. Have them come here and select a color. Player order will be
+        randomized upon start.
+      </p>
+      <p>
+        France and Ireland use a mostly different set of buildings. The 2 player game has the smallest subset of
+        buildings, usually around 36+ rounds where the action order goes 1-2, 2-1, 1-2, 2,1... so each player gets 2
+        actions in a row. In the long 2-player game, nearly all buidings from the 4-player game are used and action
+        order goes 1-1-2, 2-2-1, 1-1-2, ... so each player gets 3 actionsin a row. The 3 and 4 player standard games use
+        a larger set of buildings over 24 rounds. Short games are only 12 and 8 rounds, respectively, and each player
+        only gets 2 clergy and resources are distributed more often.
+      </p>
       <hr />
-      Colors:
-      <br />
+      <h3>Players ({users?.length})</h3>
       <input type="checkbox" disabled checked={occupied(Color.Red, users)} />
       <button type="button" disabled={occupied(Color.Red, users)} onClick={() => join(Color.Red)}>
         Red
@@ -39,36 +51,48 @@ export const StateSetup = () => {
       </button>
       {/*-------------------------------------------*/}
       <hr />
-      Configure:
-      <br />
+      <h3>Mode</h3>
       <input type="radio" disabled checked={configured(Country.france, Length.long, engineConfig)} />
       <button
         type="button"
         disabled={configured(Country.france, Length.long, engineConfig)}
         onClick={() => config(Country.france, Length.long)}
       >
-        France
+        France {users?.length === 2 && '(long)'}
       </button>
       <br />
-      <input type="radio" disabled checked={configured(Country.france, Length.short, engineConfig)} />
+      <input type="radio" disabled checked={configured(Country.ireland, Length.long, engineConfig)} />
       <button
+        disabled={configured(Country.ireland, Length.long, engineConfig)}
+        onClick={() => config(Country.ireland, Length.long)}
         type="button"
-        disabled={configured(Country.france, Length.short, engineConfig)}
-        onClick={() => config(Country.france, Length.short)}
       >
-        France+Short
+        Ireland {users?.length === 2 && '(long)'}
       </button>
       <br />
-      <input type="radio" disabled />
-      <button type="button" disabled>
-        Ireland
-      </button>
-      <br />
-      <input type="radio" disabled />
-      <button type="button" disabled>
-        Ireland+Long
-      </button>
-      <br />
+      {users.length > 1 && (
+        <>
+          {' '}
+          <input type="radio" disabled checked={configured(Country.ireland, Length.short, engineConfig)} />
+          <button
+            type="button"
+            disabled={configured(Country.ireland, Length.short, engineConfig)}
+            onClick={() => config(Country.ireland, Length.short)}
+          >
+            Ireland {users?.length >= 3 && '(short)'}
+          </button>
+          <br />
+          <input type="radio" disabled checked={configured(Country.france, Length.short, engineConfig)} />
+          <button
+            type="button"
+            disabled={configured(Country.france, Length.short, engineConfig)}
+            onClick={() => config(Country.france, Length.short)}
+          >
+            France {users?.length >= 3 && '(short)'}
+          </button>
+          <br />
+        </>
+      )}
       <hr />
       <button type="button" disabled={users?.length === 0 || engineConfig === undefined} onClick={() => start()}>
         Start
