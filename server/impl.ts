@@ -137,8 +137,8 @@ export class Impl implements Methods<InternalState> {
 
   config(state: InternalState, userId: UserId, ctx: Context, request: IConfigRequest): Response {
     const players = `${Math.max(1, state.users.length)}`
-    if(request.country !== Country.france) return Response.error('Only the France variant is implemented');
-    const country = 'france'
+    if([Country.ireland, Country.france].includes(request.country) === false) return Response.error('Only the France variant is implemented');
+    const country = request.country === Country.ireland ? 'ireland' : 'france'
     const length = request.length === Length.long ? 'long' : 'short'  
     if(reducer(initialState, ['CONFIG', players, country, length]) === undefined) return Response.error('Invalid config')
     state.country = country
@@ -148,9 +148,8 @@ export class Impl implements Methods<InternalState> {
 
   start(state: InternalState, userId: UserId, ctx: Context, request: IStartRequest): Response {
     const s0 = initialState
-
-    if(state.country===undefined) return Response.error('Country not configured');
-    if(state.length===undefined) return Response.error('Length not configured');
+    if(state.country === undefined) return Response.error('Country not configured');
+    if(state.length === undefined) return Response.error('Length not configured');
     const c1 = ['CONFIG', `${state.users.length}`, state.country, state.length]
     const s1 = reducer(s0, c1)
     if(!s1) return Response.error(`Unable to configure with ${c1.join(' ')}`)
