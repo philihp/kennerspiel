@@ -27,13 +27,10 @@ export const HeaderUser = () => {
 
   return (
     <div
-      style={
-        state?.control
-          ? {
-              backgroundColor: '#fdb462',
-            }
-          : {}
-      }
+      style={{
+        position: 'sticky',
+        backgroundColor: state?.control ? '#fdb462' : 'auto',
+      }}
     >
       {!user && (
         <GoogleLogin
@@ -44,7 +41,7 @@ export const HeaderUser = () => {
           }}
         />
       )}
-      {user && (
+      {/* {user && (
         <div
           style={{
             display: 'flex',
@@ -60,7 +57,7 @@ export const HeaderUser = () => {
           />
           <div style={{ display: 'flex' }}>{getUserName(user?.id)}</div>
         </div>
-      )}
+      )} */}
     </div>
   )
 }

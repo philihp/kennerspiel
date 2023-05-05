@@ -16,10 +16,7 @@ export const StateSetup = () => {
   return (
     <>
       <h1>Game Setup</h1>
-      <p>
-        Share the URL of this page with all players. Have them come here and select a color. Player order will be
-        randomized upon start.
-      </p>
+      <p>Share the URL of this page with all players. Have them come here and select a color.</p>
       <p>
         France and Ireland use a mostly different set of buildings. The 2 player game has the smallest subset of
         buildings, usually around 36+ rounds where the action order goes 1-2, 2-1, 1-2, 2,1... so each player gets 2
@@ -49,6 +46,7 @@ export const StateSetup = () => {
       <button type="button" disabled={occupied(Color.White, users)} onClick={() => join(Color.White)}>
         White
       </button>
+      <p>Player order will be randomized upon start.</p>
       {/*-------------------------------------------*/}
       <hr />
       <h3>Mode</h3>
@@ -93,6 +91,13 @@ export const StateSetup = () => {
           <br />
         </>
       )}
+      <p>
+        Each variant has a different set of buildings, with only 15 of the 41 buildings are shared between both. France
+        includes buildings like the Windmill and Bakery to produce bread, and Vineyards which produce grapes which can
+        be turned into wine which can be consumed instead of paying for a work contract. Ireland includes buildings like
+        the Malthouse and Brewery to turn Grain into malt and then into beer, as well as the Whiskey Distillery which
+        turns malt into whiskey which can also be consumed for a work contract.
+      </p>
       <hr />
       <button type="button" disabled={users?.length === 0 || engineConfig === undefined} onClick={() => start()}>
         Start

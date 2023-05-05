@@ -231,7 +231,7 @@ export class Impl implements Methods<InternalState> {
         me: state.users.find(u => u.id === userId),
         status: EngineStatus.SETUP,
         config: {
-          country: state.country === 'france' ? Country.france : Country.ireland,
+          country: state.country === 'ireland' ? Country.ireland : Country.france,
           length: state.length === 'short' ? Length.short : Length.long,
           players: state.users.length
         },

@@ -10,9 +10,12 @@ const resetStyle = {
 }
 
 export const MoveList = () => {
-  const { state } = useHathoraContext()
+  const { state, control } = useHathoraContext()
   return (
     <div>
+      <button type="button" onClick={() => control('')}>
+        Reset Control
+      </button>
       <ul style={resetStyle}>
         {state?.moves.map((m, i) => (
           // eslint-disable-next-line react/no-array-index-key
