@@ -7,15 +7,17 @@ import { UnbuiltPlots } from './UnbuiltPlots'
 import { UnbuiltDistricts } from './UnbuiltDistricts'
 import { UnbuiltWonders } from './UnbuiltWonders'
 import { MoveList } from './MoveList'
+import { Actions } from './actions/Actions'
 
 export const StatePlaying = () => {
-  const { state } = useHathoraContext()
+  const { control, state } = useHathoraContext()
   if (state === undefined) return <div>Error, missing state</div>
   const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders, ...elseState } =
     state
 
   return (
     <>
+      <Actions />
       <div style={{ display: 'grid', gridTemplateColumns: '200px 470px 1fr' }}>
         <MoveList />
         {rondel && config && <Rondel config={config} rondel={rondel} />}
@@ -26,6 +28,7 @@ export const StatePlaying = () => {
           {wonders && <UnbuiltWonders wonders={wonders} />}
         </div>
       </div>
+      <pre>{JSON.stringify(state.control, undefined, 2)}</pre>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         {players &&
           map(
