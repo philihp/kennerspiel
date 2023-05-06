@@ -124,7 +124,12 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
 
   const control = useCallback(
     async (partial: string) => {
+      const start = new Date()
+      console.log(`${start.toISOString()}: await connection?.control({ ${partial} })`)
       await connection?.control({ partial })
+      const end = new Date()
+      const diff = end.getTime() - start.getTime()
+      console.log(`${end.toISOString()}: returned in ${diff} ms`)
     },
     [connection]
   )

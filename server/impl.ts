@@ -186,10 +186,14 @@ export class Impl implements Methods<InternalState> {
       request.command
     ]
     state.commandIndex++
+
     return Response.ok()
   }
 
   control(state: InternalState, userId: string, ctx: Context, request: IControlRequest): Response {
+    const startMs = new Date().getMilliseconds()
+    console.log(`${new Date().toISOString()}: start impl.control`)
+
     const activeUser = activeUserId(state)
     if(activeUser !== userId) {
       return Response.error(`Active user is ${activeUser}`)
@@ -199,6 +203,9 @@ export class Impl implements Methods<InternalState> {
       'request.partial': request.partial
     })
     state.partial = request.partial
+
+    const endMs = new Date().getMilliseconds()
+    console.log(`${new Date().toISOString()}: end impl.control in ${endMs - startMs} ms`)
     return Response.ok()
   }
 
@@ -225,6 +232,9 @@ export class Impl implements Methods<InternalState> {
   }
   
   getUserState(state: InternalState, userId: UserId): EngineState {
+    const start = new Date()
+    console.log(`${start.toISOString()}: start getUserState`)
+
     if(!state.commandIndex) {
       return {
         users: state.users as User[],
@@ -255,6 +265,9 @@ export class Impl implements Methods<InternalState> {
       partial: controlSurface.partial && controlSurface.partial.join(' '),
       completion: controlSurface.completion
     }
+
+    const end = new Date()
+    console.log(`${end.toISOString()}: end getUserState in ${end.getTime() - start.getTime()} ms`)
 
     return {
       users,
