@@ -1,5 +1,3 @@
-import { ChangeEvent, useState } from 'react'
-import { equals, filter, reject } from 'ramda'
 import classes from './actions.module.css'
 import { useHathoraContext } from '../../context/GameContext'
 import { ActionUse } from './ActionUse'

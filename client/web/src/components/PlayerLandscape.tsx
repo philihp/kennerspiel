@@ -1,11 +1,11 @@
-import { addIndex, map, range } from 'ramda'
-import { EngineRondel, EngineConfig, Length } from '../../../../api/types'
 import { Erection } from './Erection'
-import { Clergy, PlayerClergy } from './PlayerClergy'
+import { Clergy } from './PlayerClergy'
+import { useHathoraContext } from '../context/GameContext'
 
 interface Props {
   landscape: string[][][]
   offset: number
+  active: boolean
 }
 
 const landToColor = (land: string) => {
@@ -26,7 +26,8 @@ const landToColor = (land: string) => {
   }
 }
 
-export const PlayerLandscape = ({ landscape, offset }: Props) => {
+export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
+  const { state, control } = useHathoraContext()
   return (
     <table style={{ borderCollapse: 'collapse' }}>
       <tbody>
@@ -38,14 +39,15 @@ export const PlayerLandscape = ({ landscape, offset }: Props) => {
                 // eslint-disable-next-line react/no-array-index-key
                 if (tile.length === 0) return <td key={`${rowId}:${colIndex}`} />
                 const [land, building, clergy] = tile
+                const key = `${colIndex - 2} ${rowId}`
+                const selectable = active && state?.control?.completion?.includes(key)
                 return (
                   <td
                     style={{
                       border: 1,
                       borderStyle: 'solid',
                       borderColor: '#555',
-                      width: 70,
-                      height: 100,
+                      width: 80,
                       textAlign: 'center',
                       backgroundColor: landToColor(land),
                     }}
@@ -54,6 +56,11 @@ export const PlayerLandscape = ({ landscape, offset }: Props) => {
                   >
                     {building && <Erection key={building} id={building} />}
                     {clergy && <Clergy id={clergy} />}
+                    {selectable && (
+                      <button type="button" onClick={() => control(`${state?.control?.partial} ${key}`)}>
+                        {state?.control?.partial}
+                      </button>
+                    )}
                   </td>
                 )
               })}

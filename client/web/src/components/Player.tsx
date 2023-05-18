@@ -10,12 +10,12 @@ interface Props {
   active: boolean
 }
 
-export const Player = ({ player }: Props) => {
+export const Player = ({ player, active }: Props) => {
   const { color, clergy, landscape, landscapeOffset, settlements, wonders, ...resources } = player
   return (
     <div>
       <PlayerClergy clergy={clergy} color={color} />
-      <PlayerLandscape landscape={landscape} offset={landscapeOffset} />
+      <PlayerLandscape landscape={landscape} offset={landscapeOffset} active={active} />
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <PlayerResources {...resources} />
       <PlayerWonders wonders={wonders} />
