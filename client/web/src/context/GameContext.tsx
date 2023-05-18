@@ -40,7 +40,6 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   const [state, setEngineState] = useState<EngineState>()
   const [user, setUserInfo] = useState<UserData>()
   const [connection, setConnection] = useState<HathoraConnection>()
-  const [events, setEvents] = useState<string[]>()
   const [error, setError] = useState<ConnectionFailure>()
   const [connecting, setConnecting] = useState<boolean>()
   const [playerNameMapping, setPlayerNameMapping] = useState<Record<string, UserData>>({})
@@ -84,7 +83,6 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     connection.disconnect()
     setConnection(undefined)
     setEngineState(undefined)
-    setEvents(undefined)
     setError(undefined)
   }, [connection])
 
