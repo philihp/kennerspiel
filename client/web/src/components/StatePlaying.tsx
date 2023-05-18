@@ -7,17 +7,18 @@ import { UnbuiltPlots } from './UnbuiltPlots'
 import { UnbuiltDistricts } from './UnbuiltDistricts'
 import { UnbuiltWonders } from './UnbuiltWonders'
 import { MoveList } from './MoveList'
-import { Actions } from './actions/Actions'
+import { Actions } from './sliders/Actions'
+import { Submit } from './sliders/Submit'
 
 export const StatePlaying = () => {
-  const { control, state } = useHathoraContext()
+  const { state } = useHathoraContext()
   if (state === undefined) return <div>Error, missing state</div>
-  const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders, ...elseState } =
-    state
+  const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = state
 
   return (
     <>
       <Actions />
+      <Submit />
       <div style={{ display: 'grid', gridTemplateColumns: '200px 470px 1fr' }}>
         <MoveList />
         {rondel && config && <Rondel config={config} rondel={rondel} />}
