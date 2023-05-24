@@ -40,10 +40,8 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   const [state, setEngineState] = useState<EngineState>()
   const [user, setUserInfo] = useState<UserData>()
   const [connection, setConnection] = useState<HathoraConnection>()
-  const [events, setEvents] = useState<string[]>()
   const [error, setError] = useState<ConnectionFailure>()
   const [connecting, setConnecting] = useState<boolean>()
-  // const [loggingIn, setLoggingIn] = useState<boolean>()
   const [playerNameMapping, setPlayerNameMapping] = useState<Record<string, UserData>>({})
 
   // if we have a stored token, immediately use that to load things
@@ -55,16 +53,14 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   }, [setPlayerNameMapping, token])
 
   const login = useCallback(async (cred: CredentialResponse) => {
-    if (cred.credential !== undefined) {
-      const token = await client.loginGoogle(cred.credential)
-      if (token) {
-        const user = HathoraClient.getUserFromToken(token)
-        setUserInfo(user)
-        setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
-        setToken(token)
-        localStorage.setItem('token', token)
-      }
-    }
+    if (cred.credential === undefined) return
+    const token = await client.loginGoogle(cred.credential)
+    if (!token) return
+    const user = HathoraClient.getUserFromToken(token)
+    setUserInfo(user)
+    setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
+    setToken(token)
+    localStorage.setItem('token', token)
   }, [])
 
   const connect = useCallback(
@@ -83,20 +79,16 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   )
 
   const disconnect = useCallback(() => {
-    if (connection !== undefined) {
-      connection.disconnect()
-      setConnection(undefined)
-      setEngineState(undefined)
-      setEvents(undefined)
-      setError(undefined)
-    }
+    if (connection === undefined) return
+    connection.disconnect()
+    setConnection(undefined)
+    setEngineState(undefined)
+    setError(undefined)
   }, [connection])
 
   const createGame = useCallback(async (): Promise<string> => {
-    if (token) {
-      return client.create(token, IInitializeRequest.default())
-    }
-    return ''
+    if (!token) return ''
+    return client.create(token, IInitializeRequest.default())
   }, [token])
 
   const join = useCallback(
@@ -144,9 +136,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
 
   const getUserName = useCallback(
     (userId: string) => {
-      if (playerNameMapping[userId]) {
-        return playerNameMapping[userId].name
-      }
+      if (playerNameMapping[userId]) return playerNameMapping[userId].name
       lookupUser(userId).then((response) => {
         setPlayerNameMapping((curr) => ({ ...curr, [userId]: response }))
       })

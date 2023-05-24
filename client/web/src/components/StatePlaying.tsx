@@ -7,41 +7,41 @@ import { UnbuiltPlots } from './UnbuiltPlots'
 import { UnbuiltDistricts } from './UnbuiltDistricts'
 import { UnbuiltWonders } from './UnbuiltWonders'
 import { MoveList } from './MoveList'
-import { Actions } from './actions/Actions'
+import { Actions } from './sliders/Actions'
+import { Submit } from './sliders/Submit'
+import { Debug } from './sliders/Debug'
 
 export const StatePlaying = () => {
-  const { control, state } = useHathoraContext()
+  const { state } = useHathoraContext()
   if (state === undefined) return <div>Error, missing state</div>
-  const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders, ...elseState } =
-    state
+  const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = state
 
   return (
     <>
       <Actions />
-      <div style={{ display: 'grid', gridTemplateColumns: '200px 470px 1fr' }}>
-        <MoveList />
-        {rondel && config && <Rondel config={config} rondel={rondel} />}
+      <Submit />
+      <Debug />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 470px 200px' }}>
         <div>
           {buildings && <UnbuiltBuildings buildings={buildings} />}
           {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
           {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
           {wonders && <UnbuiltWonders wonders={wonders} />}
         </div>
+        {rondel && config && <Rondel config={config} rondel={rondel} />}
+        <MoveList />
       </div>
-      <pre>{JSON.stringify(state.control, undefined, 2)}</pre>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-        {players &&
-          map(
-            (player) => (
-              <Player
-                key={player.color}
-                player={player}
-                active={!!state?.control && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id}
-              />
-            ),
-            players
-          )}
-      </div>
+      {players &&
+        map(
+          (player) => (
+            <Player
+              key={player.color}
+              player={player}
+              active={!!state?.control && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id}
+            />
+          ),
+          players
+        )}
     </>
   )
 }
