@@ -1,5 +1,7 @@
 interface Props {
   id: string
+  disabled?: boolean
+  onClick?: () => void
 }
 
 const decolor = (id: string) => {
@@ -12,7 +14,7 @@ const decolor = (id: string) => {
 
 const multiplier = 0.4
 
-export const Erection = ({ id }: Props) => (
+export const Erection = ({ id, disabled, onClick }: Props) => (
   <div style={{ display: 'inline-block' }}>
     <img
       alt={id}
@@ -23,6 +25,13 @@ export const Erection = ({ id }: Props) => (
       height={250 * multiplier}
     />
     <br />
-    {id}
+    <button type="button" onClick={onClick} disabled={disabled}>
+      {id}
+    </button>
   </div>
 )
+
+Erection.defaultProps = {
+  disabled: true,
+  onClick: () => undefined,
+}

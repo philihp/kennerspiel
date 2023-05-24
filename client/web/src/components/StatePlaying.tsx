@@ -9,6 +9,7 @@ import { UnbuiltWonders } from './UnbuiltWonders'
 import { MoveList } from './MoveList'
 import { Actions } from './sliders/Actions'
 import { Submit } from './sliders/Submit'
+import { Debug } from './sliders/Debug'
 
 export const StatePlaying = () => {
   const { state } = useHathoraContext()
@@ -19,17 +20,17 @@ export const StatePlaying = () => {
     <>
       <Actions />
       <Submit />
-      <div style={{ display: 'grid', gridTemplateColumns: '200px 470px 1fr' }}>
-        <MoveList />
-        {rondel && config && <Rondel config={config} rondel={rondel} />}
+      <Debug />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 470px 200px' }}>
         <div>
           {buildings && <UnbuiltBuildings buildings={buildings} />}
           {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
           {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
           {wonders && <UnbuiltWonders wonders={wonders} />}
         </div>
+        {rondel && config && <Rondel config={config} rondel={rondel} />}
+        <MoveList />
       </div>
-      <pre>{JSON.stringify(state.control, undefined, 2)}</pre>
       {players &&
         map(
           (player) => (

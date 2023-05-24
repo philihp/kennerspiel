@@ -40,7 +40,17 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                 if (tile.length === 0) return <td key={`${rowId}:${colIndex}`} />
                 const [land, building, clergy] = tile
                 const key = `${colIndex - 2} ${rowId}`
-                const selectable = active && state?.control?.completion?.includes(key)
+                const selectable =
+                  (active && state?.control?.completion?.includes(key)) ||
+                  state?.control?.completion?.includes(building)
+                const handleClick = () => {
+                  if (state?.control?.completion?.includes(key)) {
+                    control(`${state?.control?.partial} ${key}`)
+                  }
+                  if (state?.control?.completion?.includes(building)) {
+                    control(`${state?.control?.partial} ${building}`)
+                  }
+                }
                 return (
                   <td
                     style={{
@@ -54,13 +64,13 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                     // eslint-disable-next-line react/no-array-index-key
                     key={`${rowId}:${colIndex}`}
                   >
-                    {building && <Erection key={building} id={building} />}
-                    {clergy && <Clergy id={clergy} />}
-                    {selectable && (
-                      <button type="button" onClick={() => control(`${state?.control?.partial} ${key}`)}>
-                        {state?.control?.partial}
+                    {building && <Erection key={building} id={building} disabled={!selectable} onClick={handleClick} />}
+                    {!building && selectable && (
+                      <button type="button" onClick={handleClick}>
+                        {land}
                       </button>
                     )}
+                    {clergy && <Clergy id={clergy} />}
                   </td>
                 )
               })}
