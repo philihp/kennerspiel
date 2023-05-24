@@ -1,4 +1,4 @@
-import { always, lift, map, pipe, range, reverse, view } from 'ramda'
+import { always, lift, map, pipe, range, reverse, view, without } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, subtractCoins, withActivePlayer } from '../board/player'
 import { GameCommandConvertParams, GameCommandEnum, GameStatePlaying, ResourceEnum, Tableau } from '../types'
@@ -94,7 +94,10 @@ export const complete =
         const convertWhiskey = map((s) => stringRepeater(ResourceEnum.Whiskey, s), reverse(range(0, 1 + whiskey)))
         const convertWine = map((s) => stringRepeater(ResourceEnum.Wine, s), reverse(range(0, 1 + wine)))
 
-        return lift((a, b, c, d) => a + b + c + d)(convertMoney, convertGrain, convertWhiskey, convertWine)
+        return without(
+          [''],
+          lift((a, b, c, d) => a + b + c + d)(convertMoney, convertGrain, convertWhiskey, convertWine)
+        )
       })
       .with([GameCommandEnum.CONVERT, P._], always(['']))
       .otherwise(always([]))

@@ -372,7 +372,6 @@ describe('commands/convert', () => {
         'GnWn',
         'Gn',
         'Wn',
-        '',
       ])
     })
     it('only convert either nickel or pennies, and only chunks of 5 pennies', () => {
@@ -391,7 +390,7 @@ describe('commands/convert', () => {
         ],
       }
       const c0 = complete(s1)(['CONVERT'])
-      expect(c0).toStrictEqual(['PnPnPnPnPn', 'Ni', ''])
+      expect(c0).toStrictEqual(['PnPnPnPnPn', 'Ni'])
     })
     it('completes command if given a param', () => {
       const s1 = {
