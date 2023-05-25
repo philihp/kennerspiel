@@ -954,6 +954,12 @@ describe('build/buildings', () => {
     it('considers Priory as a cloister', () => {
       expect(isCloisterBuilding(BuildingEnum.Priory)).toBeTruthy()
     })
+    it('considers CloisterLibrary as a cloister', () => {
+      expect(isCloisterBuilding(BuildingEnum.CloisterLibrary)).toBeTruthy()
+    })
+    it('considers Scriptorium as a cloister', () => {
+      expect(isCloisterBuilding(BuildingEnum.Scriptorium)).toBeTruthy()
+    })
     it('does not consider Market as a cloister', () => {
       expect(isCloisterBuilding(BuildingEnum.Market)).toBeFalsy()
     })
