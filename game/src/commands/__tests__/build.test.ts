@@ -356,6 +356,31 @@ describe('commands/build', () => {
       const c0 = complete(s1)(['BUILD', BuildingEnum.StoneMerchant])
       expect(c0).toStrictEqual(['3 0', '3 1'])
     })
+    it('gives all the places a cloister can be built', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [['W'], ['C'], ['H'], ['P'], ['P'], ['H'], ['H'], [], []],
+              [['W'], ['C'], ['H'], ['P'], ['P'], ['P'], ['P', 'LG1'], [], []],
+              [['W'], ['C'], ['P'], ['P'], ['P', 'LG2'], ['P', 'G01'], ['H', 'LG3'], [], []],
+              [['W'], ['C'], ['H'], ['P'], ['P', 'G06'], ['H'], ['H'], [], []],
+            ] as Tile[][],
+            landscapeOffset: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1)(['BUILD', BuildingEnum.Priory])
+      expect(c0).toStrictEqual(['3 0', '3 2', '4 2'])
+    })
     it('considers terrain type', () => {
       const s1: GameStatePlaying = {
         ...s0,
@@ -381,7 +406,7 @@ describe('commands/build', () => {
       const c0 = complete(s1)(['BUILD', BuildingEnum.HarborPromenade])
       expect(c0).toStrictEqual(['-1 -1', '-1 0', '-1 2', '-1 3'])
     })
-    it('gives all the places the given building can be built if given a col', () => {
+    it('gives all the places a cloister can be built if given a col', () => {
       const s1: GameStatePlaying = {
         ...s0,
         players: [
@@ -389,8 +414,9 @@ describe('commands/build', () => {
             ...s0.players[0],
             landscape: [
               [['W'], ['C'], ['H'], ['P'], ['P'], ['H'], ['H'], [], []],
-              [['W'], ['C'], ['H'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-              [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H'], [], []],
+              [['W'], ['C'], ['H'], ['P'], ['P', 'G05'], ['P'], ['P', 'LG1'], [], []],
+              [['W'], ['C'], ['P'], ['P'], ['P', 'LG2'], ['P', 'G01'], ['H', 'LG3'], [], []],
+              [['W'], ['C'], ['H'], ['P'], ['P', 'G06'], ['H'], ['H'], [], []],
             ] as Tile[][],
             landscapeOffset: 1,
           },
@@ -402,8 +428,8 @@ describe('commands/build', () => {
           bonusActions: [],
         },
       }
-      const c0 = complete(s1)(['BUILD', BuildingEnum.GrapevineA, '4'])
-      expect(c0).toStrictEqual(['-1', '1'])
+      const c0 = complete(s1)(['BUILD', BuildingEnum.Priory, '3'])
+      expect(c0).toStrictEqual(['0', '2'])
     })
     it('complete if given all necessary params', () => {
       const s1: GameStatePlaying = {

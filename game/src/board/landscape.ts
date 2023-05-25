@@ -1,4 +1,4 @@
-import { addIndex, curry, filter, map, pipe, range, reduce, reduced } from 'ramda'
+import { addIndex, any, curry, filter, identity, map, pipe, range, reduce, reduced } from 'ramda'
 import { match } from 'ts-pattern'
 import {
   LandEnum,
@@ -14,6 +14,7 @@ import {
 } from '../types'
 import { terrainForErection } from './erections'
 import { isLayBrother, isPrior, withActivePlayer, withPlayerIndex } from './player'
+import { isCloisterBuilding } from './buildings'
 
 export const districtPrices = (config: GameCommandConfigParams): number[] =>
   match(config)
@@ -97,12 +98,16 @@ export const makeLandscape = (color: PlayerColor): Tile[][] => {
   ]
 }
 
+const checkLandTypeMatchesPlayer = (row: number, col: number, erection: ErectionEnum) => (player: Tableau) => {
+  const tile = player.landscape[row + player.landscapeOffset][col + 2]
+  const [landAtSpot] = tile
+  const eligibleTerrain = terrainForErection(erection)
+  if (landAtSpot && !eligibleTerrain.includes(landAtSpot)) return undefined
+  return player
+}
+
 export const checkLandTypeMatches = (row: number, col: number, erection: ErectionEnum) =>
-  withActivePlayer((player) => {
-    const landAtSpot = player.landscape[row + player.landscapeOffset][col + 2][0]
-    if (landAtSpot && !terrainForErection(erection).includes(landAtSpot)) return undefined
-    return player
-  })
+  withActivePlayer(checkLandTypeMatchesPlayer(row, col, erection))
 
 export const checkLandscapeFree = (row: number, col: number) => {
   return withActivePlayer((player) => {
@@ -112,6 +117,22 @@ export const checkLandscapeFree = (row: number, col: number) => {
   })
 }
 
+export const checkCloisterAdjacencyPlayer = (row: number, col: number, building: ErectionEnum) => (player: Tableau) => {
+  if (isCloisterBuilding(building) === false) return player
+  const { landscape, landscapeOffset } = player
+  return any(isCloisterBuilding, [
+    landscape[row + landscapeOffset + 1]?.[col + 2]?.[1],
+    landscape[row + landscapeOffset - 1]?.[col + 2]?.[1],
+    landscape[row + landscapeOffset]?.[col + 3]?.[1],
+    landscape[row + landscapeOffset]?.[col + 1]?.[1],
+  ])
+    ? player
+    : undefined
+}
+
+export const checkCloisterAdjacency = (row: number, col: number, building: ErectionEnum): StateReducer => {
+  return withActivePlayer(checkCloisterAdjacencyPlayer(row, col, building))
+}
 export const moveClergyToOwnBuilding =
   (building: BuildingEnum): StateReducer =>
   (state) => {
@@ -299,8 +320,15 @@ export const erectableLocationsCol = (erection: ErectionEnum, rawCol: string, pl
   const colsAtRow = map((row: Tile[]) => row[col], player.landscape)
   return addIndex<Tile, string[]>(reduce<Tile, string[]>)(
     (accum: string[], tile: Tile, rowIndex: number) => {
-      if (tile[0] && terrainForErection(erection).includes(tile[0]) && !tile[1])
+      const [land, building] = tile
+      if (
+        land &&
+        !building &&
+        !!checkLandTypeMatchesPlayer(rowIndex - player.landscapeOffset, col - 2, erection)(player) &&
+        !!checkCloisterAdjacencyPlayer(rowIndex - player.landscapeOffset, col - 2, erection)(player)
+      )
         accum.push(`${rowIndex - player.landscapeOffset}`)
+
       return accum
     },
     [] as string[],
@@ -313,8 +341,15 @@ export const erectableLocations = curry((erection: ErectionEnum, player: Tableau
     (accum: string[], row: Tile[], rowIndex: number) =>
       addIndex(reduce<Tile, string[]>)(
         (innerAccum: string[], tile: Tile, colIndex: number) => {
-          if (tile[0] && terrainForErection(erection).includes(tile[0]) && !tile[1])
+          const [land, building] = tile
+          if (
+            land &&
+            !building &&
+            !!checkLandTypeMatchesPlayer(rowIndex - player.landscapeOffset, colIndex - 2, erection)(player) &&
+            !!checkCloisterAdjacencyPlayer(rowIndex - player.landscapeOffset, colIndex - 2, erection)(player)
+          )
             innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
+
           return innerAccum
         },
         accum,
