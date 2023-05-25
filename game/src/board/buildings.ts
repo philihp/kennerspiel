@@ -1,6 +1,6 @@
 import { filter, union } from 'ramda'
 import { match } from 'ts-pattern'
-import { BuildingEnum, Cost, GameCommandConfigParams, SettlementRound, StateReducer } from '../types'
+import { BuildingEnum, Cost, ErectionEnum, GameCommandConfigParams, SettlementRound, StateReducer } from '../types'
 
 export const costForBuilding = (building: BuildingEnum): Cost =>
   // TODO: needs ireland buildings
@@ -48,28 +48,30 @@ export const costForBuilding = (building: BuildingEnum): Cost =>
     .with(BuildingEnum.Estate, () => ({ wood: 2, stone: 2 }))
     .otherwise(() => ({}))
 
-export const isCloisterBuilding = (building?: BuildingEnum): boolean => {
+export const isCloisterBuilding = (building?: ErectionEnum): boolean => {
   if (building === undefined) return false
-  return [
-    // TODO: add ireland cloisters
-    BuildingEnum.CloisterOfficeR,
-    BuildingEnum.CloisterOfficeG,
-    BuildingEnum.CloisterOfficeB,
-    BuildingEnum.CloisterOfficeW,
-    BuildingEnum.CloisterCourtyard,
-    BuildingEnum.CloisterGarden,
-    BuildingEnum.Priory,
-    BuildingEnum.CloisterLibrary,
-    BuildingEnum.CloisterWorkshop,
-    BuildingEnum.CloisterChapterHouse,
-    BuildingEnum.CloisterChurch,
-    BuildingEnum.Bathhouse,
-    BuildingEnum.Calefactory,
-    BuildingEnum.Dormitory,
-    BuildingEnum.HouseOfTheBrotherhood,
-    BuildingEnum.Sacristy,
-    BuildingEnum.Hospice,
-  ].includes(building)
+  return (
+    [
+      // TODO: add ireland cloisters
+      BuildingEnum.CloisterOfficeR,
+      BuildingEnum.CloisterOfficeG,
+      BuildingEnum.CloisterOfficeB,
+      BuildingEnum.CloisterOfficeW,
+      BuildingEnum.CloisterCourtyard,
+      BuildingEnum.CloisterGarden,
+      BuildingEnum.Priory,
+      BuildingEnum.CloisterLibrary,
+      BuildingEnum.CloisterWorkshop,
+      BuildingEnum.CloisterChapterHouse,
+      BuildingEnum.CloisterChurch,
+      BuildingEnum.Bathhouse,
+      BuildingEnum.Calefactory,
+      BuildingEnum.Dormitory,
+      BuildingEnum.HouseOfTheBrotherhood,
+      BuildingEnum.Sacristy,
+      BuildingEnum.Hospice,
+    ] as ErectionEnum[]
+  ).includes(building)
 }
 
 export const roundBuildings = (config: GameCommandConfigParams, round: SettlementRound): BuildingEnum[] =>

@@ -3,7 +3,13 @@ import { P, match } from 'ts-pattern'
 import { costForBuilding, isCloisterBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
 import { addErectionAtLandscape } from '../board/erections'
 import { oncePerFrame } from '../board/frame'
-import { checkLandscapeFree, checkLandTypeMatches, erectableLocations, erectableLocationsCol } from '../board/landscape'
+import {
+  checkCloisterAdjacency,
+  checkLandscapeFree,
+  checkLandTypeMatches,
+  erectableLocations,
+  erectableLocationsCol,
+} from '../board/landscape'
 import { activeLens, payCost, subtractCoins, withActivePlayer } from '../board/player'
 import {
   BuildingEnum,
@@ -13,21 +19,6 @@ import {
   NextUseClergy,
   StateReducer,
 } from '../types'
-
-const checkCloisterAdjacency = (row: number, col: number, building: BuildingEnum) => {
-  if (isCloisterBuilding(building) === false) return identity
-  return withActivePlayer((player) => {
-    const { landscape, landscapeOffset } = player
-    return any(isCloisterBuilding, [
-      landscape[row + landscapeOffset + 1]?.[col + 2]?.[1],
-      landscape[row + landscapeOffset - 1]?.[col + 2]?.[1],
-      landscape[row + landscapeOffset]?.[col + 3]?.[1],
-      landscape[row + landscapeOffset]?.[col + 1]?.[1],
-    ])
-      ? player
-      : undefined
-  })
-}
 
 const payBuildingCost = (building: BuildingEnum) => {
   const cost = costForBuilding(building)
