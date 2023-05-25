@@ -1,4 +1,4 @@
-import { addIndex, always, any, curry, map, pipe, reduce, view } from 'ramda'
+import { always, any, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, withActivePlayer } from '../board/player'
 import {
@@ -8,7 +8,6 @@ import {
   GameCommandEnum,
   StateReducer,
   GameStatePlaying,
-  Tableau,
 } from '../types'
 import { take } from '../board/rondel'
 import { oncePerFrame } from '../board/frame'
@@ -97,9 +96,10 @@ export const complete =
           const row = Number.parseInt(r, 10) + player.landscapeOffset
           const col = Number.parseInt(c, 10) + 2
           const tile = player.landscape?.[row]?.[col]
-          if (tile?.[1] === BuildingEnum.Forest) return ['']
+          if (tile?.[1] === BuildingEnum.Forest) return ['', 'Jo']
           return []
         })
+        .with([GameCommandEnum.FELL_TREES, P._, P._, 'Jo'], always(['']))
         .otherwise(always([]))
     )
   }

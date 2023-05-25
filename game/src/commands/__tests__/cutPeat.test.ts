@@ -189,6 +189,10 @@ describe('commands/cutPeat', () => {
     })
     it('if CUT_PEAT at a location, give empty string response', () => {
       const c0 = complete(s0)([GameCommandEnum.CUT_PEAT, '0', '1'])
+      expect(c0).toStrictEqual(['', 'Jo'])
+    })
+    it('if CUT_PEAT at a location, give empty string response', () => {
+      const c0 = complete(s0)([GameCommandEnum.CUT_PEAT, '0', '1', 'Jo'])
       expect(c0).toStrictEqual([''])
     })
     it('if CUT_PEAT not at a location, dont indicate this can be submitted', () => {
