@@ -14,9 +14,7 @@ const emojis = ['🪵', '🧱', '🪙', '🌾', '💩', '🐑', '🃏', '🍇', 
 export const Rondel = ({ rondel, config }: Props) => {
   const { state, control } = useHathoraContext()
   const handleClick = () => {
-    if (state?.control?.completion?.includes('Jo')) {
-      control(`${state?.control?.partial} Jo`)
-    }
+    control(`${state?.control?.partial} Jo`)
   }
   const armValues =
     config?.length === Length.short && config?.players === 2
@@ -65,6 +63,9 @@ export const Rondel = ({ rondel, config }: Props) => {
             ))}
         </tbody>
       </table>
+      <button type="button" disabled={!state?.control?.completion?.includes('Jo')} onClick={handleClick}>
+        Use Joker
+      </button>
     </div>
   )
 }
