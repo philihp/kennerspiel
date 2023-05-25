@@ -52,7 +52,6 @@ export const isCloisterBuilding = (building?: ErectionEnum): boolean => {
   if (building === undefined) return false
   return (
     [
-      // TODO: add ireland cloisters
       BuildingEnum.CloisterOfficeR,
       BuildingEnum.CloisterOfficeG,
       BuildingEnum.CloisterOfficeB,
@@ -70,6 +69,14 @@ export const isCloisterBuilding = (building?: ErectionEnum): boolean => {
       BuildingEnum.HouseOfTheBrotherhood,
       BuildingEnum.Sacristy,
       BuildingEnum.Hospice,
+      BuildingEnum.Camera,
+      BuildingEnum.FilialChurch,
+      BuildingEnum.Refectory,
+      BuildingEnum.Portico,
+      BuildingEnum.Chapel,
+      BuildingEnum.Locutory,
+      BuildingEnum.Scriptorium,
+      BuildingEnum.Granary,
     ] as ErectionEnum[]
   ).includes(building)
 }
