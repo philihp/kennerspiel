@@ -682,7 +682,7 @@ describe('commands/use', () => {
       expect(c0).toStrictEqual(['USE'])
     })
 
-    it('allows when main action unavailable, prior use but no prior', () => {
+    it('disallows when main action unavailable, prior use but no prior', () => {
       const s1 = {
         ...s0,
         players: [
@@ -701,6 +701,26 @@ describe('commands/use', () => {
       }
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
+    })
+    it('allows only use of usableBuildings when nextUse is OnlyPrior', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [Clergy.PriorR, Clergy.LayBrother1R],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          nextUse: NextUseClergy.OnlyPrior,
+          usableBuildings: [BuildingEnum.Priory],
+        },
+      }
+      const c0 = complete(s1)(['USE'])
+      expect(c0).toStrictEqual(['G01'])
     })
 
     it('allows when main action unavailable, but usage is allowed maybe from Priory, but no clergy', () => {
