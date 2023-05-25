@@ -192,6 +192,10 @@ describe('commands/fellTrees', () => {
     })
     it('if FELL_TREES at a location, give empty string response', () => {
       const c0 = complete(s0)([GameCommandEnum.FELL_TREES, '2', '0'])
+      expect(c0).toStrictEqual(['', 'Jo'])
+    })
+    it('if FELL_TREES and Joker at a location, give empty string response', () => {
+      const c0 = complete(s0)([GameCommandEnum.FELL_TREES, '2', '0', 'Jo'])
       expect(c0).toStrictEqual([''])
     })
     it('if FELL_TREES not at a location, dont indicate this can be submitted', () => {
