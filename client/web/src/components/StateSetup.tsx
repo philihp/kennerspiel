@@ -1,8 +1,7 @@
 import { Color, Country, EngineConfig, Length, User } from '../../../../api/types'
 import { useHathoraContext } from '../context/GameContext'
 
-const occupied = (color: Color, users?: User[]) => {
-  if (users === undefined) return false
+const occupied = (color: Color, users: User[] = []) => {
   return users.some((user) => user.color === color)
 }
 
@@ -31,6 +30,7 @@ export const StateSetup = () => {
       <button type="button" disabled={occupied(Color.Red, users)} onClick={() => join(Color.Red)}>
         Red
       </button>
+      {JSON.stringify(users)}
       <br />
       <input type="checkbox" disabled checked={occupied(Color.Green, users)} />
       <button type="button" disabled={occupied(Color.Green, users)} onClick={() => join(Color.Green)}>

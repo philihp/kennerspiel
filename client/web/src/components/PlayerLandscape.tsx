@@ -57,7 +57,8 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                       border: 1,
                       borderStyle: 'solid',
                       borderColor: '#555',
-                      width: 80,
+                      width: 120,
+                      height: 160,
                       textAlign: 'center',
                       backgroundColor: landToColor(land),
                     }}

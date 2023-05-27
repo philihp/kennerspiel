@@ -39,7 +39,15 @@ export const Rondel = ({ rondel, config }: Props) => {
             .filter((token) => rondel[token as keyof EngineRondel] !== undefined)
             .map((token, tokenIndex) => (
               <tr key={token}>
-                <td>{token}</td>
+                <td>
+                  {token === 'joker' && state?.control?.completion?.includes('Jo') ? (
+                    <button type="button" onClick={handleClick}>
+                      joker
+                    </button>
+                  ) : (
+                    token
+                  )}
+                </td>
                 {map((i) => {
                   const thisToken = rondel[token as keyof EngineRondel]
                   const difference = (rondel.pointingBefore - (thisToken ?? rondel.pointingBefore)) % 13
@@ -63,9 +71,6 @@ export const Rondel = ({ rondel, config }: Props) => {
             ))}
         </tbody>
       </table>
-      <button type="button" disabled={!state?.control?.completion?.includes('Jo')} onClick={handleClick}>
-        Use Joker
-      </button>
     </div>
   )
 }
