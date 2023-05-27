@@ -21,7 +21,7 @@ import {
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costFood, foodCostOptions, parseResourceParam, stringRepeater } from '../board/resource'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { Cost, GameStatePlaying, ResourceEnum } from '../types'
 
 export const inn = (param = '') => {
   const inputs = parseResourceParam(param)
@@ -44,8 +44,7 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
     .with([], () => {
       const player = view(activeLens(state), state)
       return pipe(
-        //
-        map(flip(foodCostOptions)(player)),
+        map(flip<number, Cost, string>(foodCostOptions)(player)),
         flatten,
         uniq<string>,
         map((s): string[] => {
