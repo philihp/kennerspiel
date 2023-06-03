@@ -21,7 +21,7 @@
     "@philihp/eslint-config": "6.0.2",
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/vite-react": "2.0.0",
-    "@types/jest": "29.5.1",
+    "@types/jest": "29.5.2",
     "@types/ramda": "0.29.2",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
