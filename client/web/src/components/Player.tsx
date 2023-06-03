@@ -17,7 +17,7 @@ export const Player = ({ player, active }: Props) => {
       <PlayerClergy clergy={clergy} color={color} />
       <PlayerLandscape landscape={landscape} offset={landscapeOffset} active={active} />
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <PlayerResources {...resources} />
+      <PlayerResources active={active} {...resources} />
       <PlayerWonders wonders={wonders} />
       <PlayerSettlements settlements={settlements} />
     </div>

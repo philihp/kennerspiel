@@ -1,23 +1,8 @@
 import { range } from 'ramda'
-import { ReactNode } from 'react'
-
-interface TimesProps {
-  n: number
-  children: ReactNode | ReactNode[]
-}
-interface ResourceProps {
-  id: string
-}
-
-const Times = ({ n, children }: TimesProps) => (
-  <>
-    {range(0, n).map((i) => (
-      <span key={`${i}:${children}`}>{children}</span>
-    ))}
-  </>
-)
+import { ResourcePicker } from './Picker'
 
 interface Props {
+  active: boolean
   peat: number
   penny: number
   clay: number
@@ -44,6 +29,9 @@ interface Props {
 
 const multiplier = 1.1
 
+interface ResourceProps {
+  id: string
+}
 export const Resource = ({ id }: ResourceProps) => (
   <img
     alt={id}
@@ -62,7 +50,20 @@ export const Resource = ({ id }: ResourceProps) => (
   />
 )
 
+interface TimesProps {
+  n: number
+  id: string
+}
+const Times = ({ n, id }: TimesProps) => (
+  <>
+    {range(0, n).map((i) => (
+      <Resource key={`${i}:${id}`} id={id} />
+    ))}
+  </>
+)
+
 export const PlayerResources = ({
+  active,
   peat,
   penny,
   clay,
@@ -87,71 +88,27 @@ export const PlayerResources = ({
   reliquary,
 }: Props) => (
   <div style={{ margin: 10 }}>
-    <Times n={peat}>
-      <Resource id="Pt" />
-    </Times>
-    <Times n={penny}>
-      <Resource id="Pn" />
-    </Times>
-    <Times n={clay}>
-      <Resource id="Cl" />
-    </Times>
-    <Times n={wood}>
-      <Resource id="Wo" />
-    </Times>
-    <Times n={grain}>
-      <Resource id="Gn" />
-    </Times>
-    <Times n={sheep}>
-      <Resource id="Sh" />
-    </Times>
-    <Times n={stone}>
-      <Resource id="Sn" />
-    </Times>
-    <Times n={flour}>
-      <Resource id="Fl" />
-    </Times>
-    <Times n={grape}>
-      <Resource id="Gp" />
-    </Times>
-    <Times n={nickel}>
-      <Resource id="Ni" />
-    </Times>
-    <Times n={malt}>
-      <Resource id="Ho" />
-    </Times>
-    <Times n={coal}>
-      <Resource id="Co" />
-    </Times>
-    <Times n={book}>
-      <Resource id="Bo" />
-    </Times>
-    <Times n={ceramic}>
-      <Resource id="Ce" />
-    </Times>
-    <Times n={whiskey}>
-      <Resource id="Wh" />
-    </Times>
-    <Times n={straw}>
-      <Resource id="Sw" />
-    </Times>
-    <Times n={meat}>
-      <Resource id="Mt" />
-    </Times>
-    <Times n={ornament}>
-      <Resource id="Or" />
-    </Times>
-    <Times n={bread}>
-      <Resource id="Br" />
-    </Times>
-    <Times n={wine}>
-      <Resource id="Wn" />
-    </Times>
-    <Times n={beer}>
-      <Resource id="Be" />
-    </Times>
-    <Times n={reliquary}>
-      <Resource id="Rq" />
-    </Times>
+    <Times n={peat} id="Pt" />
+    <Times n={penny} id="Pn" />
+    <Times n={clay} id="Cl" />
+    <Times n={wood} id="Wo" />
+    <Times n={grain} id="Gn" />
+    <Times n={sheep} id="Sh" />
+    <Times n={stone} id="Sn" />
+    <Times n={flour} id="Fl" />
+    <Times n={grape} id="Gp" />
+    <Times n={nickel} id="Ni" />
+    <Times n={malt} id="Ho" />
+    <Times n={coal} id="Co" />
+    <Times n={book} id="Bo" />
+    <Times n={ceramic} id="Ce" />
+    <Times n={whiskey} id="Wh" />
+    <Times n={straw} id="Sw" />
+    <Times n={meat} id="Mt" />
+    <Times n={ornament} id="Or" />
+    <Times n={bread} id="Br" />
+    <Times n={wine} id="Wn" />
+    <Times n={beer} id="Be" />
+    <Times n={reliquary} id="Rq" />
   </div>
 )

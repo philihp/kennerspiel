@@ -24,8 +24,8 @@ export const Actions = () => {
       <ActionWorkContract />
       <ActionBuyPlot />
       <ActionBuyDistrict />
-      <ActionConvert />
       <ActionSettle />
+      <ActionConvert />
       <ActionCommit />
     </div>
   )
