@@ -1,4 +1,5 @@
 import { useHathoraContext } from '../context/GameContext'
+import { Picker } from './Picker'
 
 const resetStyle = {
   fontFamily: 'monospace',
@@ -10,11 +11,14 @@ const resetStyle = {
 }
 
 export const MoveList = () => {
-  const { state, control } = useHathoraContext()
+  const { state, control, undo, redo } = useHathoraContext()
   return (
-    <div>
-      <button type="button" onClick={() => control('')}>
-        Reset Control
+    <div style={{ paddingTop: 20 }}>
+      <button type="button" onClick={undo}>
+        &lt;
+      </button>
+      <button type="button" onClick={redo}>
+        &gt;
       </button>
       <ul style={resetStyle}>
         {state?.moves.map((m, i) => (
@@ -23,6 +27,13 @@ export const MoveList = () => {
             {m}
           </li>
         ))}
+        <li style={{ fontWeight: 'bold' }}>
+          {state?.control?.partial}
+          <Picker />
+          <button type="button" onClick={() => control('')}>
+            Clear Command
+          </button>
+        </li>
       </ul>
     </div>
   )
