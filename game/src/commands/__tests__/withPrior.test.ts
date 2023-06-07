@@ -2,6 +2,7 @@ import { initialState } from '../../state'
 import {
   BuildingEnum,
   Clergy,
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -86,7 +87,11 @@ describe('commands/withPrior', () => {
   describe('withPrior', () => {
     it('sets onlyprior on next use in frame', () => {
       const s1 = withPrior(s0)!
-      expect(s1.frame.nextUse).toBe(NextUseClergy.OnlyPrior)
+      expect(s1.frame).toMatchObject({
+        nextUse: NextUseClergy.OnlyPrior,
+        mainActionUsed: true,
+        bonusActions: [GameCommandEnum.USE],
+      })
     })
     it('retains undefined state', () => {
       const s1 = withPrior(undefined)
