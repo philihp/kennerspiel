@@ -4,6 +4,7 @@ import { useHathoraContext } from '../context/GameContext'
 interface Props {
   color: Color
   clergy: string[]
+  active: boolean
 }
 
 interface ClergyProps {
@@ -53,14 +54,25 @@ export const Clergy = ({ id }: ClergyProps) => {
   return <LayBrother color={color} />
 }
 
-export const PlayerClergy = ({ clergy, color }: Props) => {
-  const { state, getUserName } = useHathoraContext()
+export const PlayerClergy = ({ clergy, color, active }: Props) => {
+  const { state, control, getUserName } = useHathoraContext()
   const user = state?.users.find((u) => u.color === color)
+
+  const canUsePrior = active && state?.control?.completion?.includes('WITH_PRIOR')
+  const handleClick = () => {
+    control(`WITH_PRIOR`)
+  }
+
   return (
     <div>
       {clergy.reverse().map((id) => {
         return <Clergy key={id} id={id} />
       })}
+      {canUsePrior && (
+        <button type="button" onClick={handleClick}>
+          Use Prior
+        </button>
+      )}
       {user && getUserName(user.id)}
     </div>
   )
