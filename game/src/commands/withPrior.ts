@@ -1,8 +1,8 @@
-import { any, curry, pipe, view } from 'ramda'
+import { all, any, curry, lens, lensProp, pipe, view } from 'ramda'
 import { match } from 'ts-pattern'
 import { revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import { moveClergyToOwnBuilding } from '../board/landscape'
-import { activeLens, isPrior } from '../board/player'
+import { activeLens, isLayBrother, isPrior } from '../board/player'
 import { GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 
 // there are two modes of this, really...
@@ -49,9 +49,11 @@ export const complete =
     match<string[], string[]>(partial)
       .with([], () => {
         const player = view(activeLens(state), state)
+        const control = view(lensProp('frame'), state)
         // TODO don't show if we already have nextUse = prior only
-        if (any(isPrior, player.clergy)) return [GameCommandEnum.WITH_PRIOR]
-        return []
+        if (control.nextUse === NextUseClergy.OnlyPrior) return []
+        if (all(isLayBrother, player.clergy)) return []
+        return [GameCommandEnum.WITH_PRIOR]
       })
       .with([GameCommandEnum.WITH_PRIOR], () => {
         return ['']
