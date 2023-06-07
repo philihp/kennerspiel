@@ -1,6 +1,6 @@
 import { all, any, curry, lens, lensProp, pipe, view } from 'ramda'
 import { match } from 'ts-pattern'
-import { revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
+import { addBonusAction, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import { moveClergyToOwnBuilding } from '../board/landscape'
 import { activeLens, isLayBrother, isPrior } from '../board/player'
 import { GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
@@ -16,6 +16,7 @@ const withPriorForCurrentPlayer: StateReducer = (state) => {
   return withFrame((frame) => ({
     ...frame,
     nextUse: NextUseClergy.OnlyPrior,
+    mainActionUsed: true,
   }))(state)
 }
 
@@ -38,7 +39,11 @@ const withPriorForWorkContract: StateReducer = (state) => {
 export const withPrior: StateReducer = (state) => {
   if (state === undefined) return undefined
   if (state.frame.activePlayerIndex === state.frame.currentPlayerIndex) {
-    return withPriorForCurrentPlayer(state)
+    return pipe(
+      //
+      withPriorForCurrentPlayer,
+      addBonusAction(GameCommandEnum.USE)
+    )(state)
   }
   return withPriorForWorkContract(state)
 }
