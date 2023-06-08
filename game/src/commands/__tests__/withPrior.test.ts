@@ -341,6 +341,26 @@ describe('commands/withPrior', () => {
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
+    it('offer with_prior if waiting from work contract', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [Clergy.LayBrother1B, Clergy.PriorB],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          currentPlayerIndex: 1,
+          activePlayerIndex: 0,
+          mainActionUsed: true, // this would be set by work_contract
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual(['WITH_PRIOR'])
+    })
     it('completes the command', () => {
       const c0 = complete(s0)(['WITH_PRIOR'])
       expect(c0).toStrictEqual([''])

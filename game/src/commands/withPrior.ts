@@ -55,8 +55,11 @@ export const complete =
       .with([], () => {
         const player = view(activeLens(state), state)
         const control = view(lensProp('frame'), state)
-        if (control.nextUse === NextUseClergy.OnlyPrior) return []
-        if (control.mainActionUsed) return []
+        if (control.activePlayerIndex === control.currentPlayerIndex) {
+          // this is the normal case, outside of work_contract
+          if (control.nextUse === NextUseClergy.OnlyPrior) return []
+          if (control.mainActionUsed) return []
+        }
         if (all(isLayBrother, player.clergy)) return []
         return [GameCommandEnum.WITH_PRIOR]
       })
