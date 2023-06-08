@@ -55,8 +55,8 @@ export const complete =
       .with([], () => {
         const player = view(activeLens(state), state)
         const control = view(lensProp('frame'), state)
-        // TODO don't show if we already have nextUse = prior only
         if (control.nextUse === NextUseClergy.OnlyPrior) return []
+        if (control.mainActionUsed) return []
         if (all(isLayBrother, player.clergy)) return []
         return [GameCommandEnum.WITH_PRIOR]
       })

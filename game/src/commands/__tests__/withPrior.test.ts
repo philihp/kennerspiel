@@ -323,6 +323,24 @@ describe('commands/withPrior', () => {
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
+    it('does not offer if already used main action', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [Clergy.LayBrother1B, Clergy.PriorB],
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual([])
+    })
     it('completes the command', () => {
       const c0 = complete(s0)(['WITH_PRIOR'])
       expect(c0).toStrictEqual([''])
