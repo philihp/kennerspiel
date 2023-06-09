@@ -1,4 +1,4 @@
-import { Frame, GameCommandEnum, GameStatePlaying } from '../../types'
+import { BuildingEnum, Frame, GameCommandEnum, GameStatePlaying } from '../../types'
 import { complete } from '../commit'
 
 describe('commands/commit', () => {
@@ -28,6 +28,37 @@ describe('commands/commit', () => {
       } as GameStatePlaying
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
+    })
+    describe('neutral building phase', () => {
+      it('does not allow commit if still buildings', () => {
+        const s1 = {
+          ...s0,
+          buildings: [BuildingEnum.Bakery],
+          frame: {
+            ...s0.frame,
+            // this is set in nextFrameSolo
+            neutralBuildingPhase: true,
+            mainActionUsed: true,
+          } as Frame,
+        } as GameStatePlaying
+        const c0 = complete(s1)([])
+        expect(c0).toStrictEqual([])
+      })
+      it('allows commit if all buildings placed, has not settled', () => {
+        const s1 = {
+          ...s0,
+          buildings: [],
+          frame: {
+            ...s0.frame,
+            // this is set in nextFrameSolo
+            neutralBuildingPhase: true,
+            mainActionUsed: true,
+            bonusActions: [GameCommandEnum.SETTLE],
+          } as Frame,
+        } as GameStatePlaying
+        const c0 = complete(s1)([])
+        expect(c0).toStrictEqual(['COMMIT'])
+      })
     })
     it('allows commit if main action used', () => {
       const c0 = complete(s0)([])

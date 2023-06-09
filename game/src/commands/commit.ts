@@ -13,6 +13,10 @@ export const complete =
   (partial: string[]): string[] => {
     return match<string[], string[]>(partial)
       .with([], () => {
+        if (state.frame.neutralBuildingPhase) {
+          if (state.buildings.length !== 0) return []
+          return [GameCommandEnum.COMMIT]
+        }
         if (state.frame.mainActionUsed) return [GameCommandEnum.COMMIT]
         return []
       })

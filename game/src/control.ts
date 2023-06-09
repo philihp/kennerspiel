@@ -31,7 +31,7 @@ const computeFlow = (state: GameStatePlaying) => {
     flow.push({
       round,
       player: state?.players?.[playerIndex]?.color,
-      settle: !!frame.bonusActions?.includes(GameCommandEnum.SETTLE),
+      settle: !!frame.bonusActions?.includes(GameCommandEnum.SETTLE) || !!frame.neutralBuildingPhase,
       bonus: !!frame.bonusRoundPlacement,
     })
     frameIndex = frame.next

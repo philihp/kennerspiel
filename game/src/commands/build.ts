@@ -1,6 +1,6 @@
-import { any, pipe, identity, curry, view, filter, always } from 'ramda'
+import { pipe, view, filter, always, concat, append, identity } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { costForBuilding, isCloisterBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
+import { costForBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
 import { addErectionAtLandscape } from '../board/erections'
 import { oncePerFrame } from '../board/frame'
 import {
@@ -20,30 +20,43 @@ import {
   StateReducer,
 } from '../types'
 
-const payBuildingCost = (building: BuildingEnum) => {
-  const cost = costForBuilding(building)
-  const buyCost = (cost.penny ?? 0) + (cost.nickel ?? 0) * 5
-  if (buyCost) {
-    return withActivePlayer(subtractCoins(buyCost))
+const payBuildingCost =
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
+    if (state?.frame?.neutralBuildingPhase) return state
+    const cost = costForBuilding(building)
+    const buyCost = (cost.penny ?? 0) + (cost.nickel ?? 0) * 5
+    if (buyCost) {
+      return withActivePlayer(subtractCoins(buyCost))(state)
+    }
+    return withActivePlayer(payCost(cost))(state)
   }
-  return withActivePlayer(payCost(cost))
+
+const buildContinuation = (state: GameStatePlaying): GameCommandEnum[] => {
+  // solo play settlements are preceeded by a neutral building phase
+  if (state.frame.neutralBuildingPhase) {
+    // while there are buildings, only allow BUILD
+    if (state.buildings.length !== 0) return [GameCommandEnum.BUILD]
+    // and when that's finished, allow the player to WORK_CONTRACT or SETTLE.
+    return [GameCommandEnum.WORK_CONTRACT, GameCommandEnum.SETTLE]
+  }
+
+  // but most of the time, we just want to allow to follow BUILD with an OnlyPrior USE.
+  return [GameCommandEnum.USE]
 }
 
 export const allowPriorToUse =
   (building: BuildingEnum): StateReducer =>
-  (state) => {
-    return (
-      state && {
-        ...state,
-        frame: {
-          ...state.frame,
-          bonusActions: [GameCommandEnum.USE, ...state.frame.bonusActions],
-          nextUse: NextUseClergy.OnlyPrior,
-          usableBuildings: [building],
-        },
-      }
-    )
-  }
+  (state) =>
+    state && {
+      ...state,
+      frame: {
+        ...state.frame,
+        bonusActions: concat(buildContinuation(state), state.frame.bonusActions),
+        nextUse: NextUseClergy.OnlyPrior,
+        usableBuildings: append(building, state.frame.usableBuildings),
+      },
+    }
 
 export const build = ({ row, col, building }: GameCommandBuildParams): StateReducer =>
   pipe(

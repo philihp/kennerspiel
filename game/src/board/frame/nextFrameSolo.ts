@@ -4,6 +4,8 @@ import { addNeutralPlayer } from './addNeutralPlayer'
 import { gameEnd } from '../state'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondelWithExpire } from './rotateRondel'
+import { introduceJokerToken } from '../rondel'
+import { checkSoloSettlementReady } from './checkSoloSettlementReady'
 
 // TODO: joker comes out in A space
 
@@ -126,8 +128,12 @@ export const nextFrameSolo: FrameFlow = {
   // Settlement A
   23: {
     mainActionUsed: true,
-    bonusActions: [GameCommandEnum.SETTLE],
+    neutralBuildingPhase: true,
+    bonusActions: [
+      /* determined by checkSoloSettlementReady */
+    ],
     settlementRound: SettlementRound.A,
+    upkeep: [returnClergyIfPlaced, introduceJokerToken, checkSoloSettlementReady],
     next: 24,
   },
 
@@ -170,8 +176,12 @@ export const nextFrameSolo: FrameFlow = {
   // Settlement B
   32: {
     mainActionUsed: true,
-    bonusActions: [GameCommandEnum.SETTLE],
+    neutralBuildingPhase: true,
+    bonusActions: [
+      /* determined by checkSoloSettlementReady */
+    ],
     settlementRound: SettlementRound.B,
+    upkeep: [checkSoloSettlementReady],
     next: 33,
   },
 
@@ -232,8 +242,12 @@ export const nextFrameSolo: FrameFlow = {
   // Settlement C
   45: {
     mainActionUsed: true,
-    bonusActions: [GameCommandEnum.SETTLE],
+    neutralBuildingPhase: true,
+    bonusActions: [
+      /* determined by checkSoloSettlementReady */
+    ],
     settlementRound: SettlementRound.C,
+    upkeep: [checkSoloSettlementReady],
     next: 46,
   },
 
@@ -276,8 +290,12 @@ export const nextFrameSolo: FrameFlow = {
   // Settlement D
   54: {
     mainActionUsed: true,
-    bonusActions: [GameCommandEnum.SETTLE],
+    neutralBuildingPhase: true,
+    bonusActions: [
+      /* determined by checkSoloSettlementReady */
+    ],
     settlementRound: SettlementRound.D,
+    upkeep: [checkSoloSettlementReady],
     next: 55,
   },
 
