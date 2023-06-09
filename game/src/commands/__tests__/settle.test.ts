@@ -153,6 +153,20 @@ describe('commands/build', () => {
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['SETTLE'])
     })
+    it('allows running if in a settlement frame of neutral building phase', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        buildings: [],
+        frame: {
+          ...s0.frame,
+          neutralBuildingPhase: true,
+          mainActionUsed: true,
+          bonusActions: [GameCommandEnum.SETTLE],
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual(['SETTLE'])
+    })
     it('does not allow running if not in a settlement frame', () => {
       const s1: GameStatePlaying = {
         ...s0,

@@ -246,6 +246,115 @@ describe('commands/build', () => {
         ],
       })
     })
+
+    describe('neutralBuildingPhase', () => {
+      it('allows building without any resources in neutral building phase', () => {
+        const s1 = {
+          ...s0,
+          players: [
+            {
+              ...s0.players[0],
+              landscape: [
+                [['W'], ['C'], ['P', 'G01'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+                [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              ] as Tile[][],
+              wood: 0,
+              clay: 0,
+              stone: 0,
+              straw: 0,
+              penny: 0,
+              nickel: 0,
+            },
+            ...s0.players.slice(1),
+          ],
+          buildings: [BuildingEnum.Windmill, BuildingEnum.Bakery],
+          frame: {
+            ...s0.frame,
+            activePlayerIndex: 0,
+            neutralBuildingPhase: true,
+            mainActionUsed: true,
+            bonusActions: [GameCommandEnum.BUILD],
+            usableBuildings: [BuildingEnum.Priory],
+          },
+        }
+        const s2 = build({ row: 1, col: -1, building: BuildingEnum.Windmill })(s1)!
+        expect(s2).toBeDefined()
+        expect(s2.buildings).not.toContain(BuildingEnum.Windmill)
+        expect(s2.buildings).toContain(BuildingEnum.Bakery)
+        expect(s2.players[0]).toMatchObject({
+          wood: 0,
+          clay: 0,
+          stone: 0,
+          straw: 0,
+          penny: 0,
+          nickel: 0,
+          landscape: [
+            [['W'], ['C'], ['P', 'G01'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+            [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+          ],
+        })
+        expect(s2.frame).toMatchObject({
+          activePlayerIndex: 0,
+          neutralBuildingPhase: true,
+          mainActionUsed: true,
+          bonusActions: [GameCommandEnum.BUILD],
+          usableBuildings: ['G01', 'F04'],
+        })
+      })
+      it('sets bonusActions after building to allow WORK_CONTRACT or BUILD after building the last building', () => {
+        const s1 = {
+          ...s0,
+          players: [
+            {
+              ...s0.players[0],
+              landscape: [
+                [['W'], ['C'], ['P', 'G01'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+                [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              ] as Tile[][],
+              wood: 0,
+              clay: 0,
+              stone: 0,
+              straw: 0,
+              penny: 0,
+              nickel: 0,
+            },
+            ...s0.players.slice(1),
+          ],
+          buildings: [BuildingEnum.Bakery],
+          frame: {
+            ...s0.frame,
+            activePlayerIndex: 0,
+            neutralBuildingPhase: true,
+            mainActionUsed: true,
+            bonusActions: [GameCommandEnum.BUILD],
+            usableBuildings: [BuildingEnum.Priory, BuildingEnum.Windmill],
+          },
+        }
+        const s2 = build({ row: 1, col: 0, building: BuildingEnum.Bakery })(s1)!
+        expect(s2).toBeDefined()
+        expect(s2.buildings).not.toContain(BuildingEnum.Windmill)
+        expect(s2.buildings).not.toContain(BuildingEnum.Bakery)
+        expect(s2.players[0]).toMatchObject({
+          wood: 0,
+          clay: 0,
+          stone: 0,
+          straw: 0,
+          penny: 0,
+          nickel: 0,
+          landscape: [
+            [['W'], ['C'], ['P', 'G01'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+            [['W'], ['C', 'F04'], ['P', 'F05'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+          ],
+        })
+        expect(s2.frame).toMatchObject({
+          activePlayerIndex: 0,
+          neutralBuildingPhase: true,
+          mainActionUsed: true,
+          bonusActions: [GameCommandEnum.WORK_CONTRACT, GameCommandEnum.SETTLE],
+          usableBuildings: [BuildingEnum.Priory, BuildingEnum.Windmill, BuildingEnum.Bakery],
+        })
+      })
+    })
   })
 
   describe('complete', () => {

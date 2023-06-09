@@ -56,6 +56,7 @@ const runProgression =
           unusableBuildings: [],
           usableBuildings: [],
           nextUse: NextUseClergy.Any,
+          neutralBuildingPhase: false,
           ...frameUpdates,
         } as Frame
         return newFrame

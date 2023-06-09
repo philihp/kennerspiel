@@ -27,7 +27,7 @@ export const updateRondel =
     }
   }
 
-const introduceToken = (token: 'grape' | 'stone') =>
+const introduceToken = (token: 'grape' | 'stone' | 'joker') =>
   withRondel((rondel) => {
     if (rondel === undefined) return undefined
     if (rondel[token] !== undefined) return rondel
@@ -41,6 +41,7 @@ export const introduceGrapeToken: StateReducer = (state) => {
   return introduceToken('grape')(state)
 }
 export const introduceStoneToken: StateReducer = introduceToken('stone')
+export const introduceJokerToken: StateReducer = introduceToken('joker')
 
 export const armValues = ({ length, players }: GameCommandConfigParams) => {
   if (players === 2 && length === 'short') {

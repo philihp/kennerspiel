@@ -2,7 +2,7 @@ import { initialState } from '../../state'
 import {
   BuildingEnum,
   Clergy,
-  Frame,
+  GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
   NextUseClergy,
@@ -350,6 +350,30 @@ describe('commands/workContract', () => {
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['WORK_CONTRACT'])
     })
+    it('can work contract in neutral building phase after buildings placed', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            penny: 0,
+            wine: 0,
+            whiskey: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+        buildings: [],
+        frame: {
+          ...s0.frame,
+          bonusActions: [GameCommandEnum.WORK_CONTRACT, GameCommandEnum.SETTLE],
+          neutralBuildingPhase: true,
+          mainActionUsed: true,
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual(['WORK_CONTRACT'])
+    })
+
     it('can not work contract if no money', () => {
       const s1 = {
         ...s0,
