@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm install -g @hathora-cli
+      - run: npm install -g @hathora/cli
       - run: hathora-cloud deploy --appId $APP_ID --token ${{ secrets.HATHORA_TOKEN }}
 
   # Vercel will deploy this by looking at vercel.json
