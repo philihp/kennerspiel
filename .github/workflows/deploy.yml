@@ -8,7 +8,7 @@ on:
 
 env:
   APP_NAME: ora
-  APP_ID: app-c90ca9cf-ab67-42e0-ae7d-ada07e5616fd
+  APP_ID: ${{ vars.HATHORA_APP_ID }}
 
 jobs:
   server:
