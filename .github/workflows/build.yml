@@ -12,8 +12,9 @@ on:
 
 env:
   CI: true
-  HATHORA_APP_SECRET: "${{ secrets.HATHORA_APP_SECRET }}"
-  HATHORA_TOKEN: "${{ secrets.HATHORA_TOKEN }}"
+  HATHORA_APP_ID: ${{ vars.HATHORA_APP_ID }}
+  HATHORA_APP_SECRET: ${{ secrets.HATHORA_APP_SECRET }}
+  HATHORA_TOKEN: ${{ secrets.HATHORA_TOKEN }}
 
 jobs:
   server:
