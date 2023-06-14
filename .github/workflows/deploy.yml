@@ -16,6 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: npm install -g @hathora/cli
+      - uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_HATHORA_APP_ID: ${{ vars.HATHORA_APP_ID }}
+          envkey_HATHORA_APP_SECRET: ${{ secrets.HATHORA_APP_SECRET }}
       - run: hathora-cloud deploy --appId $HATHORA_APP_ID --token ${{ secrets.HATHORA_TOKEN }}
 
   # Vercel will deploy this by looking at vercel.json
