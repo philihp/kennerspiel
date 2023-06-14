@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  APP_NAME: hathora-et-labora
+  APP_NAME: ora
   APP_ID: app-c90ca9cf-ab67-42e0-ae7d-ada07e5616fd
 
 jobs:
@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm install -g hathora
-      - run: hathora cloud deploy --appName $APP_NAME --token ${{ secrets.HATHORA_TOKEN }}
+      - run: npm install -g @hathora-cli
+      - run: hathora-cloud deploy --appId $APP_ID --token ${{ secrets.HATHORA_TOKEN }}
 
   # Vercel will deploy this by looking at vercel.json
   #
