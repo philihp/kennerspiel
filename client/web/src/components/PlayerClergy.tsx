@@ -55,7 +55,7 @@ export const Clergy = ({ id }: ClergyProps) => {
 }
 
 export const PlayerClergy = ({ clergy, color, active }: Props) => {
-  const { state, control, getUserName } = useHathoraContext()
+  const { state, control } = useHathoraContext()
   const user = state?.users.find((u) => u.color === color)
 
   const canUsePrior = active && state?.control?.completion?.includes('WITH_PRIOR')
@@ -73,7 +73,7 @@ export const PlayerClergy = ({ clergy, color, active }: Props) => {
           Use Prior
         </button>
       )}
-      {user && getUserName(user.id)}
+      {/* {JSON.stringify(user && getUserName(user.id)} */}
     </div>
   )
 }

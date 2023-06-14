@@ -12,6 +12,9 @@ on:
 
 env:
   CI: true
+  HATHORA_APP_ID: ${{ vars.HATHORA_APP_ID }}
+  HATHORA_APP_SECRET: ${{ secrets.HATHORA_APP_SECRET }}
+  HATHORA_TOKEN: ${{ secrets.HATHORA_TOKEN }}
 
 jobs:
   server:
@@ -20,7 +23,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
       - run: npm install -g hathora
       - run: hathora build --only server
   client:
@@ -29,6 +32,6 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
       - run: npm install -g hathora
       - run: hathora build --only client
