@@ -4,7 +4,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 import { CredentialResponse } from '@react-oauth/google'
 import { HathoraClient, HathoraConnection } from '../../../.hathora/client'
 import { Color, Country, EngineState, IInitializeRequest, Length } from '../../../../api/types'
-import { lookupUser, UserData } from '../../../../api/base'
+import { GoogleUserData, UserData, getUserDisplayName } from '../../../../api/base'
 import { ConnectionFailure } from '../../../.hathora/failures'
 
 interface GameContext {
@@ -25,7 +25,6 @@ interface GameContext {
   undo: () => Promise<void>
   redo: () => Promise<void>
   endGame: () => Promise<void>
-  getUserName: (userId: string) => string
 }
 
 interface HathoraContextProviderProps {
@@ -38,7 +37,7 @@ const HathoraContext = createContext<GameContext | null>(null)
 export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
   const [token, setToken] = useState<string | undefined>(localStorage.getItem('token') || undefined)
   const [state, setEngineState] = useState<EngineState>()
-  const [user, setUserInfo] = useState<UserData>()
+  const [user, setUserInfo] = useState<GoogleUserData>()
   const [connection, setConnection] = useState<HathoraConnection>()
   const [error, setError] = useState<ConnectionFailure>()
   const [connecting, setConnecting] = useState<boolean>()
@@ -48,8 +47,9 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   useEffect(() => {
     if (token === undefined) return
     const user = HathoraClient.getUserFromToken(token)
-    setUserInfo(user)
-    setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
+    // console.log('USER: ', user)
+    setUserInfo(user as GoogleUserData)
+    // setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
   }, [setPlayerNameMapping, token])
 
   const login = useCallback(async (cred: CredentialResponse) => {
@@ -57,8 +57,9 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     const token = await client.loginGoogle(cred.credential)
     if (!token) return
     const user = HathoraClient.getUserFromToken(token)
-    setUserInfo(user)
-    setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
+    console.log('login callback')
+    setUserInfo(user as GoogleUserData)
+    // setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
     setToken(token)
     localStorage.setItem('token', token)
   }, [])
@@ -88,7 +89,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
 
   const createGame = useCallback(async (): Promise<string> => {
     if (!token) return ''
-    return client.create(token, IInitializeRequest.default())
+    return client.create(token)
   }, [token])
 
   const join = useCallback(
@@ -134,16 +135,16 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     connection?.disconnect()
   }, [connection])
 
-  const getUserName = useCallback(
-    (userId: string) => {
-      if (playerNameMapping[userId]) return playerNameMapping[userId].name
-      lookupUser(userId).then((response) => {
-        setPlayerNameMapping((curr) => ({ ...curr, [userId]: response }))
-      })
-      return userId
-    },
-    [setPlayerNameMapping, playerNameMapping]
-  )
+  // const getUserName = useCallback(
+  //   (userId: string) => {
+  //     if (playerNameMapping[userId]) return playerNameMapping[userId].name
+  //     lookupUser(userId).then((response) => {
+  //       setPlayerNameMapping((curr) => ({ ...curr, [userId]: response }))
+  //     })
+  //     return userId
+  //   },
+  //   [setPlayerNameMapping, playerNameMapping]
+  // )
 
   const exported = useMemo(
     () => ({
@@ -164,7 +165,6 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       undo,
       redo,
       endGame,
-      getUserName,
     }),
     [
       token,
@@ -184,7 +184,6 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       undo,
       redo,
       endGame,
-      getUserName,
     ]
   )
 
