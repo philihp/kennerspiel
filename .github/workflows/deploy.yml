@@ -7,8 +7,8 @@ on:
       - main
 
 env:
-  APP_NAME: ora
-  APP_ID: ${{ vars.HATHORA_APP_ID }}
+  HATHORA_APP_ID: ${{ vars.HATHORA_APP_ID }}
+  HATHORA_APP_SECRET: ${{ secrets.HATHORA_APP_SECRET }}
 
 jobs:
   server:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: npm install -g @hathora/cli
-      - run: hathora-cloud deploy --appId $APP_ID --token ${{ secrets.HATHORA_TOKEN }}
+      - run: hathora-cloud deploy --appId $HATHORA_APP_ID --token ${{ secrets.HATHORA_TOKEN }}
 
   # Vercel will deploy this by looking at vercel.json
   #
