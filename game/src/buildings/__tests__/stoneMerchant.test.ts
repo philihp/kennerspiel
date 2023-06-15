@@ -253,7 +253,23 @@ describe('buildings/stoneMerchant', () => {
       }
       const c0 = complete([])(s2)
       // this is kind of a lot... but also, it should not crash us. If this takes too long, then we have problems.
-      expect(c0).toHaveLength(6806)
+      expect(c0).toHaveLength(355)
+    })
+    it('capped at 5 iterations', () => {
+      const s2 = {
+        ...s1,
+        players: [
+          {
+            ...s1.players[0],
+            sheep: 10,
+            wood: 10,
+          },
+          ...s1.players.slice(1),
+        ],
+      }
+      const c0 = complete([])(s2)
+      // this is kind of a lot... but also, it should not crash us. If this takes too long, then we have problems.
+      expect(c0).toStrictEqual(['ShShShShShWoWoWoWoWo', 'ShShShShWoWoWoWo', 'ShShShWoWoWo', 'ShShWoWo', 'ShWo', ''])
     })
   })
 })
