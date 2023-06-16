@@ -16,7 +16,9 @@ interface GameContext {
   login: (cred: CredentialResponse) => void
   connect: (gameId: string) => Promise<HathoraConnection | undefined>
   disconnect: () => void
-  createGame: () => Promise<string>
+  createPublicLobby: () => ReturnType<HathoraClient['createPublicLobby']>
+  createPrivateLobby: () => ReturnType<HathoraClient['createPrivateLobby']>
+  getPublicLobbies: () => ReturnType<HathoraClient['getPublicLobbies']>
   join: (color: Color) => Promise<void>
   config: (country: Country, length: Length) => Promise<void>
   start: () => Promise<void>
@@ -87,9 +89,22 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     setError(undefined)
   }, [connection])
 
-  const createGame = useCallback(async (): Promise<string> => {
+  const createPublicLobby = useCallback(async (): ReturnType<HathoraClient['createPublicLobby']> => {
     if (!token) return ''
-    return client.create(token)
+    console.log(client)
+    return client.createPublicLobby(token)
+  }, [token])
+
+  const createPrivateLobby = useCallback(async (): ReturnType<HathoraClient['createPrivateLobby']> => {
+    if (!token) return ''
+    console.log(client)
+    return client.createPrivateLobby(token)
+  }, [token])
+
+  const getPublicLobbies = useCallback(async (): ReturnType<HathoraClient['getPublicLobbies']> => {
+    if (!token) return []
+    console.log(client)
+    return client.getPublicLobbies(token)
   }, [token])
 
   const join = useCallback(
@@ -156,7 +171,9 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       login,
       connect,
       disconnect,
-      createGame,
+      createPublicLobby,
+      createPrivateLobby,
+      getPublicLobbies,
       join,
       config,
       start,
@@ -175,7 +192,9 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       login,
       connect,
       disconnect,
-      createGame,
+      createPublicLobby,
+      createPrivateLobby,
+      getPublicLobbies,
       join,
       config,
       start,

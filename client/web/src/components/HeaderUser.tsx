@@ -41,8 +41,8 @@ export const HeaderUser = () => {
           }}
         />
       )}
-      <div style={{ display: 'flex' }}>{JSON.stringify({ user })}</div>
-      {user && (
+      {/* <div style={{ display: 'flex' }}>{JSON.stringify({ user })}</div> */}
+      {/* {user && (
         <div
           style={{
             display: 'flex',
@@ -57,7 +57,7 @@ export const HeaderUser = () => {
             style={{ ...colorToStyle(state?.me?.color), borderRadius: 16, borderWidth: 4, borderStyle: 'solid' }}
           />
         </div>
-      )}
+      )} */}
     </div>
   )
 }
