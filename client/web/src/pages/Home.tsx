@@ -4,7 +4,7 @@ import { HeaderUser } from '../components/HeaderUser'
 
 const Home = () => {
   const navigate = useNavigate()
-  const { createGame, user } = useHathoraContext()
+  const { createPrivateLobby, createPublicLobby, getPublicLobbies, user } = useHathoraContext()
 
   return (
     <>
@@ -15,13 +15,26 @@ const Home = () => {
           disabled={!user}
           type="button"
           onClick={async () => {
-            const stateId = await createGame()
+            const stateId = await createPrivateLobby()
             navigate(`/game/${stateId}`)
           }}
         >
-          Create Game
+          Create Private Game
         </button>
       </p>
+      <p>
+        <button
+          disabled={!user}
+          type="button"
+          onClick={async () => {
+            const stateId = await createPublicLobby()
+            navigate(`/game/${stateId}`)
+          }}
+        >
+          Create Public Game
+        </button>
+      </p>
+      {JSON.stringify(getPublicLobbies())}
     </>
   )
 }
