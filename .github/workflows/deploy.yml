@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: npm install -g @hathora/cli
-      - uses: SpicyPizza/create-envfile@v1.3
+      - uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_HATHORA_APP_ID: ${{ vars.HATHORA_APP_ID }}
           envkey_HATHORA_APP_SECRET: ${{ secrets.HATHORA_APP_SECRET }}
