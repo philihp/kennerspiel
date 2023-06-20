@@ -6,6 +6,8 @@ types:
     - White
   User:
     id: UserId
+    name: string
+    picture: string
     color: Color
   EngineStatus:
     - SETUP
@@ -104,6 +106,8 @@ types:
 methods:
   join:
     color: Color
+    picture: string
+    name: string
   config:
     country: Country
     length: Length
