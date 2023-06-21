@@ -9,6 +9,7 @@ import { UnbuiltWonders } from './UnbuiltWonders'
 import { MoveList } from './MoveList'
 import { Actions } from './sliders/Actions'
 import { Submit } from './sliders/Submit'
+import { Flower } from './Flower'
 
 export const StatePlaying = () => {
   const { state } = useHathoraContext()
@@ -19,6 +20,7 @@ export const StatePlaying = () => {
     <>
       <Actions />
       <Submit />
+      <Flower />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 470px 200px', paddingTop: 40 }}>
         <div>
           {buildings && <UnbuiltBuildings buildings={buildings} />}

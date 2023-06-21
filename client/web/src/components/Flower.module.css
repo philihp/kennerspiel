@@ -1,0 +1,21 @@
+.flower {
+  margin-top: 60px;
+  padding-top: 10px;
+  padding-left: 4px;
+  overflow-x: scroll;
+  height: 40px;
+  border: 1px solid red;
+}
+.round {
+  display: inline;
+  width: 50px;
+}
+.frame {
+  display: inline;
+  border: 1px solid orange;
+  border-radius: 2px;
+  margin: 2px;
+  padding: 3px;
+  transition: transform 500ms;
+  transition-timing-function: cubic-bezier(0.15, 0.1, 0.25, 1);
+}
