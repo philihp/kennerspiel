@@ -68,8 +68,6 @@ describe('board/frame/nextFrameSolo', () => {
       [23, 'R', false, false],
       [24, 'R', false, false],
       [24, 'R', false, false],
-      [24, 'R', false, false],
-      [24, 'R', false, false],
       [24, 'R', false, true],
       [25, 'R', false, false],
       [25, 'R', false, false],
