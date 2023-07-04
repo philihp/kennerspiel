@@ -1,10 +1,19 @@
 import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { useHathoraContext } from '../context/GameContext'
 import { HeaderUser } from '../components/HeaderUser'
+import { HathoraClient } from '../../../.hathora/client'
 
 const Home = () => {
   const navigate = useNavigate()
   const { createPrivateLobby, createPublicLobby, getPublicLobbies, user } = useHathoraContext()
+
+  const [lobbies, setLobbies] = useState<Awaited<ReturnType<HathoraClient['getPublicLobbies']>>>([])
+  useEffect(() => {
+    getPublicLobbies().then((lobbyInfo) => {
+      setLobbies(lobbyInfo)
+    })
+  }, [setLobbies, getPublicLobbies])
 
   return (
     <>
@@ -19,7 +28,7 @@ const Home = () => {
             navigate(`/game/${stateId}`)
           }}
         >
-          Create Private Game
+          New Private Lobby
         </button>
       </p>
       <p>
@@ -31,10 +40,15 @@ const Home = () => {
             navigate(`/game/${stateId}`)
           }}
         >
-          Create Public Game
+          New Public Lobby
         </button>
       </p>
-      {JSON.stringify(getPublicLobbies())}
+      {lobbies.length > 0 && (
+        <>
+          <h3>Debug (please ignore):</h3>
+          <pre>{JSON.stringify(lobbies, undefined, 2)}</pre>
+        </>
+      )}
     </>
   )
 }
