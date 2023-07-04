@@ -53,7 +53,7 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
           (flourAmount): [number, string][] =>
             map(
               (s: string): [number, string] => [bread + flourAmount, s],
-              ap(
+              ap<string, string>(
                 [concat<string>(stringRepeater('Fl', flourAmount))],
                 energyCostOptions(flourAmount / 2, { coal, peat, wood, straw })
               )

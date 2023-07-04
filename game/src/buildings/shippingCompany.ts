@@ -27,7 +27,7 @@ export const shippingCompany = (fuel = '', product = ''): StateReducer => {
 export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
     .with([], () => [
-      ...ap(
+      ...ap<string, string>(
         [
           //
           concat(ResourceEnum.Meat),
