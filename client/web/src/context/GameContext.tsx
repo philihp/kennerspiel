@@ -3,8 +3,8 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 
 import { CredentialResponse } from '@react-oauth/google'
 import { HathoraClient, HathoraConnection } from '../../../.hathora/client'
-import { Color, Country, EngineState, IInitializeRequest, Length } from '../../../../api/types'
-import { GoogleUserData, UserData, getUserDisplayName } from '../../../../api/base'
+import { EngineColor, EngineCountry, EngineState, EngineLength, EngineUser } from '../../../../api/types'
+import { GoogleUserData, UserData } from '../../../../api/base'
 import { ConnectionFailure } from '../../../.hathora/failures'
 
 interface GameContext {
@@ -19,14 +19,15 @@ interface GameContext {
   createPublicLobby: () => ReturnType<HathoraClient['createPublicLobby']>
   createPrivateLobby: () => ReturnType<HathoraClient['createPrivateLobby']>
   getPublicLobbies: () => ReturnType<HathoraClient['getPublicLobbies']>
-  join: (color: Color) => Promise<void>
-  config: (country: Country, length: Length) => Promise<void>
+  join: (color: EngineColor) => Promise<void>
+  config: (country: EngineCountry, length: EngineLength) => Promise<void>
   start: () => Promise<void>
   move: (command: string) => Promise<void>
   control: (partial: string) => Promise<void>
   undo: () => Promise<void>
   redo: () => Promise<void>
   endGame: () => Promise<void>
+  getUser: (userId: string) => EngineUser | undefined
 }
 
 interface HathoraContextProviderProps {
@@ -39,29 +40,23 @@ const HathoraContext = createContext<GameContext | null>(null)
 export const HathoraContextProvider = ({ children }: HathoraContextProviderProps) => {
   const [token, setToken] = useState<string | undefined>(localStorage.getItem('token') || undefined)
   const [state, setEngineState] = useState<EngineState>()
-  const [user, setUserInfo] = useState<GoogleUserData>()
+  const [user, setUser] = useState<GoogleUserData>()
   const [connection, setConnection] = useState<HathoraConnection>()
   const [error, setError] = useState<ConnectionFailure>()
   const [connecting, setConnecting] = useState<boolean>()
-  const [playerNameMapping, setPlayerNameMapping] = useState<Record<string, UserData>>({})
 
   // if we have a stored token, immediately use that to load things
   useEffect(() => {
     if (token === undefined) return
-    const user = HathoraClient.getUserFromToken(token)
-    // console.log('USER: ', user)
-    setUserInfo(user as GoogleUserData)
-    // setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
-  }, [setPlayerNameMapping, token])
+    setUser(HathoraClient.getUserFromToken(token) as GoogleUserData)
+  }, [token, setUser])
 
   const login = useCallback(async (cred: CredentialResponse) => {
     if (cred.credential === undefined) return
     const token = await client.loginGoogle(cred.credential)
     if (!token) return
-    const user = HathoraClient.getUserFromToken(token)
-    console.log('login callback')
-    setUserInfo(user as GoogleUserData)
-    // setPlayerNameMapping((current) => ({ ...current, [user.id]: user }))
+    const user = HathoraClient.getUserFromToken(token) as GoogleUserData
+    setUser(user)
     setToken(token)
     localStorage.setItem('token', token)
   }, [])
@@ -91,30 +86,32 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
 
   const createPublicLobby = useCallback(async (): ReturnType<HathoraClient['createPublicLobby']> => {
     if (!token) return ''
-    console.log(client)
     return client.createPublicLobby(token)
   }, [token])
 
   const createPrivateLobby = useCallback(async (): ReturnType<HathoraClient['createPrivateLobby']> => {
     if (!token) return ''
-    console.log(client)
-    return client.createPrivateLobby(token)
+    const lobby = await client.createPrivateLobby(token)
+    return lobby
   }, [token])
 
   const getPublicLobbies = useCallback(async (): ReturnType<HathoraClient['getPublicLobbies']> => {
     if (!token) return []
-    console.log(client)
     return client.getPublicLobbies(token)
   }, [token])
 
   const join = useCallback(
-    async (color: Color) => {
-      await connection?.join({ color })
+    async (color: EngineColor) => {
+      if (user === undefined) {
+        console.log("Can't join, user is undefined")
+        return
+      }
+      await connection?.join({ color, picture: user.picture, name: user.name })
     },
-    [connection]
+    [connection, user]
   )
   const config = useCallback(
-    async (country: Country, length: Length) => {
+    async (country: EngineCountry, length: EngineLength) => {
       await connection?.config({ country, length })
     },
     [connection]
@@ -150,16 +147,12 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
     connection?.disconnect()
   }, [connection])
 
-  // const getUserName = useCallback(
-  //   (userId: string) => {
-  //     if (playerNameMapping[userId]) return playerNameMapping[userId].name
-  //     lookupUser(userId).then((response) => {
-  //       setPlayerNameMapping((curr) => ({ ...curr, [userId]: response }))
-  //     })
-  //     return userId
-  //   },
-  //   [setPlayerNameMapping, playerNameMapping]
-  // )
+  const getUser = useCallback(
+    (userId: string): EngineUser | undefined => {
+      return state?.users?.find((u) => u.id === userId)
+    },
+    [state]
+  )
 
   const exported = useMemo(
     () => ({
@@ -182,6 +175,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       undo,
       redo,
       endGame,
+      getUser,
     }),
     [
       token,
@@ -203,6 +197,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
       undo,
       redo,
       endGame,
+      getUser,
     ]
   )
 

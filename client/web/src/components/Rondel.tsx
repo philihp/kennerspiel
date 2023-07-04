@@ -1,6 +1,6 @@
 import { addIndex, map, range } from 'ramda'
 import { ReactNode } from 'react'
-import { EngineRondel, EngineConfig, Length } from '../../../../api/types'
+import { EngineRondel, EngineConfig, EngineLength } from '../../../../api/types'
 import { useHathoraContext } from '../context/GameContext'
 
 interface Props {
@@ -17,7 +17,7 @@ export const Rondel = ({ rondel, config }: Props) => {
     control(`${state?.control?.partial} Jo`)
   }
   const armValues =
-    config?.length === Length.short && config?.players === 2
+    config?.length === EngineLength.short && config?.players === 2
       ? [0, 1, 2, 2, 3, 4, 4, 5, 6, 6, 7, 8, 10]
       : [0, 2, 3, 4, 5, 6, 6, 7, 7, 8, 8, 9, 10]
   return (

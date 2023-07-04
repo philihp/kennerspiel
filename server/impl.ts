@@ -2,10 +2,10 @@ import { Methods, Context } from "./.hathora/methods";
 import { Response } from "../api/base";
 import {
   EngineStatus,EngineTableau,
-  Color,
-  Country,
-  Length,
-  User,
+  EngineColor,
+  EngineCountry,
+  EngineLength,
+  EngineUser,
   EngineState,
   UserId,
   IInitializeRequest,
@@ -25,7 +25,9 @@ import { PlayerColor } from "hathora-et-labora-game/dist/types";
 
 type InternalUser = {
   id: UserId
-  color: Color
+  name: string
+  picture: string
+  color: EngineColor
 }
 
 type InternalState = {
@@ -50,30 +52,32 @@ const statusDongle = (status: string): EngineStatus => {
       return EngineStatus.PLAYING;
   }
 }
-const colorDongle = (color: string): Color => {
+const colorDongle = (color: string): EngineColor => {
   switch(color) {
     case 'R':
-      return Color.Red;
+      return EngineColor.Red;
     case 'G':
-      return Color.Green;
+      return EngineColor.Green;
     case 'B':
-      return Color.Blue;
+      return EngineColor.Blue;
     case 'W':
     default:
-      return Color.White;
+      return EngineColor.White;
   }
 }
 
 const colorToChar = ({color}: InternalUser):string => {
   switch(color) {
-    case Color.Red:
+    case EngineColor.Red:
       return 'R'
-    case Color.Blue:
+    case EngineColor.Blue:
       return 'B'
-    case Color.Green:
+    case EngineColor.Green:
       return 'G'
-    case Color.White:
+    case EngineColor.White:
       return 'W'
+    default:
+      return ''
   }
 }
 
@@ -124,22 +128,22 @@ export class Impl implements Methods<InternalState> {
   }
 
   join(state: InternalState, userId: UserId, ctx: Context, request: IJoinRequest): Response {
-    const { color } = request
-    const users = state.users.filter(u => u.id !== userId)
-    if(users.some(u => u.color === color)) {
+    const { color, picture, name } = request
+    if(state.users.some(u => u.color === color && u.id !== userId)) {
       return Response.error('Color already taken')
     }
-    state.users = users.concat({
-      id: userId, color: (color)
-    })
+    state.users = [
+      ...state.users.filter(u => u.id !== userId),
+      { id: userId, color, name, picture }
+    ]
     return Response.ok()
   }
 
   config(state: InternalState, userId: UserId, ctx: Context, request: IConfigRequest): Response {
     const players = `${Math.max(1, state.users.length)}`
-    if([Country.ireland, Country.france].includes(request.country) === false) return Response.error('Only the France variant is implemented');
-    const country = request.country === Country.ireland ? 'ireland' : 'france'
-    const length = request.length === Length.long ? 'long' : 'short'  
+    if([EngineCountry.ireland, EngineCountry.france].includes(request.country) === false) return Response.error('Only the France variant is implemented');
+    const country = request.country === EngineCountry.ireland ? 'ireland' : 'france'
+    const length = request.length === EngineLength.long ? 'long' : 'short'
     if(reducer(initialState, ['CONFIG', players, country, length]) === undefined) return Response.error('Invalid config')
     state.country = country
     state.length = length
@@ -194,15 +198,11 @@ export class Impl implements Methods<InternalState> {
     if(activeUser !== userId) {
       return Response.error(`Active user is ${activeUser}`)
     }
-    console.log({
-      'state.partial': state.partial,
-      'request.partial': request.partial
-    })
     state.partial = request.partial
     return Response.ok()
   }
 
-  undo(state: InternalState, userId: string, ctx: Context, request: IUndoRequest): Response {   
+  undo(state: InternalState, userId: string, ctx: Context, request: IUndoRequest): Response {
     const activeUser = activeUserId(state)
     if(activeUser !== userId) {
       return Response.error(`Active user is ${activeUser}`)
@@ -212,7 +212,7 @@ export class Impl implements Methods<InternalState> {
     state.partial = ""
     return Response.ok()
   }
-  
+
   redo(state: InternalState, userId: string, ctx: Context, request: IRedoRequest): Response {
     const activeUser = activeUserId(state)
     if(activeUser !== userId) {
@@ -223,16 +223,16 @@ export class Impl implements Methods<InternalState> {
     state.partial = ""
     return Response.ok()
   }
-  
+
   getUserState(state: InternalState, userId: UserId): EngineState {
     if(!state.commandIndex) {
       return {
-        users: state.users as User[],
+        users: state.users as EngineUser[],
         me: state.users.find(u => u.id === userId),
         status: EngineStatus.SETUP,
-        config: {
-          country: state.country === 'ireland' ? Country.ireland : Country.france,
-          length: state.length === 'short' ? Length.short : Length.long,
+        config: state.country && state.length && {
+          country: state.country === 'ireland' ? EngineCountry.ireland : EngineCountry.france,
+          length: state.length === 'short' ? EngineLength.short : EngineLength.long,
           players: state.users.length
         },
         buildings: [],
@@ -245,10 +245,10 @@ export class Impl implements Methods<InternalState> {
     }
 
     const currState = state.gameState[state.commandIndex -1] as GameStatePlaying
-    const users: User[] = state.users
+    const users: EngineUser[] = state.users
     const me = state.users.find(u => u.id === userId)
     const moves = state.commands.slice(0, state.commandIndex)
-    
+
     const partial = tokenizePartial(state.partial)
     const controlSurface = control(currState, partial, myPlayerIndex(state, userId))
     const controlState = !controlSurface.active ? undefined : {
@@ -262,8 +262,8 @@ export class Impl implements Methods<InternalState> {
       moves,
       status: statusDongle(currState.status),
       config: {
-        country: Country.france,
-        length: currState.config?.length === 'short' ? Length.short : Length.long,
+        country: EngineCountry.france,
+        length: currState.config?.length === 'short' ? EngineLength.short : EngineLength.long,
         players: currState.config?.players
       },
       rondel: currState.rondel,
