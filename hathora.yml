@@ -1,27 +1,27 @@
 types:
-  Color:
+  EngineColor:
     - Red
     - Green
     - Blue
     - White
-  User:
+  EngineUser:
     id: UserId
     name: string
     picture: string
-    color: Color
+    color: EngineColor
   EngineStatus:
     - SETUP
     - PLAYING
     - FINISHED
-  Country:
+  EngineCountry:
     - france
     - ireland
-  Length:
+  EngineLength:
     - short
     - long
   EngineConfig:
-    country: Country
-    length: Length
+    country: EngineCountry
+    length: EngineLength
     players: int
   EngineFrame:
     next: int
@@ -39,7 +39,7 @@ types:
     usableBuildings: string[]
     nextUse: string
   EngineTableau:
-    color: Color
+    color: EngineColor
     clergy: string[]
     settlements: string[]
     landscape: string[][][]
@@ -80,15 +80,15 @@ types:
     stone: int?
   EngineFlower:
     round: int?
-    player: Color?
+    player: EngineColor?
     settle: boolean
     bonus: boolean
   EngineControl:
     partial: string?
     completion: string[]?
   EngineState:
-    users: User[]
-    me: User?
+    users: EngineUser[]
+    me: EngineUser?
     moves: string[]
     status: EngineStatus
     config: EngineConfig?
@@ -105,12 +105,12 @@ types:
 
 methods:
   join:
-    color: Color
+    color: EngineColor
     picture: string
     name: string
   config:
-    country: Country
-    length: Length
+    country: EngineCountry
+    length: EngineLength
   start: {}
   # Changes the game state with a complete command.
   move:

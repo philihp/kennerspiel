@@ -1,5 +1,5 @@
 import { GoogleLogin } from '@react-oauth/google'
-import { Color } from '../../../../api/types'
+import { EngineColor } from '../../../../api/types'
 import { useHathoraContext } from '../context/GameContext'
 
 type ColorStyle = {
@@ -7,15 +7,15 @@ type ColorStyle = {
   borderColor?: string
 }
 
-const colorToStyle = (c?: Color): ColorStyle => {
+const colorToStyle = (c?: EngineColor): ColorStyle => {
   switch (c) {
-    case Color.Blue:
+    case EngineColor.Blue:
       return { borderColor: '#80b1d3' } // , borderColor: '#5f849e' }
-    case Color.Red:
+    case EngineColor.Red:
       return { borderColor: '#fb8072' } // , borderColor: '#ad574d' }
-    case Color.Green:
+    case EngineColor.Green:
       return { borderColor: '#b3de69' } // , borderColor: '#87a74f' }
-    case Color.White:
+    case EngineColor.White:
       return { borderColor: '#d9d9d9' } // , borderColor: '#b1b1b1' }
     default:
       return {}

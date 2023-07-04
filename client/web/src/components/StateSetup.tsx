@@ -1,18 +1,19 @@
 import { useParams } from 'react-router-dom'
-import { Color, Country, EngineConfig, Length, User } from '../../../../api/types'
+import { equals, find } from 'ramda'
+import { EngineColor, EngineCountry, EngineConfig, EngineLength, EngineUser } from '../../../../api/types'
 import { useHathoraContext } from '../context/GameContext'
 import { Clergy } from './PlayerClergy'
 
-const occupied = (color: Color, users: User[] = []) => {
+const occupied = (color: EngineColor, users: EngineUser[] = []) => {
   return users.some((user) => user.color === color)
 }
 
-const configured = (country: Country, length: Length, config?: EngineConfig) =>
+const configured = (country: EngineCountry, length: EngineLength, config?: EngineConfig) =>
   config && config.country === country && config.length === length
 
 export const StateSetup = () => {
   const { gameId } = useParams()
-  const { state, players, join, config, start } = useHathoraContext()
+  const { state, getUser, join, config, start } = useHathoraContext()
   const users = state?.users ?? []
   const engineConfig = state?.config
   return (
@@ -24,42 +25,42 @@ export const StateSetup = () => {
       <hr />
       <h3>Players ({users?.length})</h3>
       <Clergy id="LB1R" />
-      <button type="button" disabled={occupied(Color.Red, users)} onClick={() => join(Color.Red)}>
+      {JSON.stringify(find((u) => u.color === EngineColor.Red, users))}
+      <button type="button" disabled={occupied(EngineColor.Red, users)} onClick={() => join(EngineColor.Red)}>
         Red
       </button>
       <br />
       <Clergy id="LB1G" />
-      <button type="button" disabled={occupied(Color.Green, users)} onClick={() => join(Color.Green)}>
+      <button type="button" disabled={occupied(EngineColor.Green, users)} onClick={() => join(EngineColor.Green)}>
         Green
       </button>
       <br />
       <Clergy id="LB1B" />
-      <button type="button" disabled={occupied(Color.Blue, users)} onClick={() => join(Color.Blue)}>
+      <button type="button" disabled={occupied(EngineColor.Blue, users)} onClick={() => join(EngineColor.Blue)}>
         Blue
       </button>
       <br />
       <Clergy id="LB1W" />
-      <button type="button" disabled={occupied(Color.White, users)} onClick={() => join(Color.White)}>
+      <button type="button" disabled={occupied(EngineColor.White, users)} onClick={() => join(EngineColor.White)}>
         White
       </button>
       <p>Player order will be randomized upon start.</p>
-      <pre>{JSON.stringify({ debug: users })}</pre>
       {/*-------------------------------------------*/}
       <hr />
       <h3>Mode</h3>
-      <input type="radio" disabled checked={configured(Country.france, Length.long, engineConfig)} />
+      <input type="radio" disabled checked={configured(EngineCountry.france, EngineLength.long, engineConfig)} />
       <button
         type="button"
-        disabled={configured(Country.france, Length.long, engineConfig)}
-        onClick={() => config(Country.france, Length.long)}
+        disabled={configured(EngineCountry.france, EngineLength.long, engineConfig)}
+        onClick={() => config(EngineCountry.france, EngineLength.long)}
       >
         France {users?.length === 2 && '(long)'}
       </button>
       <br />
-      <input type="radio" disabled checked={configured(Country.ireland, Length.long, engineConfig)} />
+      <input type="radio" disabled checked={configured(EngineCountry.ireland, EngineLength.long, engineConfig)} />
       <button
-        disabled={configured(Country.ireland, Length.long, engineConfig)}
-        onClick={() => config(Country.ireland, Length.long)}
+        disabled={configured(EngineCountry.ireland, EngineLength.long, engineConfig)}
+        onClick={() => config(EngineCountry.ireland, EngineLength.long)}
         type="button"
       >
         Ireland {users?.length === 2 && '(long)'}
@@ -68,27 +69,27 @@ export const StateSetup = () => {
       {users.length > 1 && (
         <>
           {' '}
-          <input type="radio" disabled checked={configured(Country.ireland, Length.short, engineConfig)} />
+          <input type="radio" disabled checked={configured(EngineCountry.ireland, EngineLength.short, engineConfig)} />
           <button
             type="button"
-            disabled={configured(Country.ireland, Length.short, engineConfig)}
-            onClick={() => config(Country.ireland, Length.short)}
+            disabled={configured(EngineCountry.ireland, EngineLength.short, engineConfig)}
+            onClick={() => config(EngineCountry.ireland, EngineLength.short)}
           >
             Ireland {users?.length >= 3 && '(short)'}
           </button>
           <br />
-          <input type="radio" disabled checked={configured(Country.france, Length.short, engineConfig)} />
+          <input type="radio" disabled checked={configured(EngineCountry.france, EngineLength.short, engineConfig)} />
           <button
             type="button"
-            disabled={configured(Country.france, Length.short, engineConfig)}
-            onClick={() => config(Country.france, Length.short)}
+            disabled={configured(EngineCountry.france, EngineLength.short, engineConfig)}
+            onClick={() => config(EngineCountry.france, EngineLength.short)}
           >
             France {users?.length >= 3 && '(short)'}
           </button>
           <br />
         </>
       )}
-      {JSON.stringify(players)}
+      <pre>{JSON.stringify(state?.users, undefined, 2)}</pre>
       <hr />
       <button type="button" disabled={users?.length === 0 || engineConfig === undefined} onClick={() => start()}>
         Start

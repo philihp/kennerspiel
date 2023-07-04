@@ -2,10 +2,10 @@ import { Methods, Context } from "./.hathora/methods";
 import { Response } from "../api/base";
 import {
   EngineStatus,EngineTableau,
-  Color,
-  Country,
-  Length,
-  User,
+  EngineColor,
+  EngineCountry,
+  EngineLength,
+  EngineUser,
   EngineState,
   UserId,
   IInitializeRequest,
@@ -27,7 +27,7 @@ type InternalUser = {
   id: UserId
   name: string
   picture: string
-  color: Color
+  color: EngineColor
 }
 
 type InternalState = {
@@ -52,30 +52,32 @@ const statusDongle = (status: string): EngineStatus => {
       return EngineStatus.PLAYING;
   }
 }
-const colorDongle = (color: string): Color => {
+const colorDongle = (color: string): EngineColor => {
   switch(color) {
     case 'R':
-      return Color.Red;
+      return EngineColor.Red;
     case 'G':
-      return Color.Green;
+      return EngineColor.Green;
     case 'B':
-      return Color.Blue;
+      return EngineColor.Blue;
     case 'W':
     default:
-      return Color.White;
+      return EngineColor.White;
   }
 }
 
 const colorToChar = ({color}: InternalUser):string => {
   switch(color) {
-    case Color.Red:
+    case EngineColor.Red:
       return 'R'
-    case Color.Blue:
+    case EngineColor.Blue:
       return 'B'
-    case Color.Green:
+    case EngineColor.Green:
       return 'G'
-    case Color.White:
+    case EngineColor.White:
       return 'W'
+    default:
+      return ''
   }
 }
 
@@ -134,14 +136,15 @@ export class Impl implements Methods<InternalState> {
       ...state.users.filter(u => u.id !== userId),
       { id: userId, color, name, picture }
     ]
+    console.log('JOIN', request, state.users)
     return Response.ok()
   }
 
   config(state: InternalState, userId: UserId, ctx: Context, request: IConfigRequest): Response {
     const players = `${Math.max(1, state.users.length)}`
-    if([Country.ireland, Country.france].includes(request.country) === false) return Response.error('Only the France variant is implemented');
-    const country = request.country === Country.ireland ? 'ireland' : 'france'
-    const length = request.length === Length.long ? 'long' : 'short'
+    if([EngineCountry.ireland, EngineCountry.france].includes(request.country) === false) return Response.error('Only the France variant is implemented');
+    const country = request.country === EngineCountry.ireland ? 'ireland' : 'france'
+    const length = request.length === EngineLength.long ? 'long' : 'short'
     if(reducer(initialState, ['CONFIG', players, country, length]) === undefined) return Response.error('Invalid config')
     state.country = country
     state.length = length
@@ -229,12 +232,12 @@ export class Impl implements Methods<InternalState> {
   getUserState(state: InternalState, userId: UserId): EngineState {
     if(!state.commandIndex) {
       return {
-        users: state.users as User[],
+        users: state.users as EngineUser[],
         me: state.users.find(u => u.id === userId),
         status: EngineStatus.SETUP,
         config: state.country && state.length && {
-          country: state.country === 'ireland' ? Country.ireland : Country.france,
-          length: state.length === 'short' ? Length.short : Length.long,
+          country: state.country === 'ireland' ? EngineCountry.ireland : EngineCountry.france,
+          length: state.length === 'short' ? EngineLength.short : EngineLength.long,
           players: state.users.length
         },
         buildings: [],
@@ -247,7 +250,7 @@ export class Impl implements Methods<InternalState> {
     }
 
     const currState = state.gameState[state.commandIndex -1] as GameStatePlaying
-    const users: User[] = state.users
+    const users: EngineUser[] = state.users
     const me = state.users.find(u => u.id === userId)
     const moves = state.commands.slice(0, state.commandIndex)
 
@@ -264,8 +267,8 @@ export class Impl implements Methods<InternalState> {
       moves,
       status: statusDongle(currState.status),
       config: {
-        country: Country.france,
-        length: currState.config?.length === 'short' ? Length.short : Length.long,
+        country: EngineCountry.france,
+        length: currState.config?.length === 'short' ? EngineLength.short : EngineLength.long,
         players: currState.config?.players
       },
       rondel: currState.rondel,
