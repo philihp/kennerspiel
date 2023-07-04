@@ -136,7 +136,6 @@ export class Impl implements Methods<InternalState> {
       ...state.users.filter(u => u.id !== userId),
       { id: userId, color, name, picture }
     ]
-    console.log('JOIN', request, state.users)
     return Response.ok()
   }
 
@@ -199,10 +198,6 @@ export class Impl implements Methods<InternalState> {
     if(activeUser !== userId) {
       return Response.error(`Active user is ${activeUser}`)
     }
-    console.log({
-      'state.partial': state.partial,
-      'request.partial': request.partial
-    })
     state.partial = request.partial
     return Response.ok()
   }

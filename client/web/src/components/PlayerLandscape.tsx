@@ -1,5 +1,5 @@
 import { Erection } from './Erection'
-import { Clergy } from './PlayerClergy'
+import { Clergy } from './Clergy'
 import { useHathoraContext } from '../context/GameContext'
 
 interface Props {

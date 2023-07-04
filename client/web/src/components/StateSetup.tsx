@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom'
-import { equals, find } from 'ramda'
+import { find } from 'ramda'
 import { EngineColor, EngineCountry, EngineConfig, EngineLength, EngineUser } from '../../../../api/types'
 import { useHathoraContext } from '../context/GameContext'
-import { Clergy } from './PlayerClergy'
+import { Clergy } from './Clergy'
 
 const occupied = (color: EngineColor, users: EngineUser[] = []) => {
   return users.some((user) => user.color === color)
@@ -10,6 +10,55 @@ const occupied = (color: EngineColor, users: EngineUser[] = []) => {
 
 const configured = (country: EngineCountry, length: EngineLength, config?: EngineConfig) =>
   config && config.country === country && config.length === length
+
+interface SeatProps {
+  clergyId: string
+  color: EngineColor
+}
+
+const Seat = ({ clergyId, color }: SeatProps) => {
+  const { state, join } = useHathoraContext()
+  const users = state?.users ?? []
+  const user = find((u) => u.color === color, users)
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      <button type="button" disabled={occupied(color, users)} onClick={() => join(color)}>
+        Pick Color
+      </button>
+      {user?.picture ? (
+        <>
+          <Clergy
+            id={clergyId}
+            style={{
+              backgroundImage: `url(${user?.picture})`,
+              height: 36,
+              width: 36,
+              backgroundSize: 36,
+              borderRadius: 18,
+              borderWidth: 3,
+            }}
+          />
+          {user?.name}
+        </>
+      ) : (
+        <Clergy
+          id={clergyId}
+          style={{
+            height: 36,
+            width: 36,
+            borderRadius: 18,
+            borderWidth: 4,
+          }}
+        />
+      )}
+    </div>
+  )
+}
 
 export const StateSetup = () => {
   const { gameId } = useParams()
@@ -24,26 +73,10 @@ export const StateSetup = () => {
       </p>
       <hr />
       <h3>Players ({users?.length})</h3>
-      <Clergy id="LB1R" />
-      {JSON.stringify(find((u) => u.color === EngineColor.Red, users))}
-      <button type="button" disabled={occupied(EngineColor.Red, users)} onClick={() => join(EngineColor.Red)}>
-        Red
-      </button>
-      <br />
-      <Clergy id="LB1G" />
-      <button type="button" disabled={occupied(EngineColor.Green, users)} onClick={() => join(EngineColor.Green)}>
-        Green
-      </button>
-      <br />
-      <Clergy id="LB1B" />
-      <button type="button" disabled={occupied(EngineColor.Blue, users)} onClick={() => join(EngineColor.Blue)}>
-        Blue
-      </button>
-      <br />
-      <Clergy id="LB1W" />
-      <button type="button" disabled={occupied(EngineColor.White, users)} onClick={() => join(EngineColor.White)}>
-        White
-      </button>
+      <Seat clergyId="LB1R" color={EngineColor.Red} />
+      <Seat clergyId="LB1G" color={EngineColor.Green} />
+      <Seat clergyId="LB1B" color={EngineColor.Blue} />
+      <Seat clergyId="LB1W" color={EngineColor.White} />
       <p>Player order will be randomized upon start.</p>
       {/*-------------------------------------------*/}
       <hr />
@@ -89,7 +122,8 @@ export const StateSetup = () => {
           <br />
         </>
       )}
-      <pre>{JSON.stringify(state?.users, undefined, 2)}</pre>
+      <p>Country variants contain different buildings.</p>
+
       <hr />
       <button type="button" disabled={users?.length === 0 || engineConfig === undefined} onClick={() => start()}>
         Start
