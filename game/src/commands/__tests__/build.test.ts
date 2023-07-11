@@ -442,6 +442,38 @@ describe('commands/build', () => {
         // notice no noop here
       ])
     })
+    it('gives all buildings, regardless of building materials, when in neutralBuildingPhase', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        buildings: [
+          BuildingEnum.Priory, // WoCl
+          BuildingEnum.CloisterCourtyard, // WoWo
+          BuildingEnum.GrainStorage, // WoSw
+          BuildingEnum.Windmill, // WoWoWoClCl
+          BuildingEnum.Bakery, // ClClSw
+        ],
+        players: [
+          {
+            ...s0.players[0],
+            wood: 0,
+            clay: 0,
+            straw: 0,
+            stone: 0,
+            penny: 0,
+            wine: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          neutralBuildingPhase: true,
+          mainActionUsed: true,
+          bonusActions: [GameCommandEnum.BUILD],
+        },
+      }
+      const c0 = complete(s1)(['BUILD'])
+      expect(c0).toStrictEqual(s1.buildings)
+    })
     it('gives all the places the given building can be built', () => {
       const s1: GameStatePlaying = {
         ...s0,

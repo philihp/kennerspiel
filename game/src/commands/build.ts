@@ -85,7 +85,11 @@ export const complete =
           [GameCommandEnum.BUILD],
           // return all buildings we have the resources for
           always(
-            filter((building: BuildingEnum): boolean => !!payCost(costForBuilding(building))(player), state.buildings)
+            filter(
+              (building: BuildingEnum): boolean =>
+                state.frame.neutralBuildingPhase || !!payCost(costForBuilding(building))(player),
+              state.buildings
+            )
           )
         )
         .with([GameCommandEnum.BUILD, P._], ([, building]) =>
