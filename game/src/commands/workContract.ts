@@ -142,19 +142,17 @@ export const complete =
               forEach((landStack: Tile) => {
                 if (landStack.length === 0) return
                 const [, erection, clergy] = landStack
-                if (
-                  erection !== undefined &&
-                  clergy === undefined &&
-                  ![BuildingEnum.Forest, BuildingEnum.Peat].includes(erection)
-                )
-                  accum.push(erection)
+                if (erection === undefined) return
+                if (clergy !== undefined) return
+                if ([BuildingEnum.Forest, BuildingEnum.Peat].includes(erection)) return
+                accum.push(erection)
               }),
               player.landscape
             )
             return accum
           },
           [] as BuildingEnum[],
-          range(0, state.config.players)
+          range(0, state.players.length)
         )
       )
       .with([GameCommandEnum.WORK_CONTRACT, P._], () => {
