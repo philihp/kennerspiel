@@ -1,7 +1,7 @@
 import { control } from '..'
 import { reducer } from '../reducer'
 import { initialState } from '../state'
-import { GameStatePlaying, GameStateSetup } from '../types'
+import { GameStatePlaying, GameStateSetup, NextUseClergy } from '../types'
 
 describe('game-solo-settle', () => {
   it('settling should', () => {
@@ -56,13 +56,41 @@ describe('game-solo-settle', () => {
     const s46 = reducer(s45, ['USE', 'G06', 'CoCoCo'])! as GameStatePlaying
     const s47 = reducer(s46, ['BUY_DISTRICT', '3', 'PLAINS'])! as GameStatePlaying
     const s48 = reducer(s47, ['COMMIT'])! as GameStatePlaying
+    expect(s48.frame).toMatchObject({
+      mainActionUsed: false,
+      usableBuildings: [],
+      unusableBuildings: [],
+      nextUse: NextUseClergy.Any,
+      bonusActions: [],
+    })
     const s49 = reducer(s48, ['BUILD', 'F09', '4', '2'])! as GameStatePlaying
+    expect(s49.frame).toMatchObject({
+      mainActionUsed: true,
+      usableBuildings: ['F09'],
+      unusableBuildings: [],
+      nextUse: NextUseClergy.OnlyPrior,
+      bonusActions: ['USE'],
+    })
     const s50 = reducer(s49, ['USE', 'F09'])! as GameStatePlaying
+    expect(s50.frame).toMatchObject({
+      mainActionUsed: true,
+      usableBuildings: ['LG3', 'F04'],
+      unusableBuildings: ['F09'],
+      nextUse: NextUseClergy.Free,
+      bonusActions: [],
+    })
     const s51 = reducer(s50, ['USE', 'LG3'])! as GameStatePlaying
-
+    expect(s51.frame).toMatchObject({
+      mainActionUsed: true,
+      usableBuildings: [],
+      unusableBuildings: ['F09'], // prevents cycles
+      nextUse: NextUseClergy.Free,
+      bonusActions: [],
+    })
     expect(s51).toBeDefined()
+
     const c51 = control(s51, [])
-    // TODO: #399, expect(c51.completion).not.toContain('USE')
+    expect(c51.completion).not.toContain('USE')
     expect(c51.completion).toContain('BUY_PLOT')
     expect(c51.completion).toContain('BUY_DISTRICT')
     expect(c51.completion).toContain('CONVERT')
@@ -71,7 +99,6 @@ describe('game-solo-settle', () => {
     const s52 = reducer(s51, ['COMMIT'])! as GameStatePlaying
     const c52 = control(s52, ['WORK_CONTRACT'])
 
-    // TODO: #404, work contract neutral player
     expect(c52.completion).toContain('G13')
     expect(c52.completion).toHaveLength(4)
 

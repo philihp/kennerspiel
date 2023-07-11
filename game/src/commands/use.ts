@@ -1,4 +1,4 @@
-import { all, always, any, curry, identity, includes, isEmpty, map, pipe, reduce, values, view } from 'ramda'
+import { any, identity, includes, isEmpty, map, pipe, reduce, values, view, without } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
 import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
@@ -87,12 +87,15 @@ const checkIfUseCanHappen =
 
     // but if mainActionUsed and bonusAction don't allow, still it is possible to use if
     // usableBuildings allows AND the building in question isn't in unusableBuildings
-    if (
-      (!building ||
-        (state.frame.usableBuildings.includes(building) === true &&
-          state.frame.unusableBuildings.includes(building) === false)) &&
-      [NextUseClergy.Free, NextUseClergy.OnlyPrior].includes(state.frame.nextUse)
-    ) {
+    if (building) {
+      if (
+        state.frame.usableBuildings.includes(building) === true &&
+        state.frame.unusableBuildings.includes(building) === false &&
+        [NextUseClergy.Free, NextUseClergy.OnlyPrior].includes(state.frame.nextUse)
+      ) {
+        return state
+      }
+    } else if (without(state.frame.unusableBuildings, state.frame.usableBuildings).length > 0) {
       return state
     }
 
