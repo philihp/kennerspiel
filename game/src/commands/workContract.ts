@@ -1,7 +1,7 @@
-import { all, curry, find, forEach, lensPath, pipe, range, reduce, view, without } from 'ramda'
+import { all, find, forEach, pipe, range, reduce, view, without } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { payCost, getCost, withActivePlayer, isLayBrother, isPrior, activeLens } from '../board/player'
-import { findBuildingWithoutOffset, moveClergyToOwnBuilding } from '../board/landscape'
+import { payCost, getCost, withActivePlayer, isLayBrother, isPrior, activeLens, withPlayerIndex } from '../board/player'
+import { findBuildingWithoutOffset, moveClergyToNeutralBuilding, moveClergyToOwnBuilding } from '../board/landscape'
 import { costMoney, parseResourceParam } from '../board/resource'
 import { oncePerFrame, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import {
@@ -37,6 +37,10 @@ const transferActiveToOwnerOf =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
+    if (state.config.players === 1) {
+      return findBuildingWithoutOffset(building)(state.players[1].landscape) ? state : undefined
+    }
+
     // this makes it so we dont look at the current player's landscape... prevent work contract on yourself
     const playerIndexes = without<number>([state.frame.activePlayerIndex], range(0, state.config.players))
     const foundWithPlayer = find(
@@ -47,27 +51,39 @@ const transferActiveToOwnerOf =
     return withFrame((frame: Frame) => ({ ...frame, activePlayerIndex: foundWithPlayer }))(state)
   }
 
-const checkModalPlayerBuildingUnoccupied = (building: BuildingEnum): StateReducer =>
-  withActivePlayer((player) => {
-    const location = findBuildingWithoutOffset(building)(player.landscape)
-    // should not actually ever get this
-    if (location === undefined) return undefined
-    const [row, col] = location
-    const [, , clergy] = player.landscape[row][col]
-    if (clergy !== undefined) return undefined
-    return player
-  })
+const checkModalPlayerBuildingUnoccupied =
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
+    const whichPlayer = state?.config?.players === 1 ? 1 : state?.frame.activePlayerIndex ?? 0
+    return withPlayerIndex(whichPlayer)((player) => {
+      const location = findBuildingWithoutOffset(building)(player.landscape)
+      // should not actually ever get this
+      if (location === undefined) return undefined
+      const [row, col] = location
+      const [, , clergy] = player.landscape[row][col]
+      if (clergy !== undefined) return undefined
+      return player
+    })(state)
+  }
 
 const checkModalPlayerHasPriorOption =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    const { clergy } = state.players[state.frame.activePlayerIndex]
+    const { clergy } = state.players[state.config.players === 1 ? 1 : state.frame.activePlayerIndex]
 
     // if theyre trying to work contract someone with no people, stop it all right here
     if (clergy.length === 0) return undefined
 
-    // if all of the the active palyers clergy are all priors or all laybrothers, then the player has no choice here
+    if (state.config.players === 1) {
+      return pipe(
+        //
+        moveClergyToNeutralBuilding(building),
+        setFrameToAllowFreeUsage([building])
+      )(state)
+    }
+
+    // if all of the the active player's clergy are all priors or all laybrothers, then the player has no choice here
     if (all(isPrior, clergy) || all(isLayBrother, clergy)) {
       return pipe(
         //

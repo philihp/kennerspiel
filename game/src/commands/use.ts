@@ -1,7 +1,7 @@
 import { any, identity, includes, isEmpty, map, pipe, reduce, values, view, without } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
-import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
+import { allVacantUsableBuildings, moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
 import {
   alehouse,
   bakery,
@@ -227,30 +227,9 @@ export const complete =
           return []
         return [GameCommandEnum.USE]
       })
-      .with([GameCommandEnum.USE], () => {
-        if (!isEmpty(state.frame.usableBuildings)) {
-          return state.frame.usableBuildings
-        }
-        return reduce(
-          (accum, row) =>
-            reduce(
-              (accum, tile) => {
-                const [, building, clergy] = tile
-                if (
-                  building !== undefined &&
-                  clergy === undefined &&
-                  [BuildingEnum.Forest, BuildingEnum.Peat].includes(building) === false
-                )
-                  accum.push(building)
-                return accum
-              },
-              accum,
-              row
-            ),
-          [] as BuildingEnum[],
-          player.landscape
-        )
-      })
+      .with([GameCommandEnum.USE], () =>
+        !isEmpty(state.frame.usableBuildings) ? state.frame.usableBuildings : allVacantUsableBuildings(player.landscape)
+      )
       .with(
         P.when(([command, building]) => command === GameCommandEnum.USE && includes(building, values(BuildingEnum))),
         ([, building, ...params]) => completeBuilding[building as BuildingEnum](params)(state)

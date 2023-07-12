@@ -104,26 +104,36 @@ describe('game-solo-settle', () => {
     const s53 = reducer(s52, ['USE', 'LG1'])! as GameStatePlaying
     expect(s53).toBeDefined()
     const s54 = reducer(s53, ['COMMIT'])! as GameStatePlaying
-    const s55 = reducer(s54, ['FELL_TREES', '2', '2'])! as GameStatePlaying
-    const s56 = reducer(s55, ['COMMIT'])! as GameStatePlaying
-    const s57 = reducer(s56, ['BUILD', 'F05', '2', '3'])! as GameStatePlaying
-    const s58 = reducer(s57, ['USE', 'F05', 'FlFlFlFlFlFlFlCoCoBrBr'])! as GameStatePlaying
-    const s59 = reducer(s58, ['COMMIT'])! as GameStatePlaying
-    const s60 = reducer(s59, ['BUILD', 'G02', '4', '3'])! as GameStatePlaying
-    const s61 = reducer(s60, ['COMMIT'])! as GameStatePlaying
+    expect(s54).toBeDefined()
+    expect(s54.players[0]).toMatchObject({
+      penny: 10,
+    })
+    expect(s54.players[1].landscape[0][2]).toStrictEqual(['P', 'G13'])
+    const s55 = reducer(s54, ['WORK_CONTRACT', 'G13', 'Pn'])! as GameStatePlaying
+    expect(s55).toBeDefined()
+    const s56 = reducer(s55, ['USE', 'G13', 'PnPn'])! as GameStatePlaying
+    const s57 = reducer(s56, ['COMMIT'])! as GameStatePlaying
+    expect(s57).toBeDefined()
+    const s58 = reducer(s57, ['BUILD', 'F05', '2', '3'])! as GameStatePlaying
+    const s59 = reducer(s58, ['USE', 'F05', 'FlFlFlFlFlFlFlCoCoBrBr'])! as GameStatePlaying
+    const s60 = reducer(s59, ['COMMIT'])! as GameStatePlaying
+    const s61 = reducer(s60, ['BUILD', 'G02', '4', '3'])! as GameStatePlaying
+    const s62 = reducer(s61, ['COMMIT'])! as GameStatePlaying
+
+    expect(s62).toBeDefined()
 
     // expect(s61.frame).toBe({})
-    expect(s61.frame).toMatchObject({
+    expect(s62.frame).toMatchObject({
       mainActionUsed: true,
       bonusActions: ['BUILD'],
       neutralBuildingPhase: true,
     })
-    const c61a = control(s61, [])
-    expect(c61a.completion).toStrictEqual(['BUILD', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT'])
-    expect(c61a.completion).not.toContain('COMMIT')
+    const c62a = control(s62, [])
+    expect(c62a.completion).toStrictEqual(['BUILD', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT'])
+    expect(c62a.completion).not.toContain('COMMIT')
 
-    const c61b = control(s61, ['BUILD'])
-    expect(c61b.completion).toStrictEqual(['F08', 'F11', 'G12'])
+    const c62b = control(s62, ['BUILD'])
+    expect(c62b.completion).toStrictEqual(['F08', 'F11', 'G12'])
 
     // at this point, we should have BUILD, BUY_PLOT, BUY_DISTRICT, and CONVERT
     // but not have COMMIT. need to build all remaining buildings.
