@@ -668,14 +668,84 @@ describe('commands/use', () => {
       expect(c0).toStrictEqual([])
     })
 
-    it('allows when main action unavailable, but next use is free, maybe from being constructed', () => {
+    it('allows when main action unavailable, but next use is onlyPrior, maybe from being constructed', () => {
       const s1 = {
         ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [Clergy.PriorB],
+          },
+          ...s0.players,
+        ],
         frame: {
           ...s0.frame,
           mainActionUsed: true,
           nextUse: NextUseClergy.OnlyPrior,
           usableBuildings: [BuildingEnum.Priory],
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual(['USE'])
+    })
+
+    it('disallows when main action unavailable, but next use is onlyPrior, but no prior', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [Clergy.LayBrother1B],
+          },
+          ...s0.players,
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          nextUse: NextUseClergy.OnlyPrior,
+          usableBuildings: [BuildingEnum.Priory],
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual([])
+    })
+
+    it('allows when main action unavailable, but next use is free, due to ability of another building', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [Clergy.LayBrother1B],
+          },
+          ...s0.players,
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          nextUse: NextUseClergy.Free,
+          usableBuildings: [BuildingEnum.CloisterGarden],
+        },
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual(['USE'])
+    })
+
+    it('disallows when main action unavailable, but next use is free, because there are no clergy', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            clergy: [],
+          },
+          ...s0.players,
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          nextUse: NextUseClergy.Free,
+          usableBuildings: [BuildingEnum.CloisterGarden],
         },
       }
       const c0 = complete(s1)([])

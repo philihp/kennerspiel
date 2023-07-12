@@ -1,9 +1,10 @@
-import { pipe, view, filter, always, concat, append, identity } from 'ramda'
+import { pipe, view, filter, always, concat, append, set, lensPath, intersection } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { costForBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
 import { addErectionAtLandscape } from '../board/erections'
 import { oncePerFrame } from '../board/frame'
 import {
+  allVacantUsableBuildings,
   checkCloisterAdjacency,
   checkLandscapeFree,
   checkLandTypeMatches,
@@ -37,8 +38,8 @@ const buildContinuation = (state: GameStatePlaying): GameCommandEnum[] => {
   if (state.frame.neutralBuildingPhase) {
     // while there are buildings, only allow BUILD
     if (state.buildings.length !== 0) return [GameCommandEnum.BUILD]
-    // and when that's finished, allow the player to WORK_CONTRACT or SETTLE.
-    return [GameCommandEnum.WORK_CONTRACT, GameCommandEnum.SETTLE]
+    // and when that's finished, allow the player to SETTLE or COMMIT. USE will also be available because of buildings built
+    return [GameCommandEnum.SETTLE, GameCommandEnum.COMMIT]
   }
 
   // but most of the time, we just want to allow to follow BUILD with an OnlyPrior USE.
@@ -48,21 +49,27 @@ const buildContinuation = (state: GameStatePlaying): GameCommandEnum[] => {
 export const allowPriorToUse =
   (building: BuildingEnum): StateReducer =>
   (state) =>
-    state && {
-      ...state,
-      frame: {
-        ...state.frame,
-        bonusActions: concat(buildContinuation(state), state.frame.bonusActions),
-        nextUse: NextUseClergy.OnlyPrior,
-        usableBuildings: append(building, state.frame.usableBuildings),
-      },
-    }
+    state &&
+    pipe(
+      set(lensPath(['frame', 'bonusActions']), concat(buildContinuation(state), state.frame.bonusActions)),
+      set(lensPath(['frame', 'nextUse']), NextUseClergy.OnlyPrior),
+      set(
+        lensPath(['frame', 'usableBuildings']),
+        append(
+          building,
+          intersection(
+            state.frame.neutralBuildingPhase ? allVacantUsableBuildings(state.players[1].landscape) : [],
+            state.frame.usableBuildings
+          )
+        )
+      )
+    )(state)
 
 export const build = ({ row, col, building }: GameCommandBuildParams): StateReducer =>
   pipe(
     // any of these not defined here are probably shared with SETTLE
     oncePerFrame(GameCommandEnum.BUILD),
-    checkLandscapeFree(row, col),
+    checkLandscapeFree(row, col, building),
     checkLandTypeMatches(row, col, building),
     checkCloisterAdjacency(row, col, building),
     payBuildingCost(building),
@@ -85,17 +92,30 @@ export const complete =
           [GameCommandEnum.BUILD],
           // return all buildings we have the resources for
           always(
-            filter((building: BuildingEnum): boolean => !!payCost(costForBuilding(building))(player), state.buildings)
+            filter(
+              (building: BuildingEnum): boolean =>
+                state.frame.neutralBuildingPhase || !!payCost(costForBuilding(building))(player),
+              state.buildings
+            )
           )
         )
         .with([GameCommandEnum.BUILD, P._], ([, building]) =>
-          // Return all the coords which match the terrain for this building...
-          erectableLocations(building as BuildingEnum, player)
+          state.frame.neutralBuildingPhase
+            ? // TODO: when building a cloister, only suggest empty or cloister spots
+              // TODO: when building a non-cloister, only suggest non-cloister spots
+
+              // in a neutral building phase, we can build on netural heartland on top of anything
+              ['0 0', '1 0', '2 0', '3 0', '4 0', '0 1', '1 1', '2 1', '3 1', '4 1']
+            : // all the coords which match the terrain for this building...
+              erectableLocations(building as BuildingEnum, player)
         )
         .with([GameCommandEnum.BUILD, P._, P._], ([, building, col]) =>
-          // Return all the coords which match the terrain from the previous step, and have
-          // the same prefix as the column
-          erectableLocationsCol(building as BuildingEnum, col, player)
+          state.frame.neutralBuildingPhase
+            ? // in a neutral building phase, we can build on netural heartland on top of anything
+              ['0', '1']
+            : // all the coords which match the terrain from the previous step, and have
+              // the same prefix as the column
+              erectableLocationsCol(building as BuildingEnum, col, player)
         )
         // TODO: only show '' if the command is ultimately valid
         .with([GameCommandEnum.BUILD, P._, P._, P._], always(['']))

@@ -125,7 +125,7 @@ export const disableFurtherUsage = (building: BuildingEnum): StateReducer =>
     (frame) =>
       frame && {
         ...frame,
-        unusableBuildings: [building],
+        unusableBuildings: [...frame.unusableBuildings, building],
       }
   )
 

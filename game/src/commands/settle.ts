@@ -45,7 +45,7 @@ export const settle = ({ row, col, settlement, resources }: GameCommandSettlePar
   return pipe(
     // any of these not defined here are probably shared with BUILD
     onlyViaBonusActions(GameCommandEnum.SETTLE),
-    checkLandscapeFree(row, col),
+    checkLandscapeFree(row, col, settlement),
     checkLandTypeMatches(row, col, settlement),
     payForSettlement(settlement, input),
     removeSettlementFromUnbuilt(settlement),

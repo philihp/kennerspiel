@@ -1,6 +1,7 @@
 import { match } from 'ts-pattern'
-import { BuildingEnum, ErectionEnum, LandEnum, SettlementEnum, Tile } from '../types'
-import { withActivePlayer } from './player'
+import { lensPath, set } from 'ramda'
+import { BuildingEnum, ErectionEnum, LandEnum, SettlementEnum, StateReducer, Tableau, Tile } from '../types'
+import { withPlayerIndex } from './player'
 
 export const terrainForErection = (erection: ErectionEnum): LandEnum[] =>
   match(erection)
@@ -33,20 +34,9 @@ export const terrainForErection = (erection: ErectionEnum): LandEnum[] =>
     )
     .otherwise(() => [LandEnum.Coast, LandEnum.Hillside, LandEnum.Plains])
 
-export const addErectionAtLandscape = (row: number, col: number, erection: ErectionEnum) =>
-  withActivePlayer((player) => {
-    const rowOff = row + player.landscapeOffset
-    const landscape = [
-      ...player.landscape.slice(0, rowOff),
-      [
-        ...player.landscape[rowOff].slice(0, col + 2),
-        [player.landscape[rowOff][col + 2][0], erection] as Tile,
-        ...player.landscape[rowOff].slice(col + 2 + 1),
-      ],
-      ...player.landscape.slice(rowOff + 1),
-    ]
-    return {
-      ...player,
-      landscape,
-    }
-  })
+export const addErectionAtLandscape =
+  (row: number, col: number, erection: ErectionEnum): StateReducer =>
+  (state) =>
+    withPlayerIndex(state?.frame.neutralBuildingPhase ? 1 : state?.frame.activePlayerIndex ?? 0)((player) =>
+      set(lensPath<Tableau, ErectionEnum>(['landscape', row + player.landscapeOffset, col + 2, 1]), erection, player)
+    )(state)

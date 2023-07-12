@@ -254,9 +254,24 @@ describe('commands/build', () => {
           players: [
             {
               ...s0.players[0],
+              color: PlayerColor.Red,
               landscape: [
-                [['W'], ['C'], ['P', 'G01'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-                [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+                [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
+                [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+              ] as Tile[][],
+              wood: 0,
+              clay: 0,
+              stone: 0,
+              straw: 0,
+              penny: 0,
+              nickel: 0,
+            },
+            {
+              ...s0.players[0],
+              color: PlayerColor.White,
+              landscape: [
+                [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
+                [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G01'], ['P', 'LW3'], [], []],
               ] as Tile[][],
               wood: 0,
               clay: 0,
@@ -277,7 +292,7 @@ describe('commands/build', () => {
             usableBuildings: [BuildingEnum.Priory],
           },
         }
-        const s2 = build({ row: 1, col: -1, building: BuildingEnum.Windmill })(s1)!
+        const s2 = build({ row: 1, col: 1, building: BuildingEnum.Windmill })(s1)!
         expect(s2).toBeDefined()
         expect(s2.buildings).not.toContain(BuildingEnum.Windmill)
         expect(s2.buildings).toContain(BuildingEnum.Bakery)
@@ -289,8 +304,20 @@ describe('commands/build', () => {
           penny: 0,
           nickel: 0,
           landscape: [
-            [['W'], ['C'], ['P', 'G01'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-            [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          ],
+        })
+        expect(s2.players[1]).toMatchObject({
+          wood: 0,
+          clay: 0,
+          stone: 0,
+          straw: 0,
+          penny: 0,
+          nickel: 0,
+          landscape: [
+            [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
+            [[], [], ['P'], ['P', 'F04'], ['P', 'LW2'], ['P', 'G01'], ['P', 'LW3'], [], []],
           ],
         })
         expect(s2.frame).toMatchObject({
@@ -298,18 +325,34 @@ describe('commands/build', () => {
           neutralBuildingPhase: true,
           mainActionUsed: true,
           bonusActions: [GameCommandEnum.BUILD],
-          usableBuildings: ['G01', 'F04'],
+          usableBuildings: [BuildingEnum.Priory, BuildingEnum.Windmill],
         })
       })
-      it('sets bonusActions after building to allow WORK_CONTRACT or BUILD after building the last building', () => {
+
+      it('does not allow overbuilding a cloister with a non-cloister', () => {
         const s1 = {
           ...s0,
           players: [
             {
               ...s0.players[0],
+              color: PlayerColor.Red,
               landscape: [
-                [['W'], ['C'], ['P', 'G01'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-                [['W'], ['C', 'F04'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+                [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
+                [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+              ] as Tile[][],
+              wood: 0,
+              clay: 0,
+              stone: 0,
+              straw: 0,
+              penny: 0,
+              nickel: 0,
+            },
+            {
+              ...s0.players[0],
+              color: PlayerColor.White,
+              landscape: [
+                [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
+                [[], [], ['P'], ['P', 'F04'], ['P', 'LW2'], ['P', 'G01'], ['P', 'LW3'], [], []],
               ] as Tile[][],
               wood: 0,
               clay: 0,
@@ -326,14 +369,112 @@ describe('commands/build', () => {
             activePlayerIndex: 0,
             neutralBuildingPhase: true,
             mainActionUsed: true,
+            nextUse: NextUseClergy.OnlyPrior,
+            bonusActions: [GameCommandEnum.BUILD],
+            usableBuildings: [BuildingEnum.Bakery, BuildingEnum.Windmill],
+          },
+        }
+        const s2 = build({ row: 1, col: 4, building: BuildingEnum.Bakery })(s1)!
+        expect(s2).toBeUndefined()
+      })
+
+      it('does not allow overbuilding a non-cloister with a cloister', () => {
+        const s1 = {
+          ...s0,
+          players: [
+            {
+              ...s0.players[0],
+              color: PlayerColor.Red,
+              landscape: [
+                [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
+                [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+              ] as Tile[][],
+              wood: 0,
+              clay: 0,
+              stone: 0,
+              straw: 0,
+              penny: 0,
+              nickel: 0,
+            },
+            {
+              ...s0.players[0],
+              color: PlayerColor.White,
+              landscape: [
+                [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
+                [[], [], ['P'], ['P', 'F04'], ['P', 'LW2'], ['P', 'F05'], ['P', 'LW3'], [], []],
+              ] as Tile[][],
+              wood: 0,
+              clay: 0,
+              stone: 0,
+              straw: 0,
+              penny: 0,
+              nickel: 0,
+            },
+            ...s0.players.slice(1),
+          ],
+          buildings: [BuildingEnum.Bakery],
+          frame: {
+            ...s0.frame,
+            activePlayerIndex: 0,
+            neutralBuildingPhase: true,
+            mainActionUsed: true,
+            nextUse: NextUseClergy.OnlyPrior,
             bonusActions: [GameCommandEnum.BUILD],
             usableBuildings: [BuildingEnum.Priory, BuildingEnum.Windmill],
           },
         }
-        const s2 = build({ row: 1, col: 0, building: BuildingEnum.Bakery })(s1)!
+        const s2 = build({ row: 1, col: 3, building: BuildingEnum.Priory })(s1)!
+        expect(s2).toBeUndefined()
+      })
+
+      it('allows overbuilding a newly-built building', () => {
+        const s1 = {
+          ...s0,
+          players: [
+            {
+              ...s0.players[0],
+              color: PlayerColor.Red,
+              landscape: [
+                [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
+                [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+              ] as Tile[][],
+              wood: 0,
+              clay: 0,
+              stone: 0,
+              straw: 0,
+              penny: 0,
+              nickel: 0,
+            },
+            {
+              ...s0.players[0],
+              color: PlayerColor.White,
+              landscape: [
+                [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
+                [[], [], ['P'], ['P', 'F04'], ['P', 'LW2'], ['P', 'G01'], ['P', 'LW3'], [], []],
+              ] as Tile[][],
+              wood: 0,
+              clay: 0,
+              stone: 0,
+              straw: 0,
+              penny: 0,
+              nickel: 0,
+            },
+            ...s0.players.slice(1),
+          ],
+          buildings: [BuildingEnum.Bakery],
+          frame: {
+            ...s0.frame,
+            activePlayerIndex: 0,
+            neutralBuildingPhase: true,
+            mainActionUsed: true,
+            nextUse: NextUseClergy.OnlyPrior,
+            bonusActions: [GameCommandEnum.BUILD],
+            usableBuildings: [BuildingEnum.Priory, BuildingEnum.Windmill],
+          },
+        }
+        const s2 = build({ row: 1, col: 1, building: BuildingEnum.Bakery })(s1)!
         expect(s2).toBeDefined()
-        expect(s2.buildings).not.toContain(BuildingEnum.Windmill)
-        expect(s2.buildings).not.toContain(BuildingEnum.Bakery)
+        expect(s2.buildings).toStrictEqual([])
         expect(s2.players[0]).toMatchObject({
           wood: 0,
           clay: 0,
@@ -342,16 +483,29 @@ describe('commands/build', () => {
           penny: 0,
           nickel: 0,
           landscape: [
-            [['W'], ['C'], ['P', 'G01'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-            [['W'], ['C', 'F04'], ['P', 'F05'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          ],
+        })
+        expect(s2.players[1]).toMatchObject({
+          wood: 0,
+          clay: 0,
+          stone: 0,
+          straw: 0,
+          penny: 0,
+          nickel: 0,
+          landscape: [
+            [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
+            [[], [], ['P'], ['P', 'F05'], ['P', 'LW2'], ['P', 'G01'], ['P', 'LW3'], [], []],
           ],
         })
         expect(s2.frame).toMatchObject({
           activePlayerIndex: 0,
           neutralBuildingPhase: true,
           mainActionUsed: true,
-          bonusActions: [GameCommandEnum.WORK_CONTRACT, GameCommandEnum.SETTLE],
-          usableBuildings: [BuildingEnum.Priory, BuildingEnum.Windmill, BuildingEnum.Bakery],
+          bonusActions: [GameCommandEnum.SETTLE, GameCommandEnum.COMMIT],
+          nextUse: NextUseClergy.OnlyPrior,
+          usableBuildings: ['G01', 'F05'],
         })
       })
     })
@@ -441,6 +595,38 @@ describe('commands/build', () => {
         BuildingEnum.StoneMerchant,
         // notice no noop here
       ])
+    })
+    it('gives all buildings, regardless of building materials, when in neutralBuildingPhase', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        buildings: [
+          BuildingEnum.Priory, // WoCl
+          BuildingEnum.CloisterCourtyard, // WoWo
+          BuildingEnum.GrainStorage, // WoSw
+          BuildingEnum.Windmill, // WoWoWoClCl
+          BuildingEnum.Bakery, // ClClSw
+        ],
+        players: [
+          {
+            ...s0.players[0],
+            wood: 0,
+            clay: 0,
+            straw: 0,
+            stone: 0,
+            penny: 0,
+            wine: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          neutralBuildingPhase: true,
+          mainActionUsed: true,
+          bonusActions: [GameCommandEnum.BUILD],
+        },
+      }
+      const c0 = complete(s1)(['BUILD'])
+      expect(c0).toStrictEqual(s1.buildings)
     })
     it('gives all the places the given building can be built', () => {
       const s1: GameStatePlaying = {

@@ -1,7 +1,12 @@
-import { all, always, any, curry, identity, includes, isEmpty, map, pipe, reduce, values, view } from 'ramda'
+import { any, identity, includes, isEmpty, lensPath, map, pipe, reduce, set, values, view, without } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
-import { moveClergyInBonusRoundTo, moveClergyToOwnBuilding } from '../board/landscape'
+import {
+  allVacantUsableBuildings,
+  moveClergyInBonusRoundTo,
+  moveClergyToNeutralBuilding,
+  moveClergyToOwnBuilding,
+} from '../board/landscape'
 import {
   alehouse,
   bakery,
@@ -87,12 +92,15 @@ const checkIfUseCanHappen =
 
     // but if mainActionUsed and bonusAction don't allow, still it is possible to use if
     // usableBuildings allows AND the building in question isn't in unusableBuildings
-    if (
-      (!building ||
-        (state.frame.usableBuildings.includes(building) === true &&
-          state.frame.unusableBuildings.includes(building) === false)) &&
-      [NextUseClergy.Free, NextUseClergy.OnlyPrior].includes(state.frame.nextUse)
-    ) {
+    if (building) {
+      if (
+        state.frame.usableBuildings.includes(building) === true &&
+        state.frame.unusableBuildings.includes(building) === false &&
+        [NextUseClergy.Free, NextUseClergy.OnlyPrior].includes(state.frame.nextUse)
+      ) {
+        return state
+      }
+    } else if (without(state.frame.unusableBuildings, state.frame.usableBuildings).length > 0) {
       return state
     }
 
@@ -110,6 +118,13 @@ const moveClergyTo =
   (state) => {
     if (state === undefined) return undefined
     if (state.frame.bonusRoundPlacement) return moveClergyInBonusRoundTo(building)(state)
+    if (state.frame.neutralBuildingPhase) {
+      return pipe(
+        //
+        moveClergyToNeutralBuilding(building),
+        set(lensPath(['frame', 'neutralBuildingPhase']), false)
+      )(state)
+    }
     return moveClergyToOwnBuilding(building)(state)
   }
 
@@ -214,6 +229,18 @@ export const complete =
     return match<string[], string[]>(partial)
       .with([], () => {
         if (checkIfUseCanHappen()(state) === undefined) return []
+
+        // really edge case, but in neutral building phase AFTER all buildings are placed
+        // AND ONLY IF the neutral player has a prior available do we allow USE
+        if (
+          state.frame.neutralBuildingPhase &&
+          state.buildings.length === 0 &&
+          state.frame.nextUse === NextUseClergy.OnlyPrior &&
+          any(identity, map(isPrior, view(lensPath(['players', 1]), state).clergy))
+        ) {
+          return [GameCommandEnum.USE]
+        }
+
         const hasClergyAvailable = view(activeLens(state), state).clergy?.length > 0
         const hasPriorAvailable = any(identity, map(isPrior, view(activeLens(state), state).clergy))
         if (
@@ -224,30 +251,9 @@ export const complete =
           return []
         return [GameCommandEnum.USE]
       })
-      .with([GameCommandEnum.USE], () => {
-        if (!isEmpty(state.frame.usableBuildings)) {
-          return state.frame.usableBuildings
-        }
-        return reduce(
-          (accum, row) =>
-            reduce(
-              (accum, tile) => {
-                const [, building, clergy] = tile
-                if (
-                  building !== undefined &&
-                  clergy === undefined &&
-                  [BuildingEnum.Forest, BuildingEnum.Peat].includes(building) === false
-                )
-                  accum.push(building)
-                return accum
-              },
-              accum,
-              row
-            ),
-          [] as BuildingEnum[],
-          player.landscape
-        )
-      })
+      .with([GameCommandEnum.USE], () =>
+        !isEmpty(state.frame.usableBuildings) ? state.frame.usableBuildings : allVacantUsableBuildings(player.landscape)
+      )
       .with(
         P.when(([command, building]) => command === GameCommandEnum.USE && includes(building, values(BuildingEnum))),
         ([, building, ...params]) => completeBuilding[building as BuildingEnum](params)(state)

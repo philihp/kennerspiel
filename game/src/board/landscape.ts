@@ -1,4 +1,19 @@
-import { addIndex, any, curry, filter, identity, map, pipe, range, reduce, reduced } from 'ramda'
+import {
+  addIndex,
+  any,
+  curry,
+  equals,
+  filter,
+  find,
+  lensPath,
+  map,
+  pipe,
+  range,
+  reduce,
+  reduced,
+  reject,
+  set,
+} from 'ramda'
 import { match } from 'ts-pattern'
 import {
   LandEnum,
@@ -106,16 +121,30 @@ const checkLandTypeMatchesPlayer = (row: number, col: number, erection: Erection
   return player
 }
 
-export const checkLandTypeMatches = (row: number, col: number, erection: ErectionEnum) =>
-  withActivePlayer(checkLandTypeMatchesPlayer(row, col, erection))
+export const checkLandTypeMatches =
+  (row: number, col: number, erection: ErectionEnum): StateReducer =>
+  (state) => {
+    if (state?.frame.neutralBuildingPhase) return state
+    return withActivePlayer(checkLandTypeMatchesPlayer(row, col, erection))(state)
+  }
 
-export const checkLandscapeFree = (row: number, col: number) => {
-  return withActivePlayer((player) => {
-    const [, erection] = player.landscape[row + player.landscapeOffset][col + 2]
-    if (erection !== undefined) return undefined
-    return player
-  })
-}
+export const checkLandscapeFree =
+  (row: number, col: number, toBuild: ErectionEnum): StateReducer =>
+  (state) => {
+    if (state?.frame.neutralBuildingPhase) {
+      return withPlayerIndex(1)((player) => {
+        const [, existing] = player.landscape[row + player.landscapeOffset][col + 2]
+        if (existing === undefined) return player
+        if (existing && isCloisterBuilding(existing) === isCloisterBuilding(toBuild)) return player
+        return undefined
+      })(state)
+    }
+    return withActivePlayer((player) => {
+      const [, erection] = player.landscape[row + player.landscapeOffset][col + 2]
+      if (erection !== undefined) return undefined
+      return player
+    })(state)
+  }
 
 export const checkCloisterAdjacencyPlayer = (row: number, col: number, building: ErectionEnum) => (player: Tableau) => {
   if (isCloisterBuilding(building) === false) return player
@@ -130,9 +159,15 @@ export const checkCloisterAdjacencyPlayer = (row: number, col: number, building:
     : undefined
 }
 
-export const checkCloisterAdjacency = (row: number, col: number, building: ErectionEnum): StateReducer => {
-  return withActivePlayer(checkCloisterAdjacencyPlayer(row, col, building))
-}
+export const checkCloisterAdjacency =
+  (row: number, col: number, building: ErectionEnum): StateReducer =>
+  (state) => {
+    if (state?.frame.neutralBuildingPhase) {
+      return withPlayerIndex(1)(checkCloisterAdjacencyPlayer(row, col, building))(state)
+    }
+    return withActivePlayer(checkCloisterAdjacencyPlayer(row, col, building))(state)
+  }
+
 export const moveClergyToOwnBuilding =
   (building: BuildingEnum): StateReducer =>
   (state) => {
@@ -154,26 +189,42 @@ export const moveClergyToOwnBuilding =
 
     if (nextClergy === undefined) return undefined
 
-    return withActivePlayer((player) => ({
-      ...player,
-      landscape: [
-        ...player.landscape.slice(0, row),
-        [
-          ...player.landscape[row].slice(0, col),
-          [land, building, nextClergy] as Tile,
-          ...player.landscape[row].slice(col + 1),
-        ],
-        ...player.landscape.slice(row + 1),
-      ],
-      clergy: filter((c) => c !== nextClergy)(player.clergy),
-    }))(state)
+    return withActivePlayer(
+      pipe(
+        //
+        set<Tableau, Tile>(lensPath(['landscape', row, col]), [land, building, nextClergy]),
+        set<Tableau, Clergy[]>(lensPath(['clergy']), filter((c) => c !== nextClergy)(player.clergy))
+      )
+    )(state)
+  }
+
+export const moveClergyToNeutralBuilding =
+  (building: BuildingEnum): StateReducer =>
+  (state) => {
+    if (state === undefined) return undefined
+    const neutralPlayer = state.players[1]
+    const matrixLocation = findBuildingWithoutOffset(building)(neutralPlayer.landscape)
+    if (matrixLocation === undefined) return undefined
+    const [row, col] = matrixLocation
+    const [land, ,] = neutralPlayer.landscape[row][col]
+    const nextClergy =
+      state.frame.nextUse === NextUseClergy.OnlyPrior ? find(isPrior, neutralPlayer.clergy) : neutralPlayer.clergy[0]
+    if (nextClergy === undefined) return undefined
+
+    return withPlayerIndex(1)(
+      pipe(
+        //
+        set<Tableau, Tile>(lensPath(['landscape', row, col]), [land, building, nextClergy]),
+        set<Tableau, Clergy[]>(lensPath(['clergy']), filter((c) => c !== nextClergy)(neutralPlayer.clergy))
+      )
+    )(state)
   }
 
 const removeClergyFromActivePlayer = (clergy: Clergy): StateReducer =>
   withActivePlayer((player) => {
     return {
       ...player,
-      clergy: filter(isLayBrother, player.clergy),
+      clergy: reject(equals(clergy), player.clergy),
     }
   })
 
@@ -359,3 +410,24 @@ export const erectableLocations = curry((erection: ErectionEnum, player: Tableau
     player.landscape
   )
 )
+
+export const allVacantUsableBuildings = (landscape: Tile[][]): BuildingEnum[] =>
+  reduce(
+    (accum, row) =>
+      reduce(
+        (accum, tile) => {
+          const [, building, clergy] = tile
+          if (
+            building !== undefined &&
+            clergy === undefined &&
+            [BuildingEnum.Forest, BuildingEnum.Peat].includes(building) === false
+          )
+            accum.push(building)
+          return accum
+        },
+        accum,
+        row
+      ),
+    [] as BuildingEnum[],
+    landscape
+  )
