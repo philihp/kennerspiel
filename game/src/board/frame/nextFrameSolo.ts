@@ -6,6 +6,7 @@ import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondelWithExpire } from './rotateRondel'
 import { introduceJokerToken } from '../rondel'
 import { checkSoloSettlementReady } from './checkSoloSettlementReady'
+import { introduceSettlements } from '../settlements'
 
 // TODO: joker comes out in A space
 
@@ -30,7 +31,7 @@ export const nextFrameSolo: FrameFlow = {
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings, addNeutralPlayer],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings, addNeutralPlayer, introduceSettlements],
     next: 2,
   },
   2: { next: 3 },
@@ -139,7 +140,7 @@ export const nextFrameSolo: FrameFlow = {
 
   24: {
     round: 12,
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings, introduceSettlements],
     next: 25,
   },
   25: {
@@ -187,7 +188,7 @@ export const nextFrameSolo: FrameFlow = {
 
   33: {
     round: 16,
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings, introduceSettlements],
     next: 34,
   },
   34: {
@@ -253,7 +254,7 @@ export const nextFrameSolo: FrameFlow = {
 
   46: {
     round: 22,
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings, introduceSettlements],
     next: 47,
   },
   47: {
@@ -292,7 +293,7 @@ export const nextFrameSolo: FrameFlow = {
 
   55: {
     round: 25,
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings, introduceSettlements],
     next: 56,
   },
   56: {

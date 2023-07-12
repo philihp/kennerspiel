@@ -201,5 +201,11 @@ describe('game-solo-settle', () => {
         [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],
       ],
     })
+    expect(s66.players[0]).toMatchObject({
+      settlements: ['SG1', 'SG2', 'SG3', 'SG4'],
+    })
+    expect(s66.players[1]).toMatchObject({
+      settlements: [],
+    })
   })
 })
