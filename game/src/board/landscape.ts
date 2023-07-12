@@ -1,4 +1,19 @@
-import { addIndex, any, curry, equals, filter, lensPath, map, pipe, range, reduce, reduced, reject, set } from 'ramda'
+import {
+  addIndex,
+  any,
+  curry,
+  equals,
+  filter,
+  find,
+  lensPath,
+  map,
+  pipe,
+  range,
+  reduce,
+  reduced,
+  reject,
+  set,
+} from 'ramda'
 import { match } from 'ts-pattern'
 import {
   LandEnum,
@@ -192,7 +207,8 @@ export const moveClergyToNeutralBuilding =
     if (matrixLocation === undefined) return undefined
     const [row, col] = matrixLocation
     const [land, ,] = neutralPlayer.landscape[row][col]
-    const nextClergy = neutralPlayer.clergy[0]
+    const nextClergy =
+      state.frame.nextUse === NextUseClergy.OnlyPrior ? find(isPrior, neutralPlayer.clergy) : neutralPlayer.clergy[0]
     if (nextClergy === undefined) return undefined
 
     return withPlayerIndex(1)(

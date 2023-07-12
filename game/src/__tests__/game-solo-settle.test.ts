@@ -122,8 +122,8 @@ describe('game-solo-settle', () => {
 
     expect(s62).toBeDefined()
 
-    // expect(s61.frame).toBe({})
     expect(s62.frame).toMatchObject({
+      nextUse: NextUseClergy.Any, // default before any neutralBuildingPhase builds
       mainActionUsed: true,
       bonusActions: ['BUILD'],
       neutralBuildingPhase: true,
@@ -144,19 +144,62 @@ describe('game-solo-settle', () => {
     // (3) placable on top of existing buildings
 
     const s63 = reducer(s62, ['BUILD', 'G02', '3', '1'])! as GameStatePlaying
+    expect(s63.frame).toMatchObject({
+      nextUse: NextUseClergy.OnlyPrior,
+    })
     const c63a = control(s63, [])
     expect(c63a.completion).toStrictEqual(['BUILD', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT'])
     const c63b = control(s63, ['BUILD'])
     expect(c63b.completion).toStrictEqual(['F08', 'G12'])
 
     const s64 = reducer(s63, ['BUILD', 'F08', '1', '0'])! as GameStatePlaying
+    expect(s64.frame).toMatchObject({
+      nextUse: NextUseClergy.OnlyPrior,
+    })
     const c64a = control(s64, [])
     expect(c64a.completion).toStrictEqual(['BUILD', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT'])
     const c64b = control(s64, ['BUILD'])
     expect(c64b.completion).toStrictEqual(['G12'])
 
     const s65 = reducer(s64, ['BUILD', 'G12', '2', '0'])! as GameStatePlaying
+    expect(s63.frame).toMatchObject({
+      nextUse: NextUseClergy.OnlyPrior,
+    })
     const c65a = control(s65, [])
-    expect(c65a.completion).toStrictEqual(['BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'SETTLE', 'COMMIT'])
+    expect(c65a.completion).toStrictEqual(['USE', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'SETTLE', 'COMMIT'])
+    const c65b = control(s65, ['USE'])
+    expect(c65b.completion).toStrictEqual(['G02', 'F08', 'G12'])
+    const c65c = control(s65, ['USE', 'G12'])
+    expect(c65c.completion).toContain('BrBrBrPnCoCo')
+
+    expect(s65.frame).toMatchObject({
+      bonusActions: ['SETTLE', 'COMMIT'],
+      bonusRoundPlacement: false,
+      canBuyLandscape: true,
+      mainActionUsed: true,
+      neutralBuildingPhase: true,
+      nextUse: NextUseClergy.OnlyPrior,
+      usableBuildings: ['G02', 'F08', 'G12'],
+    })
+    expect(s65.players[0]).toMatchObject({
+      penny: 11,
+      bread: 5,
+      coal: 10,
+    })
+    expect(s65.players[1]).toMatchObject({
+      clergy: ['LB2W', 'PRIW'],
+    })
+
+    const s66 = reducer(s65, ['USE', 'G12', 'BrBrBrPnCoCo'])! as GameStatePlaying
+    expect(s66.frame).toMatchObject({
+      usableBuildings: [],
+      neutralBuildingPhase: false, // after an optional USE (with prior), we are implicitly out of neutral building phase
+    })
+    expect(s66.players[1]).toMatchObject({
+      landscape: [
+        [[], [], ['P', 'G13', 'LB1W'], ['P', 'F08'], ['P', 'G12', 'PRIW'], ['P'], ['H', 'LW1'], [], []],
+        [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],
+      ],
+    })
   })
 })
