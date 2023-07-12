@@ -117,7 +117,7 @@ describe('game-solo-settle', () => {
     const s58 = reducer(s57, ['BUILD', 'F05', '2', '3'])! as GameStatePlaying
     const s59 = reducer(s58, ['USE', 'F05', 'FlFlFlFlFlFlFlCoCoBrBr'])! as GameStatePlaying
     const s60 = reducer(s59, ['COMMIT'])! as GameStatePlaying
-    const s61 = reducer(s60, ['BUILD', 'G02', '4', '3'])! as GameStatePlaying
+    const s61 = reducer(s60, ['BUILD', 'F11', '-1', '2'])! as GameStatePlaying
     const s62 = reducer(s61, ['COMMIT'])! as GameStatePlaying
 
     expect(s62).toBeDefined()
@@ -129,18 +129,34 @@ describe('game-solo-settle', () => {
       neutralBuildingPhase: true,
     })
     const c62a = control(s62, [])
+
+    // at this point, we should have BUILD, BUY_PLOT, BUY_DISTRICT, and CONVERT
+    // but not have COMMIT. need to build all remaining buildings.
     expect(c62a.completion).toStrictEqual(['BUILD', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT'])
     expect(c62a.completion).not.toContain('COMMIT')
 
     const c62b = control(s62, ['BUILD'])
-    expect(c62b.completion).toStrictEqual(['F08', 'F11', 'G12'])
+    expect(c62b.completion).toStrictEqual(['G02', 'F08', 'G12'])
 
-    // at this point, we should have BUILD, BUY_PLOT, BUY_DISTRICT, and CONVERT
-    // but not have COMMIT. need to build all remaining buildings.
-    // however they should be
     // (0) all buildable from completion
     // (1) free to build if built
     // (2) placed on top of neutral player board
     // (3) placable on top of existing buildings
+
+    const s63 = reducer(s62, ['BUILD', 'G02', '3', '1'])! as GameStatePlaying
+    const c63a = control(s63, [])
+    expect(c63a.completion).toStrictEqual(['BUILD', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT'])
+    const c63b = control(s63, ['BUILD'])
+    expect(c63b.completion).toStrictEqual(['F08', 'G12'])
+
+    const s64 = reducer(s63, ['BUILD', 'F08', '1', '0'])! as GameStatePlaying
+    const c64a = control(s64, [])
+    expect(c64a.completion).toStrictEqual(['BUILD', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT'])
+    const c64b = control(s64, ['BUILD'])
+    expect(c64b.completion).toStrictEqual(['G12'])
+
+    const s65 = reducer(s64, ['BUILD', 'G12', '2', '0'])! as GameStatePlaying
+    const c65a = control(s65, [])
+    expect(c65a.completion).toStrictEqual(['BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'SETTLE', 'COMMIT'])
   })
 })

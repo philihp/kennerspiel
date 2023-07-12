@@ -76,9 +76,10 @@ const checkModalPlayerHasPriorOption =
     if (clergy.length === 0) return undefined
 
     if (state.config.players === 1) {
+      const mover = moveClergyToNeutralBuilding(building)
       return pipe(
         //
-        moveClergyToNeutralBuilding(building),
+        mover,
         setFrameToAllowFreeUsage([building])
       )(state)
     }
