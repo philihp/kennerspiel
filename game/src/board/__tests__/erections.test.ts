@@ -11,7 +11,7 @@ describe('board/erections', () => {
         canBuildPlains: 0 | 1,
         canBuildHills: 0 | 1,
         canBuildMountain: 0 | 1,
-        erection: ErectionEnum
+        erection: ErectionEnum,
       ][] = [
         [0, 1, 1, 1, 0, BuildingEnum.Priory],
         [0, 1, 0, 1, 0, BuildingEnum.Windmill],
