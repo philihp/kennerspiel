@@ -82,7 +82,6 @@ describe('game-solo-settle', () => {
       mainActionUsed: true,
       usableBuildings: [],
       unusableBuildings: ['F09'], // prevents cycles
-      nextUse: NextUseClergy.Free,
       bonusActions: [],
     })
     expect(s51).toBeDefined()
@@ -120,8 +119,9 @@ describe('game-solo-settle', () => {
     const s61 = reducer(s60, ['BUILD', 'F11', '-1', '2'])! as GameStatePlaying
     const s62 = reducer(s61, ['COMMIT'])! as GameStatePlaying
 
-    expect(s62).toBeDefined()
-
+    expect(s62).toMatchObject({
+      buildings: ['G02', 'F08', 'G12'],
+    })
     expect(s62.frame).toMatchObject({
       nextUse: NextUseClergy.Any, // default before any neutralBuildingPhase builds
       mainActionUsed: true,
@@ -162,70 +162,78 @@ describe('game-solo-settle', () => {
     expect(c64b.completion).toStrictEqual(['G12'])
 
     const s65 = reducer(s64, ['BUILD', 'G12', '2', '0'])! as GameStatePlaying
-    expect(s63.frame).toMatchObject({
+    expect(s65.frame).toMatchObject({
       nextUse: NextUseClergy.OnlyPrior,
+      neutralBuildingPhase: true,
     })
     const c65a = control(s65, [])
-    expect(c65a.completion).toStrictEqual(['USE', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'SETTLE', 'COMMIT'])
-    const c65b = control(s65, ['USE'])
+    expect(c65a.completion).toStrictEqual(['WORK_CONTRACT', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'SETTLE', 'COMMIT'])
+    const c65b = control(s65, ['WORK_CONTRACT'])
     expect(c65b.completion).toStrictEqual(['G02', 'F08', 'G12'])
-    const c65c = control(s65, ['USE', 'G12'])
-    expect(c65c.completion).toContain('BrBrBrPnCoCo')
+    const c65c = control(s65, ['WORK_CONTRACT', 'G12'])
+    expect(c65c.completion).toContain('Pn')
 
-    expect(s65.frame).toMatchObject({
+    const s66 = reducer(s65, ['WORK_CONTRACT', 'G12', 'Pn'])! as GameStatePlaying
+
+    expect(s66.frame).toMatchObject({
       bonusActions: ['SETTLE', 'COMMIT'],
       bonusRoundPlacement: false,
       canBuyLandscape: true,
       mainActionUsed: true,
       neutralBuildingPhase: true,
-      nextUse: NextUseClergy.OnlyPrior,
-      usableBuildings: ['G02', 'F08', 'G12'],
+      nextUse: NextUseClergy.Free,
+      usableBuildings: ['G12'],
     })
-    expect(s65.players[0]).toMatchObject({
+    expect(s66.players[0]).toMatchObject({
       penny: 11,
       bread: 5,
       coal: 10,
     })
-    expect(s65.players[1]).toMatchObject({
-      clergy: ['LB2W', 'PRIW'],
-    })
-
-    const s66 = reducer(s65, ['USE', 'G12', 'BrBrBrPnCoCo'])! as GameStatePlaying
-    expect(s66.frame).toMatchObject({
-      usableBuildings: [],
-      neutralBuildingPhase: false, // after an optional USE (with prior), we are implicitly out of neutral building phase
-    })
     expect(s66.players[1]).toMatchObject({
+      clergy: ['LB2W'],
       landscape: [
         [[], [], ['P', 'G13', 'LB1W'], ['P', 'F08'], ['P', 'G12', 'PRIW'], ['P'], ['H', 'LW1'], [], []],
         [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],
       ],
     })
-    expect(s66.players[0]).toMatchObject({
+
+    const s67 = reducer(s65, ['USE', 'G12', 'BrBrBrPnCoCo'])! as GameStatePlaying
+    expect(s67.frame).toMatchObject({
+      usableBuildings: [],
+      neutralBuildingPhase: false, // after an optional USE (with prior), we are implicitly out of neutral building phase
+      nextUse: NextUseClergy.Any,
+    })
+    expect(s67.players[1]).toMatchObject({
+      landscape: [
+        [[], [], ['P', 'G13', 'LB1W'], ['P', 'F08'], ['P', 'G12', 'PRIW'], ['P'], ['H', 'LW1'], [], []],
+        [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],
+      ],
+    })
+    expect(s67.players[0]).toMatchObject({
       settlements: ['SG1', 'SG2', 'SG3', 'SG4'],
     })
-    expect(s66.players[1]).toMatchObject({
+    expect(s67.players[1]).toMatchObject({
       settlements: [],
     })
 
-    const c66a = control(s66, [])
-    expect(c66a.completion).toStrictEqual(['BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'SETTLE', 'COMMIT'])
-    const c66b = control(s66, ['SETTLE'])
-    expect(c66b.completion).toStrictEqual(['SG1', 'SG2', 'SG3', 'SG4'])
-    const c66c = control(s66, ['SETTLE', 'SG2'])
-    expect(c66c.completion).toStrictEqual(['3 0', '0 1', '0 2', '1 3', '3 3', '4 3'])
-    const c66d = control(s66, ['SETTLE', 'SG2', '3', '0'])
-    expect(c66d.completion).toContain('BrCo')
-    const c66e = control(s66, ['SETTLE', 'SG2', '3', '0', 'BrCo'])
-    expect(c66e.completion).toStrictEqual([''])
-
-    const s67 = reducer(s66, ['SETTLE', 'SG2', '3', '0', 'BrCo'])! as GameStatePlaying
     const c67a = control(s67, [])
-    expect(c67a.completion).toStrictEqual(['BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'COMMIT'])
+    expect(c67a.completion).toStrictEqual(['BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'SETTLE', 'COMMIT'])
+    const c67b = control(s67, ['SETTLE'])
+    expect(c67b.completion).toStrictEqual(['SG1', 'SG2', 'SG3', 'SG4'])
+    const c67c = control(s67, ['SETTLE', 'SG2'])
+    expect(c67c.completion).toStrictEqual(['3 0', '0 1', '0 2', '1 3', '3 3', '4 3'])
+    const c67d = control(s67, ['SETTLE', 'SG2', '3', '0'])
+    expect(c67d.completion).toContain('BrCo')
+    const c67e = control(s67, ['SETTLE', 'SG2', '3', '0', 'BrCo'])
+    expect(c67e.completion).toStrictEqual([''])
 
-    const s68 = reducer(s67, ['COMMIT'])! as GameStatePlaying
-    expect(s68.buildings).toStrictEqual(['F15', 'G16', 'F17', 'G18', 'G19'])
-    expect(s68.frame).toMatchObject({
+    const s68 = reducer(s67, ['SETTLE', 'SG2', '3', '0', 'BrCo'])! as GameStatePlaying
+    const c68a = control(s68, [])
+    expect(c68a.completion).toStrictEqual(['BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'COMMIT'])
+
+    const s69 = reducer(s68, ['COMMIT'])! as GameStatePlaying
+    expect(s69.buildings).toStrictEqual(['F15', 'G16', 'F17', 'G18', 'G19'])
+    expect(s69.frame).toMatchObject({
       mainActionUsed: false,
       bonusActions: [],
       nextUse: 'any',

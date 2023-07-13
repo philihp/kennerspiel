@@ -1,9 +1,9 @@
-import { all, any, curry, lens, lensProp, pipe, view } from 'ramda'
+import { all, lensProp, pipe, view } from 'ramda'
 import { match } from 'ts-pattern'
 import { addBonusAction, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
-import { moveClergyToOwnBuilding } from '../board/landscape'
 import { activeLens, isLayBrother, isPrior } from '../board/player'
 import { GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { moveClergyToOwnBuilding } from '../board/clergy'
 
 // there are two modes of this, really...
 

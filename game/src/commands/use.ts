@@ -1,12 +1,7 @@
-import { any, identity, includes, isEmpty, lensPath, map, pipe, reduce, set, values, view, without } from 'ramda'
+import { any, identity, includes, isEmpty, lensPath, lensProp, map, pipe, set, values, view, without } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
-import {
-  allVacantUsableBuildings,
-  moveClergyInBonusRoundTo,
-  moveClergyToNeutralBuilding,
-  moveClergyToOwnBuilding,
-} from '../board/landscape'
+import { allVacantUsableBuildings, moveClergyInBonusRoundTo } from '../board/landscape'
 import {
   alehouse,
   bakery,
@@ -78,8 +73,9 @@ import {
   winery,
   complete as completeBuilding,
 } from '../buildings'
-import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { BuildingEnum, Frame, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
 import { activeLens, isPrior } from '../board/player'
+import { moveClergyToNeutralBuilding, moveClergyToOwnBuilding } from '../board/clergy'
 
 const checkIfUseCanHappen =
   (building?: BuildingEnum): StateReducer =>
@@ -108,10 +104,12 @@ const checkIfUseCanHappen =
     return undefined
   }
 
-const clearUsableBuildings: StateReducer = withFrame((frame) => ({
-  ...frame,
-  usableBuildings: [],
-}))
+const clearUsableBuildings: StateReducer = withFrame(
+  pipe(
+    set<Frame, BuildingEnum[]>(lensProp('usableBuildings'), []),
+    set<Frame, NextUseClergy>(lensProp('nextUse'), NextUseClergy.Any)
+  )
+)
 
 const moveClergyTo =
   (building: BuildingEnum): StateReducer =>
@@ -229,18 +227,6 @@ export const complete =
     return match<string[], string[]>(partial)
       .with([], () => {
         if (checkIfUseCanHappen()(state) === undefined) return []
-
-        // really edge case, but in neutral building phase AFTER all buildings are placed
-        // AND ONLY IF the neutral player has a prior available do we allow USE
-        if (
-          state.frame.neutralBuildingPhase &&
-          state.buildings.length === 0 &&
-          state.frame.nextUse === NextUseClergy.OnlyPrior &&
-          any(identity, map(isPrior, view(lensPath(['players', 1]), state).clergy))
-        ) {
-          return [GameCommandEnum.USE]
-        }
-
         const hasClergyAvailable = view(activeLens(state), state).clergy?.length > 0
         const hasPriorAvailable = any(identity, map(isPrior, view(activeLens(state), state).clergy))
         if (

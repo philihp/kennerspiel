@@ -360,7 +360,10 @@ describe('commands/workContract', () => {
             wine: 0,
             whiskey: 1,
           },
-          ...s0.players.slice(1),
+          {
+            ...s0.players[1],
+            clergy: ['LB1B', 'PRIB'] as Clergy[],
+          },
         ],
         buildings: [],
         frame: {
@@ -368,6 +371,7 @@ describe('commands/workContract', () => {
           bonusActions: [GameCommandEnum.WORK_CONTRACT, GameCommandEnum.SETTLE],
           neutralBuildingPhase: true,
           mainActionUsed: true,
+          usableBuildings: [BuildingEnum.Bakery, BuildingEnum.Windmill],
         },
       }
       const c0 = complete(s1)([])

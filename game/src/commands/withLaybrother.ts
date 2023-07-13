@@ -1,8 +1,8 @@
-import { curry, pipe } from 'ramda'
+import { pipe } from 'ramda'
 import { match } from 'ts-pattern'
 import { revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
-import { moveClergyToOwnBuilding } from '../board/landscape'
 import { GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { moveClergyToOwnBuilding } from '../board/clergy'
 
 const withAnyForCurrentPlayer: StateReducer = withFrame((frame) => ({
   ...frame,

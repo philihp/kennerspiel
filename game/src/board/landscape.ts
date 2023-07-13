@@ -1,19 +1,4 @@
-import {
-  addIndex,
-  any,
-  curry,
-  equals,
-  filter,
-  find,
-  lensPath,
-  map,
-  pipe,
-  range,
-  reduce,
-  reduced,
-  reject,
-  set,
-} from 'ramda'
+import { addIndex, any, curry, equals, map, pipe, range, reduce, reduced, reject } from 'ramda'
 import { match } from 'ts-pattern'
 import {
   LandEnum,
@@ -23,12 +8,11 @@ import {
   Clergy,
   GameCommandConfigParams,
   ErectionEnum,
-  NextUseClergy,
   StateReducer,
   Tableau,
 } from '../types'
 import { terrainForErection } from './erections'
-import { isLayBrother, isPrior, withActivePlayer, withPlayerIndex } from './player'
+import { isPrior, withActivePlayer, withPlayerIndex } from './player'
 import { isCloisterBuilding } from './buildings'
 
 export const districtPrices = (config: GameCommandConfigParams): number[] =>
@@ -166,58 +150,6 @@ export const checkCloisterAdjacency =
       return withPlayerIndex(1)(checkCloisterAdjacencyPlayer(row, col, building))(state)
     }
     return withActivePlayer(checkCloisterAdjacencyPlayer(row, col, building))(state)
-  }
-
-export const moveClergyToOwnBuilding =
-  (building: BuildingEnum): StateReducer =>
-  (state) => {
-    if (state === undefined) return undefined
-    if (state.frame.nextUse === NextUseClergy.Free) return state
-    const player = state.players[state.frame.activePlayerIndex]
-    const matrixLocation = findBuildingWithoutOffset(building)(player.landscape)
-    if (matrixLocation === undefined) return undefined
-    const [row, col] = matrixLocation
-    const [land, ,] = player.landscape[row][col]
-
-    const priors = player.clergy.filter(isPrior)
-    if (state.frame.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
-    // ^this line unnecessary
-    const nextClergy = match(state.frame.nextUse)
-      .with(NextUseClergy.Any, () => player.clergy[0])
-      .with(NextUseClergy.OnlyPrior, () => priors[0])
-      .exhaustive()
-
-    if (nextClergy === undefined) return undefined
-
-    return withActivePlayer(
-      pipe(
-        //
-        set<Tableau, Tile>(lensPath(['landscape', row, col]), [land, building, nextClergy]),
-        set<Tableau, Clergy[]>(lensPath(['clergy']), filter((c) => c !== nextClergy)(player.clergy))
-      )
-    )(state)
-  }
-
-export const moveClergyToNeutralBuilding =
-  (building: BuildingEnum): StateReducer =>
-  (state) => {
-    if (state === undefined) return undefined
-    const neutralPlayer = state.players[1]
-    const matrixLocation = findBuildingWithoutOffset(building)(neutralPlayer.landscape)
-    if (matrixLocation === undefined) return undefined
-    const [row, col] = matrixLocation
-    const [land, ,] = neutralPlayer.landscape[row][col]
-    const nextClergy =
-      state.frame.nextUse === NextUseClergy.OnlyPrior ? find(isPrior, neutralPlayer.clergy) : neutralPlayer.clergy[0]
-    if (nextClergy === undefined) return undefined
-
-    return withPlayerIndex(1)(
-      pipe(
-        //
-        set<Tableau, Tile>(lensPath(['landscape', row, col]), [land, building, nextClergy]),
-        set<Tableau, Clergy[]>(lensPath(['clergy']), filter((c) => c !== nextClergy)(neutralPlayer.clergy))
-      )
-    )(state)
   }
 
 const removeClergyFromActivePlayer = (clergy: Clergy): StateReducer =>

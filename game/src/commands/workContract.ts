@@ -1,7 +1,7 @@
-import { all, find, forEach, pipe, range, reduce, view, without } from 'ramda'
+import { all, find, forEach, none, pipe, range, reduce, view, without } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { payCost, getCost, withActivePlayer, isLayBrother, isPrior, activeLens, withPlayerIndex } from '../board/player'
-import { findBuildingWithoutOffset, moveClergyToNeutralBuilding, moveClergyToOwnBuilding } from '../board/landscape'
+import { findBuildingWithoutOffset } from '../board/landscape'
 import { costMoney, parseResourceParam } from '../board/resource'
 import { oncePerFrame, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import {
@@ -10,10 +10,12 @@ import {
   Frame,
   GameCommandEnum,
   GameStatePlaying,
+  NextUseClergy,
   SettlementRound,
   StateReducer,
   Tile,
 } from '../types'
+import { moveClergyToNeutralBuilding, moveClergyToOwnBuilding } from '../board/clergy'
 
 const workContractCost = (state: GameStatePlaying | undefined): number =>
   state?.frame?.settlementRound === SettlementRound.S ||
@@ -103,7 +105,18 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
   const { penny } = input
   return pipe(
     // Only allow if mainAction not consumed, and consume it
-    oncePerFrame(GameCommandEnum.WORK_CONTRACT),
+    (state) => {
+      // edgey case, should be allowed at the end of a neutralBuildingPhase when all buildings are built
+      if (
+        state?.frame.neutralBuildingPhase &&
+        state?.frame.nextUse === NextUseClergy.OnlyPrior &&
+        state?.frame.usableBuildings.length > 0 &&
+        state?.buildings.length === 0
+      ) {
+        return state
+      }
+      return oncePerFrame(GameCommandEnum.WORK_CONTRACT)(state)
+    },
 
     // <-- check to make sure payment is enough
     checkWorkContractPayment(input),
@@ -131,10 +144,29 @@ export const complete =
   (partial: string[]): string[] =>
     match<string[], string[]>(partial)
       .with([], () => {
-        if (!state.frame.bonusActions.includes(GameCommandEnum.WORK_CONTRACT) && state.frame.mainActionUsed) return []
+        if (
+          state.frame.mainActionUsed &&
+          !state.frame.neutralBuildingPhase &&
+          !state.frame.bonusActions.includes(GameCommandEnum.WORK_CONTRACT)
+        )
+          return []
+
+        // if we're in a solo game's neutral building phase,
+        // and all buildings have been placed,
+        // BUT none are usable (being that none were actually placed)
+        // or the neutral player doesn't have a prior available
+        if (
+          state.frame.neutralBuildingPhase &&
+          (state.buildings.length > 0 ||
+            state.frame.usableBuildings.length === 0 ||
+            none(isPrior, state.players[1].clergy))
+        )
+          return []
+
+        // if active player can't possibly pay the work contract fee
         const activePlayer = view(activeLens(state), state)
-        // if this player can't possibly pay the work contract fee
         if (checkWorkContractPayment(activePlayer)(state) === undefined) return []
+
         // if all other players have no clergy available
         if (
           all(
@@ -146,31 +178,35 @@ export const complete =
           )
         )
           return []
-        // no need to check if there are buildings to be used, each player has 3 heartland buildings
+
+        // no need to check if there are buildings to be used, each player has 3 heartland buildings, so
+        // at least one of those is free.
         return [GameCommandEnum.WORK_CONTRACT]
       })
       .with([GameCommandEnum.WORK_CONTRACT], () =>
-        reduce<number, string[]>(
-          (accum: string[], i: number) => {
-            if (state.frame.activePlayerIndex === i) return accum
-            const player = state.players[i]
-            if (player.clergy.length === 0) return accum
-            forEach<Tile[], Tile[][]>(
-              forEach((landStack: Tile) => {
-                if (landStack.length === 0) return
-                const [, erection, clergy] = landStack
-                if (erection === undefined) return
-                if (clergy !== undefined) return
-                if ([BuildingEnum.Forest, BuildingEnum.Peat].includes(erection)) return
-                accum.push(erection)
-              }),
-              player.landscape
+        state.frame.neutralBuildingPhase
+          ? state.frame.usableBuildings
+          : reduce<number, string[]>(
+              (accum: string[], i: number) => {
+                if (state.frame.activePlayerIndex === i) return accum
+                const player = state.players[i]
+                if (player.clergy.length === 0) return accum
+                forEach<Tile[], Tile[][]>(
+                  forEach((landStack: Tile) => {
+                    if (landStack.length === 0) return
+                    const [, erection, clergy] = landStack
+                    if (erection === undefined) return
+                    if (clergy !== undefined) return
+                    if ([BuildingEnum.Forest, BuildingEnum.Peat].includes(erection)) return
+                    accum.push(erection)
+                  }),
+                  player.landscape
+                )
+                return accum
+              },
+              [] as BuildingEnum[],
+              range(0, state.players.length)
             )
-            return accum
-          },
-          [] as BuildingEnum[],
-          range(0, state.players.length)
-        )
       )
       .with([GameCommandEnum.WORK_CONTRACT, P._], () => {
         const options = []

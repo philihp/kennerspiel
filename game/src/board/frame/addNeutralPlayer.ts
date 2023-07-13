@@ -1,5 +1,4 @@
-import { createPcg32, randomInt } from 'fn-pcg'
-import { PCGState } from 'fn-pcg/dist/types'
+import { randomInt } from 'fn-pcg'
 import { BuildingEnum, LandEnum, PlayerColor, StateReducer, Tile } from '../../types'
 import { makeLandscape } from '../landscape'
 import { clergyForColor } from '../player'
