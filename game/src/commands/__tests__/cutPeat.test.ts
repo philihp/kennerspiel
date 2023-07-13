@@ -191,7 +191,7 @@ describe('commands/cutPeat', () => {
       const c0 = complete(s0)([GameCommandEnum.CUT_PEAT, '0', '1'])
       expect(c0).toStrictEqual(['', 'Jo'])
     })
-    it('if CUT_PEAT at a location, give empty string response', () => {
+    it('if CUT_PEAT at a location with joker, give empty string response', () => {
       const c0 = complete(s0)([GameCommandEnum.CUT_PEAT, '0', '1', 'Jo'])
       expect(c0).toStrictEqual([''])
     })
