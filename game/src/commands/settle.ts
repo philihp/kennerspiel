@@ -1,6 +1,6 @@
-import { addIndex, curry, filter, map, pipe, reduce, view } from 'ramda'
+import { filter, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { addErectionAtLandscape, terrainForErection } from '../board/erections'
+import { addErectionAtLandscape } from '../board/erections'
 import { onlyViaBonusActions } from '../board/frame'
 import { checkLandscapeFree, checkLandTypeMatches, erectableLocations, erectableLocationsCol } from '../board/landscape'
 import { activeLens, payCost, withActivePlayer } from '../board/player'
@@ -13,8 +13,6 @@ import {
   GameStatePlaying,
   SettlementEnum,
   StateReducer,
-  Tableau,
-  Tile,
 } from '../types'
 
 const payForSettlement = (settlement: SettlementEnum, resources: Cost) =>
@@ -76,12 +74,15 @@ export const complete =
           return []
         })
         .with([GameCommandEnum.SETTLE], () => {
-          return filter((settlement) => {
-            const playerFood = costFood(player)
-            const playerEnergy = costEnergy(player)
-            const { food: requiredFood, energy: requiredEnergy } = costForSettlement(settlement)
-            return playerFood >= requiredFood && playerEnergy >= requiredEnergy
-          }, view(activeLens(state), state).settlements)
+          return filter(
+            (settlement) => {
+              const playerFood = costFood(player)
+              const playerEnergy = costEnergy(player)
+              const { food: requiredFood, energy: requiredEnergy } = costForSettlement(settlement)
+              return playerFood >= requiredFood && playerEnergy >= requiredEnergy
+            },
+            view(activeLens(state), state).settlements
+          )
         })
         .with([GameCommandEnum.SETTLE, P._], ([, settlement]) =>
           // Return all the coords which match the terrain for this building...

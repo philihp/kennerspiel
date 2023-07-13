@@ -17,11 +17,8 @@ import {
   zipWith,
   zip,
   uniq,
-  sortBy,
-  tap,
   comparator,
   sort,
-  all,
 } from 'ramda'
 import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
 
@@ -149,15 +146,18 @@ const amountCostOptions =
     reduce(
       (accum, prevTrace) => {
         const [prevPrefix, prevFood] = prevTrace
-        map((numSheep) => {
-          const nextFood = prevFood - numSheep * foodValue
-          const nextPrefix = `${prevPrefix}${stringRepeater(token, numSheep)}`
-          if (nextFood <= 0) {
-            outputs.push(nextPrefix)
-          } else {
-            accum.push([nextPrefix, nextFood])
-          }
-        }, range(0, Math.min(totalCount, prevFood / foodValue) + 1))
+        map(
+          (numSheep) => {
+            const nextFood = prevFood - numSheep * foodValue
+            const nextPrefix = `${prevPrefix}${stringRepeater(token, numSheep)}`
+            if (nextFood <= 0) {
+              outputs.push(nextPrefix)
+            } else {
+              accum.push([nextPrefix, nextFood])
+            }
+          },
+          range(0, Math.min(totalCount, prevFood / foodValue) + 1)
+        )
         return accum
       },
       [] as Tracer[],
@@ -170,16 +170,19 @@ const rewardOptions =
     return reduce(
       (accum, prevTrace) => {
         const [prevPrefix, prevFood] = prevTrace
-        map((numSheep) => {
-          const nextFood = prevFood - numSheep * points
-          const nextPrefix = `${prevPrefix}${stringRepeater(token, numSheep)}`
-          if (nextFood >= 0) {
-            outputs.push(nextPrefix)
-          }
-          if (nextFood >= pointsNext) {
-            accum.push([nextPrefix, nextFood])
-          }
-        }, reverse(range(0, 1 + Math.floor(prevFood / points))))
+        map(
+          (numSheep) => {
+            const nextFood = prevFood - numSheep * points
+            const nextPrefix = `${prevPrefix}${stringRepeater(token, numSheep)}`
+            if (nextFood >= 0) {
+              outputs.push(nextPrefix)
+            }
+            if (nextFood >= pointsNext) {
+              accum.push([nextPrefix, nextFood])
+            }
+          },
+          reverse(range(0, 1 + Math.floor(prevFood / points)))
+        )
         return accum
       },
       [] as Tracer[],
