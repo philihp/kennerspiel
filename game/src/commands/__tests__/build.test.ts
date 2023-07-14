@@ -126,6 +126,33 @@ describe('commands/build', () => {
       const s4 = build({ row: 1, col: 0, building: BuildingEnum.Calefactory })(s3)!
       expect(s4).toBeUndefined()
     })
+    it('fails when building off-board', () => {
+      const s3: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          activePlayerIndex: 0,
+        },
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+            ] as Tile[][],
+            wood: 10,
+            penny: 10,
+            clay: 10,
+            stone: 10,
+            straw: 10,
+          },
+          ...s0.players.slice(1),
+        ],
+        buildings: [BuildingEnum.Windmill],
+      }
+      const s4 = build({ row: 1, col: -1, building: BuildingEnum.Windmill })(s3)!
+      expect(s4).toBeUndefined()
+    })
     it('fails when player cant afford building', () => {
       const s3: GameStatePlaying = {
         ...s0,

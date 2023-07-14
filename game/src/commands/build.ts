@@ -1,4 +1,4 @@
-import { pipe, view, filter, always, concat, append, set, lensPath, intersection } from 'ramda'
+import { pipe, view, filter, always, concat, append, set, lensPath, intersection, lensProp } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { costForBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
 import { addErectionAtLandscape } from '../board/erections'
@@ -14,6 +14,7 @@ import {
 import { activeLens, payCost, subtractCoins, withActivePlayer } from '../board/player'
 import {
   BuildingEnum,
+  Frame,
   GameCommandBuildParams,
   GameCommandEnum,
   GameStatePlaying,
@@ -50,19 +51,22 @@ export const allowPriorToUse =
   (building: BuildingEnum): StateReducer =>
   (state) =>
     state &&
-    pipe(
-      set(lensPath(['frame', 'bonusActions']), concat(buildContinuation(state), state.frame.bonusActions)),
-      set(lensPath(['frame', 'nextUse']), NextUseClergy.OnlyPrior),
-      set(
-        lensPath(['frame', 'usableBuildings']),
-        append(
-          building,
-          intersection(
-            state.frame.neutralBuildingPhase ? allVacantUsableBuildings(state.players[1].landscape) : [],
-            state.frame.usableBuildings
+    set<GameStatePlaying, Frame>(
+      lensProp('frame'),
+      pipe(
+        set(lensPath(['bonusActions']), concat(buildContinuation(state), state.frame.bonusActions)),
+        set(lensPath(['nextUse']), NextUseClergy.OnlyPrior),
+        set(
+          lensPath(['usableBuildings']),
+          append(
+            building,
+            intersection(
+              state.frame.neutralBuildingPhase ? allVacantUsableBuildings(state.players[1].landscape) : [],
+              state.frame.usableBuildings
+            )
           )
         )
-      )
+      )(state.frame)
     )(state)
 
 export const build = ({ row, col, building }: GameCommandBuildParams): StateReducer =>

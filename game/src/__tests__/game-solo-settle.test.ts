@@ -116,8 +116,24 @@ describe('game-solo-settle', () => {
     expect(s57).toBeDefined()
     const s58 = reducer(s57, ['BUILD', 'F05', '2', '3'])! as GameStatePlaying
     const s59 = reducer(s58, ['USE', 'F05', 'FlFlFlFlFlFlFlCoCoBrBr'])! as GameStatePlaying
-    const s60 = reducer(s59, ['COMMIT'])! as GameStatePlaying
+    const s59a = reducer(s59, ['COMMIT'])! as GameStatePlaying
+    const s60 = reducer(s59a, ['BUY_PLOT', '2', 'COAST'])! as GameStatePlaying
     const s61 = reducer(s60, ['BUILD', 'F11', '-1', '2'])! as GameStatePlaying
+
+    expect(s61.players[0]).toMatchObject({
+      landscape: [
+        [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'G06'], ['P'], ['H', 'LG1'], [], []],
+        [[], [], ['P'], ['P', 'F03'], ['P', 'LG2'], ['P', 'G01'], ['P', 'LG3'], [], []],
+        [['W'], ['C', 'F11'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['H', 'F04'], ['H', 'F09'], [], []],
+        [['W'], ['C'], ['P', 'LFO'], ['P'], ['P', 'F05', 'PRIG'], ['P'], ['H'], [], []],
+      ],
+    })
+    expect(s61.players[1]).toMatchObject({
+      landscape: [
+        [[], [], ['P', 'G13', 'LB1W'], ['P'], ['P'], ['P'], ['H', 'LW1'], [], []],
+        [[], [], ['P'], ['P'], ['P', 'LW2'], ['P'], ['P', 'LW3'], [], []],
+      ],
+    })
     const s62 = reducer(s61, ['COMMIT'])! as GameStatePlaying
 
     expect(s62).toBeDefined()
@@ -182,7 +198,7 @@ describe('game-solo-settle', () => {
       usableBuildings: ['G02', 'F08', 'G12'],
     })
     expect(s65.players[0]).toMatchObject({
-      penny: 11,
+      penny: 4,
       bread: 5,
       coal: 10,
     })
@@ -213,7 +229,7 @@ describe('game-solo-settle', () => {
     const c66b = control(s66, ['SETTLE'])
     expect(c66b.completion).toStrictEqual(['SG1', 'SG2', 'SG3', 'SG4'])
     const c66c = control(s66, ['SETTLE', 'SG2'])
-    expect(c66c.completion).toStrictEqual(['3 0', '0 1', '0 2', '1 3', '3 3', '4 3'])
+    expect(c66c.completion).toStrictEqual(['3 0', '0 1', '0 2', '-1 3', '1 3', '3 3', '4 3'])
     const c66d = control(s66, ['SETTLE', 'SG2', '3', '0'])
     expect(c66d.completion).toContain('BrCo')
     const c66e = control(s66, ['SETTLE', 'SG2', '3', '0', 'BrCo'])
