@@ -140,7 +140,8 @@ export const checkLandscapeFree =
       })(state)
     }
     return withActivePlayer((player) => {
-      const [, erection] = player.landscape[row + player.landscapeOffset][col + 2]
+      const [land, erection] = player.landscape[row + player.landscapeOffset][col + 2]
+      if (land === undefined) return undefined
       if (erection !== undefined) return undefined
       return player
     })(state)
