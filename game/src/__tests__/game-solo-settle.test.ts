@@ -230,12 +230,12 @@ describe('game-solo-settle', () => {
     expect(c66b.completion).toStrictEqual(['SG1', 'SG2', 'SG3', 'SG4'])
     const c66c = control(s66, ['SETTLE', 'SG2'])
     expect(c66c.completion).toStrictEqual(['3 0', '0 1', '0 2', '-1 3', '1 3', '3 3', '4 3'])
-    const c66d = control(s66, ['SETTLE', 'SG2', '3', '0'])
+    const c66d = control(s66, ['SETTLE', 'SG2', '3', '3'])
     expect(c66d.completion).toContain('BrCo')
-    const c66e = control(s66, ['SETTLE', 'SG2', '3', '0', 'BrCo'])
+    const c66e = control(s66, ['SETTLE', 'SG2', '3', '3', 'BrCo'])
     expect(c66e.completion).toStrictEqual([''])
 
-    const s67 = reducer(s66, ['SETTLE', 'SG2', '3', '0', 'BrCo'])! as GameStatePlaying
+    const s67 = reducer(s66, ['SETTLE', 'SG2', '3', '3', 'BrCo'])! as GameStatePlaying
     const c67a = control(s67, [])
     expect(c67a.completion).toStrictEqual(['BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'COMMIT'])
 
