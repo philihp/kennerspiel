@@ -462,9 +462,17 @@ export type Flower = {
   bonus: boolean
 }
 
+export type Score = {
+  goods: number
+  economic: number
+  settlements: number[]
+  total: number
+}
+
 export type Controls = {
   flow: Flower[]
   active: boolean
   partial?: string[]
   completion?: string[]
+  score: Score[]
 }

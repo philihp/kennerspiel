@@ -1,7 +1,7 @@
 import { match } from 'ts-pattern'
-import { always, head } from 'ramda'
+import { always, head, map, pipe, sum } from 'ramda'
 import { pickFrameFlow } from './board/frame'
-import { Flower, GameCommandEnum, GameStatePlaying, OrdinalFrame, Controls } from './types'
+import { Flower, GameCommandEnum, GameStatePlaying, OrdinalFrame, Controls, Tableau, Score } from './types'
 import {
   completeBuild,
   completeCommit,
@@ -16,6 +16,8 @@ import {
   completeBuyPlot,
   completeBuyDistrict,
 } from './commands'
+import { costPoints } from './board/resource'
+import { allBuildingPoints, allDwellingPoints } from './board/landscape'
 
 const computeFlow = (state: GameStatePlaying) => {
   const frameFlow = pickFrameFlow(state.config)
@@ -73,10 +75,26 @@ export const control = (state: GameStatePlaying, partial: string[], player?: num
     .with(GameCommandEnum.COMMIT, () => completeCommit(state)(partial))
     .otherwise(always([]))
 
+  const score = map(
+    pipe(
+      (player: Tableau): Score => ({
+        goods: costPoints(player),
+        economic: allBuildingPoints(player.landscape),
+        settlements: allDwellingPoints(player.landscape),
+        total: 0,
+      }),
+      (score: Score): Score => ({
+        ...score,
+        total: sum([...score.settlements, score.goods, score.economic]),
+      })
+    ),
+    state.players.slice(0, state.config.players)
+  )
   return {
     active: player === state.frame.activePlayerIndex,
     flow: computeFlow(state),
     partial,
     completion,
+    score,
   }
 }

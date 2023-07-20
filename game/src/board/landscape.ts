@@ -28,7 +28,7 @@ import {
   Tableau,
 } from '../types'
 import { terrainForErection } from './erections'
-import { isLayBrother, isPrior, withActivePlayer, withPlayerIndex } from './player'
+import { isPrior, withActivePlayer, withPlayerIndex } from './player'
 import { isCloisterBuilding } from './buildings'
 
 export const districtPrices = (config: GameCommandConfigParams): number[] =>
@@ -453,3 +453,7 @@ export const allVacantUsableBuildings = (landscape: Tile[][]): BuildingEnum[] =>
     [] as BuildingEnum[],
     landscape
   )
+
+export const allBuildingPoints = (landscape: Tile[][]): number => 0
+
+export const allDwellingPoints = (landscape: Tile[][]): number[] => [0]
