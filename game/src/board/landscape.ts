@@ -147,7 +147,7 @@ export const checkLandscapeFree =
     })(state)
   }
 
-const getAdjacentOffsets = (col: number): [number, number][] =>
+export const getAdjacentOffsets = (col: number): [number, number][] =>
   match<number, [number, number][]>(col)
     .with(5, () => [
       [1, 0], // south

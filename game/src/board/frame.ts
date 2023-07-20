@@ -18,7 +18,7 @@ import {
   StateReducer,
   Tile,
 } from '../types'
-import { findBuildingWithoutOffset, occupiedBuildingsForPlayers } from './landscape'
+import { findBuildingWithoutOffset, getAdjacentOffsets, occupiedBuildingsForPlayers } from './landscape'
 
 export const withFrame =
   (func: (frame: Frame) => Frame | undefined): StateReducer =>
@@ -139,13 +139,6 @@ const whichIndexHasBuilding =
     return undefined
   }
 
-const ADJACENT = [
-  [-1, 0],
-  [1, 0],
-  [0, -1],
-  [0, 1],
-]
-
 export const allowFreeUsageToNeighborsOf =
   (building: BuildingEnum): StateReducer =>
   (state) => {
@@ -166,7 +159,11 @@ export const allowFreeUsageToNeighborsOf =
           return accum
         },
         [] as BuildingEnum[],
-        map(([rowMod, colMod]) => [player, row + rowMod, col + colMod], ADJACENT) as [number, number, number][]
+        map(([rowMod, colMod]) => [player, row + rowMod, col + colMod], getAdjacentOffsets(col - 2)) as [
+          number,
+          number,
+          number,
+        ][]
       )
     )(state)
   }
