@@ -2,8 +2,8 @@ import { always, curry, identity, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costPoints, parseResourceParam, rewardCostOptions } from '../board/resource'
-import { BuildingEnum, Cost, GameStatePlaying, StateReducer, TableauReducer, Tile } from '../types'
-import { forestLocations, moorLocations } from '../board/landscape'
+import { Cost, GameStatePlaying, StateReducer, TableauReducer, Tile } from '../types'
+import { LANDSCAPES, forestLocations, moorLocations } from '../board/landscape'
 
 // TODO: refactor this with houseOfTheBrotherhood
 
@@ -11,8 +11,7 @@ const countForestsAndMoors: (landscape: readonly Tile[][]) => number = reduce(
   (accum: number, row: Tile[]) =>
     accum +
     reduce(
-      (accum: number, [, erection]: Tile) =>
-        erection && [BuildingEnum.Forest, BuildingEnum.Peat].includes(erection) ? accum + 1 : accum,
+      (accum: number, [, erection]: Tile) => (erection && LANDSCAPES.includes(erection) ? accum + 1 : accum),
       0,
       row
     ),

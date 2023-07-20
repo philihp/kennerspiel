@@ -316,7 +316,7 @@ export enum Clergy {
   PriorW = 'PRIW',
 }
 
-export type Tile = [LandEnum?, BuildingEnum?, Clergy?]
+export type Tile = [LandEnum?, ErectionEnum?, Clergy?]
 
 export type Tableau = Required<Cost> & {
   color: PlayerColor

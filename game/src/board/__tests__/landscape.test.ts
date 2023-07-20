@@ -6,6 +6,8 @@ import {
   findClergy,
   plotPrices,
   checkCloisterAdjacency,
+  allDwellingPoints,
+  allBuildingPoints,
 } from '../landscape'
 
 describe('board/landscape', () => {
@@ -304,5 +306,84 @@ describe('board/landscape', () => {
     it('returns undefined if not found', () => {
       expect(findBuilding(landscape, 0, BuildingEnum.Alehouse)).toStrictEqual({ row: undefined, col: undefined })
     })
+  })
+
+  describe('allBuildingPoints', () => {
+    const s0 = {
+      players: [
+        {
+          color: PlayerColor.Red,
+          landscape: [
+            [[], [], ['P', 'LPE'], ['P'], ['P'], ['P'], ['H'], [], []],
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], ['H', 'F08'], ['M']],
+            [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H', 'F09'], ['.']],
+            [[], [], ['P', 'G19'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G02'], [], []],
+          ] as Tile[][],
+          landscapeOffset: 1,
+        },
+        {
+          color: PlayerColor.Green,
+          landscape: [
+            [[], [], ['P'], ['P'], ['P', 'F04'], ['P'], ['H', 'LG1'], ['H'], ['M']],
+            [[], [], ['P'], ['P'], ['P', 'LG2'], ['P'], ['P', 'LG3'], ['H'], ['.']],
+            [[], [], ['P'], ['P'], ['P', 'F03'], ['P'], ['H', 'G01'], [], []],
+          ] as Tile[][],
+          landscapeOffset: 0,
+        },
+      ] as Tableau[],
+      frame: {
+        neutralBuildingPhase: false,
+        activePlayerIndex: 0,
+      } as Frame,
+    } as GameStatePlaying
+
+    it('works for a null board', () => {
+      expect(allBuildingPoints([[]])).toBe(0)
+    })
+
+    it('calculates the score of boards', () => {
+      expect(allBuildingPoints(s0.players[0].landscape)).toBe(26)
+      expect(allBuildingPoints(s0.players[1].landscape)).toBe(17)
+    })
+  })
+  describe('allDwellingPoints', () => {
+    const s0 = {
+      players: [
+        {
+          color: PlayerColor.Blue,
+          landscape: [
+            [[], [], ['P', 'LPE'], ['P'], ['P'], ['P'], ['H'], [], []],
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], ['H', 'F08'], ['M', 'SR1']],
+            [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], ['H', 'F09'], ['.']],
+            [[], [], ['P', 'G19'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G02'], ['SR2'], []],
+          ] as Tile[][],
+          landscapeOffset: 1,
+        },
+        {
+          color: PlayerColor.White,
+          landscape: [
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F10'], ['H'], ['M']],
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G12'], ['H', 'SW4'], ['.']],
+            [[], [], ['P'], ['P'], ['P', 'F04'], ['P', 'LFO'], ['H', 'LW1'], ['H', 'SW3'], ['M']],
+            [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'SW1'], ['P', 'LW3'], ['H'], ['.']],
+            [[], [], ['P'], ['P'], ['P', 'F03'], ['P', 'LFO'], ['H', 'G01'], [], []],
+          ] as Tile[][],
+          landscapeOffset: 2,
+        },
+      ] as Tableau[],
+      frame: {
+        neutralBuildingPhase: false,
+        activePlayerIndex: 0,
+      } as Frame,
+    } as GameStatePlaying
+
+    it('works for a null board', () => {
+      expect(allDwellingPoints([[]])).toStrictEqual([])
+    })
+
+    // it('calculates the score of boards', () => {
+    //   expect(allDwellingPoints(s0.players[0].landscape)).toStrictEqual([])
+    //   expect(allDwellingPoints(s0.players[1].landscape)).toStrictEqual([])
+    // })
   })
 })

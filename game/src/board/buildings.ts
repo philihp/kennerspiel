@@ -1,6 +1,14 @@
 import { filter, union } from 'ramda'
 import { match } from 'ts-pattern'
-import { BuildingEnum, Cost, ErectionEnum, GameCommandConfigParams, SettlementRound, StateReducer } from '../types'
+import {
+  BuildingEnum,
+  Cost,
+  ErectionEnum,
+  GameCommandConfigParams,
+  SettlementEnum,
+  SettlementRound,
+  StateReducer,
+} from '../types'
 
 export const costForBuilding = (building: BuildingEnum): Cost =>
   // TODO: needs ireland buildings
@@ -47,6 +55,11 @@ export const costForBuilding = (building: BuildingEnum): Cost =>
     .with(BuildingEnum.PilgrimageSite, () => ({ penny: 6 }))
     .with(BuildingEnum.Estate, () => ({ wood: 2, stone: 2 }))
     .otherwise(() => ({}))
+
+const SETTLEMENTS = Object.values(SettlementEnum)
+
+export const isSettlement = (building?: ErectionEnum): boolean =>
+  SETTLEMENTS.includes(building as unknown as SettlementEnum)
 
 export const isCloisterBuilding = (building?: ErectionEnum): boolean => {
   if (building === undefined) return false

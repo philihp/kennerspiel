@@ -13,6 +13,7 @@ import {
   reduced,
   reject,
   set,
+  tap,
 } from 'ramda'
 import { match } from 'ts-pattern'
 import {
@@ -27,9 +28,9 @@ import {
   StateReducer,
   Tableau,
 } from '../types'
-import { terrainForErection } from './erections'
+import { pointsForBuilding, terrainForErection } from './erections'
 import { isPrior, withActivePlayer, withPlayerIndex } from './player'
-import { isCloisterBuilding } from './buildings'
+import { isCloisterBuilding, isSettlement } from './buildings'
 
 export const districtPrices = (config: GameCommandConfigParams): number[] =>
   match(config)
@@ -314,23 +315,34 @@ export const moveClergyInBonusRoundTo =
   }
 
 // given a row of tiles, return all of the buildings where there is a building AND a clergy
-const occupiedBuildingsInRow = reduce(
-  (rAccum, [_, building, clergy]: Tile) => (building && clergy ? [...rAccum, building] : rAccum),
-  [] as BuildingEnum[]
-)
+const occupiedBuildingsInRow = (row: Tile[]) =>
+  reduce<Tile, BuildingEnum[]>(
+    (rAccum, [_, building, clergy]: Tile) => {
+      if (building !== undefined && clergy !== undefined && !isSettlement(building))
+        rAccum.push(building as BuildingEnum)
+      return rAccum
+    },
+    [] as BuildingEnum[],
+    row
+  )
 
 // given a list of rows, do the thing
-const occupiedBuildingsForLandscape = reduce(
-  (rAccum, landRow: Tile[]) => [...rAccum, ...occupiedBuildingsInRow(landRow as Tile[])],
-  [] as BuildingEnum[]
-)
-
-export const occupiedBuildingsForPlayers = (players: Tableau[]) =>
-  reduce(
-    (pAccum, { landscape }) => [...pAccum, ...occupiedBuildingsForLandscape(landscape)],
+const occupiedBuildingsForLandscape = (land: Tile[][]) =>
+  reduce<Tile[], BuildingEnum[]>(
+    (rAccum, landRow: Tile[]) => {
+      const occupied = occupiedBuildingsInRow(landRow)
+      rAccum.push(...occupied)
+      return rAccum
+    },
     [] as BuildingEnum[],
-    players
+    land
   )
+
+export const occupiedBuildingsForPlayers = reduce<Tableau, BuildingEnum[]>((pAccum, { landscape }) => {
+  const occupied = occupiedBuildingsForLandscape(landscape)
+  pAccum.push(...occupied)
+  return pAccum
+}, [] as BuildingEnum[])
 
 export const forestLocationsForCol = (rawCol: string, player: Tableau): string[] => {
   const col = Number.parseInt(rawCol, 10) + 2
@@ -433,6 +445,8 @@ export const erectableLocations = curry((erection: ErectionEnum, player: Tableau
   )
 )
 
+export const LANDSCAPES: ErectionEnum[] = [BuildingEnum.Forest, BuildingEnum.Peat]
+
 export const allVacantUsableBuildings = (landscape: Tile[][]): BuildingEnum[] =>
   reduce(
     (accum, row) =>
@@ -442,9 +456,10 @@ export const allVacantUsableBuildings = (landscape: Tile[][]): BuildingEnum[] =>
           if (
             building !== undefined &&
             clergy === undefined &&
-            [BuildingEnum.Forest, BuildingEnum.Peat].includes(building) === false
+            LANDSCAPES.includes(building) === false &&
+            isSettlement(building) === false
           )
-            accum.push(building)
+            accum.push(building as BuildingEnum)
           return accum
         },
         accum,
@@ -454,6 +469,41 @@ export const allVacantUsableBuildings = (landscape: Tile[][]): BuildingEnum[] =>
     landscape
   )
 
-export const allBuildingPoints = (landscape: Tile[][]): number => 0
+export const allBuildingPoints = (landscape: Tile[][]): number =>
+  reduce(
+    (accum: number, row: Tile[]) =>
+      reduce(
+        (accum: number, tile: Tile) => {
+          const [, building] = tile
+          if (building !== undefined && LANDSCAPES.includes(building) === false)
+            return accum + pointsForBuilding(building)
+          return accum
+        },
+        accum,
+        row
+      ),
+    0,
+    landscape
+  )
 
-export const allDwellingPoints = (landscape: Tile[][]): number[] => [0]
+export const allDwellingPoints = (landscape: Tile[][]): number[] =>
+  pipe(
+    // first get the coordinates of all of the settlements
+    (landscape: Tile[][]): [number, number][] => {
+      if (landscape === undefined) return []
+      const locations: [number, number][] = []
+      landscape.forEach((landRow: Tile[], r: number) => {
+        landRow.forEach(([_l, b, _c]: Tile, c: number) => {
+          if (b && isSettlement(b)) {
+            locations.push([r, c])
+          }
+        })
+      })
+      return locations
+    },
+    map(([row, col]) => {
+      const [, settlement] = landscape[row][col]
+      if (settlement === undefined) return 0
+      return pointsForBuilding(settlement)
+    })
+  )(landscape)

@@ -88,7 +88,7 @@ export const control = (state: GameStatePlaying, partial: string[], player?: num
         total: sum([...score.settlements, score.goods, score.economic]),
       })
     ),
-    state.players.slice(0, state.config.players)
+    state.players.slice(0, state.config.players) // this will remove neutral player
   )
   return {
     active: player === state.frame.activePlayerIndex,
