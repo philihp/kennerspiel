@@ -1,5 +1,12 @@
-import { BuildingEnum, Clergy, LandEnum, Tile } from '../../types'
-import { findBuildingWithoutOffset, districtPrices, findBuilding, findClergy, plotPrices } from '../landscape'
+import { BuildingEnum, Clergy, Frame, GameStatePlaying, LandEnum, PlayerColor, Tableau, Tile } from '../../types'
+import {
+  findBuildingWithoutOffset,
+  districtPrices,
+  findBuilding,
+  findClergy,
+  plotPrices,
+  checkCloisterAdjacency,
+} from '../landscape'
 
 describe('board/landscape', () => {
   describe('findBuildingWithoutOffset', () => {
@@ -51,6 +58,204 @@ describe('board/landscape', () => {
     })
     it('returns empty if it cant find', () => {
       expect(findClergy([Clergy.LayBrother2B])(landscape)).toStrictEqual([])
+    })
+  })
+
+  describe('checkCloisterAdjacencyPlayer', () => {
+    const p0 = {
+      color: PlayerColor.Red,
+      landscape: [
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+        [[], [], ['P'], ['P'], ['P'], ['P'], ['H', 'LR1'], ['H'], ['M']],
+        [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H'], ['.']],
+      ] as Tile[][],
+      landscapeOffset: 2,
+    } as Tableau
+    const s0 = {
+      players: [p0],
+      frame: {
+        neutralBuildingPhase: false,
+        activePlayerIndex: 0,
+      } as Frame,
+    } as GameStatePlaying
+    const building = BuildingEnum.CloisterWorkshop
+
+    it('returns state if building is not a cloister', () => {
+      const building = BuildingEnum.Bakery
+      expect(checkCloisterAdjacency(0, 0, building)(s0)).toBe(s0)
+    })
+    it('returns undefined if building is cloister and nothing around it', () => {
+      expect(checkCloisterAdjacency(0, 0, building)(s0)).toBeUndefined()
+    })
+    it('returns state if cloister to west', () => {
+      expect(checkCloisterAdjacency(1, 5, building)(s0)).toBe(s0)
+    })
+    it('returns state if cloister to north', () => {
+      const p1 = {
+        ...p0,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+        ] as Tile[][],
+        landscapeOffset: 0,
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1, ...s0.players.slice(1)],
+      }
+      expect(checkCloisterAdjacency(2, 4, building)(s1)).toBe(s1)
+    })
+    it('returns state if cloister to south', () => {
+      expect(checkCloisterAdjacency(0, 4, building)(s0)).toBe(s0)
+    })
+    it('returns state if cloister to east', () => {
+      expect(checkCloisterAdjacency(1, 3, building)(s0)).toBe(s0)
+    })
+    it('returns state if from a mountain column, the northwest spot is a cloister', () => {
+      const p1 = {
+        ...p0,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H', 'LR1']],
+          [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H', 'F17'], ['M']],
+          [[], [], [], [], [], [], [], ['H'], ['.']],
+        ] as Tile[][],
+        landscapeOffset: 2,
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1, ...s0.players.slice(1)],
+      }
+      expect(checkCloisterAdjacency(1, 6, building)(s1)).toBe(s1)
+    })
+    it('returns state if from a mountain column, the southwest spot is a cloister', () => {
+      const p1 = {
+        ...p0,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H', 'LR1'], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H', 'F17'], ['.']],
+        ] as Tile[][],
+        landscapeOffset: 2,
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1, ...s0.players.slice(1)],
+      }
+      expect(checkCloisterAdjacency(0, 6, building)(s1)).toBe(s1)
+    })
+    it('returns undefined if a cloister exists to east mountain from -1', () => {
+      // this should actually be impossible to do
+      const p1 = {
+        ...p0,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], ['H'], ['M', 'F17']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+        ] as Tile[][],
+        landscapeOffset: 0,
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1, ...s0.players.slice(1)],
+      }
+      expect(checkCloisterAdjacency(1, 5, building)(s1)).toBeUndefined()
+    })
+    it('returns state if a cloister exists to southeast mountain from 0', () => {
+      // this should actually be impossible to do
+      const p1 = {
+        ...p0,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], ['H'], ['M', 'F17']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+        ] as Tile[][],
+        landscapeOffset: 0,
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1, ...s0.players.slice(1)],
+      }
+      expect(checkCloisterAdjacency(2, 5, building)(s1)).toBe(s1)
+    })
+    it('returns state if a cloister exists to northeast mountain from +1', () => {
+      // this should actually be impossible to do
+      const p1 = {
+        ...p0,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], ['H'], ['M']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], ['H'], ['M', 'F17']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['.']],
+        ] as Tile[][],
+        landscapeOffset: 0,
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1, ...s0.players.slice(1)],
+      }
+      expect(checkCloisterAdjacency(3, 5, building)(s1)).toBe(s1)
+    })
+
+    it('returns undefined if a cloister exists to east mountain from -1 when offset', () => {
+      // this should actually be impossible to do
+      const p1 = {
+        ...p0,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M', 'F17']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], ['H'], ['.']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        ] as Tile[][],
+        landscapeOffset: 0,
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1, ...s0.players.slice(1)],
+      }
+      expect(checkCloisterAdjacency(0, 5, building)(s1)).toBeUndefined()
+    })
+    it('returns state if a cloister exists to southeast mountain from 0 when offset', () => {
+      // this should actually be impossible to do
+      const p1 = {
+        ...p0,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M', 'F17']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], ['H'], ['.']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        ] as Tile[][],
+        landscapeOffset: 0,
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1, ...s0.players.slice(1)],
+      }
+      expect(checkCloisterAdjacency(1, 5, building)(s1)).toBe(s1)
+    })
+    it('returns state if a cloister exists to northeast mountain from +1 when offset', () => {
+      // this should actually be impossible to do
+      const p1 = {
+        ...p0,
+        landscape: [
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], [], []],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M', 'F17']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['H'], ['H'], ['.']],
+          [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
+        ] as Tile[][],
+        landscapeOffset: 0,
+      } as Tableau
+      const s1 = {
+        ...s0,
+        players: [p1, ...s0.players.slice(1)],
+      }
+      expect(checkCloisterAdjacency(2, 5, building)(s1)).toBe(s1)
     })
   })
 

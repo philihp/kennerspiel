@@ -147,15 +147,36 @@ export const checkLandscapeFree =
     })(state)
   }
 
+export const getAdjacentOffsets = (col: number): [number, number][] =>
+  match<number, [number, number][]>(col)
+    .with(5, () => [
+      [1, 0], // south
+      [-1, 0], // north
+      [0, -1], // west
+      [-1, 1], // northeast
+      [0, 1], // southeast
+    ])
+    .with(6, () => [
+      [0, -1], // northwest
+      [1, -1], // southwest
+    ])
+    .otherwise(() => [
+      [1, 0], // south
+      [-1, 0], // north
+      [0, 1], // east
+      [0, -1], // west
+    ])
+
 export const checkCloisterAdjacencyPlayer = (row: number, col: number, building: ErectionEnum) => (player: Tableau) => {
   if (isCloisterBuilding(building) === false) return player
-  const { landscape, landscapeOffset } = player
-  return any(isCloisterBuilding, [
-    landscape[row + landscapeOffset + 1]?.[col + 2]?.[1],
-    landscape[row + landscapeOffset - 1]?.[col + 2]?.[1],
-    landscape[row + landscapeOffset]?.[col + 3]?.[1],
-    landscape[row + landscapeOffset]?.[col + 1]?.[1],
-  ])
+  return pipe<[number], [number, number][], (ErectionEnum | undefined)[], boolean>(
+    getAdjacentOffsets,
+    map(
+      ([rowOffset, colOffset]) =>
+        player?.landscape[row + rowOffset + (player.landscapeOffset ?? 0)]?.[col + 2 + colOffset]?.[1]
+    ),
+    any(isCloisterBuilding)
+  )(col)
     ? player
     : undefined
 }
