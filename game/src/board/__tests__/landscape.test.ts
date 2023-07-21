@@ -6,6 +6,8 @@ import {
   findClergy,
   plotPrices,
   checkCloisterAdjacency,
+  allDwellingPoints,
+  allBuildingPoints,
 } from '../landscape'
 
 describe('board/landscape', () => {
@@ -303,6 +305,115 @@ describe('board/landscape', () => {
     })
     it('returns undefined if not found', () => {
       expect(findBuilding(landscape, 0, BuildingEnum.Alehouse)).toStrictEqual({ row: undefined, col: undefined })
+    })
+  })
+
+  describe('allBuildingPoints', () => {
+    const s0 = {
+      players: [
+        {
+          color: PlayerColor.Red,
+          landscape: [
+            [[], [], ['P', 'LPE'], ['P'], ['P'], ['P'], ['H'], [], []],
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], ['H', 'F08'], ['M']],
+            [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H', 'F09'], ['.']],
+            [[], [], ['P', 'G19'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G02'], [], []],
+          ] as Tile[][],
+          landscapeOffset: 1,
+        },
+        {
+          color: PlayerColor.Green,
+          landscape: [
+            [[], [], ['P'], ['P'], ['P', 'F04'], ['P'], ['H', 'LG1'], ['H'], ['M']],
+            [[], [], ['P'], ['P'], ['P', 'LG2'], ['P'], ['P', 'LG3'], ['H'], ['.']],
+            [[], [], ['P'], ['P'], ['P', 'F03'], ['P'], ['H', 'G01'], [], []],
+          ] as Tile[][],
+          landscapeOffset: 0,
+        },
+      ] as Tableau[],
+      frame: {
+        neutralBuildingPhase: false,
+        activePlayerIndex: 0,
+      } as Frame,
+    } as GameStatePlaying
+
+    it('works for a null board', () => {
+      expect(allBuildingPoints([[]])).toBe(0)
+    })
+
+    it('calculates the score of boards', () => {
+      expect(allBuildingPoints(s0.players[0].landscape)).toBe(26)
+      expect(allBuildingPoints(s0.players[1].landscape)).toBe(17)
+    })
+  })
+  describe('allDwellingPoints', () => {
+    const s0 = {
+      players: [
+        {
+          color: PlayerColor.White,
+          landscape: [
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F10'], ['H', 'SW5'], ['M', 'G22']],
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G12'], ['H', 'SW3'], ['.']],
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'F04'], ['H', 'LW1'], ['H', 'SW8'], ['M', 'G28']],
+            [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'SW1'], ['P', 'LW3'], ['H', 'F14'], ['.']],
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'F03'], ['H', 'G01'], [], []],
+          ] as Tile[][],
+          landscapeOffset: 2,
+        },
+        {
+          color: PlayerColor.Blue,
+          landscape: [
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], ['H', 'F08'], ['M', 'SB1']],
+            [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], ['H', 'F09'], ['.']],
+            [[], [], ['P', 'G19'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G02'], ['H', 'SB2'], ['M']],
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G18'], ['H', 'F17'], ['.']],
+          ] as Tile[][],
+          landscapeOffset: 0,
+        },
+        {
+          color: PlayerColor.Red,
+          landscape: [
+            [['W'], ['C'], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H'], [], []],
+            [['W'], ['C', 'G26'], ['P', 'G13'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+            [['W'], ['C', 'SR4'], ['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+            [['W', 'I11'], ['C', 'SR7'], [], [], [], [], [], [], []],
+          ] as Tile[][],
+          landscapeOffset: 1,
+        },
+      ] as Tableau[],
+      frame: {
+        neutralBuildingPhase: false,
+        activePlayerIndex: 0,
+      } as Frame,
+    } as GameStatePlaying
+
+    it('works for a null board', () => {
+      expect(allDwellingPoints([[]])).toStrictEqual([])
+    })
+
+    it('detects mountain tiles adjacency', () => {
+      const scores = allDwellingPoints(s0.players[0].landscape)
+      expect(scores).toHaveLength(4)
+      expect(scores).toContain(3) // SW5
+      expect(scores).toContain(11) // SW1
+      expect(scores).toContain(12) // SW3
+      expect(scores).toContain(26) // SW8
+    })
+
+    it('calculates a settlement on a mountain tile', () => {
+      // no dwarves here, no settlements can be put into a mountain...
+      // but maybe an expansion might, so lets have a test against it!
+      const scores = allDwellingPoints(s0.players[1].landscape)
+      expect(scores).toHaveLength(2)
+      expect(scores).toContain(5) // SB1
+      expect(scores).toContain(12) // SB2
+    })
+
+    it('calculates values of water tiles as 3', () => {
+      const scores = allDwellingPoints(s0.players[2].landscape)
+      expect(scores).toHaveLength(2)
+      expect(scores).toContain(13) // SR4 // water should have a 3 settlement value
+      expect(scores).toContain(18) // SR7 // but if it has Houseboat, it's 6 settlement value
     })
   })
 })

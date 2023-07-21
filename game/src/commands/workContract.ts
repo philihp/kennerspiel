@@ -1,7 +1,12 @@
 import { all, find, forEach, pipe, range, reduce, view, without } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { payCost, getCost, withActivePlayer, isLayBrother, isPrior, activeLens, withPlayerIndex } from '../board/player'
-import { findBuildingWithoutOffset, moveClergyToNeutralBuilding, moveClergyToOwnBuilding } from '../board/landscape'
+import {
+  LANDSCAPES,
+  findBuildingWithoutOffset,
+  moveClergyToNeutralBuilding,
+  moveClergyToOwnBuilding,
+} from '../board/landscape'
 import { costMoney, parseResourceParam } from '../board/resource'
 import { oncePerFrame, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import {
@@ -14,6 +19,7 @@ import {
   StateReducer,
   Tile,
 } from '../types'
+import { isSettlement } from '../board/buildings'
 
 const workContractCost = (state: GameStatePlaying | undefined): number =>
   state?.frame?.settlementRound === SettlementRound.S ||
@@ -150,8 +156,8 @@ export const complete =
         return [GameCommandEnum.WORK_CONTRACT]
       })
       .with([GameCommandEnum.WORK_CONTRACT], () =>
-        reduce<number, string[]>(
-          (accum: string[], i: number) => {
+        reduce<number, BuildingEnum[]>(
+          (accum: BuildingEnum[], i: number) => {
             if (state.frame.activePlayerIndex === i) return accum
             const player = state.players[i]
             if (player.clergy.length === 0) return accum
@@ -161,8 +167,9 @@ export const complete =
                 const [, erection, clergy] = landStack
                 if (erection === undefined) return
                 if (clergy !== undefined) return
-                if ([BuildingEnum.Forest, BuildingEnum.Peat].includes(erection)) return
-                accum.push(erection)
+                if (LANDSCAPES.includes(erection)) return
+                if (isSettlement(erection)) return
+                accum.push(erection as BuildingEnum)
               }),
               player.landscape
             )

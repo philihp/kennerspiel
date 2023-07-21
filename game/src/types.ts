@@ -316,7 +316,7 @@ export enum Clergy {
   PriorW = 'PRIW',
 }
 
-export type Tile = [LandEnum?, BuildingEnum?, Clergy?]
+export type Tile = [LandEnum?, ErectionEnum?, Clergy?]
 
 export type Tableau = Required<Cost> & {
   color: PlayerColor
@@ -462,9 +462,17 @@ export type Flower = {
   bonus: boolean
 }
 
+export type Score = {
+  goods: number
+  economic: number
+  settlements: number[]
+  total: number
+}
+
 export type Controls = {
   flow: Flower[]
   active: boolean
   partial?: string[]
   completion?: string[]
+  score: Score[]
 }

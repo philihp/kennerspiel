@@ -19,6 +19,7 @@ import {
   Tile,
 } from '../types'
 import { findBuildingWithoutOffset, getAdjacentOffsets, occupiedBuildingsForPlayers } from './landscape'
+import { isSettlement } from './buildings'
 
 export const withFrame =
   (func: (frame: Frame) => Frame | undefined): StateReducer =>
@@ -155,7 +156,8 @@ export const allowFreeUsageToNeighborsOf =
           const [_, building, clergy] = landStack
           if (building === undefined) return accum
           if (clergy !== undefined) return accum
-          accum.push(building)
+          if (isSettlement(building)) return accum
+          accum.push(building as BuildingEnum)
           return accum
         },
         [] as BuildingEnum[],
