@@ -1,5 +1,5 @@
 import { BuildingEnum, ErectionEnum, LandEnum, SettlementEnum } from '../../types'
-import { terrainForErection } from '../erections'
+import { pointsForBuilding, pointsForDwelling, terrainForErection } from '../erections'
 
 describe('board/erections', () => {
   describe('terrainForErection', () => {
@@ -39,6 +39,87 @@ describe('board/erections', () => {
         expect(allowableTerrain.includes(LandEnum.Plains)).toBe(!!p)
         expect(allowableTerrain.includes(LandEnum.Hillside)).toBe(!!h)
         expect(allowableTerrain.includes(LandEnum.Mountain)).toBe(!!m)
+      })
+    })
+  })
+
+  describe('pointsForBuilding and pointsForDwelling', () => {
+    it('has all of the correct building values', () => {
+      // just some sanity here, i copied the building values from the reference sheet, but when i did
+      // the following, i copied them from the cards themselves.
+      const tests: [ErectionEnum, number, number][] = [
+        [BuildingEnum.Priory, 4, 3],
+        [BuildingEnum.CloisterCourtyard, 4, 4],
+        [BuildingEnum.GrainStorage, 3, 4],
+        [BuildingEnum.Windmill, 10, 6],
+        [BuildingEnum.Bakery, 4, 5],
+        [BuildingEnum.FuelMerchant, 5, 2],
+        [BuildingEnum.PeatCoalKiln, 4, -2],
+        [BuildingEnum.Market, 5, 8],
+        [BuildingEnum.CloisterGarden, 5, 0],
+        [BuildingEnum.Carpentry, 7, 0],
+        [BuildingEnum.HarborPromenade, 1, 7],
+        [BuildingEnum.StoneMerchant, 6, 1],
+        [BuildingEnum.BuildersMarket, 6, 1],
+        [BuildingEnum.GrapevineA, 3, 6],
+        [BuildingEnum.FinancedEstate, 4, 6],
+        [BuildingEnum.CloisterChapterHouse, 2, 5],
+        [BuildingEnum.CloisterLibrary, 7, 7],
+        [BuildingEnum.CloisterWorkshop, 7, 2],
+        [BuildingEnum.Slaughterhouse, 8, -3],
+        [BuildingEnum.Inn, 4, 6],
+        [BuildingEnum.Winery, 4, 5],
+        [BuildingEnum.QuarryA, 7, -4],
+        [BuildingEnum.Bathhouse, 2, 6],
+        [BuildingEnum.CloisterChurch, 12, 9],
+        [BuildingEnum.ChamberOfWonders, 0, 6],
+        [BuildingEnum.Shipyard, 15, -2],
+        [BuildingEnum.Palace, 25, 8],
+        [BuildingEnum.QuarryB, 7, -4],
+        [BuildingEnum.Castle, 15, 7],
+        [BuildingEnum.TownEstate, 6, 5],
+        [BuildingEnum.GrapevineB, 3, 6],
+        [BuildingEnum.Calefactory, 2, 5],
+        [BuildingEnum.ShippingCompany, 8, 4],
+        [BuildingEnum.Sacristy, 10, 7],
+        [BuildingEnum.ForgersWorkshop, 4, 2],
+        [BuildingEnum.PilgrimageSite, 2, 6],
+        [BuildingEnum.Dormitory, 3, 4],
+        [BuildingEnum.PrintingOffice, 5, 5],
+        [BuildingEnum.Estate, 5, 6],
+        [BuildingEnum.Hospice, 7, 5],
+        [BuildingEnum.HouseOfTheBrotherhood, 3, 3],
+        // and ireland
+        [BuildingEnum.Granary, 2, 3],
+        [BuildingEnum.Malthouse, 5, 4],
+        [BuildingEnum.Brewery, 9, 7],
+        [BuildingEnum.FalseLighthouse, 5, 5],
+        [BuildingEnum.SpinningMill, 3, 3],
+        [BuildingEnum.Cottage, 5, 0],
+        [BuildingEnum.Houseboat, 4, 6],
+        [BuildingEnum.SacredSite, 3, 6],
+        [BuildingEnum.DruidsHouse, 6, 6],
+        [BuildingEnum.Scriptorium, 3, 5],
+        [BuildingEnum.Alehouse, 3, 6],
+        [BuildingEnum.WhiskeyDistillery, 6, 5],
+        [BuildingEnum.Locutory, 7, 1],
+        [BuildingEnum.Chapel, 10, 8],
+        [BuildingEnum.Portico, 2, 6],
+        [BuildingEnum.GrandManor, 18, 7],
+        [BuildingEnum.ForestHut, 1, 5],
+        [BuildingEnum.Refectory, 4, 5],
+        [BuildingEnum.CoalHarbor, 12, 0],
+        [BuildingEnum.FilialChurch, 6, 7],
+        [BuildingEnum.Cooperage, 5, 3],
+        [BuildingEnum.RoundTower, 6, 9],
+        [BuildingEnum.Camera, 5, 3],
+        [BuildingEnum.Bulwark, 8, 6],
+        [BuildingEnum.FestivalGround, 3, 7],
+        [BuildingEnum.Guesthouse, 7, 5],
+      ]
+      tests.forEach(([erection, shield, dwelling]) => {
+        expect([erection, pointsForBuilding(erection)]).toStrictEqual([erection, shield])
+        expect([erection, pointsForDwelling(erection)]).toStrictEqual([erection, dwelling])
       })
     })
   })
