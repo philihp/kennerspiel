@@ -81,7 +81,7 @@ export const control = (state: GameStatePlaying, partial: string[], player?: num
         goods: costPoints(player),
         economic: allBuildingPoints(player.landscape),
         settlements: allDwellingPoints(player.landscape),
-        total: 0,
+        total: -Infinity,
       }),
       (score: Score): Score => ({
         ...score,

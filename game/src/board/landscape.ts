@@ -1,6 +1,7 @@
 import {
   addIndex,
   any,
+  append,
   curry,
   equals,
   filter,
@@ -13,7 +14,7 @@ import {
   reduced,
   reject,
   set,
-  tap,
+  sum,
 } from 'ramda'
 import { match } from 'ts-pattern'
 import {
@@ -28,7 +29,7 @@ import {
   StateReducer,
   Tableau,
 } from '../types'
-import { pointsForBuilding, terrainForErection } from './erections'
+import { pointsForBuilding, pointsForDwelling, terrainForErection } from './erections'
 import { isPrior, withActivePlayer, withPlayerIndex } from './player'
 import { isCloisterBuilding, isSettlement } from './buildings'
 
@@ -488,22 +489,41 @@ export const allBuildingPoints = (landscape: Tile[][]): number =>
 
 export const allDwellingPoints = (landscape: Tile[][]): number[] =>
   pipe(
-    // first get the coordinates of all of the settlements
+    // first get the coordinates of all of the settlements - column offset by 2, but dont worry about row offset (weird)
     (landscape: Tile[][]): [number, number][] => {
       if (landscape === undefined) return []
       const locations: [number, number][] = []
       landscape.forEach((landRow: Tile[], r: number) => {
         landRow.forEach(([_l, b, _c]: Tile, c: number) => {
           if (b && isSettlement(b)) {
-            locations.push([r, c])
+            locations.push([r, c - 2])
           }
         })
       })
       return locations
     },
-    map(([row, col]) => {
-      const [, settlement] = landscape[row][col]
-      if (settlement === undefined) return 0
-      return pointsForBuilding(settlement)
-    })
+    map(([row, col]) =>
+      pipe(
+        // get all of the offsets for the given column
+        getAdjacentOffsets,
+
+        // and also consider your own tile
+        append<[number, number]>([0, 0]),
+
+        // grab each of those tiles
+        map<[number, number], Tile>(([rowOff, colOff]) => landscape?.[row + rowOff]?.[col + colOff + 2]),
+
+        // and for each tile, calculate how much dwelling it adds
+        map<Tile, number>((tile) => {
+          if (tile === undefined) return 0
+          const [land, building] = tile
+          if (building !== undefined) return pointsForDwelling(building)
+          if (land === LandEnum.Water) return 3
+          return 0
+        }),
+
+        // and sum that all together
+        sum
+      )(col)
+    )
   )(landscape)

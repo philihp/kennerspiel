@@ -350,25 +350,35 @@ describe('board/landscape', () => {
     const s0 = {
       players: [
         {
-          color: PlayerColor.Blue,
-          landscape: [
-            [[], [], ['P', 'LPE'], ['P'], ['P'], ['P'], ['H'], [], []],
-            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], ['H', 'F08'], ['M', 'SR1']],
-            [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], ['H', 'F09'], ['.']],
-            [[], [], ['P', 'G19'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G02'], ['SR2'], []],
-          ] as Tile[][],
-          landscapeOffset: 1,
-        },
-        {
           color: PlayerColor.White,
           landscape: [
-            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F10'], ['H'], ['M']],
-            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G12'], ['H', 'SW4'], ['.']],
-            [[], [], ['P'], ['P'], ['P', 'F04'], ['P', 'LFO'], ['H', 'LW1'], ['H', 'SW3'], ['M']],
-            [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'SW1'], ['P', 'LW3'], ['H'], ['.']],
-            [[], [], ['P'], ['P'], ['P', 'F03'], ['P', 'LFO'], ['H', 'G01'], [], []],
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F10'], ['H', 'SW5'], ['M', 'G22']],
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G12'], ['H', 'SW3'], ['.']],
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'F04'], ['H', 'LW1'], ['H', 'SW8'], ['M', 'G28']],
+            [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'SW1'], ['P', 'LW3'], ['H', 'F14'], ['.']],
+            [[], [], ['P'], ['P'], ['P', 'LFO'], ['P', 'F03'], ['H', 'G01'], [], []],
           ] as Tile[][],
           landscapeOffset: 2,
+        },
+        {
+          color: PlayerColor.Blue,
+          landscape: [
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], ['H', 'F08'], ['M', 'SB1']],
+            [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], ['H', 'F09'], ['.']],
+            [[], [], ['P', 'G19'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G02'], ['H', 'SB2'], ['M']],
+            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G18'], ['H', 'F17'], ['.']],
+          ] as Tile[][],
+          landscapeOffset: 0,
+        },
+        {
+          color: PlayerColor.Red,
+          landscape: [
+            [['W'], ['C'], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H'], [], []],
+            [['W'], ['C', 'G26'], ['P', 'G13'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+            [['W'], ['C', 'SR4'], ['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+            [['W', 'I11'], ['C', 'SR7'], [], [], [], [], [], [], []],
+          ] as Tile[][],
+          landscapeOffset: 1,
         },
       ] as Tableau[],
       frame: {
@@ -381,9 +391,29 @@ describe('board/landscape', () => {
       expect(allDwellingPoints([[]])).toStrictEqual([])
     })
 
-    // it('calculates the score of boards', () => {
-    //   expect(allDwellingPoints(s0.players[0].landscape)).toStrictEqual([])
-    //   expect(allDwellingPoints(s0.players[1].landscape)).toStrictEqual([])
-    // })
+    it('detects mountain tiles adjacency', () => {
+      const scores = allDwellingPoints(s0.players[0].landscape)
+      expect(scores).toHaveLength(4)
+      expect(scores).toContain(3) // SW5
+      expect(scores).toContain(11) // SW1
+      expect(scores).toContain(12) // SW3
+      expect(scores).toContain(26) // SW8
+    })
+
+    it('calculates a settlement on a mountain tile', () => {
+      // no dwarves here, no settlements can be put into a mountain...
+      // but maybe an expansion might, so lets have a test against it!
+      const scores = allDwellingPoints(s0.players[1].landscape)
+      expect(scores).toHaveLength(2)
+      expect(scores).toContain(5) // SB1
+      expect(scores).toContain(12) // SB2
+    })
+
+    it('calculates values of water tiles as 3', () => {
+      const scores = allDwellingPoints(s0.players[2].landscape)
+      expect(scores).toHaveLength(2)
+      expect(scores).toContain(13) // SR4 // water should have a 3 settlement value
+      expect(scores).toContain(18) // SR7 // but if it has Houseboat, it's 6 settlement value
+    })
   })
 })
