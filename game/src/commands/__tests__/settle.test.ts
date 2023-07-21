@@ -139,6 +139,65 @@ describe('commands/build', () => {
         meat: 3,
       })
     })
+    it('settles on the player board during single player after building remaining buildings', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        buildings: [],
+        config: {
+          ...s0.config,
+          players: 1,
+        },
+        frame: {
+          ...s0.frame,
+          bonusActions: [GameCommandEnum.SETTLE],
+          activePlayerIndex: 0,
+          neutralBuildingPhase: true,
+        },
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G06'], ['H', 'LR1'], [], []],
+              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H', 'F09'], ['M']],
+              [[], [], ['P', 'G12'], ['P'], ['P', 'F05'], ['H'], ['H', 'F04'], ['H', 'G01'], ['.']],
+              [[], [], ['P', 'LFO'], ['P'], ['P'], ['P', 'F03'], ['H'], ['H'], ['M']],
+              [[], [], [], [], [], [], [], ['H'], ['.']],
+            ] as Tile[][],
+            landscapeOffset: 0,
+            bread: 1,
+            coal: 1,
+            settlements: [SettlementEnum.FarmingVillageR],
+          },
+          {
+            ...s0.players[1],
+            landscape: [
+              [[], [], ['P', 'G13'], ['P'], ['P', 'F08'], ['P', 'F11'], ['H', 'LW1'], [], []],
+              [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],
+            ] as Tile[][],
+          },
+        ],
+      }
+      const s2 = settle({ col: 3, row: 2, resources: 'BrCo', settlement: SettlementEnum.FarmingVillageR })(s1)!
+      expect(s2.players[0]).toMatchObject({
+        landscape: [
+          [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G06'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H', 'F09'], ['M']],
+          [[], [], ['P', 'G12'], ['P'], ['P', 'F05'], ['H', 'SR2'], ['H', 'F04'], ['H', 'G01'], ['.']],
+          [[], [], ['P', 'LFO'], ['P'], ['P'], ['P', 'F03'], ['H'], ['H'], ['M']],
+          [[], [], [], [], [], [], [], ['H'], ['.']],
+        ] as Tile[][],
+        landscapeOffset: 0,
+        bread: 0,
+        coal: 0,
+        settlements: [],
+      })
+      expect(s2.players[1]).toMatchObject({
+        landscape: [
+          [[], [], ['P', 'G13'], ['P'], ['P', 'F08'], ['P', 'F11'], ['H', 'LW1'], [], []],
+          [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],
+        ] as Tile[][],
+      })
+    })
   })
 
   describe('complete', () => {

@@ -133,16 +133,16 @@ export const checkLandTypeMatches =
 export const checkLandscapeFree =
   (row: number, col: number, toBuild: ErectionEnum): StateReducer =>
   (state) => {
-    if (state?.frame.neutralBuildingPhase) {
+    if (state?.frame.neutralBuildingPhase && isSettlement(toBuild) === false) {
       return withPlayerIndex(1)((player) => {
-        const [, existing] = player.landscape[row + player.landscapeOffset][col + 2]
+        const [, existing] = player.landscape?.[row + player.landscapeOffset]?.[col + 2] ?? []
         if (existing === undefined) return player
         if (existing && isCloisterBuilding(existing) === isCloisterBuilding(toBuild)) return player
         return undefined
       })(state)
     }
     return withActivePlayer((player) => {
-      const [land, erection] = player.landscape[row + player.landscapeOffset][col + 2]
+      const [land, erection] = player.landscape?.[row + player.landscapeOffset]?.[col + 2] ?? []
       if (land === undefined) return undefined
       if (erection !== undefined) return undefined
       return player
