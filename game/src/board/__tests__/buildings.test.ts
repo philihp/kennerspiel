@@ -217,6 +217,78 @@ describe('build/buildings', () => {
     it('returns empty cost for unknown building', () => {
       expect(costForBuilding('XXX' as BuildingEnum)).toStrictEqual({})
     })
+    it('returns appropriate building materials for Malthouse', () => {
+      expect(costForBuilding(BuildingEnum.Malthouse)).toStrictEqual({ clay: 2 })
+    })
+    it('returns appropriate building materials for Brewery', () => {
+      expect(costForBuilding(BuildingEnum.Brewery)).toStrictEqual({ stone: 2, straw: 1 })
+    })
+    it('returns appropriate building materials for FalseLighthouse', () => {
+      expect(costForBuilding(BuildingEnum.FalseLighthouse)).toStrictEqual({ wood: 2, clay: 1 })
+    })
+    it('returns appropriate building materials for SpinningMill', () => {
+      expect(costForBuilding(BuildingEnum.SpinningMill)).toStrictEqual({ wood: 1, straw: 1 })
+    })
+    it('returns appropriate building materials for Cottage', () => {
+      expect(costForBuilding(BuildingEnum.Cottage)).toStrictEqual({ stone: 1, straw: 1 })
+    })
+    it('returns appropriate building materials for Houseboat', () => {
+      expect(costForBuilding(BuildingEnum.Houseboat)).toStrictEqual({ wood: 1 })
+    })
+    it('returns appropriate building materials for SacredSite', () => {
+      expect(costForBuilding(BuildingEnum.SacredSite)).toStrictEqual({ stone: 1 })
+    })
+    it('returns appropriate building materials for DruidsHouse', () => {
+      expect(costForBuilding(BuildingEnum.DruidsHouse)).toStrictEqual({ stone: 1, clay: 1 })
+    })
+    it('returns appropriate building materials for Scriptorium', () => {
+      expect(costForBuilding(BuildingEnum.Scriptorium)).toStrictEqual({ wood: 1, straw: 1 })
+    })
+    it('returns appropriate building materials for Alehouse', () => {
+      expect(costForBuilding(BuildingEnum.Alehouse)).toStrictEqual({ wood: 1, stone: 1 })
+    })
+    it('returns appropriate building materials for Locutory', () => {
+      expect(costForBuilding(BuildingEnum.Locutory)).toStrictEqual({ wood: 3, clay: 2 })
+    })
+    it('returns appropriate building materials for Chapel', () => {
+      expect(costForBuilding(BuildingEnum.Chapel)).toStrictEqual({ clay: 3, stone: 3 })
+    })
+    it('returns appropriate building materials for Portico', () => {
+      expect(costForBuilding(BuildingEnum.Portico)).toStrictEqual({ clay: 2 })
+    })
+    it('returns appropriate building materials for GrandManor', () => {
+      expect(costForBuilding(BuildingEnum.GrandManor)).toStrictEqual({ penny: 20 })
+    })
+    it('returns appropriate building materials for ForestHut', () => {
+      expect(costForBuilding(BuildingEnum.ForestHut)).toStrictEqual({ clay: 1, straw: 1 })
+    })
+    it('returns appropriate building materials for Refectory', () => {
+      expect(costForBuilding(BuildingEnum.Refectory)).toStrictEqual({ wood: 1, clay: 2 })
+    })
+    it('returns appropriate building materials for CoalHarbor', () => {
+      expect(costForBuilding(BuildingEnum.CoalHarbor)).toStrictEqual({ clay: 1, stone: 2 })
+    })
+    it('returns appropriate building materials for FilialChurch', () => {
+      expect(costForBuilding(BuildingEnum.FilialChurch)).toStrictEqual({ wood: 3, clay: 4 })
+    })
+    it('returns appropriate building materials for Cooperage', () => {
+      expect(costForBuilding(BuildingEnum.Cooperage)).toStrictEqual({ clay: 3, straw: 1 })
+    })
+    it('returns appropriate building materials for RoundTower', () => {
+      expect(costForBuilding(BuildingEnum.RoundTower)).toStrictEqual({ stone: 4 })
+    })
+    it('returns appropriate building materials for Camera', () => {
+      expect(costForBuilding(BuildingEnum.Camera)).toStrictEqual({ clay: 2 })
+    })
+    it('returns appropriate building materials for Bulwark', () => {
+      expect(costForBuilding(BuildingEnum.Bulwark)).toStrictEqual({ clay: 4, wood: 2 })
+    })
+    it('returns appropriate building materials for FestivalGround', () => {
+      expect(costForBuilding(BuildingEnum.FestivalGround)).toStrictEqual({ penny: 10 })
+    })
+    it('returns appropriate building materials for Guesthouse', () => {
+      expect(costForBuilding(BuildingEnum.Guesthouse)).toStrictEqual({ wood: 3, straw: 1 })
+    })
   })
   describe('roundBuildings', () => {
     it('returns a list of buildings given a round', () => {
