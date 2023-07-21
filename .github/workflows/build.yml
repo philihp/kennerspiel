@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18.x
+          cache: "npm"
+          cache-dependency-path: server/package-lock.json
       - run: npm install -g hathora
       - run: hathora build --only server
   client:
@@ -33,5 +35,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18.x
+          cache: "npm"
+          cache-dependency-path: client/web/package-lock.json
       - run: npm install -g hathora
       - run: hathora build --only client
