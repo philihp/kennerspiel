@@ -150,6 +150,18 @@ describe('board/erections', () => {
         [SettlementEnum.HilltopVillageW, 10, 8],
         [BuildingEnum.Peat, 0, 0],
         [BuildingEnum.Forest, 0, 0],
+        [BuildingEnum.ClayMoundR, 0, 3],
+        [BuildingEnum.FarmYardR, 0, 2],
+        [BuildingEnum.CloisterOfficeR, 0, 2],
+        [BuildingEnum.ClayMoundG, 0, 3],
+        [BuildingEnum.FarmYardG, 0, 2],
+        [BuildingEnum.CloisterOfficeG, 0, 2],
+        [BuildingEnum.ClayMoundB, 0, 3],
+        [BuildingEnum.FarmYardB, 0, 2],
+        [BuildingEnum.CloisterOfficeB, 0, 2],
+        [BuildingEnum.ClayMoundW, 0, 3],
+        [BuildingEnum.FarmYardW, 0, 2],
+        [BuildingEnum.CloisterOfficeW, 0, 2],
       ]
       tests.forEach(([erection, shield, dwelling]) => {
         expect([erection, pointsForBuilding(erection)]).toStrictEqual([erection, shield])
