@@ -43,11 +43,11 @@ jobs:
           node-version: 18.x
       - run: npm install
       - run: npm run test --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage
-      - run: mv coverage/coverage-final.json coverage/${{matrix.shard}}.json
+      - run: mv game/coverage/coverage-final.json game/coverage/${{matrix.shard}}.json
       - uses: actions/upload-artifact@v3
         with:
           name: coverage-artifacts
-          path: coverage/
+          path: game/coverage/
 
   coverage:
     runs-on: ubuntu-latest
@@ -60,8 +60,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: coverage-artifacts
-          path: coverage
-      - run: npx nyc merge coverage/ merged-output/merged-coverage.json
+          path: game/coverage/
+      - run: npx nyc merge game/coverage/ game/merged-output/merged-coverage.json
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
