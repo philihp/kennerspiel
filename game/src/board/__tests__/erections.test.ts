@@ -148,7 +148,7 @@ describe('board/erections', () => {
         [SettlementEnum.HamletW, 3, 4],
         [SettlementEnum.VillageW, 8, 6],
         [SettlementEnum.HilltopVillageW, 10, 8],
-        [BuildingEnum.Peat, 0, 0],
+        [BuildingEnum.Moor, 0, 0],
         [BuildingEnum.Forest, 0, 0],
         [BuildingEnum.ClayMoundR, 0, 3],
         [BuildingEnum.FarmYardR, 0, 2],

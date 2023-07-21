@@ -77,7 +77,7 @@ describe('control', () => {
           color: PlayerColor.Red,
           landscape: [
             [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F03', 'LB1R'], ['H', 'LR1'], [], []],
-            [[], [], ['P', 'LPE'], ['P'], ['P', 'LR2'], ['P', 'G01'], ['P', 'LR3', 'LB2R'], [], []],
+            [[], [], ['P', 'LMO'], ['P'], ['P', 'LR2'], ['P', 'G01'], ['P', 'LR3', 'LB2R'], [], []],
           ] as Tile[][],
           landscapeOffset: 0,
           clergy: ['PRIR'] as Clergy[],

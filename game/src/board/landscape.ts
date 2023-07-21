@@ -94,7 +94,7 @@ export const findClergy =
     return locationsFound
   }
 
-const PP: Tile = [LandEnum.Plains, BuildingEnum.Peat]
+const PP: Tile = [LandEnum.Plains, BuildingEnum.Moor]
 const PF: Tile = [LandEnum.Plains, BuildingEnum.Forest]
 const P: Tile = [LandEnum.Plains]
 
@@ -378,7 +378,7 @@ export const moorLocationsForCol = (rawCol: string, player: Tableau): string[] =
   const colsAtRow = map((row: Tile[]) => row[col], player.landscape)
   return addIndex<Tile, string[]>(reduce<Tile, string[]>)(
     (accum: string[], tile: Tile, rowIndex: number) => {
-      if (tile[1] === BuildingEnum.Peat) accum.push(`${rowIndex - player.landscapeOffset}`)
+      if (tile[1] === BuildingEnum.Moor) accum.push(`${rowIndex - player.landscapeOffset}`)
       return accum
     },
     [] as string[],
@@ -391,7 +391,7 @@ export const moorLocations = (player: Tableau): string[] =>
     (accum: string[], row: Tile[], rowIndex: number) =>
       addIndex(reduce<Tile, string[]>)(
         (innerAccum: string[], tile: Tile, colIndex: number) => {
-          if (tile[1] === BuildingEnum.Peat) innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
+          if (tile[1] === BuildingEnum.Moor) innerAccum.push(`${colIndex - 2} ${rowIndex - player.landscapeOffset}`)
           return innerAccum
         },
         accum,
@@ -446,7 +446,7 @@ export const erectableLocations = curry((erection: ErectionEnum, player: Tableau
   )
 )
 
-export const LANDSCAPES: ErectionEnum[] = [BuildingEnum.Forest, BuildingEnum.Peat]
+export const LANDSCAPES: ErectionEnum[] = [BuildingEnum.Forest, BuildingEnum.Moor]
 
 export const allVacantUsableBuildings = (landscape: Tile[][]): BuildingEnum[] =>
   reduce(

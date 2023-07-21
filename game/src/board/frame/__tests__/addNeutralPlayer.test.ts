@@ -20,8 +20,8 @@ describe('board/frame/addNeutralPlayer', () => {
       clergy: ['LB1B', 'LB2B', 'PRIB'] as Clergy[],
       settlements: [],
       landscape: [
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
       ] as Tile[][],
       wonders: 0,
       landscapeOffset: 0,
@@ -86,8 +86,8 @@ describe('board/frame/addNeutralPlayer', () => {
     it('creates appropriate landscapes', () => {
       const s1 = addNeutralPlayer(s0)!
       expect(s1.players[0].landscape).toStrictEqual([
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
       ])
       expect(s1.players[1].landscape).toStrictEqual([
         [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['H', 'LR1'], [], []],

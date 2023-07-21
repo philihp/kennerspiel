@@ -17,7 +17,7 @@ describe('commands/convert', () => {
     settlements: [],
     landscape: [
       [['W'], ['C'], [], [], [], [], [], [], []],
-      [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
       [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
     ] as Tile[][],
     wonders: 0,

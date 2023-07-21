@@ -91,22 +91,22 @@ describe('commands/start', () => {
       expect(dst?.players).toHaveLength(4)
       expect(dst?.players?.[0]?.landscape).toStrictEqual([
         [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LW1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3'], [], []],
       ])
       expect(dst?.players?.[0]?.clergy).toStrictEqual(['LB1W', 'PRIW'])
       expect(dst?.players?.[1]?.landscape).toStrictEqual([
         [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
       ])
       expect(dst?.players?.[1]?.clergy).toStrictEqual(['LB1B', 'PRIB'])
       expect(dst?.players?.[2]?.landscape).toStrictEqual([
         [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LG1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P'], ['P', 'LG3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LG2'], ['P'], ['P', 'LG3'], [], []],
       ])
       expect(dst?.players?.[2]?.clergy).toStrictEqual(['LB1G', 'PRIG'])
       expect(dst?.players?.[3]?.landscape).toStrictEqual([
         [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
       ])
       expect(dst?.players?.[3]?.clergy).toStrictEqual(['LB1R', 'PRIR'])
     })
@@ -131,17 +131,17 @@ describe('commands/start', () => {
       expect(dst?.players).toHaveLength(3)
       expect(dst?.players?.[0]?.landscape).toStrictEqual([
         [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
       ])
       expect(dst?.players?.[0]?.clergy).toStrictEqual(['LB1R', 'PRIR'])
       expect(dst?.players?.[1]?.landscape).toStrictEqual([
         [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
       ])
       expect(dst?.players?.[1]?.clergy).toStrictEqual(['LB1B', 'PRIB'])
       expect(dst?.players?.[2]?.landscape).toStrictEqual([
         [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LW1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3'], [], []],
       ])
       expect(dst?.players?.[2]?.clergy).toStrictEqual(['LB1W', 'PRIW'])
     })

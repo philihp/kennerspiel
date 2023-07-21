@@ -4,8 +4,8 @@ import { removeHomelandForestMoor } from '../removeHomelandForestMoor'
 describe('board/frame/removeHomelandForestMoor', () => {
   const p0 = {
     landscape: [
-      [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
-      [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
+      [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
+      [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
     ] as Tile[][],
   } as Tableau
 
@@ -13,7 +13,7 @@ describe('board/frame/removeHomelandForestMoor', () => {
     const p1 = removeHomelandForestMoor(p0)
     expect(p1.landscape).toStrictEqual([
       [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
-      [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
+      [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
     ])
   })
 })

@@ -141,7 +141,7 @@ export { winery } from './winery'
 // could just have an array, but this will make sure every command is covered, and
 // direct lookups are faster, and i could just directly import, too, i guess
 export const complete: Record<BuildingEnum, (partial: string[]) => (state: GameStatePlaying) => string[]> = {
-  [BuildingEnum.Peat]: always(always([])),
+  [BuildingEnum.Moor]: always(always([])),
   [BuildingEnum.Forest]: always(always([])),
   [BuildingEnum.ClayMoundR]: completeClayMound,
   [BuildingEnum.ClayMoundG]: completeClayMound,

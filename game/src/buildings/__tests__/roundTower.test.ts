@@ -17,8 +17,8 @@ describe('buildings/roundTower', () => {
     clergy: ['PRIB'] as Clergy[],
     settlements: [],
     landscape: [
-      [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G41'], ['H', 'LB1'], [], []],
-      [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G01'], ['P', 'LB3', 'LB2B'], [], []],
+      [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G41'], ['H', 'LB1'], [], []],
+      [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G01'], ['P', 'LB3', 'LB2B'], [], []],
       [['W'], ['C', 'G26', 'LB1B'], [], [], [], [], []],
     ] as Tile[][],
     wonders: 0,
