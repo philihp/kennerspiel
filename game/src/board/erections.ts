@@ -2,6 +2,7 @@ import { match } from 'ts-pattern'
 import { lensPath, set } from 'ramda'
 import { BuildingEnum, ErectionEnum, LandEnum, SettlementEnum, StateReducer, Tableau, Tile } from '../types'
 import { withPlayerIndex } from './player'
+import { isSettlement } from './buildings'
 
 export const terrainForErection = (erection: ErectionEnum): LandEnum[] =>
   match(erection)
@@ -37,7 +38,9 @@ export const terrainForErection = (erection: ErectionEnum): LandEnum[] =>
 export const addErectionAtLandscape =
   (row: number, col: number, erection: ErectionEnum): StateReducer =>
   (state) =>
-    withPlayerIndex(state?.frame.neutralBuildingPhase ? 1 : state?.frame.activePlayerIndex ?? 0)((player) =>
+    withPlayerIndex(
+      state?.frame.neutralBuildingPhase && !isSettlement(erection) ? 1 : state?.frame.activePlayerIndex ?? 0
+    )((player) =>
       set(lensPath<Tableau, ErectionEnum>(['landscape', row + player.landscapeOffset, col + 2, 1]), erection, player)
     )(state)
 
