@@ -20,7 +20,7 @@ describe('commands/withPrior', () => {
     settlements: [],
     landscape: [
       [['W'], ['C'], [], [], [], [], [], [], []],
-      [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
       [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
     ] as Tile[][],
     wonders: 0,
@@ -152,8 +152,8 @@ describe('commands/withPrior', () => {
             // this is the active player
             clergy: ['PRIR'] as Clergy[],
             landscape: [
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R'], [], []],
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2', 'LB1R'], ['P', 'G01'], ['P', 'LR3'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2', 'LB1R'], ['P', 'G01'], ['P', 'LR3'], [], []],
             ] as Tile[][],
             grain: 4,
             penny: 4,
@@ -170,7 +170,7 @@ describe('commands/withPrior', () => {
               [
                 ['W'],
                 ['C', 'F04', 'PRIB'],
-                ['P', 'LPE'],
+                ['P', 'LMO'],
                 ['P', 'LFO'],
                 ['P', 'LFO'],
                 ['P'],
@@ -178,7 +178,7 @@ describe('commands/withPrior', () => {
                 ['H'],
                 ['.'],
               ],
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02'], ['P', 'LB3'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02'], ['P', 'LB3'], [], []],
             ] as Tile[][],
             landscapeOffset: 1,
           },
@@ -188,8 +188,8 @@ describe('commands/withPrior', () => {
             // specifically, green has both laybrother and prior, so she will be put to a decision
             clergy: ['LB1G', 'LB2G', 'PRIG'] as Clergy[],
             landscape: [
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05'], ['H', 'LG1'], [], []],
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05'], ['H', 'LG1'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
             ] as Tile[][],
             penny: 1,
             landscapeOffset: 0,
@@ -200,11 +200,11 @@ describe('commands/withPrior', () => {
             // white has already had their people all placed, so a work contract against them should fail
             clergy: [] as Clergy[],
             landscape: [
-              [['W'], ['C', 'F11'], ['P', 'LPE'], ['P'], ['P', 'LFO'], ['P', 'F03', 'PRIW'], ['H', 'LG1'], [], []],
+              [['W'], ['C', 'F11'], ['P', 'LMO'], ['P'], ['P', 'LFO'], ['P', 'F03', 'PRIW'], ['H', 'LG1'], [], []],
               [
                 ['W'],
                 ['C', 'G07'],
-                ['P', 'LPE'],
+                ['P', 'LMO'],
                 ['P', 'LFO'],
                 ['P', 'LG2', 'LG1W'],
                 ['P'],
@@ -268,8 +268,8 @@ describe('commands/withPrior', () => {
         expect(s2.players[2]).toMatchObject({
           clergy: ['LB1G', 'LB2G'],
           landscape: [
-            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05', 'PRIG'], ['H', 'LG1'], [], []],
-            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
+            [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05', 'PRIG'], ['H', 'LG1'], [], []],
+            [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
           ] as Tile[][],
         })
       })

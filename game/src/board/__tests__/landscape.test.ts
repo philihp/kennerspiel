@@ -21,7 +21,7 @@ describe('board/landscape', () => {
         [LandEnum.Hillside, BuildingEnum.ChamberOfWonders, Clergy.LayBrother1B],
       ],
       [
-        [LandEnum.Plains, BuildingEnum.Peat],
+        [LandEnum.Plains, BuildingEnum.Moor],
         [LandEnum.Plains, BuildingEnum.Forest],
         [LandEnum.Hillside, BuildingEnum.FarmYardB, Clergy.PriorB],
         [LandEnum.Hillside],
@@ -45,7 +45,7 @@ describe('board/landscape', () => {
         [LandEnum.Hillside, BuildingEnum.ChamberOfWonders, Clergy.LayBrother1B],
       ],
       [
-        [LandEnum.Plains, BuildingEnum.Peat],
+        [LandEnum.Plains, BuildingEnum.Moor],
         [LandEnum.Plains, BuildingEnum.Forest],
         [LandEnum.Hillside, BuildingEnum.FarmYardB, Clergy.PriorB],
         [LandEnum.Hillside],
@@ -293,7 +293,7 @@ describe('board/landscape', () => {
         [LandEnum.Hillside, BuildingEnum.ChamberOfWonders, Clergy.LayBrother1B],
       ],
       [
-        [LandEnum.Plains, BuildingEnum.Peat],
+        [LandEnum.Plains, BuildingEnum.Moor],
         [LandEnum.Plains, BuildingEnum.Forest],
         [LandEnum.Hillside, BuildingEnum.FarmYardB, Clergy.PriorB],
         [LandEnum.Hillside],
@@ -314,8 +314,8 @@ describe('board/landscape', () => {
         {
           color: PlayerColor.Red,
           landscape: [
-            [[], [], ['P', 'LPE'], ['P'], ['P'], ['P'], ['H'], [], []],
-            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], ['H', 'F08'], ['M']],
+            [[], [], ['P', 'LMO'], ['P'], ['P'], ['P'], ['H'], [], []],
+            [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], ['H', 'F08'], ['M']],
             [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H', 'F09'], ['.']],
             [[], [], ['P', 'G19'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G02'], [], []],
           ] as Tile[][],
@@ -363,10 +363,10 @@ describe('board/landscape', () => {
         {
           color: PlayerColor.Blue,
           landscape: [
-            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], ['H', 'F08'], ['M', 'SB1']],
+            [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], ['H', 'F08'], ['M', 'SB1']],
             [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], ['H', 'F09'], ['.']],
             [[], [], ['P', 'G19'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G02'], ['H', 'SB2'], ['M']],
-            [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G18'], ['H', 'F17'], ['.']],
+            [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'G18'], ['H', 'F17'], ['.']],
           ] as Tile[][],
           landscapeOffset: 0,
         },

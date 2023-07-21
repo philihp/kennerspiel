@@ -18,7 +18,7 @@ describe('buildings/farmyard', () => {
     settlements: [],
     landscape: [
       [['W'], ['C'], [], [], [], [], [], [], []],
-      [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
       [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
     ] as Tile[][],
     wonders: 0,
@@ -67,7 +67,7 @@ describe('buildings/farmyard', () => {
         color: PlayerColor.Blue,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
-          [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
+          [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
           [[], [], ['P'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
         ] as Tile[][],
         landscapeOffset: 1,
@@ -77,7 +77,7 @@ describe('buildings/farmyard', () => {
         color: PlayerColor.Red,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
-          [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
           [[], [], ['P'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
         ] as Tile[][],
         landscapeOffset: 1,
@@ -87,7 +87,7 @@ describe('buildings/farmyard', () => {
         color: PlayerColor.White,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
-          [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LW1'], [], []],
+          [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LW1'], [], []],
           [[], [], ['P'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3'], [], []],
         ] as Tile[][],
         landscapeOffset: 1,

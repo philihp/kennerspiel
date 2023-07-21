@@ -113,7 +113,7 @@ const expandLandscape = (y: number) =>
 const newDistrict = (side: 'PLAINS' | 'HILLS'): Tile[] =>
   match(side)
     .with('HILLS', () => [
-      [LandEnum.Plains, BuildingEnum.Peat] as Tile,
+      [LandEnum.Plains, BuildingEnum.Moor] as Tile,
       [LandEnum.Plains, BuildingEnum.Forest] as Tile,
       [LandEnum.Plains, BuildingEnum.Forest] as Tile,
       [LandEnum.Hillside] as Tile,

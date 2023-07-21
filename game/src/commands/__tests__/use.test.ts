@@ -172,7 +172,7 @@ describe('commands/use', () => {
     settlements: [],
     landscape: [
       [['W'], ['C'], [], [], [], [], [], [], []],
-      [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
       [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
     ] as Tile[][],
     wonders: 0,
@@ -222,7 +222,7 @@ describe('commands/use', () => {
         clergy: ['LB1R', 'LB2R', 'PRIR'] as Clergy[],
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
-          [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
+          [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
           [[], [], ['P'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
         ] as Tile[][],
         landscapeOffset: 1,
@@ -233,7 +233,7 @@ describe('commands/use', () => {
         clergy: ['LB1G', 'LB2G', 'PRIG'] as Clergy[],
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
-          [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LG1'], [], []],
+          [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LG1'], [], []],
           [[], [], ['P'], ['P', 'LFO'], ['P', 'LG2'], ['P'], ['P', 'LG3'], [], []],
         ] as Tile[][],
         landscapeOffset: 1,
@@ -244,7 +244,7 @@ describe('commands/use', () => {
         clergy: ['LB1B', 'LB2B', 'PRIB'] as Clergy[],
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
-          [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], [], []],
+          [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], [], []],
           [[], [], ['P'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
         ] as Tile[][],
         landscapeOffset: 1,

@@ -83,8 +83,8 @@ describe('commands/workContract', () => {
         // this is the active player
         clergy: ['PRIR'] as Clergy[],
         landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R'], [], []],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2', 'LB1R'], ['P', 'G01'], ['P', 'LR3'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2', 'LB1R'], ['P', 'G01'], ['P', 'LR3'], [], []],
         ] as Tile[][],
         grain: 4,
         penny: 4,
@@ -98,8 +98,8 @@ describe('commands/workContract', () => {
         clergy: ['LB1B', 'LB2B'] as Clergy[],
         landscape: [
           [['W'], ['C'], [], [], [], [], [], ['H'], ['M']],
-          [['W'], ['C', 'F04', 'PRIB'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02'], ['P', 'LB3'], [], []],
+          [['W'], ['C', 'F04', 'PRIB'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02'], ['P', 'LB3'], [], []],
         ] as Tile[][],
         landscapeOffset: 1,
       },
@@ -109,8 +109,8 @@ describe('commands/workContract', () => {
         // specifically, green has both laybrother and prior, so she will be put to a decision
         clergy: ['LB1G', 'LB2G', 'PRIG'] as Clergy[],
         landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05'], ['H', 'LG1'], [], []],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05'], ['H', 'LG1'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
         ] as Tile[][],
         penny: 1,
         landscapeOffset: 0,
@@ -121,8 +121,8 @@ describe('commands/workContract', () => {
         // white has already had their people all placed, so a work contract against them should fail
         clergy: [] as Clergy[],
         landscape: [
-          [['W'], ['C', 'F11'], ['P', 'LPE'], ['P'], ['P', 'LFO'], ['P', 'F03', 'PRIW'], ['H', 'LG1'], [], []],
-          [['W'], ['C', 'G07'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2', 'LG1W'], ['P'], ['P', 'LG3', 'LG2W'], [], []],
+          [['W'], ['C', 'F11'], ['P', 'LMO'], ['P'], ['P', 'LFO'], ['P', 'F03', 'PRIW'], ['H', 'LG1'], [], []],
+          [['W'], ['C', 'G07'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LG2', 'LG1W'], ['P'], ['P', 'LG3', 'LG2W'], [], []],
         ] as Tile[][],
         landscapeOffset: 0,
       },
@@ -148,8 +148,8 @@ describe('commands/workContract', () => {
       expect(s2.players[1]).toMatchObject({
         landscape: [
           [['W'], ['C'], [], [], [], [], [], ['H'], ['M']],
-          [['W'], ['C', 'F04', 'PRIB'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02', 'LB1B'], ['P', 'LB3'], [], []],
+          [['W'], ['C', 'F04', 'PRIB'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02', 'LB1B'], ['P', 'LB3'], [], []],
         ],
         clergy: ['LB2B'],
       })
@@ -174,8 +174,8 @@ describe('commands/workContract', () => {
         wine: 4,
         grain: 4,
         landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R'], [], []],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2', 'LB1R'], ['P', 'G01', 'PRIR'], ['P', 'LR3'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'LB2R'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2', 'LB1R'], ['P', 'G01', 'PRIR'], ['P', 'LR3'], [], []],
         ],
         clergy: [],
       })
@@ -203,8 +203,8 @@ describe('commands/workContract', () => {
         penny: 2,
         clergy: ['LB1G', 'LB2G', 'PRIG'] as Clergy[],
         landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05'], ['H', 'LG1'], [], []],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05'], ['H', 'LG1'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F08'], ['P', 'LG3'], [], []],
         ] as Tile[][],
       })
     })
@@ -229,8 +229,8 @@ describe('commands/workContract', () => {
         wine: 0,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], ['H'], ['M']],
-          [['W'], ['C', 'F04', 'PRIB'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02', 'LB1B'], ['P', 'LB3'], [], []],
+          [['W'], ['C', 'F04', 'PRIB'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P', 'G02', 'LB1B'], ['P', 'LB3'], [], []],
         ],
         clergy: ['LB2B'],
       })

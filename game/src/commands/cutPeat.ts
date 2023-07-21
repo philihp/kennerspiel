@@ -10,7 +10,7 @@ const removePeatAt = (row: number, col: number) =>
   withActivePlayer((player) => {
     const tile = player.landscape[row + player.landscapeOffset][col + 2]
     const [land, building] = tile
-    if (building !== BuildingEnum.Peat) return undefined
+    if (building !== BuildingEnum.Moor) return undefined
     const landscape = [
       ...player.landscape.slice(0, row + player.landscapeOffset),
       [
@@ -30,7 +30,7 @@ const removePeatAt = (row: number, col: number) =>
 const hasAMoor = (landscape: Tile[][]): boolean =>
   any((landRow: Tile[]) => {
     return any((tile: Tile): boolean => {
-      return tile?.[1] === BuildingEnum.Peat
+      return tile?.[1] === BuildingEnum.Moor
     }, landRow)
   }, landscape)
 
@@ -70,7 +70,7 @@ export const complete =
           const row = Number.parseInt(r, 10) + player.landscapeOffset
           const col = Number.parseInt(c, 10) + 2
           const tile = player.landscape?.[row]?.[col]
-          if (tile?.[1] === BuildingEnum.Peat) return ['', 'Jo']
+          if (tile?.[1] === BuildingEnum.Moor) return ['', 'Jo']
           return []
         })
         .with([GameCommandEnum.CUT_PEAT, P._, P._, 'Jo'], always(['']))

@@ -16,8 +16,8 @@ describe('buildings/forestHut', () => {
     clergy: [],
     settlements: [],
     landscape: [
-      [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
-      [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+      [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
     ] as Tile[][],
     wonders: 0,
     landscapeOffset: 0,
@@ -83,8 +83,8 @@ describe('buildings/forestHut', () => {
       const s1 = forestHut(0, 2)(s0)! as GameStatePlaying
       expect(s1.players[0]).toMatchObject({
         landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
         ],
         sheep: 2,
         wood: 2,
@@ -111,8 +111,8 @@ describe('buildings/forestHut', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
           },
           ...s0.players.slice(1),
@@ -128,8 +128,8 @@ describe('buildings/forestHut', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P'], ['P', 'LPE'], ['P'], ['P'], ['P', 'LG1'], [], []],
-              [[], [], ['P'], ['P', 'LPE'], ['P', 'LG2'], ['P'], ['P', 'LG3'], [], []],
+              [[], [], ['P'], ['P', 'LMO'], ['P'], ['P'], ['P', 'LG1'], [], []],
+              [[], [], ['P'], ['P', 'LMO'], ['P', 'LG2'], ['P'], ['P', 'LG3'], [], []],
             ] as Tile[][],
           },
           ...s0.players.slice(1),
@@ -145,8 +145,8 @@ describe('buildings/forestHut', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
           },
           ...s0.players.slice(1),
@@ -162,8 +162,8 @@ describe('buildings/forestHut', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
           },
           ...s0.players.slice(1),

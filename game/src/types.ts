@@ -136,7 +136,7 @@ export enum SettlementEnum {
 }
 
 export enum BuildingEnum {
-  Peat = 'LPE',
+  Moor = 'LMO',
   Forest = 'LFO',
   ClayMoundR = 'LR1',
   ClayMoundG = 'LG1',

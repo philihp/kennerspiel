@@ -99,8 +99,8 @@ describe('buildings/carpentry', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
           },
           ...s0.players.slice(1),
@@ -116,8 +116,8 @@ describe('buildings/carpentry', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P'], ['P', 'LPE'], ['P'], ['P'], ['P', 'LG1'], [], []],
-              [[], [], ['P'], ['P', 'LPE'], ['P', 'LG2'], ['P'], ['P', 'LG3'], [], []],
+              [[], [], ['P'], ['P', 'LMO'], ['P'], ['P'], ['P', 'LG1'], [], []],
+              [[], [], ['P'], ['P', 'LMO'], ['P', 'LG2'], ['P'], ['P', 'LG3'], [], []],
             ] as Tile[][],
           },
           ...s0.players.slice(1),
@@ -133,8 +133,8 @@ describe('buildings/carpentry', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
           },
           ...s0.players.slice(1),
@@ -150,8 +150,8 @@ describe('buildings/carpentry', () => {
           {
             ...s0.players[0],
             landscape: [
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
-              [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
+              [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
           },
           ...s0.players.slice(1),

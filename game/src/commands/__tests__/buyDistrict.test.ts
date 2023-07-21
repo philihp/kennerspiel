@@ -17,8 +17,8 @@ describe('commands/buyDistrict', () => {
     clergy: [],
     settlements: [],
     landscape: [
-      [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-      [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+      [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+      [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
     ] as Tile[][],
     wonders: 0,
     landscapeOffset: 0,
@@ -85,8 +85,8 @@ describe('commands/buyDistrict', () => {
       penny: 0,
       landscapeOffset: 0,
       landscape: [
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
       ],
     })
     const s1 = buyDistrict({ side: 'HILLS', y: -1 })(s0)!
@@ -100,9 +100,9 @@ describe('commands/buyDistrict', () => {
       penny: 3,
       landscapeOffset: 1,
       landscape: [
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-        [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
       ],
     })
   })
@@ -114,8 +114,8 @@ describe('commands/buyDistrict', () => {
         penny: 0,
         landscapeOffset: 0,
         landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
         ],
       })
       const s1 = buyDistrict({ side: 'HILLS', y: 0 })(s0)!
@@ -128,8 +128,8 @@ describe('commands/buyDistrict', () => {
         penny: 0,
         landscapeOffset: 0,
         landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
         ],
       })
       const s1 = buyDistrict({ side: 'HILLS', y: -2 })(s0)!
@@ -164,8 +164,8 @@ describe('commands/buyDistrict', () => {
         penny: 3,
         landscapeOffset: 0,
         landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
           [[], [], ['P', 'LFO'], ['P'], ['P'], ['P'], ['H'], [], []],
         ],
       })
@@ -178,8 +178,8 @@ describe('commands/buyDistrict', () => {
           {
             ...s0.players[0],
             landscape: [
-              [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-              [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+              [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+              [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
               [['W'], ['C'], [], [], [], [], [], [], []],
               [['W'], ['C'], [], [], [], [], [], [], []],
             ] as Tile[][],
@@ -198,8 +198,8 @@ describe('commands/buyDistrict', () => {
         penny: 3,
         landscapeOffset: 0,
         landscape: [
-          [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-          [['W'], ['C'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
           [['W'], ['C'], [], [], [], [], [], [], []],
           [['W'], ['C'], ['P', 'LFO'], ['P'], ['P'], ['P'], ['H'], [], []],
         ],
@@ -224,8 +224,8 @@ describe('commands/buyDistrict', () => {
         nickel: 1,
         penny: 0,
         landscape: [
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
-          [[], [], ['P', 'LPE'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
           [[], [], ['P', 'LFO'], ['P'], ['P'], ['P'], ['H'], [], []],
         ],
         landscapeOffset: 0,
@@ -375,7 +375,7 @@ describe('commands/buyDistrict', () => {
             landscape: [
               [['W'], ['C'], ['P'], ['P'], ['P'], ['H'], ['H'], ['H'], ['M']],
               [['W'], ['C'], [], [], [], [], [], ['H'], ['.']],
-              [['W'], ['C'], ['P', 'LPE'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], ['H'], ['M']],
+              [['W'], ['C'], ['P', 'LMO'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], ['H'], ['M']],
               [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['H', 'LR3'], ['H'], ['.']],
               [['W'], ['C'], [], [], [], [], [], [], []],
               [['W'], ['C'], [], [], [], [], [], [], []],
