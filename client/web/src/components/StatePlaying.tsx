@@ -9,7 +9,6 @@ import { UnbuiltWonders } from './UnbuiltWonders'
 import { MoveList } from './MoveList'
 import { Actions } from './sliders/Actions'
 import { Submit } from './sliders/Submit'
-import { Flower } from './Flower'
 
 export const StatePlaying = () => {
   const { state } = useHathoraContext()
@@ -20,28 +19,27 @@ export const StatePlaying = () => {
     <>
       <Actions />
       <Submit />
-      <Flower />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 470px 200px', paddingTop: 40 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', paddingTop: 40 }}>
+        <MoveList />
         <div>
+          {rondel && config && <Rondel config={config} rondel={rondel} />}
           {buildings && <UnbuiltBuildings buildings={buildings} />}
           {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
           {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
           {wonders && <UnbuiltWonders wonders={wonders} />}
+          {players &&
+            map(
+              (player) => (
+                <Player
+                  key={player.color}
+                  player={player}
+                  active={!!state?.control && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id}
+                />
+              ),
+              players
+            )}
         </div>
-        {rondel && config && <Rondel config={config} rondel={rondel} />}
-        <MoveList />
       </div>
-      {players &&
-        map(
-          (player) => (
-            <Player
-              key={player.color}
-              player={player}
-              active={!!state?.control && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id}
-            />
-          ),
-          players
-        )}
     </>
   )
 }
