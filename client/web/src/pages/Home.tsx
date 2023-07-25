@@ -1,8 +1,21 @@
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { useHathoraContext } from '../context/GameContext'
 import { HeaderUser } from '../components/HeaderUser'
 import { HathoraClient } from '../../../.hathora/client'
+
+const getBuildMessage = (): ReactNode => {
+  if (process.env.VERCEL_GIT_COMMIT_SHA === undefined) return null
+  const fullHash = process.env.VERCEL_GIT_COMMIT_SHA
+  const shortHash = fullHash.slice(fullHash.length - 7)
+  return (
+    <>
+      Made with &heart; in San Francisco, running on <a href="https://hathora.dev">Hathora</a>, built from{' '}
+      <a href={`https://github.com/philihp/hathora-et-labora/commit/${fullHash}`}>{shortHash}</a>, playing{' '}
+      <a href="https://amzn.to/3QdnouS">Ora et Labora</a> by <a href="http://lookout-spiele.de">Lookout Games</a>.
+    </>
+  )
+}
 
 const Home = () => {
   const navigate = useNavigate()
@@ -49,6 +62,8 @@ const Home = () => {
           <pre>{JSON.stringify(lobbies, undefined, 2)}</pre>
         </>
       )}
+      <hr />
+      {getBuildMessage()}
     </>
   )
 }
