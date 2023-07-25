@@ -1,8 +1,6 @@
 import { range } from 'ramda'
-import { ResourcePicker } from './Picker'
 
 interface Props {
-  active: boolean
   peat: number
   penny: number
   clay: number
@@ -63,7 +61,6 @@ const Times = ({ n, id }: TimesProps) => (
 )
 
 export const PlayerResources = ({
-  active,
   peat,
   penny,
   clay,

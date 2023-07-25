@@ -26,7 +26,7 @@ export const Rondel = ({ rondel, config }: Props) => {
         <thead>
           <tr>
             <td />
-            {addIndex(map<number, ReactNode>)(
+            {addIndex<number, ReactNode>(map)(
               (value: number, i: number) => (
                 <th key={i}>{value as number}</th>
               ),
@@ -48,25 +48,28 @@ export const Rondel = ({ rondel, config }: Props) => {
                     token
                   )}
                 </td>
-                {map((i) => {
-                  const thisToken = rondel[token as keyof EngineRondel]
-                  const difference = (rondel.pointingBefore - (thisToken ?? rondel.pointingBefore)) % 13
-                  return (
-                    <td
-                      style={{
-                        border: 1,
-                        borderStyle: 'solid',
-                        borderColor: '#DDD',
-                        width: 32,
-                        height: 32,
-                        textAlign: 'center',
-                      }}
-                      key={i}
-                    >
-                      {difference === i ? emojis[tokenIndex] : ''}
-                    </td>
-                  )
-                }, range(0, 13))}
+                {map(
+                  (i) => {
+                    const thisToken = rondel[token as keyof EngineRondel]
+                    const difference = (rondel.pointingBefore - (thisToken ?? rondel.pointingBefore)) % 13
+                    return (
+                      <td
+                        style={{
+                          border: 1,
+                          borderStyle: 'solid',
+                          borderColor: '#DDD',
+                          width: 32,
+                          height: 32,
+                          textAlign: 'center',
+                        }}
+                        key={i}
+                      >
+                        {difference === i ? emojis[tokenIndex] : ''}
+                      </td>
+                    )
+                  },
+                  range(0, 13)
+                )}
               </tr>
             ))}
         </tbody>

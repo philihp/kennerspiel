@@ -21,9 +21,7 @@ export const Picker = () => {
     <div>
       <select value={resource} onChange={handleChange}>
         <option> </option>
-        {state?.control?.completion?.map((completion) => (
-          <option key={completion}>{completion}</option>
-        ))}
+        {state?.control?.completion?.map((completion) => <option key={completion}>{completion}</option>)}
       </select>
     </div>
   )
