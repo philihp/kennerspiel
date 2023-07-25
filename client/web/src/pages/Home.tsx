@@ -33,35 +33,70 @@ const Home = () => {
       <HeaderUser />
       <h1>Hathora et Labora</h1>
       <p>
+        <h3>Public Servers</h3>
+        <table border={1} cellPadding={3} cellSpacing={0}>
+          <thead>
+            <tr>
+              <th>Room Code</th>
+              <th>Region</th>
+              <th colSpan={3}>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lobbies &&
+              lobbies.map((lobby) => {
+                const { roomId } = lobby
+                const { region } = lobby
+                const state = (lobby as unknown as { state: { players?: number; country?: string } })?.state
+                return (
+                  <tr>
+                    <td>{roomId}</td>
+                    <td>{region}</td>
+                    <td>
+                      {state?.players} players
+                      <br />
+                      {state?.country}
+                    </td>
+                    <td>{!state?.players && !state?.country && JSON.stringify({ state })}</td>
+                    <td>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          navigate(`/game/${roomId}`)
+                        }}
+                      >
+                        Join
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+          </tbody>
+        </table>
         <button
           disabled={!user}
           type="button"
           onClick={async () => {
-            const stateId = await createPrivateLobby()
-            navigate(`/game/${stateId}`)
+            const roomId = await createPublicLobby()
+            navigate(`/game/${roomId}`)
           }}
         >
-          New Private Lobby
+          Create Public Server
         </button>
       </p>
       <p>
+        <h3>Private Servers</h3>
         <button
           disabled={!user}
           type="button"
           onClick={async () => {
-            const stateId = await createPublicLobby()
-            navigate(`/game/${stateId}`)
+            const roomId = await createPrivateLobby()
+            navigate(`/game/${roomId}`)
           }}
         >
-          New Public Lobby
+          Create Private Lobby
         </button>
       </p>
-      {lobbies.length > 0 && (
-        <>
-          <h3>Debug (please ignore):</h3>
-          <pre>{JSON.stringify(lobbies, undefined, 2)}</pre>
-        </>
-      )}
       <hr />
       {getBuildMessage()}
     </>
