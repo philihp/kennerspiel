@@ -97,12 +97,6 @@ const Home = () => {
           Create Private Lobby
         </button>
       </p>
-      {lobbies.length > 0 && (
-        <>
-          <h3>Debug (please ignore):</h3>
-          <pre>{JSON.stringify(lobbies, undefined, 2)}</pre>
-        </>
-      )}
       <hr />
       {getBuildMessage()}
     </>
