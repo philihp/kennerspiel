@@ -165,7 +165,7 @@ export class Impl implements Methods<InternalState> {
     if(!s2) return Response.error(`Unable to configure with ${c2.join(' ')}`)
 
     state.gameState = [s2]
-    state.commands = ['START']
+    state.commands = [`CONFIG ${state.users.length} ${state.country} ${state.length}`]
     state.commandIndex = 1
     return Response.ok()
   }
