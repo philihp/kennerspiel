@@ -99,6 +99,7 @@ const Home = () => {
       </p>
       <hr />
       {getBuildMessage()}
+      <pre>{JSON.stringify(process.env, undefined, 2)}</pre>
     </>
   )
 }
