@@ -10,9 +10,8 @@ const getBuildMessage = (): ReactNode => {
   const shortHash = fullHash.slice(fullHash.length - 7)
   return (
     <>
-      Made with &heart; in San Francisco, running on <a href="https://hathora.dev">Hathora</a>, built from{' '}
-      <a href={`https://github.com/philihp/hathora-et-labora/commit/${fullHash}`}>{shortHash}</a>, playing{' '}
-      <a href="https://amzn.to/3QdnouS">Ora et Labora</a> by <a href="http://lookout-spiele.de">Lookout Games</a>.
+      <a href="https://amzn.to/3QdnouS">Ora et Labora</a> by <a href="http://lookout-spiele.de">Lookout Games</a>, made
+      with &heart; in San Francisco.
     </>
   )
 }
@@ -99,7 +98,6 @@ const Home = () => {
       </p>
       <hr />
       {getBuildMessage()}
-      <pre>{JSON.stringify(process.env, undefined, 2)}</pre>
     </>
   )
 }
