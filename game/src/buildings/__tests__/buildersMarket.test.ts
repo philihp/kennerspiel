@@ -114,7 +114,7 @@ describe('buildings/buildersMarket', () => {
 
     it('does nothing if you dont give it two coins', () => {
       const s1 = buildersMarket()(s0)! as GameStatePlaying
-      expect(s1).toBeUndefined()
+      expect(s1).toBe(s0)
     })
   })
 

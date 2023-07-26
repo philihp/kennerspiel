@@ -1,22 +1,16 @@
-import { always, curry, pipe, view } from 'ramda'
+import { always, curry, identity, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
-import { Cost, GameStatePlaying, Tableau } from '../types'
-
-const checkWorthTwoCoins =
-  (input: Cost) =>
-  (player: Tableau | undefined): Tableau | undefined =>
-    costMoney(input) >= 2 ? player : undefined
+import { GameStatePlaying } from '../types'
 
 export const buildersMarket = (param = '') => {
-  const inputs = parseResourceParam(param)
+  const { penny = 0 } = parseResourceParam(param)
   return withActivePlayer(
     pipe(
       //
-      checkWorthTwoCoins(inputs),
-      payCost(inputs),
-      getCost({ wood: 2, clay: 2, stone: 1, straw: 1 })
+      payCost({ penny }),
+      penny >= 2 ? getCost({ wood: 2, clay: 2, stone: 1, straw: 1 }) : identity
     )
   )
 }
