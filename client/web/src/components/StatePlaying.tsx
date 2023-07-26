@@ -1,4 +1,6 @@
-import { map } from 'ramda'
+import { curried as unwind } from 'sort-unwind'
+import { add, map, nth, pipe, range } from 'ramda'
+import { ReactNode } from 'react'
 import { useHathoraContext } from '../context/GameContext'
 import { Player } from './Player'
 import { Rondel } from './Rondel'
@@ -9,6 +11,15 @@ import { UnbuiltWonders } from './UnbuiltWonders'
 import { MoveList } from './MoveList'
 import { Actions } from './sliders/Actions'
 import { Submit } from './sliders/Submit'
+import { EngineConfig, EngineFrame, EngineTableau } from '../../../../api/types'
+
+const playerOrdering = (config?: EngineConfig, frame?: EngineFrame) => {
+  if (config === undefined || config.players === 1) return [0]
+  return map(
+    (n) => (n - (frame?.activePlayerIndex ?? 0) + (config?.players ?? 0)) % (config?.players ?? 0),
+    range(0, config?.players)
+  )
+}
 
 export const StatePlaying = () => {
   const { state } = useHathoraContext()
@@ -28,16 +39,21 @@ export const StatePlaying = () => {
           {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
           {wonders && <UnbuiltWonders wonders={wonders} />}
           {players &&
-            map(
-              (player) => (
-                <Player
-                  key={player.color}
-                  player={player}
-                  active={!!state?.control && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id}
-                />
-              ),
-              players
-            )}
+            pipe(
+              map<EngineTableau, ReactNode>((player) => {
+                return (
+                  <Player
+                    key={player.color}
+                    player={player}
+                    active={
+                      !!state?.control && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id
+                    }
+                  />
+                )
+              }),
+              unwind(playerOrdering(state.config, state.frame)),
+              nth(0)
+            )(players)}
         </div>
       </div>
     </>
