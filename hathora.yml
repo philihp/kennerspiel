@@ -83,6 +83,11 @@ types:
     player: EngineColor?
     settle: boolean
     bonus: boolean
+  EngineScore:
+    goods: int
+    economic: int
+    settlements: int[]
+    total: int
   EngineControl:
     partial: string?
     completion: string[]?

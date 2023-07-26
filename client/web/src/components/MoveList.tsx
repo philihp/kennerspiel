@@ -27,12 +27,42 @@ const colorToChar = (color?: EngineColor): string => {
   }
 }
 
+type ColorStyle = {
+  backgroundColor?: string
+  borderColor?: string
+}
+
+const colorToStyle = (c?: EngineColor): ColorStyle => {
+  switch (c) {
+    case EngineColor.Blue:
+      return { borderColor: '#80b1d3' } // , borderColor: '#5f849e' }
+    case EngineColor.Red:
+      return { borderColor: '#fb8072' } // , borderColor: '#ad574d' }
+    case EngineColor.Green:
+      return { borderColor: '#b3de69' } // , borderColor: '#87a74f' }
+    case EngineColor.White:
+      return { borderColor: '#d9d9d9' } // , borderColor: '#b1b1b1' }
+    default:
+      return {}
+  }
+}
+
 export const MoveList = () => {
-  const { state, undo, redo } = useHathoraContext()
+  const { state, user } = useHathoraContext()
 
   const flow = collectBy((f) => `${f.round}`, state?.flow ?? [])
   return (
     <div style={{ paddingTop: 20 }}>
+      {EngineColor[state?.users?.find((u) => u.id === state?.me?.id)?.color ?? -1]}
+      <br />
+      <img
+        alt={user?.name}
+        src={user?.picture}
+        height="64"
+        width="64"
+        style={{ ...colorToStyle(state?.me?.color), borderRadius: 32, borderWidth: 6, borderStyle: 'solid' }}
+      />
+
       <ul style={resetStyle}>
         {state?.moves.map((m, i) => (
           // eslint-disable-next-line react/no-array-index-key
@@ -42,15 +72,10 @@ export const MoveList = () => {
         ))}
 
         <li style={{ fontWeight: 'bold' }}>
+          <hr />
           {state?.control?.partial}
           <Picker />
-
-          <button type="button" onClick={undo}>
-            &lt;
-          </button>
-          <button type="button" onClick={redo}>
-            &gt;
-          </button>
+          <hr />
         </li>
 
         {flow.map((roundFrames) =>
