@@ -9,8 +9,8 @@ export const cooperage = (input = '', output = ''): StateReducer => {
   const { wood = 0 } = parseResourceParam(input)
   if (wood < 3) return identity
   const out = match(parseResourceParam(output))
-    .with({ whiskey: P.when((n) => n > 0) }, () => ({ whiskey: 1 }))
-    .with({ beer: P.when((n) => n > 0) }, () => ({ beer: 1 }))
+    .with({ whiskey: P.when((n) => n && n > 0) }, () => ({ whiskey: 1 }))
+    .with({ beer: P.when((n) => n && n > 0) }, () => ({ beer: 1 }))
     .otherwise(() => ({}))
 
   return pipe(
