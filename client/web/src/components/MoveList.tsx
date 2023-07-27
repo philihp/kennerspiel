@@ -81,7 +81,7 @@ export const MoveList = () => {
         {flow.map((roundFrames) =>
           roundFrames.map((frame) => (
             <li>
-              {frame.settle && `Settle ${frame.player}`}
+              {frame.settle && `Settle ${colorToChar(frame.player)}`}
               {!frame.settle && frame.bonus && `Bonus ${colorToChar(frame.player)}`}
               {!frame.settle && !frame.bonus && `Round ${frame.round} ${colorToChar(frame.player)}`}
             </li>
