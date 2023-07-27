@@ -32,7 +32,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
     <table style={{ borderCollapse: 'collapse' }}>
       <tbody>
         {landscape.map((row, rowIndex) => {
-          const rowId = rowIndex + offset
+          const rowId = rowIndex - offset
           return (
             <tr key={JSON.stringify(row)}>
               {row.map((tile, colIndex) => {
