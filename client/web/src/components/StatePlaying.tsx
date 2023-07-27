@@ -1,5 +1,5 @@
 import { curried as unwind } from 'sort-unwind'
-import { add, map, nth, pipe, range } from 'ramda'
+import { map, nth, pipe, range } from 'ramda'
 import { ReactNode } from 'react'
 import { useHathoraContext } from '../context/GameContext'
 import { Player } from './Player'
@@ -25,6 +25,7 @@ export const StatePlaying = () => {
   const { state } = useHathoraContext()
   if (state === undefined) return <div>Error, missing state</div>
   const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = state
+  const soloNeutralBuild = state?.config?.players === 1 && !!state?.frame?.neutralBuildingPhase
 
   return (
     <>
@@ -46,7 +47,10 @@ export const StatePlaying = () => {
                     key={player.color}
                     player={player}
                     active={
-                      !!state?.control && state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id
+                      (!!state?.control &&
+                        !soloNeutralBuild &&
+                        state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id) ||
+                      (soloNeutralBuild && player === state?.players?.[1])
                     }
                   />
                 )
