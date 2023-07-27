@@ -19,7 +19,7 @@ interface GameContext {
   createPublicLobby: () => ReturnType<HathoraClient['createPublicLobby']>
   createPrivateLobby: () => ReturnType<HathoraClient['createPrivateLobby']>
   getPublicLobbies: () => ReturnType<HathoraClient['getPublicLobbies']>
-  join: (color: EngineColor) => Promise<void>
+  join: (color?: EngineColor) => Promise<void>
   config: (country: EngineCountry, length: EngineLength) => Promise<void>
   start: () => Promise<void>
   move: (command: string) => Promise<void>
@@ -101,7 +101,7 @@ export const HathoraContextProvider = ({ children }: HathoraContextProviderProps
   }, [token])
 
   const join = useCallback(
-    async (color: EngineColor) => {
+    async (color?: EngineColor) => {
       if (user === undefined) {
         console.log("Can't join, user is undefined")
         return

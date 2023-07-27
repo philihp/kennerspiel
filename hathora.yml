@@ -110,7 +110,7 @@ types:
 
 methods:
   join:
-    color: EngineColor
+    color: EngineColor?
     picture: string
     name: string
   config:
