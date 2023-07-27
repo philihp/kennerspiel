@@ -120,6 +120,25 @@ describe('buildings/proiry', () => {
         grain: 1,
       })
     })
+    it('works with a 3 player short game', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+        players: [
+          { ...s0.players[0], clergy: [Clergy.LayBrother1R, Clergy.PriorR] },
+          { ...s0.players[1], clergy: [Clergy.LayBrother1G] },
+          { ...s0.players[2], clergy: [Clergy.LayBrother1B, Clergy.PriorB] },
+        ],
+      } as GameStatePlaying
+      const s2 = priory()(s1)! as GameStatePlaying
+      expect(s2.frame).toMatchObject({
+        nextUse: NextUseClergy.Free,
+        usableBuildings: [BuildingEnum.GrainStorage],
+      })
+    })
   })
 
   describe('complete', () => {
