@@ -1,5 +1,6 @@
 import { initialState } from '../../state'
 import {
+  BuildingEnum,
   GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
@@ -9,7 +10,7 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import { nextFrame, oncePerFrame } from '../frame'
+import { allowFreeUsageToNeighborsOf, nextFrame, oncePerFrame } from '../frame'
 import { gameEnd } from '../state'
 
 describe('board/frame', () => {
@@ -1157,6 +1158,29 @@ describe('board/frame', () => {
         })
         s = nextFrame(s)!
       })
+    })
+  })
+
+  describe('allowFreeUsageToNeighborsOf', () => {
+    it('only allows building neighbors', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [[], [], ['P'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'G01'], ['P'], ['H', 'F10'], ['M']],
+              [[], [], ['P'], ['P', 'SB1'], ['P', 'F09'], ['P', 'F03'], ['H'], ['H', 'F05'], ['.']],
+              [[], [], ['P'], ['P', 'LFO'], ['P', 'F04'], ['P', 'LFO'], ['P'], [], []],
+            ],
+          },
+          ...s0.players.slice(1),
+        ],
+      } as GameStatePlaying
+      const s2 = allowFreeUsageToNeighborsOf(BuildingEnum.CloisterGarden)(s1)!
+      expect(s2.frame.usableBuildings).toHaveLength(2)
+      expect(s2.frame.usableBuildings).toContain('F03')
+      expect(s2.frame.usableBuildings).toContain('F04')
     })
   })
 })
