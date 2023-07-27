@@ -12,6 +12,7 @@ import { MoveList } from './MoveList'
 import { Actions } from './sliders/Actions'
 import { Submit } from './sliders/Submit'
 import { EngineConfig, EngineFrame, EngineTableau } from '../../../../api/types'
+import { Debug } from './Debug'
 
 const playerOrdering = (config?: EngineConfig, frame?: EngineFrame) => {
   if (config === undefined || config.players === 1) return [0]
@@ -54,6 +55,7 @@ export const StatePlaying = () => {
               unwind(playerOrdering(state.config, state.frame)),
               nth(0)
             )(players)}
+          <Debug />
         </div>
       </div>
     </>
