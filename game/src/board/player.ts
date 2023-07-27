@@ -1,4 +1,4 @@
-import { Lens, any, lensPath, map, set, view } from 'ramda'
+import { Lens, any, filter, flatten, lensPath, map, set, view } from 'ramda'
 import { match } from 'ts-pattern'
 import {
   Clergy,
@@ -78,18 +78,19 @@ export const clergyForColor = (config?: GameCommandConfigParams) => {
       .exhaustive()
 }
 
-export const priors = (state: GameStatePlaying | undefined): Clergy[] =>
-  (state &&
-    state.players
-      .map(({ color }) => color)
-      .map(clergyForColor(state.config))
-      .map(([, , prior]) => prior)) ??
-  []
-
 export const isPrior = (clergy: Clergy | undefined): boolean =>
   !!(clergy && [Clergy.PriorR, Clergy.PriorG, Clergy.PriorB, Clergy.PriorW].includes(clergy))
 
 export const isLayBrother = (clergy: Clergy | undefined): boolean => !!(clergy && !isPrior(clergy))
+
+export const priors = (state: GameStatePlaying | undefined): Clergy[] => {
+  if (state === undefined) return []
+  const a = map(({ color }) => color, state.players)
+  const b = map(clergyForColor(state.config), a)
+  const c = flatten(b)
+  const d = filter(isPrior, c)
+  return d
+}
 
 export const payCost =
   (cost: Cost): TableauReducer =>
