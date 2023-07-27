@@ -132,10 +132,10 @@ export class Impl implements Methods<InternalState> {
     if(state.users.some(u => u.color === color && u.id !== userId)) {
       return Response.error('Color already taken')
     }
-    state.users = [
-      ...state.users.filter(u => u.id !== userId),
-      { id: userId, color, name, picture }
-    ]
+    state.users = state.users.filter(u => u.id !== userId)
+    if(color !== undefined) {
+      state.users.push({ id: userId, color, name, picture })
+    }
     return Response.ok()
   }
 

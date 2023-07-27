@@ -17,7 +17,7 @@ interface SeatProps {
 }
 
 const Seat = ({ clergyId, color }: SeatProps) => {
-  const { state, join } = useHathoraContext()
+  const { state, join, user: me } = useHathoraContext()
   const users = state?.users ?? []
   const user = find((u) => u.color === color, users)
   return (
@@ -44,6 +44,11 @@ const Seat = ({ clergyId, color }: SeatProps) => {
             }}
           />
           {user?.name}
+          {user?.id && user?.id === me?.id && (
+            <button type="button" onClick={() => join()}>
+              x
+            </button>
+          )}
         </>
       ) : (
         <Clergy
