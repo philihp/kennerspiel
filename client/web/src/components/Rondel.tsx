@@ -51,7 +51,7 @@ export const Rondel = ({ rondel, config }: Props) => {
                 {map(
                   (i) => {
                     const thisToken = rondel[token as keyof EngineRondel]
-                    const difference = (rondel.pointingBefore - (thisToken ?? rondel.pointingBefore)) % 13
+                    const difference = (rondel.pointingBefore - (thisToken ?? rondel.pointingBefore) + 13) % 13
                     return (
                       <td
                         style={{
