@@ -85,6 +85,7 @@ const checkIfUseCanHappen =
   (building?: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
+    if (state.frame.activePlayerIndex !== state.frame.currentPlayerIndex) return undefined
 
     // try to consume bonusAction and mainAction first
     const usedAction = oncePerFrame(GameCommandEnum.USE)(state)

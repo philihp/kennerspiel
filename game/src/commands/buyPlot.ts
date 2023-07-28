@@ -20,6 +20,7 @@ import { GameStatePlaying, GameCommandBuyPlotParams, Tile, LandEnum, GameCommand
 
 const checkCanGetLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
+  if (state.frame.currentPlayerIndex !== state.frame.activePlayerIndex) return undefined
   if (state.frame.canBuyLandscape) return state
   if (state.frame.bonusActions.includes(GameCommandEnum.BUY_PLOT)) return state
   return undefined

@@ -72,6 +72,7 @@ export const complete =
     match<string[], string[]>(partial)
       .with([], () => {
         if (
+          state.frame.currentPlayerIndex === state.frame.activePlayerIndex &&
           withActivePlayer((player) => {
             if (!player) return player
             const { penny, grain, wine, nickel, whiskey } = player
