@@ -1,19 +1,4 @@
-import {
-  always,
-  equals,
-  filter,
-  findIndex,
-  head,
-  map,
-  nth,
-  pipe,
-  range,
-  reject,
-  remove,
-  toString,
-  unless,
-  view,
-} from 'ramda'
+import { always, equals, findIndex, head, map, pipe, range, reject, remove, toString, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { costMoney } from '../board/resource'
 import { activeLens, subtractCoins, withActivePlayer } from '../board/player'
@@ -21,6 +6,7 @@ import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, Buildin
 
 const checkCanGetLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
+  if (state.frame.currentPlayerIndex !== state.frame.activePlayerIndex) return undefined
   if (state.frame.canBuyLandscape) return state
   if (state.frame.bonusActions.includes(GameCommandEnum.BUY_DISTRICT)) return state
   return undefined

@@ -1,3 +1,4 @@
+import { control } from '..'
 import { reducer } from '../reducer'
 import { initialState } from '../state'
 import { GameStatePlaying, GameStateSetup } from '../types'
@@ -528,6 +529,15 @@ describe('game 21872', () => {
     })
 
     const s146 = reducer(s145, ['WORK_CONTRACT', 'F05', 'PnPn'])! as GameStatePlaying
+    const c146 = control(s146, [])
+    expect(s146.frame).toMatchObject({
+      activePlayerIndex: 0,
+      currentPlayerIndex: 2,
+    })
+    expect(c146.completion).toHaveLength(2)
+    expect(c146.completion).toContain('WITH_LAYBROTHER')
+    expect(c146.completion).toContain('WITH_PRIOR')
+
     const s147 = reducer(s146, ['WITH_LAYBROTHER'])! as GameStatePlaying
     const s148 = reducer(s147, ['USE', 'F05', 'FlFlFlFlFlFlPtPtBrBr'])! as GameStatePlaying
     const s149 = reducer(s148, ['COMMIT'])! as GameStatePlaying
