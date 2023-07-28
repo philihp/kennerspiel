@@ -241,6 +241,7 @@ export class Impl implements Methods<InternalState> {
         moves: [],
         control: undefined,
         flow: [],
+        score: [],
       }
     }
 
@@ -255,6 +256,7 @@ export class Impl implements Methods<InternalState> {
       partial: controlSurface.partial && controlSurface.partial.join(' '),
       completion: controlSurface.completion
     }
+    const score = controlSurface.score
 
     return {
       users,
@@ -284,7 +286,7 @@ export class Impl implements Methods<InternalState> {
         }
         return engineFlower
       }),
-
+      score
     }
   }
 }

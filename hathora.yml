@@ -107,6 +107,7 @@ types:
     frame: EngineFrame?
     control: EngineControl?
     flow: EngineFlower[]
+    score: EngineScore[]
 
 methods:
   join:
