@@ -9,13 +9,13 @@ export const Picker = () => {
   const completions = state?.control?.completion ?? []
   const noSelectableOptions = reject(equals(''), completions).length < 1
   if (noSelectableOptions)
-    return <div>{EngineColor[state?.players?.[state?.frame?.activePlayerIndex ?? -1]?.color ?? -1]}&apos;s turn</div>
+    return <div>Waiting on {EngineColor[state?.players?.[state?.frame?.activePlayerIndex ?? -1]?.color ?? -1]}...</div>
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const tokens = state?.control?.partial?.split(/\s+/) ?? []
     if (tokens.length === 1 && tokens[0] === '') tokens.pop()
     tokens.push(e.target.value)
-    control(`${state?.control?.partial} ${e.target.value}`)
+    control(tokens.join(' '))
     setResource('')
   }
 

@@ -18,7 +18,7 @@ type ColorStyle = {
 const colorToStyle = (c?: EngineColor): ColorStyle => {
   switch (c) {
     case EngineColor.Blue:
-      return { borderColor: '#80b1d3', backgroundColor: '#cdd1d4' } // , borderColor: '#5f849e' }
+      return { borderColor: '#80b1d3', backgroundColor: '#dae8f2' } // , borderColor: '#5f849e' }
     case EngineColor.Red:
       return { borderColor: '#fb8072', backgroundColor: '#fceceb' } // , borderColor: '#ad574d' }
     case EngineColor.Green:

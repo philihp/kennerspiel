@@ -18,7 +18,7 @@ const decolor = (id: string) => {
 
 const isFarmYard = (id: string) => decolor(id) === 'L02'
 
-const multiplier = 0.4
+const multiplier = 0.7
 
 export const Erection = ({ id, disabled, onClick }: Props) => {
   const { state, control } = useHathoraContext()
