@@ -223,5 +223,23 @@ describe('buildings/cloisterLibrary', () => {
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['PnBo', 'Pn', ''])
     })
+    it('player has lots of pennies', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            book: 0,
+            penny: 6,
+            nickel: 0,
+            wine: 0,
+            whiskey: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual(['PnPnPnBo', 'PnPnPn', 'PnPnBo', 'PnPn', 'PnBo', 'Pn', ''])
+    })
   })
 })

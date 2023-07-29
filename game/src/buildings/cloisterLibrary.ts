@@ -26,8 +26,8 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
       const player = view(activeLens(state), state)
       const { penny = 0, book = 0 } = player
 
-      // step 1: figure out how many times we might send in flour, given flour and energy constraint
-      const pennyAmounts: number[] = reverse(range(0, 1 + penny))
+      // step 1: figure out how many times we might send in penny, given max pennies
+      const pennyAmounts: number[] = reverse(range(0, 1 + Math.min(3, penny)))
 
       // step 2: for each amount of penny, figure out how many books they would have
       const paymentAmounts = map<number, [number, string]>(

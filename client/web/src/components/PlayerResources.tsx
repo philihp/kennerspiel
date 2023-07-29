@@ -25,7 +25,7 @@ interface Props {
   reliquary: number
 }
 
-const multiplier = 1.1
+const multiplier = 1.5
 
 interface ResourceProps {
   id: string

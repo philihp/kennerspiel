@@ -4,7 +4,6 @@ import { Picker } from './Picker'
 import { EngineColor } from '../../../../api/types'
 
 const resetStyle = {
-  fontFamily: 'monospace',
   margin: 0,
   padding: 0,
   listStyle: 'none',
@@ -100,21 +99,21 @@ export const MoveList = () => {
       <ul style={resetStyle}>
         {state?.moves.map((m, i) => (
           // eslint-disable-next-line react/no-array-index-key
-          <li key={`${i}:${m}`} style={resetStyle}>
+          <li key={`${i}:${m}`} style={{ fontFamily: 'monospace' }}>
             {m}
           </li>
         ))}
 
-        <li style={{ fontWeight: 'bold' }}>
+        <li>
           <hr />
-          {state?.control?.partial}
+          <span style={{ fontFamily: 'monospace' }}>{state?.control?.partial}</span>
           <Picker />
           <hr />
         </li>
 
         {flow.map((roundFrames) =>
           roundFrames.map((frame) => (
-            <li>
+            <li style={{ fontFamily: 'monospace' }}>
               {frame.settle && `Settle ${colorToChar(frame.player)}`}
               {!frame.settle && frame.bonus && `Bonus ${colorToChar(frame.player)}`}
               {!frame.settle && !frame.bonus && `Round ${frame.round} ${colorToChar(frame.player)}`}
