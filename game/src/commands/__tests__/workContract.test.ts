@@ -280,6 +280,18 @@ describe('commands/workContract', () => {
       const s2 = workContract('G01' as BuildingEnum, 'Pn')(s0)!
       expect(s2).toBeUndefined()
     })
+
+    it('does not allow if in bonus round', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          bonusRoundPlacement: true,
+        },
+      }
+      const s2 = workContract('F05' as BuildingEnum, 'Pn')(s1)!
+      expect(s2).toBeUndefined()
+    })
   })
 
   describe('complete', () => {

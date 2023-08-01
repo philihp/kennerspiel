@@ -21,6 +21,11 @@ import {
 } from '../types'
 import { isSettlement } from '../board/buildings'
 
+const checkNotBonusRound: StateReducer = withFrame((frame) => {
+  if (frame?.bonusRoundPlacement === true) return undefined
+  return frame
+})
+
 const workContractCost = (state: GameStatePlaying | undefined): number =>
   state?.frame?.settlementRound === SettlementRound.S ||
   state?.frame?.settlementRound === SettlementRound.A ||
@@ -110,6 +115,9 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
   return pipe(
     // Only allow if mainAction not consumed, and consume it
     oncePerFrame(GameCommandEnum.WORK_CONTRACT),
+
+    // <-- not in bonus round
+    checkNotBonusRound,
 
     // <-- check to make sure payment is enough
     checkWorkContractPayment(input),
