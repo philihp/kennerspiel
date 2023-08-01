@@ -470,6 +470,23 @@ export const allVacantUsableBuildings = (landscape: Tile[][]): BuildingEnum[] =>
     landscape
   )
 
+export const allBuiltBuildings = (landscape: readonly Tile[][]): BuildingEnum[] =>
+  reduce(
+    (accum, row) =>
+      reduce(
+        (accum, tile) => {
+          const [, building] = tile
+          if (building !== undefined && LANDSCAPES.includes(building) === false && isSettlement(building) === false)
+            accum.push(building as BuildingEnum)
+          return accum
+        },
+        accum,
+        row
+      ),
+    [] as BuildingEnum[],
+    landscape
+  )
+
 export const allBuildingPoints = (landscape: Tile[][]): number =>
   reduce(
     (accum: number, row: Tile[]) =>

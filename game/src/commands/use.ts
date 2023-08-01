@@ -1,7 +1,22 @@
-import { any, identity, includes, isEmpty, lensPath, map, pipe, reduce, set, values, view, without } from 'ramda'
+import {
+  any,
+  flatten,
+  identity,
+  includes,
+  isEmpty,
+  lensPath,
+  map,
+  pipe,
+  set,
+  sortBy,
+  values,
+  view,
+  without,
+} from 'ramda'
 import { P, match } from 'ts-pattern'
 import { oncePerFrame, withFrame } from '../board/frame'
 import {
+  allBuiltBuildings,
   allVacantUsableBuildings,
   moveClergyInBonusRoundTo,
   moveClergyToNeutralBuilding,
@@ -78,7 +93,7 @@ import {
   winery,
   complete as completeBuilding,
 } from '../buildings'
-import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer, Tableau, Tile } from '../types'
 import { activeLens, isPrior } from '../board/player'
 
 const checkIfUseCanHappen =
@@ -252,9 +267,18 @@ export const complete =
           return []
         return [GameCommandEnum.USE]
       })
-      .with([GameCommandEnum.USE], () =>
-        !isEmpty(state.frame.usableBuildings) ? state.frame.usableBuildings : allVacantUsableBuildings(player.landscape)
-      )
+      .with([GameCommandEnum.USE], () => {
+        if (!isEmpty(state.frame.usableBuildings)) return state.frame.usableBuildings
+        if (state.frame.bonusRoundPlacement) {
+          return pipe(
+            map<Tableau, Tile[][]>((player) => player.landscape),
+            map(allBuiltBuildings),
+            flatten,
+            sortBy((s) => s.substring(1))
+          )(state.players)
+        }
+        return allVacantUsableBuildings(player.landscape)
+      })
       .with(
         P.when(([command, building]) => command === GameCommandEnum.USE && includes(building, values(BuildingEnum))),
         ([, building, ...params]) => completeBuilding[building as BuildingEnum](params)(state)

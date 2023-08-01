@@ -270,7 +270,7 @@ describe('commands/use', () => {
       nextUse: NextUseClergy.Any,
     },
   }
-  const s1ExtraRound = {
+  const s1Bonus = {
     ...s0,
     config: {
       ...s0.config,
@@ -710,10 +710,10 @@ describe('commands/use', () => {
       expect(winery).toHaveBeenCalled()
     })
     it('can use anothers building during extra round', () => {
-      expect(s1ExtraRound.players[0]).toMatchObject({
+      expect(s1Bonus.players[0]).toMatchObject({
         clergy: ['PRIR', 'LB2R'],
       })
-      const s2 = use(BuildingEnum.Slaughterhouse, ['ShShSwSw'])(s1ExtraRound)!
+      const s2 = use(BuildingEnum.Slaughterhouse, ['ShShSwSw'])(s1Bonus)!
       expect(slaughterhouse).toHaveBeenCalled()
       expect(s2.players[0]).toMatchObject({
         clergy: ['LB2R'],
@@ -905,6 +905,50 @@ describe('commands/use', () => {
     it('gives a list of buildings that are free', () => {
       const c0 = complete(s0)(['USE'])
       expect(c0).toStrictEqual(['LR1', 'LR2', 'LR3'])
+    })
+    it('during bonus round, can use all buildings', () => {
+      const c0 = complete(s1Bonus)(['USE'])
+      expect(c0).toStrictEqual([
+        'G01',
+        'G02',
+        'F04',
+        'F05',
+        'G06',
+        'G07',
+        'F08',
+        'F09',
+        'F11',
+        'G12',
+        'F14',
+        'G16',
+        'F17',
+        'G18',
+        'G19',
+        'F20',
+        'F21',
+        'G22',
+        'F24',
+        'G26',
+        'F27',
+        'G28',
+        'F29',
+        'F30',
+        'F32',
+        'F33',
+        'G34',
+        'F36',
+        'F38',
+        'F40',
+        'LB1',
+        'LB2',
+        'LB3',
+        'LG1',
+        'LG2',
+        'LG3',
+        'LR1',
+        'LR2',
+        'LR3',
+      ])
     })
 
     it('calls the buildingComplete with all the params', () => {
