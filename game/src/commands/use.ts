@@ -209,7 +209,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.Scriptorium, () => scriptorium(params[0]))
       .with(BuildingEnum.Sacristy, () => sacristy(params[0]))
       .with(BuildingEnum.SacredSite, () => sacredSite(params[0]))
-      .with(BuildingEnum.ShippingCompany, () => shippingCompany(params[0], params[1]))
+      .with(BuildingEnum.ShippingCompany, () => shippingCompany(params[0]))
       .with(BuildingEnum.Shipyard, () => shipyard(params[0]))
       .with(BuildingEnum.Slaughterhouse, () => slaughterhouse(params[0]))
       .with(BuildingEnum.SpinningMill, () => spinningMill())

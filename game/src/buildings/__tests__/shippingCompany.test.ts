@@ -86,32 +86,32 @@ describe('buildings/shippingCompany', () => {
       expect(s1).toBeUndefined()
     })
     it('burns wood and makes meat', () => {
-      const s1 = shippingCompany('WoWoWo', 'Mt')(s0)!
+      const s1 = shippingCompany('WoWoWoMt')(s0)!
       expect(s1.players[0]).toMatchObject({
         meat: 3,
         wood: 7,
       })
     })
     it('no output specified errors', () => {
-      const s1 = shippingCompany('WoWoWo', '')(s0)!
+      const s1 = shippingCompany('WoWoWo')(s0)!
       expect(s1).toBeUndefined()
     })
     it('burns peat and makes bread', () => {
-      const s1 = shippingCompany('PtPt', 'Br')(s0)!
+      const s1 = shippingCompany('PtPtBr')(s0)!
       expect(s1.players[0]).toMatchObject({
         peat: 8,
         bread: 3,
       })
     })
     it('burns coal and makes wine', () => {
-      const s1 = shippingCompany('Co', 'Wn')(s0)!
+      const s1 = shippingCompany('CoWn')(s0)!
       expect(s1.players[0]).toMatchObject({
         coal: 9,
         wine: 3,
       })
     })
     it('noop if not enough energy', () => {
-      const s1 = shippingCompany('Wo', 'Wn')(s0)!
+      const s1 = shippingCompany('WoWn')(s0)!
       expect(s1).toBe(s0)
     })
   })
