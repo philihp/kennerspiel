@@ -270,6 +270,86 @@ describe('commands/use', () => {
       nextUse: NextUseClergy.Any,
     },
   }
+  const s1ExtraRound = {
+    ...s0,
+    config: {
+      ...s0.config,
+      country: 'france',
+      length: 'long',
+      players: 3,
+    },
+    players: [
+      {
+        ...s0.players[0],
+        color: PlayerColor.Red,
+        clergy: ['PRIR', 'LB2R'],
+        landscape: [
+          [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'SR3'], ['H', 'LR1'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'G06'], ['P', 'LR2', 'LB1R'], ['P', 'F40'], ['P', 'LR3'], ['H'], ['M']],
+          [[], [], ['P', 'LFO'], ['P', 'SR6'], ['P', 'F21'], ['P', 'SR2'], ['H', 'F27'], ['H'], ['.']],
+          [[], [], ['P'], ['P'], ['P', 'SR5'], ['H', 'F14'], ['H', 'SR1'], ['H', 'G28'], ['M', 'G22']],
+          [[], [], [], [], [], [], [], ['H'], ['.']],
+        ],
+        landscapeOffset: 0,
+        sheep: 10,
+        straw: 2,
+        meat: 0,
+      },
+      {
+        ...s0.players[0],
+        color: PlayerColor.Blue,
+        clergy: ['PRIB'],
+        landscape: [
+          [[], [], ['P'], ['P', 'F36'], ['P', 'SB6'], ['P', 'F30', 'LB2B'], ['H'], [], []],
+          [[], [], ['P', 'F38'], ['P', 'SB2'], ['P', 'F24'], ['P', 'SB3'], ['H', 'F04'], [], []],
+          [
+            [],
+            [],
+            ['P', 'SB5'],
+            ['P', 'F05'],
+            ['P', 'F09'],
+            ['P', 'G02'],
+            ['H', 'LB1'],
+            ['H', 'F32', 'LB1B'],
+            ['M', 'F29'],
+          ],
+          [[], [], ['P', 'LMO'], ['P'], ['P', 'LB2'], ['P', 'G01'], ['P', 'LB3'], ['H', 'G16'], ['.']],
+          [[], [], ['P', 'LMO'], ['P'], ['P'], ['H'], ['H'], [], []],
+        ],
+        landscapeOffset: 2,
+      },
+      {
+        ...s0.players[0],
+        color: PlayerColor.Green,
+        clergy: ['PRIG'],
+        landscape: [
+          [[], [], ['P'], ['P', 'LFO'], ['P'], ['H'], ['H'], [], []],
+          [['W'], ['C', 'F11'], ['P', 'SG3'], ['P', 'F20'], ['P', 'SG1'], ['P', 'G34', 'LB1G'], ['H'], [], []],
+          [['W'], ['C', 'SG4'], ['P', 'F08'], ['P', 'SG6'], ['P', 'G12'], ['P', 'G18'], ['H', 'LG1'], [], []],
+          [['W'], ['C', 'F33'], ['P', 'G19'], ['P', 'LFO'], ['P', 'LG2'], ['P', 'F17', 'LB2G'], ['P', 'LG3'], [], []],
+          [['W'], ['C', 'G26'], [], [], [], [], [], [], []],
+        ],
+        landscapeOffset: 2,
+        sheep: 1,
+        meat: 1,
+        straw: 1,
+      },
+    ],
+    frame: {
+      ...s0.frame,
+      startingPlayer: 0,
+      settlementRound: 'D',
+      currentPlayerIndex: 0,
+      activePlayerIndex: 0,
+      bonusRoundPlacement: true,
+      mainActionUsed: false,
+      bonusActions: [],
+      canBuyLandscape: true,
+      unusableBuildings: [],
+      usableBuildings: [],
+      nextUse: 'only-prior',
+    },
+  } as GameStatePlaying
 
   describe('use', () => {
     it('throws errors on invalid building', () => {
@@ -628,6 +708,17 @@ describe('commands/use', () => {
     it('calls the winery', () => {
       use(BuildingEnum.Winery, [])(s0)!
       expect(winery).toHaveBeenCalled()
+    })
+    it('can use anothers building during extra round', () => {
+      expect(s1ExtraRound.players[0]).toMatchObject({
+        clergy: ['PRIR', 'LB2R'],
+      })
+      const s2 = use(BuildingEnum.Slaughterhouse, ['ShShSwSw'])(s1ExtraRound)!
+      expect(slaughterhouse).toHaveBeenCalled()
+      expect(s2.players[0]).toMatchObject({
+        clergy: ['LB2R'],
+      })
+      expect(s2.players[2].landscape[3][2]).toStrictEqual(['P', 'G19', 'PRIR'])
     })
   })
 
