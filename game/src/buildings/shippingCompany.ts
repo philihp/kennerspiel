@@ -5,11 +5,12 @@ import { costEnergy, costFood, energyCostOptions, parseResourceParam } from '../
 import { advanceJokerOnRondel, takePlayerJoker } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
 
-export const shippingCompany = (fuel = '', product = ''): StateReducer => {
-  const input = parseResourceParam(fuel)
-  if (costEnergy(input) < 3) return identity
+export const shippingCompany = (inputRaw = ''): StateReducer => {
+  const input = parseResourceParam(inputRaw)
+  const { coal, peat, wood, straw } = input
+  if (costEnergy({ coal, peat, wood, straw }) < 3) return identity
 
-  const output = match(parseResourceParam(product))
+  const output = match(input)
     .with({ meat: P.when((n) => n && n > 0) }, () => ({ meat: 1 }))
     .with({ bread: P.when((n) => n && n > 0) }, () => ({ bread: 1 }))
     .with({ wine: P.when((n) => n && n > 0) }, () => ({ wine: 1 }))
@@ -18,7 +19,7 @@ export const shippingCompany = (fuel = '', product = ''): StateReducer => {
 
   return pipe(
     //
-    withActivePlayer(payCost(input)),
+    withActivePlayer(payCost({ coal, peat, wood, straw })),
     takePlayerJoker(output),
     advanceJokerOnRondel
   )

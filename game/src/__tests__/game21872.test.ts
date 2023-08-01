@@ -1148,7 +1148,7 @@ describe('game 21872', () => {
     })
 
     const s355 = reducer(s354, ['USE', 'F40'])! as GameStatePlaying
-    const s356 = reducer(s355, ['USE', 'F33', 'PtWo', 'Mt'])! as GameStatePlaying
+    const s356 = reducer(s355, ['USE', 'F33', 'PtWoMt'])! as GameStatePlaying
     const s357 = reducer(s356, ['COMMIT'])! as GameStatePlaying
     expect(s357.frame).toMatchObject({
       activePlayerIndex: 0,
