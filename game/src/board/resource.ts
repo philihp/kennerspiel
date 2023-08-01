@@ -204,11 +204,11 @@ export const foodCostOptions = curry((food: number, player: Cost): string[] => {
     amountCostOptions(output, ResourceEnum.Malt, 1, player.malt ?? 0),
     amountCostOptions(output, ResourceEnum.Grape, 1, player.grape ?? 0),
     // then try eating money, which they might be saving for land
-    amountCostOptions(output, ResourceEnum.Nickel, 1, player.nickel ?? 0),
+    amountCostOptions(output, ResourceEnum.Nickel, 5, player.nickel ?? 0),
     amountCostOptions(output, ResourceEnum.Penny, 1, player.penny ?? 0),
     // then try eating wine/whiskey, which has more utility than money
     amountCostOptions(output, ResourceEnum.Wine, 1, player.wine ?? 0),
-    amountCostOptions(output, ResourceEnum.Whiskey, 1, player.whiskey ?? 0)
+    amountCostOptions(output, ResourceEnum.Whiskey, 2, player.whiskey ?? 0)
   )([['', food]])
   return output
 })

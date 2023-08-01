@@ -1,6 +1,7 @@
 import { initialState } from '../../state'
 import {
   BuildingEnum,
+  Clergy,
   GameCommandEnum,
   GameStatePlaying,
   GameStatusEnum,
@@ -430,6 +431,61 @@ describe('commands/build', () => {
       }
       const c0 = complete(s1)(['SETTLE', 'SR6', '-1', '0', 'MtCoCo'])
       expect(c0).toStrictEqual([''])
+    })
+
+    it('tries to eat nickels', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            color: PlayerColor.Red,
+            clergy: ['PRIR', 'LB2R'] as Clergy[],
+            settlements: ['SR4', 'SR7', 'SR8'] as SettlementEnum[],
+            landscape: [
+              [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'SR3'], ['H', 'LR1'], [], []],
+              [[], [], ['P'], ['P', 'G06'], ['P', 'LR2', 'LB1R'], ['P', 'F40'], ['P', 'LR3'], ['H'], ['M']],
+              [[], [], ['P', 'LFO'], ['P', 'SR6'], ['P', 'F21'], ['P', 'SR2'], ['H', 'F27'], ['H'], ['.']],
+              [[], [], ['P'], ['P'], ['P', 'SR5'], ['H', 'F14'], ['H', 'SR1'], ['H', 'G28'], ['M', 'G22']],
+              [[], [], [], [], [], [], [], ['H'], ['.']],
+            ] as Tile[][],
+            landscapeOffset: 0,
+            wonders: 1,
+            peat: 3,
+            penny: 2,
+            clay: 1,
+            wood: 0,
+            grain: 0,
+            sheep: 10,
+            stone: 0,
+            flour: 0,
+            grape: 1,
+            nickel: 1,
+            malt: 0,
+            coal: 0,
+            book: 0,
+            ceramic: 0,
+            whiskey: 0,
+            straw: 2,
+            meat: 0,
+            ornament: 0,
+            bread: 0,
+            wine: 3,
+            beer: 0,
+            reliquary: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c1 = complete(s1)(['SETTLE', 'SR8', '5', '2'])
+      expect(c1).toStrictEqual([
+        'ShShShShShShShShShShNiPnPnWnWnWnPtPt',
+        'ShShShShShShShShShShNiPnPnWnWnWnPtSwSw',
+        'ShShShShShShShShShShGpNiPnWnWnWnPtPt',
+        'ShShShShShShShShShShGpNiPnWnWnWnPtSwSw',
+        'ShShShShShShShShShShGpNiPnPnWnWnPtPt',
+        'ShShShShShShShShShShGpNiPnPnWnWnPtSwSw',
+      ])
     })
 
     it('doesnt continue anything else', () => {
