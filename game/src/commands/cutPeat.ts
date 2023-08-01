@@ -3,7 +3,7 @@ import { P, match } from 'ts-pattern'
 import { activeLens, getCost, withActivePlayer } from '../board/player'
 import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer, GameStatePlaying } from '../types'
 import { take, updateRondel, withRondel } from '../board/rondel'
-import { oncePerFrame } from '../board/frame'
+import { checkNotBonusRound, oncePerFrame } from '../board/frame'
 import { moorLocations, moorLocationsForCol } from '../board/landscape'
 
 const removePeatAt = (row: number, col: number) =>
@@ -47,6 +47,7 @@ export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): State
   pipe(
     //
     oncePerFrame(GameCommandEnum.CUT_PEAT),
+    checkNotBonusRound,
     givePlayerPeat(useJoker),
     removePeatAt(row, col),
     withRondel(updateRondel(useJoker ? 'joker' : 'peat'))
@@ -59,6 +60,7 @@ export const complete =
     return (
       match<string[], string[]>(partial)
         .with([], () => {
+          if (checkNotBonusRound(state) === undefined) return []
           if (!hasAMoor(player.landscape)) return []
           if (oncePerFrame(GameCommandEnum.CUT_PEAT)(state) === undefined) return []
           return [GameCommandEnum.CUT_PEAT]

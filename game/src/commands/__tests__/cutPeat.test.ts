@@ -129,6 +129,17 @@ describe('commands/cutPeat', () => {
       const s1 = cutPeat({ row: 0, col: 0, useJoker: false })(s0)!
       expect(s1.players[0].peat).toBe(2)
     })
+    it('fails if in bonus round', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          bonusRoundPlacement: true,
+        },
+      }
+      const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
+      expect(s2).toBeUndefined()
+    })
     it('gives the active player joker-peat', () => {
       const s1 = cutPeat({ row: 0, col: 0, useJoker: true })(s0)!
       expect(s1.players[0].peat).toBe(3)
@@ -178,6 +189,17 @@ describe('commands/cutPeat', () => {
       } as GameStatePlaying
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['CUT_PEAT'])
+    })
+    it('returns [] if bonus round placement', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          bonusRoundPlacement: true,
+        },
+      }
+      const c1 = complete(s1)([])
+      expect(c1).toStrictEqual([])
     })
     it('if partial in CUT_PEAT, returns a list of locations', () => {
       const c0 = complete(s0)([GameCommandEnum.CUT_PEAT])
