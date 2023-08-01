@@ -147,6 +147,7 @@ export const complete =
       .with([], () => {
         if (!state.frame.bonusActions.includes(GameCommandEnum.WORK_CONTRACT) && state.frame.mainActionUsed) return []
         const activePlayer = view(activeLens(state), state)
+        if (checkNotBonusRound(state) === undefined) return []
         // if this player can't possibly pay the work contract fee
         if (checkWorkContractPayment(activePlayer)(state) === undefined) return []
         // if all other players have no clergy available
