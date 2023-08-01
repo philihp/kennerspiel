@@ -8,7 +8,13 @@ import {
   moveClergyToOwnBuilding,
 } from '../board/landscape'
 import { costMoney, parseResourceParam } from '../board/resource'
-import { oncePerFrame, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
+import {
+  checkNotBonusRound,
+  oncePerFrame,
+  revertActivePlayerToCurrent,
+  setFrameToAllowFreeUsage,
+  withFrame,
+} from '../board/frame'
 import {
   BuildingEnum,
   Cost,
@@ -20,11 +26,6 @@ import {
   Tile,
 } from '../types'
 import { isSettlement } from '../board/buildings'
-
-const checkNotBonusRound: StateReducer = withFrame((frame) => {
-  if (frame?.bonusRoundPlacement === true) return undefined
-  return frame
-})
 
 const workContractCost = (state: GameStatePlaying | undefined): number =>
   state?.frame?.settlementRound === SettlementRound.S ||
@@ -118,7 +119,6 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
 
     // <-- not in bonus round
     checkNotBonusRound,
-
     // <-- check to make sure payment is enough
     checkWorkContractPayment(input),
     // <-- consume payment
