@@ -164,9 +164,12 @@ export class Impl implements Methods<InternalState> {
     const s2 = reducer(s1, c2) as GameStatePlaying
     if(!s2) return Response.error(`Unable to configure with ${c2.join(' ')}`)
 
-    state.gameState = [s2]
-    state.commands = [`CONFIG ${state.users.length} ${state.country} ${state.length}`]
-    state.commandIndex = 1
+    state.gameState = [s2, s2]
+    state.commands = [
+      `CONFIG ${state.users.length} ${state.country} ${state.length}`,
+      ['START', ...s2.players.map(p => p.color)].join(' ')
+    ]
+    state.commandIndex = 2
     return Response.ok()
   }
 
@@ -207,7 +210,7 @@ export class Impl implements Methods<InternalState> {
     if(activeUser !== userId) {
       return Response.error(`Active user is ${activeUser}`)
     }
-    if(state.commandIndex <= 1) return Response.error('Cannot undo past beginning')
+    if(state.commandIndex <= 2) return Response.error('Cannot undo past beginning')
     state.commandIndex--;
     state.partial = ""
     return Response.ok()
