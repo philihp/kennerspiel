@@ -44,7 +44,7 @@ export enum PlayerColor {
 }
 
 export type GameCommandStartParams = {
-  seed: number
+  seed?: number
   colors: PlayerColor[]
 }
 
@@ -429,7 +429,7 @@ export type GameStateSetup = {
 }
 export type GameStatePlaying = {
   status: GameStatusEnum.PLAYING | GameStatusEnum.FINISHED
-  randGen: PCGState
+  randGen?: PCGState
   config: GameCommandConfigParams
   rondel: Rondel
   wonders: number

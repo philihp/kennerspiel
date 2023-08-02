@@ -1,5 +1,5 @@
 import { initialState } from '../../state'
-import { GameCommandConfigParams, GameStatusEnum, PlayerColor } from '../../types'
+import { GameCommandConfigParams, GameStateSetup, GameStatusEnum, PlayerColor } from '../../types'
 import { config } from '../config'
 import { start } from '../start'
 
@@ -63,7 +63,7 @@ describe('commands/start', () => {
           config: {
             country: 'france',
             length: 'long',
-            // players will be filled in by the number of colors given
+            players: 3,
           } as GameCommandConfigParams,
         },
         { seed: 1, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue] }
@@ -144,6 +144,133 @@ describe('commands/start', () => {
         [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3'], [], []],
       ])
       expect(dst?.players?.[2]?.clergy).toStrictEqual(['LB1W', 'PRIW'])
+    })
+
+    it('will deterministically shuffle colors', () => {
+      const src = {
+        ...initialState,
+        status: GameStatusEnum.SETUP,
+        rondel: {
+          pointingBefore: 0,
+        },
+        config: {
+          players: 4,
+          country: 'france',
+          length: 'long',
+        },
+      } as GameStateSetup
+
+      const dst1 = start(src, {
+        seed: 153,
+        colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
+      })
+      const dst2 = start(src, {
+        seed: 153,
+        colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
+      })
+      const dst3 = start(src, {
+        seed: 153,
+        colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
+      })
+      const dst4 = start(src, {
+        seed: 611,
+        colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
+      })
+
+      const p1 = dst1?.players.map((p) => p.color)
+      const p2 = dst2?.players.map((p) => p.color)
+      const p3 = dst3?.players.map((p) => p.color)
+      const p4 = dst4?.players.map((p) => p.color)
+      expect(p1).toStrictEqual(p2)
+      expect(p2).toStrictEqual(p3)
+      expect(p3).not.toStrictEqual(p4)
+    })
+
+    it('will not shuffle if no seed for 4p', () => {
+      const colors = [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green]
+      const dst = start(
+        {
+          ...initialState,
+          status: GameStatusEnum.SETUP,
+          rondel: {
+            pointingBefore: 0,
+          },
+          config: {
+            players: 4,
+            country: 'france',
+            length: 'long',
+          },
+        },
+        { colors }
+      )
+      expect(dst?.players[0].color).toBe(colors[0])
+      expect(dst?.players[1].color).toBe(colors[1])
+      expect(dst?.players[2].color).toBe(colors[2])
+      expect(dst?.players[3].color).toBe(colors[3])
+    })
+
+    it('will not shuffle if no seed for 3p', () => {
+      const colors = [PlayerColor.White, PlayerColor.Blue, PlayerColor.Green]
+      const dst = start(
+        {
+          ...initialState,
+          status: GameStatusEnum.SETUP,
+          rondel: {
+            pointingBefore: 0,
+          },
+          config: {
+            players: 3,
+            country: 'france',
+            length: 'long',
+          },
+        },
+        { colors }
+      )
+      expect(dst?.players[0].color).toBe(colors[0])
+      expect(dst?.players[1].color).toBe(colors[1])
+      expect(dst?.players[2].color).toBe(colors[2])
+    })
+
+    it('will not shuffle if no seed for 2p', () => {
+      const colors = [PlayerColor.Blue, PlayerColor.Green]
+      const dst = start(
+        {
+          ...initialState,
+          status: GameStatusEnum.SETUP,
+          rondel: {
+            pointingBefore: 0,
+          },
+          config: {
+            players: 2,
+            country: 'france',
+            length: 'long',
+          },
+        },
+        { colors }
+      )
+      expect(dst?.players[0].color).toBe(colors[0])
+      expect(dst?.players[1].color).toBe(colors[1])
+    })
+
+    it('will not shuffle if no seed for 1p', () => {
+      const colors = [PlayerColor.Blue, PlayerColor.White]
+      const dst = start(
+        {
+          ...initialState,
+          status: GameStatusEnum.SETUP,
+          rondel: {
+            pointingBefore: 0,
+          },
+          config: {
+            players: 1,
+            country: 'france',
+            length: 'long',
+          },
+        },
+        { colors }
+      )
+      expect(dst?.players[0].color).toBe(colors[0])
+      expect(dst?.players[1].color).toBe(colors[1])
     })
 
     it('sets round, and moveInRound, and a starting player', () => {

@@ -6,13 +6,30 @@ import { districtPrices, makeLandscape, plotPrices } from '../board/landscape'
 import { clergyForColor } from '../board/player'
 import {
   GameCommandStartParams,
-  GameConfigPlayers,
   GameStatePlaying,
   GameStateSetup,
   GameStatusEnum,
   NextUseClergy,
+  PlayerColor,
   SettlementRound,
 } from '../types'
+
+// we could get more entropy with a second seed, but
+// honestly this is fine for now.
+const PCG_PERIOD = 42069
+
+// this is a brute-forced seed given the above, which
+// results in a noop shuffle for 2, 3, 4, or even 5 elements
+const MAGIC_SEED = 2692
+
+const neutralColor = (notThisColor: PlayerColor, neutralColorIndex: number) =>
+  [
+    // pick a color that the player isn't using
+    PlayerColor.Red,
+    PlayerColor.Blue,
+    PlayerColor.Green,
+    PlayerColor.White,
+  ].filter((c) => c !== notThisColor)[neutralColorIndex]
 
 export const start = (
   state: GameStateSetup,
@@ -20,18 +37,15 @@ export const start = (
 ): GameStatePlaying | undefined => {
   if (state.rondel === undefined) return undefined
   if (state.config === undefined) return undefined
-
   if (colors.length < 1 || colors.length > 4) return undefined
-  const config = {
-    ...state.config,
-    players: colors.length as GameConfigPlayers,
-  }
+  const seedUsed = seed ?? MAGIC_SEED
 
-  const randGen0 = createPcg32({}, seed, 42069)
-  const [playerOrderSeed, randGen1] = randomInt(0, 2 ** 32 - 1, randGen0)
+  let randGen = createPcg32({}, seedUsed, PCG_PERIOD)
+  const [playerOrderSeed, randGen1] = randomInt(0, 2 ** 32 - 1, randGen)
+  randGen = randGen1
   const shuffledColors = fastShuffle(playerOrderSeed, colors)
 
-  const playerIndexes = range(0, colors.length)
+  const playerIndexes = range(0, state.config.players)
   const players = playerIndexes.map((i) => {
     return {
       landscapeOffset: 0,
@@ -60,14 +74,37 @@ export const start = (
       reliquary: 0,
       color: shuffledColors[i],
       landscape: makeLandscape(shuffledColors[i]),
-      clergy: clergyForColor(config)(shuffledColors[i]),
+      clergy: clergyForColor(state.config)(shuffledColors[i]),
       settlements: [],
     }
   })
 
+  // feels weird to do this here, but i think it's more difficult to pass along the
+  // neutral player's color IF we had it and generate it later from addNeutralPlayer
+  if (state.config.players === 1) {
+    if (seed === undefined) {
+      players.push({
+        ...players[0],
+        color: shuffledColors[1],
+        landscape: [[]],
+        clergy: [],
+      })
+    } else {
+      const [neutralColorIndex, randGen2] = randomInt(0, 3, randGen)
+      randGen = randGen2
+      const color = neutralColor(players[0].color, neutralColorIndex)
+      players.push({
+        ...players[0],
+        color,
+        landscape: [[]],
+        clergy: [],
+      })
+    }
+  }
+
   const newState: GameStatePlaying = {
     ...state,
-    config,
+    config: state.config,
     randGen: randGen1,
     status: GameStatusEnum.PLAYING,
     players,
