@@ -182,11 +182,11 @@ describe('game-solo-settle', () => {
       nextUse: NextUseClergy.OnlyPrior,
     })
     const c65a = control(s65, [])
-    expect(c65a.completion).toStrictEqual(['USE', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'SETTLE', 'COMMIT'])
-    const c65b = control(s65, ['USE'])
+    expect(c65a.completion).toStrictEqual(['WORK_CONTRACT', 'BUY_PLOT', 'BUY_DISTRICT', 'CONVERT', 'SETTLE', 'COMMIT'])
+    const c65b = control(s65, ['WORK_CONTRACT'])
     expect(c65b.completion).toStrictEqual(['G02', 'F08', 'G12'])
-    const c65c = control(s65, ['USE', 'G12'])
-    expect(c65c.completion).toContain('BrBrBrPnCoCo')
+    const c65c = control(s65, ['WORK_CONTRACT', 'G12'])
+    expect(c65c.completion).toContain('Pn')
 
     expect(s65.frame).toMatchObject({
       bonusActions: ['SETTLE', 'COMMIT'],
@@ -206,12 +206,27 @@ describe('game-solo-settle', () => {
       clergy: ['LB2W', 'PRIW'],
     })
 
-    const s66 = reducer(s65, ['USE', 'G12', 'BrBrBrPnCoCo'])! as GameStatePlaying
+    const s65b = reducer(s65, ['WORK_CONTRACT', 'G12', 'Pn'])! as GameStatePlaying
+    expect(s65b.players[1]).toMatchObject({
+      clergy: ['LB2W'],
+      landscape: [
+        [[], [], ['P', 'G13', 'LB1W'], ['P', 'F08'], ['P', 'G12', 'PRIW'], ['P'], ['H', 'LW1'], [], []],
+        [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],
+      ],
+    })
+    expect(s65b.frame).toMatchObject({
+      usableBuildings: ['G12'],
+      neutralBuildingPhase: true,
+      nextUse: 'free',
+    })
+
+    const s66 = reducer(s65b, ['USE', 'G12', 'BrBrBrPnCoCo'])! as GameStatePlaying
     expect(s66.frame).toMatchObject({
       usableBuildings: [],
       neutralBuildingPhase: false, // after an optional USE (with prior), we are implicitly out of neutral building phase
     })
     expect(s66.players[1]).toMatchObject({
+      clergy: ['LB2W'],
       landscape: [
         [[], [], ['P', 'G13', 'LB1W'], ['P', 'F08'], ['P', 'G12', 'PRIW'], ['P'], ['H', 'LW1'], [], []],
         [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],

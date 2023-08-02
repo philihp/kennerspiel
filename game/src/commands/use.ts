@@ -1,5 +1,6 @@
 import {
   any,
+  assoc,
   flatten,
   identity,
   includes,
@@ -19,7 +20,6 @@ import {
   allBuiltBuildings,
   allVacantUsableBuildings,
   moveClergyInBonusRoundTo,
-  moveClergyToNeutralBuilding,
   moveClergyToOwnBuilding,
 } from '../board/landscape'
 import {
@@ -124,23 +124,18 @@ const checkIfUseCanHappen =
     return undefined
   }
 
-const clearUsableBuildings: StateReducer = withFrame((frame) => ({
-  ...frame,
-  usableBuildings: [],
-}))
+const clearUsableBuildings: StateReducer = withFrame(set(lensPath(['usableBuildings']), []))
+
+const clearNeutralBuildingPhase: StateReducer = withFrame((frame) => {
+  const newFrame = assoc('neutralBuildingPhase', false)(frame)
+  return newFrame
+})
 
 const moveClergyTo =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
     if (state.frame.bonusRoundPlacement) return moveClergyInBonusRoundTo(building)(state)
-    if (state.frame.neutralBuildingPhase) {
-      return pipe(
-        //
-        moveClergyToNeutralBuilding(building),
-        set(lensPath(['frame', 'neutralBuildingPhase']), false)
-      )(state)
-    }
     return moveClergyToOwnBuilding(building)(state)
   }
 
@@ -149,6 +144,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
     checkIfUseCanHappen(building),
     moveClergyTo(building),
     clearUsableBuildings,
+    clearNeutralBuildingPhase,
     match<BuildingEnum, StateReducer>(building)
       .with(BuildingEnum.Alehouse, () => alehouse(params[0]))
       .with(BuildingEnum.Bakery, () => bakery(params[0]))
@@ -245,17 +241,6 @@ export const complete =
     return match<string[], string[]>(partial)
       .with([], () => {
         if (checkIfUseCanHappen()(state) === undefined) return []
-
-        // really edge case, but in neutral building phase AFTER all buildings are placed
-        // AND ONLY IF the neutral player has a prior available do we allow USE
-        if (
-          state.frame.neutralBuildingPhase &&
-          state.buildings.length === 0 &&
-          state.frame.nextUse === NextUseClergy.OnlyPrior &&
-          any(identity, map(isPrior, view(lensPath(['players', 1]), state).clergy))
-        ) {
-          return [GameCommandEnum.USE]
-        }
 
         const hasClergyAvailable = view(activeLens(state), state).clergy?.length > 0
         const hasPriorAvailable = any(identity, map(isPrior, view(activeLens(state), state).clergy))

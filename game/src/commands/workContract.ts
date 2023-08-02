@@ -115,7 +115,10 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
   const { penny } = input
   return pipe(
     // Only allow if mainAction not consumed, and consume it
-    oncePerFrame(GameCommandEnum.WORK_CONTRACT),
+    (state) => {
+      if (state?.frame.neutralBuildingPhase && state?.buildings.length === 0) return state
+      return oncePerFrame(GameCommandEnum.WORK_CONTRACT)(state)
+    },
 
     // <-- not in bonus round
     checkNotBonusRound,
@@ -145,7 +148,12 @@ export const complete =
   (partial: string[]): string[] =>
     match<string[], string[]>(partial)
       .with([], () => {
-        if (!state.frame.bonusActions.includes(GameCommandEnum.WORK_CONTRACT) && state.frame.mainActionUsed) return []
+        if (
+          !state.frame.bonusActions.includes(GameCommandEnum.WORK_CONTRACT) &&
+          state.frame.mainActionUsed &&
+          !(state.frame.neutralBuildingPhase === true && state.buildings.length === 0)
+        )
+          return []
         const activePlayer = view(activeLens(state), state)
         if (checkNotBonusRound(state) === undefined) return []
         // if this player can't possibly pay the work contract fee
@@ -164,8 +172,9 @@ export const complete =
         // no need to check if there are buildings to be used, each player has 3 heartland buildings
         return [GameCommandEnum.WORK_CONTRACT]
       })
-      .with([GameCommandEnum.WORK_CONTRACT], () =>
-        reduce<number, BuildingEnum[]>(
+      .with([GameCommandEnum.WORK_CONTRACT], () => {
+        if (state.frame.neutralBuildingPhase) return state.frame.usableBuildings
+        return reduce<number, BuildingEnum[]>(
           (accum: BuildingEnum[], i: number) => {
             if (state.frame.activePlayerIndex === i) return accum
             const player = state.players[i]
@@ -187,7 +196,7 @@ export const complete =
           [] as BuildingEnum[],
           range(0, state.players.length)
         )
-      )
+      })
       .with([GameCommandEnum.WORK_CONTRACT, P._], () => {
         const options = []
         const { whiskey = 0, wine = 0, penny = 0, nickel = 0 } = view(activeLens(state), state)
