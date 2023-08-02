@@ -35,11 +35,11 @@ export const StatePlaying = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', paddingTop: 40 }}>
         <MoveList />
         <div>
-          {rondel && config && <Rondel config={config} rondel={rondel} />}
-          {buildings && <UnbuiltBuildings buildings={buildings} />}
           {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
           {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
           {wonders && <UnbuiltWonders wonders={wonders} />}
+          {rondel && config && <Rondel config={config} rondel={rondel} />}
+          {buildings && <UnbuiltBuildings buildings={buildings} />}
           {players &&
             pipe(
               map<EngineTableau, ReactNode>((player) => {

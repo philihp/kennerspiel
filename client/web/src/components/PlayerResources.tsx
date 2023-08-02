@@ -85,27 +85,36 @@ export const PlayerResources = ({
   reliquary,
 }: Props) => (
   <div style={{ margin: 10 }}>
-    <Times n={peat} id="Pt" />
-    <Times n={penny} id="Pn" />
+    {/* Construction stuff */}
     <Times n={clay} id="Cl" />
     <Times n={wood} id="Wo" />
-    <Times n={grain} id="Gn" />
     <Times n={sheep} id="Sh" />
+    <Times n={straw} id="Sw" />
     <Times n={stone} id="Sn" />
+
+    {/* Midgame, processed stuff */}
+    <Times n={grain} id="Gn" />
+    <Times n={malt} id="Ho" />
     <Times n={flour} id="Fl" />
     <Times n={grape} id="Gp" />
+    <Times n={beer} id="Be" />
+    <Times n={meat} id="Mt" />
+    <Times n={bread} id="Br" />
+
+    {/* Currency */}
+    <Times n={wine} id="Wn" />
+    <Times n={whiskey} id="Wh" />
+    <Times n={penny} id="Pn" />
     <Times n={nickel} id="Ni" />
-    <Times n={malt} id="Ho" />
+
+    {/* Energy */}
+    <Times n={peat} id="Pt" />
     <Times n={coal} id="Co" />
+
+    {/* Points */}
     <Times n={book} id="Bo" />
     <Times n={ceramic} id="Ce" />
-    <Times n={whiskey} id="Wh" />
-    <Times n={straw} id="Sw" />
-    <Times n={meat} id="Mt" />
     <Times n={ornament} id="Or" />
-    <Times n={bread} id="Br" />
-    <Times n={wine} id="Wn" />
-    <Times n={beer} id="Be" />
     <Times n={reliquary} id="Rq" />
   </div>
 )
