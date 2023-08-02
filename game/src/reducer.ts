@@ -97,12 +97,20 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
         country: country as GameConfigCountry,
       })(state as GameStateSetup)
     )
-    .with([GameCommandEnum.START, P.array(P.string)], ([_, [unparsedSeed, ...colors]]) =>
-      start(state as GameStateSetup, {
-        seed: Number.parseInt(unparsedSeed, 10),
-        colors: colors as PlayerColor[],
+    .with([GameCommandEnum.START, P.array(P.string)], ([_, params]) => {
+      const seed = Number.parseInt(params[0], 10)
+      if (Number.isNaN(seed)) {
+        return start(state as GameStateSetup, {
+          seed: undefined,
+          colors: params as PlayerColor[],
+        })
+      }
+
+      return start(state as GameStateSetup, {
+        seed,
+        colors: params.slice(1) as PlayerColor[],
       })
-    )
+    })
     .otherwise((command) => {
       throw new Error(`Unable to parse [${command.join(',')}]`)
     })

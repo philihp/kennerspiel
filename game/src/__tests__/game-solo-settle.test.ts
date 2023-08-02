@@ -7,7 +7,8 @@ describe('game-solo-settle', () => {
   it('settling should', () => {
     const s01 = initialState
     const s02 = reducer(s01, ['CONFIG', '1', 'france', 'long'])! as GameStateSetup
-    const s03 = reducer(s02, ['START', '41303', 'G'])! as GameStatePlaying
+    const s03 = reducer(s02, ['START', 'G', 'W'])! as GameStatePlaying
+    expect(s03.players.map((p) => p.color)).toStrictEqual(['G', 'W'])
     expect(s03).toBeDefined()
     const s06 = reducer(s03, ['USE', 'LG1'])! as GameStatePlaying
     expect(s06).toBeDefined()
@@ -15,7 +16,9 @@ describe('game-solo-settle', () => {
     const s08 = reducer(s07, ['FELL_TREES', '2', '0'])! as GameStatePlaying
     expect(s08).toBeDefined()
     const s09 = reducer(s08, ['COMMIT'])! as GameStatePlaying
+    expect(s09).toBeDefined()
     const s10 = reducer(s09, ['USE', 'LG2', 'Gn'])! as GameStatePlaying
+    expect(s10).toBeDefined()
     const s11 = reducer(s10, ['CONVERT', 'Gn'])! as GameStatePlaying
     expect(s11).toBeDefined()
     const s12 = reducer(s11, ['COMMIT'])! as GameStatePlaying

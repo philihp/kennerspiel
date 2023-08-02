@@ -1,23 +1,11 @@
-import { createPcg32, randomInt } from 'fn-pcg'
-import { PCGState } from 'fn-pcg/dist/types'
-import { BuildingEnum, LandEnum, PlayerColor, StateReducer, Tile } from '../../types'
+import { BuildingEnum, LandEnum, StateReducer, Tile } from '../../types'
 import { makeLandscape } from '../landscape'
 import { clergyForColor } from '../player'
-
-const neutralColor = (playerColor: PlayerColor, neutralColorIndex: number) =>
-  [
-    // pick a color that the player isn't using
-    PlayerColor.Red,
-    PlayerColor.Blue,
-    PlayerColor.Green,
-    PlayerColor.White,
-  ].filter((c) => c !== playerColor)[neutralColorIndex]
 
 export const addNeutralPlayer: StateReducer = (state) => {
   if (state === undefined) return state
 
-  const [neutralColorIndex, randGen] = randomInt(0, 3, state.randGen)
-  const color = neutralColor(state.players[0].color, neutralColorIndex)
+  const { color } = state.players[1]
   const clergy = clergyForColor(state.config)(color)
   const [row0, row1] = makeLandscape(color)
   const landscape: Tile[][] = [
@@ -47,13 +35,12 @@ export const addNeutralPlayer: StateReducer = (state) => {
 
   return {
     ...state,
-    randGen,
     players: [
-      ...state.players,
+      state.players[0],
       {
-        ...state.players[0],
-        clergy,
+        ...state.players[1],
         color,
+        clergy,
         landscape,
       },
     ],

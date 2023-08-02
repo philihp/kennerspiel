@@ -1,5 +1,4 @@
 import { createPcg32 } from 'fn-pcg'
-import { times } from 'ramda'
 import { initialState } from '../../../state'
 import {
   Clergy,
@@ -61,7 +60,13 @@ describe('board/frame/addNeutralPlayer', () => {
         pointingBefore: 0,
       },
       wonders: 0,
-      players: [p0],
+      players: [
+        p0,
+        {
+          ...p0,
+          color: PlayerColor.Red,
+        },
+      ],
       buildings: [],
       plotPurchasePrices: [1, 1, 1, 1, 1, 1],
       districtPurchasePrices: [],
@@ -99,21 +104,6 @@ describe('board/frame/addNeutralPlayer', () => {
       const s1 = addNeutralPlayer(s0)!
       expect(s1.players[0].clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
       expect(s1.players[1].clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
-    })
-
-    it('does not give the neutral player the same color as the starting player', () => {
-      const colors = [PlayerColor.Red, PlayerColor.Blue, PlayerColor.Green, PlayerColor.White]
-      times((seed) => {
-        colors.forEach((color) => {
-          const s1 = {
-            ...s0,
-            randGen: createPcg32({}, 42, 56),
-            players: [{ ...s0.players[0], color }],
-          }
-          const s2 = addNeutralPlayer(s1)!
-          expect(s2.players[0].color).not.toBe(s2.players[1].color)
-        })
-      }, 50)
     })
   })
 })
