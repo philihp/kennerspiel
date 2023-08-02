@@ -51,7 +51,12 @@ export const StatePlaying = () => {
                       (!!state?.control &&
                         !soloNeutralBuild &&
                         state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id) ||
-                      (soloNeutralBuild && player === state?.players?.[1])
+                      (soloNeutralBuild &&
+                        !!state?.control?.partial?.startsWith('BUILD') &&
+                        player === state?.players?.[1]) ||
+                      (soloNeutralBuild &&
+                        !!state?.control?.partial?.startsWith('SETTLE') &&
+                        player === state?.players?.[0])
                     }
                   />
                 )
