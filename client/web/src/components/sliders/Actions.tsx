@@ -9,24 +9,65 @@ import { ActionWorkContract } from './ActionWorkContract'
 import { ActionBuyPlot } from './ActionBuyPlot'
 import { ActionBuyDistrict } from './ActionBuyDistrict'
 import { ActionConvert } from './ActionConvert'
-import { ActionCommit } from './ActionCommit'
+import { Picker } from '../Picker'
+import { ActionWithLaybrother } from './ActionWithLaybrother'
+import { ActionwithPrior } from './ActionWithPrior'
 
 export const Actions = () => {
-  const { state } = useHathoraContext()
-  const position = state?.control?.partial === '' ? 80 : 0
+  const { state, move, control } = useHathoraContext()
+  const position = state?.control ? 80 : 0
+
+  const handleSend = () => {
+    if (state?.control?.partial) {
+      control('')
+      move(state?.control?.partial)
+    }
+  }
 
   return (
     <div className={classes.container} style={{ transform: `translateY(${position}px)` }}>
-      <ActionCutPeat />
-      <ActionFellTrees />
-      <ActionBuild />
-      <ActionUse />
-      <ActionWorkContract />
-      <ActionBuyPlot />
-      <ActionBuyDistrict />
-      <ActionSettle />
-      <ActionConvert />
-      <ActionCommit />
+      {state?.control?.partial === '' && (
+        <>
+          {state?.control?.completion?.includes('WITH_LAYBROTHER') === true && (
+            <>
+              <ActionWithLaybrother />
+              <ActionwithPrior />
+            </>
+          )}
+          {state?.control?.completion?.includes('WITH_LAYBROTHER') === false && (
+            <>
+              <ActionCutPeat />
+              <ActionFellTrees />
+              <ActionBuild />
+              <ActionUse />
+              <ActionWorkContract />
+              <ActionBuyPlot />
+              <ActionBuyDistrict />
+              <ActionConvert />
+              <ActionSettle />
+            </>
+          )}
+        </>
+      )}
+      {state?.control?.partial !== '' && (
+        <>
+          <button type="button" className={classes.action} onClick={() => control('')}>
+            Clear
+          </button>
+          <div>
+            <code>{state?.control?.partial}</code>
+            <Picker />
+          </div>
+          <button
+            type="button"
+            disabled={!state?.control?.completion?.includes('')}
+            className={classes.action}
+            onClick={handleSend}
+          >
+            Send Move
+          </button>
+        </>
+      )}
     </div>
   )
 }
