@@ -10,7 +10,7 @@ import {
   GameStatePlaying,
 } from '../types'
 import { take } from '../board/rondel'
-import { oncePerFrame } from '../board/frame'
+import { checkNotBonusRound, oncePerFrame } from '../board/frame'
 import { forestLocations, forestLocationsForCol } from '../board/landscape'
 
 const removeForestAt = (row: number, col: number) =>
@@ -73,6 +73,7 @@ export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): S
   pipe(
     //
     oncePerFrame(GameCommandEnum.FELL_TREES),
+    checkNotBonusRound,
     givePlayerWood(useJoker),
     removeForestAt(row, col),
     useJoker ? updateJokerRondel : updateWoodRondel
@@ -85,6 +86,7 @@ export const complete =
     return (
       match<string[], string[]>(partial)
         .with([], () => {
+          if (checkNotBonusRound(state) === undefined) return []
           if (!hasAForest(player.landscape)) return []
           if (oncePerFrame(GameCommandEnum.FELL_TREES)(state) === undefined) return []
           return [GameCommandEnum.FELL_TREES]

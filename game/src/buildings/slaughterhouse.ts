@@ -1,4 +1,4 @@
-import { always, ap, curry, lift, map, min, pipe, range, reverse, view } from 'ramda'
+import { always, curry, map, min, pipe, range, reverse, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, stringRepeater } from '../board/resource'

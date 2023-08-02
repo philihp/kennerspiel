@@ -132,6 +132,17 @@ describe('commands/fellTrees', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(s0)!
       expect(s1.players[0].wood).toBe(2)
     })
+    it('fails if in bonus round', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          bonusRoundPlacement: true,
+        },
+      }
+      const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
+      expect(s2).toBeUndefined()
+    })
     it('gives the active player joker-wood', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: true })(s0)!
       expect(s1.players[0].wood).toBe(3)
@@ -142,6 +153,17 @@ describe('commands/fellTrees', () => {
     it('returns FELL_TREES if no partial and active player has forest', () => {
       const c0 = complete(s0)([])
       expect(c0).toStrictEqual(['FELL_TREES'])
+    })
+    it('returns [] if bonus round placement', () => {
+      const s1 = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          bonusRoundPlacement: true,
+        },
+      }
+      const c1 = complete(s1)([])
+      expect(c1).toStrictEqual([])
     })
     it('returns [] if active player has no forest', () => {
       const p1 = {

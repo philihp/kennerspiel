@@ -175,3 +175,8 @@ export const allOccupiedBuildingsUsable: StateReducer = (state) => {
   if (state === undefined) return state
   return setFrameToAllowFreeUsage(occupiedBuildingsForPlayers(state.players))(state)
 }
+
+export const checkNotBonusRound: StateReducer = withFrame((frame) => {
+  if (frame?.bonusRoundPlacement === true) return undefined
+  return frame
+})
