@@ -19,6 +19,7 @@ const Game = () => {
       {connecting && <Loading />}
       {state?.status === EngineStatus.SETUP && <StateSetup />}
       {state?.status === EngineStatus.PLAYING && <StatePlaying />}
+      {state?.status === EngineStatus.FINISHED && <StatePlaying />}
     </>
   )
 }
