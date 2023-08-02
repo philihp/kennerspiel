@@ -3,27 +3,22 @@ import { useHathoraContext } from '../../context/GameContext'
 
 export const Submit = () => {
   const { state, control, move } = useHathoraContext()
-  const position = state?.control?.completion?.includes('') ? -80 : 0
-
-  const handleReset = () => {
-    control('')
-  }
+  const position = state?.control?.completion?.includes('COMMIT') ? -80 : 0
 
   const handleSubmit = () => {
     const command = state?.control?.partial
-    if (command) {
+    if (command !== undefined) {
+      // command could be '', dont remove !== undefined
       control('')
-      move(command)
+      console.log('commit')
+      move('COMMIT')
     }
   }
 
   return (
     <div className={classes.container} style={{ transform: `translateY(${position}px)` }}>
-      <button className={classes.submit} type="submit" onClick={handleReset}>
-        Reset
-      </button>
       <button className={classes.submit} type="submit" onClick={handleSubmit}>
-        Send Move
+        End Turn
       </button>
     </div>
   )

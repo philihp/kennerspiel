@@ -1,4 +1,4 @@
-import { collectBy, find, map, range } from 'ramda'
+import { collectBy, equals, find, map, range, reject } from 'ramda'
 import { useHathoraContext } from '../context/GameContext'
 import { Picker } from './Picker'
 import { EngineColor } from '../../../../api/types'
@@ -47,7 +47,9 @@ const colorToStyle = (c?: EngineColor): ColorStyle => {
 }
 
 export const MoveList = () => {
-  const { state } = useHathoraContext()
+  const { state, undo, redo } = useHathoraContext()
+  const completions = state?.control?.completion ?? []
+  const noSelectableOptions = reject(equals(''), completions).length < 1
 
   const flow = collectBy((f) => `${f.round}`, state?.flow ?? [])
   return (
@@ -96,6 +98,23 @@ export const MoveList = () => {
         )}
       </div>
       <hr />
+
+      {state?.control === undefined && (
+        <div>Waiting on {EngineColor[state?.players?.[state?.frame?.activePlayerIndex ?? -1]?.color ?? -1]}...</div>
+      )}
+      {state?.control !== undefined && (
+        <>
+          <button type="button" onClick={undo}>
+            Undo
+          </button>
+          <button type="button" onClick={redo}>
+            Redo
+          </button>
+        </>
+      )}
+
+      <hr />
+
       <ul style={resetStyle}>
         {state?.moves.map((m, i) => (
           // eslint-disable-next-line react/no-array-index-key
@@ -105,9 +124,6 @@ export const MoveList = () => {
         ))}
 
         <li>
-          <hr />
-          <span style={{ fontFamily: 'monospace' }}>{state?.control?.partial}</span>
-          <Picker />
           <hr />
         </li>
 

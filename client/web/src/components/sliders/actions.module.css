@@ -4,6 +4,7 @@
   border-radius: 4px;
   border: 1px solid #ddd;
   margin: 5px;
+  max-width: 100px;
 }
 .action:active:enabled {
   background-color: #f2f2f2;

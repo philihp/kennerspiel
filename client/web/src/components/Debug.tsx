@@ -3,11 +3,15 @@ import { useHathoraContext } from '../context/GameContext'
 
 export const Debug = () => {
   const [expanded, setExpanded] = useState<boolean>(false)
-  const { state } = useHathoraContext()
+  const { state, control } = useHathoraContext()
   const handleClick = () => setExpanded(!expanded)
+  const handleReset = () => control('')
 
   return (
     <div>
+      <button type="button" onClick={handleReset}>
+        Reset
+      </button>
       <button type="button" onClick={handleClick}>
         Debug
       </button>
