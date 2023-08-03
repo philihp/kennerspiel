@@ -1,5 +1,6 @@
 import { GameStatePlaying, control, reducer } from '..'
 import { spiel } from '../spiel'
+import { NextUseClergy } from '../types'
 
 describe('control/settlement round checks', () => {
   const s0 = spiel`
@@ -79,7 +80,7 @@ COMMIT` as GameStatePlaying
       'CONVERT',
     ])
   })
-  it('can build on neutral player', () => {
+  it('can navigate neutral building phase with expected completions', () => {
     expect(s0).toMatchObject({
       buildings: ['G02'],
     })
@@ -94,7 +95,69 @@ COMMIT` as GameStatePlaying
       //
       'G02',
     ])
+    expect(control(s0, ['BUILD', 'G02'])?.completion).toStrictEqual([
+      //
+      '3 1',
+      '4 1',
+    ])
+
     const s1 = reducer(s0, ['BUILD', 'G02', '3', '1']) as GameStatePlaying
-    expect(s1).toBeDefined()
+
+    expect(control(s1, [])?.completion).toStrictEqual([
+      //
+      'WORK_CONTRACT',
+      'BUY_PLOT',
+      'BUY_DISTRICT',
+      'CONVERT',
+      'SETTLE',
+      'COMMIT',
+    ])
+
+    // if they settle, then the WORK_CONTRACT goes away, because the neutral building phase is over
+    const s2x = reducer(s1, ['SETTLE', 'SR2', '1', '2', 'BrCo']) as GameStatePlaying
+    expect(control(s2x, [])?.completion).toStrictEqual([
+      //
+      'BUY_PLOT',
+      'BUY_DISTRICT',
+      'CONVERT',
+      'COMMIT',
+    ])
+
+    // but they have an option for a work contract, which they can only do on the buildings just built
+    // and are still visible
+    expect(control(s1, ['WORK_CONTRACT'])?.completion).toStrictEqual(['G02'])
+
+    const s3y = reducer(s1, ['WORK_CONTRACT', 'G02', 'Pn']) as GameStatePlaying
+
+    // make sure it puts the PRIOR on it
+    expect(s3y.players[1].landscape[1][5][2]).toBe('PRIB')
+    expect(s3y.frame).toMatchObject({
+      nextUse: NextUseClergy.Free,
+      usableBuildings: ['G02'],
+    })
+
+    expect(control(s3y, [])?.completion).toStrictEqual([
+      //
+      'USE',
+      'BUY_PLOT',
+      'BUY_DISTRICT',
+      'CONVERT',
+      'SETTLE',
+      'COMMIT',
+    ])
+
+    const s4 = reducer(s3y, ['USE', 'G02', 'PnGnBr', 'Gn']) as GameStatePlaying
+    expect(s4.frame).toMatchObject({
+      neutralBuildingPhase: false,
+    })
+
+    expect(control(s4, [])?.completion).toStrictEqual([
+      //
+      'BUY_PLOT',
+      'BUY_DISTRICT',
+      'CONVERT',
+      'SETTLE',
+      'COMMIT',
+    ])
   })
 })

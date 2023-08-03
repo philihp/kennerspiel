@@ -15,7 +15,7 @@ import {
   without,
 } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { oncePerFrame, withFrame } from '../board/frame'
+import { clearNeutralBuildingPhase, oncePerFrame, withFrame } from '../board/frame'
 import {
   allBuiltBuildings,
   allVacantUsableBuildings,
@@ -125,11 +125,6 @@ const checkIfUseCanHappen =
   }
 
 const clearUsableBuildings: StateReducer = withFrame(set(lensPath(['usableBuildings']), []))
-
-const clearNeutralBuildingPhase: StateReducer = withFrame((frame) => {
-  const newFrame = assoc('neutralBuildingPhase', false)(frame)
-  return newFrame
-})
 
 const moveClergyTo =
   (building: BuildingEnum): StateReducer =>

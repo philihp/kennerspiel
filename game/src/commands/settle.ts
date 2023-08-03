@@ -1,7 +1,7 @@
 import { filter, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { addErectionAtLandscape } from '../board/erections'
-import { onlyViaBonusActions } from '../board/frame'
+import { clearNeutralBuildingPhase, onlyViaBonusActions } from '../board/frame'
 import { checkLandscapeFree, checkLandTypeMatches, erectableLocations, erectableLocationsCol } from '../board/landscape'
 import { activeLens, payCost, withActivePlayer } from '../board/player'
 import { costEnergy, costFood, parseResourceParam, settlementCostOptions } from '../board/resource'
@@ -47,7 +47,8 @@ export const settle = ({ row, col, settlement, resources }: GameCommandSettlePar
     checkLandTypeMatches(row, col, settlement),
     payForSettlement(settlement, input),
     removeSettlementFromUnbuilt(settlement),
-    addErectionAtLandscape(row, col, settlement)
+    addErectionAtLandscape(row, col, settlement),
+    clearNeutralBuildingPhase
   )
 }
 
