@@ -1,4 +1,4 @@
-import { equals, findIndex, lensProp, map, pipe, reduce, remove, set } from 'ramda'
+import { assoc, equals, findIndex, lensProp, map, pipe, reduce, remove, set } from 'ramda'
 import { match } from 'ts-pattern'
 import { nextFrame4Long } from './frame/nextFrame4Long'
 import { nextFrame3Long } from './frame/nextFrame3Long'
@@ -113,6 +113,8 @@ export const oncePerFrame = (command: GameCommandEnum): StateReducer =>
     if (frame.mainActionUsed === false) return { ...frame, mainActionUsed: true }
     return undefined
   })
+
+export const clearNeutralBuildingPhase: StateReducer = withFrame(assoc('neutralBuildingPhase', false))
 
 export const setFrameToAllowFreeUsage = (building: BuildingEnum[]): StateReducer =>
   withFrame((frame) => ({

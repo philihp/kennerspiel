@@ -21,6 +21,7 @@ import {
   Frame,
   GameCommandEnum,
   GameStatePlaying,
+  NextUseClergy,
   SettlementRound,
   StateReducer,
   Tile,
@@ -116,7 +117,12 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
   return pipe(
     // Only allow if mainAction not consumed, and consume it
     (state) => {
-      if (state?.frame.neutralBuildingPhase && state?.buildings.length === 0) return state
+      if (
+        state?.frame.neutralBuildingPhase &&
+        state?.buildings.length === 0 &&
+        state?.frame?.nextUse === NextUseClergy.OnlyPrior
+      )
+        return state
       return oncePerFrame(GameCommandEnum.WORK_CONTRACT)(state)
     },
 
@@ -151,7 +157,11 @@ export const complete =
         if (
           !state.frame.bonusActions.includes(GameCommandEnum.WORK_CONTRACT) &&
           state.frame.mainActionUsed &&
-          !(state.frame.neutralBuildingPhase === true && state.buildings.length === 0)
+          !(
+            state.frame.neutralBuildingPhase === true &&
+            state.buildings.length === 0 &&
+            state.frame.nextUse === NextUseClergy.OnlyPrior
+          )
         )
           return []
         const activePlayer = view(activeLens(state), state)
@@ -169,6 +179,9 @@ export const complete =
           )
         )
           return []
+
+        // TODO: if neutral building phase and neutral player doesn't have a clergy free
+
         // no need to check if there are buildings to be used, each player has 3 heartland buildings
         return [GameCommandEnum.WORK_CONTRACT]
       })

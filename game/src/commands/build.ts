@@ -1,6 +1,6 @@
-import { pipe, view, filter, always, concat, append, set, lensPath, intersection, lensProp } from 'ramda'
+import { pipe, view, filter, always, concat, append, set, lensPath, intersection, lensProp, map, join } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { costForBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
+import { costForBuilding, isCloisterBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
 import { addErectionAtLandscape } from '../board/erections'
 import { oncePerFrame } from '../board/frame'
 import {
@@ -49,9 +49,9 @@ const buildContinuation = (state: GameStatePlaying): GameCommandEnum[] => {
 
 export const allowPriorToUse =
   (building: BuildingEnum): StateReducer =>
-  (state) =>
-    state &&
-    set<GameStatePlaying, Frame>(
+  (state) => {
+    if (state === undefined) return undefined
+    return set<GameStatePlaying, Frame>(
       lensProp('frame'),
       pipe(
         set(lensPath(['bonusActions']), concat(buildContinuation(state), state.frame.bonusActions)),
@@ -68,6 +68,7 @@ export const allowPriorToUse =
         )
       )(state.frame)
     )(state)
+  }
 
 export const build = ({ row, col, building }: GameCommandBuildParams): StateReducer =>
   pipe(
@@ -103,16 +104,34 @@ export const complete =
             )
           )
         )
-        .with([GameCommandEnum.BUILD, P._], ([, building]) =>
-          state.frame.neutralBuildingPhase
-            ? // TODO: when building a cloister, only suggest empty or cloister spots
-              // TODO: when building a non-cloister, only suggest non-cloister spots
-
-              // in a neutral building phase, we can build on netural heartland on top of anything
-              ['0 0', '1 0', '2 0', '3 0', '4 0', '0 1', '1 1', '2 1', '3 1', '4 1']
-            : // all the coords which match the terrain for this building...
-              erectableLocations(building as BuildingEnum, player)
-        )
+        .with([GameCommandEnum.BUILD, P._], ([, building]) => {
+          if (state.frame.neutralBuildingPhase) {
+            const isCloister = isCloisterBuilding(building! as BuildingEnum)
+            const coords: [number, number][] = [
+              [0, 0],
+              [1, 0],
+              [2, 0],
+              [3, 0],
+              [4, 0],
+              [0, 1],
+              [1, 1],
+              [2, 1],
+              [3, 1],
+              [4, 1],
+            ]
+            const acceptable = filter(([col, row]) => {
+              const [, localBuilding] = state.players[1].landscape[row][col + 2]
+              // if there is a building, only match if it is also similarly cloister or not cloister
+              if (localBuilding !== undefined) return isCloisterBuilding(localBuilding) === isCloister
+              // otherwise this space is blank, build under normal rules
+              return checkCloisterAdjacency(row, col, building as BuildingEnum)(state) === state
+            }, coords)
+            const ret = map(join(' '), acceptable)
+            return ret
+          }
+          // all the coords which match the terrain for this building...
+          return erectableLocations(building as BuildingEnum, player)
+        })
         .with([GameCommandEnum.BUILD, P._, P._], ([, building, col]) =>
           state.frame.neutralBuildingPhase
             ? // in a neutral building phase, we can build on netural heartland on top of anything

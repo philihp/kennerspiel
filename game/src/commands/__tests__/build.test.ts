@@ -703,6 +703,67 @@ describe('commands/build', () => {
       const c0 = complete(s1)(['BUILD', BuildingEnum.Priory])
       expect(c0).toStrictEqual(['3 0', '3 2', '4 2'])
     })
+    it('neutral building phase building a cloister only on adjacent or overbuild', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        config: {
+          ...s0.config,
+          players: 1,
+        },
+        players: [
+          {
+            ...s0.players[0],
+          },
+          {
+            ...s0.players[0],
+            landscape: [
+              [[], [], ['P', 'G12'], ['P'], ['P'], ['P'], ['P', 'LG1'], [], []],
+              [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'G01'], ['H', 'LG3'], [], []],
+            ] as Tile[][],
+            landscapeOffset: 0,
+          },
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          neutralBuildingPhase: true,
+          bonusActions: [GameCommandEnum.BUILD],
+        },
+      }
+      const c0 = complete(s1)(['BUILD', BuildingEnum.Priory])
+      expect(c0).toStrictEqual(['3 0', '3 1', '4 1'])
+    })
+    it('neutral building phase building a regular building', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        config: {
+          ...s0.config,
+          players: 1,
+        },
+        buildings: [BuildingEnum.Market],
+        players: [
+          {
+            ...s0.players[0],
+          },
+          {
+            ...s0.players[0],
+            landscape: [
+              [[], [], ['P', 'G12'], ['P'], ['P'], ['P'], ['P', 'LG1'], [], []],
+              [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'G01'], ['H', 'LG3'], [], []],
+            ] as Tile[][],
+            landscapeOffset: 0,
+          },
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          neutralBuildingPhase: true,
+          bonusActions: [GameCommandEnum.BUILD],
+        },
+      }
+      const c0 = complete(s1)(['BUILD', BuildingEnum.Market])
+      expect(c0).toStrictEqual(['0 0', '1 0', '2 0', '3 0', '4 0', '0 1', '1 1', '2 1'])
+    })
     it('considers terrain type', () => {
       const s1: GameStatePlaying = {
         ...s0,
