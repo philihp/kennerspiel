@@ -1,3 +1,4 @@
+import { always, assoc, dissoc, equals, isNil, pathSatisfies, pipe, propSatisfies, when } from 'ramda'
 import { Rondel, GameCommandConfigParams, StateReducer, Cost } from '../types'
 import { getCost, withActivePlayer } from './player'
 import { multiplyGoods } from './resource'
@@ -10,10 +11,7 @@ export const withRondel =
     if (state === undefined) return state
     const rondel = func(state.rondel)
     if (rondel === undefined) return undefined
-    return {
-      ...state,
-      rondel,
-    }
+    return assoc('rondel', rondel, state)
   }
 
 export const updateRondel =
@@ -21,27 +19,25 @@ export const updateRondel =
   (rondel: Rondel | undefined): Rondel | undefined => {
     if (rondel === undefined) return undefined
     if (rondel[token] === undefined) return rondel
-    return {
-      ...rondel,
-      [token]: rondel[token] !== undefined ? rondel.pointingBefore : rondel[token],
-    }
+    return assoc(token, rondel[token] !== undefined ? rondel.pointingBefore : rondel[token])(rondel)
   }
 
 const introduceToken = (token: 'grape' | 'stone' | 'joker') =>
-  withRondel((rondel) => {
-    if (rondel === undefined) return undefined
-    if (rondel[token] !== undefined) return rondel
-    return {
-      ...rondel,
-      [token]: rondel.pointingBefore,
-    } as Rondel
-  })
-export const introduceGrapeToken: StateReducer = (state) => {
-  if (state?.config?.country !== 'france') return state
-  return introduceToken('grape')(state)
-}
+  withRondel(
+    pipe(
+      when(isNil, always(undefined)),
+      when(propSatisfies(isNil, token), (rondel: Rondel) => assoc(token, rondel.pointingBefore, rondel))
+    )
+  )
+
+export const introduceGrapeToken: StateReducer = when(
+  pathSatisfies(equals('france'), ['config', 'country']),
+  introduceToken('grape')
+)
+
 export const introduceStoneToken: StateReducer = introduceToken('stone')
 export const introduceJokerToken: StateReducer = introduceToken('joker')
+export const removeJokerToken: StateReducer = withRondel(dissoc('joker'))
 
 export const armValues = ({ length, players }: GameCommandConfigParams) => {
   if (players === 2 && length === 'short') {
@@ -67,11 +63,4 @@ export const takePlayerJoker =
     return withActivePlayer(getCost(multiplyGoods(takeValue)(unitCost)))(state)
   }
 
-export const advanceJokerOnRondel: StateReducer = (state) =>
-  state && {
-    ...state,
-    rondel: {
-      ...state.rondel,
-      joker: state.rondel.pointingBefore,
-    },
-  }
+export const advanceJokerOnRondel: StateReducer = (state) => state && assoc('joker', state.rondel.pointingBefore, state)

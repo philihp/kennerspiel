@@ -50,9 +50,10 @@ describe('game-solo-settle', () => {
     const s37 = reducer(s36, ['COMMIT'])! as GameStatePlaying
     const s40 = reducer(s37, ['CUT_PEAT', '0', '2'])! as GameStatePlaying
     const s41 = reducer(s40, ['COMMIT'])! as GameStatePlaying
-    const s42 = reducer(s41, ['CUT_PEAT', '0', '1', 'Jo'])! as GameStatePlaying
+    const s42 = reducer(s41, ['FELL_TREES', '1', '0'])! as GameStatePlaying
+    expect(s42.players[0].landscape[0][3]).toStrictEqual(['P'])
     const s43 = reducer(s42, ['COMMIT'])! as GameStatePlaying
-    const s44 = reducer(s43, ['USE', 'G07', 'PtPtPtPtPtPtPtPtPtPtPtPtPt'])! as GameStatePlaying
+    const s44 = reducer(s43, ['USE', 'G07', 'PtPtPtPtPtPt'])! as GameStatePlaying
     const s45 = reducer(s44, ['COMMIT'])! as GameStatePlaying
     const s46 = reducer(s45, ['USE', 'G06', 'CoCoCo'])! as GameStatePlaying
     const s47 = reducer(s46, ['BUY_DISTRICT', '3', 'PLAINS'])! as GameStatePlaying
@@ -125,8 +126,8 @@ describe('game-solo-settle', () => {
 
     expect(s61.players[0]).toMatchObject({
       landscape: [
-        [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'G06'], ['P'], ['H', 'LG1'], [], []],
-        [[], [], ['P'], ['P', 'F03'], ['P', 'LG2'], ['P', 'G01'], ['P', 'LG3'], [], []],
+        [[], [], ['P', 'G07'], ['P'], ['P', 'G06'], ['P'], ['H', 'LG1'], [], []],
+        [[], [], ['P', 'LMO'], ['P', 'F03'], ['P', 'LG2'], ['P', 'G01'], ['P', 'LG3'], [], []],
         [['W'], ['C', 'F11'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['H', 'F04'], ['H', 'F09'], [], []],
         [['W'], ['C'], ['P', 'LFO'], ['P'], ['P', 'F05', 'PRIG'], ['P'], ['H'], [], []],
       ],
@@ -203,7 +204,7 @@ describe('game-solo-settle', () => {
     expect(s65.players[0]).toMatchObject({
       penny: 4,
       bread: 5,
-      coal: 10,
+      coal: 3,
     })
     expect(s65.players[1]).toMatchObject({
       clergy: ['LB2W', 'PRIW'],
@@ -247,7 +248,7 @@ describe('game-solo-settle', () => {
     const c66b = control(s66, ['SETTLE'])
     expect(c66b.completion).toStrictEqual(['SG1', 'SG2', 'SG3', 'SG4'])
     const c66c = control(s66, ['SETTLE', 'SG2'])
-    expect(c66c.completion).toStrictEqual(['3 0', '0 1', '0 2', '-1 3', '1 3', '3 3', '4 3'])
+    expect(c66c.completion).toStrictEqual(['1 0', '3 0', '0 2', '-1 3', '1 3', '3 3', '4 3'])
     const c66d = control(s66, ['SETTLE', 'SG2', '3', '3'])
     expect(c66d.completion).toContain('BrCo')
     const c66e = control(s66, ['SETTLE', 'SG2', '3', '3', 'BrCo'])

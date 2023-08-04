@@ -1,14 +1,12 @@
-import { FrameFlow, GameCommandEnum, SettlementRound } from '../../types'
+import { FrameFlow, SettlementRound } from '../../types'
 import { introduceBuildings } from '../buildings'
 import { addNeutralPlayer } from './addNeutralPlayer'
 import { gameEnd } from '../state'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondelWithExpire } from './rotateRondel'
-import { introduceJokerToken } from '../rondel'
+import { introduceJokerToken, removeJokerToken } from '../rondel'
 import { checkSoloSettlementReady } from './checkSoloSettlementReady'
 import { introduceSettlements } from '../settlements'
-
-// TODO: joker comes out in A space
 
 // Each round:
 // Return all clergymen if all placed
@@ -31,7 +29,14 @@ export const nextFrameSolo: FrameFlow = {
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
-    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings, addNeutralPlayer, introduceSettlements],
+    upkeep: [
+      rotateRondelWithExpire,
+      returnClergyIfPlaced,
+      introduceBuildings,
+      removeJokerToken,
+      addNeutralPlayer,
+      introduceSettlements,
+    ],
     next: 2,
   },
   2: { next: 3 },
