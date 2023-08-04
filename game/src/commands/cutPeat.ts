@@ -5,6 +5,7 @@ import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateRed
 import { take, updateRondel, withRondel } from '../board/rondel'
 import { checkNotBonusRound, oncePerFrame } from '../board/frame'
 import { moorLocations, moorLocationsForCol } from '../board/landscape'
+import { shortGameBonusProduction } from '../board/resource'
 
 const removePeatAt = (row: number, col: number) =>
   withActivePlayer((player) => {
@@ -50,7 +51,8 @@ export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): State
     checkNotBonusRound,
     givePlayerPeat(useJoker),
     removePeatAt(row, col),
-    withRondel(updateRondel(useJoker ? 'joker' : 'peat'))
+    withRondel(updateRondel(useJoker ? 'joker' : 'peat')),
+    shortGameBonusProduction('peat')
   )
 
 export const complete =

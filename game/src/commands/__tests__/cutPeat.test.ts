@@ -140,6 +140,19 @@ describe('commands/cutPeat', () => {
       const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
     })
+    it('gives bonus peat in short 3p', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+      } as GameStatePlaying
+      const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
+      expect(s2.players[0].peat).toBe(3)
+      expect(s2.players[1].peat).toBe(1)
+      expect(s2.players[2].peat).toBe(1)
+    })
     it('gives the active player joker-peat', () => {
       const s1 = cutPeat({ row: 0, col: 0, useJoker: true })(s0)!
       expect(s1.players[0].peat).toBe(3)
