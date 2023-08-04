@@ -131,6 +131,25 @@ describe('buildings/cooperage', () => {
       const s1 = cooperage('WoWo', 'Wh')(s0)! as GameStatePlaying
       expect(s1).toBe(s0)
     })
+    describe('in a short game', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+      } as GameStatePlaying
+      it('gives bonus whiskey', () => {
+        const s2 = cooperage('WoWoWo', 'Wh')(s1)
+        expect(s2?.players.map((p) => p.whiskey)).toStrictEqual([6, 1, 1])
+        expect(s2?.players.map((p) => p.beer)).toStrictEqual([0, 0, 0])
+      })
+      it('gives bonus beer', () => {
+        const s2 = cooperage('WoWoWo', 'Be')(s1)
+        expect(s2?.players.map((p) => p.whiskey)).toStrictEqual([0, 0, 0])
+        expect(s2?.players.map((p) => p.beer)).toStrictEqual([6, 1, 1])
+      })
+    })
   })
 
   describe('complete', () => {

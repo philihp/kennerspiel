@@ -1,7 +1,7 @@
 import { always, ap, concat, curry, identity, pipe, view } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { activeLens, payCost, withActivePlayer } from '../board/player'
-import { parseResourceParam } from '../board/resource'
+import { parseResourceParam, shortGameBonusProduction } from '../board/resource'
 import { advanceJokerOnRondel, takePlayerJoker } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
 
@@ -17,7 +17,8 @@ export const cooperage = (input = '', output = ''): StateReducer => {
     //
     withActivePlayer(payCost({ wood })),
     takePlayerJoker(out),
-    advanceJokerOnRondel
+    advanceJokerOnRondel,
+    shortGameBonusProduction(out)
   )
 }
 
