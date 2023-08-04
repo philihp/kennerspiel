@@ -230,6 +230,31 @@ describe('buildings/farmyard', () => {
         sheep: 2,
       })
     })
+    describe('in a short game', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+      }
+      it('gives grain if you take with grain', () => {
+        const s2 = farmyard('Gn')(s1)!
+        expect(s2.players.map((p) => p.grain)).toStrictEqual([6, 1, 1])
+      })
+      it('gives sheep if you take with sheep', () => {
+        const s2 = farmyard('Sh')(s1)!
+        expect(s2.players.map((p) => p.sheep)).toStrictEqual([5, 1, 1])
+      })
+      it('gives grain if you take grain with joker', () => {
+        const s2 = farmyard('GnJo')(s1)!
+        expect(s2.players.map((p) => p.grain)).toStrictEqual([4, 1, 1])
+      })
+      it('gives sheep if you take sheep with joker', () => {
+        const s2 = farmyard('ShJo')(s1)!
+        expect(s2.players.map((p) => p.sheep)).toStrictEqual([4, 1, 1])
+      })
+    })
   })
 
   describe('complete', () => {

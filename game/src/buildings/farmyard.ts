@@ -3,7 +3,7 @@ import { match, P } from 'ts-pattern'
 import { withActivePlayer } from '../board/player'
 import { updateRondel, withRondel, take } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
-import { parseResourceParam } from '../board/resource'
+import { parseResourceParam, shortGameBonusProduction } from '../board/resource'
 
 const takePlayerSheep =
   (withJoker: boolean): StateReducer =>
@@ -45,8 +45,22 @@ export const farmyard = (param = ''): StateReducer => {
   const withGrain = param.includes(ResourceEnum.Grain)
   if (!withSheep && !withGrain) return always(undefined)
   return pipe(
-    when(always(withSheep), takePlayerSheep(withJoker)),
-    when(always(withGrain), takePlayerGrain(withJoker)),
+    when(
+      always(withSheep),
+      pipe(
+        //
+        takePlayerSheep(withJoker),
+        shortGameBonusProduction('sheep')
+      )
+    ),
+    when(
+      always(withGrain),
+      pipe(
+        //
+        takePlayerGrain(withJoker),
+        shortGameBonusProduction('grain')
+      )
+    ),
     withRondel(
       cond([
         [always(withJoker), updateRondel('joker')],
