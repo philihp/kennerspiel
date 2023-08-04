@@ -50,7 +50,7 @@ export const farmyard = (param = ''): StateReducer => {
       pipe(
         //
         takePlayerSheep(withJoker),
-        shortGameBonusProduction('sheep')
+        shortGameBonusProduction({ sheep: 1 })
       )
     ),
     when(
@@ -58,7 +58,7 @@ export const farmyard = (param = ''): StateReducer => {
       pipe(
         //
         takePlayerGrain(withJoker),
-        shortGameBonusProduction('grain')
+        shortGameBonusProduction({ grain: 1 })
       )
     ),
     withRondel(

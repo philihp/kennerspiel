@@ -40,7 +40,7 @@ export const quarry = (param = ''): StateReducer => {
     //
     takePlayerStone(withJoker),
     advanceStoneOnRondel(withJoker),
-    shortGameBonusProduction('stone')
+    shortGameBonusProduction({ stone: 1 })
   )
 }
 

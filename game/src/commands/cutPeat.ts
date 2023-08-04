@@ -52,7 +52,7 @@ export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): State
     givePlayerPeat(useJoker),
     removePeatAt(row, col),
     withRondel(updateRondel(useJoker ? 'joker' : 'peat')),
-    shortGameBonusProduction('peat')
+    shortGameBonusProduction({ peat: 1 })
   )
 
 export const complete =

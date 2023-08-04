@@ -25,7 +25,7 @@ export const clayMound = (param = ''): StateReducer => {
     //
     takePlayerClay(withJoker),
     withRondel(updateToken(withJoker)),
-    shortGameBonusProduction('clay')
+    shortGameBonusProduction({ clay: 1 })
   )
 }
 

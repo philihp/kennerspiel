@@ -195,7 +195,7 @@ describe('board/resource', () => {
       const s0 = spiel`
         CONFIG 2 france short
         START B W`! as GameStatePlaying
-      const s1 = shortGameBonusProduction('reliquary')(s0)!
+      const s1 = shortGameBonusProduction({ reliquary: 1 })(s0)!
       expect(s1.players[0].reliquary).toBe(0)
       expect(s1.players[1].reliquary).toBe(0)
     })
@@ -203,7 +203,7 @@ describe('board/resource', () => {
       const s0 = spiel`
         CONFIG 3 france short
         START B W R`! as GameStatePlaying
-      const s1 = shortGameBonusProduction('reliquary')(s0)!
+      const s1 = shortGameBonusProduction({ reliquary: 1 })(s0)!
       expect(s1.players[0].reliquary).toBe(1)
       expect(s1.players[1].reliquary).toBe(1)
       expect(s1.players[2].reliquary).toBe(1)
@@ -212,7 +212,7 @@ describe('board/resource', () => {
       const s0 = spiel`
         CONFIG 4 france short
         START B W G R`! as GameStatePlaying
-      const s1 = shortGameBonusProduction('stone')(s0)!
+      const s1 = shortGameBonusProduction({ stone: 1 })(s0)!
       expect(s1.players[0].stone).toBe(1)
       expect(s1.players[1].stone).toBe(1)
       expect(s1.players[2].stone).toBe(1)
@@ -222,7 +222,7 @@ describe('board/resource', () => {
       const s0 = spiel`
         CONFIG 3 france long
         START B W R`! as GameStatePlaying
-      const s1 = shortGameBonusProduction('reliquary')(s0)!
+      const s1 = shortGameBonusProduction({ reliquary: 1 })(s0)!
       expect(s1.players[0].reliquary).toBe(0)
       expect(s1.players[1].reliquary).toBe(0)
       expect(s1.players[2].reliquary).toBe(0)
@@ -231,7 +231,7 @@ describe('board/resource', () => {
       const s0 = spiel`
         CONFIG 2 france long
         START W R`! as GameStatePlaying
-      const s1 = shortGameBonusProduction('reliquary')(s0)!
+      const s1 = shortGameBonusProduction({ reliquary: 1 })(s0)!
       expect(s1.players[0].reliquary).toBe(0)
       expect(s1.players[1].reliquary).toBe(0)
     })
@@ -239,7 +239,7 @@ describe('board/resource', () => {
       const s0 = spiel`
         CONFIG 4 france long
         START B W G R`! as GameStatePlaying
-      const s1 = shortGameBonusProduction('stone')(s0)!
+      const s1 = shortGameBonusProduction({ stone: 1 })(s0)!
       expect(s1.players[0].stone).toBe(0)
       expect(s1.players[1].stone).toBe(0)
       expect(s1.players[2].stone).toBe(0)

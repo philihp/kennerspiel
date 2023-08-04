@@ -60,7 +60,7 @@ export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): S
     givePlayerWood(useJoker),
     removeForestAt(row, col),
     withRondel(updateRondel(useJoker ? 'joker' : 'wood')),
-    shortGameBonusProduction('wood')
+    shortGameBonusProduction({ wood: 1 })
   )
 
 export const complete =

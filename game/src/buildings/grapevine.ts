@@ -40,7 +40,7 @@ export const grapevine = (param = ''): StateReducer => {
     //
     takePlayerGrape(withJoker),
     advanceGrapeOnRondel(withJoker),
-    shortGameBonusProduction('grape')
+    shortGameBonusProduction({ grape: 1 })
   )
 }
 

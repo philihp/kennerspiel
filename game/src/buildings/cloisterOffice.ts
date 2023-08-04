@@ -25,7 +25,7 @@ export const cloisterOffice = (param = '') => {
     //
     takePlayerCoin(withJoker),
     withRondel(updateToken(withJoker)),
-    shortGameBonusProduction('penny')
+    shortGameBonusProduction({ penny: 1 })
   )
 }
 

@@ -357,7 +357,7 @@ export const rewardCostOptions = curry((totalPoints: number): string[] => {
   return uniq(sort(byPoints, output))
 })
 
-export const shortGameBonusProduction = (resource: keyof Cost): StateReducer =>
+export const shortGameBonusProduction = (cost: Cost): StateReducer =>
   pipe(
     when(isNil, always(undefined)),
     when(
@@ -366,6 +366,6 @@ export const shortGameBonusProduction = (resource: keyof Cost): StateReducer =>
         pathSatisfies(equals('short'), ['config', 'length']),
         pathSatisfies(gte(__, 3), ['config', 'players']),
       ]),
-      withEachPlayer(getCost({ [resource]: 1 }))
+      withEachPlayer(getCost(cost))
     )
   )

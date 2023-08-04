@@ -114,6 +114,33 @@ describe('buildings/shippingCompany', () => {
       const s1 = shippingCompany('WoWn')(s0)!
       expect(s1).toBe(s0)
     })
+    describe('in a short game', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+      } as GameStatePlaying
+      it('gives bonus wine', () => {
+        const s2 = shippingCompany('CoWn')(s1)
+        expect(s2?.players.map((p) => p.wine)).toStrictEqual([4, 1, 1])
+        expect(s2?.players.map((p) => p.meat)).toStrictEqual([0, 0, 0])
+        expect(s2?.players.map((p) => p.bread)).toStrictEqual([0, 0, 0])
+      })
+      it('gives bonus meat', () => {
+        const s2 = shippingCompany('CoMt')(s1)
+        expect(s2?.players.map((p) => p.wine)).toStrictEqual([0, 0, 0])
+        expect(s2?.players.map((p) => p.meat)).toStrictEqual([4, 1, 1])
+        expect(s2?.players.map((p) => p.bread)).toStrictEqual([0, 0, 0])
+      })
+      it('gives bonus bread', () => {
+        const s2 = shippingCompany('CoBr')(s1)
+        expect(s2?.players.map((p) => p.wine)).toStrictEqual([0, 0, 0])
+        expect(s2?.players.map((p) => p.meat)).toStrictEqual([0, 0, 0])
+        expect(s2?.players.map((p) => p.bread)).toStrictEqual([4, 1, 1])
+      })
+    })
   })
 
   describe('complete', () => {

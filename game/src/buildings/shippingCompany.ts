@@ -1,7 +1,13 @@
 import { always, ap, concat, curry, identity, map, pipe, unnest, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, payCost, withActivePlayer } from '../board/player'
-import { costEnergy, costFood, energyCostOptions, parseResourceParam } from '../board/resource'
+import {
+  costEnergy,
+  costFood,
+  energyCostOptions,
+  parseResourceParam,
+  shortGameBonusProduction,
+} from '../board/resource'
 import { advanceJokerOnRondel, takePlayerJoker } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
 
@@ -21,7 +27,8 @@ export const shippingCompany = (inputRaw = ''): StateReducer => {
     //
     withActivePlayer(payCost({ coal, peat, wood, straw })),
     takePlayerJoker(output),
-    advanceJokerOnRondel
+    advanceJokerOnRondel,
+    shortGameBonusProduction(output)
   )
 }
 
