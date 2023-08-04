@@ -1,4 +1,5 @@
-import { Cost } from '../../types'
+import { spiel } from '../../spiel'
+import { Cost, GameStatePlaying } from '../../types'
 import {
   combinations,
   costEnergy,
@@ -8,6 +9,7 @@ import {
   multiplyGoods,
   parseResourceParam,
   settlementCostOptions,
+  shortGameBonusProduction,
   totalGoods,
 } from '../resource'
 
@@ -185,6 +187,63 @@ describe('board/resource', () => {
     })
     it('combines items', () => {
       expect(costEnergy({ coal: 1, peat: 1, wood: 1, straw: 1 })).toBe(6.5)
+    })
+  })
+
+  describe('shortGameBonusProduction', () => {
+    test('does not give resources in short 2p game', () => {
+      const s0 = spiel`
+        CONFIG 2 france short
+        START B W`! as GameStatePlaying
+      const s1 = shortGameBonusProduction('reliquary')(s0)!
+      expect(s1.players[0].reliquary).toBe(0)
+      expect(s1.players[1].reliquary).toBe(0)
+    })
+    test('dispenses resources in short 3p game', () => {
+      const s0 = spiel`
+        CONFIG 3 france short
+        START B W R`! as GameStatePlaying
+      const s1 = shortGameBonusProduction('reliquary')(s0)!
+      expect(s1.players[0].reliquary).toBe(1)
+      expect(s1.players[1].reliquary).toBe(1)
+      expect(s1.players[2].reliquary).toBe(1)
+    })
+    test('dispenses resources in short 4p game', () => {
+      const s0 = spiel`
+        CONFIG 4 france short
+        START B W G R`! as GameStatePlaying
+      const s1 = shortGameBonusProduction('stone')(s0)!
+      expect(s1.players[0].stone).toBe(1)
+      expect(s1.players[1].stone).toBe(1)
+      expect(s1.players[2].stone).toBe(1)
+      expect(s1.players[3].stone).toBe(1)
+    })
+    test('does not give resources in long 3p game', () => {
+      const s0 = spiel`
+        CONFIG 3 france long
+        START B W R`! as GameStatePlaying
+      const s1 = shortGameBonusProduction('reliquary')(s0)!
+      expect(s1.players[0].reliquary).toBe(0)
+      expect(s1.players[1].reliquary).toBe(0)
+      expect(s1.players[2].reliquary).toBe(0)
+    })
+    test('does not give resources in long 2p game', () => {
+      const s0 = spiel`
+        CONFIG 2 france long
+        START W R`! as GameStatePlaying
+      const s1 = shortGameBonusProduction('reliquary')(s0)!
+      expect(s1.players[0].reliquary).toBe(0)
+      expect(s1.players[1].reliquary).toBe(0)
+    })
+    test('does not give resources in long 4p game', () => {
+      const s0 = spiel`
+        CONFIG 4 france long
+        START B W G R`! as GameStatePlaying
+      const s1 = shortGameBonusProduction('stone')(s0)!
+      expect(s1.players[0].stone).toBe(0)
+      expect(s1.players[1].stone).toBe(0)
+      expect(s1.players[2].stone).toBe(0)
+      expect(s1.players[3].stone).toBe(0)
     })
   })
 })

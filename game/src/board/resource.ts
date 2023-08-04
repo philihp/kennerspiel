@@ -19,8 +19,17 @@ import {
   uniq,
   comparator,
   sort,
+  when,
+  pathSatisfies,
+  equals,
+  always,
+  isNil,
+  gte,
+  __,
+  allPass,
 } from 'ramda'
-import { Cost, ResourceEnum, SettlementCost, Tableau } from '../types'
+import { Cost, ResourceEnum, SettlementCost, StateReducer, Tableau } from '../types'
+import { getCost, withEachPlayer } from './player'
 
 export const basicResources = [
   ResourceEnum.Peat,
@@ -347,3 +356,16 @@ export const rewardCostOptions = curry((totalPoints: number): string[] => {
   )([['', totalPoints]])
   return uniq(sort(byPoints, output))
 })
+
+export const shortGameBonusProduction = (resource: keyof Cost): StateReducer =>
+  pipe(
+    when(isNil, always(undefined)),
+    when(
+      allPass([
+        //
+        pathSatisfies(equals('short'), ['config', 'length']),
+        pathSatisfies(gte(__, 3), ['config', 'players']),
+      ]),
+      withEachPlayer(getCost({ [resource]: 1 }))
+    )
+  )

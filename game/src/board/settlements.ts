@@ -1,4 +1,4 @@
-import { lensPath, pipe, set, union } from 'ramda'
+import { assoc, equals, isNotNil, lensPath, pathSatisfies, pipe, set, union, when } from 'ramda'
 import { match } from 'ts-pattern'
 import { PlayerColor, SettlementCost, SettlementEnum, SettlementRound, StateReducer } from '../types'
 import { withEachPlayer } from './player'
@@ -57,8 +57,8 @@ export const costForSettlement = (settlement: SettlementEnum): SettlementCost =>
     )
     .exhaustive()
 
-export const roundSettlements = (color: PlayerColor, round: SettlementRound): SettlementEnum[] =>
-  match<[PlayerColor, SettlementRound], SettlementEnum[]>([color, round])
+export const roundSettlements = (color: PlayerColor, round?: SettlementRound): SettlementEnum[] =>
+  match<[PlayerColor, SettlementRound | undefined], SettlementEnum[]>([color, round])
     .with([PlayerColor.Red, SettlementRound.S], () => [
       SettlementEnum.ShantyTownR,
       SettlementEnum.FarmingVillageR,
@@ -105,15 +105,14 @@ export const introduceSettlements: StateReducer = (state) => {
   return pipe(
     //
     withEachPlayer(
-      (player) =>
-        state && {
-          ...player,
-          settlements: union(player.settlements, roundSettlements(player.color, state.frame.settlementRound)),
-        }
+      when(isNotNil, (player) =>
+        assoc(
+          'settlements',
+          union(player.settlements, roundSettlements(player.color, state?.frame.settlementRound)),
+          player
+        )
+      )
     ),
-    (state) => {
-      if (state?.config?.players === 1) return set(lensPath(['players', 1, 'settlements']), [], state)
-      return state
-    }
+    when(pathSatisfies(equals(1), ['config', 'players']), set(lensPath(['players', 1, 'settlements']), []))
   )(state)
 }

@@ -1,3 +1,5 @@
+import { reducer } from '../..'
+import { spiel } from '../../spiel'
 import { initialState } from '../../state'
 import {
   Clergy,
@@ -154,6 +156,15 @@ describe('buildings/clayMound', () => {
         joker: 3,
         clay: undefined,
       })
+    })
+    it('dispenses clay in a 3p short game to everyone', () => {
+      const s0 = spiel`
+        CONFIG 3 france short
+        START B W R`! as GameStatePlaying
+      const s1 = reducer(s0, ['USE', 'LB1'])!
+      expect(s1.players?.[0].clay).toBe(4)
+      expect(s1.players?.[1].clay).toBe(2)
+      expect(s1.players?.[2].clay).toBe(2)
     })
   })
 
