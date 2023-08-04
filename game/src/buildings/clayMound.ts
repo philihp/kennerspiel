@@ -3,6 +3,7 @@ import { match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
 import { updateRondel, withRondel, take } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { shortGameBonusProduction } from '../board/resource'
 
 const takePlayerClay =
   (withJoker: boolean): StateReducer =>
@@ -23,7 +24,8 @@ export const clayMound = (param = ''): StateReducer => {
   return pipe(
     //
     takePlayerClay(withJoker),
-    withRondel(updateToken(withJoker))
+    withRondel(updateToken(withJoker)),
+    shortGameBonusProduction({ clay: 1 })
   )
 }
 

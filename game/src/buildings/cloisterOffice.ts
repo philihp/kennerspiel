@@ -3,6 +3,7 @@ import { match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
 import { updateRondel, withRondel, take } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { shortGameBonusProduction } from '../board/resource'
 
 const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('coin'))
 
@@ -23,7 +24,8 @@ export const cloisterOffice = (param = '') => {
   return pipe(
     //
     takePlayerCoin(withJoker),
-    withRondel(updateToken(withJoker))
+    withRondel(updateToken(withJoker)),
+    shortGameBonusProduction({ penny: 1 })
   )
 }
 

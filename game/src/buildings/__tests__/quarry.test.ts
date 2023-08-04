@@ -93,6 +93,25 @@ describe('buildings/quarry', () => {
       })
     })
 
+    it('has bonus production in short 3/4 game', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+      } as GameStatePlaying
+      const s2 = quarry()(s1)! as GameStatePlaying
+      expect(s2.rondel).toMatchObject({
+        pointingBefore: 3,
+        joker: 2,
+        stone: 3,
+      })
+      expect(s2.players[0].stone).toBe(4)
+      expect(s2.players[1].stone).toBe(1)
+      expect(s2.players[2].stone).toBe(1)
+    })
+
     it('can use the joker', () => {
       const s1 = quarry('Jo')(s0)! as GameStatePlaying
       expect(s1.rondel).toMatchObject({

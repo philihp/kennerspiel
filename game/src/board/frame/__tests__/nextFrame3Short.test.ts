@@ -1,4 +1,6 @@
+import { reducer } from '../../..'
 import { control } from '../../../control'
+import { spiel } from '../../../spiel'
 import { GameCommandConfigParams, GameStatePlaying, PlayerColor } from '../../../types'
 
 describe('board/frame/nextFrame3Short', () => {
@@ -85,5 +87,14 @@ describe('board/frame/nextFrame3Short', () => {
       [12, 'B', false, true],
       [12, 'G', false, true],
     ])
+  })
+
+  it('gives an extra good to everyone whenever someone uses the wheel', () => {
+    const s0 = spiel`
+CONFIG 3 france short
+START B W R`
+    const s1 = reducer(s0!, ['USE', 'LB1']) as GameStatePlaying
+    expect(s0?.players?.map((s) => s.clay)).toStrictEqual([1, 1, 1])
+    expect(s1?.players?.map((s) => s.clay)).toStrictEqual([4, 2, 2])
   })
 })

@@ -128,6 +128,24 @@ describe('buildings/cloisterOffice', () => {
         coin: 5,
       })
     })
+    it('can get pennies with the coin token in short game', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+      } as GameStatePlaying
+      const s2 = cloisterOffice()(s1)!
+      expect(s2.players[0].penny).toBe(5)
+      expect(s2.players[1].penny).toBe(1)
+      expect(s2.players[2].penny).toBe(1)
+      expect(s2.rondel).toMatchObject({
+        pointingBefore: 5,
+        joker: 3,
+        coin: 5,
+      })
+    })
     it('can get pennies with the joker', () => {
       const s1 = cloisterOffice('Jo')(s0)!
       expect(s1.players[0].penny).toBe(3)
