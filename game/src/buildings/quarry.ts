@@ -3,6 +3,7 @@ import { P, match } from 'ts-pattern'
 import { withActivePlayer } from '../board/player'
 import { take } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { shortGameBonusProduction } from '../board/resource'
 
 const advanceStoneOnRondel =
   (withJoker: boolean): StateReducer =>
@@ -38,7 +39,8 @@ export const quarry = (param = ''): StateReducer => {
   return pipe(
     //
     takePlayerStone(withJoker),
-    advanceStoneOnRondel(withJoker)
+    advanceStoneOnRondel(withJoker),
+    shortGameBonusProduction('stone')
   )
 }
 
