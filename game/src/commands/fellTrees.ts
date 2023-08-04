@@ -9,9 +9,10 @@ import {
   StateReducer,
   GameStatePlaying,
 } from '../types'
-import { take } from '../board/rondel'
+import { take, updateRondel, withRondel } from '../board/rondel'
 import { checkNotBonusRound, oncePerFrame } from '../board/frame'
 import { forestLocations, forestLocationsForCol } from '../board/landscape'
+import { shortGameBonusProduction } from '../board/resource'
 
 const removeForestAt = (row: number, col: number) =>
   withActivePlayer((player) => {
@@ -51,24 +52,6 @@ export const givePlayerWood =
     return withActivePlayer(getCost({ wood: amount }))(state)
   }
 
-const updateWoodRondel: StateReducer = (state) =>
-  state && {
-    ...state,
-    rondel: {
-      ...state.rondel,
-      wood: state.rondel.wood !== undefined ? state.rondel.pointingBefore : state.rondel.wood,
-    },
-  }
-
-const updateJokerRondel: StateReducer = (state) =>
-  state && {
-    ...state,
-    rondel: {
-      ...state.rondel,
-      joker: state.rondel.joker !== undefined ? state.rondel.pointingBefore : state.rondel.joker,
-    },
-  }
-
 export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): StateReducer =>
   pipe(
     //
@@ -76,7 +59,8 @@ export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): S
     checkNotBonusRound,
     givePlayerWood(useJoker),
     removeForestAt(row, col),
-    useJoker ? updateJokerRondel : updateWoodRondel
+    withRondel(updateRondel(useJoker ? 'joker' : 'wood')),
+    shortGameBonusProduction('wood')
   )
 
 export const complete =

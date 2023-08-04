@@ -143,6 +143,19 @@ describe('commands/fellTrees', () => {
       const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
     })
+    it('gives bonus production', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+      } as GameStatePlaying
+      const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
+      expect(s2.players[0].wood).toBe(3)
+      expect(s2.players[1].wood).toBe(1)
+      expect(s2.players[2].wood).toBe(1)
+    })
     it('gives the active player joker-wood', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: true })(s0)!
       expect(s1.players[0].wood).toBe(3)
