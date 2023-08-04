@@ -93,6 +93,20 @@ describe('buildings/grapevine', () => {
       })
     })
 
+    it('can get grapes with bonus production in short game', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+      } as GameStatePlaying
+      const s2 = grapevine()(s1)! as GameStatePlaying
+      expect(s2.players[0].grape).toBe(4)
+      expect(s2.players[1].grape).toBe(1)
+      expect(s2.players[2].grape).toBe(1)
+    })
+
     it('can use the joker', () => {
       const s1 = grapevine('Jo')(s0)! as GameStatePlaying
       expect(s1.rondel).toMatchObject({
@@ -103,6 +117,20 @@ describe('buildings/grapevine', () => {
       expect(s1.players[0]).toMatchObject({
         grape: 2,
       })
+    })
+
+    it('can get grapes with joker and bonus production in short game', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          ...s0.config,
+          length: 'short',
+        },
+      } as GameStatePlaying
+      const s2 = grapevine('Jo')(s1)! as GameStatePlaying
+      expect(s2.players[0].grape).toBe(3)
+      expect(s2.players[1].grape).toBe(1)
+      expect(s2.players[2].grape).toBe(1)
     })
   })
 
