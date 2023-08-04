@@ -5,5 +5,5 @@ export const spiel = (strings: TemplateStringsArray): GameState | undefined =>
     .join('')
     .split('\n')
     .slice(1)
-    .map((s) => s.split(' '))
+    .map((s) => s.trim().split(' '))
     .reduce((state: GameState | undefined, command: string[]) => reducer(state!, command), initialState)
