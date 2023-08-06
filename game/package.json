@@ -33,7 +33,7 @@
     "fast-shuffle": "6.0.1",
     "fn-pcg": "2.0.1",
     "ramda": "0.29.0",
-    "ts-pattern": "5.0.4"
+    "ts-pattern": "5.0.5"
   },
   "devDependencies": {
     "@philihp/eslint-config": "6.0.2",
