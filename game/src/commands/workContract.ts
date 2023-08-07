@@ -1,4 +1,4 @@
-import { all, find, forEach, pipe, range, reduce, view, without } from 'ramda'
+import { all, complement, equals, find, forEach, pathSatisfies, pipe, range, reduce, view, when, without } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { payCost, getCost, withActivePlayer, isLayBrother, isPrior, activeLens, withPlayerIndex } from '../board/player'
 import {
@@ -89,10 +89,9 @@ const checkModalPlayerHasPriorOption =
     if (clergy.length === 0) return undefined
 
     if (state.config.players === 1) {
-      const mover = moveClergyToNeutralBuilding(building)
       return pipe(
         //
-        mover,
+        moveClergyToNeutralBuilding(building),
         setFrameToAllowFreeUsage([building])
       )(state)
     }
@@ -137,7 +136,7 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
     transferActiveToOwnerOf(building),
 
     // --> give the new active player all of the coins that were given
-    withActivePlayer(getCost({ penny })),
+    when(pathSatisfies(complement(equals(1)), ['config', 'players']), withActivePlayer(getCost({ penny }))),
 
     checkModalPlayerBuildingUnoccupied(building),
 
