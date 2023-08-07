@@ -1,9 +1,11 @@
+import { join, map, pipe, reduce, reject, split } from 'ramda'
 import { GameState, initialState, reducer } from '.'
 
-export const spiel = (strings: TemplateStringsArray): GameState | undefined =>
-  strings
-    .join('')
-    .split('\n')
-    .slice(1)
-    .map((s) => s.trim().split(' '))
-    .reduce((state: GameState | undefined, command: string[]) => reducer(state!, command), initialState)
+export const spiel = pipe(
+  join(''),
+  split('\n'),
+  map((s) => s.trim()),
+  reject((s) => s === ''),
+  map((s) => s.split(' ')),
+  reduce((state: GameState | undefined, command: string[]) => reducer(state!, command), initialState)
+)
