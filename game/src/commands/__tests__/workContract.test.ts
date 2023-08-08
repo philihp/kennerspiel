@@ -1,3 +1,5 @@
+import { control, reducer } from '../..'
+import { spiel } from '../../spiel'
 import { initialState } from '../../state'
 import {
   BuildingEnum,
@@ -292,6 +294,32 @@ describe('commands/workContract', () => {
       const s2 = workContract('F05' as BuildingEnum, 'Pn')(s1)!
       expect(s2).toBeUndefined()
     })
+
+    it('disallows WITH_PRIOR when not in single player', () => {
+      const s2 = workContract('F05' as BuildingEnum, 'Pn', true)(s0)!
+      expect(s2).toBeUndefined()
+    })
+
+    describe('single player', () => {
+      it('disallows WITH_PRIOR when not in single player', () => {
+        const s1 = {
+          ...s0,
+          config: {
+            ...s0.config,
+            players: 1,
+          },
+          players: [
+            {
+              ...s0.players[0],
+              penny: 3,
+            },
+            s0.players[1],
+          ],
+        } as GameStatePlaying
+        const s2 = workContract('F05' as BuildingEnum, 'Pn', true)(s1)!
+        expect(s2).toBeUndefined()
+      })
+    })
   })
 
   describe('complete', () => {
@@ -559,6 +587,23 @@ describe('commands/workContract', () => {
     it('empty completions when weird params', () => {
       const c0 = complete(s0)(['WORK_CONTRACT', 'G02', 'Pn', 'Pn'])
       expect(c0).toStrictEqual([])
+    })
+
+    describe('single player', () => {
+      const s0 = spiel`
+        CONFIG 1 france long
+        START R G
+        USE LR3
+        COMMIT
+      `! as GameStatePlaying
+      it('uses a laybrother by default', () => {
+        const s1 = reducer(s0, ['WORK_CONTRACT', 'LG2', 'Pn'])! as GameStatePlaying
+        expect(s1.players[1].landscape[1][4][2]).toBe('LB1G')
+      })
+      it('uses a prior if specified by default', () => {
+        const s1 = reducer(s0, ['WORK_CONTRACT', 'LG2', 'Pn', 'WITH_PRIOR'])! as GameStatePlaying
+        expect(s1.players[1].landscape[1][4][2]).toBe('PRIG')
+      })
     })
   })
 })

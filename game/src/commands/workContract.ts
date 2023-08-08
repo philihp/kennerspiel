@@ -1,4 +1,18 @@
-import { all, complement, equals, find, forEach, pathSatisfies, pipe, range, reduce, view, when, without } from 'ramda'
+import {
+  all,
+  any,
+  complement,
+  equals,
+  find,
+  forEach,
+  pathSatisfies,
+  pipe,
+  range,
+  reduce,
+  view,
+  when,
+  without,
+} from 'ramda'
 import { P, match } from 'ts-pattern'
 import { payCost, getCost, withActivePlayer, isLayBrother, isPrior, activeLens, withPlayerIndex } from '../board/player'
 import {
@@ -35,6 +49,13 @@ const workContractCost = (state: GameStatePlaying | undefined): number =>
   state?.buildings.includes(BuildingEnum.Winery)
     ? 1
     : 2
+
+const checkWithPriorOnlyOnSinglePlayer =
+  (withPrior: boolean): StateReducer =>
+  (state) => {
+    if (withPrior && state?.config.players !== 1) return undefined
+    return state
+  }
 
 const checkWorkContractPayment =
   (payment: Cost): StateReducer =>
@@ -80,7 +101,7 @@ const checkModalPlayerBuildingUnoccupied =
   }
 
 const checkModalPlayerHasPriorOption =
-  (building: BuildingEnum): StateReducer =>
+  (building: BuildingEnum, withPrior: boolean): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
     const { clergy } = state.players[state.config.players === 1 ? 1 : state.frame.activePlayerIndex]
@@ -91,7 +112,7 @@ const checkModalPlayerHasPriorOption =
     if (state.config.players === 1) {
       return pipe(
         //
-        moveClergyToNeutralBuilding(building),
+        moveClergyToNeutralBuilding(building, withPrior),
         setFrameToAllowFreeUsage([building])
       )(state)
     }
@@ -110,7 +131,7 @@ const checkModalPlayerHasPriorOption =
     return withFrame((frame) => ({ ...frame, usableBuildings: [building] }))(state)
   }
 
-export const workContract = (building: BuildingEnum, paymentGift: string): StateReducer => {
+export const workContract = (building: BuildingEnum, paymentGift: string, withPrior: boolean = false): StateReducer => {
   const input = parseResourceParam(paymentGift)
   const { penny } = input
   return pipe(
@@ -124,6 +145,9 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
         return state
       return oncePerFrame(GameCommandEnum.WORK_CONTRACT)(state)
     },
+
+    // dont let someone send in WITH_PRIOR unless this is single player
+    checkWithPriorOnlyOnSinglePlayer(withPrior),
 
     // <-- not in bonus round
     checkNotBonusRound,
@@ -144,7 +168,7 @@ export const workContract = (building: BuildingEnum, paymentGift: string): State
     //  ...doesnt have any clergy, then fail
     //  ...only has laybrothers, or a single prior, and thus no choice, so just make it for them
     //  ...has both a laybrother and a prior available, and thus must make a choice
-    checkModalPlayerHasPriorOption(building)
+    checkModalPlayerHasPriorOption(building, withPrior)
   )
 }
 
@@ -218,5 +242,14 @@ export const complete =
         if (workContractCost(state) === 2 && (penny >= 2 || nickel)) options.push('PnPn')
         return options
       })
-      .with([GameCommandEnum.WORK_CONTRACT, P._, P._], () => [''])
+      .with([GameCommandEnum.WORK_CONTRACT, P._, P._], () => {
+        if (
+          state.config.players === 1 &&
+          any(isPrior, state.players[1].clergy) &&
+          any(isLayBrother, state.players[1].clergy)
+        )
+          return ['', 'WITH_PRIOR']
+        return ['']
+      })
+      .with([GameCommandEnum.WORK_CONTRACT, P._, P._, 'WORK_CONTRACT'], () => [''])
       .otherwise(() => [])

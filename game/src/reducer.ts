@@ -62,8 +62,8 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
         useJoker: useJoker === 'Jo',
       })(state as GameStatePlaying)
     )
-    .with([GameCommandEnum.WORK_CONTRACT, [P.string, P.string]], ([_, [building, paymentGift]]) =>
-      workContract(building as BuildingEnum, paymentGift)(state as GameStatePlaying)
+    .with([GameCommandEnum.WORK_CONTRACT, P.array(P.string)], ([_, [building, paymentGift, withPrior]]) =>
+      workContract(building as BuildingEnum, paymentGift, withPrior === 'WITH_PRIOR')(state as GameStatePlaying)
     )
     .with([GameCommandEnum.WITH_PRIOR, []], () => withPrior(state as GameStatePlaying))
     .with([GameCommandEnum.WITH_LAYBROTHER, []], () => withLaybrother(state as GameStatePlaying))

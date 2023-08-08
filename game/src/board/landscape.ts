@@ -223,7 +223,7 @@ export const moveClergyToOwnBuilding =
   }
 
 export const moveClergyToNeutralBuilding =
-  (building: BuildingEnum): StateReducer =>
+  (building: BuildingEnum, withPrior: boolean): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
     const neutralPlayer = state.players[1]
@@ -232,7 +232,9 @@ export const moveClergyToNeutralBuilding =
     const [row, col] = matrixLocation
     const [land, ,] = neutralPlayer.landscape[row][col]
     const nextClergy =
-      state.frame.nextUse === NextUseClergy.OnlyPrior ? find(isPrior, neutralPlayer.clergy) : neutralPlayer.clergy[0]
+      withPrior || state.frame.nextUse === NextUseClergy.OnlyPrior
+        ? find(isPrior, neutralPlayer.clergy)
+        : neutralPlayer.clergy[0]
     if (nextClergy === undefined) return undefined
 
     return withPlayerIndex(1)(
