@@ -1,3 +1,4 @@
+import { dissoc, dissocPath } from 'ramda'
 import { reducer } from '../..'
 import { spiel } from '../../spiel'
 import { initialState } from '../../state'
@@ -173,6 +174,11 @@ describe('buildings/clayMound', () => {
       const c0 = complete([])(s0)
       expect(c0).toContain('')
       expect(c0).toContain('Jo')
+    })
+    it('does not allow Joker if undefined', () => {
+      const s1 = dissocPath<GameStatePlaying>(['rondel', 'joker'], s0)
+      const c1 = complete([])(s1)
+      expect(c1).not.toContain('Jo')
     })
     it('no params beyond Jo', () => {
       const c0 = complete(['Jo'])(s0)

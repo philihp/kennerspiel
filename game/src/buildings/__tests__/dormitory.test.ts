@@ -130,11 +130,11 @@ describe('buildings/dormitory', () => {
       expect(c0).toStrictEqual(['WoWoWoSwSwSw', 'WoWoSwSw', 'WoSw', ''])
     })
     it('complete if given a param', () => {
-      const c0 = complete(['Jo'])(s0)
+      const c0 = complete(['WoWoWoSwSwSw'])(s0)
       expect(c0).toStrictEqual([''])
     })
     it('dont allow complete with two params', () => {
-      const c0 = complete(['Jo', 'Gp'])(s0)
+      const c0 = complete(['WoWoWoSwSwSw', 'Gp'])(s0)
       expect(c0).toStrictEqual([])
     })
   })
