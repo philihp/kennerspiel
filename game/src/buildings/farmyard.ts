@@ -71,9 +71,9 @@ export const farmyard = (param = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], _state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
-    .with([], always(['Sh', 'Gn', 'JoSh', 'JoGn']))
+    .with([], always(state.rondel.joker !== undefined ? ['Sh', 'Gn', 'JoSh', 'JoGn'] : ['Sh', 'Gn']))
     .with(
       P.when(([param]) => {
         const { sheep = 0, grain = 0 } = parseResourceParam(param)

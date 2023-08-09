@@ -1,5 +1,6 @@
-import { always, assoc, dissoc, equals, isNil, pathSatisfies, pipe, propSatisfies, when } from 'ramda'
-import { Rondel, GameCommandConfigParams, StateReducer, Cost } from '../types'
+import { always, assoc, curry, dissoc, equals, isNil, pathSatisfies, pipe, propSatisfies, when } from 'ramda'
+import { match } from 'ts-pattern'
+import { Rondel, GameCommandConfigParams, StateReducer, Cost, GameStatePlaying } from '../types'
 import { getCost, withActivePlayer } from './player'
 import { multiplyGoods } from './resource'
 
@@ -64,3 +65,10 @@ export const takePlayerJoker =
   }
 
 export const advanceJokerOnRondel: StateReducer = (state) => state && assoc('joker', state.rondel.pointingBefore, state)
+
+export const standardSesourceGatheringCompletion = curry((partial: string[], state: GameStatePlaying) =>
+  match<string[], string[]>(partial)
+    .with([], () => (state.rondel.joker !== undefined ? ['', 'Jo'] : ['']))
+    .with(['Jo'], () => (state.rondel.joker !== undefined ? [''] : []))
+    .otherwise(always([]))
+)

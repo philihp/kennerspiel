@@ -1,7 +1,7 @@
 import { always, curry, pipe } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { withActivePlayer } from '../board/player'
-import { take } from '../board/rondel'
+import { standardSesourceGatheringCompletion, take } from '../board/rondel'
 import { StateReducer, ResourceEnum, GameStatePlaying } from '../types'
 import { shortGameBonusProduction } from '../board/resource'
 
@@ -44,9 +44,4 @@ export const grapevine = (param = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], _state: GameStatePlaying): string[] =>
-  match(partial)
-    .with([], always(['', 'Jo']))
-    .with([P._], always(['']))
-    .otherwise(always([]))
-)
+export const complete = standardSesourceGatheringCompletion

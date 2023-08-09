@@ -1,3 +1,4 @@
+import { dissocPath } from 'ramda'
 import { initialState } from '../../state'
 import {
   GameStatePlaying,
@@ -138,6 +139,11 @@ describe('buildings/grapevine', () => {
     it('takes no parameters', () => {
       const c0 = complete([])(s0)
       expect(c0).toStrictEqual(['', 'Jo'])
+    })
+    it('does not allow Joker if undefined', () => {
+      const s1 = dissocPath<GameStatePlaying>(['rondel', 'joker'], s0)
+      const c1 = complete([])(s1)
+      expect(c1).not.toContain('Jo')
     })
     it('complete if given a param', () => {
       const c0 = complete(['Jo'])(s0)
