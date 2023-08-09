@@ -596,13 +596,13 @@ describe('commands/workContract', () => {
         USE LR3
         COMMIT
       `! as GameStatePlaying
-      it('uses a laybrother by default', () => {
-        const s1 = reducer(s0, ['WORK_CONTRACT', 'LG2', 'Pn'])! as GameStatePlaying
-        expect(s1.players[1].landscape[1][4][2]).toBe('LB1G')
+      it('can complete WITH_PRIOR if reasonable', () => {
+        const c0 = control(s0, ['WORK_CONTRACT', 'LG2', 'Pn'])
+        expect(c0.completion).toStrictEqual(['', 'WITH_PRIOR'])
       })
-      it('uses a prior if specified by default', () => {
-        const s1 = reducer(s0, ['WORK_CONTRACT', 'LG2', 'Pn', 'WITH_PRIOR'])! as GameStatePlaying
-        expect(s1.players[1].landscape[1][4][2]).toBe('PRIG')
+      it('completes with_prior', () => {
+        const c0 = control(s0, ['WORK_CONTRACT', 'LG2', 'Pn', 'WITH_PRIOR'])
+        expect(c0.completion).toStrictEqual([''])
       })
     })
   })

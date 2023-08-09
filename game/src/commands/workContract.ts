@@ -251,5 +251,5 @@ export const complete =
           return ['', 'WITH_PRIOR']
         return ['']
       })
-      .with([GameCommandEnum.WORK_CONTRACT, P._, P._, 'WORK_CONTRACT'], () => [''])
+      .with([GameCommandEnum.WORK_CONTRACT, P._, P._, 'WITH_PRIOR'], () => [''])
       .otherwise(() => [])
