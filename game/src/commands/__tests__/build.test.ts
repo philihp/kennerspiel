@@ -547,6 +547,18 @@ describe('commands/build', () => {
           mainActionUsed: true,
           bonusActions: [GameCommandEnum.BUILD],
         },
+        players: [
+          {
+            ...s0.players[0],
+            wood: 25,
+            clay: 25,
+            stone: 25,
+            penny: 25,
+            straw: 25,
+          },
+          ...s0.players.slice(1),
+        ],
+        buildings: [BuildingEnum.Priory, BuildingEnum.CloisterCourtyard],
       }
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['BUILD'])
@@ -559,6 +571,55 @@ describe('commands/build', () => {
           mainActionUsed: false,
           bonusActions: [],
         },
+        players: [
+          {
+            ...s0.players[0],
+            wood: 25,
+            clay: 25,
+            stone: 25,
+            penny: 25,
+            straw: 25,
+          },
+          ...s0.players.slice(1),
+        ],
+        buildings: [BuildingEnum.Priory, BuildingEnum.CloisterCourtyard],
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual(['BUILD'])
+    })
+    it('disallows running if no buildings are buildable', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: false,
+          bonusActions: [],
+        },
+        buildings: [],
+      }
+      const c0 = complete(s1)([])
+      expect(c0).toStrictEqual([])
+    })
+    it('allows running if buildings are buildable', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          mainActionUsed: false,
+          bonusActions: [],
+        },
+        players: [
+          {
+            ...s0.players[0],
+            wood: 25,
+            clay: 25,
+            stone: 25,
+            penny: 25,
+            straw: 25,
+          },
+          ...s0.players.slice(1),
+        ],
+        buildings: [BuildingEnum.Priory, BuildingEnum.CloisterCourtyard],
       }
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['BUILD'])

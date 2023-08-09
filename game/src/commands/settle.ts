@@ -59,20 +59,9 @@ export const complete =
     return (
       match<string[], string[]>(partial)
         .with([], () => {
-          if (
-            pipe(
-              //
-              onlyViaBonusActions(GameCommandEnum.SETTLE)
-              // would be cool to check, recursively, if any of the possibilities to follow
-              // this were also allowable, i.e. they complete into an array that is non-zero in length
-              //
-              // by not doing this, it's possible to go down a dead end path, and that might not be fun
-              // for the user. but also that's really hard. so maybe not right now... i'll leave this as a
-              // TODO
-            )(state) !== undefined
-          )
-            return [GameCommandEnum.SETTLE]
-          return []
+          if (onlyViaBonusActions(GameCommandEnum.SETTLE)(state) === undefined) return []
+          if (complete(state)([GameCommandEnum.SETTLE]).length === 0) return []
+          return [GameCommandEnum.SETTLE]
         })
         .with([GameCommandEnum.SETTLE], () => {
           return filter(

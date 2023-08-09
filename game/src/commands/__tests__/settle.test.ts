@@ -241,10 +241,15 @@ describe('commands/build', () => {
     it('does not allow if none of their settlements can be built', () => {
       const s1: GameStatePlaying = {
         ...s0,
-        frame: {
-          ...s0.frame,
-          bonusActions: [],
-        },
+        players: [
+          {
+            ...s0.players[0],
+            settlements: ['SR1', 'SR2', 'SR3', 'SR4'] as SettlementEnum[],
+            coal: 0,
+            meat: 0,
+          },
+          ...s0.players.slice(1),
+        ],
       }
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
