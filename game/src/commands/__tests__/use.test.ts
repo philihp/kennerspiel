@@ -965,5 +965,33 @@ describe('commands/use', () => {
       const c0 = complete(s0)(['YUZU'])
       expect(c0).toStrictEqual([])
     })
+
+    describe('single player', () => {
+      const s1 = {
+        ...s0,
+        config: {
+          players: 1,
+          country: 'france',
+          length: 'long',
+        },
+        players: [s0.players[0], s0.players[1]],
+        buildings: ['G18', 'G19'],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          neutralBuildingPhase: true,
+          canBuyLandscape: true,
+          currentPlayerIndex: 0,
+          activePlayerIndex: 0,
+          bonusActions: ['BUILD'],
+          usableBuildings: ['F15'],
+          nextUse: 'only-prior',
+        },
+      } as GameStatePlaying
+      it('does not complete USE', () => {
+        const c1 = complete(s1)([])
+        expect(c1).not.toContain('USE')
+      })
+    })
   })
 })
