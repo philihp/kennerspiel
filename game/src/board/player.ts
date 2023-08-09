@@ -104,8 +104,17 @@ export const payCost =
       const [type, amount] = fields[i]
       if (amount) {
         dirty = true
-        const newValue = (newPlayer[type as keyof Tableau] as number) - (amount ?? 0)
-        if (newValue < 0 && type !== 'penny') return undefined
+        let newValue = (newPlayer[type as keyof Tableau] as number) - (amount ?? 0)
+
+        if (newValue < 0) {
+          if (type === 'straw') {
+            newPlayer.grain += newValue
+            newValue = 0
+            if (newPlayer.grain < 0) return undefined
+          } else if (type !== 'penny') {
+            return undefined
+          }
+        }
         newPlayer[type as keyof Cost] = newValue
       }
     }

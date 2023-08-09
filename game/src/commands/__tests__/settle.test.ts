@@ -140,6 +140,34 @@ describe('commands/build', () => {
         meat: 3,
       })
     })
+    it('does not autoconvert grain to energy', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            coal: 0,
+            meat: 0,
+            wood: 2,
+            grain: 3,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const s2 = settle({ row: -2, col: -1, resources: 'GnWo', settlement: SettlementEnum.ShantyTownB })(s1)!
+      expect(s2).toBeDefined()
+      expect(s2.players[0]).toMatchObject({
+        landscape: [
+          [['W'], ['C'], [], [], [], [], [], [], []],
+          [['W'], ['C', 'SB1'], [], [], [], [], [], [], []],
+          [['W'], ['C'], [], [], [], [], [], [], []],
+          [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['P', 'LB1'], [], []],
+          [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
+        ],
+        grain: 2,
+        wood: 1,
+      })
+    })
     it('settles on the player board during single player after building remaining buildings', () => {
       const s1: GameStatePlaying = {
         ...s0,
