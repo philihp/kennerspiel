@@ -187,7 +187,7 @@ export const nextFrameSolo: FrameFlow = {
       /* determined by checkSoloSettlementReady */
     ],
     settlementRound: SettlementRound.B,
-    upkeep: [checkSoloSettlementReady],
+    upkeep: [returnClergyIfPlaced, checkSoloSettlementReady],
     next: 33,
   },
 
@@ -253,7 +253,7 @@ export const nextFrameSolo: FrameFlow = {
       /* determined by checkSoloSettlementReady */
     ],
     settlementRound: SettlementRound.C,
-    upkeep: [checkSoloSettlementReady],
+    upkeep: [returnClergyIfPlaced, checkSoloSettlementReady],
     next: 46,
   },
 
@@ -292,7 +292,7 @@ export const nextFrameSolo: FrameFlow = {
       /* determined by checkSoloSettlementReady */
     ],
     settlementRound: SettlementRound.D,
-    upkeep: [checkSoloSettlementReady],
+    upkeep: [returnClergyIfPlaced, checkSoloSettlementReady],
     next: 55,
   },
 
