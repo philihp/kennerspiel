@@ -90,8 +90,10 @@ export const complete =
     return (
       match<string[], string[]>(partial)
         .with([], () => {
-          if (oncePerFrame(GameCommandEnum.BUILD)(state)) return [GameCommandEnum.BUILD]
-          return []
+          if (!oncePerFrame(GameCommandEnum.BUILD)(state)) return []
+          if (complete(state)([GameCommandEnum.BUILD]).length === 0) return []
+          // TODO this could be faster if we bail as soon as we know at least one building is buildable
+          return [GameCommandEnum.BUILD]
         })
         .with(
           [GameCommandEnum.BUILD],
