@@ -64,7 +64,9 @@ export const takePlayerJoker =
     return withActivePlayer(getCost(multiplyGoods(takeValue)(unitCost)))(state)
   }
 
-export const advanceJokerOnRondel: StateReducer = (state) => state && assoc('joker', state.rondel.pointingBefore, state)
+export const advanceJokerOnRondel: StateReducer = withRondel(
+  (rondel) => rondel && assoc('joker', rondel.pointingBefore, rondel)
+)
 
 export const standardSesourceGatheringCompletion = curry((partial: string[], state: GameStatePlaying) =>
   match<string[], string[]>(partial)

@@ -85,6 +85,13 @@ describe('buildings/shippingCompany', () => {
       const s1 = shippingCompany()(undefined)!
       expect(s1).toBeUndefined()
     })
+    it('resets the rondel', () => {
+      const s1 = shippingCompany('WoWoWoMt')(s0)!
+      expect(s1.rondel).toMatchObject({
+        pointingBefore: 7,
+        joker: 7,
+      })
+    })
     it('burns wood and makes meat', () => {
       const s1 = shippingCompany('WoWoWoMt')(s0)!
       expect(s1.players[0]).toMatchObject({
