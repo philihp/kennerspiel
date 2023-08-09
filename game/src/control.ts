@@ -78,7 +78,7 @@ export const control = (state: GameStatePlaying, partial: string[], player?: num
   const score = map(
     pipe(
       (player: Tableau): Score => ({
-        goods: costPoints(player),
+        goods: costPoints(player) + 30 * player.wonders,
         economic: allBuildingPoints(player.landscape),
         settlements: allDwellingPoints(player.landscape),
         total: -Infinity,
