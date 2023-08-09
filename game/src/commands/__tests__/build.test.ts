@@ -236,6 +236,49 @@ describe('commands/build', () => {
         ],
       })
     })
+    it('automatically converts grain into straw', () => {
+      const s3: GameStatePlaying = {
+        ...s0,
+        frame: {
+          ...s0.frame,
+          activePlayerIndex: 0,
+        },
+        players: [
+          {
+            ...s0.players[0],
+            landscape: [
+              [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+              [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+            ] as Tile[][],
+            wood: 3, // consume 2
+            penny: 0,
+            clay: 0,
+            stone: 0,
+            straw: 1, // consume all
+            grain: 1, // convert to straw and consume
+            flour: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+        buildings: [BuildingEnum.Inn],
+      }
+      const s4 = build({ row: 1, col: -1, building: BuildingEnum.Inn })(s3)!
+      expect(s4).toBeDefined()
+      expect(s4.buildings).not.toContain(BuildingEnum.Windmill)
+      expect(s4.players[0]).toMatchObject({
+        wood: 1,
+        penny: 0,
+        clay: 0,
+        stone: 0,
+        straw: 0,
+        grain: 0,
+        flour: 0,
+        landscape: [
+          [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+          [['W'], ['C', 'F20'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
+        ],
+      })
+    })
     it('accounts for landscape Y offset', () => {
       const s3: GameStatePlaying = {
         ...s0,
@@ -682,6 +725,38 @@ describe('commands/build', () => {
         BuildingEnum.HarborPromenade,
         BuildingEnum.StoneMerchant,
         // notice no noop here
+      ])
+    })
+
+    it('suggests buildings which require autoconversion of grain', () => {
+      const s1: GameStatePlaying = {
+        ...s0,
+        buildings: [
+          BuildingEnum.Priory, // WoCl
+          BuildingEnum.FuelMerchant, // ClSw
+          BuildingEnum.TownEstate, // WoWoSwSw
+          BuildingEnum.Market, // SnSn
+        ],
+        players: [
+          {
+            ...s0.players[0],
+            wood: 2,
+            clay: 2,
+            grain: 2,
+            stone: 0,
+          },
+          ...s0.players.slice(1),
+        ],
+        frame: {
+          ...s0.frame,
+          mainActionUsed: true,
+          bonusActions: [],
+        },
+      }
+      const c0 = complete(s1)(['BUILD'])
+      expect(c0).toStrictEqual([
+        BuildingEnum.Priory, // WoCl
+        BuildingEnum.FuelMerchant, // ClSw
       ])
     })
     it('gives all buildings, regardless of building materials, when in neutralBuildingPhase', () => {
