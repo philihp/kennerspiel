@@ -183,7 +183,8 @@ export const complete =
           !(
             state.frame.neutralBuildingPhase === true &&
             state.buildings.length === 0 &&
-            state.frame.nextUse === NextUseClergy.OnlyPrior
+            state.frame.nextUse === NextUseClergy.OnlyPrior &&
+            any(isPrior, state?.players?.[1]?.clergy ?? [])
           )
         )
           return []
@@ -202,8 +203,6 @@ export const complete =
           )
         )
           return []
-
-        // TODO: if neutral building phase and neutral player doesn't have a clergy free
 
         // no need to check if there are buildings to be used, each player has 3 heartland buildings
         return [GameCommandEnum.WORK_CONTRACT]

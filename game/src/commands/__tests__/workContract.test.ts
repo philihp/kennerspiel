@@ -599,10 +599,95 @@ describe('commands/workContract', () => {
       it('can complete WITH_PRIOR if reasonable', () => {
         const c0 = control(s0, ['WORK_CONTRACT', 'LG2', 'Pn'])
         expect(c0.completion).toStrictEqual(['', 'WITH_PRIOR'])
+        expect(s0.frame).toMatchObject({
+          activePlayerIndex: 0,
+          bonusActions: [],
+          bonusRoundPlacement: false,
+          canBuyLandscape: true,
+          currentPlayerIndex: 0,
+          mainActionUsed: false,
+          neutralBuildingPhase: false,
+          next: 3,
+          nextUse: 'any',
+          round: 1,
+          settlementRound: 'S',
+          startingPlayer: 0,
+          unusableBuildings: [],
+          usableBuildings: [],
+        })
       })
       it('completes with_prior', () => {
         const c0 = control(s0, ['WORK_CONTRACT', 'LG2', 'Pn', 'WITH_PRIOR'])
         expect(c0.completion).toStrictEqual([''])
+      })
+
+      it('does not show WORK_CONTRACT during start of neutral building phase', () => {
+        const s1 = {
+          ...s0,
+          frame: {
+            ...s0.frame,
+            mainActionUsed: true,
+            neutralBuildingPhase: true,
+            bonusActions: ['BUILD'],
+            settlementRound: SettlementRound.B,
+            nextUse: NextUseClergy.Any,
+          },
+          buildings: [BuildingEnum.Winery, BuildingEnum.Windmill],
+        } as GameStatePlaying
+        const c1 = control(s1, [])
+        expect(c1.completion).not.toContain('WORK_CONTRACT')
+      })
+
+      it('shows WORK_CONTRACT at end of neutral building phase, if a building was built', () => {
+        const s1 = {
+          ...s0,
+          frame: {
+            ...s0.frame,
+            mainActionUsed: true,
+            neutralBuildingPhase: true,
+            bonusActions: ['BUILD'],
+            settlementRound: SettlementRound.B,
+            nextUse: NextUseClergy.OnlyPrior,
+            usableBuildings: [BuildingEnum.Winery, BuildingEnum.Windmill],
+          },
+          players: [
+            s0.players[0],
+            {
+              ...s0.players[1],
+              color: PlayerColor.Green,
+              clergy: ['PRIG'],
+            },
+          ],
+          buildings: [],
+        } as GameStatePlaying
+        const c1 = control(s1, [])
+        expect(c1.completion).toContain('WORK_CONTRACT')
+      })
+
+      it('does not show WORK_CONTRACT at end of neutral building phase, if a building was built, but no prior available', () => {
+        const s1 = {
+          ...s0,
+          frame: {
+            ...s0.frame,
+            mainActionUsed: true,
+            neutralBuildingPhase: true,
+            bonusActions: ['BUILD'],
+            settlementRound: SettlementRound.B,
+            nextUse: NextUseClergy.OnlyPrior,
+            usableBuildings: [BuildingEnum.Winery, BuildingEnum.Windmill],
+          },
+          players: [
+            s0.players[0],
+            {
+              ...s0.players[1],
+              color: PlayerColor.Green,
+              clergy: ['LB2G'],
+            },
+          ],
+          buildings: [],
+        } as GameStatePlaying
+        const c1 = control(s1, [])
+        expect(c1.completion).not.toContain('WORK_CONTRACT')
       })
     })
   })
