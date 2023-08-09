@@ -316,8 +316,33 @@ describe('commands/workContract', () => {
             s0.players[1],
           ],
         } as GameStatePlaying
-        const s2 = workContract('F05' as BuildingEnum, 'Pn', true)(s1)!
+        const s2 = workContract('G02' as BuildingEnum, 'Pn', true)(s1)!
         expect(s2).toBeUndefined()
+      })
+      it('has a work contract fee of 1 penny during B settlement neutral build phase', () => {
+        const s1 = {
+          ...s0,
+          config: {
+            ...s0.config,
+            players: 1,
+          },
+          players: [
+            {
+              ...s0.players[0],
+              penny: 5,
+            },
+            s0.players[1],
+          ],
+          frame: {
+            ...s0.frame,
+            neutralBuildingPhase: true,
+            settlementRound: 'B',
+          },
+        } as GameStatePlaying
+        const s2 = workContract('G02' as BuildingEnum, 'Pn')(s1)!
+        expect(s2.players[0]).toMatchObject({
+          penny: 4,
+        })
       })
     })
   })
