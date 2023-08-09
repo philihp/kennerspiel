@@ -45,6 +45,9 @@ import { isSettlement } from '../board/buildings'
 const workContractCost = (state: GameStatePlaying | undefined): number =>
   state?.frame?.settlementRound === SettlementRound.S ||
   state?.frame?.settlementRound === SettlementRound.A ||
+  (state?.config?.players === 1 &&
+    state?.frame?.settlementRound === SettlementRound.B &&
+    state.frame.neutralBuildingPhase) ||
   state?.buildings.includes(BuildingEnum.WhiskeyDistillery) ||
   state?.buildings.includes(BuildingEnum.Winery)
     ? 1
