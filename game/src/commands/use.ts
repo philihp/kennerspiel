@@ -236,7 +236,6 @@ export const complete =
     return match<string[], string[]>(partial)
       .with([], () => {
         if (checkIfUseCanHappen()(state) === undefined) return []
-
         const hasClergyAvailable = view(activeLens(state), state).clergy?.length > 0
         const hasPriorAvailable = any(identity, map(isPrior, view(activeLens(state), state).clergy))
         if (
@@ -245,6 +244,7 @@ export const complete =
             (state.frame.nextUse === NextUseClergy.OnlyPrior && !hasPriorAvailable))
         )
           return []
+        if (state.frame.neutralBuildingPhase && state.frame.nextUse !== NextUseClergy.Free) return []
         return [GameCommandEnum.USE]
       })
       .with([GameCommandEnum.USE], () => {
