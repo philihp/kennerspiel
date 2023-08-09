@@ -202,7 +202,7 @@ describe('game-solo-settle', () => {
       usableBuildings: ['G02', 'F08', 'G12'],
     })
     expect(s65.players[0]).toMatchObject({
-      penny: 4,
+      penny: 3,
       bread: 5,
       coal: 3,
     })

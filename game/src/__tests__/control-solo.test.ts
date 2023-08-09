@@ -146,10 +146,11 @@ COMMIT` as GameStatePlaying
       'COMMIT',
     ])
 
-    const s4 = reducer(s3y, ['USE', 'G02', 'PnGnBr', 'Gn']) as GameStatePlaying
+    const s4 = reducer(s3y, ['USE', 'G02', 'PnGnBr', 'Pn']) as GameStatePlaying
     expect(s4.frame).toMatchObject({
       neutralBuildingPhase: false,
     })
+    expect(s4.players[0].penny).toBe(6)
 
     expect(control(s4, [])?.completion).toStrictEqual([
       //
