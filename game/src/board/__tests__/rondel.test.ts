@@ -1,6 +1,12 @@
-import { initialState } from '../../state'
-import { GameStatePlaying, Rondel } from '../../types'
-import { introduceGrapeToken, introduceStoneToken, take, updateRondel } from '../rondel'
+import { GameStatePlaying, Rondel, Tableau } from '../../types'
+import {
+  introduceGrapeToken,
+  introduceStoneToken,
+  standardSesourceGatheringAction,
+  standardSesourceGatheringCompletion,
+  take,
+  updateRondel,
+} from '../rondel'
 
 describe('board/rondel', () => {
   describe('take', () => {
@@ -179,6 +185,154 @@ describe('board/rondel', () => {
         stone: undefined,
         grape: undefined,
       })
+    })
+  })
+
+  describe('standardSesourceGatheringAction', () => {
+    describe('when both tokens usable', () => {
+      const r0 = {
+        pointingBefore: 8,
+        grain: 5,
+        joker: 2,
+      } as Rondel
+      const p0 = {
+        grain: 1,
+      } as Tableau
+      const s0 = {
+        rondel: r0,
+        players: [p0, p0],
+        config: {
+          players: 2,
+          length: 'long',
+          country: 'france',
+        },
+        frame: {
+          activePlayerIndex: 0,
+        },
+      } as GameStatePlaying
+      it('takes from the grain token', () => {
+        const s1 = standardSesourceGatheringAction('grain', false)(s0)!
+        expect(s1.players[0].grain).toBe(5)
+      })
+      it('takes from the joker token', () => {
+        const s1 = standardSesourceGatheringAction('grain', true)(s0)!
+        expect(s1.players[0].grain).toBe(7)
+      })
+    })
+    describe('when no joker available', () => {
+      const r0 = {
+        pointingBefore: 8,
+        sheep: 5,
+        joker: undefined,
+      } as Rondel
+      const p0 = {
+        sheep: 1,
+      } as Tableau
+      const s0 = {
+        rondel: r0,
+        players: [p0, p0],
+        config: {
+          players: 2,
+          length: 'long',
+          country: 'france',
+        },
+        frame: {
+          activePlayerIndex: 0,
+        },
+      } as GameStatePlaying
+      it('takes from the sheep token', () => {
+        const s1 = standardSesourceGatheringAction('sheep', false)(s0)!
+        expect(s1.players[0].sheep).toBe(5)
+      })
+      it('does not default back to sheep when joker specified', () => {
+        const s1 = standardSesourceGatheringAction('sheep', true)(s0)!
+        expect(s1.players[0].sheep).toBe(1)
+      })
+    })
+    describe('when no main token available', () => {
+      const r0 = {
+        pointingBefore: 8,
+        sheep: undefined,
+        joker: 4,
+      } as Rondel
+      const p0 = {
+        sheep: 1,
+      } as Tableau
+      const s0 = {
+        rondel: r0,
+        players: [p0, p0],
+        config: {
+          players: 2,
+          length: 'long',
+          country: 'france',
+        },
+        frame: {
+          activePlayerIndex: 0,
+        },
+      } as GameStatePlaying
+      it('does not fallback to sheep token', () => {
+        const s1 = standardSesourceGatheringAction('sheep', false)(s0)!
+        expect(s1.players[0].sheep).toBe(1)
+      })
+      it('takes with the joker token', () => {
+        const s1 = standardSesourceGatheringAction('sheep', true)(s0)!
+        expect(s1.players[0].sheep).toBe(6)
+      })
+    })
+  })
+
+  describe('standardSesourceGatheringCompletion', () => {
+    it('gives both options if defined', () => {
+      const r0 = {
+        pointingBefore: 4,
+        sheep: 3,
+        joker: 0,
+      } as Rondel
+      const s0 = {
+        rondel: r0,
+      } as GameStatePlaying
+
+      const c0 = standardSesourceGatheringCompletion('sheep')([], s0)
+      expect(c0).toStrictEqual(['', 'Jo'])
+    })
+    it('if no main token, but still joker, assume joker', () => {
+      const r0 = {
+        pointingBefore: 4,
+        sheep: undefined,
+        joker: 0,
+      } as Rondel
+      const s0 = {
+        rondel: r0,
+      } as GameStatePlaying
+
+      const c0 = standardSesourceGatheringCompletion('sheep')([], s0)
+      expect(c0).toStrictEqual([''])
+    })
+    it('if no joker token, but still main, assume main', () => {
+      const r0 = {
+        pointingBefore: 4,
+        sheep: 3,
+        joker: undefined,
+      } as Rondel
+      const s0 = {
+        rondel: r0,
+      } as GameStatePlaying
+
+      const c0 = standardSesourceGatheringCompletion('sheep')([], s0)
+      expect(c0).toStrictEqual([''])
+    })
+    it('if neither main nor joker token, no completion allowed', () => {
+      const r0 = {
+        pointingBefore: 4,
+        sheep: undefined,
+        joker: undefined,
+      } as Rondel
+      const s0 = {
+        rondel: r0,
+      } as GameStatePlaying
+
+      const c0 = standardSesourceGatheringCompletion('sheep')([], s0)
+      expect(c0).toStrictEqual([])
     })
   })
 })

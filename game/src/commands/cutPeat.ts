@@ -1,8 +1,8 @@
-import { addIndex, always, any, curry, map, pipe, reduce, view } from 'ramda'
+import { always, any, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
-import { activeLens, getCost, withActivePlayer } from '../board/player'
+import { activeLens, withActivePlayer } from '../board/player'
 import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer, GameStatePlaying } from '../types'
-import { take, updateRondel, withRondel } from '../board/rondel'
+import { standardSesourceGatheringAction, updateRondel, withRondel } from '../board/rondel'
 import { checkNotBonusRound, oncePerFrame } from '../board/frame'
 import { moorLocations, moorLocationsForCol } from '../board/landscape'
 import { shortGameBonusProduction } from '../board/resource'
@@ -35,21 +35,12 @@ const hasAMoor = (landscape: Tile[][]): boolean =>
     }, landRow)
   }, landscape)
 
-const givePlayerPeat =
-  (useJoker: boolean): StateReducer =>
-  (state) => {
-    if (state === undefined) return undefined
-    const { joker, peat, pointingBefore } = state.rondel
-    const amount = take(pointingBefore, (useJoker ? joker : peat) ?? pointingBefore, state.config)
-    return withActivePlayer(getCost({ peat: amount }))(state)
-  }
-
 export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): StateReducer =>
   pipe(
     //
     oncePerFrame(GameCommandEnum.CUT_PEAT),
     checkNotBonusRound,
-    givePlayerPeat(useJoker),
+    standardSesourceGatheringAction('peat', useJoker),
     removePeatAt(row, col),
     withRondel(updateRondel(useJoker ? 'joker' : 'peat')),
     shortGameBonusProduction({ peat: 1 })
