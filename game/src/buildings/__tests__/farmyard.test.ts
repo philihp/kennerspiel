@@ -1,4 +1,3 @@
-import { initialState } from '../../state'
 import {
   Clergy,
   GameStatePlaying,
