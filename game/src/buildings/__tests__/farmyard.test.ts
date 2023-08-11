@@ -46,8 +46,7 @@ describe('buildings/farmyard', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
-    ...initialState,
+  const s0 = {
     status: GameStatusEnum.PLAYING,
     config: {
       country: 'france',
@@ -112,7 +111,7 @@ describe('buildings/farmyard', () => {
       usableBuildings: [],
       nextUse: NextUseClergy.Any,
     },
-  }
+  } as GameStatePlaying
 
   describe('farmyard', () => {
     it('retains undefined state', () => {
@@ -258,9 +257,60 @@ describe('buildings/farmyard', () => {
   })
 
   describe('complete', () => {
-    it('returns options to select grain or sheep or with joker', () => {
+    it('returns options to select grain or sheep or either with joker', () => {
       const c0 = complete([])(s0)
-      expect(c0).toStrictEqual(['Sh', 'Gn', 'JoSh', 'JoGn'])
+      expect(c0).toContain('Sh')
+      expect(c0).toContain('Gn')
+      expect(c0).toContain('JoSh')
+      expect(c0).toContain('JoGn')
+    })
+    it('does not include Sh if no Sh token anymore', () => {
+      const s1 = {
+        ...s0,
+        rondel: {
+          pointingBefore: 2,
+          grain: 10,
+          joker: 1,
+          sheep: undefined,
+        },
+      }
+      const c1 = complete([])(s1)
+      expect(c1).not.toContain('Sh')
+      expect(c1).toContain('Gn')
+      expect(c1).toContain('JoSh')
+      expect(c1).toContain('JoGn')
+    })
+    it('only includes options from joker if only joker', () => {
+      const s1 = {
+        ...s0,
+        rondel: {
+          pointingBefore: 2,
+          grain: undefined,
+          joker: 1,
+          sheep: undefined,
+        },
+      }
+      const c1 = complete([])(s1)
+      expect(c1).not.toContain('Sh')
+      expect(c1).not.toContain('Gn')
+      expect(c1).toContain('JoSh')
+      expect(c1).toContain('JoGn')
+    })
+    it('does not include Gn if no grain token', () => {
+      const s1 = {
+        ...s0,
+        rondel: {
+          pointingBefore: 2,
+          grain: undefined,
+          joker: undefined,
+          sheep: 4,
+        },
+      }
+      const c1 = complete([])(s1)
+      expect(c1).toContain('Sh')
+      expect(c1).not.toContain('Gn')
+      expect(c1).not.toContain('JoSh')
+      expect(c1).not.toContain('JoGn')
     })
     it('no params beyond Sh', () => {
       const c0 = complete(['Sh'])(s0)
