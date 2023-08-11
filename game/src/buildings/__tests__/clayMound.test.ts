@@ -140,7 +140,7 @@ describe('buildings/clayMound', () => {
         clay: 2,
       })
     })
-    it('if clay is not there, do nothing', () => {
+    it('if clay is not there, fallback to joker', () => {
       const s1: GameStatePlaying = {
         ...s0,
         rondel: {
@@ -151,7 +151,7 @@ describe('buildings/clayMound', () => {
         },
       }
       const s2 = clayMound()(s1)!
-      expect(s2.players[0].clay).toBe(0)
+      expect(s2.players[0].clay).toBe(3)
       expect(s1.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 3,

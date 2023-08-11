@@ -1,21 +1,19 @@
 import { pipe } from 'ramda'
 import {
-  updateRondel,
   withRondel,
   standardSesourceGatheringCompletion,
   standardSesourceGatheringAction,
+  updateToken,
 } from '../board/rondel'
 import { ResourceEnum } from '../types'
 import { shortGameBonusProduction } from '../board/resource'
-
-const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('coin'))
 
 export const cloisterOffice = (param = '') => {
   const withJoker = param.includes(ResourceEnum.Joker)
   return pipe(
     //
     standardSesourceGatheringAction('coin', withJoker),
-    withRondel(updateToken(withJoker)),
+    withRondel(updateToken('coin', withJoker)),
     shortGameBonusProduction({ penny: 1 })
   )
 }

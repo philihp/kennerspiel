@@ -90,6 +90,12 @@ export const advanceJokerOnRondel: StateReducer = withRondel(
   (rondel) => rondel && assoc('joker', rondel.pointingBefore, rondel)
 )
 
+export const updateToken = (withToken: TokenName, withJoker: boolean) => (rondel: Rondel) => {
+  if (withJoker) return updateRondel('joker')(rondel)
+  if (rondel[withToken] === undefined) return updateRondel('joker')(rondel)
+  return updateRondel(withToken)(rondel)
+}
+
 export const standardSesourceGatheringAction =
   (usingToken: TokenName, withJoker: boolean): StateReducer =>
   (state) => {
@@ -99,7 +105,7 @@ export const standardSesourceGatheringAction =
       rondel: { joker, pointingBefore },
     } = state
     const main = state.rondel[usingToken]
-    const amount = take(pointingBefore, (withJoker ? joker : main) ?? pointingBefore, config)
+    const amount = take(pointingBefore, (withJoker ? joker : main ?? joker) ?? pointingBefore, config)
     const resource = tokenToResource(usingToken)
     const cost = parseResourceParam(resource)
     const magnitude = multiplyGoods(amount)(cost)
