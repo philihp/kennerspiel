@@ -10,6 +10,8 @@ import {
   Tile,
 } from '../../types'
 import { complete, quarry } from '../quarry'
+import { spiel } from '../../spiel'
+import { control } from '../..'
 
 describe('buildings/quarry', () => {
   const p0: Tableau = {
@@ -143,6 +145,32 @@ describe('buildings/quarry', () => {
     it('dont allow complete with two params', () => {
       const c0 = complete(['Jo', 'Gp'])(s0)
       expect(c0).toStrictEqual([])
+    })
+  })
+
+  it('backup to joker if main token gone', () => {
+    const s1 = {
+      ...s0,
+      rondel: {
+        stone: undefined,
+        joker: 11,
+        pointingBefore: 8,
+      },
+      players: [
+        {
+          ...s0.players[0],
+          stone: 0,
+        },
+      ],
+    } as GameStatePlaying
+    expect(s1.rondel).toMatchObject({
+      stone: undefined,
+      joker: 11,
+      pointingBefore: 8,
+    })
+    const s2 = quarry('')(s1)!
+    expect(s2.players[0]).toMatchObject({
+      stone: 8,
     })
   })
 })

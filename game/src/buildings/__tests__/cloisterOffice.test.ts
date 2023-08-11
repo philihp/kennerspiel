@@ -156,7 +156,7 @@ describe('buildings/cloisterOffice', () => {
         coin: 2,
       })
     })
-    it('if coin is not there, do nothing', () => {
+    it('fallback to joker if no main token', () => {
       const s1: GameStatePlaying = {
         ...s0,
         rondel: {
@@ -168,10 +168,10 @@ describe('buildings/cloisterOffice', () => {
       }
       expect(s1.players[0].penny).toBe(0)
       const s2 = cloisterOffice()(s1)!
-      expect(s2.players[0].penny).toBe(0)
-      expect(s1.rondel).toMatchObject({
+      expect(s2.players[0].penny).toBe(3)
+      expect(s2.rondel).toMatchObject({
         pointingBefore: 5,
-        joker: 3,
+        joker: 5,
         coin: undefined,
       })
     })

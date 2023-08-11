@@ -2,7 +2,7 @@ import { always, any, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, withActivePlayer } from '../board/player'
 import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer, GameStatePlaying } from '../types'
-import { standardSesourceGatheringAction, updateRondel, withRondel } from '../board/rondel'
+import { standardSesourceGatheringAction, updateToken, withRondel } from '../board/rondel'
 import { checkNotBonusRound, oncePerFrame } from '../board/frame'
 import { moorLocations, moorLocationsForCol } from '../board/landscape'
 import { shortGameBonusProduction } from '../board/resource'
@@ -42,7 +42,7 @@ export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): State
     checkNotBonusRound,
     standardSesourceGatheringAction('peat', useJoker),
     removePeatAt(row, col),
-    withRondel(updateRondel(useJoker ? 'joker' : 'peat')),
+    withRondel(updateToken('peat', useJoker)),
     shortGameBonusProduction({ peat: 1 })
   )
 

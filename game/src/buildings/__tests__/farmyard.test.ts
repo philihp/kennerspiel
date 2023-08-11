@@ -162,7 +162,7 @@ describe('buildings/farmyard', () => {
         grain: 1,
       })
     })
-    it('if sheep is not there, do nothing', () => {
+    it('if sheep is not there, fallback to joker', () => {
       const s1: GameStatePlaying = {
         ...s0,
         rondel: {
@@ -174,10 +174,10 @@ describe('buildings/farmyard', () => {
         },
       }
       const s2 = farmyard('Sh')(s1)!
-      expect(s2.players[0].sheep).toBe(0)
-      expect(s1.rondel).toMatchObject({
+      expect(s2.players[0].sheep).toBe(3)
+      expect(s2.rondel).toMatchObject({
         pointingBefore: 5,
-        joker: 3,
+        joker: 5,
         grain: 1,
         sheep: undefined,
       })

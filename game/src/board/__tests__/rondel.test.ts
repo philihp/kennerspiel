@@ -270,9 +270,9 @@ describe('board/rondel', () => {
           activePlayerIndex: 0,
         },
       } as GameStatePlaying
-      it('does not fallback to sheep token', () => {
+      it('falls back to joker even if main is gone', () => {
         const s1 = standardSesourceGatheringAction('sheep', false)(s0)!
-        expect(s1.players[0].sheep).toBe(1)
+        expect(s1.players[0].sheep).toBe(6)
       })
       it('takes with the joker token', () => {
         const s1 = standardSesourceGatheringAction('sheep', true)(s0)!
