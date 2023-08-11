@@ -9,7 +9,7 @@ import {
   StateReducer,
   GameStatePlaying,
 } from '../types'
-import { take, updateRondel, withRondel } from '../board/rondel'
+import { standardSesourceGatheringAction, take, updateRondel, withRondel } from '../board/rondel'
 import { checkNotBonusRound, oncePerFrame } from '../board/frame'
 import { forestLocations, forestLocationsForCol } from '../board/landscape'
 import { shortGameBonusProduction } from '../board/resource'
@@ -43,21 +43,12 @@ const hasAForest = (landscape: Tile[][]): boolean =>
     }, landRow)
   }, landscape)
 
-export const givePlayerWood =
-  (useJoker: boolean): StateReducer =>
-  (state) => {
-    if (state === undefined) return undefined
-    const { joker, wood, pointingBefore } = state.rondel
-    const amount = take(pointingBefore, (useJoker ? joker : wood) ?? pointingBefore, state.config)
-    return withActivePlayer(getCost({ wood: amount }))(state)
-  }
-
 export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): StateReducer =>
   pipe(
     //
     oncePerFrame(GameCommandEnum.FELL_TREES),
     checkNotBonusRound,
-    givePlayerWood(useJoker),
+    standardSesourceGatheringAction('wood', useJoker),
     removeForestAt(row, col),
     withRondel(updateRondel(useJoker ? 'joker' : 'wood')),
     shortGameBonusProduction({ wood: 1 })

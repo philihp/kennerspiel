@@ -1,47 +1,23 @@
-import { always, curry, pipe } from 'ramda'
-import { P, match } from 'ts-pattern'
-import { withActivePlayer } from '../board/player'
-import { standardSesourceGatheringCompletion, take } from '../board/rondel'
-import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { pipe } from 'ramda'
+import {
+  standardSesourceGatheringAction,
+  standardSesourceGatheringCompletion,
+  updateRondel,
+  withRondel,
+} from '../board/rondel'
+import { ResourceEnum, StateReducer } from '../types'
 import { shortGameBonusProduction } from '../board/resource'
 
-const advanceStoneOnRondel =
-  (withJoker: boolean): StateReducer =>
-  (state) =>
-    state && {
-      ...state,
-      rondel: {
-        ...state.rondel,
-        joker: withJoker ? state.rondel.pointingBefore : state.rondel.joker,
-        stone: !withJoker ? state.rondel.pointingBefore : state.rondel.stone,
-      },
-    }
-
-const takePlayerStone =
-  (withJoker: boolean): StateReducer =>
-  (state) => {
-    if (state === undefined) return undefined
-    const {
-      config,
-      rondel: { joker, stone, pointingBefore },
-    } = state
-    return withActivePlayer(
-      (player) =>
-        player && {
-          ...player,
-          stone: player.stone + take(pointingBefore, (withJoker ? joker : stone) ?? pointingBefore, config),
-        }
-    )(state)
-  }
+const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('stone'))
 
 export const quarry = (param = ''): StateReducer => {
   const withJoker = param.includes(ResourceEnum.Joker)
   return pipe(
     //
-    takePlayerStone(withJoker),
-    advanceStoneOnRondel(withJoker),
+    standardSesourceGatheringAction('stone', withJoker),
+    withRondel(updateToken(withJoker)),
     shortGameBonusProduction({ stone: 1 })
   )
 }
 
-export const complete = standardSesourceGatheringCompletion
+export const complete = standardSesourceGatheringCompletion('stone')

@@ -1,43 +1,8 @@
 import { always, cond, curry, pipe, when } from 'ramda'
 import { match, P } from 'ts-pattern'
-import { withActivePlayer } from '../board/player'
-import { updateRondel, withRondel, take } from '../board/rondel'
+import { updateRondel, withRondel, standardSesourceGatheringAction } from '../board/rondel'
 import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
 import { parseResourceParam, shortGameBonusProduction } from '../board/resource'
-
-const takePlayerSheep =
-  (withJoker: boolean): StateReducer =>
-  (state) => {
-    if (state === undefined) return state
-    const {
-      config,
-      rondel: { joker, sheep, pointingBefore },
-    } = state
-    return withActivePlayer(
-      (player) =>
-        player && {
-          ...player,
-          sheep: player.sheep + take(pointingBefore, (withJoker ? joker : sheep) ?? pointingBefore, config),
-        }
-    )(state)
-  }
-
-const takePlayerGrain =
-  (withJoker: boolean): StateReducer =>
-  (state) => {
-    if (state === undefined) return state
-    const {
-      config,
-      rondel: { joker, grain, pointingBefore },
-    } = state
-    return withActivePlayer(
-      (player) =>
-        player && {
-          ...player,
-          grain: player.grain + take(pointingBefore, (withJoker ? joker : grain) ?? pointingBefore, config),
-        }
-    )(state)
-  }
 
 export const farmyard = (param = ''): StateReducer => {
   const withJoker = param.includes(ResourceEnum.Joker)
@@ -49,7 +14,7 @@ export const farmyard = (param = ''): StateReducer => {
       always(withSheep),
       pipe(
         //
-        takePlayerSheep(withJoker),
+        standardSesourceGatheringAction('sheep', withJoker),
         shortGameBonusProduction({ sheep: 1 })
       )
     ),
@@ -57,7 +22,7 @@ export const farmyard = (param = ''): StateReducer => {
       always(withGrain),
       pipe(
         //
-        takePlayerGrain(withJoker),
+        standardSesourceGatheringAction('grain', withJoker),
         shortGameBonusProduction({ grain: 1 })
       )
     ),
@@ -73,7 +38,13 @@ export const farmyard = (param = ''): StateReducer => {
 
 export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
-    .with([], always(state.rondel.joker !== undefined ? ['Sh', 'Gn', 'JoSh', 'JoGn'] : ['Sh', 'Gn']))
+    .with([], () => {
+      return [
+        ...(state.rondel.sheep !== undefined ? ['Sh'] : []),
+        ...(state.rondel.grain !== undefined ? ['Gn'] : []),
+        ...(state.rondel.joker !== undefined ? ['JoSh', 'JoGn'] : []),
+      ]
+    })
     .with(
       P.when(([param]) => {
         const { sheep = 0, grain = 0 } = parseResourceParam(param)

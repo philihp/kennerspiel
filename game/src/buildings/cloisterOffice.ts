@@ -1,32 +1,23 @@
-import { always, curry, pipe } from 'ramda'
-import { match } from 'ts-pattern'
-import { getCost, withActivePlayer } from '../board/player'
-import { updateRondel, withRondel, take, standardSesourceGatheringCompletion } from '../board/rondel'
-import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { pipe } from 'ramda'
+import {
+  updateRondel,
+  withRondel,
+  standardSesourceGatheringCompletion,
+  standardSesourceGatheringAction,
+} from '../board/rondel'
+import { ResourceEnum } from '../types'
 import { shortGameBonusProduction } from '../board/resource'
 
 const updateToken = (withJoker: boolean) => (withJoker ? updateRondel('joker') : updateRondel('coin'))
-
-const takePlayerCoin =
-  (withJoker: boolean): StateReducer =>
-  (state) => {
-    if (state === undefined) return undefined
-    const {
-      config,
-      rondel: { joker, coin, pointingBefore },
-    } = state
-    const amount = take(pointingBefore, (withJoker ? joker : coin) ?? pointingBefore, config)
-    return withActivePlayer(getCost({ penny: amount }))(state)
-  }
 
 export const cloisterOffice = (param = '') => {
   const withJoker = param.includes(ResourceEnum.Joker)
   return pipe(
     //
-    takePlayerCoin(withJoker),
+    standardSesourceGatheringAction('coin', withJoker),
     withRondel(updateToken(withJoker)),
     shortGameBonusProduction({ penny: 1 })
   )
 }
 
-export const complete = standardSesourceGatheringCompletion
+export const complete = standardSesourceGatheringCompletion('coin')

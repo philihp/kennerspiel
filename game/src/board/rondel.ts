@@ -1,10 +1,32 @@
 import { always, assoc, curry, dissoc, equals, isNil, pathSatisfies, pipe, propSatisfies, when } from 'ramda'
 import { match } from 'ts-pattern'
-import { Rondel, GameCommandConfigParams, StateReducer, Cost, GameStatePlaying } from '../types'
+import { Rondel, GameCommandConfigParams, StateReducer, Cost, GameStatePlaying, ResourceEnum } from '../types'
 import { getCost, withActivePlayer } from './player'
-import { multiplyGoods } from './resource'
+import { multiplyGoods, parseResourceParam } from './resource'
 
 type TokenName = 'grain' | 'sheep' | 'clay' | 'coin' | 'wood' | 'joker' | 'peat' | 'grape' | 'stone'
+
+// eslint-disable-next-line consistent-return
+const tokenToResource = (token: TokenName): ResourceEnum | undefined => {
+  switch (token) {
+    case 'grain':
+      return ResourceEnum.Grain
+    case 'sheep':
+      return ResourceEnum.Sheep
+    case 'clay':
+      return ResourceEnum.Clay
+    case 'coin':
+      return ResourceEnum.Penny
+    case 'wood':
+      return ResourceEnum.Wood
+    case 'peat':
+      return ResourceEnum.Peat
+    case 'grape':
+      return ResourceEnum.Grape
+    case 'stone':
+      return ResourceEnum.Stone
+  }
+}
 
 export const withRondel =
   (func: (rondel: Rondel) => Rondel | undefined): StateReducer =>
@@ -68,9 +90,33 @@ export const advanceJokerOnRondel: StateReducer = withRondel(
   (rondel) => rondel && assoc('joker', rondel.pointingBefore, rondel)
 )
 
-export const standardSesourceGatheringCompletion = curry((partial: string[], state: GameStatePlaying) =>
-  match<string[], string[]>(partial)
-    .with([], () => (state.rondel.joker !== undefined ? ['', 'Jo'] : ['']))
-    .with(['Jo'], () => (state.rondel.joker !== undefined ? [''] : []))
-    .otherwise(always([]))
+export const standardSesourceGatheringAction =
+  (usingToken: TokenName, withJoker: boolean): StateReducer =>
+  (state) => {
+    if (state === undefined) return state
+    const {
+      config,
+      rondel: { joker, pointingBefore },
+    } = state
+    const main = state.rondel[usingToken]
+    const amount = take(pointingBefore, (withJoker ? joker : main) ?? pointingBefore, config)
+    const resource = tokenToResource(usingToken)
+    const cost = parseResourceParam(resource)
+    const magnitude = multiplyGoods(amount)(cost)
+    return withActivePlayer(getCost(magnitude))(state)
+  }
+
+export const standardSesourceGatheringCompletion = curry(
+  (usingToken: TokenName, partial: string[], state: GameStatePlaying) => {
+    const jokerAvailable = state.rondel.joker !== undefined
+    const mainAvailable = state.rondel[usingToken] !== undefined
+    return match<string[], string[]>(partial)
+      .with([], () => {
+        if (jokerAvailable && mainAvailable) return ['', 'Jo']
+        if (jokerAvailable !== mainAvailable) return ['']
+        return []
+      })
+      .with(['Jo'], () => (jokerAvailable ? [''] : []))
+      .otherwise(always([]))
+  }
 )

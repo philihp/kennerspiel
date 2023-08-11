@@ -166,6 +166,7 @@ describe('buildings/cloisterOffice', () => {
           coin: undefined,
         },
       }
+      expect(s1.players[0].penny).toBe(0)
       const s2 = cloisterOffice()(s1)!
       expect(s2.players[0].penny).toBe(0)
       expect(s1.rondel).toMatchObject({
