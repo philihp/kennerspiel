@@ -1,4 +1,4 @@
-import { T, always, cond, curry, identity, pipe, reduce, view } from 'ramda'
+import { always, cond, curry, identity, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { getCost, withActivePlayer, payCost, activeLens } from '../board/player'
 import { parseResourceParam, totalGoods, differentGoods, allResource, combinations } from '../board/resource'
