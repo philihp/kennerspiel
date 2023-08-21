@@ -118,8 +118,8 @@ export const isCloisterBuilding = (building?: ErectionEnum): boolean => {
   ).includes(building)
 }
 
-export const roundBuildings = (config: GameCommandConfigParams, round: SettlementRound): BuildingEnum[] =>
-  match<[GameCommandConfigParams, SettlementRound], BuildingEnum[]>([config, round])
+export const roundBuildings = (config: GameCommandConfigParams, round: SettlementRound): BuildingEnum[] => {
+  return match<[GameCommandConfigParams, SettlementRound], BuildingEnum[]>([config, round])
     .with([{ country: 'france', players: 4 }, SettlementRound.S], () => [
       BuildingEnum.Priory,
       BuildingEnum.CloisterCourtyard,
@@ -475,6 +475,7 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.HouseOfTheBrotherhood,
     ])
     .otherwise(() => [])
+}
 
 export const introduceBuildings: StateReducer = (state) => {
   if (state === undefined) return undefined

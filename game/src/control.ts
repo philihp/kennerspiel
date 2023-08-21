@@ -1,7 +1,18 @@
 import { match } from 'ts-pattern'
-import { always, head, map, pipe, sum } from 'ramda'
+import { always, head, map, pipe, sum, without } from 'ramda'
 import { pickFrameFlow } from './board/frame'
-import { Flower, GameCommandEnum, GameStatePlaying, OrdinalFrame, Controls, Tableau, Score } from './types'
+import {
+  Flower,
+  GameCommandEnum,
+  GameStatePlaying,
+  OrdinalFrame,
+  Controls,
+  Tableau,
+  Score,
+  SettlementRound,
+  BuildingEnum,
+  RondelToken,
+} from './types'
 import {
   completeBuild,
   completeCommit,
@@ -18,6 +29,8 @@ import {
 } from './commands'
 import { costPoints } from './board/resource'
 import { allBuildingPoints, allDwellingPoints } from './board/landscape'
+import { introduceBuildings, roundBuildings } from './board/buildings'
+import { introduceGrapeToken, introduceJokerToken, introduceStoneToken } from './board/rondel'
 
 const computeFlow = (state: GameStatePlaying) => {
   const frameFlow = pickFrameFlow(state.config)
@@ -27,14 +40,23 @@ const computeFlow = (state: GameStatePlaying) => {
   let playerIndex = state.frame.activePlayerIndex
   let { frame }: { frame: OrdinalFrame } = state
   let { round } = frame
+  let lastSeenSettlementRound = SettlementRound.S
   do {
     round = frame.round ?? round
     playerIndex = frame.currentPlayerIndex ?? playerIndex
+    const settle = !!frame.bonusActions?.includes(GameCommandEnum.SETTLE) || !!frame.neutralBuildingPhase
+    lastSeenSettlementRound = frame.settlementRound ?? lastSeenSettlementRound
     flow.push({
       round,
       player: state?.players?.[playerIndex]?.color,
-      settle: !!frame.bonusActions?.includes(GameCommandEnum.SETTLE) || !!frame.neutralBuildingPhase,
+      settle,
       bonus: !!frame.bonusRoundPlacement,
+      introduced: [
+        ...(frame.upkeep?.includes(introduceBuildings) ? roundBuildings(state.config, lastSeenSettlementRound) : []),
+        ...(frame.upkeep?.includes(introduceGrapeToken) ? ['grape' as RondelToken] : []),
+        ...(frame.upkeep?.includes(introduceStoneToken) ? ['stone' as RondelToken] : []),
+        ...(frame.upkeep?.includes(introduceJokerToken) ? ['joker' as RondelToken] : []),
+      ],
     })
     frameIndex = frame.next
     frame = frameFlow[frame.next]
