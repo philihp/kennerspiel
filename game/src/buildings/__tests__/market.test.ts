@@ -104,6 +104,30 @@ describe('buildings/market', () => {
       })
     })
 
+    it('allows a noop', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            straw: 1,
+            clay: 1,
+            peat: 1,
+            penny: 1,
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const s2 = market('')(s1)!
+      expect(s2.players[0]).toMatchObject({
+        straw: 1,
+        clay: 1,
+        peat: 1,
+        penny: 1,
+        bread: 0,
+      })
+    })
+
     it('fails if given 3 different things', () => {
       const s1 = {
         ...s0,
