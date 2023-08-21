@@ -1,10 +1,11 @@
-import { always, curry, pipe, reduce, view } from 'ramda'
+import { always, curry, identity, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { getCost, withActivePlayer, payCost, activeLens } from '../board/player'
 import { parseResourceParam, totalGoods, differentGoods, allResource, combinations } from '../board/resource'
 import { GameStatePlaying, StateReducer } from '../types'
 
 export const market = (input = ''): StateReducer => {
+  if (input === '') return identity
   const inputs = parseResourceParam(input)
   if (totalGoods(inputs) !== 4) return () => undefined
   if (differentGoods(inputs) !== 4) return () => undefined
