@@ -1,4 +1,4 @@
-import { addIndex, map, range } from 'ramda'
+import { addIndex, keys, map, range, toPairs } from 'ramda'
 import { ReactNode } from 'react'
 import { EngineRondel, EngineConfig, EngineLength } from '../../../../api/types'
 import { useHathoraContext } from '../context/GameContext'
@@ -8,8 +8,17 @@ interface Props {
   config: EngineConfig
 }
 
-const tokens = ['wood', 'clay', 'coin', 'grain', 'peat', 'sheep', 'joker', 'grape', 'stone']
-const emojis = ['🪵', '🧱', '🪙', '🌾', '💩', '🐑', '🃏', '🍇', '🪨']
+const symbols = {
+  wood: '🪵',
+  clay: '🧱',
+  coin: '🪙',
+  grain: '🌾',
+  peat: '💩',
+  sheep: '🐑',
+  joker: '🃏',
+  grape: '🍇',
+  stone: '🪨',
+}
 
 export const Rondel = ({ rondel, config }: Props) => {
   const { state, control } = useHathoraContext()
@@ -35,43 +44,46 @@ export const Rondel = ({ rondel, config }: Props) => {
           </tr>
         </thead>
         <tbody>
-          {tokens
-            .filter((token) => rondel[token as keyof EngineRondel] !== undefined)
-            .map((token, tokenIndex) => (
-              <tr key={token}>
-                <td>
-                  {token === 'joker' && state?.control?.completion?.includes('Jo') ? (
-                    <button type="button" onClick={handleClick}>
-                      joker
-                    </button>
-                  ) : (
-                    token
+          {map(
+            ([token, emoji]) =>
+              rondel[token] !== undefined && (
+                <tr key={token}>
+                  <td>
+                    {token === 'joker' && state?.control?.completion?.includes('Jo') ? (
+                      <button type="button" onClick={handleClick}>
+                        joker
+                      </button>
+                    ) : (
+                      token
+                    )}
+                  </td>
+                  {map(
+                    (i) => {
+                      const thisToken = rondel[token as keyof EngineRondel]
+                      if (thisToken === undefined) return null
+                      const difference = (rondel.pointingBefore - (thisToken ?? rondel.pointingBefore) + 13) % 13
+                      return (
+                        <td
+                          style={{
+                            border: 1,
+                            borderStyle: 'solid',
+                            borderColor: '#DDD',
+                            width: 32,
+                            height: 32,
+                            textAlign: 'center',
+                          }}
+                          key={i}
+                        >
+                          {difference === i ? emoji : ''}
+                        </td>
+                      )
+                    },
+                    range(0, 13)
                   )}
-                </td>
-                {map(
-                  (i) => {
-                    const thisToken = rondel[token as keyof EngineRondel]
-                    const difference = (rondel.pointingBefore - (thisToken ?? rondel.pointingBefore) + 13) % 13
-                    return (
-                      <td
-                        style={{
-                          border: 1,
-                          borderStyle: 'solid',
-                          borderColor: '#DDD',
-                          width: 32,
-                          height: 32,
-                          textAlign: 'center',
-                        }}
-                        key={i}
-                      >
-                        {difference === i ? emojis[tokenIndex] : ''}
-                      </td>
-                    )
-                  },
-                  range(0, 13)
-                )}
-              </tr>
-            ))}
+                </tr>
+              ),
+            toPairs(symbols)
+          )}
         </tbody>
       </table>
     </div>
