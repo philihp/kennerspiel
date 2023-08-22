@@ -340,6 +340,8 @@ export type Rondel = {
   stone?: number
 }
 
+export type RondelToken = 'grain' | 'sheep' | 'clay' | 'coin' | 'wood' | 'joker' | 'peat' | 'grape' | 'stone'
+
 export enum NextUseClergy {
   Any = 'any', // next use can use any clergy, using laybrother first
   OnlyPrior = 'only-prior', // next use must use prior, or it will fail
@@ -460,6 +462,7 @@ export type Flower = {
   player?: PlayerColor
   settle: boolean
   bonus: boolean
+  introduced: (BuildingEnum | RondelToken)[]
 }
 
 export type Score = {
