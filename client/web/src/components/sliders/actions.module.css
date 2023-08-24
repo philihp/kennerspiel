@@ -1,10 +1,9 @@
 .action {
   flex: 1 1 0;
-  background-color: white;
   border-radius: 4px;
-  border: 1px solid #ddd;
   margin: 5px;
-  max-width: 100px;
+  min-width: 65px;
+  padding: 0;
 }
 .action:active:enabled {
   background-color: #f2f2f2;
@@ -21,15 +20,14 @@
 
   position: fixed;
   height: 50px;
-  width: 640px;
+  width: 700px;
   top: -80px;
   left: 0;
   right: 0;
   margin: auto;
   padding: 0 5px;
 
-  filter: drop-shadow(2px 2px 5px #888);
-  background: rgba(255, 255, 255, 0.38);
+  filter: drop-shadow(2px 2px 5px rgba(255, 255, 255, 0.5));
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
