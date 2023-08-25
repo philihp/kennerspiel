@@ -11,8 +11,8 @@ export const ActionwithPrior = () => {
   const disabled = !(state?.control?.completion ?? []).includes('WITH_PRIOR')
 
   return (
-    <button type="button" disabled={disabled} className={classes.action} onClick={handleClick}>
-      With Laybrother
+    <button type="button" disabled={disabled} className={`primary ${classes.action}`} onClick={handleClick}>
+      With Prior
     </button>
   )
 }

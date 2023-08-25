@@ -17,7 +17,7 @@ export const Submit = () => {
 
   return (
     <div className={classes.container} style={{ transform: `translateY(${position}px)` }}>
-      <button className={classes.submit} type="submit" onClick={handleSubmit}>
+      <button className={`primary ${classes.submit}`} type="submit" onClick={handleSubmit}>
         End Turn
       </button>
     </div>

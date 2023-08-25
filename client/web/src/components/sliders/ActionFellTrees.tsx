@@ -11,7 +11,12 @@ export const ActionFellTrees = () => {
   const disabled = !(state?.control?.completion ?? []).includes('FELL_TREES')
 
   return (
-    <button type="button" disabled={disabled} className={classes.action} onClick={handleClick}>
+    <button
+      type="button"
+      disabled={disabled}
+      className={`${!disabled ? 'primary' : ''} ${classes.action}`}
+      onClick={handleClick}
+    >
       Fell Trees
     </button>
   )
