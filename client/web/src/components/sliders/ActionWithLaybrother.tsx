@@ -11,7 +11,7 @@ export const ActionWithLaybrother = () => {
   const disabled = !(state?.control?.completion ?? []).includes('WITH_LAYBROTHER')
 
   return (
-    <button type="button" disabled={disabled} className={classes.action} onClick={handleClick}>
+    <button type="button" disabled={disabled} className={`primary ${classes.action}`} onClick={handleClick}>
       With Laybrother
     </button>
   )

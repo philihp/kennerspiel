@@ -48,6 +48,7 @@ summary,
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(227, 229, 233);
 }
 
 code {
@@ -87,4 +88,33 @@ code {
 .white {
   background-color: #d9d9d9;
   border-color: #b1b1b1;
+}
+
+button {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  box-shadow: 0 0.5px 0px 0px rgba(210, 210, 210, 0.2);
+  padding: 4px 14px 5px 14px;
+  margin: 2px;
+  border-radius: 6px;
+  transition: all 100ms;
+}
+
+button:disabled {
+  cursor: auto;
+  color: rgba(180, 180, 180, 1);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+button.primary {
+  border: none;
+  color: white;
+  box-shadow: 0 0.5px 0px 0px rgba(0, 100, 255, 0.2);
+  background-image: linear-gradient(rgb(39, 124, 255), rgb(1, 100, 255));
+}
+
+button.primary:disabled {
+  color: rgba(0, 0, 0, 0.8);
+  opacity: 0.8;
+  background-image: linear-gradient(rgb(138, 177, 245), rgb(126, 165, 245));
 }

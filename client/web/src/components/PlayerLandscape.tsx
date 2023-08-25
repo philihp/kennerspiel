@@ -1,3 +1,4 @@
+import { head } from 'ramda'
 import { Erection } from './Erection'
 import { Clergy } from './Clergy'
 import { useHathoraContext } from '../context/GameContext'
@@ -28,6 +29,8 @@ const landToColor = (land: string) => {
 
 export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
   const { state, control } = useHathoraContext()
+  const partial = state?.control?.partial ?? ''
+  const command = head(partial.split(/ +/) ?? [])
   return (
     <table style={{ borderCollapse: 'collapse' }}>
       <tbody>
@@ -51,6 +54,14 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                     control(`${state?.control?.partial} ${building}`)
                   }
                 }
+
+                const primary =
+                  (partial === 'FELL_TREES' && active && building === 'LFO') ||
+                  (partial === 'CUT_PEAT' && active && building === 'LMO') ||
+                  (partial === 'USE' && active && !['LFO', 'LMO'].includes(building)) ||
+                  (partial === 'WORK_CONTRACT' && !active && !['LFO', 'LMO'].includes(building)) ||
+                  state?.control?.completion?.includes(building)
+
                 return (
                   <td
                     style={{
@@ -65,9 +76,21 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                     // eslint-disable-next-line react/no-array-index-key
                     key={`${rowId}:${colIndex}`}
                   >
-                    {building && <Erection key={building} id={building} disabled={!selectable} onClick={handleClick} />}
+                    {building && (
+                      <Erection
+                        primary={primary || (active && partial.includes(key))}
+                        key={building}
+                        id={building}
+                        disabled={!selectable}
+                        onClick={handleClick}
+                      />
+                    )}
                     {!building && selectable && (
-                      <button type="button" onClick={handleClick}>
+                      <button
+                        className={`${state?.control?.completion?.includes?.(key) ? 'primary' : ''}`}
+                        type="button"
+                        onClick={handleClick}
+                      >
                         {land}
                       </button>
                     )}

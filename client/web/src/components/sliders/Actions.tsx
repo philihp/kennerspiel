@@ -61,7 +61,7 @@ export const Actions = () => {
           <button
             type="button"
             disabled={!state?.control?.completion?.includes('')}
-            className={classes.action}
+            className={`primary ${classes.action}`}
             onClick={handleSend}
           >
             Send Move

@@ -11,7 +11,12 @@ export const ActionWorkContract = () => {
   const disabled = !(state?.control?.completion ?? []).includes('WORK_CONTRACT')
 
   return (
-    <button type="button" disabled={disabled} className={classes.action} onClick={handleClick}>
+    <button
+      type="button"
+      disabled={disabled}
+      className={`${!disabled ? 'primary' : ''} ${classes.action}`}
+      onClick={handleClick}
+    >
       Work Contract
     </button>
   )

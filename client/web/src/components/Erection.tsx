@@ -1,9 +1,8 @@
-import { ChangeEvent } from 'react'
-import classes from './Erection.module.css'
 import { useHathoraContext } from '../context/GameContext'
 
 interface Props {
   id: string
+  primary?: boolean
   disabled?: boolean
   onClick?: () => void
 }
@@ -16,17 +15,11 @@ const decolor = (id: string) => {
   return id
 }
 
-const isFarmYard = (id: string) => decolor(id) === 'L02'
-
 const multiplier = 0.7
 
-export const Erection = ({ id, disabled, onClick }: Props) => {
-  const { state, control } = useHathoraContext()
-  const onFarmYardClick = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === ' ') return
-    console.log({ target: e.target.value, control: `${state?.control?.partial} ${e.target.value}` })
-    control(`${state?.control?.partial} ${e.target.value}`)
-  }
+export const Erection = ({ id, primary, disabled, onClick }: Props) => {
+  const { state } = useHathoraContext()
+  const partial = state?.control?.partial ?? ''
 
   return (
     <div style={{ display: 'inline-block' }}>
@@ -38,19 +31,12 @@ export const Erection = ({ id, disabled, onClick }: Props) => {
         height={250 * multiplier}
       />
       <br />
-
-      {isFarmYard(id) && state?.control?.partial?.endsWith(`${id}`) && (
-        <div className={classes.dialog}>
-          <select onChange={onFarmYardClick}>
-            <option> </option>
-            <option>Gn</option>
-            <option>Sh</option>
-            <option>JoGn</option>
-            <option>JoSh</option>
-          </select>
-        </div>
-      )}
-      <button type="button" onClick={onClick} disabled={disabled}>
+      <button
+        className={primary || partial.includes(id) ? 'primary' : ''}
+        type="button"
+        onClick={onClick}
+        disabled={disabled}
+      >
         {id}
       </button>
     </div>
@@ -58,6 +44,7 @@ export const Erection = ({ id, disabled, onClick }: Props) => {
 }
 
 Erection.defaultProps = {
+  primary: false,
   disabled: true,
   onClick: () => undefined,
 }
