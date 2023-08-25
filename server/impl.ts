@@ -285,7 +285,8 @@ export class Impl implements Methods<InternalState> {
           round: flower.round,
           player: colorDongle(flower.player as PlayerColor),
           settle: flower.settle,
-          bonus: flower.bonus
+          bonus: flower.bonus,
+          introduced: flower.introduced,
         }
         return engineFlower
       }),

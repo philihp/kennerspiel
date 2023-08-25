@@ -83,6 +83,7 @@ types:
     player: EngineColor?
     settle: boolean
     bonus: boolean
+    introduced: string[]
   EngineScore:
     goods: int
     economic: int
