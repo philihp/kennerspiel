@@ -129,10 +129,18 @@ export const MoveList = () => {
 
         {flow.map((roundFrames) =>
           roundFrames.map((frame) => (
-            <li style={{ fontFamily: 'monospace' }}>
+            <li>
               {frame.settle && `Settle ${colorToChar(frame.player)}`}
               {!frame.settle && frame.bonus && `Bonus ${colorToChar(frame.player)}`}
               {!frame.settle && !frame.bonus && `Round ${frame.round} ${colorToChar(frame.player)}`}
+              {frame.introduced?.length !== 0 && (
+                <span>
+                  {' '}
+                  <a href="#" style={{ textDecoration: 'none' }}>
+                    ⚠️
+                  </a>
+                </span>
+              )}
             </li>
           ))
         )}
