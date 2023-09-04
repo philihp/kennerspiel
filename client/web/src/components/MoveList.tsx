@@ -1,7 +1,8 @@
-import { collectBy, equals, find, map, range, reject } from 'ramda'
+import { addIndex, collectBy, find, flatten, map, range } from 'ramda'
+import React from 'react'
 import { useHathoraContext } from '../context/GameContext'
-import { Picker } from './Picker'
-import { EngineColor } from '../../../../api/types'
+import { EngineColor, EngineFlower } from '../../../../api/types'
+import { Frame } from './Frame'
 
 const resetStyle = {
   margin: 0,
@@ -9,21 +10,6 @@ const resetStyle = {
   listStyle: 'none',
   textIndent: 0,
   listStyleType: 'none',
-}
-
-const colorToChar = (color?: EngineColor): string => {
-  switch (color) {
-    case EngineColor.Red:
-      return 'R'
-    case EngineColor.Blue:
-      return 'B'
-    case EngineColor.Green:
-      return 'G'
-    case EngineColor.White:
-      return 'W'
-    default:
-      return ''
-  }
 }
 
 type ColorStyle = {
@@ -49,7 +35,6 @@ const colorToStyle = (c?: EngineColor): ColorStyle => {
 export const MoveList = () => {
   const { state, undo, redo } = useHathoraContext()
   const completions = state?.control?.completion ?? []
-  const noSelectableOptions = reject(equals(''), completions).length < 1
 
   const flow = collectBy((f) => `${f.round}`, state?.flow ?? [])
   return (
@@ -65,7 +50,7 @@ export const MoveList = () => {
             const score = state?.score?.[i]
             const user = find((user) => user.color === player?.color, state?.users ?? [])
             return (
-              <div style={{ display: 'flex', gap: 4, alignItems: 'center', flexDirection: 'row' }}>
+              <div key={`player:${i}`} style={{ display: 'flex', gap: 4, alignItems: 'center', flexDirection: 'row' }}>
                 <div style={{ minWidth: 20 }}>
                   {current && '🏵️'}
                   {!current && active && '⌚️'}
@@ -122,27 +107,14 @@ export const MoveList = () => {
             {m}
           </li>
         ))}
-
         <li>
           <hr />
         </li>
-
-        {flow.map((roundFrames) =>
-          roundFrames.map((frame) => (
-            <li>
-              {frame.settle && `Settle ${colorToChar(frame.player)}`}
-              {!frame.settle && frame.bonus && `Bonus ${colorToChar(frame.player)}`}
-              {!frame.settle && !frame.bonus && `Round ${frame.round} ${colorToChar(frame.player)}`}
-              {frame.introduced?.length !== 0 && (
-                <span>
-                  {' '}
-                  <a href="#" style={{ textDecoration: 'none' }}>
-                    ⚠️
-                  </a>
-                </span>
-              )}
-            </li>
-          ))
+        {addIndex(map<EngineFlower, React.JSX.Element>)(
+          (frame: EngineFlower, n: number) => (
+            <Frame key={n} frame={frame} />
+          ),
+          flatten(flow)
         )}
       </ul>
       <hr />
