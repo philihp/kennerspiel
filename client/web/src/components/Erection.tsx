@@ -30,15 +30,19 @@ export const Erection = ({ id, primary, disabled, onClick }: Props) => {
         width={150 * multiplier}
         height={250 * multiplier}
       />
-      <br />
-      <button
-        className={primary || partial.includes(id) ? 'primary' : ''}
-        type="button"
-        onClick={onClick}
-        disabled={disabled}
-      >
-        {id}
-      </button>
+      {onClick !== undefined && (
+        <>
+          <br />
+          <button
+            className={primary || partial.includes(id) ? 'primary' : ''}
+            type="button"
+            onClick={onClick}
+            disabled={disabled}
+          >
+            {id}
+          </button>
+        </>
+      )}
     </div>
   )
 }
@@ -46,5 +50,5 @@ export const Erection = ({ id, primary, disabled, onClick }: Props) => {
 Erection.defaultProps = {
   primary: false,
   disabled: true,
-  onClick: () => undefined,
+  onClick: undefined,
 }
