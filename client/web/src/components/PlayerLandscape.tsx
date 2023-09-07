@@ -62,6 +62,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                   (partial === 'WORK_CONTRACT' && !active && !['LFO', 'LMO'].includes(building)) ||
                   state?.control?.completion?.includes(building)
 
+                if (land === '.') return null
                 return (
                   <td
                     style={{
@@ -75,6 +76,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                     }}
                     // eslint-disable-next-line react/no-array-index-key
                     key={`${rowId}:${colIndex}`}
+                    rowSpan={land === 'M' ? 2 : 1}
                   >
                     {building && (
                       <Erection

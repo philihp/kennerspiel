@@ -11,7 +11,12 @@ export const ActionSettle = () => {
   const disabled = !(state?.control?.completion ?? []).includes('SETTLE')
 
   return (
-    <button type="button" disabled={disabled} className={classes.action} onClick={handleClick}>
+    <button
+      type="button"
+      disabled={disabled}
+      className={`${!disabled ? 'primary' : ''} ${classes.action}`}
+      onClick={handleClick}
+    >
       Settle
     </button>
   )
