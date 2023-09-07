@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern'
-import { always, head, map, pipe, sum, without } from 'ramda'
+import { always, head, map, pipe, sum } from 'ramda'
 import { pickFrameFlow } from './board/frame'
 import {
   Flower,
@@ -10,8 +10,8 @@ import {
   Tableau,
   Score,
   SettlementRound,
-  BuildingEnum,
   RondelToken,
+  GameStatusEnum,
 } from './types'
 import {
   completeBuild,
@@ -66,20 +66,24 @@ const computeFlow = (state: GameStatePlaying) => {
 
 export const control = (state: GameStatePlaying, partial: string[], player?: number): Controls => {
   const completion = match(head(partial))
-    .with(undefined, () => [
-      ...completeUse(state)([]),
-      ...completeBuild(state)([]),
-      ...completeCutPeat(state)([]),
-      ...completeFellTrees(state)([]),
-      ...completeWorkContract(state)([]),
-      ...completeBuyPlot(state)([]),
-      ...completeBuyDistrict(state)([]),
-      ...completeConvert(state)([]),
-      ...completeSettle(state)([]),
-      ...completeWithLaybrother(state)([]),
-      ...completeWithPrior(state)([]),
-      ...completeCommit(state)([]),
-    ])
+    .with(undefined, () =>
+      state.status === GameStatusEnum.FINISHED
+        ? []
+        : [
+            ...completeUse(state)([]),
+            ...completeBuild(state)([]),
+            ...completeCutPeat(state)([]),
+            ...completeFellTrees(state)([]),
+            ...completeWorkContract(state)([]),
+            ...completeBuyPlot(state)([]),
+            ...completeBuyDistrict(state)([]),
+            ...completeConvert(state)([]),
+            ...completeSettle(state)([]),
+            ...completeWithLaybrother(state)([]),
+            ...completeWithPrior(state)([]),
+            ...completeCommit(state)([]),
+          ]
+    )
     // this can be prettier with https://github.com/gvergnaud/ts-pattern/pull/139
     // git blame this line and see how it used to be, but i really want something like
     // .with([GameCommandEnum.Use, P.rest], complete.USE(state))

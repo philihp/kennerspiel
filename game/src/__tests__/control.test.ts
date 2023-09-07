@@ -405,6 +405,14 @@ describe('control', () => {
         'COMMIT',
       ])
     })
+    it('does not give any moves if game is over', () => {
+      const s1 = {
+        ...s0,
+        status: GameStatusEnum.FINISHED,
+      } as GameStatePlaying
+      const c1 = control(s1, [], 0)
+      expect(c1.completion).toStrictEqual([])
+    })
 
     it('handles a mistake in the flow without an error or overflow', () => {
       const f1 = {
