@@ -39,7 +39,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
           return (
             <tr key={JSON.stringify(row)}>
               {row.map((tile, colIndex) => {
-                // eslint-disable-next-line react/no-array-index-key
+                // eslint-disable-next-line react/no-array-index-key, jsx-a11y/control-has-associated-label
                 if (tile.length === 0) return <td key={`${rowId}:${colIndex}`} />
                 const [land, building, clergy] = tile
                 const key = `${colIndex - 2} ${rowId}`
