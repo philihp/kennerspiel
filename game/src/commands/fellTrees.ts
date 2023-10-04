@@ -73,8 +73,11 @@ export const complete =
           const row = Number.parseInt(r, 10) + player.landscapeOffset
           const col = Number.parseInt(c, 10) + 2
           const tile = player.landscape?.[row]?.[col]
-          if (tile?.[1] === BuildingEnum.Forest) return ['', 'Jo']
-          return []
+          if (tile?.[1] !== BuildingEnum.Forest) return []
+          const options = []
+          if (state?.rondel?.wood !== undefined) options.push('')
+          if (state?.rondel?.joker !== undefined) options.push('Jo')
+          return options
         })
         .with([GameCommandEnum.FELL_TREES, P._, P._, 'Jo'], always(['']))
         .otherwise(always([]))
