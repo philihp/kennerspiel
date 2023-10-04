@@ -19,7 +19,7 @@ interface SeatProps {
 }
 
 const Seat = ({ clergyId, color }: SeatProps) => {
-  const { state, join, user: me } = useHathoraContext()
+  const { state, join, config, user: me } = useHathoraContext()
   const users = state?.users ?? []
   const user = find((u) => u.color === color, users)
   return (
@@ -47,7 +47,15 @@ const Seat = ({ clergyId, color }: SeatProps) => {
           />
           {user?.name}
           {user?.id && user?.id === me?.id && (
-            <button type="button" onClick={() => join()}>
+            <button
+              type="button"
+              onClick={() => {
+                if (users.length === 2 && state?.config?.country !== undefined) {
+                  config(state?.config?.country, EngineLength.long)
+                }
+                join()
+              }}
+            >
               x
             </button>
           )}
@@ -88,7 +96,12 @@ export const StateSetup = () => {
       {/*-------------------------------------------*/}
       <hr />
       <h3>Mode</h3>
-      <input type="radio" disabled checked={configured(EngineCountry.france, EngineLength.long, engineConfig)} />
+      <input
+        type="radio"
+        disabled={configured(EngineCountry.france, EngineLength.long, engineConfig)}
+        checked={configured(EngineCountry.france, EngineLength.long, engineConfig)}
+        onClick={() => config(EngineCountry.france, EngineLength.long)}
+      />
       <button
         type="button"
         disabled={configured(EngineCountry.france, EngineLength.long, engineConfig)}
@@ -97,7 +110,12 @@ export const StateSetup = () => {
         France {users?.length === 2 && '(long)'}
       </button>
       <br />
-      <input type="radio" disabled checked={configured(EngineCountry.ireland, EngineLength.long, engineConfig)} />
+      <input
+        type="radio"
+        disabled={IRELAND_DISABLED || configured(EngineCountry.ireland, EngineLength.long, engineConfig)}
+        checked={configured(EngineCountry.ireland, EngineLength.long, engineConfig)}
+        onClick={() => config(EngineCountry.ireland, EngineLength.long)}
+      />
       <button
         disabled={IRELAND_DISABLED || configured(EngineCountry.ireland, EngineLength.long, engineConfig)}
         onClick={() => config(EngineCountry.ireland, EngineLength.long)}
@@ -109,7 +127,12 @@ export const StateSetup = () => {
       {users.length > 1 && (
         <>
           {' '}
-          <input type="radio" disabled checked={configured(EngineCountry.france, EngineLength.short, engineConfig)} />
+          <input
+            type="radio"
+            disabled={configured(EngineCountry.france, EngineLength.short, engineConfig)}
+            checked={configured(EngineCountry.france, EngineLength.short, engineConfig)}
+            onClick={() => config(EngineCountry.france, EngineLength.short)}
+          />
           <button
             type="button"
             disabled={configured(EngineCountry.france, EngineLength.short, engineConfig)}
@@ -118,7 +141,12 @@ export const StateSetup = () => {
             France {users?.length >= 3 && '(short)'}
           </button>
           <br />
-          <input type="radio" disabled checked={configured(EngineCountry.ireland, EngineLength.short, engineConfig)} />
+          <input
+            type="radio"
+            disabled={IRELAND_DISABLED || configured(EngineCountry.ireland, EngineLength.short, engineConfig)}
+            checked={configured(EngineCountry.ireland, EngineLength.short, engineConfig)}
+            onClick={() => config(EngineCountry.ireland, EngineLength.short)}
+          />
           <button
             type="button"
             disabled={IRELAND_DISABLED || configured(EngineCountry.ireland, EngineLength.short, engineConfig)}
