@@ -229,6 +229,28 @@ describe('commands/fellTrees', () => {
       const c0 = complete(s0)([GameCommandEnum.FELL_TREES, '2', '0'])
       expect(c0).toStrictEqual(['', 'Jo'])
     })
+    it('if FELL_TREES at a location, but no wood token, just give Jo', () => {
+      const s1 = {
+        ...s0,
+        rondel: {
+          ...s0.rondel,
+          wood: undefined,
+        },
+      }
+      const c1 = complete(s1)([GameCommandEnum.FELL_TREES, '2', '0'])
+      expect(c1).toStrictEqual(['Jo'])
+    })
+    it('if FELL_TREES at a location, but no joker token, just give ""', () => {
+      const s1 = {
+        ...s0,
+        rondel: {
+          ...s0.rondel,
+          joker: undefined,
+        },
+      }
+      const c1 = complete(s1)([GameCommandEnum.FELL_TREES, '2', '0'])
+      expect(c1).toStrictEqual([''])
+    })
     it('if FELL_TREES and Joker at a location, give empty string response', () => {
       const c0 = complete(s0)([GameCommandEnum.FELL_TREES, '2', '0', 'Jo'])
       expect(c0).toStrictEqual([''])

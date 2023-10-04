@@ -65,8 +65,11 @@ export const complete =
           const row = Number.parseInt(r, 10) + player.landscapeOffset
           const col = Number.parseInt(c, 10) + 2
           const tile = player.landscape?.[row]?.[col]
-          if (tile?.[1] === BuildingEnum.Moor) return ['', 'Jo']
-          return []
+          if (tile?.[1] !== BuildingEnum.Moor) return []
+          const options = []
+          if (state?.rondel?.peat !== undefined) options.push('')
+          if (state?.rondel?.joker !== undefined) options.push('Jo')
+          return options
         })
         .with([GameCommandEnum.CUT_PEAT, P._, P._, 'Jo'], always(['']))
         .otherwise(always([]))

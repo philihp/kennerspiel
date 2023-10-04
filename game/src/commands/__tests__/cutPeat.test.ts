@@ -226,6 +226,28 @@ describe('commands/cutPeat', () => {
       const c0 = complete(s0)([GameCommandEnum.CUT_PEAT, '0', '1'])
       expect(c0).toStrictEqual(['', 'Jo'])
     })
+    it('if CUT_PEAT at a location, but no joker available, just give completion', () => {
+      const s1 = {
+        ...s0,
+        rondel: {
+          ...s0.rondel,
+          joker: undefined,
+        },
+      }
+      const c1 = complete(s1)([GameCommandEnum.CUT_PEAT, '0', '1'])
+      expect(c1).toStrictEqual([''])
+    })
+    it('if CUT_PEAT at a location, but no wood available, just give Jo', () => {
+      const s1 = {
+        ...s0,
+        rondel: {
+          ...s0.rondel,
+          peat: undefined,
+        },
+      }
+      const c1 = complete(s1)([GameCommandEnum.CUT_PEAT, '0', '1'])
+      expect(c1).toStrictEqual(['Jo'])
+    })
     it('if CUT_PEAT at a location with joker, give empty string response', () => {
       const c0 = complete(s0)([GameCommandEnum.CUT_PEAT, '0', '1', 'Jo'])
       expect(c0).toStrictEqual([''])
