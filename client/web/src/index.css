@@ -106,15 +106,23 @@ button:disabled {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
+button:active {
+  background-color: rgba(240, 240, 240, 0.5);
+}
+
 button.primary {
   border: none;
   color: white;
   box-shadow: 0 0.5px 0px 0px rgba(0, 100, 255, 0.2);
-  background-image: linear-gradient(rgb(39, 124, 255), rgb(1, 100, 255));
+  background-image: linear-gradient(rgb(42, 144, 255), rgb(4, 122, 255));
 }
 
 button.primary:disabled {
   color: rgba(0, 0, 0, 0.8);
   opacity: 0.8;
   background-image: linear-gradient(rgb(138, 177, 245), rgb(126, 165, 245));
+}
+
+button.primary:active {
+  background-image: linear-gradient(rgb(17, 125, 235), rgb(0, 102, 234));
 }
