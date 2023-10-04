@@ -4,6 +4,7 @@ interface Props {
   id: string
   primary?: boolean
   disabled?: boolean
+  ghosted?: boolean
   onClick?: () => void
 }
 
@@ -17,7 +18,7 @@ const decolor = (id: string) => {
 
 const multiplier = 0.7
 
-export const Erection = ({ id, primary, disabled, onClick }: Props) => {
+export const Erection = ({ id, primary, disabled, ghosted, onClick }: Props) => {
   const { state } = useHathoraContext()
   const partial = state?.control?.partial ?? ''
 
@@ -25,7 +26,14 @@ export const Erection = ({ id, primary, disabled, onClick }: Props) => {
     <div style={{ display: 'inline-block' }}>
       <img
         alt={id}
-        style={{ display: 'inline' }}
+        style={{
+          display: 'inline',
+          ...(ghosted
+            ? {
+                opacity: 0.5,
+              }
+            : {}),
+        }}
         src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${decolor(id)}.jpg`}
         width={150 * multiplier}
         height={250 * multiplier}
@@ -50,5 +58,6 @@ export const Erection = ({ id, primary, disabled, onClick }: Props) => {
 Erection.defaultProps = {
   primary: false,
   disabled: true,
+  ghosted: false,
   onClick: undefined,
 }

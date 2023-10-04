@@ -30,6 +30,21 @@ const colorToStyle = (c?: EngineColor): ColorStyle => {
   }
 }
 
+const colorToChar = (c?: EngineColor): string => {
+  switch (c) {
+    case EngineColor.Blue:
+      return 'B'
+    case EngineColor.Red:
+      return 'R'
+    case EngineColor.Green:
+      return 'G'
+    case EngineColor.White:
+      return 'W'
+    default:
+      return '0'
+  }
+}
+
 export const Player = ({ player, active }: Props) => {
   const { color, clergy, landscape, landscapeOffset, settlements, wonders, ...resources } = player
   return (
@@ -48,7 +63,7 @@ export const Player = ({ player, active }: Props) => {
       <PlayerResources {...resources} />
       <PlayerLandscape landscape={landscape} offset={landscapeOffset} active={active} />
       <PlayerWonders wonders={wonders} />
-      <PlayerSettlements settlements={settlements} />
+      <PlayerSettlements settlements={settlements} color={colorToChar(color)} />
     </div>
   )
 }

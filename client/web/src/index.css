@@ -100,14 +100,14 @@ button {
   transition: all 100ms;
 }
 
+button:active {
+  background-color: rgba(240, 240, 240, 0.5);
+}
+
 button:disabled {
   cursor: auto;
   color: rgba(180, 180, 180, 1);
   background-color: rgba(255, 255, 255, 0.5);
-}
-
-button:active {
-  background-color: rgba(240, 240, 240, 0.5);
 }
 
 button.primary {
@@ -117,12 +117,12 @@ button.primary {
   background-image: linear-gradient(rgb(42, 144, 255), rgb(4, 122, 255));
 }
 
+button.primary:active {
+  background-image: linear-gradient(rgb(17, 125, 235), rgb(0, 102, 234));
+}
+
 button.primary:disabled {
   color: rgba(0, 0, 0, 0.8);
   opacity: 0.8;
   background-image: linear-gradient(rgb(138, 177, 245), rgb(126, 165, 245));
-}
-
-button.primary:active {
-  background-image: linear-gradient(rgb(17, 125, 235), rgb(0, 102, 234));
 }
