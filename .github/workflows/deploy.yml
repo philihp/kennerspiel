@@ -14,7 +14,7 @@ jobs:
   server:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: npm install -g @hathora/cli
       - uses: SpicyPizza/create-envfile@v2.0
         with:
