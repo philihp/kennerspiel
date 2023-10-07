@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@react-oauth/google": "0.11.1",
-    "ramda": "0.29.0",
+    "ramda": "0.29.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.16.0",
@@ -23,7 +23,7 @@
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/vite-react": "2.0.1",
     "@types/jest": "29.5.5",
-    "@types/ramda": "0.29.5",
+    "@types/ramda": "0.29.6",
     "@types/react": "18.2.25",
     "@types/react-dom": "18.2.11",
     "@types/react-router-dom": "5.3.3",
