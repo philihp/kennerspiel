@@ -23,7 +23,7 @@
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/vite-react": "2.0.1",
     "@types/jest": "29.5.6",
-    "@types/ramda": "0.29.6",
+    "@types/ramda": "0.29.7",
     "@types/react": "18.2.28",
     "@types/react-dom": "18.2.13",
     "@types/react-router-dom": "5.3.3",
