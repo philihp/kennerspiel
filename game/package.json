@@ -30,7 +30,7 @@
     "!/src/**/__tests__/*.test.ts"
   ],
   "dependencies": {
-    "fast-shuffle": "6.0.1",
+    "fast-shuffle": "6.1.0",
     "fn-pcg": "2.0.1",
     "ramda": "0.29.1",
     "ts-pattern": "5.0.6"
