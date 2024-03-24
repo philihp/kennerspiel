@@ -20,7 +20,7 @@
     "history": "^1.17.0",
     "http-proxy": "^1.11.2",
     "isomorphic-fetch": "^2.1.1",
-    "node-sass": "^4.0.0",
+    "node-sass": "^7.0.0",
     "react": "^0.14.5",
     "react-dom": "^0.14.5",
     "react-redux": "^7.0.0",
