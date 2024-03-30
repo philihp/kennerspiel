@@ -21,7 +21,7 @@
   "devDependencies": {
     "@philihp/eslint-config": "6.1.0",
     "@philihp/prettier-config": "1.0.0",
-    "@tsconfig/vite-react": "3.0.1",
+    "@tsconfig/vite-react": "3.0.2",
     "@types/jest": "29.5.12",
     "@types/ramda": "0.29.11",
     "@types/react": "18.2.69",
