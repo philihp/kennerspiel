@@ -1,6 +1,0 @@
-{
-  "installCommand": "npm install hathora -g",
-  "buildCommand": "hathora build --only client",
-  "outputDirectory": "client/web/dist",
-  "rewrites": [{ "source": "/game/:id", "destination": "/index.html" }]
-}
