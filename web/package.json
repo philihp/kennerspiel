@@ -1,0 +1,40 @@
+{
+  "name": "kennerspiel-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@marsidev/react-turnstile": "0.5.4",
+    "@next/third-parties": "14.2.1",
+    "@philihp/prettier-config": "1.0.0",
+    "@supabase/auth-helpers-nextjs": "0.10.0",
+    "@supabase/ssr": "0.3.0",
+    "@supabase/supabase-js": "2.42.3",
+    "@vercel/analytics": "1.2.2",
+    "@vercel/speed-insights": "1.0.10",
+    "dotenv": "16.4.5",
+    "form-urlencoded": "6.1.4",
+    "jsonwebtoken": "9.0.2",
+    "jwks-rsa": "3.1.0",
+    "next": "14.2.1",
+    "ramda": "0.29.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
+  },
+  "prettier": "@philihp/prettier-config",
+  "devDependencies": {
+    "@types/node": "20.12.7",
+    "@types/react": "18.2.78",
+    "@types/react-dom": "18.2.25",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.1",
+    "supabase": "1.153.4",
+    "typescript": "5.4.5"
+  }
+}
