@@ -1,0 +1,18 @@
+html,
+body {
+  text-rendering: geometricPrecision;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  margin: 5pt 0;
+  padding: 5pt 10pt;
+}
