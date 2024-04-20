@@ -9,7 +9,7 @@
     "@philihp/prettier-config": "1.0.0",
     "@supabase/auth-helpers-nextjs": "0.10.0",
     "@supabase/ssr": "0.3.0",
-    "@supabase/supabase-js": "2.42.3",
+    "@supabase/supabase-js": "2.42.5",
     "@vercel/analytics": "1.2.2",
     "@vercel/speed-insights": "1.0.10",
     "dotenv": "16.4.5",
