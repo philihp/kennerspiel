@@ -18,8 +18,8 @@
     "jwks-rsa": "3.1.0",
     "next": "14.2.2",
     "ramda": "0.29.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "scripts": {
     "build": "next build",
@@ -30,8 +30,8 @@
   "prettier": "@philihp/prettier-config",
   "devDependencies": {
     "@types/node": "20.12.7",
-    "@types/react": "18.2.79",
-    "@types/react-dom": "18.2.25",
+    "@types/react": "18.3.1",
+    "@types/react-dom": "18.3.0",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.2",
     "supabase": "1.163.6",
