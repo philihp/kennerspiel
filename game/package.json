@@ -32,7 +32,7 @@
   "dependencies": {
     "fast-shuffle": "6.1.0",
     "fn-pcg": "2.0.1",
-    "ramda": "0.29.1",
+    "ramda": "0.30.0",
     "ts-pattern": "5.1.1"
   },
   "devDependencies": {
@@ -40,7 +40,7 @@
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/node16": "16.1.3",
     "@types/jest": "29.5.12",
-    "@types/ramda": "0.29.12",
+    "@types/ramda": "0.30.0",
     "@typescript-eslint/eslint-plugin": "7.8.0",
     "@typescript-eslint/parser": "7.8.0",
     "eslint": "9.2.0",
