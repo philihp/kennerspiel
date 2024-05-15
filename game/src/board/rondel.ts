@@ -34,30 +34,25 @@ const tokenToResource = (token: RondelToken): ResourceEnum | undefined => {
   }
 }
 
-export const withRondel =
-  (func: (rondel: Rondel) => Rondel | undefined): StateReducer =>
-  (state) => {
+export const withRondel = (func: (rondel: Rondel) => Rondel | undefined): StateReducer => {
+  return (state) => {
     if (state === undefined) return state
     const rondel = func(state.rondel)
     if (rondel === undefined) return undefined
     return assoc('rondel', rondel, state)
   }
+}
 
-export const updateRondel =
-  (token: RondelToken) =>
-  (rondel: Rondel | undefined): Rondel | undefined => {
+export const updateRondel = (token: RondelToken) => {
+  return (rondel: Rondel | undefined): Rondel | undefined => {
     if (rondel === undefined) return undefined
     if (rondel[token] === undefined) return rondel
     return assoc(token, rondel[token] !== undefined ? rondel.pointingBefore : rondel[token])(rondel)
   }
+}
 
 const introduceToken = (token: 'grape' | 'stone' | 'joker') =>
-  withRondel(
-    pipe(
-      when(isNil, always(undefined)),
-      when(propSatisfies(isNil, token), (rondel: Rondel) => assoc(token, rondel.pointingBefore, rondel))
-    )
-  )
+  withRondel(when(propSatisfies(isNil, token), (rondel: Rondel) => assoc(token, rondel.pointingBefore, rondel)))
 
 export const introduceGrapeToken: StateReducer = when(
   pathSatisfies(equals('france'), ['config', 'country']),
@@ -80,9 +75,8 @@ export const take = (armIndex: number, tokenIndex: number, config: GameCommandCo
   return armVals[(armIndex - tokenIndex + armVals.length) % armVals.length]
 }
 
-export const takePlayerJoker =
-  (unitCost: Cost): StateReducer =>
-  (state) => {
+export const takePlayerJoker = (unitCost: Cost): StateReducer => {
+  return (state) => {
     if (state === undefined) return undefined
     const {
       rondel: { pointingBefore, joker },
@@ -91,6 +85,7 @@ export const takePlayerJoker =
     const takeValue = take(pointingBefore, joker ?? pointingBefore, config)
     return withActivePlayer(getCost(multiplyGoods(takeValue)(unitCost)))(state)
   }
+}
 
 export const advanceJokerOnRondel: StateReducer = withRondel(
   (rondel) => rondel && assoc('joker', rondel.pointingBefore, rondel)
@@ -102,9 +97,8 @@ export const updateToken = (withToken: RondelToken, withJoker: boolean) => (rond
   return updateRondel(withToken)(rondel)
 }
 
-export const standardSesourceGatheringAction =
-  (usingToken: RondelToken, withJoker: boolean): StateReducer =>
-  (state) => {
+export const standardSesourceGatheringAction = (usingToken: RondelToken, withJoker: boolean): StateReducer => {
+  return (state) => {
     if (state === undefined) return state
     const {
       config,
@@ -117,6 +111,7 @@ export const standardSesourceGatheringAction =
     const magnitude = multiplyGoods(amount)(cost)
     return withActivePlayer(getCost(magnitude))(state)
   }
+}
 
 export const standardSesourceGatheringCompletion = curry(
   (usingToken: RondelToken, partial: string[], state: GameStatePlaying) => {
