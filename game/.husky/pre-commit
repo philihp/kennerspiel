@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-. "${0%/*}/h"
-
-exit 1123
