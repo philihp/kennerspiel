@@ -119,11 +119,8 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
       .with('Ho', addRes('malt', cost))
       .with(ResourceEnum.Malt, addRes('malt', cost))
       .with(ResourceEnum.Beer, addRes('beer', cost))
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       .with(ResourceEnum.BonusPoint, () => {})
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       .with(ResourceEnum.Joker, () => {})
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       .otherwise(() => {})
   }
   return cost
@@ -165,7 +162,7 @@ const amountCostOptions =
               accum.push([nextPrefix, nextFood])
             }
           },
-          range(0, Math.min(totalCount, prevFood / foodValue) + 1)
+          range(0, Math.min(totalCount, Math.ceil(prevFood / foodValue)) + 1)
         )
         return accum
       },
@@ -175,8 +172,8 @@ const amountCostOptions =
 
 const rewardOptions =
   (outputs: string[], token: string, points: number, pointsNext: number) =>
-  (incompletes: Tracer[]): Tracer[] => {
-    return reduce(
+  (incompletes: Tracer[]): Tracer[] =>
+    reduce(
       (accum, prevTrace) => {
         const [prevPrefix, prevFood] = prevTrace
         map(
@@ -197,7 +194,6 @@ const rewardOptions =
       [] as Tracer[],
       incompletes
     )
-  }
 
 export const foodCostOptions = curry((food: number, player: Cost): string[] => {
   const output: string[] = []
@@ -331,17 +327,15 @@ export const canAfford =
   (player: Tableau): Tableau | undefined =>
     any<keyof Cost>(
       //
-      (key) => {
-        return player[key] < (cost[key] ?? 0)
-      },
+      (key) => player[key] < (cost[key] ?? 0),
       keys(cost)
     )
       ? undefined
       : player
 
-const byPoints = comparator<string>((a: string, b: string) => {
-  return costPoints(parseResourceParam(a)) > costPoints(parseResourceParam(b))
-})
+const byPoints = comparator<string>(
+  (a: string, b: string) => costPoints(parseResourceParam(a)) > costPoints(parseResourceParam(b))
+)
 
 export const rewardCostOptions = curry((totalPoints: number): string[] => {
   // this one is different because we want our output to be <= points, and cannot

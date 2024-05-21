@@ -217,7 +217,7 @@ export const complete =
             if (state.frame.activePlayerIndex === i) return accum
             const player = state.players[i]
             if (player.clergy.length === 0) return accum
-            forEach<Tile[], Tile[][]>(
+            forEach<Tile[]>(
               forEach((landStack: Tile) => {
                 if (landStack.length === 0) return
                 const [, erection, clergy] = landStack
