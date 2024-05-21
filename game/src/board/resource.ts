@@ -120,11 +120,11 @@ export const parseResourceParam: (p?: string) => Cost = (p) => {
       .with(ResourceEnum.Malt, addRes('malt', cost))
       .with(ResourceEnum.Beer, addRes('beer', cost))
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      .with(ResourceEnum.BonusPoint, () => { })
+      .with(ResourceEnum.BonusPoint, () => {})
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      .with(ResourceEnum.Joker, () => { })
+      .with(ResourceEnum.Joker, () => {})
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      .otherwise(() => { })
+      .otherwise(() => {})
   }
   return cost
 }
@@ -151,53 +151,52 @@ type Tracer = [resources: string, amount: number]
 
 const amountCostOptions =
   (outputs: string[], token: string, foodValue: number, totalCount: number) =>
-    (incompletes: Tracer[]): Tracer[] =>
-      reduce(
-        (accum, prevTrace) => {
-          const [prevPrefix, prevFood] = prevTrace
-          map(
-            (numSheep) => {
-              const nextFood = prevFood - numSheep * foodValue
-              const nextPrefix = `${prevPrefix}${stringRepeater(token, numSheep)}`
-              if (nextFood <= 0) {
-                outputs.push(nextPrefix)
-              } else {
-                accum.push([nextPrefix, nextFood])
-              }
-            },
-            range(0, Math.min(totalCount, Math.ceil(prevFood / foodValue)) + 1)
-          )
-          return accum
-        },
-        [] as Tracer[],
-        incompletes
-      )
+  (incompletes: Tracer[]): Tracer[] =>
+    reduce(
+      (accum, prevTrace) => {
+        const [prevPrefix, prevFood] = prevTrace
+        map(
+          (numSheep) => {
+            const nextFood = prevFood - numSheep * foodValue
+            const nextPrefix = `${prevPrefix}${stringRepeater(token, numSheep)}`
+            if (nextFood <= 0) {
+              outputs.push(nextPrefix)
+            } else {
+              accum.push([nextPrefix, nextFood])
+            }
+          },
+          range(0, Math.min(totalCount, Math.ceil(prevFood / foodValue)) + 1)
+        )
+        return accum
+      },
+      [] as Tracer[],
+      incompletes
+    )
 
 const rewardOptions =
   (outputs: string[], token: string, points: number, pointsNext: number) =>
-    (incompletes: Tracer[]): Tracer[] => {
-      return reduce(
-        (accum, prevTrace) => {
-          const [prevPrefix, prevFood] = prevTrace
-          map(
-            (numSheep) => {
-              const nextFood = prevFood - numSheep * points
-              const nextPrefix = `${prevPrefix}${stringRepeater(token, numSheep)}`
-              if (nextFood >= 0) {
-                outputs.push(nextPrefix)
-              }
-              if (nextFood >= pointsNext) {
-                accum.push([nextPrefix, nextFood])
-              }
-            },
-            reverse(range(0, 1 + Math.floor(prevFood / points)))
-          )
-          return accum
-        },
-        [] as Tracer[],
-        incompletes
-      )
-    }
+  (incompletes: Tracer[]): Tracer[] =>
+    reduce(
+      (accum, prevTrace) => {
+        const [prevPrefix, prevFood] = prevTrace
+        map(
+          (numSheep) => {
+            const nextFood = prevFood - numSheep * points
+            const nextPrefix = `${prevPrefix}${stringRepeater(token, numSheep)}`
+            if (nextFood >= 0) {
+              outputs.push(nextPrefix)
+            }
+            if (nextFood >= pointsNext) {
+              accum.push([nextPrefix, nextFood])
+            }
+          },
+          reverse(range(0, 1 + Math.floor(prevFood / points)))
+        )
+        return accum
+      },
+      [] as Tracer[],
+      incompletes
+    )
 
 export const foodCostOptions = curry((food: number, player: Cost): string[] => {
   const output: string[] = []
@@ -283,11 +282,11 @@ export const multiplyGoods = (by: number) => (cost: Cost) =>
 
 export const maskGoods =
   (goods: (keyof Cost)[]) =>
-    (cost: Cost): Cost =>
-      goods.reduce((outCost, key) => {
-        if (cost[key]) outCost[key] = cost[key]
-        return outCost
-      }, {} as Cost)
+  (cost: Cost): Cost =>
+    goods.reduce((outCost, key) => {
+      if (cost[key]) outCost[key] = cost[key]
+      return outCost
+    }, {} as Cost)
 
 export const costMoney = ({ penny = 0, nickel = 0, wine = 0, whiskey = 0 }): number =>
   penny + 5 * nickel + wine + 2 * whiskey
@@ -328,20 +327,18 @@ export const settlementCost = (cost: Cost): SettlementCost => ({
 
 export const canAfford =
   (cost: Cost) =>
-    (player: Tableau): Tableau | undefined =>
-      any<keyof Cost>(
-        //
-        (key) => {
-          return player[key] < (cost[key] ?? 0)
-        },
-        keys(cost)
-      )
-        ? undefined
-        : player
+  (player: Tableau): Tableau | undefined =>
+    any<keyof Cost>(
+      //
+      (key) => player[key] < (cost[key] ?? 0),
+      keys(cost)
+    )
+      ? undefined
+      : player
 
-const byPoints = comparator<string>((a: string, b: string) => {
-  return costPoints(parseResourceParam(a)) > costPoints(parseResourceParam(b))
-})
+const byPoints = comparator<string>(
+  (a: string, b: string) => costPoints(parseResourceParam(a)) > costPoints(parseResourceParam(b))
+)
 
 export const rewardCostOptions = curry((totalPoints: number): string[] => {
   // this one is different because we want our output to be <= points, and cannot
