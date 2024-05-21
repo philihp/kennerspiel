@@ -9,7 +9,7 @@
     "@philihp/prettier-config": "1.0.0",
     "@supabase/auth-helpers-nextjs": "0.10.0",
     "@supabase/ssr": "0.3.0",
-    "@supabase/supabase-js": "2.43.1",
+    "@supabase/supabase-js": "2.43.2",
     "@vercel/analytics": "1.2.2",
     "@vercel/speed-insights": "1.0.10",
     "dotenv": "16.4.5",
@@ -29,12 +29,12 @@
   },
   "prettier": "@philihp/prettier-config",
   "devDependencies": {
-    "@types/node": "20.12.11",
+    "@types/node": "20.12.12",
     "@types/react": "18.3.2",
     "@types/react-dom": "18.3.0",
-    "eslint": "8.57.0",
+    "eslint": "9.3.0",
     "eslint-config-next": "14.2.3",
-    "supabase": "1.165.0",
+    "supabase": "1.167.4",
     "typescript": "5.4.5"
   }
 }
