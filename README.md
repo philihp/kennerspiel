@@ -1,5 +1,6 @@
-[![Hathora Deploy](https://github.com/philihp/kennerspiel/actions/workflows/deploy.yml/badge.svg)](https://github.com/philihp/kennerspiel/actions/workflows/deploy.yml)
-[![Coverage Status](https://coveralls.io/repos/github/philihp/kennerspiel/badge.svg?branch=main)](https://coveralls.io/github/philihp/kennerspiel?branch=main)
+[![Vercel](https://img.shields.io/github/deployments/philihp/kennerspiel/production?logo=vercel&label=Vercel
+)](https://github.com/philihp/kennerspiel/actions/workflows/deploy.yml)
+[![Coverage](https://coveralls.io/repos/github/philihp/kennerspiel/badge.svg?branch=main)](https://coveralls.io/github/philihp/kennerspiel?branch=main)
 
 # Hathora et Labora
 
