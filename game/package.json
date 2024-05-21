@@ -19,10 +19,11 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "format": "prettier . --write",
     "lint": "eslint .",
     "test": "jest",
     "prepack": "npm run build",
-    "prepare": "cd .. && husky install game/.husky"
+    "prepare": "cd .. && husky game/.husky"
   },
   "main": "./dist/index.js",
   "files": [
