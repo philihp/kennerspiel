@@ -61,11 +61,11 @@
     ]
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --quiet --fix"
+    "**/*.{js,ts,jsx,tsx}": [
+      "eslint --fix"
     ],
-    "*.{json,js,ts,jsx,tsx,html}": [
-      "prettier --write --ignore-unknown"
+    "**/*.{json,js,ts,jsx,tsx,html}": [
+      "prettier --write"
     ]
   },
   "prettier": "@philihp/prettier-config"
