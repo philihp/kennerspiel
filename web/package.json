@@ -11,7 +11,7 @@
     "@supabase/ssr": "0.3.0",
     "@supabase/supabase-js": "2.43.4",
     "@vercel/analytics": "1.2.2",
-    "@vercel/speed-insights": "1.0.10",
+    "@vercel/speed-insights": "1.0.11",
     "dotenv": "16.4.5",
     "form-urlencoded": "6.1.5",
     "jsonwebtoken": "9.0.2",
