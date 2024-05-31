@@ -5,8 +5,8 @@ import './globals.css'
 import Header from './layout/header'
 
 export const metadata: Metadata = {
-  title: 'EVE Hangar',
-  description: 'EVE Online Public Hangar',
+  title: 'Kennerspiel',
+  description: 'Digital Tabletop',
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
@@ -38,7 +38,6 @@ const RootLayout = async ({
       <Analytics />
       <SpeedInsights />
     </body>
-    {/* <GoogleAnalytics gaId="{ process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }" /> */}
   </html>
 )
 
