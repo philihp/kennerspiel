@@ -58,15 +58,17 @@ const RegisterPage = () => {
           {response}
         </>
       )}
-      <Turnstile
-        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''}
-        onSuccess={setCaptchaToken}
-        options={{
-          action: 'register',
-          theme: 'light',
-          size: 'normal',
-        }}
-      />
+      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+        <Turnstile
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          onSuccess={setCaptchaToken}
+          options={{
+            action: 'register',
+            theme: 'light',
+            size: 'normal',
+          }}
+        />
+      )}
     </form>
   )
 }
