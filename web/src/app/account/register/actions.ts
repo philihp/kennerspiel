@@ -10,7 +10,6 @@ export const register = async (formData: FormData, captchaToken: string) => {
     password: `${formData.get('password')}`,
     options: {
       captchaToken,
-      emailRedirectTo: `${origin}/account/register`,
     },
   })
 
