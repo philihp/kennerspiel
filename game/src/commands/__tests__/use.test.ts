@@ -92,6 +92,7 @@ jest.mock('../../buildings/clayMound', () => {
 })
 
 jest.mock('../../buildings', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     ...jest.requireActual('../../buildings'),
     alehouse: jest.fn().mockReturnValue(identity),
