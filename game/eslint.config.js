@@ -1,7 +1,7 @@
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import eslintConfigPrettier from 'eslint-config-prettier'
-import jestPlugin from 'eslint-plugin-jest'
+import jest from 'eslint-plugin-jest'
 
 export default tseslint.config(
   {
@@ -30,11 +30,10 @@ export default tseslint.config(
   {
     // rules specifically for tests
     files: ['src/**/__tests__/*.test.ts'],
-    ...jestPlugin.configs['flat/recommended'],
+    ...jest.configs['flat/recommended'],
     rules: {
-      ...jestPlugin.configs['flat/recommended'].rules,
-      '@typescript-eslint/no-unsafe-return': 'off',
-      'jest/prefer-expect-assertions': 'off'
+      ...jest.configs['flat/recommended'].rules,
+      'jest/prefer-expect-assertions': 'off',
     },
   }
 )
