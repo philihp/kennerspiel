@@ -51,23 +51,23 @@ export const allowPriorToUse =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    return set<GameStatePlaying, Frame>(
-      lensProp('frame'),
-      pipe(
-        set(lensPath(['bonusActions']), concat(buildContinuation(state), state.frame.bonusActions)),
-        set(lensPath(['nextUse']), NextUseClergy.OnlyPrior),
-        set(
-          lensPath(['usableBuildings']),
-          append(
-            building,
-            intersection(
-              state.frame.neutralBuildingPhase ? allVacantUsableBuildings(state.players[1].landscape) : [],
-              state.frame.usableBuildings
-            )
-          )
-        )
-      )(state.frame)
-    )(state)
+    const bonusActions = concat<GameCommandEnum, GameCommandEnum>(buildContinuation(state), state.frame.bonusActions)
+    const usableBuildings = append<BuildingEnum>(
+      building,
+      intersection(
+        state.frame.neutralBuildingPhase ? allVacantUsableBuildings(state.players[1].landscape) : [],
+        state.frame.usableBuildings
+      )
+    )
+    return {
+      ...state,
+      frame: {
+        ...state.frame,
+        bonusActions,
+        nextUse: NextUseClergy.OnlyPrior,
+        usableBuildings,
+      },
+    }
   }
 
 export const build = ({ row, col, building }: GameCommandBuildParams): StateReducer =>
@@ -108,7 +108,7 @@ export const complete =
         )
         .with([GameCommandEnum.BUILD, P._], ([, building]) => {
           if (state.frame.neutralBuildingPhase) {
-            const isCloister = isCloisterBuilding(building! as BuildingEnum)
+            const isCloister = isCloisterBuilding(building as BuildingEnum)
             const coords: [number, number][] = [
               [0, 0],
               [1, 0],

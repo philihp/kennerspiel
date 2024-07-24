@@ -96,7 +96,7 @@ describe('buildings/windmill', () => {
           ...s0.players.slice(1),
         ],
       }
-      const s2 = windmill('GnGnGn')(s1)! as GameStatePlaying
+      const s2 = windmill('GnGnGn')(s1)!
       expect(s2.players[0]).toMatchObject({
         grain: 2,
         flour: 3,

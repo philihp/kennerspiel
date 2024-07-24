@@ -80,7 +80,7 @@ describe('buildings/cloisterLibrary', () => {
 
   describe('cloisterLibrary', () => {
     it('supports a noop with empty strings', () => {
-      const s1 = cloisterLibrary('')(s0)! as GameStatePlaying
+      const s1 = cloisterLibrary('')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 10,
         book: 10,
@@ -90,7 +90,7 @@ describe('buildings/cloisterLibrary', () => {
     })
 
     it('supports a noop with no params', () => {
-      const s1 = cloisterLibrary()(s0)! as GameStatePlaying
+      const s1 = cloisterLibrary()(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 10,
         book: 10,
@@ -100,7 +100,7 @@ describe('buildings/cloisterLibrary', () => {
     })
 
     it('goes through a happy path', () => {
-      const s1 = cloisterLibrary('PnPnPnBo')(s0)! as GameStatePlaying
+      const s1 = cloisterLibrary('PnPnPnBo')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 7,
         book: 12,
@@ -110,7 +110,7 @@ describe('buildings/cloisterLibrary', () => {
     })
 
     it('might only consume books', () => {
-      const s1 = cloisterLibrary('Bo')(s0)! as GameStatePlaying
+      const s1 = cloisterLibrary('Bo')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 10,
         book: 9,
@@ -120,7 +120,7 @@ describe('buildings/cloisterLibrary', () => {
     })
 
     it('maybe only makes books', () => {
-      const s1 = cloisterLibrary('PnPn')(s0)! as GameStatePlaying
+      const s1 = cloisterLibrary('PnPn')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 8,
         book: 12,
@@ -142,7 +142,7 @@ describe('buildings/cloisterLibrary', () => {
           ...s0.players.slice(1),
         ],
       }
-      const s2 = cloisterLibrary('Ni')(s1)! as GameStatePlaying
+      const s2 = cloisterLibrary('Ni')(s1)!
       expect(s2.players[0]).toMatchObject({
         nickel: 0,
         penny: 0,
@@ -157,7 +157,7 @@ describe('buildings/cloisterLibrary', () => {
         ...s0,
         players: [{ ...s0.players[0], nickel: 0, penny: 0, wine: 1, book: 0, meat: 0 }, ...s0.players.slice(1)],
       }
-      const s2 = cloisterLibrary('WnBo')(s1)! as GameStatePlaying
+      const s2 = cloisterLibrary('WnBo')(s1)!
       expect(s2.players[0]).toMatchObject({
         nickel: 0,
         penny: 0,

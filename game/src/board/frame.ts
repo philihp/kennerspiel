@@ -164,11 +164,10 @@ export const allowFreeUsageToNeighborsOf =
           return accum
         },
         [] as BuildingEnum[],
-        map(([rowMod, colMod]) => [player, row + rowMod, col + colMod], getAdjacentOffsets(col - 2)) as [
-          number,
-          number,
-          number,
-        ][]
+        map<[number, number], [number, number, number]>(
+          ([rowMod, colMod]) => [player, row + rowMod, col + colMod],
+          getAdjacentOffsets(col - 2)
+        )
       )
     )(state)
   }

@@ -11,7 +11,15 @@ export default tseslint.config(
       // standard eslint rules
       eslint.configs.recommended,
       // and then eslint
-      ...tseslint.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked,
+      {
+        languageOptions: {
+          parserOptions: {
+            project: true,
+            tsconfigRootDir: import.meta.dirname,
+          },
+        },
+      },
       // disable eslint rules that conflict with prettier
       eslintConfigPrettier,
     ],

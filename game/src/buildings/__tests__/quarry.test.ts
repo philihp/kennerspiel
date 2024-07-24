@@ -85,7 +85,7 @@ describe('buildings/quarry', () => {
 
   describe('quarry', () => {
     it('can take stones', () => {
-      const s1 = quarry()(s0)! as GameStatePlaying
+      const s1 = quarry()(s0)!
       expect(s1.rondel).toMatchObject({
         pointingBefore: 3,
         joker: 2,
@@ -104,7 +104,7 @@ describe('buildings/quarry', () => {
           length: 'short',
         },
       } as GameStatePlaying
-      const s2 = quarry()(s1)! as GameStatePlaying
+      const s2 = quarry()(s1)!
       expect(s2.rondel).toMatchObject({
         pointingBefore: 3,
         joker: 2,
@@ -116,7 +116,7 @@ describe('buildings/quarry', () => {
     })
 
     it('can use the joker', () => {
-      const s1 = quarry('Jo')(s0)! as GameStatePlaying
+      const s1 = quarry('Jo')(s0)!
       expect(s1.rondel).toMatchObject({
         pointingBefore: 3,
         joker: 3,

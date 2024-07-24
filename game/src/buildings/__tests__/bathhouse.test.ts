@@ -83,7 +83,7 @@ describe('buildings/bathhouse', () => {
 
   describe('bathhouse', () => {
     it('follows happy path', () => {
-      const s1 = bathhouse('Pn')(s0)! as GameStatePlaying
+      const s1 = bathhouse('Pn')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 0,
         book: 1,
@@ -99,12 +99,12 @@ describe('buildings/bathhouse', () => {
     })
 
     it('allows noop with undefined', () => {
-      const s1 = bathhouse()(s0)! as GameStatePlaying
+      const s1 = bathhouse()(s0)!
       expect(s1).toBe(s0)
     })
 
     it('allows noop with empty string', () => {
-      const s1 = bathhouse('')(s0)! as GameStatePlaying
+      const s1 = bathhouse('')(s0)!
       expect(s1).toBe(s0)
     })
 
@@ -123,7 +123,7 @@ describe('buildings/bathhouse', () => {
           ...s0.players.slice(1),
         ],
       }
-      const s2 = bathhouse('Pn')(s1)! as GameStatePlaying
+      const s2 = bathhouse('Pn')(s1)!
       expect(s2.players[0].clergy).toContain('PRIB')
       expect(s2.players[0].clergy).toContain('LB1B')
       expect(s2.players[0].clergy).toContain('LB2B')
@@ -149,14 +149,14 @@ describe('buildings/bathhouse', () => {
           ...s0.players.slice(1),
         ],
       }
-      const s2 = bathhouse()(s1)! as GameStatePlaying
+      const s2 = bathhouse()(s1)!
       expect(s1.players[0].clergy).toBe(s2.players[0].clergy)
       expect(s1.players[0].landscape).toBe(s2.players[0].landscape)
     })
 
     it('fails if no pennies', () => {
       const s1 = { ...s0, players: [{ ...s0.players[0], penny: 0 }, ...s0.players.slice(1)] }
-      const s2 = bathhouse('Pn')(s1)! as GameStatePlaying
+      const s2 = bathhouse('Pn')(s1)!
       expect(s2).toBeUndefined()
     })
   })

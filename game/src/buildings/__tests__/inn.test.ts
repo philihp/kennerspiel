@@ -80,7 +80,7 @@ describe('buildings/inn', () => {
 
   describe('inn', () => {
     it('goes through a happy path', () => {
-      const s1 = inn('WnMtGnGnGn')(s0)! as GameStatePlaying
+      const s1 = inn('WnMtGnGnGn')(s0)!
       expect(s1.players[0]).toMatchObject({
         wine: 9,
         meat: 9,
@@ -91,7 +91,7 @@ describe('buildings/inn', () => {
     })
 
     it('has a max payout of 13, with 1 nickel and 8 pennies', () => {
-      const s1 = inn('WnMtMtMtMtMtMt')(s0)! as GameStatePlaying
+      const s1 = inn('WnMtMtMtMtMtMt')(s0)!
       expect(s1.players[0]).toMatchObject({
         wine: 9,
         meat: 4,
@@ -102,7 +102,7 @@ describe('buildings/inn', () => {
     })
 
     it('pays out 6 if only given wine', () => {
-      const s1 = inn('Wn')(s0)! as GameStatePlaying
+      const s1 = inn('Wn')(s0)!
       expect(s1.players[0]).toMatchObject({
         wine: 9,
         meat: 10,
@@ -113,7 +113,7 @@ describe('buildings/inn', () => {
     })
 
     it('pays out 7 if only given two wine', () => {
-      const s1 = inn('WnWn')(s0)! as GameStatePlaying
+      const s1 = inn('WnWn')(s0)!
       expect(s1.players[0]).toMatchObject({
         wine: 8,
         meat: 10,
@@ -124,7 +124,7 @@ describe('buildings/inn', () => {
     })
 
     it('pays out 1 if given 1 food', () => {
-      const s1 = inn('Gn')(s0)! as GameStatePlaying
+      const s1 = inn('Gn')(s0)!
       expect(s1.players[0]).toMatchObject({
         wine: 10,
         meat: 10,

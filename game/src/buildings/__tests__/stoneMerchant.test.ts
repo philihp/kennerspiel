@@ -79,7 +79,7 @@ describe('buildings/stoneMerchant', () => {
   }
   describe('stoneMerchant', () => {
     it('goes through a happy path', () => {
-      const s1 = stoneMerchant('ShShCo')(s0)! as GameStatePlaying
+      const s1 = stoneMerchant('ShShCo')(s0)!
       expect(s1.players[0]).toMatchObject({
         sheep: 8,
         coal: 9,
@@ -88,7 +88,7 @@ describe('buildings/stoneMerchant', () => {
     })
 
     it('does not give energy change', () => {
-      const s1 = stoneMerchant('ShCo')(s0)! as GameStatePlaying
+      const s1 = stoneMerchant('ShCo')(s0)!
       expect(s1.players[0]).toMatchObject({
         wood: 10,
         sheep: 9,
@@ -97,7 +97,7 @@ describe('buildings/stoneMerchant', () => {
       })
     })
     it('does not give food change', () => {
-      const s1 = stoneMerchant('GnCo')(s0)! as GameStatePlaying
+      const s1 = stoneMerchant('GnCo')(s0)!
       expect(s1.players[0]).toMatchObject({
         wood: 10,
         grain: 9,
@@ -107,7 +107,7 @@ describe('buildings/stoneMerchant', () => {
     })
 
     it('can be used up to 5 times', () => {
-      const s1 = stoneMerchant('ShShShShShWoWoWoWoWo')(s0)! as GameStatePlaying
+      const s1 = stoneMerchant('ShShShShShWoWoWoWoWo')(s0)!
       expect(s1.players[0]).toMatchObject({
         sheep: 5,
         wood: 5,
@@ -116,7 +116,7 @@ describe('buildings/stoneMerchant', () => {
     })
 
     it('max output is 5, but still consumes everything', () => {
-      const s1 = stoneMerchant('ShShShShShShShWoWoWoWoWoWoWo')(s0)! as GameStatePlaying
+      const s1 = stoneMerchant('ShShShShShShShWoWoWoWoWoWoWo')(s0)!
       expect(s1.players[0]).toMatchObject({
         sheep: 3,
         wood: 3,
@@ -129,7 +129,7 @@ describe('buildings/stoneMerchant', () => {
         ...s0,
         players: [{ ...s0.players[0], sheep: 0, wood: 0, stone: 0 }, ...s0.players.slice(1)],
       }
-      const s2 = stoneMerchant('ShWo')(s1)! as GameStatePlaying
+      const s2 = stoneMerchant('ShWo')(s1)!
       expect(s2).toBeUndefined()
     })
   })

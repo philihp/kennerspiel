@@ -32,6 +32,7 @@ import {
 
 jest.mock('../commands', () => {
   const innerUse = jest.fn().mockReturnValue(['USE'])
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     ...jest.requireActual('../commands'),
     completeBuild: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['BUILD'])),

@@ -79,12 +79,12 @@ describe('buildings/houseboat', () => {
   }
   describe('houseboat', () => {
     it('maintains an undefined state', () => {
-      const s1 = houseboat()(undefined)! as GameStatePlaying
+      const s1 = houseboat()(undefined)!
       expect(s1).toBeUndefined()
     })
 
     it('gives the player stuff', () => {
-      const s1 = houseboat()(s0)! as GameStatePlaying
+      const s1 = houseboat()(s0)!
       expect(s1.players[0]).toMatchObject({
         wood: 1,
         malt: 1,

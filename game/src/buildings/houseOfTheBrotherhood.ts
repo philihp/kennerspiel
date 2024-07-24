@@ -15,7 +15,7 @@ const pointsPerCloister = (config: GameCommandConfigParams) =>
 const cloistersInRow = map(([_, building]: Tile) => (isCloisterBuilding(building) ? 1 : 0))
 
 // given a list of rows, do the thing
-const cloistersInLandscape = map((landRow: Tile[]) => cloistersInRow(landRow as Tile[]))
+const cloistersInLandscape = map((landRow: Tile[]) => cloistersInRow(landRow))
 
 const entitledPointCount = (state: GameStatePlaying | undefined): number => {
   if (state === undefined) return -1

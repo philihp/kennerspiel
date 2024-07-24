@@ -82,7 +82,7 @@ describe('buildings/cloisterChurch', () => {
 
   describe('cloisterChurch', () => {
     it('works twice', () => {
-      const s1 = cloisterChurch('BrBrWnWn')(s0)! as GameStatePlaying
+      const s1 = cloisterChurch('BrBrWnWn')(s0)!
       expect(s1.players[0]).toMatchObject({
         bread: 1,
         wine: 2,
@@ -91,7 +91,7 @@ describe('buildings/cloisterChurch', () => {
     })
 
     it('works once', () => {
-      const s1 = cloisterChurch('BrWn')(s0)! as GameStatePlaying
+      const s1 = cloisterChurch('BrWn')(s0)!
       expect(s1.players[0]).toMatchObject({
         bread: 2,
         wine: 3,
@@ -100,7 +100,7 @@ describe('buildings/cloisterChurch', () => {
     })
 
     it('works once with extra just consumed', () => {
-      const s1 = cloisterChurch('BrWnWn')(s0)! as GameStatePlaying
+      const s1 = cloisterChurch('BrWnWn')(s0)!
       expect(s1.players[0]).toMatchObject({
         bread: 2,
         wine: 2,
@@ -109,7 +109,7 @@ describe('buildings/cloisterChurch', () => {
     })
 
     it('works with nothing, and gives nothing', () => {
-      const s1 = cloisterChurch('')(s0)! as GameStatePlaying
+      const s1 = cloisterChurch('')(s0)!
       expect(s1.players[0]).toMatchObject({
         bread: 3,
         wine: 4,

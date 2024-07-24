@@ -6,6 +6,6 @@ export const spiel = pipe(
   split('\n'),
   map((s) => s.trim()),
   reject((s) => s === ''),
-  map((s) => s.split(' ')),
+  map((s: string) => s.split(' ')),
   reduce((state: GameState | undefined, command: string[]) => reducer(state!, command), initialState)
 )

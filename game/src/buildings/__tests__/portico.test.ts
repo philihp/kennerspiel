@@ -95,7 +95,7 @@ describe('buildings/portico', () => {
       expect(s0).toBe(s1)
     })
     it('turns grain into malt and straw', () => {
-      const s1 = portico('Rq')(s0)! as GameStatePlaying
+      const s1 = portico('Rq')(s0)!
       expect(s1.players[0]).toMatchObject({
         reliquary: 9,
         stone: 2,

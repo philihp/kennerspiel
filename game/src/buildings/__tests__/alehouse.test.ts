@@ -17,7 +17,7 @@ describe('buildings/alehouse', () => {
 
   describe('alehouse', () => {
     it('goes through a happy path', () => {
-      const s1 = alehouse('WhBe')(s0)! as GameStatePlaying
+      const s1 = alehouse('WhBe')(s0)!
       expect(s1.players[0]).toMatchObject({
         whiskey: 1,
         beer: 1,
@@ -42,7 +42,7 @@ describe('buildings/alehouse', () => {
     })
 
     it('can only do beer', () => {
-      const s1 = alehouse('Be')(s0)! as GameStatePlaying
+      const s1 = alehouse('Be')(s0)!
       expect(s1.players[0]).toMatchObject({
         whiskey: 2,
         beer: 1,
@@ -52,7 +52,7 @@ describe('buildings/alehouse', () => {
     })
 
     it('can only do whiskey', () => {
-      const s1 = alehouse('Wh')(s0)! as GameStatePlaying
+      const s1 = alehouse('Wh')(s0)!
       expect(s1.players[0]).toMatchObject({
         whiskey: 1,
         beer: 2,

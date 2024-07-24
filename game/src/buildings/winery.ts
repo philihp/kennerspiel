@@ -50,7 +50,7 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
               range(0),
               reverse<number>,
               ap([stringRepeater('Wn')]),
-              map((s) => resourceString + s)
+              map((s) => resourceString + String(s))
             )(sellableWine),
           paymentAmounts
         )

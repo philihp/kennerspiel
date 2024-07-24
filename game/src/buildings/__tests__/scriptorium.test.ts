@@ -80,7 +80,7 @@ describe('buildings/scriptorium', () => {
 
   describe('scriptorium', () => {
     it('supports a noop with empty strings', () => {
-      const s1 = scriptorium('')(s0)! as GameStatePlaying
+      const s1 = scriptorium('')(s0)!
       expect(s1).toBe(s0)
       expect(s1.players[0]).toMatchObject({
         penny: 1,
@@ -91,7 +91,7 @@ describe('buildings/scriptorium', () => {
     })
 
     it('supports a noop with no params', () => {
-      const s1 = scriptorium()(s0)! as GameStatePlaying
+      const s1 = scriptorium()(s0)!
       expect(s1).toBe(s0)
       expect(s1.players[0]).toMatchObject({
         penny: 1,
@@ -102,7 +102,7 @@ describe('buildings/scriptorium', () => {
     })
 
     it('works ordinarily', () => {
-      const s1 = scriptorium('Pn')(s0)! as GameStatePlaying
+      const s1 = scriptorium('Pn')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 0,
         book: 1,
@@ -112,7 +112,7 @@ describe('buildings/scriptorium', () => {
     })
 
     it('consumes everything you give it', () => {
-      const s1 = scriptorium('Wh')(s0)! as GameStatePlaying
+      const s1 = scriptorium('Wh')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 1,
         book: 1,

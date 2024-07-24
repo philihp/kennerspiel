@@ -96,7 +96,7 @@ describe('buildings/cooperage', () => {
       expect(s0).toBe(s1)
     })
     it('uses joker to get whiskey', () => {
-      const s1 = cooperage('WoWoWo', 'Wh')(s0)! as GameStatePlaying
+      const s1 = cooperage('WoWoWo', 'Wh')(s0)!
       expect(s1.players[0]).toMatchObject({
         wood: 0,
         beer: 0,
@@ -104,7 +104,7 @@ describe('buildings/cooperage', () => {
       })
     })
     it('uses joker to get beer', () => {
-      const s1 = cooperage('WoWoWo', 'Be')(s0)! as GameStatePlaying
+      const s1 = cooperage('WoWoWo', 'Be')(s0)!
       expect(s1.players[0]).toMatchObject({
         wood: 0,
         beer: 5,
@@ -112,7 +112,7 @@ describe('buildings/cooperage', () => {
       })
     })
     it('fails if nothing specified', () => {
-      const s1 = cooperage('WoWoWo', '')(s0)! as GameStatePlaying
+      const s1 = cooperage('WoWoWo', '')(s0)!
       expect(s1.players[0]).toMatchObject({
         wood: 0,
         beer: 0,
@@ -120,7 +120,7 @@ describe('buildings/cooperage', () => {
       })
     })
     it('prefers whiskey if both requested', () => {
-      const s1 = cooperage('WoWoWo', 'BeWh')(s0)! as GameStatePlaying
+      const s1 = cooperage('WoWoWo', 'BeWh')(s0)!
       expect(s1.players[0]).toMatchObject({
         wood: 0,
         beer: 0,
@@ -128,7 +128,7 @@ describe('buildings/cooperage', () => {
       })
     })
     it('noop if not enough wood', () => {
-      const s1 = cooperage('WoWo', 'Wh')(s0)! as GameStatePlaying
+      const s1 = cooperage('WoWo', 'Wh')(s0)!
       expect(s1).toBe(s0)
     })
     describe('in a short game', () => {

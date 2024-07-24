@@ -110,7 +110,7 @@ describe('buildings/proiry', () => {
       expect(s1).toBeUndefined()
     })
     it('using priory allows usage of many buildings except itself', () => {
-      const s1 = priory()(s0)! as GameStatePlaying
+      const s1 = priory()(s0)!
       expect(s1.frame).toMatchObject({
         nextUse: NextUseClergy.Free,
         usableBuildings: [BuildingEnum.GrainStorage],
@@ -133,7 +133,7 @@ describe('buildings/proiry', () => {
           { ...s0.players[2], clergy: [Clergy.LayBrother1B, Clergy.PriorB] },
         ],
       } as GameStatePlaying
-      const s2 = priory()(s1)! as GameStatePlaying
+      const s2 = priory()(s1)!
       expect(s2.frame).toMatchObject({
         nextUse: NextUseClergy.Free,
         usableBuildings: [BuildingEnum.GrainStorage],

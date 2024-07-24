@@ -46,7 +46,7 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
               range(0),
               reverse<number>,
               map(stringRepeater(ResourceEnum.Book)),
-              map((s) => resourceString + s)
+              map((s) => resourceString + String(s))
             )(sellableBooks),
           paymentAmounts
         )

@@ -79,7 +79,7 @@ describe('buildings/spinningMill', () => {
   }
   describe('spinningMill', () => {
     it('maintains an undefined state', () => {
-      const s1 = spinningMill()(undefined)! as GameStatePlaying
+      const s1 = spinningMill()(undefined)!
       expect(s1).toBeUndefined()
     })
 
@@ -94,7 +94,7 @@ describe('buildings/spinningMill', () => {
           s0.players.slice(1),
         ],
       } as GameStatePlaying
-      const s2 = spinningMill()(s1)! as GameStatePlaying
+      const s2 = spinningMill()(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 0,
       })
@@ -110,7 +110,7 @@ describe('buildings/spinningMill', () => {
           s0.players.slice(1),
         ],
       } as GameStatePlaying
-      const s2 = spinningMill()(s1)! as GameStatePlaying
+      const s2 = spinningMill()(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 3,
       })
@@ -126,7 +126,7 @@ describe('buildings/spinningMill', () => {
           s0.players.slice(1),
         ],
       } as GameStatePlaying
-      const s2 = spinningMill()(s1)! as GameStatePlaying
+      const s2 = spinningMill()(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 3,
       })
@@ -142,7 +142,7 @@ describe('buildings/spinningMill', () => {
           s0.players.slice(1),
         ],
       } as GameStatePlaying
-      const s2 = spinningMill()(s1)! as GameStatePlaying
+      const s2 = spinningMill()(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 3,
       })
@@ -158,7 +158,7 @@ describe('buildings/spinningMill', () => {
           s0.players.slice(1),
         ],
       } as GameStatePlaying
-      const s2 = spinningMill()(s1)! as GameStatePlaying
+      const s2 = spinningMill()(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 5,
       })
@@ -174,7 +174,7 @@ describe('buildings/spinningMill', () => {
           s0.players.slice(1),
         ],
       } as GameStatePlaying
-      const s2 = spinningMill()(s1)! as GameStatePlaying
+      const s2 = spinningMill()(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 5,
       })
@@ -190,7 +190,7 @@ describe('buildings/spinningMill', () => {
           s0.players.slice(1),
         ],
       } as GameStatePlaying
-      const s2 = spinningMill()(s1)! as GameStatePlaying
+      const s2 = spinningMill()(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 5,
       })
@@ -206,7 +206,7 @@ describe('buildings/spinningMill', () => {
           s0.players.slice(1),
         ],
       } as GameStatePlaying
-      const s2 = spinningMill()(s1)! as GameStatePlaying
+      const s2 = spinningMill()(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 6,
       })
@@ -222,7 +222,7 @@ describe('buildings/spinningMill', () => {
           s0.players.slice(1),
         ],
       } as GameStatePlaying
-      const s2 = spinningMill()(s1)! as GameStatePlaying
+      const s2 = spinningMill()(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 6,
       })

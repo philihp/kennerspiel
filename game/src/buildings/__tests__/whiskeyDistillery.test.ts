@@ -35,7 +35,7 @@ describe('buildings/whiskeyDistillery', () => {
 
   describe('whiskeyDistillery', () => {
     it('goes through a happy path', () => {
-      const s1 = whiskeyDistillery('MaWoPtMaWoPt')(s0)! as GameStatePlaying
+      const s1 = whiskeyDistillery('MaWoPtMaWoPt')(s0)!
       expect(s1.players[0]).toMatchObject({
         malt: 8,
         wood: 8,
@@ -60,13 +60,13 @@ describe('buildings/whiskeyDistillery', () => {
     })
 
     it('only makes the minimum of the inputs', () => {
-      const s1 = whiskeyDistillery('MaWoPtMaWo')(s0)! as GameStatePlaying
+      const s1 = whiskeyDistillery('MaWoPtMaWo')(s0)!
       expect(s1.players[0]).toMatchObject({
         whiskey: 2,
       })
     })
     it('consumes everything given', () => {
-      const s1 = whiskeyDistillery('MaMaMaPtWo')(s0)! as GameStatePlaying
+      const s1 = whiskeyDistillery('MaMaMaPtWo')(s0)!
       expect(s1.players[0]).toMatchObject({
         malt: 7,
         wood: 9,
