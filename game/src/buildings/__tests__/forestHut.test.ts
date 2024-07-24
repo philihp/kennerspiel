@@ -80,7 +80,7 @@ describe('buildings/forestHut', () => {
 
   describe('forestHut', () => {
     it('goes through a happy path', () => {
-      const s1 = forestHut(0, 2)(s0)! as GameStatePlaying
+      const s1 = forestHut(0, 2)(s0)!
       expect(s1.players[0]).toMatchObject({
         landscape: [
           [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
@@ -93,12 +93,12 @@ describe('buildings/forestHut', () => {
     })
 
     it('fails if spot is not forest', () => {
-      const s1 = forestHut(0, 0)(s0)! as GameStatePlaying
+      const s1 = forestHut(0, 0)(s0)!
       expect(s1).toBeUndefined()
     })
 
     it('noop if no spot specified', () => {
-      const s1 = forestHut()(s0)! as GameStatePlaying
+      const s1 = forestHut()(s0)!
       expect(s1).toBe(s0)
     })
   })

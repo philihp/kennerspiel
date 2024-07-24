@@ -21,7 +21,7 @@ export const priory = (): StateReducer => (state) => {
     (b: BuildingEnum) => b !== BuildingEnum.Priory,
     clergyBuildings
   )
-  return setFrameToAllowFreeUsage(usableBuildings as BuildingEnum[])(state)
+  return setFrameToAllowFreeUsage(usableBuildings)(state)
 }
 
 export const complete = curry((partial: string[], _state: GameStatePlaying): string[] =>

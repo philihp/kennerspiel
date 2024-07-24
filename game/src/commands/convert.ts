@@ -95,9 +95,14 @@ export const complete =
         const convertWhiskey = map((s) => stringRepeater(ResourceEnum.Whiskey, s), reverse(range(0, 1 + whiskey)))
         const convertWine = map((s) => stringRepeater(ResourceEnum.Wine, s), reverse(range(0, 1 + wine)))
 
-        return without(
+        return without<string>(
           [''],
-          lift((a, b, c, d) => a + b + c + d)(convertMoney, convertGrain, convertWhiskey, convertWine)
+          lift<(a: string, b: string, c: string, d: string) => string>((a, b, c, d) => a + b + c + d)(
+            convertMoney,
+            convertGrain,
+            convertWhiskey,
+            convertWine
+          )
         )
       })
       .with([GameCommandEnum.CONVERT, P._], always(['']))

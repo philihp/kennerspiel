@@ -90,7 +90,7 @@ describe('buildings/shipyard', () => {
     })
 
     it('turns two wood into 1 ornament and 1 nickel', () => {
-      const s1 = shipyard('WoWo')(s0)! as GameStatePlaying
+      const s1 = shipyard('WoWo')(s0)!
       expect(s1.players[0]).toMatchObject({
         wood: 8,
         ornament: 1,

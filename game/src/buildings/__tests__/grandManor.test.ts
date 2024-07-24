@@ -152,7 +152,7 @@ describe('buildings/grandManor', () => {
 
   describe('grandManor', () => {
     it('can take whiskey', () => {
-      const s1 = grandManor('Wh')(s0)! as GameStatePlaying
+      const s1 = grandManor('Wh')(s0)!
       expect(s1.players[0]).toMatchObject({
         whiskey: 0,
       })

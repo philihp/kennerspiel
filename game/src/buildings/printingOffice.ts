@@ -56,7 +56,7 @@ const forestPairs = (player: Tableau) => (coords: string[]) => {
   const forestsAlreadyCutDown = pipe(
     //
     splitEvery(2),
-    map(([a, b]) => `${a} ${b}`)
+    map<string[], string>(([a, b]) => `${a} ${b}`)
   )(coords)
   const forestsRemaining = pipe(
     //
@@ -100,7 +100,7 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
     .with([P._, P._, P._, P._, P._], forestPairsWithColumn(player))
     .with([P._, P._, P._, P._, P._, P._], forestPairs(player))
     .otherwise((param) => {
-      const locations = param as string[]
+      const locations = param
       if (locations?.length === 7) {
         // well this is annoying, i can't check an array with more than 6 things?
         return forestPairsWithColumn(player)(locations)

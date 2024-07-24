@@ -44,7 +44,7 @@ describe('game 29767', () => {
     expect(s8.rondel.pointingBefore).toBe(2)
     expect(s8.players[0].peat).toBe(2)
 
-    const s9 = reducer(s8, ['CUT_PEAT', '0', '1']!) as GameStatePlaying
+    const s9 = reducer(s8, ['CUT_PEAT', '0', '1']) as GameStatePlaying
     expect(s9.players[0].peat).toBe(4)
     expect(s9.rondel.peat).toBe(2)
 

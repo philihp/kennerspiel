@@ -80,7 +80,7 @@ describe('buildings/buildersMarket', () => {
 
   describe('buildersMarket', () => {
     it('goes through a happy path', () => {
-      const s1 = buildersMarket('PnPn')(s0)! as GameStatePlaying
+      const s1 = buildersMarket('PnPn')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 8,
         wood: 2,
@@ -102,7 +102,7 @@ describe('buildings/buildersMarket', () => {
           ...s0.players.slice(1),
         ],
       }
-      const s2 = buildersMarket('PnPn')(s1)! as GameStatePlaying
+      const s2 = buildersMarket('PnPn')(s1)!
       expect(s2.players[0]).toMatchObject({
         penny: 3,
         wood: 2,
@@ -113,7 +113,7 @@ describe('buildings/buildersMarket', () => {
     })
 
     it('does nothing if you dont give it two coins', () => {
-      const s1 = buildersMarket()(s0)! as GameStatePlaying
+      const s1 = buildersMarket()(s0)!
       expect(s1).toBe(s0)
     })
   })

@@ -18,7 +18,7 @@ describe('buildings/camera', () => {
 
   describe('camera', () => {
     it('goes through a happy path', () => {
-      const s1 = camera('BoBoCeCe')(s0)! as GameStatePlaying
+      const s1 = camera('BoBoCeCe')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 1,
         ceramic: 1,
@@ -44,7 +44,7 @@ describe('buildings/camera', () => {
     })
 
     it('can only do one', () => {
-      const s1 = camera('BoCe')(s0)! as GameStatePlaying
+      const s1 = camera('BoCe')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 2,
         ceramic: 2,
@@ -55,7 +55,7 @@ describe('buildings/camera', () => {
     })
 
     it('if paying for more than two, only give 2', () => {
-      const s1 = camera('BoBoBoCeCeCe')(s0)! as GameStatePlaying
+      const s1 = camera('BoBoBoCeCeCe')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 1,
         ceramic: 1,

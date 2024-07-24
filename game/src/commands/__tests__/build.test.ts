@@ -100,7 +100,7 @@ describe('commands/build', () => {
           },
           ...s0.players.slice(1),
         ],
-        buildings: s0.buildings.filter((b) => b !== 'G07'),
+        buildings: s0.buildings.filter((b) => b !== ('G07' as BuildingEnum)),
       }
       const s4 = build({ row: 1, col: 3, building: BuildingEnum.Calefactory })(s3)!
       expect(s4).toBeUndefined()

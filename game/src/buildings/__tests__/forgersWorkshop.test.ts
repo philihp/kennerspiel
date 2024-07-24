@@ -92,7 +92,7 @@ describe('buildings/forgersWorkshop', () => {
     })
 
     it('can do both things', () => {
-      const s1 = forgersWorkshop('NiNiNi')(s0)! as GameStatePlaying
+      const s1 = forgersWorkshop('NiNiNi')(s0)!
       expect(s1.players[0]).toMatchObject({
         reliquary: 2,
         nickel: 7,
@@ -100,7 +100,7 @@ describe('buildings/forgersWorkshop', () => {
     })
 
     it('can do just one', () => {
-      const s1 = forgersWorkshop('Ni')(s0)! as GameStatePlaying
+      const s1 = forgersWorkshop('Ni')(s0)!
       expect(s1.players[0]).toMatchObject({
         reliquary: 1,
         nickel: 9,
@@ -108,7 +108,7 @@ describe('buildings/forgersWorkshop', () => {
     })
 
     it('can do it 4 times', () => {
-      const s1 = forgersWorkshop('NiNiNiNiNiNiNi')(s0)! as GameStatePlaying
+      const s1 = forgersWorkshop('NiNiNiNiNiNiNi')(s0)!
       expect(s1.players[0]).toMatchObject({
         reliquary: 4,
         nickel: 3,

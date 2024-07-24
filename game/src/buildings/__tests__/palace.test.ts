@@ -159,7 +159,7 @@ describe('buildings/palace', () => {
       expect(s1).toBe(s1)
     })
     it('can take wine', () => {
-      const s1 = palace('Wn')(s0)! as GameStatePlaying
+      const s1 = palace('Wn')(s0)!
       expect(s1.players[0]).toMatchObject({
         wine: 0,
       })

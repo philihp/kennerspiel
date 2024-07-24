@@ -79,7 +79,7 @@ describe('buildings/cloisterWorkshop', () => {
   }
   describe('cloisterWorkshop', () => {
     it('allows noop with null', () => {
-      const s1 = cloisterWorkshop()(s0)! as GameStatePlaying
+      const s1 = cloisterWorkshop()(s0)!
       expect(s1.players[0]).toMatchObject({
         ceramic: 0,
         ornament: 0,
@@ -90,7 +90,7 @@ describe('buildings/cloisterWorkshop', () => {
     })
 
     it('allows noop with empty string', () => {
-      const s1 = cloisterWorkshop('')(s0)! as GameStatePlaying
+      const s1 = cloisterWorkshop('')(s0)!
       expect(s1.players[0]).toMatchObject({
         ceramic: 0,
         ornament: 0,
@@ -101,7 +101,7 @@ describe('buildings/cloisterWorkshop', () => {
     })
 
     it('plenty of coal, make three ceramic and 1 ornament', () => {
-      const s1 = cloisterWorkshop('ClClClSnCoCoCoCo')(s0)! as GameStatePlaying
+      const s1 = cloisterWorkshop('ClClClSnCoCoCoCo')(s0)!
       expect(s1.players[0]).toMatchObject({
         ceramic: 3,
         ornament: 1,
@@ -112,7 +112,7 @@ describe('buildings/cloisterWorkshop', () => {
     })
 
     it('when abundant clay/stone, prefer to make an ornament', () => {
-      const s1 = cloisterWorkshop('ClClClSnCo')(s0)! as GameStatePlaying
+      const s1 = cloisterWorkshop('ClClClSnCo')(s0)!
       expect(s1.players[0]).toMatchObject({
         ceramic: 2,
         ornament: 1,
@@ -123,7 +123,7 @@ describe('buildings/cloisterWorkshop', () => {
     })
 
     it('eats all the energy', () => {
-      const s1 = cloisterWorkshop('CoSn')(s0)! as GameStatePlaying
+      const s1 = cloisterWorkshop('CoSn')(s0)!
       expect(s1.players[0]).toMatchObject({
         ceramic: 0,
         ornament: 1,
@@ -134,7 +134,7 @@ describe('buildings/cloisterWorkshop', () => {
     })
 
     it('can be used for only ceramic', () => {
-      const s1 = cloisterWorkshop('CoClCl')(s0)! as GameStatePlaying
+      const s1 = cloisterWorkshop('CoClCl')(s0)!
       expect(s1.players[0]).toMatchObject({
         ceramic: 2,
         ornament: 0,

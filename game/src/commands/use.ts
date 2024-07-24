@@ -225,7 +225,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.Windmill, () => windmill(params[0]))
       .with(BuildingEnum.Winery, () => winery(params[0]))
       .otherwise(() => () => {
-        throw new Error(`Invalid params [${params}] for building ${building}`)
+        throw new Error(`Invalid params ${JSON.stringify(params)} for building ${building}`)
       })
   )
 
@@ -260,7 +260,10 @@ export const complete =
         return allVacantUsableBuildings(player.landscape)
       })
       .with(
-        P.when(([command, building]) => command === GameCommandEnum.USE && includes(building, values(BuildingEnum))),
+        P.when(
+          ([command, building]) =>
+            (command as GameCommandEnum) === GameCommandEnum.USE && includes(building, values(BuildingEnum))
+        ),
         ([, building, ...params]) => completeBuilding[building as BuildingEnum](params)(state)
       )
       .otherwise(() => {

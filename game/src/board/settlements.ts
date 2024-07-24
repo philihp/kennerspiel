@@ -113,6 +113,10 @@ export const introduceSettlements: StateReducer = (state) => {
         )
       )
     ),
-    when(pathSatisfies(equals(1), ['config', 'players']), set(lensPath(['players', 1, 'settlements']), []))
+    (state) => {
+      if (state === undefined) return state
+      if (state.config.players !== 1) return state
+      return set(lensPath(['players', 1, 'settlements']), [], state)
+    }
   )(state)
 }

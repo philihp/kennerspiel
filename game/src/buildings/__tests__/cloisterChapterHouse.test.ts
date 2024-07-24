@@ -79,7 +79,7 @@ describe('buildings/cloisterChapterHouse', () => {
   }
   describe('cloisterChapterHouse', () => {
     it('goes through a happy path', () => {
-      const s1 = cloisterChapterHouse()(s0)! as GameStatePlaying
+      const s1 = cloisterChapterHouse()(s0)!
       expect(s1.players[0]).toMatchObject({
         clay: 1,
         sheep: 1,

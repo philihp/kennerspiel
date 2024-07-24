@@ -83,7 +83,7 @@ describe('buildings/grapevine', () => {
 
   describe('grapevine', () => {
     it('can take grapes', () => {
-      const s1 = grapevine()(s0)! as GameStatePlaying
+      const s1 = grapevine()(s0)!
       expect(s1.rondel).toMatchObject({
         pointingBefore: 3,
         joker: 2,
@@ -102,14 +102,14 @@ describe('buildings/grapevine', () => {
           length: 'short',
         },
       } as GameStatePlaying
-      const s2 = grapevine()(s1)! as GameStatePlaying
+      const s2 = grapevine()(s1)!
       expect(s2.players[0].grape).toBe(4)
       expect(s2.players[1].grape).toBe(1)
       expect(s2.players[2].grape).toBe(1)
     })
 
     it('can use the joker', () => {
-      const s1 = grapevine('Jo')(s0)! as GameStatePlaying
+      const s1 = grapevine('Jo')(s0)!
       expect(s1.rondel).toMatchObject({
         pointingBefore: 3,
         joker: 3,
@@ -128,7 +128,7 @@ describe('buildings/grapevine', () => {
           length: 'short',
         },
       } as GameStatePlaying
-      const s2 = grapevine('Jo')(s1)! as GameStatePlaying
+      const s2 = grapevine('Jo')(s1)!
       expect(s2.players[0].grape).toBe(3)
       expect(s2.players[1].grape).toBe(1)
       expect(s2.players[2].grape).toBe(1)

@@ -79,12 +79,12 @@ describe('buildings/falseLighthouse', () => {
   }
   describe('falseLighthouse', () => {
     it('maintains an undefined state', () => {
-      const s1 = falseLighthouse('Wh')(undefined)! as GameStatePlaying
+      const s1 = falseLighthouse('Wh')(undefined)!
       expect(s1).toBeUndefined()
     })
 
     it('gives a whiskey to the player', () => {
-      const s1 = falseLighthouse('Wh')(s0)! as GameStatePlaying
+      const s1 = falseLighthouse('Wh')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 3,
         whiskey: 1,
@@ -93,7 +93,7 @@ describe('buildings/falseLighthouse', () => {
     })
 
     it('gives a beer to the player', () => {
-      const s1 = falseLighthouse('Be')(s0)! as GameStatePlaying
+      const s1 = falseLighthouse('Be')(s0)!
       expect(s1.players[0]).toMatchObject({
         penny: 3,
         whiskey: 0,
@@ -102,17 +102,17 @@ describe('buildings/falseLighthouse', () => {
     })
 
     it('fails if empty string given', () => {
-      const s1 = falseLighthouse()(s0)! as GameStatePlaying
+      const s1 = falseLighthouse()(s0)!
       expect(s1).toBeUndefined()
     })
 
     it('fails if nothing given', () => {
-      const s1 = falseLighthouse('')(s0)! as GameStatePlaying
+      const s1 = falseLighthouse('')(s0)!
       expect(s1).toBeUndefined()
     })
 
     it('fails if wrong thing given', () => {
-      const s1 = falseLighthouse('Wn')(s0)! as GameStatePlaying
+      const s1 = falseLighthouse('Wn')(s0)!
       expect(s1).toBeUndefined()
     })
   })

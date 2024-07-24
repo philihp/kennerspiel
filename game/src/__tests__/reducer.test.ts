@@ -19,6 +19,7 @@ import {
 } from '../commands'
 
 jest.mock('../commands', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     ...jest.requireActual('../commands'),
     build: jest.fn().mockReturnValue(identity),

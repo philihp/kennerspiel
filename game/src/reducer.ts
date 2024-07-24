@@ -70,13 +70,13 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
     .with([GameCommandEnum.BUY_PLOT, [P._, PPlot]], ([_, [y, side]]) =>
       buyPlot({
         y: Number.parseInt(y, 10),
-        side: side as 'MOUNTAIN' | 'COAST',
+        side: side,
       })(state as GameStatePlaying)
     )
     .with([GameCommandEnum.BUY_DISTRICT, [P._, PDistrict]], ([_, [y, side]]) =>
       buyDistrict({
         y: Number.parseInt(y, 10),
-        side: side as 'HILLS' | 'PLAINS',
+        side: side,
       })(state as GameStatePlaying)
     )
     .with([GameCommandEnum.CONVERT, [P.select('resources')]], ({ resources }) =>

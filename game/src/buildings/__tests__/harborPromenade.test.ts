@@ -80,7 +80,7 @@ describe('buildings/harborPromenade', () => {
 
   describe('use', () => {
     it('goes through a happy path', () => {
-      const s1 = harborPromenade()(s0)! as GameStatePlaying
+      const s1 = harborPromenade()(s0)!
       expect(s1.players[0]).toMatchObject({
         wood: 1,
         wine: 1,

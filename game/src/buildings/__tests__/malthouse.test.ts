@@ -107,7 +107,7 @@ describe('buildings/malthouse', () => {
           ...s0.players.slice(1),
         ],
       }
-      const s2 = malthouse('GnGnGn')(s1)! as GameStatePlaying
+      const s2 = malthouse('GnGnGn')(s1)!
       expect(s2.players[0]).toMatchObject({
         grain: 2,
         malt: 3,

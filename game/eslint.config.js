@@ -11,7 +11,15 @@ export default tseslint.config(
       // standard eslint rules
       eslint.configs.recommended,
       // and then eslint
-      ...tseslint.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked,
+      {
+        languageOptions: {
+          parserOptions: {
+            project: true,
+            tsconfigRootDir: import.meta.dirname,
+          },
+        },
+      },
       // disable eslint rules that conflict with prettier
       eslintConfigPrettier,
     ],
@@ -25,7 +33,8 @@ export default tseslint.config(
     ...jestPlugin.configs['flat/recommended'],
     rules: {
       ...jestPlugin.configs['flat/recommended'].rules,
-      'jest/prefer-expect-assertions': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      'jest/prefer-expect-assertions': 'off'
     },
   }
 )

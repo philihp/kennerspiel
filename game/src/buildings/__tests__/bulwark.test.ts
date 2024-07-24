@@ -82,17 +82,17 @@ describe('buildings/bulwark', () => {
 
   describe('bulwark', () => {
     it('supports a noop with empty strings', () => {
-      const s1 = bulwark('')(s0)! as GameStatePlaying
+      const s1 = bulwark('')(s0)!
       expect(s1).toBe(s0)
     })
 
     it('supports a noop with no params', () => {
-      const s1 = bulwark()(s0)! as GameStatePlaying
+      const s1 = bulwark()(s0)!
       expect(s1).toBe(s0)
     })
 
     it('goes through a happy path', () => {
-      const s1 = bulwark('Bo')(s0)! as GameStatePlaying
+      const s1 = bulwark('Bo')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 4,
       })

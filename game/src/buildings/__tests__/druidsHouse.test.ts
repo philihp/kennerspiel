@@ -35,7 +35,7 @@ describe('buildings/druidsHouse', () => {
 
   describe('druidsHouse', () => {
     it('works as normal', () => {
-      const s1 = druidsHouse('Bo', 'WoWoWoWoWoPtPtPt')(s0)! as GameStatePlaying
+      const s1 = druidsHouse('Bo', 'WoWoWoWoWoPtPtPt')(s0)!
       expect(s1.players[0]).toMatchObject({
         book: 0,
         wood: 5,
@@ -44,32 +44,32 @@ describe('buildings/druidsHouse', () => {
     })
 
     it('works noop undefined input', () => {
-      const s1 = druidsHouse()(s0)! as GameStatePlaying
+      const s1 = druidsHouse()(s0)!
       expect(s1).toBe(s0)
     })
 
     it('works noop empty string input', () => {
-      const s1 = druidsHouse('', '')(s0)! as GameStatePlaying
+      const s1 = druidsHouse('', '')(s0)!
       expect(s1).toBe(s0)
     })
 
     it('does not allow eight of an output', () => {
-      const s1 = druidsHouse('Bo', 'GnGnGnGnGnGnGnGn')(s0)! as GameStatePlaying
+      const s1 = druidsHouse('Bo', 'GnGnGnGnGnGnGnGn')(s0)!
       expect(s1).toBeUndefined()
     })
 
     it('does not allow four and four', () => {
-      const s1 = druidsHouse('Bo', 'WoWoWoWoClClClCl')(s0)! as GameStatePlaying
+      const s1 = druidsHouse('Bo', 'WoWoWoWoClClClCl')(s0)!
       expect(s1).toBeUndefined()
     })
 
     it('does not allow five of one, but none of another', () => {
-      const s1 = druidsHouse('Bo', 'PnPnPnPnPn')(s0)! as GameStatePlaying
+      const s1 = druidsHouse('Bo', 'PnPnPnPnPn')(s0)!
       expect(s1).toBeUndefined()
     })
 
     it('does not allow non-basic goods', () => {
-      const s1 = druidsHouse('Bo', 'PnPnPnPnPnRqRqRq')(s0)! as GameStatePlaying
+      const s1 = druidsHouse('Bo', 'PnPnPnPnPnRqRqRq')(s0)!
       expect(s1).toBeUndefined()
     })
   })
