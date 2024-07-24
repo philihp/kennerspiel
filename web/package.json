@@ -39,6 +39,6 @@
     "lint-staged": "15.2.7",
     "prettier": "3.3.3",
     "supabase": "1.183.5",
-    "typescript": "5.5.3"
+    "typescript": "5.5.4"
   }
 }
