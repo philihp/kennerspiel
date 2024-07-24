@@ -51,17 +51,22 @@ export const allowPriorToUse =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
+    const bonusActions = concat<GameCommandEnum, GameCommandEnum>(buildContinuation(state), state.frame.bonusActions)
+    const usableBuildings = append<BuildingEnum>(
+      building,
+      intersection(
+        state.frame.neutralBuildingPhase ? allVacantUsableBuildings(state.players[1].landscape) : [],
+        state.frame.usableBuildings
+      )
+    )
     return {
       ...state,
-      bonusActions: concat<GameCommandEnum, GameCommandEnum>(buildContinuation(state), state.frame.bonusActions),
-      nextUse: NextUseClergy.OnlyPrior,
-      usableBuildings: append<BuildingEnum>(
-        building,
-        intersection(
-          state.frame.neutralBuildingPhase ? allVacantUsableBuildings(state.players[1].landscape) : [],
-          state.frame.usableBuildings
-        )
-      ),
+      frame: {
+        ...state.frame,
+        bonusActions,
+        nextUse: NextUseClergy.OnlyPrior,
+        usableBuildings,
+      },
     }
   }
 
