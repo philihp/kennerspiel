@@ -35,7 +35,7 @@
     "fast-shuffle": "6.1.0",
     "fn-pcg": "2.0.1",
     "ramda": "0.30.1",
-    "ts-pattern": "5.2.0"
+    "ts-pattern": "5.3.1"
   },
   "devDependencies": {
     "@eslint/js": "9.9.0",
