@@ -38,7 +38,7 @@
     "husky": "9.1.4",
     "lint-staged": "15.2.9",
     "prettier": "3.3.3",
-    "supabase": "1.187.10",
+    "supabase": "1.190.0",
     "typescript": "5.5.4"
   }
 }
