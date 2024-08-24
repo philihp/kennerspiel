@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@marsidev/react-turnstile": "0.7.2",
-    "@next/third-parties": "14.2.5",
+    "@next/third-parties": "14.2.6",
     "@philihp/prettier-config": "1.0.0",
     "@supabase/auth-helpers-nextjs": "0.10.0",
     "@supabase/ssr": "0.4.0",
@@ -16,7 +16,7 @@
     "form-urlencoded": "6.1.5",
     "jsonwebtoken": "9.0.2",
     "jwks-rsa": "3.1.0",
-    "next": "14.2.5",
+    "next": "14.2.6",
     "ramda": "0.30.1",
     "react": "18.3.1",
     "react-dom": "18.3.1"
@@ -34,7 +34,7 @@
     "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",
     "eslint": "8.57.0",
-    "eslint-config-next": "14.2.5",
+    "eslint-config-next": "14.2.6",
     "husky": "9.1.5",
     "lint-staged": "15.2.9",
     "prettier": "3.3.3",
