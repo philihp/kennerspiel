@@ -38,7 +38,7 @@
     "ts-pattern": "5.3.1"
   },
   "devDependencies": {
-    "@eslint/js": "9.9.0",
+    "@eslint/js": "9.9.1",
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/recommended": "1.0.7",
     "@types/jest": "29.5.12",
