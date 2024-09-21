@@ -38,12 +38,12 @@
     "ts-pattern": "5.3.1"
   },
   "devDependencies": {
-    "@eslint/js": "9.10.0",
+    "@eslint/js": "9.11.0",
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/recommended": "1.0.7",
     "@types/jest": "29.5.13",
     "@types/ramda": "0.30.2",
-    "eslint": "8.57.0",
+    "eslint": "8.57.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-jest": "28.8.3",
     "husky": "9.1.6",
