@@ -5,10 +5,6 @@ on:
   schedule:
     - cron: '17 * * * *'
 
-env:
-  SUPABASE_URL: ${{ vars.SUPABASE_URL }}
-  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-
 jobs:
   refresh:
     runs-on: ubuntu-latest
@@ -24,3 +20,7 @@ jobs:
           cache-dependency-path: web/package-lock.json
       - run: npm install
       - run: npm run hourly
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+
