@@ -1,0 +1,26 @@
+name: hourly
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm install
+      - run: npm run hourly
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
