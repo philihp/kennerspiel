@@ -1,13 +1,13 @@
-create table entrant (
+create table public.entrant (
   id bigint primary key generated always as identity,
   created_at timestamptz default now(),
   updated_at timestamptz,
-  instance_id bigint
+  instance_id bigint references public.instance(id) on delete cascade
 );
 
-alter table entrant enable row level security;
+alter table public.entrant enable row level security;
 
 create policy "Entrants are viewable by everyone"
-on entrant for select
+on public.entrant for select
 to authenticated, anon
 using ( true );

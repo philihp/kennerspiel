@@ -1,13 +1,13 @@
-create table instance (
+create table public.instance (
   id bigint primary key generated always as identity,
   created_at timestamptz default now(),
   updated_at timestamptz,
-  state_id bigint
+  commands text[] not null
 );
 
-alter table instance enable row level security;
+alter table public.instance enable row level security;
 
 create policy "Instances are viewable by everyone"
-on instance for select
+on public.instance for select
 to authenticated, anon
 using ( true );
