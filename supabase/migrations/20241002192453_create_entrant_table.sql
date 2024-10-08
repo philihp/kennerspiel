@@ -1,8 +1,8 @@
 create table public.entrant (
-  id bigint primary key generated always as identity,
+  id uuid primary key default gen_random_uuid(),
   created_at timestamptz default now(),
   updated_at timestamptz,
-  instance_id bigint references public.instance(id) on delete cascade
+  instance_id uuid references public.instance(id) on delete cascade
 );
 
 alter table public.entrant enable row level security;
