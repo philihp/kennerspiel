@@ -39,5 +39,5 @@ export const Presence = () => {
   }, [])
 
   const [live, setLive] = useState(false)
-  return <span>{live ? '🟢' : '🔴'} </span>
+  return <span title={JSON.stringify(store, undefined, 2)}>{live ? '🟢' : '🔴'} </span>
 }
