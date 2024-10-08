@@ -1,20 +1,34 @@
+import { createClient } from '@/utils/supabase/server'
+import { CreateButton } from './createButton'
+import { InstancesList } from './instancesList'
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-import { createClient } from '@/utils/supabase/server'
-
-const PrivatePage = async () => {
+const InstancePage = async () => {
   const supabase = createClient()
+  const { data, error } = await supabase.from('instance').select()
 
-  const { data, error } = await supabase.auth.getUser()
-  if (error || !data?.user) {
-    redirect('/')
+  const createInstance = async (formData: FormData) => {
+    'use server'
+    const supabase = createClient()
+    const { data, error } = await supabase.from('instance').insert([{}]).select()
+    const id = data?.[0]?.id
+    if (error === undefined) redirect(`/instance/${id}`)
   }
 
   return (
-    <section>
-      <p>Hello {data.user.email}, these are the instances you can see</p>
-    </section>
+    <>
+      <section>
+        <b>{error && JSON.stringify(error)}</b>
+      </section>
+      <section>{data && <InstancesList instances={data ?? []} />}</section>
+      <section>
+        <form action={createInstance}>
+          <CreateButton />
+        </form>
+      </section>
+    </>
   )
 }
 
-export default PrivatePage
+export default InstancePage

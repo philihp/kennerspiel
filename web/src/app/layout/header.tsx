@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
+import { Presence } from './presence'
 
 const Header = async () => {
   const supabase = createClient()
@@ -10,6 +11,7 @@ const Header = async () => {
   const userId = user?.email ?? undefined
   return (
     <header>
+      <Presence />
       Kennerspiel
       {!userId && (
         <>
@@ -25,7 +27,7 @@ const Header = async () => {
           &nbsp;[&nbsp;
           {userId}
           &nbsp;|&nbsp;
-          <Link href="/instance/">Instance</Link>
+          <Link href="/instance/">Instances</Link>
           &nbsp;|&nbsp;
           <Link href="/account/settings">Settings</Link> ]
         </>
