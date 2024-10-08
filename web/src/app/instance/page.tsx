@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { CreateButton } from './createButton'
 import { InstancesList } from './instancesList'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 const InstancePage = async () => {
   const supabase = createClient()
@@ -10,12 +11,9 @@ const InstancePage = async () => {
   const createInstance = async (formData: FormData) => {
     'use server'
     const supabase = createClient()
-    // const { data: user } = await supabase.auth.getUser()
-    // console.log({ user })
     const { data, error } = await supabase.from('instance').insert([{}]).select()
-    console.log({ data, error })
-
-    // redirect(`/instance/${data}`)
+    const id = data?.[0]?.id
+    if (error === undefined) redirect(`/instance/${id}`)
   }
 
   return (
