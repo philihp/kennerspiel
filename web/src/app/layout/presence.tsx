@@ -1,6 +1,7 @@
 'use client'
 
 import { createClient } from '@/utils/supabase/client'
+import { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js'
 import { useEffect, useReducer, useState } from 'react'
 
 const supabase = createClient()
@@ -17,8 +18,9 @@ const presenceReducer = (state: State, action: Action) => {
 export const Presence = () => {
   const [store, dispatch] = useReducer(presenceReducer, { initial: 'initial' })
 
+  let channel: RealtimeChannel
   useEffect(() => {
-    const channel = supabase
+    channel = supabase
       .channel('schema-db-changes')
       .on(
         'postgres_changes',
@@ -35,7 +37,9 @@ export const Presence = () => {
         console.log('subscribed to psql changes', status, err)
         if (status === 'SUBSCRIBED') setLive(true)
       })
-    // TODO return something that unsubscribes
+    return () => {
+      channel.unsubscribe()
+    }
   }, [])
 
   const [live, setLive] = useState(false)
