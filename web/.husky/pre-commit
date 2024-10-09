@@ -1,1 +1,2 @@
-npm test
+cd web
+npm run lint
