@@ -11,10 +11,11 @@ const RegisterPage = () => {
   const [response, setResponse] = useState('')
   const [captchaToken, setCaptchaToken] = useState<string>('')
   const signupAndReturn = async (formData: FormData) => {
+    console.log('SIGNUP ', { formData })
     const { error } = await register(formData, captchaToken)
-    if (error?.message) {
+    if (error) {
       setDisabled(false)
-      setResponse(error?.message)
+      setResponse(error)
       setColor('#FF0000')
       return
     }

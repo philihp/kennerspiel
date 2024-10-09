@@ -1,11 +1,10 @@
 'use server'
 
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
 
-export const logoff = async (_formData: FormData) => {
+export const logoff = async () => {
   const supabase = createClient()
 
   const { error } = await supabase.auth.signOut({ scope: 'local' })

@@ -2,9 +2,8 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
 
-import { logoff } from './actions'
-
 import ChangePassword from './changePassword'
+import LogoffButton from './logoffButton'
 
 const SettingsPage = async () => {
   const supabase = createClient()
@@ -21,9 +20,7 @@ const SettingsPage = async () => {
       <ChangePassword />
 
       <h2>Logoff</h2>
-      <form>
-        <button formAction={logoff}>Logoff</button>
-      </form>
+      <LogoffButton />
       {/* <pre>{JSON.stringify(data?.user, undefined, 2)}</pre> */}
     </>
   )
