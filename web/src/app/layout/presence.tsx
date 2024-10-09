@@ -18,10 +18,8 @@ const presenceReducer = (state: State, action: Action) => {
 export const Presence = () => {
   const [store, dispatch] = useReducer(presenceReducer, { initial: 'initial' })
 
-  let channel: RealtimeChannel | undefined = undefined
   useEffect(() => {
-    console.log('USE_EFFECT', channel)
-    channel = supabase.channel('schema-db-changes').on(
+    const channel = supabase.channel('schema-db-changes').on(
       'postgres_changes',
       {
         event: '*', // INSERT, UPDATE, DELETE
@@ -39,7 +37,7 @@ export const Presence = () => {
     return () => {
       channel?.unsubscribe()
     }
-  }, [channel])
+  }, [])
 
   const [live, setLive] = useState(false)
   return <span title={JSON.stringify(store, undefined, 2)}>{live ? '🟢' : '🔴'} </span>
