@@ -1,14 +1,8 @@
 'use client'
 
 import { createClient } from '@/utils/supabase/client'
-import {
-  REALTIME_LISTEN_TYPES,
-  REALTIME_SUBSCRIBE_STATES,
-  RealtimeChannel,
-  RealtimeChannelSendResponse,
-  User,
-} from '@supabase/supabase-js'
-import { MouseEventHandler, useEffect, useState } from 'react'
+import { REALTIME_LISTEN_TYPES, REALTIME_SUBSCRIBE_STATES, RealtimeChannelSendResponse } from '@supabase/supabase-js'
+import { useEffect, useState } from 'react'
 
 // const { data, error } = await supabase.from('instance').select();
 // return <pre>{JSON.stringify({ data, error }, undefined, 2)}</pre>
@@ -26,12 +20,12 @@ const InstancePage = ({ params: { slug } }: InstanceParams) => {
 
   useEffect(() => {
     let channel = supabase.channel('instance', { config: { presence: { key: slug } } })
-    channel.on('presence', { event: 'sync' }, () => {
+    channel.on(REALTIME_LISTEN_TYPES.PRESENCE, { event: 'sync' }, () => {
       const state = channel.presenceState()
       console.log('sync', state)
     })
     channel.subscribe(async (status) => {
-      if (status === 'SUBSCRIBED') {
+      if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
         const resp: RealtimeChannelSendResponse = await channel.track({ user_id: userId })
         // if (resp === 'ok') {
         //   router.push(`/${roomId}`)
