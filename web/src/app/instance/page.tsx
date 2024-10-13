@@ -1,19 +1,16 @@
-'use client'
+'use server'
 
 import { CreateButton } from './createButton'
 import { InstancesList } from './instancesList'
-import { createInstance } from './actions'
 
-const InstancePage = () => {
+const InstancePage = async () => {
   return (
     <>
       <section>
-        {<InstancesList />}
+        <InstancesList />
       </section>
       <section>
-        <form action={createInstance}>
-          <CreateButton />
-        </form>
+        <CreateButton />
       </section>
     </>
   )
