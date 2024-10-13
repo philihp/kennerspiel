@@ -1,7 +1,7 @@
 'use client'
 
 import { createClient } from "@/utils/supabase/client"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 type Instance = {
   id: string
@@ -10,14 +10,14 @@ type Instance = {
 }
 
 export const InstancesList = () => {
-  const supabase = createClient()
   const [instances, setInstances] = useState<Instance[] | undefined>(undefined)
 
-  const handleLoad = () => {
+  const handleLoad = useCallback(() => {
+    const supabase = createClient()
     supabase.from('instance').select().then(({ data }) => {
       setInstances(data ?? [] as Instance[])
     })
-  }
+  }, [])
 
   useEffect(() => {
     handleLoad()
