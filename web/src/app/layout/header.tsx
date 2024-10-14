@@ -31,8 +31,6 @@ const Header = async () => {
           <Link href="/instance/">Instances</Link>
           &nbsp;|&nbsp;
           <Link href="/account/settings">Settings</Link> ]
-
-          <FlagValues values={{ pretzel: true }} />
         </>
       )}
     </header>
