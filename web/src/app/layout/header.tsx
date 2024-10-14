@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import { Presence } from './presence'
+import { FlagValues } from '@vercel/flags/react'
 
 const Header = async () => {
   const supabase = createClient()
@@ -30,6 +31,8 @@ const Header = async () => {
           <Link href="/instance/">Instances</Link>
           &nbsp;|&nbsp;
           <Link href="/account/settings">Settings</Link> ]
+
+          <FlagValues values={{ pretzel: true }} />
         </>
       )}
     </header>

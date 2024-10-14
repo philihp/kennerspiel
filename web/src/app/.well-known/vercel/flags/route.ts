@@ -7,8 +7,8 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json<ApiData>({
     definitions: {
-      newFeature: {
-        description: 'Controls whether the new feature is visible',
+      pretzel: {
+        description: 'Pretzel',
         origin: 'https://example.com/#new-feature',
         options: [
           { value: false, label: 'Off' },
