@@ -13,6 +13,7 @@ export const InstancesList = () => {
   const [instances, setInstances] = useState<Instance[] | undefined>(undefined)
 
   const handleLoad = useCallback(() => {
+    setInstances([])
     const supabase = createClient()
     supabase.from('instance').select().then(({ data }) => {
       setInstances(data ?? [] as Instance[])
