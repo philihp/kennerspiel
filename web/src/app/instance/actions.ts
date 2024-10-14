@@ -11,6 +11,9 @@ export type FormState = {
 export const createInstance = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   const supabase = createClient()
   const { data, error } = await supabase.from('instance').insert([{}]).select()
-  if (error) return { error }
+  if (error) {
+    console.error(`createInstance ${error.code} ${error.message}`)
+    return { error }
+  }
   return { id: data?.[0]?.id }
 }
