@@ -1,38 +1,49 @@
 import Link from 'next/link'
-import { createClient } from '@/utils/supabase/server'
 import { Presence } from './presence'
-import { FlagValues } from '@vercel/flags/react'
+import { AuthError, User } from '@supabase/supabase-js'
+import { createClient } from '@/utils/supabase/server'
 
 const Header = async () => {
   const supabase = createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  const userId = user?.email ?? undefined
+  let user: User | null = null
+  let error: AuthError | null = null
+
+  const userRes = await supabase.auth.getUser()
+  user = userRes.data?.user
+  error = userRes.error
+
   return (
     <header>
       <Presence />
       Kennerspiel
-      {!userId && (
+      {(user?.is_anonymous && <i>Guest</i>) ?? user?.email ?? undefined}
+      {user?.email === undefined && (
         <>
           &nbsp;[&nbsp;
-          <Link href="/account/login">Login</Link>
-          &nbsp;|&nbsp;
-          <Link href="/account/register">Register</Link>
+          <Link href="/account/connect">Connect</Link>
           &nbsp;]
         </>
       )}
-      {userId && (
+      {user?.is_anonymous && (
+        <>
+          &nbsp;|&nbsp;
+          <Link href="/instance/">Instances</Link>
+          &nbsp;|&nbsp;
+          <Link href="/account/settings">Settings⚠️</Link> ]
+        </>
+      )}
+      {user?.is_anonymous === false && user?.email !== undefined && (
         <>
           &nbsp;[&nbsp;
-          {userId}
+          {user?.email}
           &nbsp;|&nbsp;
           <Link href="/instance/">Instances</Link>
           &nbsp;|&nbsp;
           <Link href="/account/settings">Settings</Link> ]
         </>
       )}
+      <pre>{JSON.stringify({ user, error }, undefined, 2)}</pre>
     </header>
   )
 }

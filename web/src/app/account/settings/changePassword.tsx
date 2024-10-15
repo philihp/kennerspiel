@@ -23,6 +23,7 @@ const ChangePassword = () => {
 
   return <>
     <h2>Change Password</h2>
+    <p>You can set your password once you&apos;ve confirmed your email.</p>
     <form>
       <label htmlFor="password">New Password:</label><br />
       <input id="password" name="password" type="password" required /><br />
