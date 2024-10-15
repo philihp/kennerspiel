@@ -19,7 +19,9 @@ export const loginAnonymous = async (formData: FormData, captchaToken: string) =
   const {
     data: { user, session },
     error,
-  } = await supabase.auth.signInAnonymously()
+  } = await supabase.auth.signInAnonymously({
+    options: { captchaToken },
+  })
   console.log(JSON.stringify({ user, session }, undefined, 2))
   return error?.message
 }
