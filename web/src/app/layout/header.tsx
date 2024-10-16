@@ -16,7 +16,7 @@ const Header = async () => {
   return (
     <header>
       <Presence />
-      Kennerspiel
+      {process.env.NODE_ENV === 'development' ? process.env.NODE_ENV : 'Kennerspiel'}
       {(user?.is_anonymous && <i>Guest</i>) ?? user?.email ?? undefined}
       {user?.email === undefined && (
         <>

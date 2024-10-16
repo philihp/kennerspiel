@@ -2,7 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server'
 
-export const login = async (formData: FormData, captchaToken: string) => {
+export const connect = async (formData: FormData, captchaToken: string) => {
   const supabase = createClient()
   if (!formData.get('email')) return 'Missing an email address'
   if (!formData.get('password')) return 'Blank passwords are bad passwords'
@@ -14,7 +14,7 @@ export const login = async (formData: FormData, captchaToken: string) => {
   return error?.message
 }
 
-export const loginAnonymous = async (formData: FormData, captchaToken: string) => {
+export const skip = async (formData: FormData, captchaToken: string) => {
   const supabase = createClient()
   const {
     data: { user, session },
