@@ -1,11 +1,9 @@
-'use client'
+'use server'
 
-import { createClient } from '@/utils/supabase/client'
-import { REALTIME_LISTEN_TYPES, REALTIME_SUBSCRIBE_STATES, RealtimeChannelSendResponse } from '@supabase/supabase-js'
-import { useEffect, useState } from 'react'
-
-// const { data, error } = await supabase.from('instance').select();
-// return <pre>{JSON.stringify({ data, error }, undefined, 2)}</pre>
+import { createClient } from '@/utils/supabase/server'
+import Presenter from './presenter'
+import { ServerUser } from './serverUser'
+import { PostgrestSingleResponse } from '@supabase/supabase-js'
 
 type InstanceParams = {
   params: {
@@ -13,36 +11,20 @@ type InstanceParams = {
   }
 }
 
-const supabase = createClient()
+type Instance = {
+  commands: string[]
+}
 
-const InstancePage = ({ params: { slug } }: InstanceParams) => {
-  const [userId, setUserId] = useState('')
-
-  useEffect(() => {
-    let channel = supabase.channel('instance', { config: { presence: { key: slug } } })
-    channel.on(REALTIME_LISTEN_TYPES.PRESENCE, { event: 'sync' }, () => {
-      const state = channel.presenceState()
-      console.log('sync', state)
-    })
-    channel.subscribe(async (status) => {
-      if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
-        const resp: RealtimeChannelSendResponse = await channel.track({ user_id: userId })
-        // if (resp === 'ok') {
-        //   router.push(`/${roomId}`)
-        // } else {
-        //   router.push(`/`)
-        // }
-      }
-    })
-  }, [slug, userId])
+const InstancePage = async ({ params: { slug } }: InstanceParams) => {
+  const supabase = createClient()
+  const { data: instance } = await supabase.from('instance').select('*').limit(1).single<Instance>()
+  const commands = instance?.commands ?? []
+  const { data: { user } } = await supabase.auth.getUser()
 
   return (
     <div>
-      <h1>{slug}</h1>
-      <i>{userId}</i>
-      <hr />
-      <input type="text" size={50} onChange={(e) => setUserId(e.target.value)} value={userId} />
-    </div>
+      <Presenter user={user} params={{ slug }} commands={commands} />
+    </div >
   )
 }
 

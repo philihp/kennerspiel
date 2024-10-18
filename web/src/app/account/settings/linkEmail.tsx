@@ -25,7 +25,7 @@ export const LinkEmail = () => {
     <p>You will lose access to any games when you close your browser. To prevent this, link an email. Or don&apos;t, but that&apos;s on you.</p>
     <form>
       <label htmlFor="email">Email:</label><br />
-      <input id="email" name="email" type="email" placeholder="you@example.com" required /><br />
+      <input id="email" name="email" type="email" required /><br />
       <button formAction={linkEmailAndReturn}>Connect</button>
     </form>
     <p>
