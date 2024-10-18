@@ -43,7 +43,6 @@ const Header = async () => {
           <Link href="/account/settings">Settings</Link> ]
         </>
       )}
-      <pre>{JSON.stringify({ user, error }, undefined, 2)}</pre>
     </header>
   )
 }

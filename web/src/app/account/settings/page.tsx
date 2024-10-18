@@ -17,19 +17,13 @@ const SettingsPage = async () => {
   return (
     <>
       <h1>Settings</h1>
-      <input type="text" disabled value={user.email} />{' '}
-      {
-        user.email_confirmed_at ? 'Confirmed' : 'Unconfirmed'
-      }
       {
         user.is_anonymous && <>
           <LinkEmail />
-          <h2>Disconnect</h2>
-          <DisconnectButton />
         </>
       }
       {!user.is_anonymous && <>
-        <ChangePassword />
+        {user.email_confirmed_at && <ChangePassword />}
         <h2>Disconnect</h2>
         <DisconnectButton />
       </>}

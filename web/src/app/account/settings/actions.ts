@@ -27,23 +27,16 @@ export const changePassword = async (formData: FormData) => {
 }
 
 export const linkEmail = async (formData: FormData) => {
-  console.log('creating client')
   const supabase = createClient()
-  console.log({ supabase })
 
-  console.log('getting email')
   const email = formData.get('email') as string
-  console.log({ email })
 
-  console.log('updating user')
   const {
     data: { user },
     error,
   } = await supabase.auth.updateUser({ email })
-  console.log({ user, error })
 
   if (error) {
-    console.log('returning ', error?.message)
     return error?.message
   }
 }
