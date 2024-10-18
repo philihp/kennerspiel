@@ -1,21 +1,22 @@
 'use client'
 
-import { createClient } from "@/utils/supabase/client"
 import { REALTIME_LISTEN_TYPES, REALTIME_SUBSCRIBE_STATES, RealtimeChannelSendResponse, User } from "@supabase/supabase-js"
 import { useEffect, useMemo } from "react"
 import { Board } from "./board"
+import { useInstanceContext } from "@/context/InstanceContext"
+import { useSupabaseContext } from "@/context/SupabaseContext"
 
 type InstanceParams = {
-  user: User | null
   params: {
     slug: string
   }
-  commands: string[]
 }
 
-const Presenter = ({ params: { slug }, user, commands }: InstanceParams) => {
+export const ClientPresenter = ({ params: { slug } }: InstanceParams) => {
+  const { supabase } = useSupabaseContext()
+  const { user } = useInstanceContext()
+
   const userId = user?.id
-  const supabase = useMemo(() => createClient(), [])
 
   useEffect(() => {
     if (supabase === undefined) return;
@@ -39,11 +40,8 @@ const Presenter = ({ params: { slug }, user, commands }: InstanceParams) => {
   return (
     <div>
       <i>userId: {userId}</i><br />
-      {JSON.stringify(commands)}
       <hr />
-      <Board commands={commands} />
+      <Board />
     </div>
   )
 }
-
-export default Presenter

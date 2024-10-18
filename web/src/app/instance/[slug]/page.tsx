@@ -1,9 +1,9 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
-import Presenter from './presenter'
-import { ServerUser } from './serverUser'
-import { PostgrestSingleResponse } from '@supabase/supabase-js'
+import { ClientPresenter } from './clientPresenter'
+import { InstanceContextProvider } from '@/context/InstanceContext'
+import { SupabaseContextProvider } from '@/context/SupabaseContext'
 
 type InstanceParams = {
   params: {
@@ -22,9 +22,11 @@ const InstancePage = async ({ params: { slug } }: InstanceParams) => {
   const { data: { user } } = await supabase.auth.getUser()
 
   return (
-    <div>
-      <Presenter user={user} params={{ slug }} commands={commands} />
-    </div >
+    <SupabaseContextProvider>
+      <InstanceContextProvider commands={commands} user={user}>
+        <ClientPresenter params={{ slug }} />
+      </InstanceContextProvider>
+    </SupabaseContextProvider>
   )
 }
 
