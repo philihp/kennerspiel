@@ -13,29 +13,29 @@ type InstanceParams = {
 }
 
 export const ClientPresenter = ({ params: { slug } }: InstanceParams) => {
-  const { supabase } = useSupabaseContext()
+  // const { supabase } = useSupabaseContext()
   const { user } = useInstanceContext()
 
   const userId = user?.id
 
-  useEffect(() => {
-    if (supabase === undefined) return;
-    let channel = supabase.channel('instance', { config: { presence: { key: slug } } })
-    channel.on(REALTIME_LISTEN_TYPES.PRESENCE, { event: 'sync' }, () => {
-      const state = channel.presenceState()
-      console.log('sync', state)
-    })
-    channel.subscribe(async (status) => {
-      if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
-        const resp: RealtimeChannelSendResponse = await channel.track({ user_id: userId })
-        // if (resp === 'ok') {
-        //   router.push(`/${roomId}`)
-        // } else {
-        //   router.push(`/`)
-        // }
-      }
-    })
-  }, [slug, supabase, userId])
+  // useEffect(() => {
+  //   if (supabase === undefined) return;
+  //   let channel = supabase.channel('instance', { config: { presence: { key: slug } } })
+  //   channel.on(REALTIME_LISTEN_TYPES.PRESENCE, { event: 'sync' }, () => {
+  //     const state = channel.presenceState()
+  //     console.log('sync', state)
+  //   })
+  //   channel.subscribe(async (status) => {
+  //     if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
+  //       const resp: RealtimeChannelSendResponse = await channel.track({ user_id: userId })
+  //       // if (resp === 'ok') {
+  //       //   router.push(`/${roomId}`)
+  //       // } else {
+  //       //   router.push(`/`)
+  //       // }
+  //     }
+  //   })
+  // }, [slug, supabase, userId])
 
   return (
     <div>
