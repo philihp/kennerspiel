@@ -1,38 +1,45 @@
 'use client'
 
-import { GameState, GameStateSetup, initialState, reducer } from 'hathora-et-labora-game'
-import { createContext, createElement, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useSupabaseContext } from './SupabaseContext'
+import { GameState, initialState, reducer } from 'hathora-et-labora-game'
+import { createContext, createElement, ReactNode, useContext, useMemo } from 'react'
 import { User } from '@supabase/supabase-js'
 
-interface Instance {
-  user?: User
-  state?: GameState
+type Instance = {
+  id: string
   commands: string[]
 }
 
-interface InstanceContextProviderProps {
+type InstanceContextType = {
+  instance: Instance
+  user?: User
+  state?: GameState
+}
+
+type InstanceContextProviderProps = {
   user: User | null
-  commands: string[]
+  instance: Instance
   children: ReactNode | ReactNode[]
 }
 
-const InstanceContext = createContext<Instance>({
-  commands: [],
+const InstanceContext = createContext<InstanceContextType>({
+  instance: {
+    id: '123',
+    commands: [],
+  },
 })
 
-export const InstanceContextProvider = ({ children, user, commands }: InstanceContextProviderProps) => {
+export const InstanceContextProvider = ({ children, user, instance }: InstanceContextProviderProps) => {
   const exported = useMemo(() => {
-    const c1 = ['CONFIG 3 france long', ...commands].map((s) => s.split(' '))
+    const c1 = ['CONFIG 3 france long', ...instance.commands].map((s) => s.split(' '))
     return {
       user: user === null ? undefined : user,
       state: c1.reduce<GameState | undefined>(
         reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined,
         initialState
       ),
-      commands,
+      instance,
     }
-  }, [user, commands])
+  }, [user, instance])
   return createElement(InstanceContext.Provider, { value: exported }, children)
 }
 
