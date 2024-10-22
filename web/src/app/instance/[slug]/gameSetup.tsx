@@ -4,18 +4,22 @@ import { Seat, SeatProps } from "@/components/seat"
 import { useInstanceContext } from "@/context/InstanceContext"
 import { EngineColor, EngineConfig, EngineCountry, EngineLength } from "@/types"
 import { useState } from "react"
-import { join } from "./actions"
+import { join, toggleHidden } from "./actions"
 
 
 const configured = (country: EngineCountry, length: EngineLength, config?: EngineConfig) =>
   false //config && config.country === country && config.length === length
 
 export const GameSetup = () => {
-  // const { supabase } = useSupabaseContext()
   const { state, instance } = useInstanceContext()
   const [hidden, setHidden] = useState(true)
   const users = [1, 2]
   const engineConfig = undefined
+
+  const handleSetHidden = (newState: boolean) => {
+    setHidden(newState)
+    toggleHidden(instance.id, newState)
+  }
 
   return <>
     <h1>Game Setup</h1>
@@ -23,10 +27,10 @@ export const GameSetup = () => {
     <p>
       <a href={`/instance/${instance?.id}`}>/instance/{instance.id}</a>
     </p>
-    <input type="checkbox" name="hidden" id="hidden" disabled={false} checked={hidden} onChange={() => { }} />
+    <input type="checkbox" name="hidden" id="hidden" disabled={false} checked={hidden} onChange={() => handleSetHidden(!hidden)} />
     {' '}<label htmlFor="hidden">Hidden</label>{' '}
-    {!hidden && <button type="button" disabled={false} onClick={() => setHidden(true)}>Make Hidden</button>}
-    {!!hidden && <button type="button" disabled={false} onClick={() => setHidden(false)}>Make Public</button>}
+    {!hidden && <button type="button" disabled={false} onClick={() => handleSetHidden(true)}>Make Hidden</button>}
+    {!!hidden && <button type="button" disabled={false} onClick={() => handleSetHidden(false)}>Make Public</button>}
     <br />
     <p>Making an instance public will list it to all users. Share the link directly to invite users to a private instance.</p>
     <hr />

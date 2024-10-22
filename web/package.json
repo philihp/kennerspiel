@@ -29,7 +29,8 @@
     "lint": "next lint",
     "start": "next start",
     "hourly": "node src/hourly.js",
-    "prepare": "cd .. && husky web/.husky"
+    "prepare": "cd .. && husky web/.husky",
+    "gentypes": "npx supabase gen types --lang=typescript --local > src/supabase.types.ts"
   },
   "prettier": "@philihp/prettier-config",
   "devDependencies": {
