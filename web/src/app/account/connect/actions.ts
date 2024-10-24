@@ -1,27 +1,43 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
+import { randomUUID } from 'crypto'
 
 export const connect = async (formData: FormData, captchaToken: string) => {
   const supabase = createClient()
-  if (!formData.get('email')) return 'Missing an email address'
-  if (!formData.get('password')) return 'Blank passwords are bad passwords'
-  const { error } = await supabase.auth.signInWithPassword({
-    email: `${formData.get('email')}`,
-    password: `${formData.get('password')}`,
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+  if (!email) return 'Missing an email address'
+  if (!password) return 'Blank passwords are bad passwords'
+  const {
+    error: authError,
+    data: { user },
+  } = await supabase.auth.signInWithPassword({
+    email: `${email}`,
+    password: `${password}`,
     options: { captchaToken },
   })
-  return error?.message
+  if (authError || !user) return authError?.message
+  const { error: profError } = await supabase.from('profile').insert({ id: user?.id, email })
+  if (profError) {
+    await supabase.auth.signOut({ scope: 'local' })
+    return profError?.message
+  }
 }
 
 export const skip = async (formData: FormData, captchaToken: string) => {
   const supabase = createClient()
   const {
-    data: { user, session },
-    error,
+    data: { user },
+    error: authError,
   } = await supabase.auth.signInAnonymously({
     options: { captchaToken },
   })
-  console.log(JSON.stringify({ user, session }, undefined, 2))
-  return error?.message
+
+  if (authError || !user) return authError?.message
+  const { error: profError } = await supabase.from('profile').upsert({ id: user?.id, email: randomUUID() })
+  if (profError) {
+    await supabase.auth.signOut({ scope: 'local' })
+    return profError?.message
+  }
 }

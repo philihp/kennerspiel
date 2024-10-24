@@ -17,7 +17,6 @@ const Header = async () => {
     <header>
       <Presence />
       {process.env.NODE_ENV === 'development' ? process.env.NODE_ENV : 'Kennerspiel'}
-      {(user?.is_anonymous && <i>Guest</i>) ?? user?.email ?? undefined}
       {user?.email === undefined && (
         <>
           &nbsp;[&nbsp;
@@ -25,15 +24,15 @@ const Header = async () => {
           &nbsp;]
         </>
       )}
-      {user?.is_anonymous && (
+      {user?.email !== undefined && user?.is_anonymous === true && (
         <>
-          &nbsp;|&nbsp;
+          &nbsp;[&nbsp;
           <Link href="/instance/">Instances</Link>
           &nbsp;|&nbsp;
           <Link href="/account/settings">Settings⚠️</Link> ]
         </>
       )}
-      {user?.is_anonymous === false && user?.email !== undefined && (
+      {user?.email !== undefined && user?.is_anonymous === false && (
         <>
           &nbsp;[&nbsp;
           {user?.email}

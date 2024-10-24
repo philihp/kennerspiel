@@ -28,15 +28,20 @@ export const changePassword = async (formData: FormData) => {
 
 export const linkEmail = async (formData: FormData) => {
   const supabase = createClient()
-
   const email = formData.get('email') as string
 
   const {
     data: { user },
-    error,
+    error: authError,
   } = await supabase.auth.updateUser({ email })
 
-  if (error) {
-    return error?.message
+  if (authError || !user) {
+    return authError?.message
+  }
+
+  const { error: profError } = await supabase.from('profile').upsert({ id: user?.id, email })
+  if (profError) {
+    await supabase.auth.signOut({ scope: 'local' })
+    return profError?.message
   }
 }
