@@ -1,16 +1,42 @@
 'use server'
 
-import { EngineColor } from '@/types'
+import { Enums } from '@/supabase.types'
 import { createClient } from '@/utils/supabase/server'
 
-export const join = async (instanceId: string, color: EngineColor) => {
+export const join = async (instanceId: string, color: Enums<'color'>) => {
   const supabase = createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return
+  const { data: instance, error: selectError } = await supabase.from('instance').select().eq('id', instanceId).single()
+  if (!instance) {
+    console.error(selectError)
+    return
+  }
 
-  console.log('joined', user.id, color, instanceId)
+  const { data: entrant, error: checkError } = await supabase
+    .from('entrant')
+    .select()
+    .eq('instance_id', instance?.id)
+    .eq('profile_id', user.id)
+    .eq('color', color)
+    .maybeSingle()
+  if (entrant) {
+    console.error(`ERROR: ${entrant?.instance_id}:${entrant?.color} already has ${entrant?.profile_id} `)
+    return
+  } else if (checkError) {
+    console.error(checkError)
+    return
+  }
+
+  const { error: upsertError } = await supabase
+    .from('entrant')
+    .upsert({ profile_id: user.id, instance_id: instance?.id, color })
+  if (upsertError) {
+    console.error(upsertError)
+    return
+  }
 }
 
 export const toggleHidden = async (instanceId: string, hidden: boolean) => {

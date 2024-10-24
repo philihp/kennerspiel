@@ -36,21 +36,27 @@ export type Database = {
     Tables: {
       entrant: {
         Row: {
+          color: Database["public"]["Enums"]["color"]
           created_at: string | null
           id: string
           instance_id: string | null
+          profile_id: string | null
           updated_at: string | null
         }
         Insert: {
+          color: Database["public"]["Enums"]["color"]
           created_at?: string | null
           id?: string
           instance_id?: string | null
+          profile_id?: string | null
           updated_at?: string | null
         }
         Update: {
+          color?: Database["public"]["Enums"]["color"]
           created_at?: string | null
           id?: string
           instance_id?: string | null
+          profile_id?: string | null
           updated_at?: string | null
         }
         Relationships: [
@@ -59,6 +65,13 @@ export type Database = {
             columns: ["instance_id"]
             isOneToOne: false
             referencedRelation: "instance"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entrant_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
         ]
@@ -129,7 +142,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      color: "red" | "green" | "blue" | "white"
     }
     CompositeTypes: {
       [_ in never]: never

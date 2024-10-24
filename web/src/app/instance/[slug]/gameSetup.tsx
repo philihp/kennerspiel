@@ -2,7 +2,7 @@
 
 import { Seat, SeatProps } from '@/components/seat'
 import { useInstanceContext } from '@/context/InstanceContext'
-import { EngineColor, EngineConfig, EngineCountry, EngineLength } from '@/types'
+import { EngineConfig, EngineCountry, EngineLength } from '@/types'
 import { useState } from 'react'
 import { join, toggleHidden } from './actions'
 
@@ -51,10 +51,10 @@ export const GameSetup = () => {
       </p>
       <hr />
       <h3>Players ({0})</h3>
-      <Seat clergyId="LB1R" onClick={() => join(instance?.id, EngineColor.red)} />
-      <Seat clergyId="LB1G" onClick={() => join(instance?.id, EngineColor.green)} />
-      <Seat clergyId="LB1B" onClick={() => join(instance?.id, EngineColor.blue)} />
-      <Seat clergyId="LB1W" onClick={() => join(instance?.id, EngineColor.white)} />
+      <Seat clergyId="LB1R" onClick={() => join(instance?.id, 'red')} />
+      <Seat clergyId="LB1G" onClick={() => join(instance?.id, 'green')} />
+      <Seat clergyId="LB1B" onClick={() => join(instance?.id, 'blue')} />
+      <Seat clergyId="LB1W" onClick={() => join(instance?.id, 'white')} />
       <p>Player order will be randomized upon start.</p>
       {/*-------------------------------------------*/}
       <hr />

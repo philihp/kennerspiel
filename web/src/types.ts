@@ -1,10 +1,3 @@
-export enum EngineColor {
-  red = 'RED',
-  blue = 'BLUE',
-  green = 'GREEN',
-  white = 'WHITE',
-}
-
 export enum EngineCountry {
   france = 'FRANCE',
   ireland = 'IRELAND',
