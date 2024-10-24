@@ -31,4 +31,5 @@ export const toggleHidden = async (instanceId: string, hidden: boolean) => {
       hidden,
     })
     .eq('id', instance.id)
+  console.log(`SET HIDDEN ${hidden}\n${JSON.stringify(error, undefined, 2)}`)
 }

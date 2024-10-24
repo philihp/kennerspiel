@@ -19,19 +19,21 @@ export const Presence = () => {
   const [store, dispatch] = useReducer(presenceReducer, { initial: 'initial' })
 
   useEffect(() => {
-    const channel = supabase.channel('schema-db-changes').on(
-      'postgres_changes',
-      {
-        event: '*', // INSERT, UPDATE, DELETE
-        schema: 'public',
-      },
-      (payload) => {
-        console.log({ payload })
-        dispatch(payload)
-      }
-    )
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // INSERT, UPDATE, DELETE
+          schema: 'public',
+        },
+        (payload) => {
+          // console.log({ payload })
+          dispatch(payload)
+        }
+      )
       .subscribe((status, err) => {
-        console.log('subscribed to psql changes', status, err)
+        // console.log('subscribed to psql changes', status, err)
         if (status === 'SUBSCRIBED') setLive(true)
       })
     return () => {

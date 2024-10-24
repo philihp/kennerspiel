@@ -35,8 +35,8 @@ const RootLayout = async ({
       <Header />
       <hr />
       {children}
-      <Analytics />
-      <SpeedInsights />
+      {/* <Analytics /> */}
+      {/* <SpeedInsights /> */}
     </body>
   </html>
 )

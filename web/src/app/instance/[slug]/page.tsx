@@ -4,7 +4,6 @@ import { createClient } from '@/utils/supabase/server'
 import { ClientPresenter } from './clientPresenter'
 import { InstanceContextProvider } from '@/context/InstanceContext'
 import { SupabaseContextProvider } from '@/context/SupabaseContext'
-import { Instance } from '@/types'
 
 type InstanceParams = {
   params: {
@@ -12,13 +11,13 @@ type InstanceParams = {
   }
 }
 
-
 const InstancePage = async ({ params: { slug } }: InstanceParams) => {
   const supabase = createClient()
-  const { data: instance, error } = await supabase.from('instance').select('*').limit(1).single<Instance>()
-  // TODO: this needs to select by the ID
+  const { data: instance, error } = await supabase.from('instance').select('*').eq('id', slug).limit(1).single()
   const commands = instance?.commands ?? []
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (instance === null) {
     return <pre>{JSON.stringify(error, undefined, 2)}</pre>

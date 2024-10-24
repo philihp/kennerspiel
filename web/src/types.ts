@@ -19,8 +19,3 @@ export type EngineConfig = {
   country: EngineCountry
   length: EngineLength
 }
-
-export type Instance = {
-  id: string
-  commands: string[]
-}
