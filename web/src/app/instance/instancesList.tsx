@@ -1,7 +1,7 @@
 'use client'
 
-import { createClient } from "@/utils/supabase/client"
-import { useCallback, useEffect, useState } from "react"
+import { createClient } from '@/utils/supabase/client'
+import { useCallback, useEffect, useState } from 'react'
 
 type Instance = {
   id: string
@@ -13,11 +13,15 @@ export const InstancesList = () => {
   const [instances, setInstances] = useState<Instance[] | undefined>(undefined)
 
   const handleLoad = useCallback(() => {
-    setInstances([])
+    setInstances(undefined)
     const supabase = createClient()
-    supabase.from('instance').select().then(({ data }) => {
-      setInstances(data ?? [] as Instance[])
-    })
+    supabase
+      .from('instance')
+      .select()
+      .eq('hidden', false)
+      .then(({ data }) => {
+        setInstances(data ?? ([] as Instance[]))
+      })
   }, [])
 
   useEffect(() => {
@@ -26,16 +30,25 @@ export const InstancesList = () => {
 
   return (
     <>
-      <button onClick={handleLoad} type="button">Refresh</button>
+      <button onClick={handleLoad} type="button">
+        Refresh
+      </button>
       <ul>
-        {instances === undefined && <li><i>...</i></li>}
-        {instances !== undefined && instances.map((instance) => (
-          <li key={instance.id}>
-            <a href={`instance/${instance.id}`}>{instance.id}</a>
+        {instances === undefined && (
+          <li>
+            <i>...</i>
           </li>
-        ))}
+        )}
+        {instances !== undefined &&
+          instances.map((instance) => (
+            <li key={instance.id}>
+              <a href={`instance/${instance.id}`}>{instance.id}</a>
+            </li>
+          ))}
         {instances?.length === 0 && (
-          <li><i>(none)</i></li>
+          <li>
+            <i>(none)</i>
+          </li>
         )}
       </ul>
     </>
