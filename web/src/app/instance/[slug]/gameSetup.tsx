@@ -3,13 +3,12 @@
 import { Seat } from '@/components/seat'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { EngineConfig, EngineCountry, EngineLength } from '@/types'
-import { useState } from 'react'
 import { join, toggleHidden } from './actions'
 
 const configured = (country: EngineCountry, length: EngineLength, config?: EngineConfig) => false //config && config.country === country && config.length === length
 
 export const GameSetup = () => {
-  const { gameState, user, instance } = useInstanceContext()
+  const { gameState, user, instance, entrants } = useInstanceContext()
   const users = [1, 2]
   const engineConfig = undefined
 
@@ -43,11 +42,11 @@ export const GameSetup = () => {
         instance.
       </p>
       <hr />
-      <h3>Players ({0})</h3>
-      <Seat clergyId="LB1R" onClick={() => join(instance?.id, 'red')} />
-      <Seat clergyId="LB1G" onClick={() => join(instance?.id, 'green')} />
-      <Seat clergyId="LB1B" onClick={() => join(instance?.id, 'blue')} />
-      <Seat clergyId="LB1W" onClick={() => join(instance?.id, 'white')} />
+      <h3>Players ({entrants.length})</h3>
+      <Seat clergyId="LB1R" color={'red'} />
+      <Seat clergyId="LB1G" color={'green'} />
+      <Seat clergyId="LB1B" color={'blue'} />
+      <Seat clergyId="LB1W" color={'white'} />
       <p>Player order will be randomized upon start.</p>
       {/*-------------------------------------------*/}
       <hr />

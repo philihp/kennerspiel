@@ -19,7 +19,6 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
     .from('entrant')
     .select()
     .eq('instance_id', instance?.id)
-    .eq('profile_id', user.id)
     .eq('color', color)
     .maybeSingle()
   if (entrant) {

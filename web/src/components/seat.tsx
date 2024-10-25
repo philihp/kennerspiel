@@ -2,20 +2,18 @@ import { User } from '@supabase/supabase-js'
 
 import { Clergy } from '@/components/clergy'
 import { useInstanceContext } from '@/context/InstanceContext'
-import { MouseEventHandler } from 'react'
-import { Enums } from '@/supabase.types'
+import { Enums, Tables } from '@/supabase.types'
+import { join } from '@/app/instance/[slug]/actions'
+import { find, propEq } from 'ramda'
 
 export interface SeatProps {
   clergyId: string
-  onClick: MouseEventHandler<HTMLButtonElement>
+  color: Enums<'color'>
 }
 
-const occupied = (color: Enums<'color'>, users: User[] = []) => {
-  return false //users.some((user) => user.color === color)
-}
-
-export const Seat = ({ clergyId, onClick }: SeatProps) => {
-  const { user } = useInstanceContext()
+export const Seat = ({ clergyId, color }: SeatProps) => {
+  const { user, instance, entrants } = useInstanceContext()
+  const entrant = find<Tables<'entrant'>>(propEq(color, 'color'))(entrants)
   return (
     <div
       style={{
@@ -23,7 +21,7 @@ export const Seat = ({ clergyId, onClick }: SeatProps) => {
         alignItems: 'center',
       }}
     >
-      <button type="button" onClick={onClick}>
+      <button type="button" disabled={!!entrant} onClick={() => join(instance.id, color)}>
         Pick Color
       </button>
       {user ? (
@@ -39,6 +37,7 @@ export const Seat = ({ clergyId, onClick }: SeatProps) => {
               borderWidth: 3,
             }}
           />
+          {entrant?.profile_id}
           {/* {user.email} */}
           {/* {user?.id && user?.id === me?.id && ( */}
           {/* <button

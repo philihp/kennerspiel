@@ -2,12 +2,14 @@
 
 import { GameState, initialState, reducer } from 'hathora-et-labora-game'
 import { createContext, createElement, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
-import { REALTIME_POSTGRES_CHANGES_LISTEN_EVENT, User } from '@supabase/supabase-js'
+import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT, User } from '@supabase/supabase-js'
 import { Tables } from '@/supabase.types'
 import { useSupabaseContext } from './SupabaseContext'
+import { reject } from 'ramda'
 
 type InstanceContextType = {
   instance: Tables<'instance'>
+  entrants: Tables<'entrant'>[]
   user?: User
   gameState?: GameState
 }
@@ -15,6 +17,7 @@ type InstanceContextType = {
 type InstanceContextProviderProps = {
   user: User | null
   instance: Tables<'instance'>
+  entrants: Tables<'entrant'>[]
   children: ReactNode | ReactNode[]
 }
 
@@ -28,15 +31,24 @@ export const InstanceContextProvider = ({
   children,
   user,
   instance: providedInstance,
+  entrants: providedEntrants,
 }: InstanceContextProviderProps) => {
   const { supabase } = useSupabaseContext()
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
+  const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
 
   useEffect(() => {
+    console.log({ entrants })
+  }, [entrants])
+
+  useEffect(() => {
+    console.log('loaded with intance: ')
+    console.log(entrants)
+
     const channel = supabase
       ?.channel('schema-db-changes')
       .on(
-        'postgres_changes',
+        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
         {
           table: 'instance',
           event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE,
@@ -45,30 +57,38 @@ export const InstanceContextProvider = ({
         },
         (payload) => {
           setInstance(payload.new as Tables<'instance'>)
-          // TODO: maybe this should use useOptimistic somehow and do an actual query again?
-          // supabase
-          //   .from('instance')
-          //   .select()
-          //   .eq('id', payload.old.id)
-          //   .single()
-          //   .then(({ data }) => {
-          //     console.log('setInstance(', data, ') from ', currentInstance)
-          //     setInstance(data)
-          //   })
         }
       )
-      .subscribe
-      //   (status, err) => {
-      //   console.log('subscribed to psql changes', status, err)
-      //   if (status === 'SUBSCRIBED') {
-      //     // on successful subscription, probably dont need this
-      //   }
-      // }
-      ()
+      .on(
+        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
+        {
+          table: 'entrant',
+          event: '*',
+          schema: 'public',
+          filter: `instance_id=eq.${instance.id}`,
+        },
+        (payload) => {
+          switch (payload.eventType) {
+            case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.INSERT:
+              setEntrants([...entrants, payload.new as Tables<'entrant'>])
+              break
+            case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.DELETE:
+              setEntrants([...reject<Tables<'entrant'>>((entrant) => entrant.id === payload.old.id)(entrants)])
+              break
+            case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE:
+              setEntrants([
+                ...reject<Tables<'entrant'>>((entrant) => entrant.id === payload.old.id)(entrants),
+                payload.new as Tables<'entrant'>,
+              ])
+              break
+          }
+        }
+      )
+      .subscribe()
     return () => {
       channel?.unsubscribe()
     }
-  }, [supabase, instance.id])
+  }, [supabase, instance])
 
   const gameState = useMemo(() => {
     const c1 = ['CONFIG 3 france long', ...instance.commands].map((s) => s.split(' '))
@@ -84,6 +104,7 @@ export const InstanceContextProvider = ({
       value: {
         user: user === null ? undefined : user,
         instance,
+        entrants,
         gameState,
       },
     },
