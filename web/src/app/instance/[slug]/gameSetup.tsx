@@ -2,15 +2,14 @@
 
 import { Seat } from '@/components/seat'
 import { useInstanceContext } from '@/context/InstanceContext'
-import { EngineConfig, EngineCountry, EngineLength } from '@/types'
-import { join, toggleHidden } from './actions'
+import { EngineCountry, EngineLength } from '@/types'
+import { configureInstance, toggleHidden } from './actions'
 
-const configured = (country: EngineCountry, length: EngineLength, config?: EngineConfig) => false //config && config.country === country && config.length === length
+const configured = (country: EngineCountry, length: EngineLength, firstCommand: string = '') =>
+  firstCommand.includes(country.toLowerCase()) && firstCommand.includes(length.toLowerCase())
 
 export const GameSetup = () => {
-  const { gameState, user, instance, entrants } = useInstanceContext()
-  const users = [1, 2]
-  const engineConfig = undefined
+  const { gameState, instance, entrants } = useInstanceContext()
 
   const hidden = !!instance.hidden
 
@@ -18,9 +17,14 @@ export const GameSetup = () => {
     toggleHidden(instance.id, newState)
   }
 
+  const config = async (players: number, country: EngineCountry, length: EngineLength) => {
+    configureInstance(instance.id, `CONFIG ${players} ${country.toLowerCase()} ${length.toLowerCase()}`)
+  }
+
   return (
     <>
       <h1>Game Setup</h1>
+      {/* <pre>{JSON.stringify({ gameState, instance }, undefined, 2)}</pre> */}
       <p>
         <a href={`/instance/${instance?.id}`}>/instance/{instance.id}</a>
       </p>
@@ -53,28 +57,28 @@ export const GameSetup = () => {
       <h3>Mode</h3>
       <input
         type="radio"
-        disabled={configured(EngineCountry.france, EngineLength.long, engineConfig)}
-        checked={configured(EngineCountry.france, EngineLength.long, engineConfig)}
-        onChange={() => {}}
+        disabled={configured(EngineCountry.france, EngineLength.long, instance?.commands?.[0])}
+        checked={configured(EngineCountry.france, EngineLength.long, instance?.commands?.[0])}
+        onChange={() => config(entrants.length, EngineCountry.france, EngineLength.long)}
       />
       <button
         type="button"
-        disabled={configured(EngineCountry.france, EngineLength.long, engineConfig)}
-        onClick={() => {}}
+        disabled={configured(EngineCountry.france, EngineLength.long, instance?.commands?.[0])}
+        onClick={() => config(entrants.length, EngineCountry.france, EngineLength.long)}
       >
         France {entrants?.length === 2 && '(long)'}
       </button>
       <br />
       <input
         type="radio"
-        disabled={configured(EngineCountry.ireland, EngineLength.long, engineConfig)}
-        checked={configured(EngineCountry.ireland, EngineLength.long, engineConfig)}
-        onChange={() => {}}
+        disabled={configured(EngineCountry.ireland, EngineLength.long, instance?.commands?.[0])}
+        checked={configured(EngineCountry.ireland, EngineLength.long, instance?.commands?.[0])}
+        onChange={() => config(entrants.length, EngineCountry.ireland, EngineLength.long)}
       />
       <button
-        disabled={configured(EngineCountry.ireland, EngineLength.long, engineConfig)}
-        onClick={() => {}}
         type="button"
+        disabled={configured(EngineCountry.ireland, EngineLength.long, instance?.commands?.[0])}
+        onClick={() => config(entrants.length, EngineCountry.ireland, EngineLength.long)}
       >
         Ireland {entrants?.length === 2 && '(long)'}
       </button>
@@ -84,28 +88,28 @@ export const GameSetup = () => {
           {' '}
           <input
             type="radio"
-            disabled={configured(EngineCountry.france, EngineLength.short, engineConfig)}
-            checked={configured(EngineCountry.france, EngineLength.short, engineConfig)}
-            onChange={() => {}}
+            disabled={configured(EngineCountry.france, EngineLength.short, instance?.commands?.[0])}
+            checked={configured(EngineCountry.france, EngineLength.short, instance?.commands?.[0])}
+            onChange={() => config(entrants.length, EngineCountry.france, EngineLength.short)}
           />
           <button
             type="button"
-            disabled={configured(EngineCountry.france, EngineLength.short, engineConfig)}
-            onClick={() => {}}
+            disabled={configured(EngineCountry.france, EngineLength.short, instance?.commands?.[0])}
+            onClick={() => config(entrants.length, EngineCountry.france, EngineLength.short)}
           >
             France {entrants?.length >= 3 && '(short)'}
           </button>
           <br />
           <input
             type="radio"
-            disabled={configured(EngineCountry.ireland, EngineLength.short, engineConfig)}
-            checked={configured(EngineCountry.ireland, EngineLength.short, engineConfig)}
-            onChange={() => {}}
+            disabled={configured(EngineCountry.ireland, EngineLength.short, instance?.commands?.[0])}
+            checked={configured(EngineCountry.ireland, EngineLength.short, instance?.commands?.[0])}
+            onChange={() => config(entrants.length, EngineCountry.ireland, EngineLength.long)}
           />
           <button
             type="button"
-            disabled={configured(EngineCountry.ireland, EngineLength.short, engineConfig)}
-            onClick={() => {}}
+            disabled={configured(EngineCountry.ireland, EngineLength.short, instance?.commands?.[0])}
+            onClick={() => config(entrants.length, EngineCountry.ireland, EngineLength.long)}
           >
             Ireland {entrants?.length >= 3 && '(short)'}
           </button>

@@ -9,7 +9,11 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return
-  const { data: instance, error: selectError } = await supabase.from('instance').select().eq('id', instanceId).single()
+  const { data: instance, error: selectError } = await supabase
+    .from('instance')
+    .select('*, entrant(*)')
+    .eq('id', instanceId)
+    .single()
   if (!instance) {
     console.error(selectError)
     return
@@ -39,6 +43,20 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
     console.error(upsertError)
     return
   }
+
+  if (instance.commands.length) {
+    const { data: newEntrant, error: refreshError } = await supabase
+      .from('instance')
+      .select('*, entrant(*)')
+      .eq('id', instanceId)
+      .single()
+    if (refreshError) {
+      console.error(refreshError)
+      return
+    }
+    const config = instance.commands[0].split(' ')
+    configureInstance(instance.id, `CONFIG ${newEntrant.entrant.length} ${config[2]} ${config[3]}`)
+  }
 }
 
 export const toggleHidden = async (instanceId: string, hidden: boolean) => {
@@ -46,7 +64,10 @@ export const toggleHidden = async (instanceId: string, hidden: boolean) => {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return
+  if (!user) {
+    console.error('ERROR: toggleHidden has no user')
+    return
+  }
 
   const { error } = await supabase
     .from('instance')
@@ -58,4 +79,19 @@ export const toggleHidden = async (instanceId: string, hidden: boolean) => {
   if (error) {
     console.error(JSON.stringify(error, undefined, 2))
   }
+}
+
+export const configureInstance = async (instanceId: string, configString: string) => {
+  const supabase = createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    console.error('ERROR: configureInstance has no user')
+    return
+  }
+  await supabase
+    .from('instance')
+    .update({ commands: [configString] })
+    .eq('id', instanceId)
 }

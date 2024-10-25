@@ -38,10 +38,6 @@ export const InstanceContextProvider = ({
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
 
   useEffect(() => {
-    console.log({ entrants })
-  }, [entrants])
-
-  useEffect(() => {
     const channel = supabase
       ?.channel('schema-db-changes')
       .on(
@@ -88,7 +84,7 @@ export const InstanceContextProvider = ({
   }, [supabase, instance, entrants])
 
   const gameState = useMemo(() => {
-    const c1 = ['CONFIG 3 france long', ...instance.commands].map((s) => s.split(' '))
+    const c1 = [...instance.commands].map((s) => s.split(' '))
     return c1.reduce<GameState | undefined>(
       reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined,
       initialState
