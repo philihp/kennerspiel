@@ -50,17 +50,15 @@ export const toggleHidden = async (instanceId: string, hidden: boolean) => {
   } = await supabase.auth.getUser()
   if (!user) return
 
-  const { data: instance } = await supabase.from('instance').select().eq('id', instanceId).limit(1).single()
-  if (instance?.owner_id !== user.id) {
-    console.error(`INSTANCE ${instance?.id} OWNER IS ${instance?.owner_id} AND NOT ${user.id}`)
-    return
-  }
   const { error } = await supabase
     .from('instance')
     .update({
       hidden,
       updated_at: new Date().toISOString(),
     })
-    .eq('id', instance.id)
-  console.log(`SET HIDDEN ${hidden}\n${JSON.stringify(error, undefined, 2)}`)
+    .eq('id', instanceId)
+  if (error) {
+    console.error(JSON.stringify(error, undefined, 2))
+  }
+  console.log(`SET HIDDEN ${hidden}`)
 }
