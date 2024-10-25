@@ -1,25 +1,21 @@
-import { User } from "@supabase/supabase-js"
+import { User } from '@supabase/supabase-js'
 
-import { Clergy } from "@/components/clergy"
-import { useHathoraContext, useInstanceContext } from "@/context/InstanceContext"
-import { EngineColor, EngineCountry, EngineLength } from "@/types"
-import { MouseEventHandler } from "react"
-
+import { Clergy } from '@/components/clergy'
+import { useInstanceContext } from '@/context/InstanceContext'
+import { MouseEventHandler } from 'react'
+import { Enums } from '@/supabase.types'
 
 export interface SeatProps {
   clergyId: string
   onClick: MouseEventHandler<HTMLButtonElement>
 }
 
-const occupied = (color: EngineColor, users: User[] = []) => {
+const occupied = (color: Enums<'color'>, users: User[] = []) => {
   return false //users.some((user) => user.color === color)
 }
 
-
 export const Seat = ({ clergyId, onClick }: SeatProps) => {
-  const { state, user } = useInstanceContext()
-  // const { state, join, config, user: me } = useHathoraContext()
-  // const users = state?.users ?? []
+  const { user } = useInstanceContext()
   return (
     <div
       style={{

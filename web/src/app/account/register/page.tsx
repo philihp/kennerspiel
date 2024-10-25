@@ -11,8 +11,7 @@ const RegisterPage = () => {
   const [response, setResponse] = useState('')
   const [captchaToken, setCaptchaToken] = useState<string>('')
   const signupAndReturn = async (formData: FormData) => {
-    console.log('SIGNUP ', { formData })
-    const { error } = await register(formData, captchaToken)
+    const error = await register(formData, captchaToken)
     if (error) {
       setDisabled(false)
       setResponse(error)

@@ -17,15 +17,13 @@ export const register = async (formData: FormData, captchaToken: string) => {
     },
   })
 
-  if (authError || !user) return authError?.message
+  if (authError || !user) {
+    return authError?.message
+  }
 
   const { error: profError } = await supabase.from('profile').upsert({ id: user?.id, email })
   if (profError) {
     await supabase.auth.signOut({ scope: 'local' })
     return profError?.message
-  }
-
-  return {
-    user,
   }
 }
