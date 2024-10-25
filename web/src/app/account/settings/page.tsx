@@ -9,7 +9,10 @@ import DisconnectButton from './disconnectButton'
 const SettingsPage = async () => {
   const supabase = createClient()
 
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
   if (error || !user) {
     redirect('/account/login')
   }
@@ -17,16 +20,14 @@ const SettingsPage = async () => {
   return (
     <>
       <h1>Settings</h1>
-      {
-        user.is_anonymous && <>
+      {user.is_anonymous && (
+        <>
           <LinkEmail />
         </>
-      }
-      {!user.is_anonymous && <>
-        {user.email_confirmed_at && <ChangePassword />}
-        <h2>Disconnect</h2>
-        <DisconnectButton />
-      </>}
+      )}
+      {!user.is_anonymous && user.email_confirmed_at && <ChangePassword />}
+      <h2>Disconnect</h2>
+      <DisconnectButton />
     </>
   )
 }
