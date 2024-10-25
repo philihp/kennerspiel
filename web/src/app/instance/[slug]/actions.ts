@@ -30,7 +30,6 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
     return
   }
 
-  console.log({ instance_id: instance?.id, profile_id: user.id, color }, { onConflict: 'instance_id, profile_id' })
   const { error: upsertError } = await supabase
     .from('entrant')
     .upsert(
@@ -60,5 +59,4 @@ export const toggleHidden = async (instanceId: string, hidden: boolean) => {
   if (error) {
     console.error(JSON.stringify(error, undefined, 2))
   }
-  console.log(`SET HIDDEN ${hidden}`)
 }

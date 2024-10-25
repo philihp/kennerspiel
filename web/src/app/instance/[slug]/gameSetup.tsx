@@ -1,6 +1,6 @@
 'use client'
 
-import { Seat, SeatProps } from '@/components/seat'
+import { Seat } from '@/components/seat'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { EngineConfig, EngineCountry, EngineLength } from '@/types'
 import { useState } from 'react'
@@ -16,7 +16,6 @@ export const GameSetup = () => {
   const hidden = !!instance.hidden
 
   const handleSetHidden = (newState: boolean) => {
-    // setHidden(newState)
     toggleHidden(instance.id, newState)
   }
 

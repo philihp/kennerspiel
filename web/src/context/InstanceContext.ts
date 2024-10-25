@@ -44,24 +44,8 @@ export const InstanceContextProvider = ({
           filter: `id=eq.${instance.id}`,
         },
         (payload) => {
-          console.log('OLD INSTANCE')
-          console.log(JSON.stringify(instance, undefined, 2))
-          console.log('NEW INSTANCE')
-          console.log(
-            JSON.stringify(
-              {
-                ...instance,
-                ...payload.new,
-              },
-              undefined,
-              2
-            )
-          )
-
-          setInstance({
-            ...instance,
-            ...payload.new,
-          } as Tables<'instance'>)
+          setInstance(payload.new as Tables<'instance'>)
+          // TODO: maybe this should use useOptimistic somehow and do an actual query again?
           // supabase
           //   .from('instance')
           //   .select()
@@ -73,16 +57,18 @@ export const InstanceContextProvider = ({
           //   })
         }
       )
-      .subscribe((status, err) => {
-        console.log('subscribed to psql changes', status, err)
-        if (status === 'SUBSCRIBED') {
-          //
-        }
-      })
+      .subscribe
+      //   (status, err) => {
+      //   console.log('subscribed to psql changes', status, err)
+      //   if (status === 'SUBSCRIBED') {
+      //     // on successful subscription, probably dont need this
+      //   }
+      // }
+      ()
     return () => {
       channel?.unsubscribe()
     }
-  }, [supabase])
+  }, [supabase, instance.id])
 
   const gameState = useMemo(() => {
     const c1 = ['CONFIG 3 france long', ...instance.commands].map((s) => s.split(' '))

@@ -19,7 +19,7 @@ export const Presence = ({ user }: PresenceParams) => {
     let channel = supabase.channel(`presence:${key}`, { config: { presence: { key } } })
     channel.on(REALTIME_LISTEN_TYPES.PRESENCE, { event: 'sync' }, () => {
       const state = channel.presenceState()
-      console.log('sync', state)
+      console.log('sync', state[key])
       setCount(state[key]?.length)
     })
     channel.subscribe(async (status) => {
@@ -28,7 +28,7 @@ export const Presence = ({ user }: PresenceParams) => {
         await channel.track({ user_id: user?.id })
       }
     })
-  }, [supabase, user?.id])
+  }, [supabase, user?.id, key])
 
   return (
     <>
