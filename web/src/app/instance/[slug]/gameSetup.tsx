@@ -62,7 +62,7 @@ export const GameSetup = () => {
         disabled={configured(EngineCountry.france, EngineLength.long, engineConfig)}
         onClick={() => {}}
       >
-        France {users?.length === 2 && '(long)'}
+        France {entrants?.length === 2 && '(long)'}
       </button>
       <br />
       <input
@@ -76,10 +76,10 @@ export const GameSetup = () => {
         onClick={() => {}}
         type="button"
       >
-        Ireland {users?.length === 2 && '(long)'}
+        Ireland {entrants?.length === 2 && '(long)'}
       </button>
       <br />
-      {users.length > 1 && (
+      {entrants.length > 1 && (
         <>
           {' '}
           <input
@@ -93,7 +93,7 @@ export const GameSetup = () => {
             disabled={configured(EngineCountry.france, EngineLength.short, engineConfig)}
             onClick={() => {}}
           >
-            France {users?.length >= 3 && '(short)'}
+            France {entrants?.length >= 3 && '(short)'}
           </button>
           <br />
           <input
@@ -107,7 +107,7 @@ export const GameSetup = () => {
             disabled={configured(EngineCountry.ireland, EngineLength.short, engineConfig)}
             onClick={() => {}}
           >
-            Ireland {users?.length >= 3 && '(short)'}
+            Ireland {entrants?.length >= 3 && '(short)'}
           </button>
           <br />
         </>
