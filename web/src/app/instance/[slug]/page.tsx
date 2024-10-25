@@ -14,7 +14,6 @@ type InstanceParams = {
 const InstancePage = async ({ params: { slug } }: InstanceParams) => {
   const supabase = createClient()
   const { data: instance, error } = await supabase.from('instance').select('*').eq('id', slug).limit(1).single()
-  const commands = instance?.commands ?? []
   const {
     data: { user },
   } = await supabase.auth.getUser()

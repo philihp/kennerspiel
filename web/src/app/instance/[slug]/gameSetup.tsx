@@ -9,7 +9,7 @@ import { join, toggleHidden } from './actions'
 const configured = (country: EngineCountry, length: EngineLength, config?: EngineConfig) => false //config && config.country === country && config.length === length
 
 export const GameSetup = () => {
-  const { state, instance } = useInstanceContext()
+  const { state, user, instance } = useInstanceContext()
   const [hidden, setHidden] = useState(!!instance?.hidden)
   const users = [1, 2]
   const engineConfig = undefined
@@ -25,22 +25,15 @@ export const GameSetup = () => {
       <p>
         <a href={`/instance/${instance?.id}`}>/instance/{instance.id}</a>
       </p>
-      <input
-        type="checkbox"
-        name="hidden"
-        id="hidden"
-        disabled={false}
-        checked={hidden}
-        onChange={() => handleSetHidden(!hidden)}
-      />{' '}
+      <input type="checkbox" name="hidden" id="hidden" checked={hidden} onChange={() => handleSetHidden(!hidden)} />{' '}
       <label htmlFor="hidden">Hidden</label>{' '}
       {!hidden && (
-        <button type="button" disabled={false} onClick={() => handleSetHidden(true)}>
+        <button type="button" onClick={() => handleSetHidden(true)}>
           Make Hidden
         </button>
       )}
       {!!hidden && (
-        <button type="button" disabled={false} onClick={() => handleSetHidden(false)}>
+        <button type="button" onClick={() => handleSetHidden(false)}>
           Make Public
         </button>
       )}
