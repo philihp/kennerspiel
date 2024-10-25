@@ -5,22 +5,23 @@ import { GameSetup } from './gameSetup'
 import { useInstanceContext } from '@/context/InstanceContext'
 
 export const Board = () => {
-  const { state } = useInstanceContext()
+  const { gameState } = useInstanceContext()
 
-  if (state?.status === GameStatusEnum.SETUP)
-    return <>
-      <GameSetup />
+  if (gameState?.status === GameStatusEnum.SETUP)
+    return (
+      <>
+        <GameSetup />
+      </>
+    )
+
+  if (gameState?.status === GameStatusEnum.FINISHED) return <>game finished</>
+
+  return (
+    <>
+      <pre>{JSON.stringify({ gameState }, undefined, 2)}</pre>
+      <hr />
+      {/* <pre>{JSON.stringify({ s2, c2 }, undefined, 2)}</pre> */}
+      {/* <hr /> */}
     </>
-
-  if (state?.status === GameStatusEnum.FINISHED)
-    return <>
-      game finished
-    </>
-
-  return <>
-    <pre>{JSON.stringify({ state }, undefined, 2)}</pre>
-    <hr />
-    {/* <pre>{JSON.stringify({ s2, c2 }, undefined, 2)}</pre> */}
-    {/* <hr /> */}
-  </>
+  )
 }

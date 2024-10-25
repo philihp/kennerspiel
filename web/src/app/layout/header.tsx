@@ -6,16 +6,14 @@ import { createClient } from '@/utils/supabase/server'
 const Header = async () => {
   const supabase = createClient()
 
-  let user: User | null = null
-  let error: AuthError | null = null
-
-  const userRes = await supabase.auth.getUser()
-  user = userRes.data?.user
-  error = userRes.error
+  const {
+    data: { user },
+    // error,
+  } = await supabase.auth.getUser()
 
   return (
     <header>
-      <Presence />
+      <Presence user={user} />
       {process.env.NODE_ENV === 'development' ? process.env.NODE_ENV : 'Kennerspiel'}
       {user?.email === undefined && (
         <>

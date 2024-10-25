@@ -9,13 +9,14 @@ import { join, toggleHidden } from './actions'
 const configured = (country: EngineCountry, length: EngineLength, config?: EngineConfig) => false //config && config.country === country && config.length === length
 
 export const GameSetup = () => {
-  const { state, user, instance } = useInstanceContext()
-  const [hidden, setHidden] = useState(!!instance?.hidden)
+  const { gameState, user, instance } = useInstanceContext()
   const users = [1, 2]
   const engineConfig = undefined
 
+  const hidden = !!instance.hidden
+
   const handleSetHidden = (newState: boolean) => {
-    setHidden(newState)
+    // setHidden(newState)
     toggleHidden(instance.id, newState)
   }
 
@@ -115,7 +116,9 @@ export const GameSetup = () => {
       )}
       <p>Country variants contain a different set of buildings.</p>
       <form></form>
-      <pre>{JSON.stringify({ instance, state }, undefined, 2)}</pre>
+      <hr />
+      <i>Last Updated: </i>
+      {instance.updated_at}
     </>
   )
 }

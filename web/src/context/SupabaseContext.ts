@@ -1,10 +1,11 @@
 'use client'
 
+import { Database } from '@/supabase.types'
 import { createClient } from '@/utils/supabase/client'
 import { SupabaseClient } from '@supabase/supabase-js'
-import { createContext, createElement, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, createElement, ReactNode, useContext, useEffect, useState } from 'react'
 
-interface Instance {
+interface SupabaseContextType {
   supabase?: SupabaseClient
 }
 
@@ -12,10 +13,11 @@ interface SupabaseContextProviderProps {
   children: ReactNode | ReactNode[]
 }
 
-const SupabaseContext = createContext<Instance>({})
+const SupabaseContext = createContext<SupabaseContextType>({})
 
 export const SupabaseContextProvider = ({ children }: SupabaseContextProviderProps) => {
   const supabase = createClient()
+
   return createElement(SupabaseContext.Provider, { value: { supabase } }, children)
 }
 

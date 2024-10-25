@@ -3,6 +3,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import './globals.css'
 import Header from './layout/header'
+import { SupabaseContextProvider } from '@/context/SupabaseContext'
 
 export const metadata: Metadata = {
   title: 'Kennerspiel',
@@ -30,15 +31,17 @@ const RootLayout = async ({
 }: Readonly<{
   children: React.ReactNode
 }>) => (
-  <html lang="en">
-    <body>
-      <Header />
-      <hr />
-      {children}
-      {/* <Analytics /> */}
-      {/* <SpeedInsights /> */}
-    </body>
-  </html>
+  <SupabaseContextProvider>
+    <html lang="en">
+      <body>
+        <Header />
+        <hr />
+        {children}
+        {/* <Analytics /> */}
+        {/* <SpeedInsights /> */}
+      </body>
+    </html>
+  </SupabaseContextProvider>
 )
 
 export default RootLayout

@@ -3,7 +3,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { ClientPresenter } from './clientPresenter'
 import { InstanceContextProvider } from '@/context/InstanceContext'
-import { SupabaseContextProvider } from '@/context/SupabaseContext'
 
 type InstanceParams = {
   params: {
@@ -23,11 +22,9 @@ const InstancePage = async ({ params: { slug } }: InstanceParams) => {
   }
 
   return (
-    <SupabaseContextProvider>
-      <InstanceContextProvider instance={instance} user={user}>
-        <ClientPresenter params={{ slug }} />
-      </InstanceContextProvider>
-    </SupabaseContextProvider>
+    <InstanceContextProvider instance={instance} user={user}>
+      <ClientPresenter params={{ slug }} />
+    </InstanceContextProvider>
   )
 }
 
