@@ -42,9 +42,6 @@ export const InstanceContextProvider = ({
   }, [entrants])
 
   useEffect(() => {
-    console.log('loaded with intance: ')
-    console.log(entrants)
-
     const channel = supabase
       ?.channel('schema-db-changes')
       .on(
@@ -88,7 +85,7 @@ export const InstanceContextProvider = ({
     return () => {
       channel?.unsubscribe()
     }
-  }, [supabase, instance])
+  }, [supabase, instance, entrants])
 
   const gameState = useMemo(() => {
     const c1 = ['CONFIG 3 france long', ...instance.commands].map((s) => s.split(' '))
