@@ -98,6 +98,7 @@ export const InstanceContextProvider = ({
   }, [instance])
 
   const completion = useMemo(() => {
+    if (state?.status !== GameStatusEnum.PLAYING) return []
     const p = partial.split(/\s+/).filter((s) => s)
     const controls = control(state as GameStatePlaying, p)
     return controls.completion || []
