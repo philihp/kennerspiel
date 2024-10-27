@@ -42,7 +42,6 @@ export const InstanceContextProvider = ({
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
   const [partial, setPartial] = useState<string>('')
-  const [completion, setCompletion] = useState<string[]>([])
 
   useEffect(() => {
     const channel = supabase
@@ -92,15 +91,17 @@ export const InstanceContextProvider = ({
 
   const state = useMemo(() => {
     const commands = [...instance.commands].map((s) => s.split(' '))
-    const state = commands.reduce<GameState | undefined>(
+    return commands.reduce<GameState | undefined>(
       reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined,
       initialState
     )
+  }, [instance])
+
+  const completion = useMemo(() => {
     const p = partial.split(/\s+/).filter((s) => s)
     const controls = control(state as GameStatePlaying, p)
-    setCompletion(controls.completion || [])
-    return state
-  }, [instance])
+    return controls.completion || []
+  }, [state, partial])
 
   return createElement(
     InstanceContext.Provider,
