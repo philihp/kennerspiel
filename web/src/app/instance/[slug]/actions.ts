@@ -14,7 +14,7 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
     .select('*, entrant(*)')
     .eq('id', instanceId)
     .single()
-  if (!instance) {
+  if (!instance || selectError) {
     console.error(selectError)
     return
   }
@@ -33,7 +33,7 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
     return
   }
 
-  const { error: upsertError } = await supabase
+  const { error: upsertError, data } = await supabase
     .from('entrant')
     .upsert(
       { instance_id: instance?.id, profile_id: user.id, color, updated_at: new Date().toISOString() },
@@ -54,8 +54,9 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
       console.error(refreshError)
       return
     }
+    const players = Math.max(newEntrant.entrant.length, 1)
     const config = instance.commands[0].split(' ')
-    configureInstance(instance.id, `CONFIG ${newEntrant.entrant.length} ${config[2]} ${config[3]}`)
+    configureInstance(instance.id, `CONFIG ${players} ${config[2]} ${config[3]}`)
   }
 }
 

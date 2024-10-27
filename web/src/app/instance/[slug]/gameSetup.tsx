@@ -13,12 +13,14 @@ export const GameSetup = () => {
 
   const hidden = !!instance.hidden
 
+  const canStart = entrants.length >= 1 && instance.commands?.[0]?.startsWith('CONFIG')
+
   const handleSetHidden = (newState: boolean) => {
     toggleHidden(instance.id, newState)
   }
 
   const config = async (players: number, country: EngineCountry, length: EngineLength) => {
-    configureInstance(instance.id, `CONFIG ${players} ${country.toLowerCase()} ${length.toLowerCase()}`)
+    configureInstance(instance.id, `CONFIG ${Math.max(players, 1)} ${country.toLowerCase()} ${length.toLowerCase()}`)
   }
 
   return (
@@ -117,7 +119,9 @@ export const GameSetup = () => {
         </>
       )}
       <p>Country variants contain a different set of buildings.</p>
-      <form></form>
+      <button type="button" disabled={!canStart}>
+        Start Game
+      </button>
       <hr />
       <i>Last Updated: </i>
       {instance.updated_at}
