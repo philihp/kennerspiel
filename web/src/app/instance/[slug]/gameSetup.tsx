@@ -3,13 +3,13 @@
 import { Seat } from '@/components/seat'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { EngineCountry, EngineLength } from '@/types'
-import { configureInstance, toggleHidden } from './actions'
+import { config, start, toggleHidden } from './actions'
 
 const configured = (country: EngineCountry, length: EngineLength, firstCommand: string = '') =>
   firstCommand.includes(country.toLowerCase()) && firstCommand.includes(length.toLowerCase())
 
 export const GameSetup = () => {
-  const { gameState, instance, entrants } = useInstanceContext()
+  const { instance, entrants } = useInstanceContext()
 
   const hidden = !!instance.hidden
 
@@ -19,8 +19,12 @@ export const GameSetup = () => {
     toggleHidden(instance.id, newState)
   }
 
-  const config = async (players: number, country: EngineCountry, length: EngineLength) => {
-    configureInstance(instance.id, `CONFIG ${Math.max(players, 1)} ${country.toLowerCase()} ${length.toLowerCase()}`)
+  const handleConfig = async (players: number, country: EngineCountry, length: EngineLength) => {
+    config(instance.id, `CONFIG ${Math.max(players, 1)} ${country.toLowerCase()} ${length.toLowerCase()}`)
+  }
+
+  const handleStart = () => {
+    start(instance.id)
   }
 
   return (
@@ -61,12 +65,12 @@ export const GameSetup = () => {
         type="radio"
         disabled={configured(EngineCountry.france, EngineLength.long, instance?.commands?.[0])}
         checked={configured(EngineCountry.france, EngineLength.long, instance?.commands?.[0])}
-        onChange={() => config(entrants.length, EngineCountry.france, EngineLength.long)}
+        onChange={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.long)}
       />
       <button
         type="button"
         disabled={configured(EngineCountry.france, EngineLength.long, instance?.commands?.[0])}
-        onClick={() => config(entrants.length, EngineCountry.france, EngineLength.long)}
+        onClick={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.long)}
       >
         France {entrants?.length === 2 && '(long)'}
       </button>
@@ -75,12 +79,12 @@ export const GameSetup = () => {
         type="radio"
         disabled={configured(EngineCountry.ireland, EngineLength.long, instance?.commands?.[0])}
         checked={configured(EngineCountry.ireland, EngineLength.long, instance?.commands?.[0])}
-        onChange={() => config(entrants.length, EngineCountry.ireland, EngineLength.long)}
+        onChange={() => handleConfig(entrants.length, EngineCountry.ireland, EngineLength.long)}
       />
       <button
         type="button"
         disabled={configured(EngineCountry.ireland, EngineLength.long, instance?.commands?.[0])}
-        onClick={() => config(entrants.length, EngineCountry.ireland, EngineLength.long)}
+        onClick={() => handleConfig(entrants.length, EngineCountry.ireland, EngineLength.long)}
       >
         Ireland {entrants?.length === 2 && '(long)'}
       </button>
@@ -92,12 +96,12 @@ export const GameSetup = () => {
             type="radio"
             disabled={configured(EngineCountry.france, EngineLength.short, instance?.commands?.[0])}
             checked={configured(EngineCountry.france, EngineLength.short, instance?.commands?.[0])}
-            onChange={() => config(entrants.length, EngineCountry.france, EngineLength.short)}
+            onChange={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.short)}
           />
           <button
             type="button"
             disabled={configured(EngineCountry.france, EngineLength.short, instance?.commands?.[0])}
-            onClick={() => config(entrants.length, EngineCountry.france, EngineLength.short)}
+            onClick={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.short)}
           >
             France {entrants?.length >= 3 && '(short)'}
           </button>
@@ -106,12 +110,12 @@ export const GameSetup = () => {
             type="radio"
             disabled={configured(EngineCountry.ireland, EngineLength.short, instance?.commands?.[0])}
             checked={configured(EngineCountry.ireland, EngineLength.short, instance?.commands?.[0])}
-            onChange={() => config(entrants.length, EngineCountry.ireland, EngineLength.long)}
+            onChange={() => handleConfig(entrants.length, EngineCountry.ireland, EngineLength.long)}
           />
           <button
             type="button"
             disabled={configured(EngineCountry.ireland, EngineLength.short, instance?.commands?.[0])}
-            onClick={() => config(entrants.length, EngineCountry.ireland, EngineLength.long)}
+            onClick={() => handleConfig(entrants.length, EngineCountry.ireland, EngineLength.long)}
           >
             Ireland {entrants?.length >= 3 && '(short)'}
           </button>
@@ -119,7 +123,7 @@ export const GameSetup = () => {
         </>
       )}
       <p>Country variants contain a different set of buildings.</p>
-      <button type="button" disabled={!canStart}>
+      <button type="button" disabled={!canStart} onClick={handleStart}>
         Start Game
       </button>
       <hr />

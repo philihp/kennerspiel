@@ -55,8 +55,8 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
       return
     }
     const players = Math.max(newEntrant.entrant.length, 1)
-    const config = instance.commands[0].split(' ')
-    configureInstance(instance.id, `CONFIG ${players} ${config[2]} ${config[3]}`)
+    const oldConfig = instance.commands[0].split(' ')
+    config(instance.id, `CONFIG ${players} ${oldConfig[2]} ${oldConfig[3]}`)
   }
 }
 
@@ -82,17 +82,51 @@ export const toggleHidden = async (instanceId: string, hidden: boolean) => {
   }
 }
 
-export const configureInstance = async (instanceId: string, configString: string) => {
+export const config = async (instanceId: string, configString: string) => {
   const supabase = createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) {
-    console.error('ERROR: configureInstance has no user')
+    console.error('ERROR: config has no user')
     return
   }
   await supabase
     .from('instance')
     .update({ commands: [configString] })
     .eq('id', instanceId)
+}
+
+export const start = async (instanceId: string) => {
+  const supabase = createClient()
+  const { data: instance } = await supabase
+    .from('instance')
+    .select('commands, entrant(id)')
+    .eq('id', instanceId)
+    .single()
+  if (instance?.commands?.length !== 1) {
+    console.error(`ERROR: cannot START instance it should have exactly one CONFIG command ${instanceId}`)
+    return
+  }
+  if (instance?.entrant?.length === 0) {
+    console.error(`ERROR: cannot START instance because no entrants ${instanceId}`)
+    return
+  }
+
+  const seed = (Math.random() * 100000) | 0
+
+  const { data: entrants } = await supabase.from('entrant').select('color').eq('instance_id', instanceId)
+  const colors = (entrants ?? []).map((entrant) => entrant.color[0]?.toUpperCase())
+  console.log({ colors })
+
+  const { error: startError } = await supabase
+    .from('instance')
+    .update({
+      commands: [instance.commands[0], `START ${seed} ${colors}`],
+    })
+    .eq('id', instanceId)
+
+  if (startError) {
+    console.error(`ERROR: cannot START because ${startError}`)
+  }
 }
