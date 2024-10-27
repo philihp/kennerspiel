@@ -3,25 +3,23 @@
 import { GameStatusEnum } from 'hathora-et-labora-game/dist/types'
 import { GameSetup } from './gameSetup'
 import { useInstanceContext } from '@/context/InstanceContext'
+import { GamePlaying } from './gamePlaying'
 
 export const Board = () => {
-  const { gameState } = useInstanceContext()
+  const { state } = useInstanceContext()
 
-  if (gameState?.status === GameStatusEnum.SETUP)
+  if (state?.status === GameStatusEnum.SETUP)
     return (
       <>
         <GameSetup />
       </>
     )
 
-  if (gameState?.status === GameStatusEnum.FINISHED) return <>game finished</>
+  if (state?.status === GameStatusEnum.FINISHED) return <>game finished</>
 
   return (
     <>
-      <pre>{JSON.stringify({ gameState }, undefined, 2)}</pre>
-      <hr />
-      {/* <pre>{JSON.stringify({ s2, c2 }, undefined, 2)}</pre> */}
-      {/* <hr /> */}
+      <GamePlaying />
     </>
   )
 }

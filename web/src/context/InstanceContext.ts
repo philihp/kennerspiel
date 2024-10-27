@@ -1,17 +1,22 @@
 'use client'
 
-import { GameState, initialState, reducer } from 'hathora-et-labora-game'
+import { control, GameState, GameStatePlaying, initialState, reducer } from 'hathora-et-labora-game'
 import { createContext, createElement, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT, User } from '@supabase/supabase-js'
 import { Tables } from '@/supabase.types'
 import { useSupabaseContext } from './SupabaseContext'
 import { reject } from 'ramda'
+import { GameStatusEnum } from 'hathora-et-labora-game/dist/types'
 
 type InstanceContextType = {
   instance: Tables<'instance'>
   entrants: Tables<'entrant'>[]
   user?: User
-  gameState?: GameState
+  state?: GameState
+  gameState?: GameStatePlaying
+  partial: string
+  completion: string[]
+  setPartial: (partial: string) => void
 }
 
 type InstanceContextProviderProps = {
@@ -36,6 +41,8 @@ export const InstanceContextProvider = ({
   const { supabase } = useSupabaseContext()
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
+  const [partial, setPartial] = useState<string>('')
+  const [completion, setCompletion] = useState<string[]>([])
 
   useEffect(() => {
     const channel = supabase
@@ -83,12 +90,16 @@ export const InstanceContextProvider = ({
     }
   }, [supabase, instance, entrants])
 
-  const gameState = useMemo(() => {
-    const c1 = [...instance.commands].map((s) => s.split(' '))
-    return c1.reduce<GameState | undefined>(
+  const state = useMemo(() => {
+    const commands = [...instance.commands].map((s) => s.split(' '))
+    const state = commands.reduce<GameState | undefined>(
       reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined,
       initialState
     )
+    const p = partial.split(/\s+/).filter((s) => s)
+    const controls = control(state as GameStatePlaying, p)
+    setCompletion(controls.completion || [])
+    return state
   }, [instance])
 
   return createElement(
@@ -98,7 +109,11 @@ export const InstanceContextProvider = ({
         user: user === null ? undefined : user,
         instance,
         entrants,
-        gameState,
+        state,
+        gameState: state?.status === GameStatusEnum.PLAYING ? (state as GameStatePlaying) : undefined,
+        partial,
+        completion,
+        setPartial,
       },
     },
     children
