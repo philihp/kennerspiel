@@ -1,20 +1,23 @@
 'use client'
 
+import { MoveList } from '@/components/moveList'
 import { Actions } from '@/components/sliders/actions'
 import { useInstanceContext } from '@/context/InstanceContext'
 
 export const GamePlaying = () => {
-  const { gameState, instance } = useInstanceContext()
-  if (gameState === undefined) return <>Missing Game State</>
+  const { state, instance } = useInstanceContext()
+  if (state === undefined) return <>Missing Game State</>
 
-  const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = gameState
-  const soloNeutralBuild = gameState?.config?.players === 1 && !!gameState?.frame?.neutralBuildingPhase
+  const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = state
+  const soloNeutralBuild = state?.config?.players === 1 && !!state?.frame?.neutralBuildingPhase
 
   return (
     <>
-      <h1>Game Playing</h1>
-      <Actions />
-      <pre>{JSON.stringify(gameState, undefined, 2)}</pre>
+      {/* <Actions /> */}
+      <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr' }}>
+        <MoveList />
+        <pre>{JSON.stringify(state, undefined, 2)}</pre>
+      </div>
 
       <hr />
       <i>Last Updated: </i>

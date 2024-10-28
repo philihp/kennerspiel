@@ -116,7 +116,7 @@ export const start = async (instanceId: string) => {
   const seed = (Math.random() * 100000) | 0
 
   const { data: entrants } = await supabase.from('entrant').select('color').eq('instance_id', instanceId)
-  const colors = (entrants ?? []).map((entrant) => entrant.color[0]?.toUpperCase())
+  const colors = (entrants ?? []).map((entrant) => entrant.color[0]?.toUpperCase()).join(' ')
   console.log({ colors })
 
   const { error: startError } = await supabase

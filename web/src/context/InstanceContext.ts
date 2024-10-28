@@ -6,16 +6,16 @@ import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT, User } f
 import { Tables } from '@/supabase.types'
 import { useSupabaseContext } from './SupabaseContext'
 import { reject } from 'ramda'
-import { GameStatusEnum } from 'hathora-et-labora-game/dist/types'
+import { Controls, GameStateSetup, GameStatusEnum } from 'hathora-et-labora-game/dist/types'
 
 type InstanceContextType = {
   instance: Tables<'instance'>
   entrants: Tables<'entrant'>[]
   user?: User
-  state?: GameState
-  gameState?: GameStatePlaying
+  stateSetup?: GameStateSetup
+  state?: GameStatePlaying
   partial: string
-  completion: string[]
+  controls?: Controls
   setPartial: (partial: string) => void
 }
 
@@ -89,7 +89,7 @@ export const InstanceContextProvider = ({
     }
   }, [supabase, instance, entrants])
 
-  const state = useMemo(() => {
+  const gameState = useMemo(() => {
     const commands = [...instance.commands].map((s) => s.split(' '))
     return commands.reduce<GameState | undefined>(
       reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined,
@@ -97,12 +97,11 @@ export const InstanceContextProvider = ({
     )
   }, [instance])
 
-  const completion = useMemo(() => {
-    if (state?.status !== GameStatusEnum.PLAYING) return []
+  const controls = useMemo(() => {
+    if (gameState?.status !== GameStatusEnum.PLAYING) return undefined
     const p = partial.split(/\s+/).filter((s) => s)
-    const controls = control(state as GameStatePlaying, p)
-    return controls.completion || []
-  }, [state, partial])
+    return control(gameState as GameStatePlaying, p)
+  }, [gameState, partial])
 
   return createElement(
     InstanceContext.Provider,
@@ -111,10 +110,10 @@ export const InstanceContextProvider = ({
         user: user === null ? undefined : user,
         instance,
         entrants,
-        state,
-        gameState: state?.status === GameStatusEnum.PLAYING ? (state as GameStatePlaying) : undefined,
+        stateSetup: gameState?.status === GameStatusEnum.SETUP ? (gameState as GameStateSetup) : undefined,
+        state: gameState?.status === GameStatusEnum.PLAYING ? (gameState as GameStatePlaying) : undefined,
         partial,
-        completion,
+        controls,
         setPartial,
       },
     },

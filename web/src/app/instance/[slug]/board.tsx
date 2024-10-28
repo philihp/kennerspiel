@@ -6,9 +6,9 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import { GamePlaying } from './gamePlaying'
 
 export const Board = () => {
-  const { state } = useInstanceContext()
+  const { stateSetup, state } = useInstanceContext()
 
-  if (state?.status === GameStatusEnum.SETUP)
+  if (stateSetup)
     return (
       <>
         <GameSetup />
@@ -16,7 +16,6 @@ export const Board = () => {
     )
 
   if (state?.status === GameStatusEnum.FINISHED) return <>game finished</>
-
   return (
     <>
       <GamePlaying />
