@@ -4,12 +4,8 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 
 export const Actions = () => {
-  const { state, partial, completion, setPartial } = useInstanceContext() as {
-    state: GameStatePlaying
-    partial: string
-    completion: string[]
-    setPartial: (partial: string) => void
-  }
+  const { controls, state, partial, setPartial } = useInstanceContext()
+  const completion = controls?.completion ?? []
   const position = completion.length > 0 ? 80 : 0
 
   const handleSend = () => {
