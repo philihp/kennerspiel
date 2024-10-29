@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef } from 'react'
-import classes from './FrameModal.module.css'
+import classes from './frameModal.module.css'
 
 type Params = {
   openModal?: boolean
