@@ -4,6 +4,7 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import { Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { Tables } from '@/supabase.types'
 import { Frame } from './frame'
+import Image from 'next/image'
 
 const resetStyle = {
   margin: 0,
@@ -82,10 +83,10 @@ export const MoveList = () => {
                   {!current && active && '⌚️'}
                 </div>
                 <div style={{}}>
-                  <img
+                  <Image
                     title={user?.id}
-                    alt={user?.id}
-                    // src={user?.picture}
+                    alt={user?.id ?? ''}
+                    src={''}
                     height="32"
                     width="32"
                     style={{

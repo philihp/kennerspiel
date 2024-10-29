@@ -38,7 +38,7 @@ export const StatePlaying = () => {
           {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
           {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
           {wonders && <UnbuiltWonders wonders={wonders} />}
-          {rondel && config && <Rondel config={config} rondel={rondel} />}
+          {rondel && config && <Rondel rondel={rondel} />}
           {buildings && <UnbuiltBuildings buildings={buildings} />}
           {players &&
             pipe(

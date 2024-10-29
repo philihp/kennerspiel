@@ -1,4 +1,5 @@
 import { useInstanceContext } from '@/context/InstanceContext'
+import Image from 'next/image'
 
 interface Props {
   id: string
@@ -24,7 +25,7 @@ export const Erection = ({ id, primary, disabled, ghosted, onClick }: Props) => 
 
   return (
     <div style={{ display: 'inline-block' }}>
-      <img
+      <Image
         alt={id}
         style={{
           display: 'inline',

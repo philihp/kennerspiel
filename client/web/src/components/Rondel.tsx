@@ -20,7 +20,7 @@ const symbols = {
   stone: '🪨',
 }
 
-export const Rondel = ({ rondel, config }: Props) => {
+export const Rondel = () => {
   const { state, control } = useHathoraContext()
   const handleClick = () => {
     control(`${state?.control?.partial} Jo`)
