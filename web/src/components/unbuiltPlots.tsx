@@ -1,14 +1,18 @@
+import { match, P } from 'ts-pattern'
+
 interface Props {
   plots: number[]
 }
 
 export const UnbuiltPlots = ({ plots }: Props) => (
-  <div style={{ margin: 10 }}>
-    Plots:
-    {plots.map((plot, i) => (
-      <span style={{ padding: 3, margin: 3, border: '1px solid #DDD' }} key={i}>
-        {plot}
-      </span>
-    ))}
+  <div>
+    {match(plots)
+      .with([], () => 'no plots left')
+      .with([P.select('next', P.number), ...P.array(P.select('stack', P.number))], ({ next, stack }) => (
+        <>
+          Next Plot: [ graph ] for {next} and then costs are {stack.join(', ')}
+        </>
+      ))
+      .otherwise(() => '')}
   </div>
 )

@@ -1,14 +1,18 @@
+import { match, P } from 'ts-pattern'
+
 interface Props {
   districts: number[]
 }
 
 export const UnbuiltDistricts = ({ districts }: Props) => (
-  <div style={{ margin: 10 }}>
-    Districts:
-    {districts.map((district, i) => (
-      <span style={{ padding: 3, margin: 3, border: '1px solid #DDD' }} key={i}>
-        {district}
-      </span>
-    ))}
+  <div>
+    {match(districts)
+      .with([], () => 'no districts left')
+      .with([P.select('next', P.number), ...P.array(P.select('stack', P.number))], ({ next, stack }) => (
+        <>
+          Next District: [ graph ] for {next} and then costs are {stack.join(', ')}
+        </>
+      ))
+      .otherwise(() => '')}
   </div>
 )
