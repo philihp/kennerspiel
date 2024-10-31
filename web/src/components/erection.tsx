@@ -42,12 +42,7 @@ export const Erection = ({ id, primary, disabled, ghosted, onClick }: Props) => 
       {onClick !== undefined && (
         <>
           <br />
-          <button
-            className={primary || partial.includes(id) ? 'primary' : ''}
-            type="button"
-            onClick={onClick}
-            disabled={disabled}
-          >
+          <button className={`primary`} type="button" onClick={onClick} disabled={disabled}>
             {id}
           </button>
         </>

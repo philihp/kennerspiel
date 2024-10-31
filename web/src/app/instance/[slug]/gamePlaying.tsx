@@ -1,6 +1,7 @@
 'use client'
 
 import { MoveList } from '@/components/moveList'
+import { Player } from '@/components/player/player'
 import { Rondel } from '@/components/rondel'
 import { Actions } from '@/components/sliders/actions'
 import { UnbuiltBuildings } from '@/components/unbuiltBuildings'
@@ -8,23 +9,39 @@ import { UnbuiltDistricts } from '@/components/unbuiltDistricts'
 import { UnbuiltPlots } from '@/components/unbuiltPlots'
 import { UnbuiltWonders } from '@/components/unbuiltWonders'
 import { useInstanceContext } from '@/context/InstanceContext'
-import { Frame, GameStatePlaying } from 'hathora-et-labora-game'
-import { map, nth, pipe, unwind } from 'ramda'
+import { Enums } from '@/supabase.types'
+import { Frame, GameStatePlaying, Tableau } from 'hathora-et-labora-game'
+import { PlayerColor } from 'hathora-et-labora-game/dist/types'
+import { map, nth, pipe, range, unwind } from 'ramda'
+import { ReactNode } from 'react'
+import { match } from 'ts-pattern'
 
-// const playerOrdering = (state?: GameStatePlaying) => {
-//   if (state?.players.length === 1) return [0]
+const playerOrdering = (state?: GameStatePlaying) => {
+  if (state?.players.length === 1) return [0]
+  const frame = state?.frame
+  const config = state?.config
 
-//   return map(
-//     (n) => (n - (frame?.activePlayerIndex ?? 0) + (config?.players ?? 0)) % (config?.players ?? 0),
-//     range(0, config?.players)
-//   )
-// }
+  return map(
+    (n) => (n - (frame?.activePlayerIndex ?? 0) + (config?.players ?? 0)) % (config?.players ?? 0),
+    range(0, config?.players ?? 0)
+  )
+}
+
+const engineColorToEntrantColor = (c: PlayerColor): Enums<'color'> =>
+  match<PlayerColor, Enums<'color'>>(c)
+    .with(PlayerColor.Red, () => 'red')
+    .with(PlayerColor.Green, () => 'green')
+    .with(PlayerColor.Blue, () => 'blue')
+    .with(PlayerColor.White, () => 'white')
+    .exhaustive()
 
 export const GamePlaying = () => {
-  const { state, instance } = useInstanceContext()
+  const { state, user, controls, entrants, instance } = useInstanceContext()
   if (state === undefined) return <>Missing Game State</>
 
   const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = state
+
+  const playerOrder = playerOrdering(state)
   const soloNeutralBuild = state?.config?.players === 1 && !!state?.frame?.neutralBuildingPhase
 
   return (
@@ -39,31 +56,18 @@ export const GamePlaying = () => {
           <Rondel />
           {buildings && <UnbuiltBuildings buildings={buildings} />}
 
-          {/* {players &&
-            pipe(
-              map<EngineTableau, ReactNode>((player) => {
-                return (
-                  <Player
-                    key={player.color}
-                    player={player}
-                    active={
-                      (!!state?.control &&
-                        !soloNeutralBuild &&
-                        state?.users?.find((u) => u.color === player.color)?.id === state?.me?.id) ||
-                      (soloNeutralBuild &&
-                        !!state?.control?.partial?.startsWith('BUILD') &&
-                        player === state?.players?.[1]) ||
-                      (soloNeutralBuild &&
-                        !!state?.control?.partial?.startsWith('SETTLE') &&
-                        player === state?.players?.[0])
-                    }
-                  />
-                )
-              }),
-              unwind(playerOrdering(state.config, state.frame)),
-              nth(0)
+          {players &&
+            pipe<[Tableau[]], ReactNode[]>(
+              map<Tableau, ReactNode>((tableau) => {
+                const entrant = entrants.find((e) => e.color === engineColorToEntrantColor(tableau?.color))
+                const active =
+                  (controls !== undefined && !soloNeutralBuild && entrant?.profile_id === user?.id) ||
+                  (soloNeutralBuild && controls?.partial?.[0] === 'BUILD' && tableau === players?.[1]) ||
+                  (soloNeutralBuild && controls?.partial?.[0] === 'SETTLE' && tableau === players?.[0])
+                return <Player key={tableau.color} tableau={tableau} active={active} />
+              })
             )(players)}
-          <Debug /> */}
+          {/*           <Debug /> */}
         </div>
         {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
       </div>

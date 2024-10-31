@@ -11,7 +11,7 @@ export const ActionConvert = () => {
   const disabled = !(controls?.completion ?? []).includes('CONVERT')
 
   return (
-    <button type="button" disabled={disabled} className={`primary ${classes.action}`} onClick={handleClick}>
+    <button type="button" disabled={disabled} className={`${classes.action}`} onClick={handleClick}>
       Convert
     </button>
   )

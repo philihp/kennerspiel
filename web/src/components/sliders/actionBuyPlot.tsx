@@ -11,7 +11,7 @@ export const ActionBuyPlot = () => {
   const disabled = !(controls?.completion ?? []).includes('BUY_PLOT')
 
   return (
-    <button type="button" disabled={disabled} className={`primary ${classes.action}`} onClick={handleClick}>
+    <button type="button" disabled={disabled} className={`${classes.action}`} onClick={handleClick}>
       Buy Plot
     </button>
   )

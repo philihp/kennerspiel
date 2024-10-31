@@ -10,7 +10,7 @@ interface WorkerProps {
   style: CSSProperties | undefined
 }
 
-const colorToStyle = (color: string) => {
+const colorToStyle = (color: string): CSSProperties => {
   const baseStyle = {
     height: 24,
     width: 24,
