@@ -2,10 +2,10 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 
 export const ActionWorkContract = () => {
-  const { controls } = useInstanceContext()
+  const { controls, addPartial } = useInstanceContext()
 
   const handleClick = () => {
-    // control('WORK_CONTRACT')
+    addPartial('WORK_CONTRACT')
   }
 
   const disabled = !(controls?.completion ?? []).includes('WORK_CONTRACT')

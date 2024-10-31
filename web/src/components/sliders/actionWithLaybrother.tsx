@@ -2,10 +2,10 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 
 export const ActionWithLaybrother = () => {
-  const { controls } = useInstanceContext()
+  const { controls, addPartial } = useInstanceContext()
 
   const handleClick = () => {
-    // control('WITH_LAYBROTHER')
+    addPartial('WITH_LAYBROTHER')
   }
 
   const disabled = !(controls?.completion ?? []).includes('WITH_LAYBROTHER')

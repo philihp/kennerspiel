@@ -2,10 +2,10 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 
 export const ActionCutPeat = () => {
-  const { controls } = useInstanceContext()
+  const { controls, addPartial } = useInstanceContext()
 
   const handleClick = () => {
-    // control('CUT_PEAT')
+    addPartial('CUT_PEAT')
   }
 
   const disabled = !(controls?.completion ?? []).includes('CUT_PEAT')

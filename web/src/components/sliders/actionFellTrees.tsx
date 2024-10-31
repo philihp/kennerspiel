@@ -2,10 +2,10 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 
 export const ActionFellTrees = () => {
-  const { controls } = useInstanceContext()
+  const { controls, addPartial } = useInstanceContext()
 
   const handleClick = () => {
-    // control('FELL_TREES')
+    addPartial('FELL_TREES')
   }
 
   const disabled = !(controls?.completion ?? []).includes('FELL_TREES')

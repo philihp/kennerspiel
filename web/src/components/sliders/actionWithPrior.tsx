@@ -2,10 +2,10 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 
 export const ActionWithPrior = () => {
-  const { controls } = useInstanceContext()
+  const { controls, addPartial } = useInstanceContext()
 
   const handleClick = () => {
-    // control('WITH_PRIOR')
+    addPartial('WITH_PRIOR')
   }
 
   const disabled = !(controls?.completion ?? []).includes('WITH_PRIOR')

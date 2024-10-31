@@ -2,10 +2,10 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 
 export const ActionConvert = () => {
-  const { controls } = useInstanceContext()
+  const { controls, addPartial } = useInstanceContext()
 
   const handleClick = () => {
-    // control('CONVERT')
+    addPartial('CONVERT')
   }
 
   const disabled = !(controls?.completion ?? []).includes('CONVERT')

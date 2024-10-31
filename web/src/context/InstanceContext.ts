@@ -14,9 +14,10 @@ type InstanceContextType = {
   user?: User
   stateSetup?: GameStateSetup
   state?: GameStatePlaying
-  partial: string
+  partial: string[]
   controls?: Controls
-  setPartial: (partial: string) => void
+  addPartial: (command: string) => void
+  clearPartial: () => void
 }
 
 type InstanceContextProviderProps = {
@@ -41,7 +42,7 @@ export const InstanceContextProvider = ({
   const { supabase } = useSupabaseContext()
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
-  const [partial, setPartial] = useState<string>('')
+  const [partial, setPartial] = useState<string[]>([])
 
   useEffect(() => {
     const channel = supabase
@@ -99,9 +100,15 @@ export const InstanceContextProvider = ({
 
   const controls = useMemo(() => {
     if (gameState?.status !== GameStatusEnum.PLAYING) return undefined
-    const p = partial.split(/\s+/).filter((s) => s)
-    return control(gameState as GameStatePlaying, p)
+    return control(gameState as GameStatePlaying, partial)
   }, [gameState, partial])
+
+  const addPartial = (command: string) => {
+    setPartial([...partial, command])
+  }
+  const clearPartial = () => {
+    setPartial([])
+  }
 
   return createElement(
     InstanceContext.Provider,
@@ -114,7 +121,8 @@ export const InstanceContextProvider = ({
         state: gameState?.status === GameStatusEnum.PLAYING ? (gameState as GameStatePlaying) : undefined,
         partial,
         controls,
-        setPartial,
+        addPartial,
+        clearPartial,
       },
     },
     children

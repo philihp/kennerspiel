@@ -15,41 +15,48 @@ import { ActionConvert } from './actionConvert'
 import { ActionSettle } from './actionSettle'
 
 export const Actions = () => {
-  const { controls, state, partial, setPartial } = useInstanceContext()
+  const { controls, state, partial, clearPartial } = useInstanceContext()
   const completion = controls?.completion ?? []
+
+  const handleClear = () => {
+    clearPartial()
+  }
 
   const handleSend = () => {
     if (partial) {
-      setPartial('')
+      // setPartial('')
     }
   }
 
   return (
     <>
+      <div>
+        Partial ({partial.length}): {partial.join(' ')}
+        <button type="button" onClick={handleClear}>
+          &#x25C3;
+        </button>
+      </div>
       <div className={classes.container}>
-        {partial === '' && (
+        {completion?.includes('WITH_LAYBROTHER') === true && (
           <>
-            {completion?.includes('WITH_LAYBROTHER') === true && (
-              <>
-                <ActionWithLaybrother />
-                <ActionWithPrior />
-              </>
-            )}
-            {completion?.includes('WITH_LAYBROTHER') === false && (
-              <>
-                <ActionCutPeat />
-                <ActionFellTrees />
-                <ActionBuild />
-                <ActionUse />
-                <ActionWorkContract />
-                <ActionBuyPlot />
-                <ActionBuyDistrict />
-                <ActionConvert />
-                <ActionSettle />
-              </>
-            )}
+            <ActionWithLaybrother />
+            <ActionWithPrior />
           </>
         )}
+        {completion?.includes('WITH_LAYBROTHER') === false && (
+          <>
+            <ActionCutPeat />
+            <ActionFellTrees />
+            <ActionBuild />
+            <ActionUse />
+            <ActionWorkContract />
+            <ActionBuyPlot />
+            <ActionBuyDistrict />
+            <ActionConvert />
+            <ActionSettle />
+          </>
+        )}
+
         {/* {partial === '' && (
           <>
             <button type="button" className={classes.action} onClick={() => setPartial('')}>
