@@ -118,10 +118,10 @@ export const MoveList = () => {
       {controls !== undefined && (
         <>
           <button type="button" onClick={handleUndo}>
-            Undo
+            &#x25C0; Undo
           </button>
           <button type="button" onClick={handleRedo}>
-            Redo
+            Redo &#x25B6;
           </button>
         </>
       )}
