@@ -29,10 +29,10 @@ export const GamePlaying = () => {
 
   return (
     <>
-      {/* <Actions /> */}
-      <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr 1fr' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr' }}>
         <MoveList />
         <div>
+          <Actions />
           {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
           {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
           {wonders && <UnbuiltWonders wonders={wonders} />}
@@ -65,7 +65,7 @@ export const GamePlaying = () => {
             )(players)}
           <Debug /> */}
         </div>
-        <pre>{JSON.stringify(state, undefined, 2)}</pre>
+        {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
       </div>
 
       <hr />

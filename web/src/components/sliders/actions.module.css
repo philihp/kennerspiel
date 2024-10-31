@@ -1,31 +1,13 @@
 .action {
-  flex: 1 1 0;
   margin: 5px;
 }
 
-.action:active:enabled {
-  background-color: #f2f2f2;
-}
 .action:disabled {
   cursor: auto;
 }
 
 .container {
-  display: flex;
-  flex-flow: row nowrap;
-
-  justify-content: space-between;
-
-  position: fixed;
-  height: 50px;
-  width: 700px;
-  top: -80px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  padding: 0 5px;
-
-  filter: drop-shadow(2px 2px 5px rgba(255, 255, 255, 0.25));
+  /* filter: drop-shadow(2px 2px 5px rgba(255, 255, 255, 0.25));
   background: rgba(255, 255, 255, 0.38);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -38,5 +20,5 @@
   border-color: rgba(255, 255, 255, 0.21);
 
   transition: transform 500ms;
-  transition-timing-function: cubic-bezier(0.15, 0.1, 0.25, 1);
+  transition-timing-function: cubic-bezier(0.15, 0.1, 0.25, 1); */
 }

@@ -2,11 +2,21 @@ import { GameStatePlaying } from 'hathora-et-labora-game'
 
 import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
+import { ActionWithLaybrother } from './actionWithLaybrother'
+import { ActionWithPrior } from './actionWithPrior'
+import { ActionCutPeat } from './actionCutPeat'
+import { ActionFellTrees } from './actionFellTrees'
+import { ActionBuild } from './actionBuild'
+import { ActionUse } from './actionUse'
+import { ActionWorkContract } from './actionWorkContract'
+import { ActionBuyPlot } from './actionBuyPlot'
+import { ActionBuyDistrict } from './actionBuyDistrict'
+import { ActionConvert } from './actionConvert'
+import { ActionSettle } from './actionSettle'
 
 export const Actions = () => {
   const { controls, state, partial, setPartial } = useInstanceContext()
   const completion = controls?.completion ?? []
-  const position = completion.length > 0 ? 80 : 0
 
   const handleSend = () => {
     if (partial) {
@@ -16,31 +26,31 @@ export const Actions = () => {
 
   return (
     <>
-      <div className={classes.container} style={{ transform: `translateY(${position}px)` }}>
+      <div className={classes.container}>
         {partial === '' && (
           <>
             {completion?.includes('WITH_LAYBROTHER') === true && (
               <>
-                <div>ActionWithLaybrother</div>
-                <div>ActionwithPrior</div>
+                <ActionWithLaybrother />
+                <ActionWithPrior />
               </>
             )}
             {completion?.includes('WITH_LAYBROTHER') === false && (
               <>
-                <div>ActionCutPeat</div>
-                <div>ActionFellTrees</div>
-                <div>ActionBuild</div>
-                <div>ActionUse</div>
-                <div>ActionWorkContract</div>
-                <div>ActionBuyPlot</div>
-                <div>ActionBuyDistrict</div>
-                <div>ActionConvert</div>
-                <div>ActionSettle</div>
+                <ActionCutPeat />
+                <ActionFellTrees />
+                <ActionBuild />
+                <ActionUse />
+                <ActionWorkContract />
+                <ActionBuyPlot />
+                <ActionBuyDistrict />
+                <ActionConvert />
+                <ActionSettle />
               </>
             )}
           </>
         )}
-        {partial === '' && (
+        {/* {partial === '' && (
           <>
             <button type="button" className={classes.action} onClick={() => setPartial('')}>
               Clear
@@ -58,7 +68,7 @@ export const Actions = () => {
               Send Move
             </button>
           </>
-        )}
+        )} */}
       </div>
     </>
   )
