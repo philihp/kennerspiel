@@ -32,7 +32,7 @@ export const Actions = () => {
     <>
       <div>
         Partial ({partial.length}): {partial.join(' ')}
-        <button type="button" onClick={handleClear}>
+        <button type="button" disabled={controls?.partial?.length === 0} onClick={handleClear}>
           &#x25C3;
         </button>
       </div>

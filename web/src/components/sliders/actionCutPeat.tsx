@@ -11,7 +11,7 @@ export const ActionCutPeat = () => {
   const disabled = !(controls?.completion ?? []).includes('CUT_PEAT')
 
   return (
-    <button type="button" disabled={disabled} className={`primary ${classes.action}`} onClick={handleClick}>
+    <button type="button" disabled={disabled} className={`${classes.action} ${classes.primary}`} onClick={handleClick}>
       Cut Peat
     </button>
   )

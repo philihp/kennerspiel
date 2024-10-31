@@ -1,5 +1,6 @@
 html,
 body {
+  background-color: rgba(230,230,230,1);
   text-rendering: geometricPrecision;
 }
 
