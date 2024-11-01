@@ -60,7 +60,6 @@ export const Player = ({ tableau, active }: TableauProps) => {
         marginBottom: 5,
       }}
     >
-      {JSON.stringify({ active })}
       <PlayerClergy clergy={clergy} color={color} active={active} />
       <PlayerResources {...resources} />
       <PlayerLandscape landscape={landscape} offset={landscapeOffset} active={active} />

@@ -72,7 +72,6 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                     key={`${rowId}:${colIndex}`}
                     rowSpan={land === 'M' ? 2 : 1}
                   >
-                    {JSON.stringify({ active })}
                     {building && (
                       <Erection
                         primary={primary || (active && completion.includes(key))}
