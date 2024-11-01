@@ -1,5 +1,5 @@
 'use client'
-
+import { curried as unwind } from 'sort-unwind'
 import { MoveList } from '@/components/moveList'
 import { Player } from '@/components/player/player'
 import { Rondel } from '@/components/rondel'
@@ -10,9 +10,9 @@ import { UnbuiltPlots } from '@/components/unbuiltPlots'
 import { UnbuiltWonders } from '@/components/unbuiltWonders'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Enums } from '@/supabase.types'
-import { Frame, GameStatePlaying, Tableau } from 'hathora-et-labora-game'
+import { GameStatePlaying, Tableau } from 'hathora-et-labora-game'
 import { PlayerColor } from 'hathora-et-labora-game/dist/types'
-import { map, nth, pipe, range, unwind } from 'ramda'
+import { map, nth, pipe, range } from 'ramda'
 import { ReactNode } from 'react'
 import { match } from 'ts-pattern'
 
@@ -39,10 +39,32 @@ export const GamePlaying = () => {
   const { state, user, controls, entrants, instance, active } = useInstanceContext()
   if (state === undefined) return <>Missing Game State</>
 
-  const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = state
+  const { players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = state
 
   const playerOrder = playerOrdering(state)
   const soloNeutralBuild = state?.config?.players === 1 && !!state?.frame?.neutralBuildingPhase
+
+  const unwinder: (src: Tableau[]) => [Tableau[], number[]] = unwind(playerOrder)
+  const zeroth = (src: [Tableau[], number[]]): Tableau[] => src[0]
+
+  const tableauToReact = map<Tableau, ReactNode>((tableau) => {
+    const entrant = entrants.find((e) => e.color === engineColorToEntrantColor(tableau?.color))
+    const playerActive =
+      active &&
+      ((controls !== undefined && !soloNeutralBuild && entrant?.profile_id === user?.id) ||
+        (soloNeutralBuild && controls?.partial?.[0] === 'BUILD' && tableau === players?.[1]) ||
+        (soloNeutralBuild && controls?.partial?.[0] === 'SETTLE' && tableau === players?.[0]))
+    return (
+      <div key={tableau.color}>
+        <Player tableau={tableau} active={playerActive} />
+      </div>
+    )
+  })
+  const playerBoards = pipe<[Tableau[]], [Tableau[], number[]], Tableau[], ReactNode[]>(
+    unwinder,
+    zeroth,
+    tableauToReact
+  )(players)
 
   return (
     <>
@@ -55,26 +77,8 @@ export const GamePlaying = () => {
           {wonders && <UnbuiltWonders wonders={wonders} />}
           <Rondel />
           {buildings && <UnbuiltBuildings buildings={buildings} />}
-
-          {players &&
-            pipe<[Tableau[]], ReactNode[]>(
-              map<Tableau, ReactNode>((tableau) => {
-                const entrant = entrants.find((e) => e.color === engineColorToEntrantColor(tableau?.color))
-                const playerActive =
-                  active &&
-                  ((controls !== undefined && !soloNeutralBuild && entrant?.profile_id === user?.id) ||
-                    (soloNeutralBuild && controls?.partial?.[0] === 'BUILD' && tableau === players?.[1]) ||
-                    (soloNeutralBuild && controls?.partial?.[0] === 'SETTLE' && tableau === players?.[0]))
-                return (
-                  <div key={tableau.color}>
-                    <Player tableau={tableau} active={playerActive} />
-                  </div>
-                )
-              })
-            )(players)}
-          {/*           <Debug /> */}
+          {playerBoards}
         </div>
-        {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
       </div>
 
       <hr />
