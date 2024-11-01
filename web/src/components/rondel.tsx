@@ -33,7 +33,6 @@ export const Rondel = () => {
       <table style={{ borderCollapse: 'collapse' }}>
         <thead>
           <tr>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <td />
             {addIndex<number, ReactNode>(map)(
               (value: number, i: number) => (

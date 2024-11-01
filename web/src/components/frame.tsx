@@ -9,15 +9,14 @@ const colorToChar = (color?: string): string => {
 }
 
 type FrameParams = {
-  key: number
   frame: Flower
 }
 
-export const Frame = ({ key, frame }: FrameParams) => {
+export const Frame = ({ frame }: FrameParams) => {
   const [modal, setModal] = useState<boolean>(false)
 
   return (
-    <li key={key}>
+    <>
       {frame.settle && `Settle ${colorToChar(frame.player)}`}
       {!frame.settle && frame.bonus && `Bonus ${colorToChar(frame.player)}`}
       {!frame.settle && !frame.bonus && `Round ${frame.round} ${colorToChar(frame.player)}`}
@@ -49,14 +48,14 @@ export const Frame = ({ key, frame }: FrameParams) => {
             )}
             {map((bid) => {
               if (bid.length === 3) return <Erection key={bid} id={bid} />
-              if (bid === 'joker') return <div>The 🃏 joker token will be added to the rondel at zero</div>
-              if (bid === 'stone') return <div>The 🪨 stone token will be added to the rondel at zero</div>
-              if (bid === 'grape') return <div>The 🍇 grape token will be added to the rondel at zero</div>
+              if (bid === 'joker') return <div key={bid}>The 🃏 joker token will be added to the rondel at zero</div>
+              if (bid === 'stone') return <div key={bid}>The 🪨 stone token will be added to the rondel at zero</div>
+              if (bid === 'grape') return <div key={bid}>The 🍇 grape token will be added to the rondel at zero</div>
               return null
             }, frame.introduced)}
           </FrameModal>
         </span>
       )}
-    </li>
+    </>
   )
 }

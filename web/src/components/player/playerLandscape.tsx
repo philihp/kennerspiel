@@ -26,6 +26,8 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
   const { controls, addPartial } = useInstanceContext()
   const partial = controls?.partial ?? []
   const command = head(partial) ?? ''
+  const completion = controls?.completion ?? []
+
   return (
     <table style={{ borderCollapse: 'collapse' }}>
       <tbody>
@@ -34,17 +36,16 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
           return (
             <tr key={JSON.stringify(row)}>
               {row.map((tile, colIndex) => {
-                // eslint-disable-next-line react/no-array-index-key, jsx-a11y/control-has-associated-label
                 if (tile.length === 0) return <td key={`${rowId}:${colIndex}`} />
                 const [land, building, clergy] = tile
                 const key = `${colIndex - 2} ${rowId}`
-                const selectable =
-                  (active && controls?.completion?.includes(key)) || controls?.completion?.includes(building as string)
+                const selectable = (active && completion?.includes(key)) || completion?.includes(building as string)
+
                 const handleClick = () => {
-                  if (controls?.completion?.includes(key)) {
+                  if (completion?.includes(key)) {
                     addPartial(`${key}`)
                   }
-                  if (controls?.completion?.includes(building as string)) {
+                  if (completion?.includes(building as string)) {
                     addPartial(`${building}`)
                   }
                 }
@@ -54,7 +55,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                   (command === 'CUT_PEAT' && active && building === 'LMO') ||
                   (command === 'USE' && active && !['LFO', 'LMO'].includes(building as string)) ||
                   (command === 'WORK_CONTRACT' && !active && !['LFO', 'LMO'].includes(building as string)) ||
-                  controls?.completion?.includes(building as string)
+                  completion?.includes(building as string)
 
                 if (land === '.') return null
                 return (
@@ -68,13 +69,13 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                       textAlign: 'center',
                       backgroundColor: landToColor(land),
                     }}
-                    // eslint-disable-next-line react/no-array-index-key
                     key={`${rowId}:${colIndex}`}
                     rowSpan={land === 'M' ? 2 : 1}
                   >
+                    {JSON.stringify({ active })}
                     {building && (
                       <Erection
-                        primary={primary || (active && partial.includes(key))}
+                        primary={primary || (active && completion.includes(key))}
                         key={building}
                         id={building}
                         disabled={!selectable}

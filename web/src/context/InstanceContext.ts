@@ -16,8 +16,13 @@ type InstanceContextType = {
   state?: GameStatePlaying
   partial: string[]
   controls?: Controls
+  commands: string[]
+  active: boolean
   addPartial: (command: string) => void
   clearPartial: () => void
+  move: () => Promise<void>
+  undo?: () => void
+  redo?: () => void
 }
 
 type InstanceContextProviderProps = {
@@ -43,8 +48,19 @@ export const InstanceContextProvider = ({
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
   const [partial, setPartial] = useState<string[]>([])
+  const [commands, setCommands] = useState<string[]>(providedInstance.commands)
+
+  const instanceId = instance.id
 
   useEffect(() => {
+    console.log({
+      listenFilter: {
+        table: 'instance',
+        event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE,
+        schema: 'public',
+        filter: `id=eq.${instanceId}`,
+      },
+    })
     const channel = supabase
       ?.channel('schema-db-changes')
       .on(
@@ -53,9 +69,10 @@ export const InstanceContextProvider = ({
           table: 'instance',
           event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE,
           schema: 'public',
-          filter: `id=eq.${instance.id}`,
+          filter: `id=eq.${instanceId}`,
         },
         (payload) => {
+          console.log({ payload })
           setInstance(payload.new as Tables<'instance'>)
         }
       )
@@ -65,7 +82,7 @@ export const InstanceContextProvider = ({
           table: 'entrant',
           event: '*',
           schema: 'public',
-          filter: `instance_id=eq.${instance.id}`,
+          filter: `instance_id=eq.${instanceId}`,
         },
         (payload) => {
           switch (payload.eventType) {
@@ -88,15 +105,15 @@ export const InstanceContextProvider = ({
     return () => {
       channel?.unsubscribe()
     }
-  }, [supabase, instance, entrants])
+  }, [supabase, instanceId, entrants])
 
   const gameState = useMemo(() => {
-    const commands = [...instance.commands].map((s) => s.split(' '))
-    return commands.reduce<GameState | undefined>(
-      reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined,
-      initialState
-    )
-  }, [instance])
+    return [...commands]
+      .map((s) => s.split(' '))
+      .reduce<
+        GameState | undefined
+      >(reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined, initialState)
+  }, [commands])
 
   const controls = useMemo(() => {
     if (gameState?.status !== GameStatusEnum.PLAYING) return undefined
@@ -104,11 +121,42 @@ export const InstanceContextProvider = ({
   }, [gameState, partial])
 
   const addPartial = (command: string) => {
-    setPartial([...partial, command])
+    setPartial([...partial, ...command.split(' ').filter((s) => s)])
   }
   const clearPartial = () => {
     setPartial([])
   }
+
+  const move = async () => {
+    if (!supabase) return
+    const newCommands = [...commands, partial.join(' ')]
+    const { error } = await supabase
+      .from('instance')
+      .update({ commands: newCommands, updated_at: new Date().toISOString() })
+      .eq('id', instance.id)
+    if (error) {
+      console.error(error)
+      return
+    }
+    setPartial([])
+    setCommands(newCommands)
+  }
+
+  const undo =
+    commands.length <= 2
+      ? undefined
+      : () => {
+          setCommands(instance.commands.slice(0, Math.max(2, commands.length - 1)))
+        }
+
+  const redo =
+    commands.length === instance.commands.length
+      ? undefined
+      : () => {
+          setCommands(instance.commands.slice(0, commands.length + 1))
+        }
+
+  const active = true
 
   return createElement(
     InstanceContext.Provider,
@@ -121,8 +169,13 @@ export const InstanceContextProvider = ({
         state: gameState?.status === GameStatusEnum.PLAYING ? (gameState as GameStatePlaying) : undefined,
         partial,
         controls,
+        commands,
+        active,
         addPartial,
         clearPartial,
+        move,
+        undo,
+        redo,
       },
     },
     children

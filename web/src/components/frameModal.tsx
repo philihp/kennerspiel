@@ -7,7 +7,7 @@ type Params = {
   children: ReactNode | ReactNode[]
 }
 
-export const FrameModal = ({ children, openModal, closeModal }: Params) => {
+export const FrameModal = ({ children, openModal = false, closeModal = () => {} }: Params) => {
   const ref = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -34,9 +34,4 @@ export const FrameModal = ({ children, openModal, closeModal }: Params) => {
       </form>
     </dialog>
   )
-}
-
-FrameModal.defaultProps = {
-  openModal: false,
-  closeModal: () => {},
 }

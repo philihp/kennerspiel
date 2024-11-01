@@ -7,7 +7,6 @@ import { PlayerWonders } from './playerWonders'
 import { PlayerSettlements } from './playerSettlements'
 
 type TableauProps = {
-  key: string
   tableau: Tableau
   active: boolean
 }
@@ -47,10 +46,11 @@ const colorToChar = (c?: PlayerColor): string => {
   }
 }
 
-export const Player = ({ key, tableau, active }: TableauProps) => {
+export const Player = ({ tableau, active }: TableauProps) => {
   const { color, clergy, landscape, landscapeOffset, settlements, wonders, ...resources } = tableau
   return (
     <div
+      key={color}
       style={{
         borderWidth: 1,
         borderRadius: 16,
@@ -60,8 +60,8 @@ export const Player = ({ key, tableau, active }: TableauProps) => {
         marginBottom: 5,
       }}
     >
+      {JSON.stringify({ active })}
       <PlayerClergy clergy={clergy} color={color} active={active} />
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <PlayerResources {...resources} />
       <PlayerLandscape landscape={landscape} offset={landscapeOffset} active={active} />
       <PlayerWonders wonders={wonders} />

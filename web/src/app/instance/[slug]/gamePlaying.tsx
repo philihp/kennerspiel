@@ -36,7 +36,7 @@ const engineColorToEntrantColor = (c: PlayerColor): Enums<'color'> =>
     .exhaustive()
 
 export const GamePlaying = () => {
-  const { state, user, controls, entrants, instance } = useInstanceContext()
+  const { state, user, controls, entrants, instance, active } = useInstanceContext()
   if (state === undefined) return <>Missing Game State</>
 
   const { rondel, config, players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = state
@@ -60,11 +60,16 @@ export const GamePlaying = () => {
             pipe<[Tableau[]], ReactNode[]>(
               map<Tableau, ReactNode>((tableau) => {
                 const entrant = entrants.find((e) => e.color === engineColorToEntrantColor(tableau?.color))
-                const active =
-                  (controls !== undefined && !soloNeutralBuild && entrant?.profile_id === user?.id) ||
-                  (soloNeutralBuild && controls?.partial?.[0] === 'BUILD' && tableau === players?.[1]) ||
-                  (soloNeutralBuild && controls?.partial?.[0] === 'SETTLE' && tableau === players?.[0])
-                return <Player key={tableau.color} tableau={tableau} active={active} />
+                const playerActive =
+                  active &&
+                  ((controls !== undefined && !soloNeutralBuild && entrant?.profile_id === user?.id) ||
+                    (soloNeutralBuild && controls?.partial?.[0] === 'BUILD' && tableau === players?.[1]) ||
+                    (soloNeutralBuild && controls?.partial?.[0] === 'SETTLE' && tableau === players?.[0]))
+                return (
+                  <div key={tableau.color}>
+                    <Player tableau={tableau} active={playerActive} />
+                  </div>
+                )
               })
             )(players)}
           {/*           <Debug /> */}

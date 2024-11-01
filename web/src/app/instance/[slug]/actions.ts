@@ -117,14 +117,14 @@ export const start = async (instanceId: string) => {
 
   const { data: entrants } = await supabase.from('entrant').select('color').eq('instance_id', instanceId)
   const colors = (entrants ?? []).map((entrant) => entrant.color[0]?.toUpperCase()).join(' ')
-  console.log({ colors })
 
-  const { error: startError } = await supabase
-    .from('instance')
-    .update({
-      commands: [instance.commands[0], `START ${seed} ${colors}`],
-    })
-    .eq('id', instanceId)
+  const updateSet = {
+    commands: [instance.commands[0], `START ${seed} ${colors}`],
+    updated_at: new Date().toISOString(),
+  }
+  const { error: startError } = await supabase.from('instance').update(updateSet).eq('id', instanceId)
+
+  console.log({ updateSet })
 
   if (startError) {
     console.error(`ERROR: cannot START because ${startError}`)

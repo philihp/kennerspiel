@@ -54,10 +54,3 @@ export const Erection = ({ id, primary, disabled, ghosted, onClick }: Props) => 
     </div>
   )
 }
-
-Erection.defaultProps = {
-  primary: false,
-  disabled: true,
-  ghosted: false,
-  onClick: undefined,
-}

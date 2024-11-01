@@ -1,18 +1,18 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 
-export const ActionSettle = () => {
+export const ActionCommit = () => {
   const { controls, addPartial, active } = useInstanceContext()
 
   const handleClick = () => {
-    addPartial('SETTLE')
+    addPartial('COMMIT')
   }
 
-  const disabled = !active || !(controls?.completion ?? []).includes('SETTLE')
+  const disabled = !active || !(controls?.completion ?? []).includes('COMMIT')
 
   return (
     <button type="button" disabled={disabled} className={`${classes.action} ${classes.primary}`} onClick={handleClick}>
-      Settle
+      Commit
     </button>
   )
 }

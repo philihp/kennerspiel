@@ -4,6 +4,8 @@ import { Seat } from '@/components/seat'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { EngineCountry, EngineLength } from '@/types'
 import { config, start, toggleHidden } from './actions'
+import { revalidatePath } from 'next/cache'
+import { redirect, RedirectType } from 'next/navigation'
 
 const configured = (country: EngineCountry, length: EngineLength, firstCommand: string = '') =>
   firstCommand.includes(country.toLowerCase()) && firstCommand.includes(length.toLowerCase())
@@ -23,8 +25,8 @@ export const GameSetup = () => {
     config(instance.id, `CONFIG ${Math.max(players, 1)} ${country.toLowerCase()} ${length.toLowerCase()}`)
   }
 
-  const handleStart = () => {
-    start(instance.id)
+  const handleStart = async () => {
+    await start(instance.id)
   }
 
   return (

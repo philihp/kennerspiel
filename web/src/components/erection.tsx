@@ -19,7 +19,7 @@ const decolor = (id: string) => {
 
 const multiplier = 0.7
 
-export const Erection = ({ id, primary, disabled, ghosted, onClick }: Props) => {
+export const Erection = ({ id, primary = false, disabled = true, ghosted = false, onClick = () => {} }: Props) => {
   const { controls, state } = useInstanceContext()
   const partial = controls?.partial ?? ''
 
@@ -49,11 +49,4 @@ export const Erection = ({ id, primary, disabled, ghosted, onClick }: Props) => 
       )}
     </div>
   )
-}
-
-Erection.defaultProps = {
-  primary: false,
-  disabled: true,
-  ghosted: false,
-  onClick: undefined,
 }

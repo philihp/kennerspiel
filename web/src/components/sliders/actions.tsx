@@ -13,9 +13,10 @@ import { ActionBuyPlot } from './actionBuyPlot'
 import { ActionBuyDistrict } from './actionBuyDistrict'
 import { ActionConvert } from './actionConvert'
 import { ActionSettle } from './actionSettle'
+import { ActionCommit } from './actionCommit'
 
 export const Actions = () => {
-  const { controls, state, partial, clearPartial } = useInstanceContext()
+  const { controls, state, partial, clearPartial, move, active } = useInstanceContext()
   const completion = controls?.completion ?? []
 
   const handleClear = () => {
@@ -23,18 +24,26 @@ export const Actions = () => {
   }
 
   const handleSend = () => {
-    if (partial) {
-      // setPartial('')
-    }
+    move()
   }
 
   return (
     <>
       <div>
         Partial ({partial.length}): {partial.join(' ')}
-        <button type="button" disabled={controls?.partial?.length === 0} onClick={handleClear}>
-          &#x25C3;
+        <button type="button" disabled={!active || controls?.partial?.length === 0} onClick={handleClear}>
+          &#x25C3; Reset
         </button>
+        {controls?.completion?.includes('') && (
+          <button
+            type="button"
+            disabled={!active || !completion?.includes('')}
+            className={`primary ${classes.action}`}
+            onClick={handleSend}
+          >
+            Send &#x25B6;
+          </button>
+        )}
       </div>
       <div className={classes.container}>
         {completion?.includes('WITH_LAYBROTHER') === true && (
@@ -56,6 +65,9 @@ export const Actions = () => {
             <ActionSettle />
           </>
         )}
+        <ActionCommit />
+
+        {JSON.stringify(controls?.completion)}
 
         {/* {partial === '' && (
           <>

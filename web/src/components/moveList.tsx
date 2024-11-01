@@ -49,24 +49,20 @@ const colorToStyle = (c?: string): ColorStyle => {
 }
 
 export const MoveList = () => {
-  const { controls, state, instance, entrants } = useInstanceContext()
+  const { controls, state, commands, entrants, instance, undo, redo } = useInstanceContext()
   if (controls === undefined) return <>Missing Controls</>
 
-  const moves = instance.commands.slice(2)
-
   const handleUndo = () => {
-    console.log('undo')
+    undo?.()
   }
   const handleRedo = () => {
-    console.log('redo')
+    redo?.()
   }
 
   const flow = collectBy((f) => `${f.round}`, controls?.flow ?? [])
 
   return (
     <div>
-      {/* {EngineColor[state?.users?.find((u) => u.id === state?.me?.id)?.color ?? -1]}
-      <br /> */}
       <div style={{ display: 'flex', gap: 4, flexDirection: 'column' }}>
         {map(
           (i) => {
@@ -114,10 +110,10 @@ export const MoveList = () => {
       )}
       {controls !== undefined && (
         <>
-          <button type="button" onClick={handleUndo}>
+          <button type="button" disabled={!undo} onClick={handleUndo}>
             &#x25C0; Undo
           </button>
-          <button type="button" onClick={handleRedo}>
+          <button type="button" disabled={!redo} onClick={handleRedo}>
             Redo &#x25B6;
           </button>
         </>
@@ -126,14 +122,14 @@ export const MoveList = () => {
       <hr />
 
       <ul style={resetStyle}>
-        {moves.map((m, i) => (
-          <li key={`${i}:${m}`} style={{ fontFamily: 'monospace' }}>
-            {m}
-          </li>
+        {commands.slice(2).map((m, i) => (
+          <li key={`${i}:${m}`}>{m}</li>
         ))}
         {addIndex(map<Flower, React.JSX.Element>)(
           (frame: Flower, n: number) => (
-            <Frame key={n} frame={frame} />
+            <li key={JSON.stringify({ n, frame })}>
+              <Frame frame={frame} />
+            </li>
           ),
           flatten(flow)
         )}
