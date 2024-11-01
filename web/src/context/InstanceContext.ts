@@ -147,6 +147,7 @@ export const InstanceContextProvider = ({
       ? undefined
       : () => {
           setCommands(instance.commands.slice(0, Math.max(2, commands.length - 1)))
+          setPartial([])
         }
 
   const redo =
@@ -154,6 +155,7 @@ export const InstanceContextProvider = ({
       ? undefined
       : () => {
           setCommands(instance.commands.slice(0, commands.length + 1))
+          setPartial([])
         }
 
   const active = true
