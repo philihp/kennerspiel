@@ -7,20 +7,24 @@ interface Props {
 }
 
 export const UnbuiltBuildings = ({ buildings }: Props) => {
-  const { controls } = useInstanceContext()
+  const { controls, addPartial } = useInstanceContext()
   const partial = controls?.partial ?? []
   const command = head(partial)
   const primary = command === 'BUILD' && partial.length === 1
   return (
-    <div style={{ margin: 10 }}>
-      {buildings.map((building) => {
-        const buildable = controls?.completion?.includes(building)
-        const handleClick = () => {
-          console.log('handleClick unbuilt building')
-          // control(`${controls?.partial} ${building}`)
-        }
-        return <Erection key={building} primary={primary} id={building} disabled={!buildable} onClick={handleClick} />
-      })}
+    <div>
+      {buildings.map((building) => (
+        <span key={building} style={{ marginRight: 10 }}>
+          <Erection
+            primary={primary}
+            id={building}
+            disabled={!controls?.completion?.includes(building)}
+            onClick={() => {
+              addPartial(`${building}`)
+            }}
+          />
+        </span>
+      ))}
     </div>
   )
 }

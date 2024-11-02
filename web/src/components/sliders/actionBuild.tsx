@@ -5,7 +5,7 @@ export const ActionBuild = () => {
   const { controls, addPartial, active } = useInstanceContext()
 
   const handleClick = () => {
-    addPartial('CUT_PEAT')
+    addPartial('BUILD')
   }
 
   const disabled = !(controls?.completion ?? []).includes('BUILD')

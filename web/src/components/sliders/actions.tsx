@@ -23,8 +23,10 @@ export const Actions = () => {
     clearPartial()
   }
 
-  const handleSend = () => {
-    move()
+  const handleSend = async () => {
+    console.log('SENDING')
+    await move()
+    console.log('SENT')
   }
 
   return (

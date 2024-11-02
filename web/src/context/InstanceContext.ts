@@ -3,10 +3,21 @@
 import { control, GameState, GameStatePlaying, initialState, reducer } from 'hathora-et-labora-game'
 import { createContext, createElement, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT, User } from '@supabase/supabase-js'
-import { Tables } from '@/supabase.types'
+import { Enums, Tables } from '@/supabase.types'
 import { useSupabaseContext } from './SupabaseContext'
 import { reject } from 'ramda'
-import { Controls, GameStateSetup, GameStatusEnum } from 'hathora-et-labora-game/dist/types'
+import { Controls, GameStateSetup, GameStatusEnum, PlayerColor } from 'hathora-et-labora-game/dist/types'
+import { match } from 'ts-pattern'
+import { serverMove } from './actions'
+
+const engineColorToEntrantColor = (c?: PlayerColor): Enums<'color'> | undefined =>
+  match<PlayerColor | undefined, Enums<'color'> | undefined>(c)
+    .with(PlayerColor.Red, () => 'red')
+    .with(PlayerColor.Green, () => 'green')
+    .with(PlayerColor.Blue, () => 'blue')
+    .with(PlayerColor.White, () => 'white')
+    .with(undefined, () => undefined)
+    .exhaustive()
 
 type InstanceContextType = {
   instance: Tables<'instance'>
@@ -128,18 +139,10 @@ export const InstanceContextProvider = ({
   }
 
   const move = async () => {
-    if (!supabase) return
-    const newCommands = [...commands, partial.join(' ')]
-    const { error } = await supabase
-      .from('instance')
-      .update({ commands: newCommands, updated_at: new Date().toISOString() })
-      .eq('id', instance.id)
-    if (error) {
-      console.error(error)
-      return
-    }
+    const { error, commands: newCommands } = await serverMove(instance.id, [...commands, partial.join(' ')])
+    if (error) return console.error(error)
+    setCommands(newCommands ?? commands)
     setPartial([])
-    setCommands(newCommands)
   }
 
   const undo =
@@ -158,7 +161,9 @@ export const InstanceContextProvider = ({
           setPartial([])
         }
 
-  const active = true
+  const activeColor = gameState?.players?.[(gameState as GameStatePlaying)?.frame?.activePlayerIndex]?.color
+  const entrant = entrants.find((e) => e.color === engineColorToEntrantColor(activeColor))
+  const active = !!user && entrant?.profile_id === user?.id
 
   return createElement(
     InstanceContext.Provider,

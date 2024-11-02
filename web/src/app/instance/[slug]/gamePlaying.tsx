@@ -17,14 +17,14 @@ import { ReactNode } from 'react'
 import { match } from 'ts-pattern'
 
 const playerOrdering = (state?: GameStatePlaying) => {
-  if (state?.players.length === 1) return [0]
-  const frame = state?.frame
-  const config = state?.config
+  if (state === undefined) return []
+  if (state.players.length === 0) return []
+  if (state.players.length === 1) return [0]
+  const frame = state.frame
+  const config = state.config
+  const players = config.players ?? 0
 
-  return map(
-    (n) => (n - (frame?.activePlayerIndex ?? 0) + (config?.players ?? 0)) % (config?.players ?? 0),
-    range(0, config?.players ?? 0)
-  )
+  return map((n) => (n - (frame?.activePlayerIndex ?? 0) + players) % players, range(0, state.players.length))
 }
 
 const engineColorToEntrantColor = (c: PlayerColor): Enums<'color'> =>
@@ -68,6 +68,10 @@ export const GamePlaying = () => {
 
   return (
     <>
+      {JSON.stringify({
+        user: user?.id,
+        activeColor: state.players[state.frame.activePlayerIndex].color,
+      })}
       <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr' }}>
         <MoveList />
         <div>
