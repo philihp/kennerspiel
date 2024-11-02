@@ -15,11 +15,10 @@ const symbols = {
 }
 
 export const Rondel = () => {
-  const { state, controls } = useInstanceContext()
+  const { state, controls, addPartial } = useInstanceContext()
 
   const handleClick = () => {
-    console.log('handleControl')
-    // control(`${state?.control?.partial} Jo`)
+    addPartial('Jo')
   }
 
   const rondel = state?.rondel
