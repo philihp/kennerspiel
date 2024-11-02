@@ -76,11 +76,11 @@ export const GamePlaying = () => {
         <MoveList />
         <div>
           <Actions />
-          {plotPurchasePrices && <UnbuiltPlots plots={plotPurchasePrices} />}
-          {districtPurchasePrices && <UnbuiltDistricts districts={districtPurchasePrices} />}
-          {wonders && <UnbuiltWonders wonders={wonders} />}
+          <UnbuiltPlots />
+          <UnbuiltDistricts />
+          <UnbuiltWonders />
           <Rondel />
-          {buildings && <UnbuiltBuildings buildings={buildings} />}
+          <UnbuiltBuildings />
           {playerBoards}
         </div>
       </div>

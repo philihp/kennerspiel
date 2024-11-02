@@ -1,14 +1,17 @@
+import { useInstanceContext } from '@/context/InstanceContext'
 import { range } from 'ramda'
 
-interface Props {
-  wonders: number
-}
+export const UnbuiltWonders = () => {
+  const { state } = useInstanceContext()
+  if (state === undefined) return <></>
+  const { wonders } = state
 
-export const UnbuiltWonders = ({ wonders }: Props) => (
-  <div>
-    Wonders:
-    {range(0, wonders).map((n) => (
-      <span key={n}>🖼️</span>
-    ))}
-  </div>
-)
+  return (
+    <div>
+      Wonders:
+      {range(0, wonders).map((n) => (
+        <span key={n}>🖼️</span>
+      ))}
+    </div>
+  )
+}
