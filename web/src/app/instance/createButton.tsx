@@ -27,16 +27,17 @@ export const CreateButton = ({ user }: Params) => {
 
   return (
     <form action={formAction}>
-      <button type="submit" disabled={(user === null) || pending}>
+      <button type="submit" disabled={user === null || pending}>
         Create Instance
       </button>
-      {error && <>
-        <svg height="10" width="20">
-          <circle cx="10" cy="5" r="5" fill={color} />
-        </svg>
-        {message}
-      </>
-      }
+      {error && (
+        <>
+          <svg height="10" width="20">
+            <circle cx="10" cy="5" r="5" fill={color} />
+          </svg>
+          {message}
+        </>
+      )}
     </form>
   )
 }

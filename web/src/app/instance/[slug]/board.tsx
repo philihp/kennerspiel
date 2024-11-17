@@ -6,19 +6,23 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import { GamePlaying } from './gamePlaying'
 
 export const Board = () => {
-  const { stateSetup, state } = useInstanceContext()
+  const { rawState } = useInstanceContext()
 
-  if (stateSetup)
-    return (
-      <>
-        <GameSetup />
-      </>
-    )
-
-  if (state?.status === GameStatusEnum.FINISHED) return <>game finished</>
-  return (
-    <>
-      <GamePlaying />
-    </>
-  )
+  switch (rawState?.status as GameStatusEnum) {
+    case GameStatusEnum.SETUP:
+      return (
+        <>
+          <GameSetup />
+        </>
+      )
+    case GameStatusEnum.FINISHED:
+      return <>game finished</>
+    default:
+      console.log(`playing as `, rawState)
+      return (
+        <>
+          <GamePlaying />
+        </>
+      )
+  }
 }

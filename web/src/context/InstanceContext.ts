@@ -23,7 +23,7 @@ type InstanceContextType = {
   instance: Tables<'instance'>
   entrants: Tables<'entrant'>[]
   user?: User
-  stateSetup?: GameStateSetup
+  rawState?: GameState
   state?: GameStatePlaying
   partial: string[]
   controls?: Controls
@@ -64,14 +64,6 @@ export const InstanceContextProvider = ({
   const instanceId = instance.id
 
   useEffect(() => {
-    console.log({
-      listenFilter: {
-        table: 'instance',
-        event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE,
-        schema: 'public',
-        filter: `id=eq.${instanceId}`,
-      },
-    })
     const channel = supabase
       ?.channel('schema-db-changes')
       .on(
@@ -83,8 +75,10 @@ export const InstanceContextProvider = ({
           filter: `id=eq.${instanceId}`,
         },
         (payload) => {
-          console.log({ payload })
+          console.log('instance update', { payload })
           setInstance(payload.new as Tables<'instance'>)
+          setCommands(payload.new.commands)
+          // maybe setPartial([])
         }
       )
       .on(
@@ -119,6 +113,7 @@ export const InstanceContextProvider = ({
   }, [supabase, instanceId, entrants])
 
   const gameState = useMemo(() => {
+    console.log('memoizzing', commands)
     return [...commands]
       .map((s) => s.split(' '))
       .reduce<
@@ -172,8 +167,8 @@ export const InstanceContextProvider = ({
         user: user === null ? undefined : user,
         instance,
         entrants,
-        stateSetup: gameState?.status === GameStatusEnum.SETUP ? (gameState as GameStateSetup) : undefined,
-        state: gameState?.status === GameStatusEnum.PLAYING ? (gameState as GameStatePlaying) : undefined,
+        rawState: gameState,
+        state: gameState as GameStatePlaying,
         partial,
         controls,
         commands,
