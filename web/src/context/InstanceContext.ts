@@ -75,7 +75,6 @@ export const InstanceContextProvider = ({
           filter: `id=eq.${instanceId}`,
         },
         (payload) => {
-          console.log('instance update', { payload })
           setInstance(payload.new as Tables<'instance'>)
           setCommands(payload.new.commands)
           // maybe setPartial([])
@@ -113,7 +112,6 @@ export const InstanceContextProvider = ({
   }, [supabase, instanceId, entrants])
 
   const gameState = useMemo(() => {
-    console.log('memoizzing', commands)
     return [...commands]
       .map((s) => s.split(' '))
       .reduce<

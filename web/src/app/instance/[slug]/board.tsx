@@ -18,7 +18,6 @@ export const Board = () => {
     case GameStatusEnum.FINISHED:
       return <>game finished</>
     default:
-      console.log(`playing as `, rawState)
       return (
         <>
           <GamePlaying />

@@ -124,8 +124,6 @@ export const start = async (instanceId: string) => {
   }
   const { error: startError } = await supabase.from('instance').update(updateSet).eq('id', instanceId)
 
-  console.log({ updateSet })
-
   if (startError) {
     console.error(`ERROR: cannot START because ${startError}`)
   }

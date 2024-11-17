@@ -24,9 +24,7 @@ export const Actions = () => {
   }
 
   const handleSend = async () => {
-    console.log('SENDING')
     await move()
-    console.log('SENT')
   }
 
   return (
