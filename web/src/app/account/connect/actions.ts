@@ -18,7 +18,9 @@ export const connect = async (formData: FormData, captchaToken: string) => {
     options: { captchaToken },
   })
   if (authError || !user) return authError?.message
-  const { error: profError } = await supabase.from('profile').insert({ id: user?.id, email })
+  const { error: profError } = await supabase
+    .from('profile')
+    .upsert({ id: user?.id, email, updated_at: new Date().toISOString() })
   if (profError) {
     await supabase.auth.signOut({ scope: 'local' })
     return profError?.message

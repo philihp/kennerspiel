@@ -31,7 +31,10 @@ const Connect = () => {
   return (
     <>
       <h1>Connect</h1>
-      <p>Connect to be able to resume games or automatically save new ones. You can play without connecting, but you&apos;ll lose your games if you close your browser.</p>
+      <p>
+        Connect to be able to resume games or automatically save new ones. You can play without connecting, but
+        you&apos;ll lose your games if you close your browser.
+      </p>
       <form onSubmit={() => setResponse('')}>
         <label htmlFor="email">Email:</label>
         <br />
@@ -41,9 +44,8 @@ const Connect = () => {
         <br />
         <input id="password" name="password" type="password" />
         <br />
-        <button formAction={handleSkip}>Skip</button>
-        {' '}
-        <button formAction={handleConnect}>Login</button>{response && (
+        <button formAction={handleSkip}>Skip</button> <button formAction={handleConnect}>Connect</button>
+        {response && (
           <>
             <svg height="10" width="20">
               <circle cx="10" cy="5" r="5" fill="#FF0000" />
