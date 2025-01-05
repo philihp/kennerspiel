@@ -3,12 +3,22 @@
 import { Enums } from '@/supabase.types'
 import { createClient } from '@/utils/supabase/server'
 
+// const sleep = (durationMs: number) => {
+//   return new Promise((resolve) => setTimeout(resolve, durationMs))
+// }
+
 export const join = async (instanceId: string, color: Enums<'color'>) => {
   const supabase = createClient()
+  console.log('JOIN()...', color)
+  // await sleep(500)
+
+  // if no user, then just bail
   const {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return
+
+  // if no instance, bail
   const { data: instance, error: selectError } = await supabase
     .from('instance')
     .select('*, entrant(*)')
@@ -19,6 +29,7 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
     return
   }
 
+  // if theres already a color, bail
   const { data: entrant, error: checkError } = await supabase
     .from('entrant')
     .select()
@@ -33,7 +44,8 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
     return
   }
 
-  const { error: upsertError, data } = await supabase
+  // otherwise update this instance+profile with the color
+  const { data, error: upsertError } = await supabase
     .from('entrant')
     .upsert(
       { instance_id: instance?.id, profile_id: user.id, color, updated_at: new Date().toISOString() },
@@ -44,20 +56,22 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
     return
   }
 
-  if (instance.commands.length) {
-    const { data: newEntrant, error: refreshError } = await supabase
-      .from('instance')
-      .select('*, entrant(*)')
-      .eq('id', instanceId)
-      .single()
-    if (refreshError) {
-      console.error(refreshError)
-      return
-    }
-    const players = Math.max(newEntrant.entrant.length, 1)
-    const oldConfig = instance.commands[0].split(' ')
-    config(instance.id, `CONFIG ${players} ${oldConfig[2]} ${oldConfig[3]}`)
-  }
+  console.log('updated ', data)
+
+  // if (instance.commands.length) {
+  //   const { data: newEntrant, error: refreshError } = await supabase
+  //     .from('instance')
+  //     .select('*, entrant(*)')
+  //     .eq('id', instanceId)
+  //     .single()
+  //   if (refreshError) {
+  //     console.error(refreshError)
+  //     return
+  //   }
+  //   const players = Math.max(newEntrant.entrant.length, 1)
+  //   const oldConfig = instance.commands[0].split(' ')
+  //   config(instance.id, `CONFIG ${players} ${oldConfig[2]} ${oldConfig[3]}`)
+  // }
 }
 
 export const toggleHidden = async (instanceId: string, hidden: boolean) => {

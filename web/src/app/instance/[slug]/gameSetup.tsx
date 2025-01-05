@@ -3,17 +3,36 @@
 import { Seat } from '@/components/seat'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { EngineCountry, EngineLength } from '@/types'
-import { config, start, toggleHidden } from './actions'
+import { config, join, start, toggleHidden } from './actions'
+import { find, propEq } from 'ramda'
+import { Enums, Tables } from '@/supabase.types'
+import { useOptimistic } from 'react'
 
 const configured = (country: EngineCountry, length: EngineLength, firstCommand: string = '') =>
   firstCommand.includes(country.toLowerCase()) && firstCommand.includes(length.toLowerCase())
 
 export const GameSetup = () => {
-  const { instance, entrants } = useInstanceContext()
+  const { instance, entrants, setEntrants } = useInstanceContext()
 
   const hidden = !!instance.hidden
 
   const canStart = entrants.length >= 1 && instance.commands?.[0]?.startsWith('CONFIG')
+
+  const [optimisticEntrants, setOptimisticJoin] = useOptimistic(
+    entrants,
+    (state: Tables<'entrant'>[], color: Enums<'color'>) => {
+      const out = [...state.map((entrant) => ({ ...entrant, color: color }))]
+      return out
+    }
+  )
+
+  const findEntrant = (color: Enums<'color'>) => find<Tables<'entrant'>>(propEq(color, 'color'))(optimisticEntrants)
+
+  const handleSeatSelect = async (color: Enums<'color'>) => {
+    setOptimisticJoin(color)
+    await join(instance.id, color)
+    setEntrants([...entrants.map((entrant) => ({ ...entrant, color: color }))])
+  }
 
   const handleSetHidden = (newState: boolean) => {
     toggleHidden(instance.id, newState)
@@ -30,7 +49,6 @@ export const GameSetup = () => {
   return (
     <>
       <h1>Game Setup</h1>
-      {/* <pre>{JSON.stringify({ gameState, instance }, undefined, 2)}</pre> */}
       <p>
         <a href={`/instance/${instance?.id}`}>/instance/{instance.id}</a>
       </p>
@@ -53,10 +71,23 @@ export const GameSetup = () => {
       </p>
       <hr />
       <h3>Players ({entrants.length})</h3>
-      <Seat clergyId="LB1R" color={'red'} />
-      <Seat clergyId="LB1G" color={'green'} />
-      <Seat clergyId="LB1B" color={'blue'} />
-      <Seat clergyId="LB1W" color={'white'} />
+      <pre>{JSON.stringify(entrants, undefined, 2)}</pre>
+      <Seat clergyId="LB1R" entrant={findEntrant('red')} onClick={() => handleSeatSelect('red')} />
+      <Seat
+        clergyId="LB1G"
+        entrant={find<Tables<'entrant'>>(propEq('green', 'color'))(optimisticEntrants)}
+        onClick={() => handleSeatSelect('green')}
+      />
+      <Seat
+        clergyId="LB1B"
+        entrant={find<Tables<'entrant'>>(propEq('blue', 'color'))(optimisticEntrants)}
+        onClick={() => handleSeatSelect('blue')}
+      />
+      <Seat
+        clergyId="LB1W"
+        entrant={find<Tables<'entrant'>>(propEq('white', 'color'))(optimisticEntrants)}
+        onClick={() => handleSeatSelect('white')}
+      />
       <p>Player order will be randomized upon start.</p>
       {/*-------------------------------------------*/}
       <hr />

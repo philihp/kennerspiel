@@ -1,7 +1,17 @@
 'use client'
 
 import { control, GameState, GameStatePlaying, initialState, reducer } from 'hathora-et-labora-game'
-import { createContext, createElement, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  createContext,
+  createElement,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT, User } from '@supabase/supabase-js'
 import { Enums, Tables } from '@/supabase.types'
 import { useSupabaseContext } from './SupabaseContext'
@@ -29,6 +39,8 @@ type InstanceContextType = {
   controls?: Controls
   commands: string[]
   active: boolean
+  setInstance: Dispatch<SetStateAction<Tables<'instance'>>>
+  setEntrants: Dispatch<SetStateAction<Tables<'entrant'>[]>>
   addPartial: (command: string) => void
   clearPartial: () => void
   move: () => Promise<void>
@@ -171,6 +183,8 @@ export const InstanceContextProvider = ({
         controls,
         commands,
         active,
+        setInstance,
+        setEntrants,
         addPartial,
         clearPartial,
         move,
