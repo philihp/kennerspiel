@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server'
 import { randomUUID } from 'crypto'
 
 export const connect = async (formData: FormData, captchaToken: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   if (!email) return 'Missing an email address'
@@ -12,11 +12,7 @@ export const connect = async (formData: FormData, captchaToken: string) => {
   const {
     error: authError,
     data: { user },
-  } = await supabase.auth.signInWithPassword({
-    email: `${email}`,
-    password: `${password}`,
-    options: { captchaToken },
-  })
+  } = await supabase.auth.signInWithPassword({ email: `${email}`, password: `${password}`, options: { captchaToken } })
   if (authError || !user) return authError?.message
   const { error: profError } = await supabase
     .from('profile')
@@ -28,13 +24,11 @@ export const connect = async (formData: FormData, captchaToken: string) => {
 }
 
 export const skip = async (formData: FormData, captchaToken: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
     data: { user },
     error: authError,
-  } = await supabase.auth.signInAnonymously({
-    options: { captchaToken },
-  })
+  } = await supabase.auth.signInAnonymously({ options: { captchaToken } })
 
   if (authError || !user) return authError?.message
   const { error: profError } = await supabase.from('profile').upsert({ id: user?.id, email: randomUUID() })

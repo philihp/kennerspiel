@@ -4,7 +4,7 @@ import { AuthError, User } from '@supabase/supabase-js'
 import { createClient } from '@/utils/supabase/server'
 
 const Header = async () => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const {
     data: { user },

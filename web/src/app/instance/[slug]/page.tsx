@@ -4,14 +4,14 @@ import { createClient } from '@/utils/supabase/server'
 import { InstanceContextProvider } from '@/context/InstanceContext'
 import { Board } from './board'
 
-type InstanceParams = {
-  params: {
-    slug: string
-  }
-}
+type InstanceParams = { params: Promise<{ slug: string }> }
 
-const InstancePage = async ({ params: { slug } }: InstanceParams) => {
-  const supabase = createClient()
+const InstancePage = async (props: InstanceParams) => {
+  const params = await props.params
+
+  const { slug } = params
+
+  const supabase = await createClient()
   const { data, error } = await supabase.from('instance').select('*, entrant (*)').eq('id', slug).limit(1).single()
   const {
     data: { user },

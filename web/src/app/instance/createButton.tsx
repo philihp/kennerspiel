@@ -1,17 +1,17 @@
 'use client'
 
-import { useFormState, useFormStatus } from 'react-dom'
+import { useFormStatus } from 'react-dom';
 import { createInstance, FormState } from './actions'
 import { redirect, RedirectType } from 'next/navigation'
 import { User } from '@supabase/supabase-js'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useActionState } from 'react';
 
 type Params = {
   user: User | null
 }
 
 export const CreateButton = ({ user }: Params) => {
-  const [{ error, id }, formAction, pending] = useFormState(createInstance, {} as FormState)
+  const [{ error, id }, formAction, pending] = useActionState(createInstance, {} as FormState)
   const [color, setColor] = useState('#000000')
   const [message, setMessage] = useState('')
 

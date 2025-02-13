@@ -3,12 +3,11 @@
 import { createClient } from '@/utils/supabase/server'
 import { PostgrestError } from '@supabase/supabase-js'
 
-const supabase = createClient()
-
 export const serverMove = async (
   instanceId: string,
   newCommands: string[]
 ): Promise<{ error: PostgrestError | null; commands: string[] | undefined }> => {
+  const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()

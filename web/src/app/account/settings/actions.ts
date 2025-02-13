@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 
 export const disconnect = async () => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase.auth.signOut({ scope: 'local' })
   if (error) {
     return error?.message
@@ -14,7 +14,7 @@ export const disconnect = async () => {
 }
 
 export const changePassword = async (formData: FormData) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const password = formData.get('password') as string
   const confirm = formData.get('confirm') as string
   if (password !== confirm) {
@@ -27,7 +27,7 @@ export const changePassword = async (formData: FormData) => {
 }
 
 export const linkEmail = async (formData: FormData) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const email = formData.get('email') as string
 
   const {

@@ -12,12 +12,9 @@ export const GET = async (request: NextRequest) => {
   redirectTo.pathname = next
 
   if (token_hash && type) {
-    const supabase = createClient()
+    const supabase = await createClient()
 
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash,
-    })
+    const { error } = await supabase.auth.verifyOtp({ type, token_hash })
     if (!error) {
       return NextResponse.redirect(redirectTo)
     }

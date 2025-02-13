@@ -6,8 +6,10 @@ import { InstancesList } from './instancesList'
 import { FlagValues } from '@vercel/flags/react'
 
 const InstancePage = async () => {
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   return (
     <>
       <section>

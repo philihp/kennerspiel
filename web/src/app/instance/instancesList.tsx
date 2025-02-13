@@ -3,11 +3,7 @@
 import { createClient } from '@/utils/supabase/client'
 import { useCallback, useEffect, useState } from 'react'
 
-type Instance = {
-  id: string
-  created_at: string
-  commands: string[]
-}
+type Instance = { id: string; created_at: string; commands: string[] }
 
 export const InstancesList = () => {
   const [instances, setInstances] = useState<Instance[] | undefined>(undefined)

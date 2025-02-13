@@ -8,7 +8,7 @@ import { createClient } from '@/utils/supabase/server'
 // }
 
 export const join = async (instanceId: string, color: Enums<'color'>) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   console.log('JOIN()...', color)
   // await sleep(500)
 
@@ -75,7 +75,7 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
 }
 
 export const toggleHidden = async (instanceId: string, hidden: boolean) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -86,10 +86,7 @@ export const toggleHidden = async (instanceId: string, hidden: boolean) => {
 
   const { error } = await supabase
     .from('instance')
-    .update({
-      hidden,
-      updated_at: new Date().toISOString(),
-    })
+    .update({ hidden, updated_at: new Date().toISOString() })
     .eq('id', instanceId)
   if (error) {
     console.error(JSON.stringify(error, undefined, 2))
@@ -97,7 +94,7 @@ export const toggleHidden = async (instanceId: string, hidden: boolean) => {
 }
 
 export const config = async (instanceId: string, configString: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -112,7 +109,7 @@ export const config = async (instanceId: string, configString: string) => {
 }
 
 export const start = async (instanceId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: instance } = await supabase
     .from('instance')
     .select('commands, entrant(id)')
