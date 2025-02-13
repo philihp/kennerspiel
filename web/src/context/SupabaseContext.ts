@@ -17,7 +17,6 @@ const SupabaseContext = createContext<SupabaseContextType>({})
 
 export const SupabaseContextProvider = ({ children }: SupabaseContextProviderProps) => {
   const supabase = createClient()
-
   return createElement(SupabaseContext.Provider, { value: { supabase } }, children)
 }
 

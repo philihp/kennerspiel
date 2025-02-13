@@ -7,7 +7,7 @@ import { LinkEmail } from './linkEmail'
 import DisconnectButton from './disconnectButton'
 
 const SettingsPage = async () => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const {
     data: { user },
