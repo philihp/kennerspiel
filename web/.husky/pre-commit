@@ -1,2 +1,2 @@
 cd web
-npm run lint
+npx lint-staged
