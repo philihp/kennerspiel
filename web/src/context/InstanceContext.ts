@@ -8,14 +8,15 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
-  useEffect,
+  // useEffect,
   useMemo,
   useState,
 } from 'react'
-import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT, User } from '@supabase/supabase-js'
+// import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT} from '@supabase/supabase-js'
+import { User } from '@supabase/supabase-js'
 import { Enums, Tables } from '@/supabase.types'
-import { useSupabaseContext } from './SupabaseContext'
-import { reject } from 'ramda'
+// import { useSupabaseContext } from './SupabaseContext'
+// import { reject } from 'ramda'
 import { Controls, GameStateSetup, GameStatusEnum, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { match } from 'ts-pattern'
 import { serverMove } from './actions'
@@ -67,61 +68,61 @@ export const InstanceContextProvider = ({
   instance: providedInstance,
   entrants: providedEntrants,
 }: InstanceContextProviderProps) => {
-  const { supabase } = useSupabaseContext()
+  // const { supabase } = useSupabaseContext()
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
   const [partial, setPartial] = useState<string[]>([])
   const [commands, setCommands] = useState<string[]>(providedInstance.commands)
 
-  const instanceId = instance.id
+  // const instanceId = instance.id
 
-  useEffect(() => {
-    const channel = supabase
-      ?.channel('schema-db-changes')
-      .on(
-        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
-        {
-          table: 'instance',
-          event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE,
-          schema: 'public',
-          filter: `id=eq.${instanceId}`,
-        },
-        (payload) => {
-          setInstance(payload.new as Tables<'instance'>)
-          setCommands(payload.new.commands)
-          // maybe setPartial([])
-        }
-      )
-      .on(
-        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
-        {
-          table: 'entrant',
-          event: '*',
-          schema: 'public',
-          filter: `instance_id=eq.${instanceId}`,
-        },
-        (payload) => {
-          switch (payload.eventType) {
-            case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.INSERT:
-              setEntrants([...entrants, payload.new as Tables<'entrant'>])
-              break
-            case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.DELETE:
-              setEntrants([...reject<Tables<'entrant'>>((entrant) => entrant.id === payload.old.id)(entrants)])
-              break
-            case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE:
-              setEntrants([
-                ...reject<Tables<'entrant'>>((entrant) => entrant.id === payload.old.id)(entrants),
-                payload.new as Tables<'entrant'>,
-              ])
-              break
-          }
-        }
-      )
-      .subscribe()
-    return () => {
-      channel?.unsubscribe()
-    }
-  }, [supabase, instanceId, entrants])
+  // useEffect(() => {
+  //   const channel = supabase
+  //     ?.channel('schema-db-changes')
+  //     .on(
+  //       REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
+  //       {
+  //         table: 'instance',
+  //         event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE,
+  //         schema: 'public',
+  //         filter: `id=eq.${instanceId}`,
+  //       },
+  //       (payload) => {
+  //         setInstance(payload.new as Tables<'instance'>)
+  //         setCommands(payload.new.commands)
+  //         // maybe setPartial([])
+  //       }
+  //     )
+  //     .on(
+  //       REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
+  //       {
+  //         table: 'entrant',
+  //         event: '*',
+  //         schema: 'public',
+  //         filter: `instance_id=eq.${instanceId}`,
+  //       },
+  //       (payload) => {
+  //         switch (payload.eventType) {
+  //           case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.INSERT:
+  //             setEntrants([...entrants, payload.new as Tables<'entrant'>])
+  //             break
+  //           case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.DELETE:
+  //             setEntrants([...reject<Tables<'entrant'>>((entrant) => entrant.id === payload.old.id)(entrants)])
+  //             break
+  //           case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE:
+  //             setEntrants([
+  //               ...reject<Tables<'entrant'>>((entrant) => entrant.id === payload.old.id)(entrants),
+  //               payload.new as Tables<'entrant'>,
+  //             ])
+  //             break
+  //         }
+  //       }
+  //     )
+  //     .subscribe()
+  //   return () => {
+  //     channel?.unsubscribe()
+  //   }
+  // }, [supabase, instanceId, entrants])
 
   const gameState = useMemo(() => {
     return [...commands]
