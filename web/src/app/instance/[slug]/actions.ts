@@ -3,9 +3,9 @@
 import { Enums } from '@/supabase.types'
 import { createClient } from '@/utils/supabase/server'
 
-// const sleep = (durationMs: number) => {
-//   return new Promise((resolve) => setTimeout(resolve, durationMs))
-// }
+const sleep = (durationMs: number) => {
+  return new Promise((resolve) => setTimeout(resolve, durationMs))
+}
 
 export const join = async (instanceId: string, color: Enums<'color'>) => {
   const supabase = await createClient()
@@ -74,16 +74,15 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
   // }
 }
 
-export const toggleHidden = async (instanceId: string, hidden: boolean) => {
+export const toggleHidden = async (instanceId: string, hidden: boolean): Promise<boolean> => {
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) {
     console.error('ERROR: toggleHidden has no user')
-    return
+    return hidden
   }
-
   const { error } = await supabase
     .from('instance')
     .update({ hidden, updated_at: new Date().toISOString() })
@@ -91,6 +90,7 @@ export const toggleHidden = async (instanceId: string, hidden: boolean) => {
   if (error) {
     console.error(JSON.stringify(error, undefined, 2))
   }
+  return hidden
 }
 
 export const config = async (instanceId: string, configString: string) => {

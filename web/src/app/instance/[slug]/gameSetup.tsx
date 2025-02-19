@@ -8,14 +8,13 @@ import { find, propEq } from 'ramda'
 import { Enums, Tables } from '@/supabase.types'
 import { useOptimistic } from 'react'
 import { CopyPathButton } from '@/components/copyPathButton'
+import { GameSetupHidden } from './gameSetupHidden'
 
 const configured = (country: EngineCountry, length: EngineLength, firstCommand: string = '') =>
   firstCommand.includes(country.toLowerCase()) && firstCommand.includes(length.toLowerCase())
 
 export const GameSetup = () => {
   const { instance, entrants, setEntrants } = useInstanceContext()
-
-  const hidden = !!instance.hidden
 
   const canStart = entrants.length >= 1 && instance.commands?.[0]?.startsWith('CONFIG')
 
@@ -33,10 +32,6 @@ export const GameSetup = () => {
     setOptimisticJoin(color)
     await join(instance.id, color)
     setEntrants([...entrants.map((entrant) => ({ ...entrant, color: color }))])
-  }
-
-  const handleSetHidden = (newState: boolean) => {
-    toggleHidden(instance.id, newState)
   }
 
   const handleConfig = async (players: number, country: EngineCountry, length: EngineLength) => {
@@ -67,29 +62,7 @@ export const GameSetup = () => {
       </p>
       <p>Share this link with someone to invite them to the room.</p>
       <hr />
-      <input
-        type="checkbox"
-        name="hidden"
-        id="hidden"
-        checked={hidden}
-        onChange={() => handleSetHidden(!hidden)}
-      />{' '}
-      <label htmlFor="hidden">Hidden</label>{' '}
-      {!hidden && (
-        <button type="button" onClick={() => handleSetHidden(true)}>
-          Make Hidden
-        </button>
-      )}
-      {!!hidden && (
-        <button type="button" onClick={() => handleSetHidden(false)}>
-          Make Public
-        </button>
-      )}
-      <br />
-      <p>
-        Making an instance public will list it to all users. Share the link directly to invite users to a private
-        instance.
-      </p>
+      <GameSetupHidden />
       <hr />
       <h3>Players ({entrants.length})</h3>
       <pre>{JSON.stringify(entrants, undefined, 2)}</pre>
