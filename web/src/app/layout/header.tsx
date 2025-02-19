@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Presence } from './presence'
-import { AuthError, User } from '@supabase/supabase-js'
 import { createClient } from '@/utils/supabase/server'
 
 const Header = async () => {
