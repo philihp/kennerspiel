@@ -7,6 +7,7 @@ import { config, join, start, toggleHidden } from './actions'
 import { find, propEq } from 'ramda'
 import { Enums, Tables } from '@/supabase.types'
 import { useOptimistic } from 'react'
+import { CopyPathButton } from '@/components/copyPathButton'
 
 const configured = (country: EngineCountry, length: EngineLength, firstCommand: string = '') =>
   firstCommand.includes(country.toLowerCase()) && firstCommand.includes(length.toLowerCase())
@@ -50,9 +51,29 @@ export const GameSetup = () => {
     <>
       <h1>Game Setup</h1>
       <p>
-        <a href={`/instance/${instance?.id}`}>/instance/{instance.id}</a>
+        <a
+          style={{
+            backgroundColor: 'white',
+            display: 'inline',
+            padding: 10,
+            fontFamily: 'monospace',
+            boxShadow: 'inset 0 0 2px #000',
+          }}
+          href={`/instance/${instance?.id}`}
+        >
+          {instance.id}
+        </a>
+        <CopyPathButton path={`/instance/${instance?.id}`} />
       </p>
-      <input type="checkbox" name="hidden" id="hidden" checked={hidden} onChange={() => handleSetHidden(!hidden)} />{' '}
+      <p>Share this link with someone to invite them to the room.</p>
+      <hr />
+      <input
+        type="checkbox"
+        name="hidden"
+        id="hidden"
+        checked={hidden}
+        onChange={() => handleSetHidden(!hidden)}
+      />{' '}
       <label htmlFor="hidden">Hidden</label>{' '}
       {!hidden && (
         <button type="button" onClick={() => handleSetHidden(true)}>

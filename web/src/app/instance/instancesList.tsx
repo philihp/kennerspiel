@@ -8,7 +8,7 @@ type Instance = { id: string; created_at: string; commands: string[] }
 export const InstancesList = () => {
   const [instances, setInstances] = useState<Instance[] | undefined>(undefined)
 
-  const handleLoad = useCallback(() => {
+  const handleReload = useCallback(() => {
     setInstances(undefined)
     const supabase = createClient()
     supabase
@@ -21,12 +21,12 @@ export const InstancesList = () => {
   }, [])
 
   useEffect(() => {
-    handleLoad()
-  }, [handleLoad])
+    handleReload()
+  }, [handleReload])
 
   return (
     <>
-      <button onClick={handleLoad} type="button">
+      <button onClick={handleReload} type="button">
         Refresh
       </button>
       <ul>
