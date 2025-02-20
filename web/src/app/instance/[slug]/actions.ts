@@ -7,10 +7,8 @@ const sleep = (durationMs: number) => {
   return new Promise((resolve) => setTimeout(resolve, durationMs))
 }
 
-export const join = async (instanceId: string, color: Enums<'color'>) => {
+export const join = async (instanceId: string, color?: Enums<'color'>) => {
   const supabase = await createClient()
-  console.log('JOIN()...', color)
-  // await sleep(500)
 
   // if no user, then just bail
   const {
@@ -30,33 +28,58 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
   }
 
   // if theres already a color, bail
-  const { data: entrant, error: checkError } = await supabase
+  if (color) {
+    const { data: entrant, error: checkError } = await supabase
+      .from('entrant')
+      .select()
+      .eq('instance_id', instance?.id)
+      .eq('color', color)
+      .maybeSingle()
+    if (entrant) {
+      console.error(`ERROR: ${entrant?.instance_id}:${entrant?.color} already has ${entrant?.profile_id} `)
+      return
+    } else if (checkError) {
+      console.error(checkError)
+      return
+    }
+
+    // otherwise update this instance+profile with the color
+    const { data, error: upsertError } = await supabase
+      .from('entrant')
+      .upsert(
+        { instance_id: instance?.id, profile_id: user.id, color, updated_at: new Date().toISOString() },
+        { onConflict: 'instance_id, profile_id' }
+      )
+      .select()
+    if (upsertError) {
+      console.error(upsertError)
+      return
+    }
+    console.log('upsert ', data)
+  } else {
+    const { data: entrant, error: deleteError } = await supabase
+      .from('entrant')
+      .delete()
+      .eq('instance_id', instance?.id)
+      .eq('profile_id', user.id)
+      .select()
+    if (deleteError) {
+      console.error(deleteError)
+      return
+    }
+    console.log('delete ', entrant)
+  }
+
+  const { data: entrants, error: entrantsError } = await supabase
     .from('entrant')
-    .select()
+    .select('*')
     .eq('instance_id', instance?.id)
-    .eq('color', color)
-    .maybeSingle()
-  if (entrant) {
-    console.error(`ERROR: ${entrant?.instance_id}:${entrant?.color} already has ${entrant?.profile_id} `)
-    return
-  } else if (checkError) {
-    console.error(checkError)
+
+  if (entrantsError) {
+    console.error(entrantsError)
     return
   }
-
-  // otherwise update this instance+profile with the color
-  const { data, error: upsertError } = await supabase
-    .from('entrant')
-    .upsert(
-      { instance_id: instance?.id, profile_id: user.id, color, updated_at: new Date().toISOString() },
-      { onConflict: 'instance_id, profile_id' }
-    )
-  if (upsertError) {
-    console.error(upsertError)
-    return
-  }
-
-  console.log('updated ', data)
+  return entrants
 
   // if (instance.commands.length) {
   //   const { data: newEntrant, error: refreshError } = await supabase
