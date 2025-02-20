@@ -9,8 +9,6 @@ const sleep = (durationMs: number) => {
 
 export const join = async (instanceId: string, color: Enums<'color'>) => {
   const supabase = await createClient()
-  console.log('JOIN()...', color)
-  // await sleep(500)
 
   // if no user, then just bail
   const {
@@ -57,6 +55,17 @@ export const join = async (instanceId: string, color: Enums<'color'>) => {
   }
 
   console.log('updated ', data)
+
+  const { data: entrants, error: entrantsError } = await supabase
+    .from('entrant')
+    .select('*')
+    .eq('instance_id', instance?.id)
+
+  if (entrantsError) {
+    console.error(entrantsError)
+    return
+  }
+  return entrants
 
   // if (instance.commands.length) {
   //   const { data: newEntrant, error: refreshError } = await supabase

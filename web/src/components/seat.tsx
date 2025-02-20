@@ -7,7 +7,7 @@ import { MouseEventHandler } from 'react'
 
 export interface SeatProps {
   clergyId: string
-  entrant?: Tables<'entrant'>
+  entrant?: Pick<Tables<'entrant'>, 'color' | 'profile_id'>
   onClick: MouseEventHandler<HTMLButtonElement>
 }
 
@@ -37,7 +37,7 @@ export const Seat = ({ clergyId, entrant, onClick }: SeatProps) => {
               borderWidth: 3,
             }}
           />
-          {JSON.stringify(entrant)}
+          {/* {JSON.stringify({entrant: entrant?.profile_id})} */}
           {entrant?.profile_id}
         </>
       ) : (
