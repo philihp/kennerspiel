@@ -8,7 +8,7 @@ import { find, pipe, propEq, reject, splitWhen, tail } from 'ramda'
 type PartEntrant = Pick<Tables<'entrant'>, 'color' | 'profile_id'>
 
 export const GameSetupPlayers = () => {
-  const { instance, entrants, setEntrants, user } = useInstanceContext()
+  const { instance, setInstance, entrants, setEntrants, user } = useInstanceContext()
 
   const [optEntrants, setOptEntrants] = useOptimistic<PartEntrant[], Enums<'color'> | undefined>(
     entrants,
@@ -34,24 +34,31 @@ export const GameSetupPlayers = () => {
   const handleSelectColor = (color: Enums<'color'>) => async () => {
     startTransition(async () => {
       setOptEntrants(color)
-      const newEntrants = await join(instance.id, color)
+      const [entrants, updatedInstance] = await join(instance.id, color)
       // pessimistically, update with what the server action returned
-      setEntrants(newEntrants ?? [])
+      if (updatedInstance) {
+        setInstance(updatedInstance)
+        setEntrants(entrants ?? [])
+      }
     })
   }
 
   const handleLeave = async () => {
     startTransition(async () => {
       setOptEntrants(undefined)
-      const newEntrants = await join(instance.id)
+      const [entrants, updatedInstance] = await join(instance.id)
       // pessimistically, update with what the server action returned
-      setEntrants(newEntrants ?? [])
+      if (updatedInstance) {
+        setInstance(updatedInstance)
+        setEntrants(entrants ?? [])
+      }
     })
   }
 
   return (
     <>
-      <h3>Players ({entrants?.length})</h3>
+      <hr />
+      <h3>Players ({optEntrants?.length})</h3>
       <Seat clergyId="LB1R" entrant={findEntrant('red')} onClick={handleSelectColor('red')} onLeave={handleLeave} />
       <Seat clergyId="LB1G" entrant={findEntrant('green')} onClick={handleSelectColor('green')} onLeave={handleLeave} />
       <Seat clergyId="LB1B" entrant={findEntrant('blue')} onClick={handleSelectColor('blue')} onLeave={handleLeave} />

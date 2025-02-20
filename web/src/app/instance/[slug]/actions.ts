@@ -1,20 +1,23 @@
 'use server'
 
-import { Enums } from '@/supabase.types'
+import { Enums, Tables } from '@/supabase.types'
 import { createClient } from '@/utils/supabase/server'
 
 const sleep = (durationMs: number) => {
   return new Promise((resolve) => setTimeout(resolve, durationMs))
 }
 
-export const join = async (instanceId: string, color?: Enums<'color'>) => {
+export const join = async (
+  instanceId: string,
+  color?: Enums<'color'>
+): Promise<[Tables<'entrant'>[], Tables<'instance'> | undefined]> => {
   const supabase = await createClient()
 
   // if no user, then just bail
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return
+  if (!user) return [[], undefined]
 
   // if no instance, bail
   const { data: instance, error: selectError } = await supabase
@@ -24,7 +27,7 @@ export const join = async (instanceId: string, color?: Enums<'color'>) => {
     .single()
   if (!instance || selectError) {
     console.error(selectError)
-    return
+    return [[], undefined]
   }
 
   // if theres already a color, bail
@@ -37,10 +40,10 @@ export const join = async (instanceId: string, color?: Enums<'color'>) => {
       .maybeSingle()
     if (entrant) {
       console.error(`ERROR: ${entrant?.instance_id}:${entrant?.color} already has ${entrant?.profile_id} `)
-      return
+      return [[], undefined]
     } else if (checkError) {
       console.error(checkError)
-      return
+      return [[], undefined]
     }
 
     // otherwise update this instance+profile with the color
@@ -53,7 +56,7 @@ export const join = async (instanceId: string, color?: Enums<'color'>) => {
       .select()
     if (upsertError) {
       console.error(upsertError)
-      return
+      return [[], undefined]
     }
     console.log('upsert ', data)
   } else {
@@ -65,36 +68,29 @@ export const join = async (instanceId: string, color?: Enums<'color'>) => {
       .select()
     if (deleteError) {
       console.error(deleteError)
-      return
+      return [[], undefined]
     }
     console.log('delete ', entrant)
   }
 
-  const { data: entrants, error: entrantsError } = await supabase
-    .from('entrant')
-    .select('*')
-    .eq('instance_id', instance?.id)
-
-  if (entrantsError) {
-    console.error(entrantsError)
-    return
+  const { data: updatedInstance, error: refreshError } = await supabase
+    .from('instance')
+    .select('*, entrant(*)')
+    .eq('id', instanceId)
+    .single()
+  if (refreshError) {
+    console.error(refreshError)
+    return [[], undefined]
   }
-  return entrants
 
-  // if (instance.commands.length) {
-  //   const { data: newEntrant, error: refreshError } = await supabase
-  //     .from('instance')
-  //     .select('*, entrant(*)')
-  //     .eq('id', instanceId)
-  //     .single()
-  //   if (refreshError) {
-  //     console.error(refreshError)
-  //     return
-  //   }
-  //   const players = Math.max(newEntrant.entrant.length, 1)
-  //   const oldConfig = instance.commands[0].split(' ')
-  //   config(instance.id, `CONFIG ${players} ${oldConfig[2]} ${oldConfig[3]}`)
-  // }
+  if (updatedInstance.commands.length) {
+    const players = Math.max(updatedInstance.entrant.length, 1)
+    const oldConfig = instance.commands[0].split(' ')
+    config(instance.id, `CONFIG ${players} ${oldConfig[2]} ${oldConfig[3]}`)
+  }
+
+  const { entrant, ...shallowInstance } = updatedInstance
+  return [entrant, shallowInstance]
 }
 
 export const toggleHidden = async (instanceId: string, hidden: boolean): Promise<boolean> => {
@@ -125,10 +121,17 @@ export const config = async (instanceId: string, configString: string) => {
     console.error('ERROR: config has no user')
     return
   }
-  await supabase
+  const { data, error } = await supabase
     .from('instance')
     .update({ commands: [configString] })
     .eq('id', instanceId)
+    .select()
+    .single()
+  if (error) {
+    console.error(error)
+    return
+  }
+  return data
 }
 
 export const start = async (instanceId: string) => {

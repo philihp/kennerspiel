@@ -21,7 +21,14 @@ export const GameSetupHidden = () => {
   }
   return (
     <>
-      <input type="checkbox" name="hidden" id="hidden" checked={optHidden} onChange={() => handleSetHidden(!hidden)} />{' '}
+      <hr />
+      <input
+        type="checkbox"
+        name="hidden"
+        id="hidden"
+        checked={optHidden}
+        onChange={() => handleSetHidden(!hidden)}
+      />{' '}
       <label htmlFor="hidden">Hidden</label>{' '}
       {!optHidden && (
         <button type="button" onClick={() => handleSetHidden(true)}>
