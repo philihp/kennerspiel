@@ -9,9 +9,10 @@ export interface SeatProps {
   clergyId: string
   entrant?: Pick<Tables<'entrant'>, 'color' | 'profile_id'>
   onClick: MouseEventHandler<HTMLButtonElement>
+  onLeave?: MouseEventHandler<HTMLButtonElement>
 }
 
-export const Seat = ({ clergyId, entrant, onClick }: SeatProps) => {
+export const Seat = ({ clergyId, entrant, onClick, onLeave }: SeatProps) => {
   const { user } = useInstanceContext()
 
   return (
@@ -39,6 +40,11 @@ export const Seat = ({ clergyId, entrant, onClick }: SeatProps) => {
           />
           {/* {JSON.stringify({entrant: entrant?.profile_id})} */}
           {entrant?.profile_id}
+          {entrant?.profile_id === user?.id && (
+            <>
+              <button onClick={onLeave}>X</button>
+            </>
+          )}
         </>
       ) : (
         <Clergy
