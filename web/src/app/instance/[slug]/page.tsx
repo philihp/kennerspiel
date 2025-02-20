@@ -12,7 +12,7 @@ const InstancePage = async (props: InstanceParams) => {
   const { slug } = params
 
   const supabase = await createClient()
-  const { data, error } = await supabase.from('instance').select('*, entrant (*)').eq('id', slug).limit(1).single()
+  const { data, error } = await supabase.from('instance').select('*, entrant(*)').eq('id', slug).limit(1).single()
   const {
     data: { user },
   } = await supabase.auth.getUser()
