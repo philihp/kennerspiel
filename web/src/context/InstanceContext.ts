@@ -20,6 +20,7 @@ import { Enums, Tables } from '@/supabase.types'
 import { Controls, GameStateSetup, GameStatusEnum, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { match } from 'ts-pattern'
 import { serverMove } from './actions'
+import { useSupabaseContext } from './SupabaseContext'
 
 const engineColorToEntrantColor = (c?: PlayerColor): Enums<'color'> | undefined =>
   match<PlayerColor | undefined, Enums<'color'> | undefined>(c)
@@ -68,61 +69,11 @@ export const InstanceContextProvider = ({
   instance: providedInstance,
   entrants: providedEntrants,
 }: InstanceContextProviderProps) => {
-  // const { supabase } = useSupabaseContext()
+  const { sequence } = useSupabaseContext()
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
   const [partial, setPartial] = useState<string[]>([])
   const [commands, setCommands] = useState<string[]>(providedInstance.commands)
-
-  // const instanceId = instance.id
-
-  // useEffect(() => {
-  //   const channel = supabase
-  //     ?.channel('schema-db-changes')
-  //     .on(
-  //       REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
-  //       {
-  //         table: 'instance',
-  //         event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE,
-  //         schema: 'public',
-  //         filter: `id=eq.${instanceId}`,
-  //       },
-  //       (payload) => {
-  //         setInstance(payload.new as Tables<'instance'>)
-  //         setCommands(payload.new.commands)
-  //         // maybe setPartial([])
-  //       }
-  //     )
-  //     .on(
-  //       REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
-  //       {
-  //         table: 'entrant',
-  //         event: '*',
-  //         schema: 'public',
-  //         filter: `instance_id=eq.${instanceId}`,
-  //       },
-  //       (payload) => {
-  //         switch (payload.eventType) {
-  //           case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.INSERT:
-  //             setEntrants([...entrants, payload.new as Tables<'entrant'>])
-  //             break
-  //           case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.DELETE:
-  //             setEntrants([...reject<Tables<'entrant'>>((entrant) => entrant.id === payload.old.id)(entrants)])
-  //             break
-  //           case REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE:
-  //             setEntrants([
-  //               ...reject<Tables<'entrant'>>((entrant) => entrant.id === payload.old.id)(entrants),
-  //               payload.new as Tables<'entrant'>,
-  //             ])
-  //             break
-  //         }
-  //       }
-  //     )
-  //     .subscribe()
-  //   return () => {
-  //     channel?.unsubscribe()
-  //   }
-  // }, [supabase, instanceId, entrants])
 
   const gameState = useMemo(() => {
     return [...commands]
@@ -174,6 +125,7 @@ export const InstanceContextProvider = ({
   return createElement(
     InstanceContext.Provider,
     {
+      key: sequence,
       value: {
         user: user === null ? undefined : user,
         instance,
