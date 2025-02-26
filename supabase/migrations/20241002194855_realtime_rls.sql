@@ -1,31 +1,15 @@
-create policy "anyone can receive broadcast"
+create policy "anyone can send or receive on topic for broadcast"
 on "realtime"."messages"
-for select
+for all
 to authenticated, anon
 using (
-  realtime.messages.extension in ('broadcast')
+  realtime.messages.extension = 'broadcast'
 );
 
-create policy "anyone can send broadcast on topic"
+create policy "anyone can send or receive on topic for presence"
 on "realtime"."messages"
-for insert
-to authenticated, anon
-with check (
-  realtime.messages.extension in ('broadcast')
-);
-
-create policy "anyone can listen to presence in topic"
-on "realtime"."messages"
-for select
+for all
 to authenticated, anon
 using (
-  realtime.messages.extension in ('presence')
-);
-
-create policy "anyone can track presence on topic"
-on "realtime"."messages"
-for insert
-to authenticated, anon
-with check (
-  realtime.messages.extension in ('presence')
+  realtime.messages.extension = 'presence'
 );

@@ -6,9 +6,11 @@ import { CopyPathButton } from '@/components/copyPathButton'
 import { GameSetupHidden } from './gameSetupHidden'
 import { GameSetupPlayers } from './gameSetupPlayers'
 import { GameSetupVariant } from './gameSetupVariant'
+import { useSupabaseContext } from '@/context/SupabaseContext'
 
 export const GameSetup = () => {
   const { instance, entrants } = useInstanceContext()
+  const { sequence } = useSupabaseContext()
 
   const canStart = entrants.length >= 1 && instance.commands?.[0]?.startsWith('CONFIG')
 
@@ -18,7 +20,7 @@ export const GameSetup = () => {
 
   return (
     <>
-      <h1>Game Setup</h1>
+      <h1>Game Setup {sequence}</h1>
       <p>
         <a
           style={{
