@@ -32,7 +32,7 @@ export const Presence = ({ user }: PresenceParams) => {
   const path = usePathname()
   const [connected, setConnected] = useState<boolean>(false)
   const [count, setCount] = useState<number | undefined>(undefined)
-  const { supabase, setChannel, channel: channelRef, sequence, setSequence } = useSupabaseContext()
+  const { supabase } = useSupabaseContext()
 
   const channelKey = pathToKey(path)
 
@@ -59,23 +59,16 @@ export const Presence = ({ user }: PresenceParams) => {
         await channel.track({ user_id: user?.id, online_at: new Date().toISOString() })
       }
     })
-    setChannel(channel)
 
     return () => {
       channel?.unsubscribe()
       channel && supabase?.removeChannel(channel)
     }
-  }, [supabase, user?.id, channelKey, path, setSequence])
+  }, [supabase, user?.id, channelKey, path])
 
   return (
     <>
-      {connected ? '🟢' : '🔴'}{' '}
-      {count && (
-        <>
-          {' '}
-          ({count} viewers) {sequence}{' '}
-        </>
-      )}
+      {connected ? '🟢' : '🔴'} {count && <> ({count} viewers)</>}
       <b>{user?.id}</b>{' '}
     </>
   )
