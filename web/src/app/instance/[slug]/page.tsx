@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
-import { InstanceContextProvider } from '@/context/InstanceContext'
+import { InstanceContextProvider, useInstanceContext } from '@/context/InstanceContext'
 import { Board } from './board'
 
 type InstanceParams = { params: Promise<{ slug: string }> }

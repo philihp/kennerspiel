@@ -1,22 +1,27 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { toggleHidden } from './actions'
 import { useOptimistic, useState, useTransition } from 'react'
+import { Tables } from '@/supabase.types'
+import { usePathname, useRouter } from 'next/navigation'
 
 export const GameSetupHidden = () => {
-  const { instance } = useInstanceContext()
+  const { instance, setInstance } = useInstanceContext()
+  const path = usePathname()
+  const router = useRouter()
 
-  const [hidden, setHidden] = useState(!!instance.hidden)
+  const hidden = !!instance.hidden
 
-  const [optHidden, setOptHidden] = useOptimistic<boolean, boolean>(hidden, (state, newState) => {
-    return newState
-  })
+  const [optInstance, setOptInstance] = useOptimistic<Tables<'instance'>, boolean>(instance, (state, hidden) => ({
+    ...state,
+    hidden,
+  }))
   const [_isPending, startTransition] = useTransition()
 
   const handleSetHidden = async (newState: boolean) => {
     startTransition(async () => {
-      setOptHidden(newState)
+      setOptInstance(newState)
       const finalState = await toggleHidden(instance.id, newState)
-      setHidden(finalState)
+      finalState && setInstance(finalState)
     })
   }
   return (
@@ -26,16 +31,16 @@ export const GameSetupHidden = () => {
         type="checkbox"
         name="hidden"
         id="hidden"
-        checked={optHidden}
+        checked={!!optInstance?.hidden}
         onChange={() => handleSetHidden(!hidden)}
       />{' '}
       <label htmlFor="hidden">Hidden</label>{' '}
-      {!optHidden && (
+      {!optInstance?.hidden && (
         <button type="button" onClick={() => handleSetHidden(true)}>
           Make Hidden
         </button>
       )}
-      {!!optHidden && (
+      {!!optInstance?.hidden && (
         <button type="button" onClick={() => handleSetHidden(false)}>
           Make Public
         </button>

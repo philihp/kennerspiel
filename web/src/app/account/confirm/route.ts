@@ -15,11 +15,10 @@ export const GET = async (request: NextRequest) => {
     const supabase = await createClient()
 
     const { error } = await supabase.auth.verifyOtp({ type, token_hash })
-    if (!error) {
-      return NextResponse.redirect(redirectTo)
+    if (error) {
+      console.log({ error })
     }
-
-    console.log({ error })
+    return NextResponse.redirect(redirectTo)
   }
 
   // return the user to an error page with some instructions

@@ -4,7 +4,8 @@ import { useSupabaseContext } from '@/context/SupabaseContext'
 import { User } from '@supabase/supabase-js'
 import { REALTIME_LISTEN_TYPES, REALTIME_SUBSCRIBE_STATES } from '@supabase/supabase-js'
 import { usePathname } from 'next/navigation'
-import { join, keys, pipe, slice, split, tail } from 'ramda'
+import { useRouter } from 'next/navigation'
+import { join, keys, lensProp, pipe, set, slice, split, tail } from 'ramda'
 import { useEffect, useState } from 'react'
 
 type PresenceParams = {
@@ -15,22 +16,25 @@ const pathToKey: (path: string) => string = pipe<
   [string], // input type
   string[], // after split
   string[], // after tail
-  string[], // after slice
+  string[], // after slice,
+  string[], // after set,
   string // final output after join
 >(
   //
   split('/'),
   tail,
   slice(0, 2),
+  set<string[], string>(lensProp(0), 'presence'),
   join(':')
 )
 
 export const Presence = ({ user }: PresenceParams) => {
+  const path = usePathname()
   const [connected, setConnected] = useState<boolean>(false)
   const [count, setCount] = useState<number | undefined>(undefined)
-  const { supabase, setChannel, channel: channelRef, sequence, setSequence } = useSupabaseContext()
+  const { supabase } = useSupabaseContext()
 
-  const channelKey = pathToKey(usePathname())
+  const channelKey = pathToKey(path)
 
   useEffect(() => {
     if (supabase === undefined) return
@@ -40,15 +44,10 @@ export const Presence = ({ user }: PresenceParams) => {
         presence: { key: user?.id },
       },
     })
-    setChannel(channel)
 
     channel.on(REALTIME_LISTEN_TYPES.PRESENCE, { event: 'sync' }, () => {
       const present = channel.presenceState()
       setCount(keys(present).length)
-    })
-    channel.on(REALTIME_LISTEN_TYPES.BROADCAST, { event: 'sync' }, ({ payload }) => {
-      // using the sequence as a key for the Board component, incrementing it triggers reloads
-      setSequence((n) => n + 1)
     })
     channel.subscribe(async (status: REALTIME_SUBSCRIBE_STATES, err?: Error) => {
       if (err) {
@@ -65,17 +64,11 @@ export const Presence = ({ user }: PresenceParams) => {
       channel?.unsubscribe()
       channel && supabase?.removeChannel(channel)
     }
-  }, [supabase, user?.id, channelKey, setSequence])
+  }, [supabase, user?.id, channelKey, path])
 
   return (
     <>
-      {connected ? '🟢' : '🔴'}{' '}
-      {count && (
-        <>
-          {' '}
-          ({count} viewers) {sequence}{' '}
-        </>
-      )}
+      {connected ? '🟢' : '🔴'} {count && <> ({count} viewers)</>}
       <b>{user?.id}</b>{' '}
     </>
   )

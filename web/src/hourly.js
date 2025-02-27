@@ -7,7 +7,7 @@ const execute = async () => {
   if (!supabaseUrl) return console.error('Please add the SUPABASE_URL to Github variables')
   if (!supabaseKey) return console.error('Please add the SUPABASE_KEY to Github secrets')
   const supabase = createClient(supabaseUrl, supabaseKey)
-  const result = await supabase.from('state').select('*', { count: 'exact', head: true })
+  const result = await supabase.from('instance').select('*', { count: 'exact', head: true })
   console.log(result)
 }
 
