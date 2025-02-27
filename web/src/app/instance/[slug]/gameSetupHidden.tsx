@@ -22,6 +22,7 @@ export const GameSetupHidden = () => {
   return (
     <>
       <hr />
+      {JSON.stringify(instance.hidden)}
       <input
         type="checkbox"
         name="hidden"
