@@ -93,23 +93,26 @@ export const join = async (
   return [entrant, shallowInstance]
 }
 
-export const toggleHidden = async (instanceId: string, hidden: boolean): Promise<boolean> => {
+export const toggleHidden = async (instanceId: string, hidden: boolean): Promise<Tables<'instance'> | undefined> => {
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) {
     console.error('ERROR: toggleHidden has no user')
-    return hidden
+    return
   }
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('instance')
     .update({ hidden, updated_at: new Date().toISOString() })
     .eq('id', instanceId)
+    .select()
+    .single()
   if (error) {
     console.error(JSON.stringify(error, undefined, 2))
+    return
   }
-  return hidden
+  return data
 }
 
 export const config = async (instanceId: string, configString: string) => {

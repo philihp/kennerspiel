@@ -9,19 +9,15 @@ import {
   SetStateAction,
   useContext,
   useEffect,
-  // useEffect,
   useMemo,
   useState,
 } from 'react'
-// import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT} from '@supabase/supabase-js'
 import { REALTIME_LISTEN_TYPES, REALTIME_SUBSCRIBE_STATES, RealtimeChannel, User } from '@supabase/supabase-js'
 import { Enums, Tables } from '@/supabase.types'
-// import { reject } from 'ramda'
-import { Controls, GameStateSetup, GameStatusEnum, PlayerColor } from 'hathora-et-labora-game/dist/types'
+import { Controls, GameStatusEnum, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { match } from 'ts-pattern'
 import { serverMove } from './actions'
 import { useSupabaseContext } from './SupabaseContext'
-import { usePathname, useRouter } from 'next/navigation'
 
 const engineColorToEntrantColor = (c?: PlayerColor): Enums<'color'> | undefined =>
   match<PlayerColor | undefined, Enums<'color'> | undefined>(c)
@@ -70,8 +66,6 @@ export const InstanceContextProvider = ({
   instance: providedInstance,
   entrants: providedEntrants,
 }: InstanceContextProviderProps) => {
-  const router = useRouter()
-  // const path = usePathname()
   const { supabase } = useSupabaseContext()
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
@@ -81,15 +75,10 @@ export const InstanceContextProvider = ({
   let channel: RealtimeChannel | undefined
   useEffect(() => {
     if (supabase === undefined) return
-    channel = supabase?.channel(`instance:${instance?.id}`, {
-      config: {
-        broadcast: { self: false },
-        presence: { key: user?.id },
-      },
-    })
+    channel = supabase?.channel(`instance:${instance?.id}`)
     channel.on(REALTIME_LISTEN_TYPES.BROADCAST, { event: 'sync' }, ({ payload }) => {
-      console.log('BROADCAST SYNC', payload)
-      setInstance((oldPayload) => ({ ...payload, ...oldPayload }))
+      const { id, ...payloadWIthoutId } = payload
+      setInstance((oldPayload) => ({ ...oldPayload, ...payloadWIthoutId }))
     })
     channel.subscribe(async (status: REALTIME_SUBSCRIBE_STATES, err?: Error) => {
       if (err) {
@@ -97,7 +86,6 @@ export const InstanceContextProvider = ({
         return
       }
       if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
-        // sgtm
       }
     })
 
