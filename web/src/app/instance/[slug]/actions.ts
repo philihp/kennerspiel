@@ -126,7 +126,7 @@ export const config = async (instanceId: string, configString: string) => {
   }
   const { data, error } = await supabase
     .from('instance')
-    .update({ commands: [configString] })
+    .update({ commands: [configString], updated_at: new Date().toISOString() })
     .eq('id', instanceId)
     .select()
     .single()

@@ -44,12 +44,12 @@ export const GameSetupVariant = () => {
     startTransition(async () => {
       // optimistic reducer
       setOptInstance([country, length])
-      const updatedInstance = await config(
+      const finalInstance = await config(
         instance.id,
         `CONFIG ${Math.max(players, 1)} ${country.toLowerCase()} ${length.toLowerCase()}`
       )
       // pessimistic reducer
-      if (updatedInstance) setInstance(updatedInstance)
+      if (finalInstance) setInstance((oldInstance) => ({ ...oldInstance, ...finalInstance }))
     })
   }
 
