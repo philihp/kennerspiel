@@ -1,6 +1,6 @@
 import { useInstanceContext } from '@/context/InstanceContext'
-import { join } from './actions'
-import { useOptimistic, useTransition } from 'react'
+import { join, reloadEntrants } from './actions'
+import { useEffect, useOptimistic, useTransition } from 'react'
 import { Seat } from '@/components/seat'
 import { Enums, Tables } from '@/supabase.types'
 import { find, pipe, propEq, reject, splitWhen, tail } from 'ramda'
@@ -31,6 +31,19 @@ export const GameSetupPlayers = () => {
 
   const [_isPending, startTransition] = useTransition()
 
+  useEffect(() => {
+    const timer = setInterval(handleReload, 1000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
+
+  const handleReload = async () => {
+    if (instance === undefined) return
+    const entrantList = await reloadEntrants(instance.id)
+    setEntrants(entrantList)
+  }
+
   const handleSelectColor = (color: Enums<'color'>) => async () => {
     startTransition(async () => {
       setOptEntrants(color)
@@ -59,6 +72,9 @@ export const GameSetupPlayers = () => {
     <>
       <hr />
       <h3>Players ({optEntrants?.length})</h3>
+      <button type="button" onClick={handleReload}>
+        Reload
+      </button>
       <Seat clergyId="LB1R" entrant={findEntrant('red')} onClick={handleSelectColor('red')} onLeave={handleLeave} />
       <Seat clergyId="LB1G" entrant={findEntrant('green')} onClick={handleSelectColor('green')} onLeave={handleLeave} />
       <Seat clergyId="LB1B" entrant={findEntrant('blue')} onClick={handleSelectColor('blue')} onLeave={handleLeave} />
