@@ -148,33 +148,37 @@ export const config = async (instanceId: string, configString: string) => {
 }
 
 export const start = async (instanceId: string) => {
+  console.log('starting game')
   const supabase = await createClient()
-  const { data: instance } = await supabase
-    .from('instance')
-    .select('commands, entrant(id)')
-    .eq('id', instanceId)
-    .single()
-  if (instance?.commands?.length !== 1) {
+  const { data, error } = await supabase.from('instance').select('*, entrant(id)').eq('id', instanceId).single()
+  if (!data || error) {
+    console.error(error)
+    return
+  }
+  const { entrant, ...instance } = data
+  if (instance.commands?.length !== 1) {
     console.error(`ERROR: cannot START instance it should have exactly one CONFIG command ${instanceId}`)
     return
   }
-  if (instance?.entrant?.length === 0) {
+  if (entrant?.length === 0) {
     console.error(`ERROR: cannot START instance because no entrants ${instanceId}`)
     return
   }
-
   const seed = (Math.random() * 100000) | 0
-
   const { data: entrants } = await supabase.from('entrant').select('color').eq('instance_id', instanceId)
   const colors = (entrants ?? []).map((entrant) => entrant.color[0]?.toUpperCase()).join(' ')
-
-  const updateSet = {
-    commands: [instance.commands[0], `START ${seed} ${colors}`],
-    updated_at: new Date().toISOString(),
-  }
-  const { error: startError } = await supabase.from('instance').update(updateSet).eq('id', instanceId)
-
+  const { data: updatedData, error: startError } = await supabase
+    .from('instance')
+    .update({
+      commands: [instance.commands[0], `START ${seed} ${colors}`],
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', instanceId)
+    .select()
+    .single()
   if (startError) {
     console.error(`ERROR: cannot START because ${startError}`)
   }
+  console.log('returning ', updatedData)
+  return updatedData
 }

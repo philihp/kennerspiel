@@ -72,6 +72,10 @@ export const InstanceContextProvider = ({
   const [partial, setPartial] = useState<string[]>([])
   const [commands, setCommands] = useState<string[]>(providedInstance.commands)
 
+  useEffect(() => {
+    setCommands(instance.commands)
+  }, [instance.commands, setCommands])
+
   let channel: RealtimeChannel | undefined
   useEffect(() => {
     if (supabase === undefined) return
