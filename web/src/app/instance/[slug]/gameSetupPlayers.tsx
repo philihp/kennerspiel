@@ -32,7 +32,7 @@ export const GameSetupPlayers = () => {
   const [_isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    const timer = setInterval(handleReload, 1000)
+    const timer = setInterval(handleReload, 618.3398875)
     return () => {
       clearInterval(timer)
     }
@@ -72,9 +72,6 @@ export const GameSetupPlayers = () => {
     <>
       <hr />
       <h3>Players ({optEntrants?.length})</h3>
-      <button type="button" onClick={handleReload}>
-        Reload
-      </button>
       <Seat clergyId="LB1R" entrant={findEntrant('red')} onClick={handleSelectColor('red')} onLeave={handleLeave} />
       <Seat clergyId="LB1G" entrant={findEntrant('green')} onClick={handleSelectColor('green')} onLeave={handleLeave} />
       <Seat clergyId="LB1B" entrant={findEntrant('blue')} onClick={handleSelectColor('blue')} onLeave={handleLeave} />

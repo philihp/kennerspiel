@@ -6,15 +6,17 @@ import { CopyPathButton } from '@/components/copyPathButton'
 import { GameSetupHidden } from './gameSetupHidden'
 import { GameSetupPlayers } from './gameSetupPlayers'
 import { GameSetupVariant } from './gameSetupVariant'
-import { useSupabaseContext } from '@/context/SupabaseContext'
+import { usePathname } from 'next/navigation'
 
 export const GameSetup = () => {
-  const { instance, entrants } = useInstanceContext()
+  const path = usePathname()
+  const { instance, setInstance, entrants } = useInstanceContext()
 
   const canStart = entrants.length >= 1 && instance.commands?.[0]?.startsWith('CONFIG')
 
   const handleStart = async () => {
-    await start(instance.id)
+    const newInstance = await start(instance.id)
+    if (newInstance) setInstance({ ...newInstance })
   }
 
   return (
