@@ -93,6 +93,16 @@ export const join = async (
   return [entrant, shallowInstance]
 }
 
+export const reloadEntrants = async (instanceId: string): Promise<Tables<'entrant'>[]> => {
+  const supabase = await createClient()
+  const { data, error } = await supabase.from('instance').select('entrant(*)').eq('id', instanceId).single()
+  if (error) {
+    console.error(error)
+    return []
+  }
+  return data.entrant
+}
+
 export const toggleHidden = async (instanceId: string, hidden: boolean): Promise<Tables<'instance'> | undefined> => {
   const supabase = await createClient()
   const {
