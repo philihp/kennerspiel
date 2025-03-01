@@ -4,13 +4,13 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
 
-export const disconnect = async () => {
+export const disconnect = async (redirectTo: string) => {
   const supabase = await createClient()
   const { error } = await supabase.auth.signOut({ scope: 'local' })
   if (error) {
     return error?.message
   }
-  redirect('/')
+  redirect(redirectTo)
 }
 
 export const changePassword = async (formData: FormData) => {

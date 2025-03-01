@@ -5,8 +5,10 @@ import { redirect } from 'next/navigation'
 import { Turnstile } from '@marsidev/react-turnstile'
 
 import { connect, skip } from './actions'
+import { useSupabaseContext } from '@/context/SupabaseContext'
 
 const Connect = () => {
+  const { redirectTo } = useSupabaseContext()
   const [response, setResponse] = useState<string>('')
   const [captchaToken, setCaptchaToken] = useState<string>('')
 
@@ -16,7 +18,7 @@ const Connect = () => {
       setResponse(error)
       return
     }
-    redirect('/instance')
+    redirect(redirectTo)
   }
 
   const handleSkip = async (formData: FormData) => {
@@ -25,7 +27,7 @@ const Connect = () => {
       setResponse(error)
       return
     }
-    redirect('/instance')
+    redirect(redirectTo)
   }
 
   return (
