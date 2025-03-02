@@ -76,10 +76,9 @@ export const InstanceContextProvider = ({
     setCommands(instance.commands)
   }, [instance.commands, setCommands])
 
-  let channel: RealtimeChannel | undefined
   useEffect(() => {
     if (supabase === undefined) return
-    channel = supabase?.channel(`instance:${instance?.id}`)
+    const channel = supabase?.channel(`instance:${instance?.id}`)
     channel.on(REALTIME_LISTEN_TYPES.BROADCAST, { event: 'sync' }, ({ payload }) => {
       const { id, ...payloadWIthoutId } = payload
       setInstance((oldPayload) => ({ ...oldPayload, ...payloadWIthoutId }))

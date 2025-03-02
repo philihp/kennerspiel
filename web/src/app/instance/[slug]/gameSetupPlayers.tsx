@@ -32,17 +32,15 @@ export const GameSetupPlayers = () => {
   const [_isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    const timer = setInterval(handleReload, 618.3398875)
+    const timer = setInterval(async () => {
+      if (instance === undefined) return
+      const entrantList = await reloadEntrants(instance.id)
+      setEntrants(entrantList)
+    }, 618.3398875)
     return () => {
       clearInterval(timer)
     }
-  }, [])
-
-  const handleReload = async () => {
-    if (instance === undefined) return
-    const entrantList = await reloadEntrants(instance.id)
-    setEntrants(entrantList)
-  }
+  }, [setEntrants, instance])
 
   const handleSelectColor = (color: Enums<'color'>) => async () => {
     startTransition(async () => {
