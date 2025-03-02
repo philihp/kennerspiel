@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { Presence } from './presence'
 import { createClient } from '@/utils/supabase/server'
+import { Connect } from './connect'
+import { Settings } from './settings'
 
 const Header = async () => {
   const supabase = await createClient()
@@ -17,7 +19,7 @@ const Header = async () => {
       {user?.email === undefined && (
         <>
           &nbsp;[&nbsp;
-          <Link href="/account/connect">Connect</Link>
+          <Connect />
           &nbsp;]
         </>
       )}
@@ -26,7 +28,7 @@ const Header = async () => {
           &nbsp;[&nbsp;
           <Link href="/instance/">Instances</Link>
           &nbsp;|&nbsp;
-          <Link href="/account/settings">Settings⚠️</Link> ]
+          <Settings />
         </>
       )}
       {user?.email !== undefined && user?.is_anonymous === false && (
@@ -36,7 +38,7 @@ const Header = async () => {
           &nbsp;|&nbsp;
           <Link href="/instance/">Instances</Link>
           &nbsp;|&nbsp;
-          <Link href="/account/settings">Settings</Link> ]
+          <Settings />
         </>
       )}
     </header>

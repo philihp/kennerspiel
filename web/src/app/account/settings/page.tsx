@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/server'
 import ChangePassword from './changePassword'
 import { LinkEmail } from './linkEmail'
 import DisconnectButton from './disconnectButton'
+import { useSupabaseContext } from '@/context/SupabaseContext'
 
 const SettingsPage = async () => {
   const supabase = await createClient()
@@ -14,7 +15,7 @@ const SettingsPage = async () => {
     error,
   } = await supabase.auth.getUser()
   if (error || !user) {
-    redirect('/account/login')
+    redirect('/account/connect')
   }
 
   return (
