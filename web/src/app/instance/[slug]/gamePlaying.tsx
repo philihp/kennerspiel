@@ -12,7 +12,7 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import { Enums } from '@/supabase.types'
 import { GameStatePlaying, Tableau } from 'hathora-et-labora-game'
 import { PlayerColor } from 'hathora-et-labora-game/dist/types'
-import { map, nth, pipe, range } from 'ramda'
+import { map, pipe, range } from 'ramda'
 import { ReactNode } from 'react'
 import { match } from 'ts-pattern'
 
@@ -39,7 +39,7 @@ export const GamePlaying = () => {
   const { state, user, controls, entrants, instance, active } = useInstanceContext()
   if (state === undefined) return <>Missing Game State</>
 
-  const { players, buildings, plotPurchasePrices, districtPurchasePrices, wonders } = state
+  const { players } = state
 
   const playerOrder = playerOrdering(state)
   const soloNeutralBuild = state?.config?.players === 1 && !!state?.frame?.neutralBuildingPhase
@@ -68,10 +68,6 @@ export const GamePlaying = () => {
 
   return (
     <>
-      {JSON.stringify({
-        user: user?.id,
-        activeColor: state.players[state.frame.activePlayerIndex].color,
-      })}
       <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr' }}>
         <MoveList />
         <div>

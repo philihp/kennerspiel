@@ -1,11 +1,12 @@
-import { ReactNode, useState } from 'react'
+import { ClipboardCopy } from 'lucide-react'
+import { useState } from 'react'
 
 export interface CopyPathButtonProps {
   path: string
 }
 
 export const CopyPathButton = ({ path }: CopyPathButtonProps) => {
-  const [message, setMessage] = useState('Copy to Clipboard')
+  const [message, setMessage] = useState('Copy')
   const [disabled, setDisabled] = useState(false)
   return (
     <button
@@ -21,7 +22,7 @@ export const CopyPathButton = ({ path }: CopyPathButtonProps) => {
       }}
       disabled={disabled}
     >
-      {message}
+      {message} <ClipboardCopy size={12} />
     </button>
   )
 }
