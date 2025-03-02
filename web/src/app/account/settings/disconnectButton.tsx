@@ -14,8 +14,6 @@ const DisconnectButton = () => {
 
   return (
     <form>
-      <pre>{JSON.stringify(redirectTo, undefined, 2)}</pre>
-
       <button formAction={disconnectAndReturn}>Disconnect</button>
     </form>
   )
