@@ -98,19 +98,19 @@ export const Rondel = () => {
           <polyline points={mask} fill="black" filter="url(#shadow)" />
         </g>
         <g id="wheel">
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeA} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeB} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeC} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeD} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeE} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeF} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeG} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeH} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeI} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeJ} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeK} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeL} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" stroke-width="1" points={wedgeM} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeA} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeB} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeC} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeD} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeE} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeF} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeG} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeH} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeI} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeJ} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeK} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeL} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeM} />
         </g>
         <g
           id="arm"
