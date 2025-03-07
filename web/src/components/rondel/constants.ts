@@ -37,19 +37,21 @@ export const wedgeK = `0,0 ${points[10].join(',')} ${points[11].join(',')} 0,0`
 export const wedgeL = `0,0 ${points[11].join(',')} ${points[12].join(',')} 0,0`
 export const wedgeM = `0,0 ${points[12].join(',')} ${points[0].join(',')} 0,0`
 
-export const rotA = `${(360 * 12.5) / points.length}`
-export const rotB = `${(360 * 11.5) / points.length}`
-export const rotC = `${(360 * 10.5) / points.length}`
-export const rotD = `${(360 * 9.5) / points.length}`
-export const rotE = `${(360 * 8.5) / points.length}`
-export const rotF = `${(360 * 7.5) / points.length}`
-export const rotG = `${(360 * 6.5) / points.length}`
-export const rotH = `${(360 * 5.5) / points.length}`
-export const rotI = `${(360 * 4.5) / points.length}`
-export const rotJ = `${(360 * 3.5) / points.length}`
-export const rotK = `${(360 * 2.5) / points.length}`
-export const rotL = `${(360 * 1.5) / points.length}`
-export const rotM = `${(360 * 0.5) / points.length}`
+export const rot = {
+  A: `${(360 * 12.5) / points.length}`,
+  B: `${(360 * 11.5) / points.length}`,
+  C: `${(360 * 10.5) / points.length}`,
+  D: `${(360 * 9.5) / points.length}`,
+  E: `${(360 * 8.5) / points.length}`,
+  F: `${(360 * 7.5) / points.length}`,
+  G: `${(360 * 6.5) / points.length}`,
+  H: `${(360 * 5.5) / points.length}`,
+  I: `${(360 * 4.5) / points.length}`,
+  J: `${(360 * 3.5) / points.length}`,
+  K: `${(360 * 2.5) / points.length}`,
+  L: `${(360 * 1.5) / points.length}`,
+  M: `${(360 * 0.5) / points.length}`,
+}
 
 export const ARM_RADIUS = 35
 export const ARM_WIDTH = 6
