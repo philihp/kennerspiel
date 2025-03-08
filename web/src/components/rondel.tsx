@@ -1,6 +1,8 @@
 import { useInstanceContext } from '@/context/InstanceContext'
-import { addIndex, keys, map, range, toPairs } from 'ramda'
+import { addIndex, map, range, toPairs } from 'ramda'
 import { ReactNode } from 'react'
+import { RondelSettlements } from './rondel/settlements'
+import { mask, wedge, arrowPath, armPath } from './rondel/constants'
 
 const symbols = {
   wood: '🪵',
@@ -13,61 +15,6 @@ const symbols = {
   grape: '🍇',
   stone: '🪨',
 }
-
-const WHEEL_RADIUS = 140
-const points = new Array<[number, number]>(13)
-for (let n = 0; n < points.length; n++) {
-  const x = -Math.sin((n * Math.PI * 2) / points.length) * WHEEL_RADIUS
-  const y = -Math.cos((n * Math.PI * 2) / points.length) * WHEEL_RADIUS
-  points[n] = [x, y]
-}
-
-const mask =
-  `${points[0].join(',')} ` +
-  `${points[1].join(',')} ` +
-  `${points[2].join(',')} ` +
-  `${points[3].join(',')} ` +
-  `${points[4].join(',')} ` +
-  `${points[5].join(',')} ` +
-  `${points[6].join(',')} ` +
-  `${points[7].join(',')} ` +
-  `${points[8].join(',')} ` +
-  `${points[9].join(',')} ` +
-  `${points[10].join(',')} ` +
-  `${points[11].join(',')} ` +
-  `${points[12].join(',')} ` +
-  `${points[0].join(',')} `
-
-const wedgeA = `0,0 ${points[0].join(',')} ${points[1].join(',')} 0,0`
-const wedgeB = `0,0 ${points[1].join(',')} ${points[2].join(',')} 0,0`
-const wedgeC = `0,0 ${points[2].join(',')} ${points[3].join(',')} 0,0`
-const wedgeD = `0,0 ${points[3].join(',')} ${points[4].join(',')} 0,0`
-const wedgeE = `0,0 ${points[4].join(',')} ${points[5].join(',')} 0,0`
-const wedgeF = `0,0 ${points[5].join(',')} ${points[6].join(',')} 0,0`
-const wedgeG = `0,0 ${points[6].join(',')} ${points[7].join(',')} 0,0`
-const wedgeH = `0,0 ${points[7].join(',')} ${points[8].join(',')} 0,0`
-const wedgeI = `0,0 ${points[8].join(',')} ${points[9].join(',')} 0,0`
-const wedgeJ = `0,0 ${points[9].join(',')} ${points[10].join(',')} 0,0`
-const wedgeK = `0,0 ${points[10].join(',')} ${points[11].join(',')} 0,0`
-const wedgeL = `0,0 ${points[11].join(',')} ${points[12].join(',')} 0,0`
-const wedgeM = `0,0 ${points[12].join(',')} ${points[0].join(',')} 0,0`
-
-const ARM_RADIUS = 35
-const ARM_WIDTH = 6
-const ARM_LENGTH = 110
-const ARM_TEXT_RADIUS = 25
-
-const armPath =
-  `M${-ARM_WIDTH / 2},${-ARM_LENGTH} ` +
-  `Q${-ARM_WIDTH / 2},${-ARM_RADIUS} ${Math.sin((12 / 13) * 2 * Math.PI) * ARM_RADIUS},${-Math.cos((12 / 13) * 2 * Math.PI) * ARM_RADIUS} ` +
-  `A${ARM_RADIUS},${ARM_RADIUS} 0 1,0 ${Math.sin((1 / 13) * 2 * Math.PI) * ARM_RADIUS},${-Math.cos((1 / 13) * 2 * Math.PI) * ARM_RADIUS} ` +
-  `Q${ARM_WIDTH / 2},${-ARM_RADIUS} ${ARM_WIDTH / 2},${-ARM_LENGTH} ` +
-  `z`
-
-const ARROW_RADIUS = 44
-const ARROW_SIZE = 7
-
-const arrowPath = `M${-ARROW_SIZE / 2},${-ARROW_RADIUS} l${ARROW_SIZE},${ARROW_SIZE / 2} v${-ARROW_SIZE} z`
 
 export const Rondel = () => {
   const { state, controls, addPartial } = useInstanceContext()
@@ -84,7 +31,7 @@ export const Rondel = () => {
       : [0, 2, 3, 4, 5, 6, 6, 7, 7, 8, 8, 9, 10]
   return (
     <div>
-      <svg style={{ float: 'right', width: '300px', height: '300px' }} viewBox="-150.5 -150.5 300 300">
+      <svg style={{ float: 'right', width: '600px', height: '600px' }} viewBox="-300.5 -300.5 600 600">
         <defs>
           <linearGradient id="housefill" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" style={{ stopColor: '#004e85', stopOpacity: 1 }} />
@@ -98,20 +45,36 @@ export const Rondel = () => {
           <polyline points={mask} fill="black" filter="url(#shadow)" />
         </g>
         <g id="wheel">
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeA} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeB} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeC} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeD} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeE} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeF} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeG} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeH} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeI} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeJ} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeK} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeL} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeM} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.A} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.B} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.C} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.D} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.E} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.F} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.G} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.H} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.I} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.J} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.K} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.L} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.M} />
         </g>
+
+        <RondelSettlements />
+
+        {/* <c:if test="${board.mode.grapesUsed}">
+          <g id="grape" transform="rotate(${ora:deg(board.wheel.grape.position)})">
+            <text x="0" y="${board.wheel.grape.radius}"
+            style="font-size: 9px; font-weight: 100; kerning:-0.5; text-anchor: middle; fill:#000">Grape</text>
+          </g>
+        </c:if>
+        <c:if test="${board.mode.stoneUsed}">
+          <g id="stone" transform="rotate(${ora:deg(board.wheel.stone.position)})">
+            <text x="0" y="${board.wheel.stone.radius}"
+            style="font-size: 9px; font-weight: 100; kerning:-0.5; text-anchor: middle; fill:#000">Stone</text>
+          </g>
+        </c:if> */}
+
         <g
           id="arm"
           transform="rotate(${ora:deg(board.wheel.arm.position)-board.armOffset})"
