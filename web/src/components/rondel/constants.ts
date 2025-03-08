@@ -23,19 +23,21 @@ export const mask =
   `${points[12].join(',')} ` +
   `${points[0].join(',')} `
 
-export const wedgeA = `0,0 ${points[0].join(',')} ${points[1].join(',')} 0,0`
-export const wedgeB = `0,0 ${points[1].join(',')} ${points[2].join(',')} 0,0`
-export const wedgeC = `0,0 ${points[2].join(',')} ${points[3].join(',')} 0,0`
-export const wedgeD = `0,0 ${points[3].join(',')} ${points[4].join(',')} 0,0`
-export const wedgeE = `0,0 ${points[4].join(',')} ${points[5].join(',')} 0,0`
-export const wedgeF = `0,0 ${points[5].join(',')} ${points[6].join(',')} 0,0`
-export const wedgeG = `0,0 ${points[6].join(',')} ${points[7].join(',')} 0,0`
-export const wedgeH = `0,0 ${points[7].join(',')} ${points[8].join(',')} 0,0`
-export const wedgeI = `0,0 ${points[8].join(',')} ${points[9].join(',')} 0,0`
-export const wedgeJ = `0,0 ${points[9].join(',')} ${points[10].join(',')} 0,0`
-export const wedgeK = `0,0 ${points[10].join(',')} ${points[11].join(',')} 0,0`
-export const wedgeL = `0,0 ${points[11].join(',')} ${points[12].join(',')} 0,0`
-export const wedgeM = `0,0 ${points[12].join(',')} ${points[0].join(',')} 0,0`
+export const wedge = {
+  A: `0,0 ${points[0].join(',')} ${points[1].join(',')} 0,0`,
+  B: `0,0 ${points[1].join(',')} ${points[2].join(',')} 0,0`,
+  C: `0,0 ${points[2].join(',')} ${points[3].join(',')} 0,0`,
+  D: `0,0 ${points[3].join(',')} ${points[4].join(',')} 0,0`,
+  E: `0,0 ${points[4].join(',')} ${points[5].join(',')} 0,0`,
+  F: `0,0 ${points[5].join(',')} ${points[6].join(',')} 0,0`,
+  G: `0,0 ${points[6].join(',')} ${points[7].join(',')} 0,0`,
+  H: `0,0 ${points[7].join(',')} ${points[8].join(',')} 0,0`,
+  I: `0,0 ${points[8].join(',')} ${points[9].join(',')} 0,0`,
+  J: `0,0 ${points[9].join(',')} ${points[10].join(',')} 0,0`,
+  K: `0,0 ${points[10].join(',')} ${points[11].join(',')} 0,0`,
+  L: `0,0 ${points[11].join(',')} ${points[12].join(',')} 0,0`,
+  M: `0,0 ${points[12].join(',')} ${points[0].join(',')} 0,0`,
+}
 
 export const rot = {
   A: `${(360 * 12.5) / points.length}`,

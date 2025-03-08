@@ -1,26 +1,8 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { addIndex, map, range, toPairs } from 'ramda'
 import { ReactNode } from 'react'
-import { match } from 'ts-pattern'
-import { RondelSettlements, RondelSettlementsSolo } from './rondel/settlements'
-import {
-  mask,
-  wedgeA,
-  wedgeB,
-  wedgeC,
-  wedgeD,
-  wedgeE,
-  wedgeF,
-  wedgeG,
-  wedgeH,
-  wedgeI,
-  wedgeJ,
-  wedgeK,
-  wedgeL,
-  wedgeM,
-  arrowPath,
-  armPath,
-} from './rondel/constants'
+import { RondelSettlements } from './rondel/settlements'
+import { mask, wedge, arrowPath, armPath } from './rondel/constants'
 
 const symbols = {
   wood: '🪵',
@@ -63,19 +45,19 @@ export const Rondel = () => {
           <polyline points={mask} fill="black" filter="url(#shadow)" />
         </g>
         <g id="wheel">
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeA} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeB} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeC} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeD} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeE} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeF} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeG} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeH} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeI} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeJ} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeK} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeL} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedgeM} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.A} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.B} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.C} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.D} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.E} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.F} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.G} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.H} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.I} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.J} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.K} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.L} />
+          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.M} />
         </g>
 
         <RondelSettlements />
