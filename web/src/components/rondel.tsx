@@ -2,7 +2,7 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import { addIndex, map, range, toPairs } from 'ramda'
 import { ReactNode } from 'react'
 import { match } from 'ts-pattern'
-import { RondelSettlements, RondelSettlementsFourLong, RondelSettlementsSolo } from './rondel/settlements'
+import { RondelSettlements, RondelSettlementsSolo } from './rondel/settlements'
 import {
   mask,
   wedgeA,
