@@ -1,0 +1,13 @@
+.token {
+  font-size: 18px;
+  font-weight: 100;
+  text-anchor: middle;
+  fill: #000
+}
+
+.armPath {
+  fill: #ffffff;
+  fill-opacity: 1;
+  stroke: #686868;
+  stroke-width: 1;
+}
