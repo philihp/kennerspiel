@@ -67,8 +67,6 @@ export const Actions = () => {
         )}
         <ActionCommit />
 
-        {JSON.stringify(controls?.completion)}
-
         {/* {partial === '' && (
           <>
             <button type="button" className={classes.action} onClick={() => setPartial('')}>

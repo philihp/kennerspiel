@@ -72,12 +72,12 @@ export const GamePlaying = () => {
         <MoveList />
         <div>
           <Actions />
-          <UnbuiltPlots />
-          <UnbuiltDistricts />
-          <UnbuiltWonders />
           <Rondel />
           <UnbuiltBuildings />
           {playerBoards}
+          <UnbuiltPlots />
+          <UnbuiltDistricts />
+          <UnbuiltWonders />
         </div>
       </div>
 
