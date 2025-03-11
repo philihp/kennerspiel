@@ -1,4 +1,4 @@
-import { match } from 'ts-pattern'
+import { match, P } from 'ts-pattern'
 import { housePath, houseTextY, INCOME_RADIUS, rot } from './constants'
 import { useInstanceContext } from '@/context/InstanceContext'
 

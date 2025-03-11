@@ -68,8 +68,7 @@ export const Presence = ({ user }: PresenceParams) => {
 
   return (
     <>
-      {connected ? '🟢' : '🔴'} {count && <> ({count} viewers)</>}
-      <b>{user?.id}</b>{' '}
+      {connected ? '🟢' : '🔴'} {count && <> ({count} viewers)</>}{' '}
     </>
   )
 }

@@ -1,12 +1,18 @@
-import { Flower } from 'hathora-et-labora-game/dist/types'
+import { Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { any, equals, length, map } from 'ramda'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { FrameModal } from './frameModal'
 import { Erection } from './erection'
+import Dot from './dot'
+import { match } from 'ts-pattern'
 
-const colorToChar = (color?: string): string => {
-  return color ?? ''
-}
+const colorToChar = (color?: PlayerColor): ReactNode =>
+  match(color)
+    .with(PlayerColor.Red, (c) => <Dot color={'#fb8072'} border={'#ad574d'} />)
+    .with(PlayerColor.Green, (c) => <Dot color={'#b3de69'} border={'#87a74f'} />)
+    .with(PlayerColor.Blue, (c) => <Dot color={'#80b1d3'} border={'#5f849e'} />)
+    .with(PlayerColor.White, (c) => <Dot color={'#d9d9d9'} border={'#b1b1b1'} />)
+    .otherwise(() => <></>)
 
 type FrameParams = {
   frame: Flower
@@ -17,9 +23,19 @@ export const Frame = ({ frame }: FrameParams) => {
 
   return (
     <>
-      {frame.settle && `Settle ${colorToChar(frame.player)}`}
-      {!frame.settle && frame.bonus && `Bonus ${colorToChar(frame.player)}`}
-      {!frame.settle && !frame.bonus && `Round ${frame.round} ${colorToChar(frame.player)}`}
+      {frame.settle && (
+        <>
+          {colorToChar(frame.player)}
+          Settle
+        </>
+      )}
+      {!frame.settle && frame.bonus && <>{colorToChar(frame.player)} Bonus</>}
+      {!frame.settle && !frame.bonus && (
+        <>
+          {colorToChar(frame.player)}
+          Action, round {frame.round}
+        </>
+      )}
       {frame.introduced.length > 0 && (
         <span>
           {' '}
