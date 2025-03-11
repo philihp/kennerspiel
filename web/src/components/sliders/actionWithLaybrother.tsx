@@ -1,7 +1,10 @@
+import { useTranslations } from 'next-intl'
 import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 
 export const ActionWithLaybrother = () => {
+  const t = useTranslations('components/sliders')
+
   const { controls, addPartial, active } = useInstanceContext()
 
   const handleClick = () => {
@@ -12,7 +15,7 @@ export const ActionWithLaybrother = () => {
 
   return (
     <button type="button" disabled={disabled} className={`primary ${classes.action}`} onClick={handleClick}>
-      With Laybrother
+      {t('with-laybrother')}
     </button>
   )
 }

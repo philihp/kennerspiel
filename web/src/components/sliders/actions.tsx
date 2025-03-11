@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { GameStatePlaying } from 'hathora-et-labora-game'
 
 import { useInstanceContext } from '@/context/InstanceContext'
@@ -16,6 +17,8 @@ import { ActionSettle } from './actionSettle'
 import { ActionCommit } from './actionCommit'
 
 export const Actions = () => {
+  const t = useTranslations('components/sliders')
+
   const { controls, state, partial, clearPartial, move, active } = useInstanceContext()
   const completion = controls?.completion ?? []
 
@@ -30,9 +33,10 @@ export const Actions = () => {
   return (
     <>
       <div>
-        Partial ({partial.length}): {partial.join(' ')}
+        {t('partial-length-info', { partialLength: partial.length })}
+        {partial.join(' ')}
         <button type="button" disabled={!active || controls?.partial?.length === 0} onClick={handleClear}>
-          &#x25C3; Reset
+          {t('reset-button-label')}
         </button>
         {controls?.completion?.includes('') && (
           <button
@@ -41,7 +45,7 @@ export const Actions = () => {
             className={`primary ${classes.action}`}
             onClick={handleSend}
           >
-            Send &#x25B6;
+            {t('send-button-label')}
           </button>
         )}
       </div>

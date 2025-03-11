@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { any, equals, length, map } from 'ramda'
 import { ReactNode, useState } from 'react'
@@ -19,6 +20,8 @@ type FrameParams = {
 }
 
 export const Frame = ({ frame }: FrameParams) => {
+  const t = useTranslations('components')
+
   const [modal, setModal] = useState<boolean>(false)
 
   return (
@@ -26,14 +29,20 @@ export const Frame = ({ frame }: FrameParams) => {
       {frame.settle && (
         <>
           {colorToChar(frame.player)}
-          Settle
+          {t('settle')}
         </>
       )}
-      {!frame.settle && frame.bonus && <>{colorToChar(frame.player)} Bonus</>}
+      {!frame.settle && frame.bonus && (
+        <>
+          {colorToChar(frame.player)}
+          {t('bonus')}
+        </>
+      )}
       {!frame.settle && !frame.bonus && (
         <>
           {colorToChar(frame.player)}
-          Action, round {frame.round}
+          {t('action-round')}
+          {frame.round}
         </>
       )}
       {frame.introduced.length > 0 && (
@@ -59,14 +68,14 @@ export const Frame = ({ frame }: FrameParams) => {
             {any(equals(3), map(length, frame.introduced)) && '🏘️'}
           </a>
           <FrameModal closeModal={() => setModal(false)} openModal={modal}>
-            {any((bid) => bid.length === 3, frame.introduced) && (
-              <div>These buildings will be made available to be built</div>
-            )}
+            {any((bid) => bid.length === 3, frame.introduced) && <div>{t('buildings-availability')}</div>}
             {map((bid) => {
+              const t = useTranslations('components')
+
               if (bid.length === 3) return <Erection key={bid} id={bid} />
-              if (bid === 'joker') return <div key={bid}>The 🃏 joker token will be added to the rondel at zero</div>
-              if (bid === 'stone') return <div key={bid}>The 🪨 stone token will be added to the rondel at zero</div>
-              if (bid === 'grape') return <div key={bid}>The 🍇 grape token will be added to the rondel at zero</div>
+              if (bid === 'joker') return <div key={bid}>{t('joker-token-addition')}</div>
+              if (bid === 'stone') return <div key={bid}>{t('stone-token-addition')}</div>
+              if (bid === 'grape') return <div key={bid}>{t('grape-token-addition')}</div>
               return null
             }, frame.introduced)}
           </FrameModal>

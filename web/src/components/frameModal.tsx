@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { ReactNode, useEffect, useRef } from 'react'
 import classes from './frameModal.module.css'
 
@@ -8,6 +9,8 @@ type Params = {
 }
 
 export const FrameModal = ({ children, openModal = false, closeModal = () => {} }: Params) => {
+  const t = useTranslations('components')
+
   const ref = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export const FrameModal = ({ children, openModal = false, closeModal = () => {} 
       {children}
       <form method="dialog" style={{ textAlign: 'right' }}>
         <button type="button" onClick={closeModal} className="primary">
-          Close
+          {t('close-button')}
         </button>
       </form>
     </dialog>

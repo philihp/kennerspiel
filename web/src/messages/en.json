@@ -1,0 +1,29 @@
+{
+  "components/sliders": {
+    "work-contract": "Work Contract",
+    "fell-trees": "Fell Trees",
+    "with-laybrother": "With Laybrother",
+    "partial-length-info": "Partial ({partialLength}):",
+    "reset-button-label": "◃ Reset",
+    "send-button-label": "Send ▶"
+  },
+  "app/account/settings": {
+    "settings": "Settings",
+    "disconnect": "Disconnect"
+  },
+  "components": {
+    "wonders-fragment": "Wonders:",
+    "settle": " Settle",
+    "bonus": " Bonus",
+    "action-round": " Action, round",
+    "buildings-availability": "These buildings will be made available to be built",
+    "joker-token-addition": "The 🃏 joker token will be added to the rondel at zero",
+    "stone-token-addition": "The 🪨 stone token will be added to the rondel at zero",
+    "grape-token-addition": "The 🍇 grape token will be added to the rondel at zero",
+    "close-button": "Close"
+  },
+  "app/instance/[slug]": {
+    "players-count": "Players ({optEntrantsLength})",
+    "player-order-randomization": "Player order will be randomized upon start."
+  }
+}
