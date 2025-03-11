@@ -1,9 +1,7 @@
 import { match } from 'ts-pattern'
 import { useInstanceContext } from '@/context/InstanceContext'
-import { addIndex, map, range, toPairs } from 'ramda'
-import { ReactNode } from 'react'
-import { RondelSettlements } from './rondel/settlements'
-import { mask, wedge, arrowPath, armPath, points } from './rondel/constants'
+import { RondelSettlements } from './settlements'
+import { mask, wedge, arrowPath, armPath, points, rot, armTextY } from './constants'
 import { GameCommandConfigParams } from 'hathora-et-labora-game'
 
 import styles from './rondel.module.css'
@@ -54,11 +52,7 @@ const BASE = -50
 const armOffset = (360 * 0.5) / points.length
 
 export const Rondel = () => {
-  const { state, controls, addPartial } = useInstanceContext()
-
-  const handleClick = () => {
-    addPartial('Jo')
-  }
+  const { state } = useInstanceContext()
 
   const rondel = state?.rondel
 
@@ -68,17 +62,17 @@ export const Rondel = () => {
       : [0, 2, 3, 4, 5, 6, 6, 7, 7, 8, 8, 9, 10]
   return (
     <div>
-      <svg style={{ float: 'right', width: '600px', height: '600px' }} viewBox="-300.5 -300.5 600 600">
+      <svg style={{ float: 'right', width: '50%', height: '50%' }} viewBox="-210.5 -210.5 420 420">
         <defs>
           <linearGradient id="housefill" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" style={{ stopColor: '#004e85', stopOpacity: 1 }} />
             <stop offset="100%" style={{ stopColor: '#1973b2', stopOpacity: 1 }} />
           </linearGradient>
           <filter id="shadow">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
           </filter>
         </defs>
-        <g id="shadowMask" opacity="0.1">
+        <g id="shadowMask" opacity="0.2">
           <polyline points={mask} fill="black" filter="url(#shadow)" />
         </g>
         <g id="wheel">
@@ -99,124 +93,109 @@ export const Rondel = () => {
 
         <RondelSettlements />
 
-        {state?.rondel?.grape && state?.config && isGrapeUsed(state.config) && (
-          <g id="grape" transform={`rotate(${oraDeg(state?.rondel?.grape ?? 0)})`}>
+        {rondel?.grape && state?.config && isGrapeUsed(state.config) && (
+          <g id="grape" transform={`rotate(${oraDeg(rondel?.grape ?? 0)})`}>
             <text x={50} y={BASE - 105} className={styles.token}>
               {symbols.grape}
             </text>
           </g>
         )}
 
-        {state?.rondel?.stone && state?.config && isStoneUsed(state.config) && (
-          <g id="stone" transform={`rotate(${oraDeg(state?.rondel?.stone ?? 0)})`}>
+        {rondel?.stone && state?.config && isStoneUsed(state.config) && (
+          <g id="stone" transform={`rotate(${oraDeg(rondel?.stone ?? 0)})`}>
             <text x={0} y={BASE - 114} className={styles.token}>
               {symbols.stone}
             </text>
           </g>
         )}
 
-        <g id="grain" transform={`rotate(${oraDeg(state?.rondel?.grain ?? 0)})`}>
-          <text x={0} y={BASE - 87} className={styles.token}>
+        <g id="grain" transform={`rotate(${oraDeg(rondel?.grain ?? 0)})`}>
+          <text x={0 + 13} y={BASE - 87 - 9} className={styles.token}>
             {symbols.grain}
           </text>
         </g>
-        <g id="sheep" transform={`rotate(${oraDeg(state?.rondel?.sheep ?? 0)})`}>
-          <text x={0} y={BASE - 96} className={styles.token}>
+        <g id="sheep" transform={`rotate(${oraDeg(rondel?.sheep ?? 0)})`}>
+          <text x={0 - 13} y={BASE - 96} className={styles.token}>
             {symbols.sheep}
           </text>
         </g>
-        <g id="joker" transform={`rotate(${oraDeg(state?.rondel?.joker ?? 0)})`}>
-          <text x={0} y={BASE - 78} className={styles.token}>
+        <g id="joker" transform={`rotate(${oraDeg(rondel?.joker ?? 0)})`}>
+          <text x={0 + 11} y={BASE - 78 + 4.5} className={styles.token}>
             {symbols.joker}
           </text>
         </g>
-        <g id="wood" transform={`rotate(${oraDeg(state?.rondel?.wood ?? 0)})`}>
-          <text x={0} y={BASE - 69} className={styles.token}>
+        <g id="wood" transform={`rotate(${oraDeg(rondel?.wood ?? 0)})`}>
+          <text x={0 - 11} y={BASE - 69 - 4.5} className={styles.token}>
             {symbols.wood}
           </text>
         </g>
-        <g id="clay" transform={`rotate(${oraDeg(state?.rondel?.clay ?? 0)})`}>
-          <text x={0} y={BASE - 60} className={styles.token}>
+        <g id="clay" transform={`rotate(${oraDeg(rondel?.clay ?? 0)})`}>
+          <text x={-9} y={BASE - 60 + 4.5} className={styles.token}>
             {symbols.clay}
           </text>
         </g>
-        <g id="peat" transform={`rotate(${oraDeg(state?.rondel?.peat ?? 0)})`}>
-          <text x={0} y={BASE - 51} className={styles.token}>
+        <g id="peat" transform={`rotate(${oraDeg(rondel?.peat ?? 0)})`}>
+          <text x={+9} y={BASE - 51 - 4.5} className={styles.token}>
             {symbols.peat}
           </text>
         </g>
-        <g id="coin" transform={`rotate(${oraDeg(state?.rondel?.coin ?? 0)})`}>
-          <text x={0} y={BASE - 42} className={styles.token}>
+        <g id="coin" transform={`rotate(${oraDeg(rondel?.coin ?? 0)})`}>
+          <text x={0} y={BASE - 42 + 5} className={styles.token}>
             {symbols.coin}
           </text>
         </g>
 
+        <g id="shadowMask" opacity="0.2" transform={`rotate(${oraDeg(rondel?.pointingBefore) - armOffset})`}>
+          <path d={armPath} fill="black" filter="url(#shadow)" />
+        </g>
         <g
           id="arm"
-          transform={`rotate(${oraDeg(state?.rondel?.pointingBefore) - armOffset})`}
+          transform={`rotate(${oraDeg(rondel?.pointingBefore) - armOffset})`}
           style={{ fontSize: '10px', textAnchor: 'middle' }}
         >
           <path d={armPath} className={styles.armPath} />
           <path d={arrowPath} fill="#000" />
+          <text x="0" y={armTextY} transform={`rotate(${rot.A})`}>
+            {armValues[12]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.B})`}>
+            {armValues[11]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.C})`}>
+            {armValues[10]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.D})`}>
+            {armValues[9]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.E})`}>
+            {armValues[8]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.F})`}>
+            {armValues[7]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.G})`}>
+            {armValues[6]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.H})`}>
+            {armValues[5]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.I})`}>
+            {armValues[4]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.J})`}>
+            {armValues[3]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.K})`}>
+            {armValues[2]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.L})`}>
+            {armValues[1]}
+          </text>
+          <text x="0" y={armTextY} transform={`rotate(${rot.M})`}>
+            {armValues[0]}
+          </text>
         </g>
       </svg>
-
-      <table style={{ borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <td />
-            {addIndex<number, ReactNode>(map)(
-              (value: number, i: number) => (
-                <th key={i}>{value as number}</th>
-              ),
-              armValues
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {rondel &&
-            map(
-              ([token, emoji]) =>
-                rondel[token] !== undefined && (
-                  <tr key={token}>
-                    <td>
-                      {token === 'joker' && controls?.completion?.includes('Jo') ? (
-                        <button type="button" onClick={handleClick}>
-                          joker
-                        </button>
-                      ) : (
-                        token
-                      )}
-                    </td>
-                    {map(
-                      (i) => {
-                        const thisToken = rondel[token]
-                        if (thisToken === undefined) return null
-                        const difference = (rondel.pointingBefore - (thisToken ?? rondel.pointingBefore) + 13) % 13
-                        return (
-                          <td
-                            style={{
-                              border: 1,
-                              borderStyle: 'solid',
-                              borderColor: '#DDD',
-                              width: 32,
-                              height: 32,
-                              textAlign: 'center',
-                            }}
-                            key={i}
-                          >
-                            {difference === i ? emoji : ''}
-                          </td>
-                        )
-                      },
-                      range(0, 13)
-                    )}
-                  </tr>
-                ),
-              toPairs(symbols)
-            )}
-        </tbody>
-      </table>
     </div>
   )
 }

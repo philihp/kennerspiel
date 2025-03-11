@@ -2,7 +2,7 @@
 import { curried as unwind } from 'sort-unwind'
 import { MoveList } from '@/components/moveList'
 import { Player } from '@/components/player/player'
-import { Rondel } from '@/components/rondel'
+import { Rondel } from '@/components/rondel/rondel'
 import { Actions } from '@/components/sliders/actions'
 import { UnbuiltBuildings } from '@/components/unbuiltBuildings'
 import { UnbuiltDistricts } from '@/components/unbuiltDistricts'
