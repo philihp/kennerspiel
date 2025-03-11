@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: rgba(230,230,230,1);
+  background-color: rgba(230, 230, 230, 1);
   text-rendering: geometricPrecision;
 }
 
@@ -22,20 +22,20 @@ button {
   border-width: 0;
   margin: 5px;
   font-size: small;
-  background: rgb(255,255,255,1);
+  background: rgb(255, 255, 255, 1);
 }
 
 button.primary {
   color: white;
-  background: linear-gradient(#2e93ff, #007AFF 50%);
+  background: linear-gradient(#2e93ff, #007aff 50%);
 }
 
 button:disabled {
   cursor: auto;
-  background: rgb(240,240,240,0.8);
+  background: rgb(240, 240, 240, 0.8);
 }
 button.primary:disabled {
   color: grayText;
   cursor: auto;
-  background: rgb(240,240,240,0.8);
+  background: rgb(240, 240, 240, 0.8);
 }
