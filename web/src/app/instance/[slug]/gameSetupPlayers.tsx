@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { join, reloadEntrants } from './actions'
 import { useEffect, useOptimistic, useTransition } from 'react'
@@ -8,6 +9,8 @@ import { find, pipe, propEq, reject, splitWhen, tail } from 'ramda'
 type PartEntrant = Pick<Tables<'entrant'>, 'color' | 'profile_id'>
 
 export const GameSetupPlayers = () => {
+  const t = useTranslations('app/instance/[slug]')
+
   const { instance, setInstance, entrants, setEntrants, user } = useInstanceContext()
 
   const [optEntrants, setOptEntrants] = useOptimistic<PartEntrant[], Enums<'color'> | undefined>(
@@ -69,12 +72,12 @@ export const GameSetupPlayers = () => {
   return (
     <>
       <hr />
-      <h3>Players ({optEntrants?.length})</h3>
+      <h3>{t('players-count', { optEntrantsLength: optEntrants?.length })}</h3>
       <Seat clergyId="LB1R" entrant={findEntrant('red')} onClick={handleSelectColor('red')} onLeave={handleLeave} />
       <Seat clergyId="LB1G" entrant={findEntrant('green')} onClick={handleSelectColor('green')} onLeave={handleLeave} />
       <Seat clergyId="LB1B" entrant={findEntrant('blue')} onClick={handleSelectColor('blue')} onLeave={handleLeave} />
       <Seat clergyId="LB1W" entrant={findEntrant('white')} onClick={handleSelectColor('white')} onLeave={handleLeave} />
-      <p>Player order will be randomized upon start.</p>
+      <p>{t('player-order-randomization')}</p>
     </>
   )
 }
