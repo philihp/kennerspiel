@@ -62,7 +62,7 @@ export const Rondel = () => {
       : [0, 2, 3, 4, 5, 6, 6, 7, 7, 8, 8, 9, 10]
   return (
     <div>
-      <svg style={{ float: 'left', width: '450px', height: '450px' }} viewBox="-210.5 -210.5 420 420">
+      <svg style={{ width: '450px', height: '450px' }} viewBox="-210.5 -210.5 420 420">
         <defs>
           <linearGradient id="housefill" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" style={{ stopColor: '#004e85', stopOpacity: 1 }} />
