@@ -25,25 +25,24 @@ export const Erection = ({ id, primary = false, disabled = true, ghosted = false
 
   return (
     <div style={{ display: 'inline-block' }}>
-      <Image
-        alt={id}
-        style={{
-          display: 'inline',
-          ...(ghosted
-            ? {
-                opacity: 0.5,
-              }
-            : {}),
-        }}
-        src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${decolor(id)}.jpg`}
-        width={150 * multiplier}
-        height={250 * multiplier}
-      />
       {onClick !== undefined && (
         <>
           <br />
           <button className={`primary`} type="button" onClick={onClick} disabled={disabled}>
-            {id}
+            <Image
+              alt={id}
+              style={{
+                display: 'inline',
+                ...(ghosted
+                  ? {
+                      opacity: 0.5,
+                    }
+                  : {}),
+              }}
+              src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${decolor(id)}.jpg`}
+              width={150 * multiplier}
+              height={250 * multiplier}
+            />
           </button>
         </>
       )}

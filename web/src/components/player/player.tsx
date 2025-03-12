@@ -61,7 +61,7 @@ export const Player = ({ tableau, active }: TableauProps) => {
       }}
     >
       <PlayerClergy clergy={clergy} color={color} active={active} />
-      <PlayerResources {...resources} />
+      <PlayerResources {...resources} active={active} />
       <PlayerLandscape landscape={landscape} offset={landscapeOffset} active={active} />
       <PlayerWonders wonders={wonders} />
       <PlayerSettlements settlements={settlements} color={colorToChar(color)} />

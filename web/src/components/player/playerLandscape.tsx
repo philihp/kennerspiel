@@ -82,7 +82,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                       />
                     )}
                     {!building && selectable && (
-                      <button type="button" onClick={handleClick}>
+                      <button type="button" onClick={handleClick} className={`primary`}>
                         {land}
                       </button>
                     )}

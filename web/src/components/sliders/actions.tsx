@@ -30,7 +30,15 @@ export const Actions = () => {
   return (
     <>
       <div>
-        Partial ({partial.length}): {partial.join(' ')}
+        <input
+          disabled
+          type="text"
+          value={partial.join(' ')}
+          className="disabled code"
+          style={{
+            padding: 8,
+          }}
+        />
         <button type="button" disabled={!active || controls?.partial?.length === 0} onClick={handleClear}>
           &#x25C3; Reset
         </button>
