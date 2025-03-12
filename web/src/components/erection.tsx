@@ -1,5 +1,6 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import Image from 'next/image'
+import { Farmyard } from './erection/farmyard'
 
 interface Props {
   id: string
@@ -21,14 +22,15 @@ const multiplier = 0.7
 
 export const Erection = ({ id, primary = false, disabled = true, ghosted = false, onClick = () => {} }: Props) => {
   const { controls, state } = useInstanceContext()
-  const partial = controls?.partial ?? ''
+  const partial = controls?.partial
+  const used = partial?.slice(0, 2)?.join(' ') === `USE ${id}`
 
   return (
     <div style={{ display: 'inline-block' }}>
       {onClick !== undefined && (
         <>
           <br />
-          <button className={`primary`} type="button" onClick={onClick} disabled={disabled}>
+          <button className={`primary`} type="button" onClick={onClick} disabled={disabled && !used}>
             <Image
               alt={id}
               style={{
@@ -44,6 +46,8 @@ export const Erection = ({ id, primary = false, disabled = true, ghosted = false
               height={250 * multiplier}
             />
           </button>
+          <br />
+          {used && ['LR2', 'LG2', 'LB2', 'LW2'].includes(id) && <Farmyard />}
         </>
       )}
     </div>
