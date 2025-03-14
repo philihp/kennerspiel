@@ -1,11 +1,21 @@
-export const WHEEL_RADIUS = 200
-export const points = new Array<[number, number]>(13)
+import { join, map, pipe, range } from 'ramda'
+import sin from '@stdlib/math/base/special/sin'
+import cos from '@stdlib/math/base/special/cos'
 
-for (let n = 0; n < points.length; n++) {
-  const x = -Math.sin((n * Math.PI * 2) / points.length) * WHEEL_RADIUS
-  const y = -Math.cos((n * Math.PI * 2) / points.length) * WHEEL_RADIUS
-  points[n] = [x, y]
-}
+export const WHEEL_RADIUS = 200
+
+const round = (decimals: number) => (n: number) => Math.round(n * Math.pow(10, decimals)) / Math.pow(10, decimals)
+const roundTo7 = round(7)
+
+export const points = pipe(
+  range(0),
+  map<number, number[]>((n): number[] => {
+    const x = -sin((n * Math.PI * 2) / 13) * WHEEL_RADIUS
+    const y = -cos((n * Math.PI * 2) / 13) * WHEEL_RADIUS
+    return [x, y]
+  }),
+  map<number[], number[]>(map(roundTo7))
+)(13)
 
 export const mask =
   `${points[0].join(',')} ` +
