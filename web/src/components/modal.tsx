@@ -1,13 +1,14 @@
 import { ReactNode, useEffect, useRef } from 'react'
-import classes from './frameModal.module.css'
+import classes from './modal.module.css'
 
 type Params = {
   openModal?: boolean
   closeModal?: () => void
+  close?: string
   children: ReactNode | ReactNode[]
 }
 
-export const FrameModal = ({ children, openModal = false, closeModal = () => {} }: Params) => {
+export const Modal = ({ children, openModal = false, closeModal = () => {}, close = undefined }: Params) => {
   const ref = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -27,11 +28,6 @@ export const FrameModal = ({ children, openModal = false, closeModal = () => {} 
   return (
     <dialog ref={ref} onCancel={closeModal} className={classes.frameModal}>
       {children}
-      <form method="dialog" style={{ textAlign: 'right' }}>
-        <button type="button" onClick={closeModal} className="primary">
-          Close
-        </button>
-      </form>
     </dialog>
   )
 }

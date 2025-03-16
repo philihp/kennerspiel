@@ -64,8 +64,6 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                       border: 1,
                       borderStyle: 'solid',
                       borderColor: '#555',
-                      width: 120,
-                      height: 160,
                       textAlign: 'center',
                       backgroundColor: landToColor(land),
                     }}
@@ -82,11 +80,19 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                       />
                     )}
                     {!building && selectable && (
-                      <button type="button" onClick={handleClick} className={`primary`}>
-                        {land}
-                      </button>
+                      <>
+                        <br />
+                        <button type="button" onClick={handleClick} className={`primary`}>
+                          {land}
+                        </button>
+                      </>
                     )}
-                    {clergy && <Clergy id={clergy} />}
+                    {clergy && (
+                      <>
+                        <br />
+                        <Clergy id={clergy} />
+                      </>
+                    )}
                   </td>
                 )
               })}

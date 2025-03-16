@@ -1,6 +1,8 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import Image from 'next/image'
 import { Farmyard } from './erection/farmyard'
+import { BuildingEnum } from 'hathora-et-labora-game/dist/types'
+import { FuelMerchant } from './erection/fuelMerchant'
 
 interface Props {
   id: string
@@ -21,7 +23,7 @@ const decolor = (id: string) => {
 const multiplier = 0.7
 
 export const Erection = ({ id, primary = false, disabled = true, ghosted = false, onClick = () => {} }: Props) => {
-  const { controls, state } = useInstanceContext()
+  const { controls } = useInstanceContext()
   const partial = controls?.partial
   const used = partial?.slice(0, 2)?.join(' ') === `USE ${id}`
 
@@ -48,6 +50,7 @@ export const Erection = ({ id, primary = false, disabled = true, ghosted = false
           </button>
           <br />
           {used && ['LR2', 'LG2', 'LB2', 'LW2'].includes(id) && <Farmyard />}
+          {used && id === BuildingEnum.FuelMerchant && <FuelMerchant />}
         </>
       )}
     </div>
