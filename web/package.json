@@ -7,6 +7,7 @@
     "@marsidev/react-turnstile": "1.1.0",
     "@next/third-parties": "15.2.2",
     "@philihp/prettier-config": "1.0.0",
+    "@stdlib/math": "^0.3.3",
     "@supabase/auth-helpers-nextjs": "0.10.0",
     "@supabase/ssr": "0.5.2",
     "@supabase/supabase-js": "2.49.1",

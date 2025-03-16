@@ -1,10 +1,11 @@
 import { Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { any, equals, length, map } from 'ramda'
 import { ReactNode, useState } from 'react'
-import { FrameModal } from './frameModal'
+import { Modal } from './modal'
 import { Erection } from './erection'
 import Dot from './dot'
 import { match } from 'ts-pattern'
+import { LucideX } from 'lucide-react'
 
 const colorToChar = (color?: PlayerColor): ReactNode =>
   match(color)
@@ -20,6 +21,8 @@ type FrameParams = {
 
 export const Frame = ({ frame }: FrameParams) => {
   const [modal, setModal] = useState<boolean>(false)
+
+  const handleClose = () => setModal(false)
 
   return (
     <>
@@ -58,7 +61,13 @@ export const Frame = ({ frame }: FrameParams) => {
             {any(equals('joker'), frame.introduced) && '🃏'}
             {any(equals(3), map(length, frame.introduced)) && '🏘️'}
           </a>
-          <FrameModal closeModal={() => setModal(false)} openModal={modal}>
+          <Modal closeModal={handleClose} openModal={modal}>
+            <form method="dialog" style={{ textAlign: 'right' }}>
+              <button type="button" className="primary" onClick={handleClose}>
+                <LucideX size={16} />
+              </button>
+            </form>
+
             {any((bid) => bid.length === 3, frame.introduced) && (
               <div>These buildings will be made available to be built</div>
             )}
@@ -69,7 +78,7 @@ export const Frame = ({ frame }: FrameParams) => {
               if (bid === 'grape') return <div key={bid}>The 🍇 grape token will be added to the rondel at zero</div>
               return null
             }, frame.introduced)}
-          </FrameModal>
+          </Modal>
         </span>
       )}
     </>

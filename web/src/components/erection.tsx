@@ -1,6 +1,8 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import Image from 'next/image'
 import { Farmyard } from './erection/farmyard'
+import { BuildingEnum } from 'hathora-et-labora-game/dist/types'
+import { FuelMerchant } from './erection/fuelMerchant'
 
 interface Props {
   id: string
@@ -29,7 +31,6 @@ export const Erection = ({ id, primary = false, disabled = true, ghosted = false
     <div style={{ display: 'inline-block' }}>
       {onClick !== undefined && (
         <>
-          <br />
           <button className={`primary`} type="button" onClick={onClick} disabled={disabled && !used}>
             <Image
               alt={id}
@@ -48,6 +49,7 @@ export const Erection = ({ id, primary = false, disabled = true, ghosted = false
           </button>
           <br />
           {used && ['LR2', 'LG2', 'LB2', 'LW2'].includes(id) && <Farmyard />}
+          {used && id === BuildingEnum.FuelMerchant && <FuelMerchant />}
         </>
       )}
     </div>
