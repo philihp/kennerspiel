@@ -23,7 +23,7 @@ const decolor = (id: string) => {
 const multiplier = 0.7
 
 export const Erection = ({ id, primary = false, disabled = true, ghosted = false, onClick = () => {} }: Props) => {
-  const { controls } = useInstanceContext()
+  const { controls, state } = useInstanceContext()
   const partial = controls?.partial
   const used = partial?.slice(0, 2)?.join(' ') === `USE ${id}`
 
