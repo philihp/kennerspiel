@@ -1,13 +1,12 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { useState } from 'react'
 import { Modal } from '../modal'
+import { partiallyUsed } from './util'
+import { BuildingEnum } from 'hathora-et-labora-game/dist/types'
 
 export const FuelMerchant = () => {
-  const { addPartial, clearPartial, controls, monotonic } = useInstanceContext()
-
-  const partial = controls?.partial
-
-  const [open, setOpen] = useState(partial?.join(' ') === `USE G06`)
+  const { addPartial, setPartial, controls } = useInstanceContext()
+  const [open, setOpen] = useState(partiallyUsed([BuildingEnum.FuelMerchant], controls?.partial))
 
   const sendPartial = (type: 'Sh' | 'Gn') => () => {
     addPartial(type)
@@ -15,13 +14,12 @@ export const FuelMerchant = () => {
   }
 
   const handleClose = () => {
-    clearPartial()
-    addPartial('USE') //no
+    setPartial(['USE'])
     setOpen(false)
   }
 
   return (
-    <Modal key={monotonic} closeModal={handleClose} openModal={open} close={'Cancel'}>
+    <Modal closeModal={handleClose} openModal={open} close={'Cancel'}>
       <button className="primary" onClick={sendPartial('Gn')}>
         Grain
       </button>

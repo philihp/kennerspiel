@@ -42,7 +42,7 @@ type InstanceContextType = {
   setInstance: Dispatch<SetStateAction<Tables<'instance'>>>
   setEntrants: Dispatch<SetStateAction<Tables<'entrant'>[]>>
   addPartial: (command: string) => void
-  clearPartial: () => void
+  setPartial: (commands: string[]) => void
   move: () => Promise<void>
   undo?: () => void
   redo?: () => void
@@ -121,9 +121,6 @@ export const InstanceContextProvider = ({
   const addPartial = (command: string) => {
     setPartial([...partial, ...command.split(' ').filter((s) => s)])
   }
-  const clearPartial = () => {
-    setPartial([])
-  }
 
   const move = async () => {
     setMonotonic(monotonic + 1)
@@ -170,7 +167,7 @@ export const InstanceContextProvider = ({
         setInstance,
         setEntrants,
         addPartial,
-        clearPartial,
+        setPartial,
         move,
         undo,
         redo,
