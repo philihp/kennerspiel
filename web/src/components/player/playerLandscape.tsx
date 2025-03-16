@@ -79,6 +79,11 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                         onClick={handleClick}
                       />
                     )}
+                    <div
+                      style={{
+                        width: 137,
+                      }}
+                    ></div>
                     {!building && selectable && (
                       <>
                         <br />
