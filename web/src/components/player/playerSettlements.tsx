@@ -1,5 +1,6 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Erection } from '../erection'
+import { ErectionEnum } from 'hathora-et-labora-game'
 
 interface Props {
   settlements: string[]
@@ -33,12 +34,12 @@ export const PlayerSettlements = ({ settlements, color }: Props) => {
             addPartial(`${settlement}`)
           }
         }
-        return <Erection key={settlement} id={settlement} onClick={handleClick} disabled={disabled} />
+        return <Erection key={settlement} id={settlement as ErectionEnum} onClick={handleClick} disabled={disabled} />
       })}
-      {showS05 && <Erection key={`S${color}5`} id={`S${color}5`} onClick={() => {}} disabled ghosted />}
-      {showS06 && <Erection key={`S${color}6`} id={`S${color}6`} onClick={() => {}} disabled ghosted />}
-      {showS07 && <Erection key={`S${color}7`} id={`S${color}7`} onClick={() => {}} disabled ghosted />}
-      {showS08 && <Erection key={`S${color}8`} id={`S${color}8`} onClick={() => {}} disabled ghosted />}
+      {showS05 && <Erection key={`S${color}5`} id={`S${color}5` as ErectionEnum} onClick={() => {}} disabled ghosted />}
+      {showS06 && <Erection key={`S${color}6`} id={`S${color}6` as ErectionEnum} onClick={() => {}} disabled ghosted />}
+      {showS07 && <Erection key={`S${color}7`} id={`S${color}7` as ErectionEnum} onClick={() => {}} disabled ghosted />}
+      {showS08 && <Erection key={`S${color}8`} id={`S${color}8` as ErectionEnum} onClick={() => {}} disabled ghosted />}
     </div>
   )
 }

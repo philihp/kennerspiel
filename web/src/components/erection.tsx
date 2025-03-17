@@ -1,11 +1,13 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import Image from 'next/image'
 import { Farmyard } from './erection/farmyard'
-import { BuildingEnum } from 'hathora-et-labora-game/dist/types'
+import { BuildingEnum, ErectionEnum } from 'hathora-et-labora-game/dist/types'
 import { FuelMerchant } from './erection/fuelMerchant'
+import { PeatCoalKiln } from './erection/peatCoalKiln'
+import { ErectionModal } from './erection/'
 
 interface Props {
-  id: string
+  id: ErectionEnum
   primary?: boolean
   disabled?: boolean
   ghosted?: boolean
@@ -48,8 +50,7 @@ export const Erection = ({ id, primary = false, disabled = true, ghosted = false
             />
           </button>
           <br />
-          {used && ['LR2', 'LG2', 'LB2', 'LW2'].includes(id) && <Farmyard />}
-          {used && id === BuildingEnum.FuelMerchant && <FuelMerchant />}
+          {used && <ErectionModal id={id} />}
         </>
       )}
     </div>

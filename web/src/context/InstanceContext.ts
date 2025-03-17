@@ -38,11 +38,10 @@ type InstanceContextType = {
   controls?: Controls
   commands: string[]
   active: boolean
-  monotonic: number
   setInstance: Dispatch<SetStateAction<Tables<'instance'>>>
   setEntrants: Dispatch<SetStateAction<Tables<'entrant'>[]>>
   addPartial: (command: string) => void
-  clearPartial: () => void
+  setPartial: (commands: string[]) => void
   move: () => Promise<void>
   undo?: () => void
   redo?: () => void
@@ -68,7 +67,6 @@ export const InstanceContextProvider = ({
   entrants: providedEntrants,
 }: InstanceContextProviderProps) => {
   const { supabase } = useSupabaseContext()
-  const [monotonic, setMonotonic] = useState(0)
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
   const [partial, setPartial] = useState<string[]>([])
@@ -109,24 +107,15 @@ export const InstanceContextProvider = ({
   }, [commands])
 
   const controls = useMemo(() => {
-    setMonotonic(monotonic + 1)
     if (gameState?.status !== GameStatusEnum.PLAYING) return undefined
     return control(gameState as GameStatePlaying, partial)
   }, [gameState, partial])
 
-  useEffect(() => {
-    console.log({ monotonic })
-  }, [monotonic])
-
   const addPartial = (command: string) => {
     setPartial([...partial, ...command.split(' ').filter((s) => s)])
   }
-  const clearPartial = () => {
-    setPartial([])
-  }
 
   const move = async () => {
-    setMonotonic(monotonic + 1)
     const { error, commands: newCommands } = await serverMove(instance.id, [...commands, partial.join(' ')])
     if (error) return console.error(error)
     setCommands(newCommands ?? commands)
@@ -166,11 +155,10 @@ export const InstanceContextProvider = ({
         controls,
         commands,
         active,
-        monotonic,
         setInstance,
         setEntrants,
         addPartial,
-        clearPartial,
+        setPartial,
         move,
         undo,
         redo,

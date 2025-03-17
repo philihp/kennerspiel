@@ -16,11 +16,11 @@ import { ActionSettle } from './actionSettle'
 import { ActionCommit } from './actionCommit'
 
 export const Actions = () => {
-  const { controls, state, partial, clearPartial, move, active } = useInstanceContext()
+  const { controls, state, partial, setPartial, move, active } = useInstanceContext()
   const completion = controls?.completion ?? []
 
   const handleClear = () => {
-    clearPartial()
+    setPartial([])
   }
 
   const handleSend = async () => {
