@@ -1,4 +1,4 @@
-import { Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
+import { ErectionEnum, Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { any, equals, length, map } from 'ramda'
 import { ReactNode, useState } from 'react'
 import { Modal } from './modal'
@@ -72,7 +72,7 @@ export const Frame = ({ frame }: FrameParams) => {
               <div>These buildings will be made available to be built</div>
             )}
             {map((bid) => {
-              if (bid.length === 3) return <Erection key={bid} id={bid} />
+              if (bid.length === 3) return <Erection key={bid} id={bid as ErectionEnum} />
               if (bid === 'joker') return <div key={bid}>The 🃏 joker token will be added to the rondel at zero</div>
               if (bid === 'stone') return <div key={bid}>The 🪨 stone token will be added to the rondel at zero</div>
               if (bid === 'grape') return <div key={bid}>The 🍇 grape token will be added to the rondel at zero</div>
