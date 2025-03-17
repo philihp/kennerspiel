@@ -1,15 +1,15 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { ChangeEventHandler, ReactNode, useState } from 'react'
-import { Modal } from './modal'
+import { Modal } from '../modal'
 import { BuildingEnum, ResourceEnum } from 'hathora-et-labora-game/dist/types'
 import Image from 'next/image'
 import { map, range, repeat, reverse } from 'ramda'
-import { partiallyUsed } from './erection/util'
-import { ItemList } from './itemList'
+import { partiallyUsed } from '../erection/util'
+import { ItemList } from '../itemList'
 
 const multiplier = 1
 
-export const WorkModal = () => {
+export const ModalWork = () => {
   const { state, setPartial, addPartial, controls } = useInstanceContext()
   const partial = controls?.partial ?? []
   const [open, setOpen] = useState(
