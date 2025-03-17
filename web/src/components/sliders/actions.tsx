@@ -52,6 +52,7 @@ export const Actions = () => {
             Send &#x25B6;
           </button>
         )}
+        {JSON.stringify(controls?.completion)}
       </div>
       <div className={classes.container}>
         {completion?.includes('WITH_LAYBROTHER') === true && (

@@ -5,6 +5,7 @@ import { createElement, ReactNode } from 'react'
 import { PeatCoalKiln } from './peatCoalKiln'
 import { FuelMerchant } from './fuelMerchant'
 import { PlaceholderForUse } from './placeholderForUse'
+import { BuildersMarket } from './buildersMarket'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -48,7 +49,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.HarborPromenade, () => PlaceholderForUse)
       .with(BuildingEnum.Houseboat, () => PlaceholderForUse)
       .with(BuildingEnum.StoneMerchant, () => PlaceholderForUse)
-      .with(BuildingEnum.BuildersMarket, () => PlaceholderForUse)
+      .with(BuildingEnum.BuildersMarket, () => BuildersMarket)
       .with(BuildingEnum.GrapevineA, () => PlaceholderForUse)
       .with(BuildingEnum.SacredSite, () => PlaceholderForUse)
       .with(BuildingEnum.FinancedEstate, () => PlaceholderForUse)
