@@ -1,6 +1,6 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
-import { WorkModal } from '../workModal'
+import { ModalWork } from './modalWork'
 
 export const ActionWorkContract = () => {
   const { controls, addPartial, active } = useInstanceContext()
@@ -24,7 +24,7 @@ export const ActionWorkContract = () => {
       >
         Work Contract
       </button>
-      {showModal && <WorkModal />}
+      {showModal && <ModalWork />}
     </>
   )
 }
