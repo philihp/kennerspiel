@@ -1,5 +1,6 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
+import { WorkModal } from '../workModal'
 
 export const ActionWorkContract = () => {
   const { controls, addPartial, active } = useInstanceContext()
@@ -10,9 +11,20 @@ export const ActionWorkContract = () => {
 
   const disabled = !active || !(controls?.completion ?? []).includes('WORK_CONTRACT')
 
+  const partial = controls?.partial ?? []
+  const showModal = partial[0] === 'WORK_CONTRACT' && partial[1] !== undefined && partial[2] === undefined
+
   return (
-    <button type="button" disabled={disabled} className={`${classes.action} ${classes.primary}`} onClick={handleClick}>
-      Work Contract
-    </button>
+    <>
+      <button
+        type="button"
+        disabled={disabled}
+        className={`${classes.action} ${classes.primary}`}
+        onClick={handleClick}
+      >
+        Work Contract
+      </button>
+      {showModal && <WorkModal />}
+    </>
   )
 }
