@@ -93,7 +93,7 @@ export const Rondel = () => {
 
         <RondelSettlements />
 
-        {rondel?.grape && state?.config && isGrapeUsed(state.config) && (
+        {rondel?.grape !== undefined && state?.config && isGrapeUsed(state.config) && (
           <g id="grape" transform={`rotate(${oraDeg(rondel?.grape ?? 0)})`}>
             <text x={50} y={BASE - 105} className={styles.token}>
               {symbols.grape}
@@ -101,56 +101,56 @@ export const Rondel = () => {
           </g>
         )}
 
-        {rondel?.stone && state?.config && isStoneUsed(state.config) && (
+        {rondel?.stone !== undefined && state?.config && isStoneUsed(state.config) && (
           <g id="stone" transform={`rotate(${oraDeg(rondel?.stone ?? 0)})`}>
             <text x={0} y={BASE - 114} className={styles.token}>
               {symbols.stone}
             </text>
           </g>
         )}
-        {rondel?.grain && (
+        {rondel?.grain !== undefined && (
           <g id="grain" transform={`rotate(${oraDeg(rondel?.grain ?? 0)})`}>
             <text x={0 + 13} y={BASE - 87 - 9} className={styles.token}>
               {symbols.grain}
             </text>
           </g>
         )}
-        {rondel?.sheep && (
+        {rondel?.sheep !== undefined && (
           <g id="sheep" transform={`rotate(${oraDeg(rondel?.sheep ?? 0)})`}>
             <text x={0 - 13} y={BASE - 96} className={styles.token}>
               {symbols.sheep}
             </text>
           </g>
         )}
-        {rondel?.joker && (
+        {rondel?.joker !== undefined && (
           <g id="joker" transform={`rotate(${oraDeg(rondel?.joker ?? 0)})`}>
             <text x={0 + 11} y={BASE - 78 + 4.5} className={styles.token}>
               {symbols.joker}
             </text>
           </g>
         )}
-        {rondel?.wood && (
+        {rondel?.wood !== undefined && (
           <g id="wood" transform={`rotate(${oraDeg(rondel?.wood ?? 0)})`}>
             <text x={0 - 11} y={BASE - 69 - 4.5} className={styles.token}>
               {symbols.wood}
             </text>
           </g>
         )}
-        {rondel?.clay && (
+        {rondel?.clay !== undefined && (
           <g id="clay" transform={`rotate(${oraDeg(rondel?.clay ?? 0)})`}>
             <text x={-9} y={BASE - 60 + 4.5} className={styles.token}>
               {symbols.clay}
             </text>
           </g>
         )}
-        {rondel?.peat && (
+        {rondel?.peat !== undefined && (
           <g id="peat" transform={`rotate(${oraDeg(rondel?.peat ?? 0)})`}>
             <text x={+9} y={BASE - 51 - 4.5} className={styles.token}>
               {symbols.peat}
             </text>
           </g>
         )}
-        {rondel?.coin && (
+        {rondel?.coin !== undefined && (
           <g id="coin" transform={`rotate(${oraDeg(rondel?.coin ?? 0)})`}>
             <text x={0} y={BASE - 42 + 5} className={styles.token}>
               {symbols.coin}
