@@ -7,7 +7,7 @@ export const UnbuiltBuildings = () => {
   if (state === undefined) return <></>
   const { buildings } = state
   return (
-    <div>
+    <div style={{ minHeight: 450 }}>
       {buildings.map((building) => (
         <span key={building} style={{ marginRight: 10 }}>
           <Erection

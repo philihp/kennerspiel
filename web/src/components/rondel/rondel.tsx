@@ -61,154 +61,152 @@ export const Rondel = () => {
       ? [0, 1, 2, 2, 3, 4, 4, 5, 6, 6, 7, 8, 10]
       : [0, 2, 3, 4, 5, 6, 6, 7, 7, 8, 8, 9, 10]
   return (
-    <div>
-      <svg style={{ width: '450px', height: '450px' }} viewBox="-210.5 -210.5 420 420">
-        <defs>
-          <linearGradient id="housefill" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style={{ stopColor: '#004e85', stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: '#1973b2', stopOpacity: 1 }} />
-          </linearGradient>
-          <filter id="shadow">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
-          </filter>
-        </defs>
-        <g id="shadowMask" opacity="0.2">
-          <polyline points={mask} fill="black" filter="url(#shadow)" />
-        </g>
-        <g id="wheel">
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.A} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.B} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.C} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.D} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.E} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.F} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.G} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.H} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.I} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.J} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.K} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.L} />
-          <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.M} />
-        </g>
+    <svg style={{ float: 'left', width: '450px', height: '450px' }} viewBox="-210.5 -210.5 420 420">
+      <defs>
+        <linearGradient id="housefill" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style={{ stopColor: '#004e85', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#1973b2', stopOpacity: 1 }} />
+        </linearGradient>
+        <filter id="shadow">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
+        </filter>
+      </defs>
+      <g id="shadowMask" opacity="0.2">
+        <polyline points={mask} fill="black" filter="url(#shadow)" />
+      </g>
+      <g id="wheel">
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.A} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.B} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.C} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.D} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.E} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.F} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.G} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.H} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.I} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.J} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.K} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.L} />
+        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.M} />
+      </g>
 
-        <RondelSettlements />
+      <RondelSettlements />
 
-        {rondel?.grape !== undefined && state?.config && isGrapeUsed(state.config) && (
-          <g id="grape" transform={`rotate(${oraDeg(rondel?.grape ?? 0)})`}>
-            <text x={50} y={BASE - 105} className={styles.token}>
-              {symbols.grape}
-            </text>
-          </g>
-        )}
-
-        {rondel?.stone !== undefined && state?.config && isStoneUsed(state.config) && (
-          <g id="stone" transform={`rotate(${oraDeg(rondel?.stone ?? 0)})`}>
-            <text x={0} y={BASE - 114} className={styles.token}>
-              {symbols.stone}
-            </text>
-          </g>
-        )}
-        {rondel?.grain !== undefined && (
-          <g id="grain" transform={`rotate(${oraDeg(rondel?.grain ?? 0)})`}>
-            <text x={0 + 13} y={BASE - 87 - 9} className={styles.token}>
-              {symbols.grain}
-            </text>
-          </g>
-        )}
-        {rondel?.sheep !== undefined && (
-          <g id="sheep" transform={`rotate(${oraDeg(rondel?.sheep ?? 0)})`}>
-            <text x={0 - 13} y={BASE - 96} className={styles.token}>
-              {symbols.sheep}
-            </text>
-          </g>
-        )}
-        {rondel?.joker !== undefined && (
-          <g id="joker" transform={`rotate(${oraDeg(rondel?.joker ?? 0)})`}>
-            <text x={0 + 11} y={BASE - 78 + 4.5} className={styles.token}>
-              {symbols.joker}
-            </text>
-          </g>
-        )}
-        {rondel?.wood !== undefined && (
-          <g id="wood" transform={`rotate(${oraDeg(rondel?.wood ?? 0)})`}>
-            <text x={0 - 11} y={BASE - 69 - 4.5} className={styles.token}>
-              {symbols.wood}
-            </text>
-          </g>
-        )}
-        {rondel?.clay !== undefined && (
-          <g id="clay" transform={`rotate(${oraDeg(rondel?.clay ?? 0)})`}>
-            <text x={-9} y={BASE - 60 + 4.5} className={styles.token}>
-              {symbols.clay}
-            </text>
-          </g>
-        )}
-        {rondel?.peat !== undefined && (
-          <g id="peat" transform={`rotate(${oraDeg(rondel?.peat ?? 0)})`}>
-            <text x={+9} y={BASE - 51 - 4.5} className={styles.token}>
-              {symbols.peat}
-            </text>
-          </g>
-        )}
-        {rondel?.coin !== undefined && (
-          <g id="coin" transform={`rotate(${oraDeg(rondel?.coin ?? 0)})`}>
-            <text x={0} y={BASE - 42 + 5} className={styles.token}>
-              {symbols.coin}
-            </text>
-          </g>
-        )}
-
-        <g id="shadowMask" opacity="0.2" transform={`rotate(${oraDeg(rondel?.pointingBefore) - armOffset})`}>
-          <path d={armPath} fill="black" filter="url(#shadow)" />
-        </g>
-        <g
-          id="arm"
-          transform={`rotate(${oraDeg(rondel?.pointingBefore) - armOffset})`}
-          style={{ fontSize: '10px', textAnchor: 'middle' }}
-        >
-          <path d={armPath} className={styles.armPath} />
-          <path d={arrowPath} fill="#000" />
-          <text x="0" y={armTextY} transform={`rotate(${rot.A})`}>
-            {armValues[12]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.B})`}>
-            {armValues[11]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.C})`}>
-            {armValues[10]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.D})`}>
-            {armValues[9]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.E})`}>
-            {armValues[8]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.F})`}>
-            {armValues[7]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.G})`}>
-            {armValues[6]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.H})`}>
-            {armValues[5]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.I})`}>
-            {armValues[4]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.J})`}>
-            {armValues[3]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.K})`}>
-            {armValues[2]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.L})`}>
-            {armValues[1]}
-          </text>
-          <text x="0" y={armTextY} transform={`rotate(${rot.M})`}>
-            {armValues[0]}
+      {rondel?.grape !== undefined && state?.config && isGrapeUsed(state.config) && (
+        <g id="grape" transform={`rotate(${oraDeg(rondel?.grape ?? 0)})`}>
+          <text x={50} y={BASE - 105} className={styles.token}>
+            {symbols.grape}
           </text>
         </g>
-      </svg>
-    </div>
+      )}
+
+      {rondel?.stone !== undefined && state?.config && isStoneUsed(state.config) && (
+        <g id="stone" transform={`rotate(${oraDeg(rondel?.stone ?? 0)})`}>
+          <text x={0} y={BASE - 114} className={styles.token}>
+            {symbols.stone}
+          </text>
+        </g>
+      )}
+      {rondel?.grain !== undefined && (
+        <g id="grain" transform={`rotate(${oraDeg(rondel?.grain ?? 0)})`}>
+          <text x={0 + 13} y={BASE - 87 - 9} className={styles.token}>
+            {symbols.grain}
+          </text>
+        </g>
+      )}
+      {rondel?.sheep !== undefined && (
+        <g id="sheep" transform={`rotate(${oraDeg(rondel?.sheep ?? 0)})`}>
+          <text x={0 - 13} y={BASE - 96} className={styles.token}>
+            {symbols.sheep}
+          </text>
+        </g>
+      )}
+      {rondel?.joker !== undefined && (
+        <g id="joker" transform={`rotate(${oraDeg(rondel?.joker ?? 0)})`}>
+          <text x={0 + 11} y={BASE - 78 + 4.5} className={styles.token}>
+            {symbols.joker}
+          </text>
+        </g>
+      )}
+      {rondel?.wood !== undefined && (
+        <g id="wood" transform={`rotate(${oraDeg(rondel?.wood ?? 0)})`}>
+          <text x={0 - 11} y={BASE - 69 - 4.5} className={styles.token}>
+            {symbols.wood}
+          </text>
+        </g>
+      )}
+      {rondel?.clay !== undefined && (
+        <g id="clay" transform={`rotate(${oraDeg(rondel?.clay ?? 0)})`}>
+          <text x={-9} y={BASE - 60 + 4.5} className={styles.token}>
+            {symbols.clay}
+          </text>
+        </g>
+      )}
+      {rondel?.peat !== undefined && (
+        <g id="peat" transform={`rotate(${oraDeg(rondel?.peat ?? 0)})`}>
+          <text x={+9} y={BASE - 51 - 4.5} className={styles.token}>
+            {symbols.peat}
+          </text>
+        </g>
+      )}
+      {rondel?.coin !== undefined && (
+        <g id="coin" transform={`rotate(${oraDeg(rondel?.coin ?? 0)})`}>
+          <text x={0} y={BASE - 42 + 5} className={styles.token}>
+            {symbols.coin}
+          </text>
+        </g>
+      )}
+
+      <g id="shadowMask" opacity="0.2" transform={`rotate(${oraDeg(rondel?.pointingBefore) - armOffset})`}>
+        <path d={armPath} fill="black" filter="url(#shadow)" />
+      </g>
+      <g
+        id="arm"
+        transform={`rotate(${oraDeg(rondel?.pointingBefore) - armOffset})`}
+        style={{ fontSize: '10px', textAnchor: 'middle' }}
+      >
+        <path d={armPath} className={styles.armPath} />
+        <path d={arrowPath} fill="#000" />
+        <text x="0" y={armTextY} transform={`rotate(${rot.A})`}>
+          {armValues[12]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.B})`}>
+          {armValues[11]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.C})`}>
+          {armValues[10]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.D})`}>
+          {armValues[9]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.E})`}>
+          {armValues[8]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.F})`}>
+          {armValues[7]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.G})`}>
+          {armValues[6]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.H})`}>
+          {armValues[5]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.I})`}>
+          {armValues[4]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.J})`}>
+          {armValues[3]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.K})`}>
+          {armValues[2]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.L})`}>
+          {armValues[1]}
+        </text>
+        <text x="0" y={armTextY} transform={`rotate(${rot.M})`}>
+          {armValues[0]}
+        </text>
+      </g>
+    </svg>
   )
 }
