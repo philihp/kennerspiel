@@ -1,14 +1,16 @@
 import { ResourceEnum } from 'hathora-et-labora-game/dist/types'
 import Image from 'next/image'
 import { map, splitEvery } from 'ramda'
+import { MouseEventHandler } from 'react'
 
 const multiplier = 1.5
 
 type Props = {
   items: string
+  onClick?: MouseEventHandler<HTMLImageElement> | undefined
 }
 
-export const ItemList = ({ items: itemsRaw }: Props) => {
+export const ItemList = ({ items: itemsRaw, onClick }: Props) => {
   const items = splitEvery(2, itemsRaw) as ResourceEnum[]
 
   return (
@@ -29,6 +31,7 @@ export const ItemList = ({ items: itemsRaw }: Props) => {
             src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${type}.jpg`}
             width={24 * multiplier}
             height={24 * multiplier}
+            onClick={onClick}
           />
         ),
         items
