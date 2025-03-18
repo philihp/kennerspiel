@@ -29,7 +29,7 @@ export const BuildersMarket = () => {
       Pay 2 coins for 2 wood, 2 clay, 1 stone, 1 straw
       {map(
         (option) => (
-          <button className="primary" onClick={handleOK(option)}>
+          <button key={option} className="primary" onClick={handleOK(option)}>
             {match(option)
               .with('', () => (
                 <div>

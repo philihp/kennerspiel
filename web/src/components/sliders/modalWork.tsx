@@ -36,7 +36,7 @@ export const ModalWork = () => {
         <ul>
           {map<string, ReactNode>(
             (param) => (
-              <li>
+              <li key={param}>
                 <button className="primary" onClick={handleOK(param)}>
                   <ItemList items={param} />
                 </button>
