@@ -9,11 +9,15 @@ import { partiallyUsed } from './util'
 const ids = [BuildingEnum.FarmYardR, BuildingEnum.FarmYardG, BuildingEnum.FarmYardB, BuildingEnum.FarmYardW]
 
 export const Farmyard = () => {
-  const { state, addPartial, controls } = useInstanceContext()
+  const { state, setPartial, addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed(ids, controls?.partial))
 
   const sendPartial = (type: 'Sh' | 'Gn') => () => {
     addPartial(type)
+    setOpen(false)
+  }
+  const handleCancel = () => {
+    setPartial(['USE'])
     setOpen(false)
   }
 
@@ -38,7 +42,7 @@ export const Farmyard = () => {
   const options = controls?.completion ?? []
 
   return (
-    <Modal title="Farmyard" openModal={open}>
+    <Modal title="Farmyard" openModal={open} closeModal={handleCancel}>
       Sending your clergy to the farmyard to collect: options
       <ul>{map(button)(options)}</ul>
     </Modal>
