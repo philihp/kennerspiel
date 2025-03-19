@@ -1,6 +1,6 @@
 .frameModal {
   text-align: left;
-  min-width: 60%;
+  min-width: 61.8%;
 }
 .frameModal::backdrop {
   background: rgba(0, 0, 0, 0.5);
