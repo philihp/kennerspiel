@@ -38,7 +38,7 @@ export const Farmyard = () => {
   const options = controls?.completion ?? []
 
   return (
-    <Modal title="Use Farmyard" openModal={open}>
+    <Modal title="Farmyard" openModal={open}>
       Sending your clergy to the farmyard to collect: options
       <ul>{map(button)(options)}</ul>
     </Modal>

@@ -1,11 +1,10 @@
 import { useInstanceContext } from '@/context/InstanceContext'
-import { ChangeEvent, MouseEvent, MouseEventHandler, useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import { Modal } from '../modal'
 import { partiallyUsed } from './util'
 import { BuildingEnum } from 'hathora-et-labora-game/dist/types'
 import { range } from 'ramda'
 import Image from 'next/image'
-import { XIcon } from 'lucide-react'
 
 const id = BuildingEnum.FuelMerchant
 
@@ -163,10 +162,7 @@ export const FuelMerchant = () => {
   const invalid = !(controls?.completion ?? []).includes(param)
 
   return (
-    <Modal closeModal={handleClose} openModal={open} close={'Cancel'}>
-      <button onClick={handleClose} style={{ float: 'right' }}>
-        <XIcon />
-      </button>
+    <Modal title="Fuel Merchant" closeModal={handleClose} openModal={open} close={'Cancel'}>
       <Image
         alt={id}
         src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${id}.jpg`}

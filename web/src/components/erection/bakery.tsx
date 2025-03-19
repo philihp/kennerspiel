@@ -1,17 +1,13 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Modal } from '../modal'
 import { match, P } from 'ts-pattern'
-import { all, filter, includes, join, map, max, min, range, reduce, repeat } from 'ramda'
+import { filter, includes, join, map, max, min, range, reduce, repeat } from 'ramda'
 import { useState } from 'react'
 import { BuildingEnum, ResourceEnum } from 'hathora-et-labora-game/dist/types'
 import { partiallyUsed } from './util'
 import { ItemList } from '../itemList'
 
-import classes from './index.module.css'
-import Image from 'next/image'
-import { ChevronRight, ChevronsRight } from 'lucide-react'
-
-const multiplier = 1.5
+import { ChevronsRight } from 'lucide-react'
 
 const id = BuildingEnum.Bakery
 
@@ -75,7 +71,7 @@ export const Bakery = () => {
   )
 
   return (
-    <Modal title="Use Bakery" openModal={open} closeModal={handleClose}>
+    <Modal title="Bakery" openModal={open} closeModal={handleClose}>
       Turning {flourUsed} flour into bread
       <br />
       {map(

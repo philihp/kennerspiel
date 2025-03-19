@@ -12,7 +12,7 @@ import classes from './index.module.css'
 const id = BuildingEnum.Windmill
 
 export const Windmill = () => {
-  const { state, addPartial, controls } = useInstanceContext()
+  const { addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
 
   const sendPartial = (param: string) => () => {

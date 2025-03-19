@@ -7,7 +7,7 @@ const multiplier = 1.5
 
 type Props = {
   items: string
-  onClick?: MouseEventHandler<HTMLImageElement> | undefined
+  onClick?: (index: number, type: ResourceEnum) => void
 }
 
 export const ItemList = ({ items: itemsRaw, onClick }: Props) => {
@@ -33,7 +33,9 @@ export const ItemList = ({ items: itemsRaw, onClick }: Props) => {
               src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${type}.jpg`}
               width={24 * multiplier}
               height={24 * multiplier}
-              onClick={onClick}
+              onClick={() => {
+                onClick?.(i, type)
+              }}
             />
           </>
         ),

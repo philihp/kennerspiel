@@ -9,6 +9,7 @@ import { BuildersMarket } from './buildersMarket'
 import { GrainStorage } from './grainStorage'
 import { Windmill } from './windmill'
 import { Bakery } from './bakery'
+import { CloisterCourtyard } from './cloisterCourtyard'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -34,7 +35,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.CloisterOfficeB, () => PlaceholderForUse)
       .with(BuildingEnum.CloisterOfficeW, () => PlaceholderForUse)
       .with(BuildingEnum.Priory, () => PlaceholderForUse)
-      .with(BuildingEnum.CloisterCourtyard, () => PlaceholderForUse)
+      .with(BuildingEnum.CloisterCourtyard, () => CloisterCourtyard)
       .with(BuildingEnum.GrainStorage, () => GrainStorage)
       .with(BuildingEnum.Granary, () => PlaceholderForUse)
       .with(BuildingEnum.Windmill, () => Windmill)

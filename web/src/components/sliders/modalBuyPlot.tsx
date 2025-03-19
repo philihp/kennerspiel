@@ -1,17 +1,11 @@
 import { useInstanceContext } from '@/context/InstanceContext'
-import { ChangeEventHandler, ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { Modal } from '../modal'
-import { BuildingEnum, ResourceEnum } from 'hathora-et-labora-game/dist/types'
-import Image from 'next/image'
-import { map, range, repeat, reverse } from 'ramda'
-import { partiallyUsed } from '../erection/util'
-import { ItemList } from '../itemList'
+import { map } from 'ramda'
 import { match, P } from 'ts-pattern'
 
-const multiplier = 1
-
 export const ModalBuyPlot = () => {
-  const { state, setPartial, addPartial, controls } = useInstanceContext()
+  const { setPartial, addPartial, controls } = useInstanceContext()
   const partial = controls?.partial ?? []
   const [open, setOpen] = useState(partial[0] === 'BUY_PLOT' && partial[2] === undefined)
 
