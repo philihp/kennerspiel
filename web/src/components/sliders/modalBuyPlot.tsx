@@ -46,7 +46,8 @@ export const ModalBuyPlot = () => {
                       [[LandEnum.Water], [LandEnum.Coast]],
                       [[LandEnum.Water], [LandEnum.Coast]],
                     ]}
-                    offset={landscapeOffset}
+                    rowMin={0}
+                    rowMax={1}
                   />
                 </button>
               ))
@@ -58,6 +59,8 @@ export const ModalBuyPlot = () => {
                       [[LandEnum.Hillside], [LandEnum.BelowMountain]],
                     ]}
                     offset={landscapeOffset}
+                    rowMin={0}
+                    rowMax={1}
                   />
                 </button>
               ))

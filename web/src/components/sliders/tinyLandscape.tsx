@@ -1,24 +1,16 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Tile } from 'hathora-et-labora-game'
 import { LandEnum } from 'hathora-et-labora-game/dist/types'
-import {
-  AlignCenter,
-  AlignCenterHorizontal,
-  ArrowDownLeft,
-  ArrowDownNarrowWide,
-  ArrowDownRight,
-  ArrowDownWideNarrow,
-  Expand,
-  ExpandIcon,
-  MoveDownLeft,
-  MoveDownRight,
-} from 'lucide-react'
 import { includes, map, range } from 'ramda'
-import { match, P } from 'ts-pattern'
+import { match } from 'ts-pattern'
+import { ItemList } from '../itemList'
 
 interface Props {
   landscape: Tile[][]
-  offset: number
+  offset?: number
+  rowMin?: number
+  rowMax?: number
+  showTerrain?: boolean
 }
 
 const landToColor = (land: LandEnum | undefined) =>
@@ -31,27 +23,33 @@ const landToColor = (land: LandEnum | undefined) =>
     .with(LandEnum.BelowMountain, () => '#d9d9d9')
     .otherwise(() => '')
 
-export const TinyLandscape = ({ landscape, offset }: Props) => {
-  const { state, partial, setPartial, addPartial, controls } = useInstanceContext()
-  const completions = controls?.completion ?? []
+type ThisRowButtonProps = {
+  onClick: () => void
+}
+const ThisRowButton = ({ onClick }: ThisRowButtonProps) => {
+  return (
+    <button className="primary" onClick={onClick}>
+      This Row
+    </button>
+  )
+}
 
-  const [mode, rowMin, rowMax] = match<string[], [string, number, number]>(partial)
-    .with(['BUY_PLOT'], () => [
-      'buy-plot-row',
-      Math.min(...map((s: string) => Number.parseInt(s, 10), completions)) + (offset ?? 0),
-      Math.max(...map((s: string) => Number.parseInt(s, 10), completions)) + (offset ?? 0),
-    ])
-    .with(['BUY_PLOT', P.string], () => ['buy-plot-type', 0, 1])
-    .otherwise(() => ['', 0, 1])
+export const TinyLandscape = ({ landscape, offset = 0, rowMin, rowMax, showTerrain = false }: Props) => {
+  const { addPartial, controls } = useInstanceContext()
+  const completions = controls?.completion ?? []
 
   const handleClick = (param: string) => () => {
     addPartial(param)
   }
 
-  const rowsCovered = range(rowMin, rowMax + 1)
+  const rowsCovered = range(
+    rowMin ?? Math.min(...map((s: string) => Number.parseInt(s, 10), completions)) + offset,
+    (rowMax ?? Math.max(...map((s: string) => Number.parseInt(s, 10), completions)) + offset) + 1
+  )
 
   return (
     <>
+      {/* <pre>{JSON.stringify({ rowsCovered })}</pre> */}
       <table style={{ borderCollapse: 'collapse' }}>
         <tbody>
           {map((rowIndex) => {
@@ -67,10 +65,8 @@ export const TinyLandscape = ({ landscape, offset }: Props) => {
                       height: 50,
                     }}
                   >
-                    {includes(`${rowId}`, completions) && (
-                      <button className="primary" onClick={handleClick(`${rowId}`)}>
-                        Here
-                      </button>
+                    {includes(`${rowId}`, completions) && ( //
+                      <ThisRowButton onClick={handleClick(`${rowId}`)} />
                     )}
                   </td>
                 </tr>
@@ -99,17 +95,22 @@ export const TinyLandscape = ({ landscape, offset }: Props) => {
                       >
                         <div
                           style={{
-                            width: 50,
-                            height: 50,
-                            verticalAlign: 'bottom',
+                            width: 60,
+                            height: 60,
                           }}
                         >
+                          {showTerrain && building === 'LMO' && (
+                            <div style={{ padding: 11 }}>
+                              <ItemList items="Pt" />
+                            </div>
+                          )}
+                          {showTerrain && building === 'LFO' && (
+                            <div style={{ padding: 11 }}>
+                              <ItemList items="Wo" />
+                            </div>
+                          )}
                           {colIndex === 4 && completions.includes(`${rowId}`) && (
-                            <>
-                              <button className="primary" onClick={handleClick(`${rowId}`)}>
-                                Here
-                              </button>
-                            </>
+                            <ThisRowButton onClick={handleClick(`${rowId}`)} />
                           )}
                         </div>
                       </td>
