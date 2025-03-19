@@ -30,7 +30,7 @@ export const ModalBuyPlot = () => {
       <Modal closeModal={handleClose} openModal={open} close={'Cancel'}>
         <h1>Buy Plot</h1>
         Which Row?
-        <TinyLandscape landscape={landscape} offset={landscapeOffset} completions={options} />
+        <TinyLandscape landscape={landscape} offset={landscapeOffset} />
       </Modal>
     ))
     .with(['BUY_PLOT', P.string], () => (
@@ -47,7 +47,6 @@ export const ModalBuyPlot = () => {
                       [[LandEnum.Water], [LandEnum.Coast]],
                     ]}
                     offset={landscapeOffset}
-                    completions={options}
                   />
                 </button>
               ))
@@ -59,7 +58,6 @@ export const ModalBuyPlot = () => {
                       [[LandEnum.Hillside], [LandEnum.BelowMountain]],
                     ]}
                     offset={landscapeOffset}
-                    completions={options}
                   />
                 </button>
               ))

@@ -1,13 +1,24 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Tile } from 'hathora-et-labora-game'
 import { LandEnum } from 'hathora-et-labora-game/dist/types'
-import { MoveDownLeft, MoveDownRight } from 'lucide-react'
+import {
+  AlignCenter,
+  AlignCenterHorizontal,
+  ArrowDownLeft,
+  ArrowDownNarrowWide,
+  ArrowDownRight,
+  ArrowDownWideNarrow,
+  Expand,
+  ExpandIcon,
+  MoveDownLeft,
+  MoveDownRight,
+} from 'lucide-react'
+import { includes, map, range } from 'ramda'
 import { match, P } from 'ts-pattern'
 
 interface Props {
   landscape: Tile[][]
   offset: number
-  completions: string[]
 }
 
 const landToColor = (land: LandEnum | undefined) =>
@@ -20,85 +31,95 @@ const landToColor = (land: LandEnum | undefined) =>
     .with(LandEnum.BelowMountain, () => '#d9d9d9')
     .otherwise(() => '')
 
-export const TinyLandscape = ({ landscape, offset, completions }: Props) => {
+export const TinyLandscape = ({ landscape, offset }: Props) => {
   const { state, partial, setPartial, addPartial, controls } = useInstanceContext()
+  const completions = controls?.completion ?? []
 
-  const mode = match(partial)
-    .with(['BUY_PLOT'], () => 'buy-plot-row')
-    .with(['BUY_PLOT', P.string], () => 'buy-plot-type')
-    .otherwise(() => undefined)
+  const [mode, rowMin, rowMax] = match<string[], [string, number, number]>(partial)
+    .with(['BUY_PLOT'], () => [
+      'buy-plot-row',
+      Math.min(...map((s: string) => Number.parseInt(s, 10), completions)) + (offset ?? 0),
+      Math.max(...map((s: string) => Number.parseInt(s, 10), completions)) + (offset ?? 0),
+    ])
+    .with(['BUY_PLOT', P.string], () => ['buy-plot-type', 0, 1])
+    .otherwise(() => ['', 0, 1])
 
   const handleClick = (param: string) => () => {
     addPartial(param)
   }
 
+  const rowsCovered = range(rowMin, rowMax + 1)
+
   return (
-    <table style={{ borderCollapse: 'collapse' }}>
-      <tbody>
-        {mode === 'buy-plot-row' && (
-          <tr>
-            <td
-              style={{
-                border: 1,
-              }}
-              colSpan={4}
-            ></td>
-            <td
-              style={{
-                textAlign: 'center',
-                backgroundColor: 'white',
-              }}
-            >
-              <button className="primary" onClick={handleClick(`${-1 - offset}`)}>
-                <MoveDownRight size={16} />
-              </button>
-            </td>
-          </tr>
-        )}
-        {landscape.map((row, rowIndex) => {
-          const rowId = rowIndex - offset
-          return (
-            <tr key={`${rowId}:${JSON.stringify(row)}`}>
-              {row.map((tile, colIndex) => {
-                if (tile.length === 0) return <td key={`${rowId}:${colIndex}`} />
-                const [land, building] = tile
-
-                if (land === '.') return null
-
-                const rowSpan = land === 'M' ? 2 : 1
-
-                return (
+    <>
+      <table style={{ borderCollapse: 'collapse' }}>
+        <tbody>
+          {map((rowIndex) => {
+            const row = landscape[rowIndex]
+            const rowId = rowIndex - offset
+            return match<Tile[] | undefined>(row)
+              .with(undefined, () => (
+                <tr>
+                  <td colSpan={4} />
                   <td
                     style={{
-                      border: 1,
-                      borderStyle: 'solid',
-                      borderColor: '#555',
-                      textAlign: 'center',
-                      backgroundColor: landToColor(land),
+                      width: 50,
+                      height: 50,
                     }}
-                    key={`${rowId}:${colIndex}`}
-                    rowSpan={rowSpan}
                   >
-                    <div
-                      style={{
-                        width: 50,
-                        height: 50,
-                        verticalAlign: 'bottom',
-                      }}
-                    >
-                      {colIndex === 4 && completions.includes(`${rowId}`) && (
-                        <button className="primary" onClick={handleClick(`${rowId}`)}>
-                          <MoveDownRight size={16} />
-                        </button>
-                      )}
-                    </div>
+                    {includes(`${rowId}`, completions) && (
+                      <button className="primary" onClick={handleClick(`${rowId}`)}>
+                        Here
+                      </button>
+                    )}
                   </td>
-                )
-              })}
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
+                </tr>
+              ))
+              .otherwise(() => (
+                <tr key={`${rowId}:${JSON.stringify(row)}`}>
+                  {row.map((tile, colIndex) => {
+                    const [land, building] = tile
+
+                    // so long as the mountain is always at the end
+                    // and a '.' is under it, this will work
+                    if (land === '.') return <></>
+                    const rowSpan = land === 'M' ? 2 : 1
+
+                    return (
+                      <td
+                        style={{
+                          border: tile.length !== 0 ? 1 : 0,
+                          borderStyle: 'solid',
+                          borderColor: '#555',
+                          textAlign: 'center',
+                          backgroundColor: landToColor(land),
+                        }}
+                        key={`${rowId}:${colIndex}`}
+                        rowSpan={rowSpan}
+                      >
+                        <div
+                          style={{
+                            width: 50,
+                            height: 50,
+                            verticalAlign: 'bottom',
+                          }}
+                        >
+                          {colIndex === 4 && completions.includes(`${rowId}`) && (
+                            <>
+                              <button className="primary" onClick={handleClick(`${rowId}`)}>
+                                Here
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))
+          }, rowsCovered)}
+        </tbody>
+      </table>
+    </>
   )
 }
