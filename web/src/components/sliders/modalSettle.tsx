@@ -6,8 +6,7 @@ import Image from 'next/image'
 import { filter, includes, join, map, max, min, range, reduce, repeat } from 'ramda'
 import { ItemList } from '../itemList'
 import { ChevronsRight } from 'lucide-react'
-import { normalize } from 'path'
-import { genDenormalize } from '../erection/util'
+import { normalize, genDenormalize } from '../erection/util'
 
 const multiplier = 0.75
 
@@ -223,7 +222,7 @@ export const ModalSettle = () => {
       <button
         style={{ float: 'right' }}
         className="primary"
-        disabled={!includes(param, viableOptions)}
+        disabled={!includes(param, map(normalize, options))}
         onClick={handleOK(denormalizer[param])}
       >
         Settle
