@@ -12,7 +12,7 @@ import classes from './index.module.css'
 const id = BuildingEnum.GrainStorage
 
 export const GrainStorage = () => {
-  const { state, addPartial, controls } = useInstanceContext()
+  const { addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
 
   const sendPartial = (param: string) => () => {
@@ -41,7 +41,7 @@ export const GrainStorage = () => {
   const options = controls?.completion ?? []
 
   return (
-    <Modal title="Use Grain Storage" openModal={open}>
+    <Modal title="Grain Storage" openModal={open}>
       <ul className={classes.modal}>{map(button)(options)}</ul>
     </Modal>
   )
