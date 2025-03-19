@@ -58,7 +58,7 @@ export const TinyLandscape = ({ landscape, offset, completions }: Props) => {
         {landscape.map((row, rowIndex) => {
           const rowId = rowIndex - offset
           return (
-            <tr key={JSON.stringify(row)}>
+            <tr key={`${rowId}:${JSON.stringify(row)}`}>
               {row.map((tile, colIndex) => {
                 if (tile.length === 0) return <td key={`${rowId}:${colIndex}`} />
                 const [land, building] = tile
