@@ -75,7 +75,7 @@ export const Bakery = () => {
   )
 
   return (
-    <Modal title="Use Bakery" openModal={open} closeModal={handleClose}>
+    <Modal title="Bakery" openModal={open} closeModal={handleClose}>
       Turning {flourUsed} flour into bread
       <br />
       {map(

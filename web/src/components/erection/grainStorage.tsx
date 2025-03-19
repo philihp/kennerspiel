@@ -41,7 +41,7 @@ export const GrainStorage = () => {
   const options = controls?.completion ?? []
 
   return (
-    <Modal title="Use Grain Storage" openModal={open}>
+    <Modal title="Grain Storage" openModal={open}>
       <ul className={classes.modal}>{map(button)(options)}</ul>
     </Modal>
   )

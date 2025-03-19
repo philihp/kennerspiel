@@ -6,9 +6,9 @@ import { useState } from 'react'
 import { BuildingEnum } from 'hathora-et-labora-game/dist/types'
 import { partiallyUsed } from './util'
 
-const ids = [BuildingEnum.FarmYardR, BuildingEnum.FarmYardG, BuildingEnum.FarmYardB, BuildingEnum.FarmYardW]
+const ids = [BuildingEnum.CloisterCourtyard]
 
-export const Farmyard = () => {
+export const CloisterCourtyard = () => {
   const { state, addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed(ids, controls?.partial))
 
@@ -38,8 +38,8 @@ export const Farmyard = () => {
   const options = controls?.completion ?? []
 
   return (
-    <Modal title="Farmyard" openModal={open}>
-      Sending your clergy to the farmyard to collect: options
+    <Modal title="Cloister Courtyard" openModal={open}>
+      Sending your clergy to the Cloister Courtyard to collect: options
       <ul>{map(button)(options)}</ul>
     </Modal>
   )
