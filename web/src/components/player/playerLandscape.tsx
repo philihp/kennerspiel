@@ -62,6 +62,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                   <td
                     style={{
                       border: 1,
+                      height: 205,
                       borderStyle: 'solid',
                       borderColor: '#555',
                       textAlign: 'center',

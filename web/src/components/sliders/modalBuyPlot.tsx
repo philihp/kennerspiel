@@ -40,7 +40,7 @@ export const ModalBuyPlot = () => {
           (option: string) =>
             match(option)
               .with('COAST', () => (
-                <button className="primary" onClick={handleOK(option)}>
+                <button key={option} className="primary" onClick={handleOK(option)}>
                   <TinyLandscape
                     landscape={[
                       [[LandEnum.Water], [LandEnum.Coast]],
@@ -52,7 +52,7 @@ export const ModalBuyPlot = () => {
                 </button>
               ))
               .with('MOUNTAIN', () => (
-                <button className="primary" onClick={handleOK(option)}>
+                <button key={option} className="primary" onClick={handleOK(option)}>
                   <TinyLandscape
                     landscape={[
                       [[LandEnum.Hillside], [LandEnum.Mountain]],
