@@ -40,7 +40,7 @@ export const ModalBuyDistrict = () => {
           (param) =>
             match(param)
               .with('PLAINS', () => (
-                <button className="primary" onClick={handleOK(param)}>
+                <button className="primary" onClick={handleOK(param)} key={param}>
                   <TinyLandscape
                     landscape={[
                       [
@@ -58,7 +58,7 @@ export const ModalBuyDistrict = () => {
                 </button>
               ))
               .with('HILLS', () => (
-                <button className="primary" onClick={handleOK(param)}>
+                <button className="primary" onClick={handleOK(param)} key={param}>
                   <TinyLandscape
                     landscape={[
                       [

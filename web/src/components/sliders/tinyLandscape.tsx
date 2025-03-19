@@ -57,7 +57,7 @@ export const TinyLandscape = ({ landscape, offset = 0, rowMin, rowMax, showTerra
             const rowId = rowIndex - offset
             return match<Tile[] | undefined>(row)
               .with(undefined, () => (
-                <tr>
+                <tr key={`${rowId}:${JSON.stringify(row)}`}>
                   <td colSpan={4} />
                   <td
                     style={{
@@ -78,7 +78,7 @@ export const TinyLandscape = ({ landscape, offset = 0, rowMin, rowMax, showTerra
 
                     // so long as the mountain is always at the end
                     // and a '.' is under it, this will work
-                    if (land === '.') return <></>
+                    if (land === '.') return
                     const rowSpan = land === 'M' ? 2 : 1
 
                     return (

@@ -61,7 +61,8 @@ export const ModalSettle = () => {
     1 * pennyUsed +
     5 * meatUsed +
     5 * beerUsed +
-    2 * whiskeyUsed
+    2 * whiskeyUsed +
+    5 * nickelUsed
   const energyUsed = 1 * woodUsed + 2 * peatUsed + 3 * coalUsed + 0.5 * strawUsed
 
   const substrings = [
@@ -81,14 +82,6 @@ export const ModalSettle = () => {
     join('', repeat(ResourceEnum.Straw, strawUsed)),
   ]
   const param = normalize(join('', substrings))
-
-  const viableOptions = map<string, string>(normalize)(
-    reduce<string, string[]>(
-      (options, substr) => filter<string, string[]>(includes(substr), options),
-      options,
-      substrings
-    )
-  )
 
   const handleClose = () => {
     setPartial(['SETTLE'])
