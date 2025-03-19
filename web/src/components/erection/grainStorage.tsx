@@ -12,7 +12,7 @@ import classes from './index.module.css'
 const id = BuildingEnum.GrainStorage
 
 export const GrainStorage = () => {
-  const { state, addPartial, controls } = useInstanceContext()
+  const { addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
 
   const sendPartial = (param: string) => () => {

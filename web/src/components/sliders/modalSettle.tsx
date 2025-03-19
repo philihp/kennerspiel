@@ -3,9 +3,11 @@ import { useState } from 'react'
 import { Modal } from '../modal'
 import { ResourceEnum } from 'hathora-et-labora-game/dist/types'
 import Image from 'next/image'
-import { ascend, filter, identity, includes, join, map, max, min, range, reduce, repeat, sort, splitEvery } from 'ramda'
+import { filter, includes, join, map, max, min, range, reduce, repeat } from 'ramda'
 import { ItemList } from '../itemList'
 import { ChevronsRight } from 'lucide-react'
+import { normalize } from 'path'
+import { genDenormalize } from '../erection/util'
 
 const multiplier = 0.75
 
@@ -15,8 +17,6 @@ type CLickableListProps = {
   to?: number
   onClick: () => void
 }
-
-const normalize = (inv: string) => join('', sort(ascend(identity), splitEvery(2, inv)))
 
 const ClickableList = ({ from = 0, to = 0, type, onClick }: CLickableListProps) =>
   map((n) => <ItemList key={`${type}:${n}`} items={type} onClick={onClick} />, range(from, to))
@@ -52,14 +52,7 @@ export const ModalSettle = () => {
 
   const options = controls?.completion ?? []
 
-  const denormalizer = reduce(
-    (accum: Record<string, string>, key: string) => ({
-      ...accum,
-      [normalize(key)]: key,
-    }),
-    {} as Record<string, string>,
-    options
-  )
+  const denormalizer = genDenormalize(options)
 
   const foodUsed =
     1 * grainUsed +
