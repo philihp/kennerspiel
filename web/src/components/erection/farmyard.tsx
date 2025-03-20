@@ -1,46 +1,56 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Modal } from '../modal'
 import { match } from 'ts-pattern'
-import { map } from 'ramda'
-import { useState } from 'react'
+import { join, map, repeat } from 'ramda'
+import { ReactNode, useState } from 'react'
 import { BuildingEnum } from 'hathora-et-labora-game/dist/types'
-import { partiallyUsed } from './util'
+import { normalize, partiallyUsed } from './util'
+import { ItemList } from '../itemList'
+import { take } from '../rondel/values'
 
 const ids = [BuildingEnum.FarmYardR, BuildingEnum.FarmYardG, BuildingEnum.FarmYardB, BuildingEnum.FarmYardW]
 
 export const Farmyard = () => {
-  const { state, addPartial, controls } = useInstanceContext()
+  const { state, setPartial, addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed(ids, controls?.partial))
 
-  const sendPartial = (type: 'Sh' | 'Gn') => () => {
+  const sendPartial = (type: string) => () => {
     addPartial(type)
     setOpen(false)
   }
-
-  const button = (completion: string) =>
-    match(completion)
-      .with('Sh', () => (
-        <li key={completion}>
-          <button className="primary" onClick={sendPartial('Sh')}>
-            Sheep
-          </button>
-        </li>
-      ))
-      .with('Gn', () => (
-        <li key={completion}>
-          <button className="primary" onClick={sendPartial('Gn')}>
-            Grain
-          </button>
-        </li>
-      ))
-      .otherwise(() => undefined)
+  const handleCancel = () => {
+    setPartial(['USE'])
+    setOpen(false)
+  }
 
   const options = controls?.completion ?? []
 
   return (
-    <Modal title="Farmyard" openModal={open}>
-      Sending your clergy to the farmyard to collect: options
-      <ul>{map(button)(options)}</ul>
+    <Modal title="Farmyard" openModal={open} closeModal={handleCancel}>
+      {map<string, ReactNode>((option) => {
+        return match<string>(normalize(option))
+          .with(normalize('Sh'), () => (
+            <button key={`${option}`} className="primary" onClick={sendPartial('Sh')} style={{ float: 'right' }}>
+              Take {take(state?.rondel?.sheep!, state?.rondel?.pointingBefore!, state?.config!)} sheep with 🐑
+            </button>
+          ))
+          .with(normalize('Gn'), () => (
+            <button key={`${option}`} className="primary" onClick={sendPartial('Gn')} style={{ float: 'right' }}>
+              Take {take(state?.rondel?.grain!, state?.rondel?.pointingBefore!, state?.config!)} grain with 🌾
+            </button>
+          ))
+          .with(normalize('ShJo'), () => (
+            <button key={`${option}`} className="primary" onClick={sendPartial('ShJo')} style={{ float: 'right' }}>
+              Take {take(state?.rondel?.joker!, state?.rondel?.pointingBefore!, state?.config!)} sheep with 🃏
+            </button>
+          ))
+          .with(normalize('GnJo'), () => (
+            <button key={`${option}`} className="primary" onClick={sendPartial('GnJo')} style={{ float: 'right' }}>
+              Take {take(state?.rondel?.joker!, state?.rondel?.pointingBefore!, state?.config!)} grain with 🃏
+            </button>
+          ))
+          .otherwise(() => undefined)
+      }, options)}
     </Modal>
   )
 }

@@ -34,7 +34,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
         {landscape.map((row, rowIndex) => {
           const rowId = rowIndex - offset
           return (
-            <tr key={JSON.stringify(row)}>
+            <tr key={`${rowId}:${JSON.stringify(row)}`}>
               {row.map((tile, colIndex) => {
                 if (tile.length === 0) return <td key={`${rowId}:${colIndex}`} />
                 const [land, building, clergy] = tile
@@ -62,6 +62,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                   <td
                     style={{
                       border: 1,
+                      height: 205,
                       borderStyle: 'solid',
                       borderColor: '#555',
                       textAlign: 'center',

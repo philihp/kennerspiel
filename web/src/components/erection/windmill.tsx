@@ -12,11 +12,16 @@ import classes from './index.module.css'
 const id = BuildingEnum.Windmill
 
 export const Windmill = () => {
-  const { addPartial, controls } = useInstanceContext()
+  const { addPartial, setPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
 
   const sendPartial = (param: string) => () => {
     addPartial(param)
+    setOpen(false)
+  }
+
+  const handleCancel = () => {
+    setPartial(['USE'])
     setOpen(false)
   }
 
@@ -41,7 +46,7 @@ export const Windmill = () => {
   const options = controls?.completion ?? []
 
   return (
-    <Modal title="Use Windmill" openModal={open}>
+    <Modal title="Use Windmill" openModal={open} closeModal={handleCancel}>
       <ul className={classes.modal}>{map(button)(options)}</ul>
     </Modal>
   )
