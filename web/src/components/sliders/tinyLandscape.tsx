@@ -4,7 +4,7 @@ import { LandEnum } from 'hathora-et-labora-game/dist/types'
 import { includes, map, range } from 'ramda'
 import { match } from 'ts-pattern'
 import { ItemList } from '../itemList'
-import { MoveHorizontal } from 'lucide-react'
+import { ChevronsLeftRightEllipsis, MoveHorizontal } from 'lucide-react'
 
 interface Props {
   landscape: Tile[][]
@@ -30,7 +30,7 @@ type ThisRowButtonProps = {
 const ThisRowButton = ({ onClick }: ThisRowButtonProps) => {
   return (
     <button className="primary" onClick={onClick}>
-      <MoveHorizontal size={16} />
+      <ChevronsLeftRightEllipsis size={16} />
     </button>
   )
 }

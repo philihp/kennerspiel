@@ -30,23 +30,23 @@ export const Farmyard = () => {
       {map<string, ReactNode>((option) => {
         return match<string>(normalize(option))
           .with(normalize('Sh'), () => (
-            <button key={`${option}`} className="primary" onClick={sendPartial('Sh')} style={{ float: 'right' }}>
-              Take {take(state?.rondel?.sheep!, state?.rondel?.pointingBefore!, state?.config!)} sheep with 🐑
+            <button key={`${option}`} className="primary" onClick={sendPartial('Sh')}>
+              Take {take(state?.rondel?.pointingBefore!, state?.rondel?.sheep!, state?.config!)} sheep with 🐑
             </button>
           ))
           .with(normalize('Gn'), () => (
-            <button key={`${option}`} className="primary" onClick={sendPartial('Gn')} style={{ float: 'right' }}>
-              Take {take(state?.rondel?.grain!, state?.rondel?.pointingBefore!, state?.config!)} grain with 🌾
+            <button key={`${option}`} className="primary" onClick={sendPartial('Gn')}>
+              Take {take(state?.rondel?.pointingBefore!, state?.rondel?.grain!, state?.config!)} grain with 🌾
             </button>
           ))
           .with(normalize('ShJo'), () => (
-            <button key={`${option}`} className="primary" onClick={sendPartial('ShJo')} style={{ float: 'right' }}>
-              Take {take(state?.rondel?.joker!, state?.rondel?.pointingBefore!, state?.config!)} sheep with 🃏
+            <button key={`${option}`} className="primary" onClick={sendPartial('ShJo')}>
+              Take {take(state?.rondel?.pointingBefore!, state?.rondel?.joker!, state?.config!)} sheep with 🃏
             </button>
           ))
           .with(normalize('GnJo'), () => (
-            <button key={`${option}`} className="primary" onClick={sendPartial('GnJo')} style={{ float: 'right' }}>
-              Take {take(state?.rondel?.joker!, state?.rondel?.pointingBefore!, state?.config!)} grain with 🃏
+            <button key={`${option}`} className="primary" onClick={sendPartial('GnJo')}>
+              Take {take(state?.rondel?.pointingBefore!, state?.rondel?.joker!, state?.config!)} grain with 🃏
             </button>
           ))
           .otherwise(() => undefined)
