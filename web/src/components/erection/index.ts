@@ -14,6 +14,8 @@ import { Market } from './market'
 import { StoneMerchant } from './stoneMerchant'
 import { FinancedEstate } from './financedEstate'
 import { Slaughterhouse } from './slaughterhouse'
+import { CloisterWorkshop } from './cloisterWorkshop'
+import { CloisterLibrary } from './cloisterLibrary'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -63,9 +65,9 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.FinancedEstate, () => FinancedEstate)
       .with(BuildingEnum.DruidsHouse, () => PlaceholderForUse)
       .with(BuildingEnum.CloisterChapterHouse, () => PlaceholderForUse)
-      .with(BuildingEnum.CloisterLibrary, () => PlaceholderForUse)
+      .with(BuildingEnum.CloisterLibrary, () => CloisterLibrary)
       .with(BuildingEnum.Scriptorium, () => PlaceholderForUse)
-      .with(BuildingEnum.CloisterWorkshop, () => PlaceholderForUse)
+      .with(BuildingEnum.CloisterWorkshop, () => CloisterWorkshop)
       .with(BuildingEnum.Slaughterhouse, () => Slaughterhouse)
       .with(BuildingEnum.Inn, () => PlaceholderForUse)
       .with(BuildingEnum.Alehouse, () => PlaceholderForUse)
