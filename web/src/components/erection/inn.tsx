@@ -3,14 +3,16 @@ import { useState } from 'react'
 import { Modal } from '../modal'
 import { BuildingEnum, ResourceEnum } from 'hathora-et-labora-game/dist/types'
 import Image from 'next/image'
-import { filter, includes, join, map, max, min, range, reduce, repeat } from 'ramda'
+import { filter, flatten, includes, join, map, max, min, range, reduce, repeat } from 'ramda'
 import { ItemList } from '../itemList'
 import { ChevronsRight } from 'lucide-react'
 import { normalize, genDenormalize, partiallyUsed } from './util'
 
-const id = BuildingEnum.StoneMerchant
+const id = BuildingEnum.Inn
 
 const multiplier = 0.75
+const COINS_FOR_WINE = 6
+const MAX_FOOD = 7
 
 type ClickableListProps = {
   type: ResourceEnum
@@ -22,9 +24,8 @@ type ClickableListProps = {
 const ClickableList = ({ from = 0, to = 0, type, onClick }: ClickableListProps) =>
   map((n) => <ItemList key={`${type}:${n}`} items={type} onClick={onClick} />, range(from, to))
 
-export const StoneMerchant = () => {
+export const Inn = () => {
   const { state, setPartial, addPartial, controls } = useInstanceContext()
-  const partial = controls?.partial ?? []
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
   const [grainUsed, setGrainUsed] = useState(0)
   const [flourUsed, setFlourUsed] = useState(0)
@@ -35,13 +36,9 @@ export const StoneMerchant = () => {
   const [nickelUsed, setNickelUsed] = useState(0)
   const [meatUsed, setMeatUsed] = useState(0)
   const [beerUsed, setBeerUsed] = useState(0)
-  const [wineUsed, setWineUsed] = useState(0)
   const [whiskeyUsed, setWhiskeyUsed] = useState(0)
 
-  const [woodUsed, setWoodUsed] = useState(0)
-  const [peatUsed, setPeatUsed] = useState(0)
-  const [coalUsed, setCoalUsed] = useState(0)
-  const [strawUsed, setStrawUsed] = useState(0)
+  const [wineUsed, setWineUsed] = useState(0)
 
   const player = state?.players[state?.frame?.currentPlayerIndex]
 
@@ -53,29 +50,26 @@ export const StoneMerchant = () => {
     1 * grainUsed +
     2 * sheepUsed +
     1 * grapeUsed +
-    1 * wineUsed +
     3 * breadUsed +
     1 * pennyUsed +
     5 * nickelUsed +
     5 * meatUsed +
     5 * beerUsed +
-    2 * whiskeyUsed
-  const energyUsed = 1 * woodUsed + 2 * peatUsed + 3 * coalUsed + 0.5 * strawUsed
+    2 * whiskeyUsed +
+    1 * wineUsed
+
+  const coinsMade = 1 * min(foodUsed - max(wineUsed - 1, 0), MAX_FOOD) + COINS_FOR_WINE * min(1, wineUsed)
 
   const substrings = [
     join('', repeat(ResourceEnum.Grain, grainUsed)),
     join('', repeat(ResourceEnum.Flour, flourUsed)),
     join('', repeat(ResourceEnum.Sheep, sheepUsed)),
     join('', repeat(ResourceEnum.Grape, grapeUsed)),
-    join('', repeat(ResourceEnum.Wine, wineUsed)),
     join('', repeat(ResourceEnum.Nickel, nickelUsed)),
     join('', repeat(ResourceEnum.Meat, meatUsed)),
     join('', repeat(ResourceEnum.Beer, beerUsed)),
     join('', repeat(ResourceEnum.Whiskey, whiskeyUsed)),
-    join('', repeat(ResourceEnum.Wood, woodUsed)),
-    join('', repeat(ResourceEnum.Peat, peatUsed)),
-    join('', repeat(ResourceEnum.Coal, coalUsed)),
-    join('', repeat(ResourceEnum.Straw, strawUsed)),
+    join('', repeat(ResourceEnum.Wine, wineUsed)),
     join('', repeat(ResourceEnum.Bread, breadUsed)),
     join('', repeat(ResourceEnum.Penny, pennyUsed)),
   ]
@@ -92,7 +86,7 @@ export const StoneMerchant = () => {
   }
 
   return (
-    <Modal title="Stone Merchant" closeModal={handleClose} openModal={open} close={'Cancel'}>
+    <Modal title="Inn" closeModal={handleClose} openModal={open} close={'Cancel'}>
       <Image
         alt={id}
         src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${id}.jpg`}
@@ -100,8 +94,8 @@ export const StoneMerchant = () => {
         width={150 * multiplier}
         height={250 * multiplier}
       />
-      Consume
-      <hr />
+      Convert food and wine
+      <br />
       <ClickableList
         type={ResourceEnum.Grain}
         from={grainUsed}
@@ -163,32 +157,11 @@ export const StoneMerchant = () => {
         onClick={() => setWhiskeyUsed(min(whiskeyUsed + 1, player?.whiskey ?? 0))}
       />
       <ClickableList
-        type={ResourceEnum.Wood}
-        from={woodUsed}
-        to={player?.wood}
-        onClick={() => setWoodUsed(min(woodUsed + 1, player?.wood ?? 0))}
+        type={ResourceEnum.Wine}
+        from={wineUsed}
+        to={min(0, (player?.wine ?? 0) - 1)}
+        onClick={() => setWineUsed(min(wineUsed + 1, player?.wine ?? 0))}
       />
-      <ClickableList
-        type={ResourceEnum.Peat}
-        from={peatUsed}
-        to={player?.peat}
-        onClick={() => setPeatUsed(min(peatUsed + 1, player?.peat ?? 0))}
-      />
-      <ClickableList
-        type={ResourceEnum.Coal}
-        from={coalUsed}
-        to={player?.coal}
-        onClick={() => setCoalUsed(min(coalUsed + 1, player?.coal ?? 0))}
-      />
-      <ClickableList
-        type={ResourceEnum.Straw}
-        from={strawUsed}
-        to={player?.straw}
-        onClick={() => setStrawUsed(min(strawUsed + 1, player?.straw ?? 0))}
-      />
-      <hr />
-      for {foodUsed} food from
-      <br />
       <ChevronsRight />
       <ClickableList type={ResourceEnum.Grain} to={grainUsed} onClick={() => setGrainUsed(max(0, grainUsed - 1))} />
       <ClickableList type={ResourceEnum.Flour} to={flourUsed} onClick={() => setFlourUsed(max(0, flourUsed - 1))} />
@@ -199,21 +172,31 @@ export const StoneMerchant = () => {
       <ClickableList type={ResourceEnum.Nickel} to={nickelUsed} onClick={() => setNickelUsed(max(0, nickelUsed - 1))} />
       <ClickableList type={ResourceEnum.Meat} to={meatUsed} onClick={() => setMeatUsed(max(0, meatUsed - 1))} />
       <ClickableList type={ResourceEnum.Beer} to={beerUsed} onClick={() => setBeerUsed(max(0, beerUsed - 1))} />
-      <ClickableList type={ResourceEnum.Wine} to={wineUsed} onClick={() => setWineUsed(max(0, wineUsed - 1))} />
       <ClickableList
         type={ResourceEnum.Whiskey}
         to={whiskeyUsed}
         onClick={() => setWhiskeyUsed(max(0, whiskeyUsed - 1))}
       />
-      <br />
-      and {energyUsed} energy from
-      <br />
-      <ChevronsRight />
-      <ClickableList type={ResourceEnum.Wood} to={woodUsed} onClick={() => setWoodUsed(max(0, woodUsed - 1))} />
-      <ClickableList type={ResourceEnum.Peat} to={peatUsed} onClick={() => setPeatUsed(max(0, peatUsed - 1))} />
-      <ClickableList type={ResourceEnum.Coal} to={coalUsed} onClick={() => setCoalUsed(max(0, coalUsed - 1))} />
-      <ClickableList type={ResourceEnum.Straw} to={strawUsed} onClick={() => setStrawUsed(max(0, strawUsed - 1))} />
+      <ClickableList
+        type={ResourceEnum.Wine}
+        to={min(0, wineUsed - 1)}
+        onClick={() => setWineUsed(max(0, wineUsed - 1))}
+      />
       <hr />
+      <ClickableList
+        type={ResourceEnum.Wine}
+        from={wineUsed}
+        to={player?.wine}
+        onClick={() => setWineUsed(min(wineUsed + 1, player?.wine ?? 0))}
+      />
+      <ChevronsRight />
+      <ClickableList type={ResourceEnum.Wine} to={min(wineUsed, 1)} onClick={() => setWineUsed(max(0, wineUsed - 1))} />
+      <hr />
+      into
+      <ItemList items={join('', repeat(ResourceEnum.Nickel, Math.floor(coinsMade / 5)))} />
+      <ItemList items={join('', repeat(ResourceEnum.Penny, coinsMade % 5))} />
+      <hr />
+      {param}
       <button
         style={{ float: 'right' }}
         className="primary"
