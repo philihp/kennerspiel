@@ -1,7 +1,7 @@
 import { ResourceEnum } from 'hathora-et-labora-game/dist/types'
 import Image from 'next/image'
 import { addIndex, map, splitEvery } from 'ramda'
-import { MouseEventHandler, ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 const multiplier = 1.5
 

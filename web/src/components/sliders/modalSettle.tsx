@@ -3,22 +3,12 @@ import { useState } from 'react'
 import { Modal } from '../modal'
 import { ResourceEnum } from 'hathora-et-labora-game/dist/types'
 import Image from 'next/image'
-import { filter, includes, join, map, max, min, range, reduce, repeat } from 'ramda'
-import { ItemList } from '../itemList'
+import { includes, join, map, max, min, repeat } from 'ramda'
 import { ChevronsRight } from 'lucide-react'
 import { normalize, genDenormalize } from '../erection/util'
+import { ItemRange } from '../itemRange'
 
 const multiplier = 0.75
-
-type CLickableListProps = {
-  type: ResourceEnum
-  from?: number
-  to?: number
-  onClick: () => void
-}
-
-const ClickableList = ({ from = 0, to = 0, type, onClick }: CLickableListProps) =>
-  map((n) => <ItemList key={`${type}:${n}`} items={type} onClick={onClick} />, range(from, to))
 
 export const ModalSettle = () => {
   const { state, setPartial, addPartial, controls } = useInstanceContext()
@@ -105,112 +95,108 @@ export const ModalSettle = () => {
       />
       Consume {foodUsed} food from
       <hr />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Grain}
         from={grainUsed}
         to={player?.grain}
         onClick={() => setGrainUsed(min(grainUsed + 1, player?.grain ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Flour}
         from={flourUsed}
         to={player?.flour}
         onClick={() => setFlourUsed(min(flourUsed + 1, player?.flour ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Sheep}
         from={sheepUsed}
         to={player?.sheep}
         onClick={() => setSheepUsed(min(sheepUsed + 1, player?.sheep ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Grape}
         from={grapeUsed}
         to={player?.grape}
         onClick={() => setGrapeUsed(min(grapeUsed + 1, player?.grape ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Bread}
         from={breadUsed}
         to={player?.bread}
         onClick={() => setBreadUsed(min(breadUsed + 1, player?.bread ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Penny}
         from={pennyUsed}
         to={player?.penny}
         onClick={() => setPennyUsed(min(pennyUsed + 1, player?.penny ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Nickel}
         from={nickelUsed}
         to={player?.nickel}
         onClick={() => setNickelUsed(min(nickelUsed + 1, player?.nickel ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Meat}
         from={meatUsed}
         to={player?.meat}
         onClick={() => setMeatUsed(min(meatUsed + 1, player?.meat ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Beer}
         from={beerUsed}
         to={player?.beer}
         onClick={() => setBeerUsed(min(beerUsed + 1, player?.beer ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Whiskey}
         from={whiskeyUsed}
         to={player?.whiskey}
         onClick={() => setWhiskeyUsed(min(whiskeyUsed + 1, player?.whiskey ?? 0))}
       />
       <ChevronsRight />
-      <ClickableList type={ResourceEnum.Grain} to={grainUsed} onClick={() => setGrainUsed(max(0, grainUsed - 1))} />
-      <ClickableList type={ResourceEnum.Flour} to={flourUsed} onClick={() => setFlourUsed(max(0, flourUsed - 1))} />
-      <ClickableList type={ResourceEnum.Sheep} to={sheepUsed} onClick={() => setSheepUsed(max(0, sheepUsed - 1))} />
-      <ClickableList type={ResourceEnum.Grape} to={grapeUsed} onClick={() => setGrapeUsed(max(0, grapeUsed - 1))} />
-      <ClickableList type={ResourceEnum.Bread} to={breadUsed} onClick={() => setBreadUsed(max(0, breadUsed - 1))} />
-      <ClickableList type={ResourceEnum.Penny} to={pennyUsed} onClick={() => setPennyUsed(max(0, pennyUsed - 1))} />
-      <ClickableList type={ResourceEnum.Nickel} to={nickelUsed} onClick={() => setNickelUsed(max(0, nickelUsed - 1))} />
-      <ClickableList type={ResourceEnum.Meat} to={meatUsed} onClick={() => setMeatUsed(max(0, meatUsed - 1))} />
-      <ClickableList type={ResourceEnum.Beer} to={beerUsed} onClick={() => setBeerUsed(max(0, beerUsed - 1))} />
-      <ClickableList
-        type={ResourceEnum.Whiskey}
-        to={whiskeyUsed}
-        onClick={() => setWhiskeyUsed(max(0, whiskeyUsed - 1))}
-      />
+      <ItemRange type={ResourceEnum.Grain} to={grainUsed} onClick={() => setGrainUsed(max(0, grainUsed - 1))} />
+      <ItemRange type={ResourceEnum.Flour} to={flourUsed} onClick={() => setFlourUsed(max(0, flourUsed - 1))} />
+      <ItemRange type={ResourceEnum.Sheep} to={sheepUsed} onClick={() => setSheepUsed(max(0, sheepUsed - 1))} />
+      <ItemRange type={ResourceEnum.Grape} to={grapeUsed} onClick={() => setGrapeUsed(max(0, grapeUsed - 1))} />
+      <ItemRange type={ResourceEnum.Bread} to={breadUsed} onClick={() => setBreadUsed(max(0, breadUsed - 1))} />
+      <ItemRange type={ResourceEnum.Penny} to={pennyUsed} onClick={() => setPennyUsed(max(0, pennyUsed - 1))} />
+      <ItemRange type={ResourceEnum.Nickel} to={nickelUsed} onClick={() => setNickelUsed(max(0, nickelUsed - 1))} />
+      <ItemRange type={ResourceEnum.Meat} to={meatUsed} onClick={() => setMeatUsed(max(0, meatUsed - 1))} />
+      <ItemRange type={ResourceEnum.Beer} to={beerUsed} onClick={() => setBeerUsed(max(0, beerUsed - 1))} />
+      <ItemRange type={ResourceEnum.Whiskey} to={whiskeyUsed} onClick={() => setWhiskeyUsed(max(0, whiskeyUsed - 1))} />
       <hr />
       and {energyUsed} energy from
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Wood}
         from={woodUsed}
         to={player?.wood}
         onClick={() => setWoodUsed(min(woodUsed + 1, player?.wood ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Peat}
         from={peatUsed}
         to={player?.peat}
         onClick={() => setPeatUsed(min(peatUsed + 1, player?.peat ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Coal}
         from={coalUsed}
         to={player?.coal}
         onClick={() => setCoalUsed(min(coalUsed + 1, player?.coal ?? 0))}
       />
-      <ClickableList
+      <ItemRange
         type={ResourceEnum.Straw}
         from={strawUsed}
         to={player?.straw}
         onClick={() => setStrawUsed(min(strawUsed + 1, player?.straw ?? 0))}
       />
       <ChevronsRight />
-      <ClickableList type={ResourceEnum.Wood} to={woodUsed} onClick={() => setWoodUsed(max(0, woodUsed - 1))} />
-      <ClickableList type={ResourceEnum.Peat} to={peatUsed} onClick={() => setPeatUsed(max(0, peatUsed - 1))} />
-      <ClickableList type={ResourceEnum.Coal} to={coalUsed} onClick={() => setCoalUsed(max(0, coalUsed - 1))} />
-      <ClickableList type={ResourceEnum.Straw} to={strawUsed} onClick={() => setStrawUsed(max(0, strawUsed - 1))} />
+      <ItemRange type={ResourceEnum.Wood} to={woodUsed} onClick={() => setWoodUsed(max(0, woodUsed - 1))} />
+      <ItemRange type={ResourceEnum.Peat} to={peatUsed} onClick={() => setPeatUsed(max(0, peatUsed - 1))} />
+      <ItemRange type={ResourceEnum.Coal} to={coalUsed} onClick={() => setCoalUsed(max(0, coalUsed - 1))} />
+      <ItemRange type={ResourceEnum.Straw} to={strawUsed} onClick={() => setStrawUsed(max(0, strawUsed - 1))} />
       <hr />
       <button
         style={{ float: 'right' }}
