@@ -46,7 +46,7 @@ export const Winery = () => {
         width={150 * multiplier}
         height={250 * multiplier}
       />
-      Convert grapes to wine
+      Ferment grapes to wine
       <br />
       <ItemRange
         type={ResourceEnum.Grape}
@@ -58,6 +58,8 @@ export const Winery = () => {
       <ItemRange type={ResourceEnum.Grape} to={grapeUsed} onClick={() => setGrapeUsed(max(0, grapeUsed - 1))} />
       <ItemRange type={ResourceEnum.Wine} to={min(0, wineUsed - 1)} onClick={() => setWineUsed(max(0, wineUsed - 1))} />
       <hr />
+      Then sell wine for 7 coins
+      <br />
       <ItemRange
         type={ResourceEnum.Wine}
         from={wineUsed}
