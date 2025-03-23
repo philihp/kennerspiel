@@ -8,6 +8,7 @@ import { partiallyUsed } from './util'
 import { ItemList } from '../itemList'
 
 import { ChevronsRight } from 'lucide-react'
+import { ItemRange } from '../itemRange'
 
 const id = BuildingEnum.Bakery
 
@@ -36,30 +37,13 @@ export const Bakery = () => {
     setOpen(false)
   }
 
-  const button = (completion: string) =>
-    match(completion)
-      .with('', () => (
-        <li key={completion}>
-          <button className="primary" onClick={sendPartial('')}>
-            <i>Skip</i>
-          </button>
-        </li>
-      ))
-      .with(P.any, (param) => (
-        <li key={completion}>
-          <button className="primary" onClick={sendPartial(param)}>
-            <ItemList items={param} />
-          </button>
-        </li>
-      ))
-      .otherwise(() => undefined)
-
   const options = controls?.completion ?? []
   const substrings = [
     join('', repeat(ResourceEnum.Flour, flourUsed)),
     join('', repeat(ResourceEnum.Wood, woodUsed)),
     join('', repeat(ResourceEnum.Coal, coalUsed)),
     join('', repeat(ResourceEnum.Straw, strawUsed)),
+    join('', repeat(ResourceEnum.Peat, peatUsed)),
     join('', repeat(ResourceEnum.Bread, breadUsed)),
   ]
   const param = join('', substrings)
@@ -74,87 +58,51 @@ export const Bakery = () => {
     <Modal title="Bakery" openModal={open} closeModal={handleClose}>
       Turning {flourUsed} flour into bread
       <br />
-      {map(
-        (n) => (
-          <ItemList key={n} items="Fl" onClick={() => setFlourUsed(min(flourUsed + 1, player?.flour ?? 0))} />
-        ),
-        range(0, (player?.flour ?? 0) - flourUsed)
-      )}
+      <ItemRange
+        type={ResourceEnum.Flour}
+        to={(player?.flour ?? 0) - flourUsed}
+        onClick={() => setFlourUsed(min(flourUsed + 1, player?.flour ?? 0))}
+      />
       <ChevronsRight />
-      {map(
-        (n) => (
-          <ItemList key={n} items="Fl" onClick={() => setFlourUsed(max(0, flourUsed - 1))} />
-        ),
-        range(0, flourUsed)
-      )}
+      <ItemRange type={ResourceEnum.Flour} to={flourUsed} onClick={() => setFlourUsed(max(0, flourUsed - 1))} />
       <br />
       by generating {powerGenerated} power from burning
       <br />
-      {map(
-        (n) => (
-          <ItemList key={n} items="Wo" onClick={() => setWoodUsed(min(woodUsed + 1, player?.wood ?? 0))} />
-        ),
-        range(0, (player?.wood ?? 0) - woodUsed)
-      )}
-      {map(
-        (n) => (
-          <ItemList key={n} items="Pt" onClick={() => setPeatUsed(min(peatUsed + 1, player?.peat ?? 0))} />
-        ),
-        range(0, (player?.peat ?? 0) - peatUsed)
-      )}
-      {map(
-        (n) => (
-          <ItemList key={n} items="Co" onClick={() => setCoalUsed(min(coalUsed + 1, player?.coal ?? 0))} />
-        ),
-        range(0, (player?.coal ?? 0) - coalUsed)
-      )}
-      {map(
-        (n) => (
-          <ItemList key={n} items="Sw" onClick={() => setStrawUsed(min(strawUsed + 1, player?.straw ?? 0))} />
-        ),
-        range(0, (player?.straw ?? 0) - strawUsed)
-      )}
+      <ItemRange
+        type={ResourceEnum.Wood}
+        to={(player?.wood ?? 0) - woodUsed}
+        onClick={() => setWoodUsed(min(woodUsed + 1, player?.wood ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Peat}
+        to={(player?.peat ?? 0) - peatUsed}
+        onClick={() => setPeatUsed(min(peatUsed + 1, player?.peat ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Coal}
+        to={(player?.coal ?? 0) - coalUsed}
+        onClick={() => setCoalUsed(min(coalUsed + 1, player?.coal ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Straw}
+        to={(player?.straw ?? 0) - strawUsed}
+        onClick={() => setStrawUsed(min(strawUsed + 1, player?.straw ?? 0))}
+      />
       <ChevronsRight />
-      {map(
-        (n) => (
-          <ItemList key={n} items="Wo" onClick={() => setWoodUsed(max(0, woodUsed - 1))} />
-        ),
-        range(0, woodUsed)
-      )}
-      {map(
-        (n) => (
-          <ItemList key={n} items="Pt" onClick={() => setPeatUsed(max(0, peatUsed - 1))} />
-        ),
-        range(0, peatUsed)
-      )}
-      {map(
-        (n) => (
-          <ItemList key={n} items="Co" onClick={() => setCoalUsed(max(0, coalUsed - 1))} />
-        ),
-        range(0, coalUsed)
-      )}
-      {map(
-        (n) => (
-          <ItemList key={n} items="Sw" onClick={() => setStrawUsed(max(0, strawUsed - 1))} />
-        ),
-        range(0, strawUsed)
-      )}
+      <ItemRange type={ResourceEnum.Wood} to={woodUsed} onClick={() => setWoodUsed(max(0, woodUsed - 1))} />
+      <ItemRange type={ResourceEnum.Peat} to={peatUsed} onClick={() => setPeatUsed(max(0, peatUsed - 1))} />
+      <ItemRange type={ResourceEnum.Coal} to={coalUsed} onClick={() => setCoalUsed(max(0, coalUsed - 1))} />
+      <ItemRange type={ResourceEnum.Straw} to={strawUsed} onClick={() => setStrawUsed(max(0, strawUsed - 1))} />
       <br />
       and then selling {breadUsed} bread for {breadUsed * 4} coins
       <br />
-      {map(
-        (n) => (
-          <ItemList key={n} items="Br" onClick={() => setBreadUsed(min(breadUsed + 1, 2))} />
-        ),
-        range(0, min(flourUsed, 2) - breadUsed)
-      )}
+      <ItemRange
+        type={ResourceEnum.Bread}
+        to={min(flourUsed, 2) - breadUsed}
+        onClick={() => setBreadUsed(min(breadUsed + 1, 2))}
+      />
       <ChevronsRight />
-      {map(
-        (n) => (
-          <ItemList key={n} items="Br" onClick={() => setBreadUsed(max(0, breadUsed - 1))} />
-        ),
-        range(0, breadUsed)
-      )}
+      <ItemRange type={ResourceEnum.Bread} to={breadUsed} onClick={() => setBreadUsed(max(0, breadUsed - 1))} />
       <hr />
       <div style={{ float: 'right' }}>
         <button
