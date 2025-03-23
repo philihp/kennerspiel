@@ -100,7 +100,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.CoalHarbor, () => PlaceholderForUse)
       .with(BuildingEnum.Calefactory, () => PlaceholderForUse)
       .with(BuildingEnum.FilialChurch, () => PlaceholderForUse)
-      .with(BuildingEnum.ShippingCompany, () => PlaceholderForUse)
+      .with(BuildingEnum.ShippingCompany, () => ShippingCompany)
       .with(BuildingEnum.Cooperage, () => PlaceholderForUse)
       .with(BuildingEnum.Sacristy, () => PlaceholderForUse)
       .with(BuildingEnum.ForgersWorkshop, () => PlaceholderForUse)
