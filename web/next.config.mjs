@@ -3,7 +3,7 @@ const nextConfig = {
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
-    ignoreDuringBuilds: process.env.LINT_ON_BUILD,
+    ignoreDuringBuilds: process.env.LINT_ON_BUILD === 'true',
   },
   images: {
     remotePatterns: [
