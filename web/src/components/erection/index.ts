@@ -18,6 +18,7 @@ import { CloisterWorkshop } from './cloisterWorkshop'
 import { CloisterLibrary } from './cloisterLibrary'
 import { Inn } from './inn'
 import { Winery } from './winery'
+import { CloisterChurch } from './cloisterChurch'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -78,7 +79,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.QuarryA, () => PlaceholderForUse)
       .with(BuildingEnum.Bathhouse, () => PlaceholderForUse)
       .with(BuildingEnum.Locutory, () => PlaceholderForUse)
-      .with(BuildingEnum.CloisterChurch, () => PlaceholderForUse)
+      .with(BuildingEnum.CloisterChurch, () => CloisterChurch)
       .with(BuildingEnum.Chapel, () => PlaceholderForUse)
       .with(BuildingEnum.ChamberOfWonders, () => PlaceholderForUse)
       .with(BuildingEnum.Portico, () => PlaceholderForUse)
