@@ -1,10 +1,10 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Modal } from '../modal'
 import { match, P } from 'ts-pattern'
-import { filter, includes, join, map, max, min, range, reduce, repeat } from 'ramda'
+import { filter, includes, join, map, max, min, range, reduce, repeat, splitEvery } from 'ramda'
 import { useState } from 'react'
 import { BuildingEnum, ResourceEnum } from 'hathora-et-labora-game/dist/types'
-import { partiallyUsed } from './util'
+import { genDenormalize, normalize, partiallyUsed } from './util'
 import { ItemList } from '../itemList'
 
 import { ChevronsRight } from 'lucide-react'
@@ -46,12 +46,15 @@ export const Bakery = () => {
     join('', repeat(ResourceEnum.Peat, peatUsed)),
     join('', repeat(ResourceEnum.Bread, breadUsed)),
   ]
-  const param = join('', substrings)
+  const param = normalize(join('', substrings))
+  const denormalizer = genDenormalize(options)
 
-  const viableOptions = reduce<string, string[]>(
-    (options, substr) => filter<string, string[]>(includes(substr), options),
-    options,
-    substrings
+  const viableOptions = map<string, string>(normalize)(
+    reduce<string, string[]>(
+      (options, substr) => filter<string, string[]>(includes(substr), options),
+      options,
+      splitEvery(2, param)
+    )
   )
 
   return (
@@ -104,6 +107,7 @@ export const Bakery = () => {
       <ChevronsRight />
       <ItemRange type={ResourceEnum.Bread} to={breadUsed} onClick={() => setBreadUsed(max(0, breadUsed - 1))} />
       <hr />
+      {JSON.stringify({ param, viableOptions })}
       <div style={{ float: 'right' }}>
         <button
           className="primary"
