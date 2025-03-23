@@ -22,6 +22,8 @@ import { CloisterChurch } from './cloisterChurch'
 import { Bathhouse } from './bathhouse'
 import { ChamberOfWonders } from './chamberOfWonders'
 import { ShippingCompany } from './shippingCompany'
+import { Shipyard } from './shipyard'
+import { Quarry } from './quarry'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -79,18 +81,18 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.Alehouse, () => PlaceholderForUse)
       .with(BuildingEnum.Winery, () => Winery)
       .with(BuildingEnum.WhiskeyDistillery, () => PlaceholderForUse)
-      .with(BuildingEnum.QuarryA, () => PlaceholderForUse)
+      .with(BuildingEnum.QuarryA, () => Quarry)
       .with(BuildingEnum.Bathhouse, () => Bathhouse)
       .with(BuildingEnum.Locutory, () => PlaceholderForUse)
       .with(BuildingEnum.CloisterChurch, () => CloisterChurch)
       .with(BuildingEnum.Chapel, () => PlaceholderForUse)
       .with(BuildingEnum.ChamberOfWonders, () => ChamberOfWonders)
       .with(BuildingEnum.Portico, () => PlaceholderForUse)
-      .with(BuildingEnum.Shipyard, () => PlaceholderForUse)
+      .with(BuildingEnum.Shipyard, () => Shipyard)
       .with(BuildingEnum.Palace, () => PlaceholderForUse)
       .with(BuildingEnum.GrandManor, () => PlaceholderForUse)
       .with(BuildingEnum.Castle, () => PlaceholderForUse)
-      .with(BuildingEnum.QuarryB, () => PlaceholderForUse)
+      .with(BuildingEnum.QuarryB, () => Quarry)
       .with(BuildingEnum.ForestHut, () => PlaceholderForUse)
       .with(BuildingEnum.TownEstate, () => PlaceholderForUse)
       .with(BuildingEnum.Refectory, () => PlaceholderForUse)
