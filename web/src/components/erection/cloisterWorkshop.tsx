@@ -129,9 +129,6 @@ export const CloisterWorkshop = () => {
         range(0, strawUsed)
       )}
       <hr />
-      {command}
-      <br />
-      {JSON.stringify(normOptions)}
       <div style={{ float: 'right' }}>
         <button className="primary" disabled={!includes(command, normOptions) || command !== ''} onClick={sendPartial}>
           Skip
