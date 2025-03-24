@@ -1,6 +1,6 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Modal } from '../modal'
-import { equals, findIndex, includes, join, map, max, min, range, repeat } from 'ramda'
+import { equals, findIndex, flatten, includes, join, map, max, min, range, repeat } from 'ramda'
 import { useState } from 'react'
 import { BuildingEnum, ResourceEnum } from 'hathora-et-labora-game/dist/types'
 import { normalize, partiallyUsed } from './util'
@@ -28,14 +28,17 @@ export const CloisterWorkshop = () => {
   const powerGenerated = woodUsed + peatUsed * 2 + coalUsed * 3 + strawUsed * 0.5
 
   const command = normalize(
-    join('', [
-      repeat(ResourceEnum.Clay, clayUsed),
-      repeat(ResourceEnum.Stone, stoneUsed),
-      repeat(ResourceEnum.Wood, woodUsed),
-      repeat(ResourceEnum.Peat, peatUsed),
-      repeat(ResourceEnum.Straw, strawUsed),
-      repeat(ResourceEnum.Coal, coalUsed),
-    ])
+    join(
+      '',
+      flatten([
+        repeat(ResourceEnum.Clay, clayUsed),
+        repeat(ResourceEnum.Stone, stoneUsed),
+        repeat(ResourceEnum.Wood, woodUsed),
+        repeat(ResourceEnum.Peat, peatUsed),
+        repeat(ResourceEnum.Straw, strawUsed),
+        repeat(ResourceEnum.Coal, coalUsed),
+      ])
+    )
   )
 
   const handleClose = () => {
@@ -129,6 +132,7 @@ export const CloisterWorkshop = () => {
         range(0, strawUsed)
       )}
       <hr />
+      {command}
       <div style={{ float: 'right' }}>
         <button className="primary" disabled={!includes(command, normOptions) || command !== ''} onClick={sendPartial}>
           Skip
