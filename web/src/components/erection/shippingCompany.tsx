@@ -8,6 +8,7 @@ import { ItemList } from '../itemList'
 
 import { ChevronsRight } from 'lucide-react'
 import { ItemRange } from '../itemRange'
+import { take } from '../rondel/values'
 
 const id = BuildingEnum.ShippingCompany
 
@@ -86,7 +87,7 @@ export const ShippingCompany = () => {
       <ItemRange type={ResourceEnum.Coal} to={coalUsed} onClick={() => setCoalUsed(max(0, coalUsed - 1))} />
       <ItemRange type={ResourceEnum.Straw} to={strawUsed} onClick={() => setStrawUsed(max(0, strawUsed - 1))} />
       <br />
-      for {'TODO'}
+      with 🃏 for {take(state?.rondel?.pointingBefore!, state?.rondel?.joker!, state?.config!)}
       <br />
       <ItemRange type={ResourceEnum.Meat} to={1 - meatUsed} onClick={() => setMeatUsed(meatUsed + 1)} />
       <ItemRange type={ResourceEnum.Bread} to={1 - breadUsed} onClick={() => setBreadUsed(breadUsed + 1)} />
