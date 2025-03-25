@@ -16,7 +16,7 @@ const multiplier = 1
 export const Dormitory = () => {
   const { state, setPartial, addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(true)
-  const max = min(state?.players?.[0]?.bread ?? 0, state?.players?.[0]?.wine ?? 0)
+  const max = min(state?.players?.[0]?.straw ?? 0, state?.players?.[0]?.wood ?? 0)
   const [times, setTimes] = useState(0)
 
   const options = controls?.completion ?? []
@@ -46,7 +46,7 @@ export const Dormitory = () => {
         />
         <div style={{ height: 200, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           +1 <ItemList items={ResourceEnum.Ceramic} />
-          <span>
+          <span style={{ paddingLeft: 10 }}>
             <ItemRange from={times} to={max} type={ResourceEnum.Straw} onClick={() => setTimes(times + 1)} />
             <br />
             <ItemRange from={times} to={max} type={ResourceEnum.Wood} onClick={() => setTimes(times + 1)} />
