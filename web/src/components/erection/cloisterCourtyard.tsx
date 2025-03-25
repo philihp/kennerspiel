@@ -145,7 +145,7 @@ export const CloisterCourtyard = () => {
           <hr />
           {map(
             (option) => (
-              <button style={{ float: 'right' }} className="primary" onClick={handleProduce(option)}>
+              <button key={option} style={{ float: 'right' }} className="primary" onClick={handleProduce(option)}>
                 <ItemList items={option} />
               </button>
             ),

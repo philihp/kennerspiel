@@ -14,18 +14,20 @@ const id = BuildingEnum.PilgrimageSite
 
 interface OptionProps {
   option: string
+  primary: boolean
   handleOption: () => void
 }
 
-const Option = ({ option, handleOption }: OptionProps): JSX.Element =>
-  match(option)
-    .with(P.union(ResourceEnum.Ceramic, ResourceEnum.Book, ResourceEnum.Ornament), () => (
-      <button className="primary">
+const Option = ({ option, primary, handleOption }: OptionProps) =>
+  match<{ option: string }>({ option })
+    .with({ option: P.union(ResourceEnum.Ceramic, ResourceEnum.Book, ResourceEnum.Ornament) }, () => (
+      <button className={primary ? 'primary' : ''}>
         <ItemList items={option} onClick={handleOption} />
       </button>
     ))
-    .with('', () => (
-      <button className="primary" onClick={handleOption}>
+    .with({ option: '' }, () => (
+      // which way of doing primary do i like more?
+      <button className={`${primary && 'primary'}`} onClick={handleOption}>
         <i>Done</i>
       </button>
     ))
@@ -54,7 +56,7 @@ export const PilgrimageSite = () => {
       <br />
       {map(
         (option) => (
-          <Option option={option} handleOption={sendPartial(option)} />
+          <Option primary={partial.length === 2} key={option} option={option} handleOption={sendPartial(option)} />
         ),
         normOptions
       )}
@@ -65,7 +67,7 @@ export const PilgrimageSite = () => {
           <br />
           {map(
             (option) => (
-              <Option option={option} handleOption={sendPartial(option)} />
+              <Option primary={true} key={option} option={option} handleOption={sendPartial(option)} />
             ),
             normOptions
           )}
