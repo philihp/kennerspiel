@@ -24,6 +24,7 @@ import { ChamberOfWonders } from './chamberOfWonders'
 import { ShippingCompany } from './shippingCompany'
 import { Shipyard } from './shipyard'
 import { Quarry } from './quarry'
+import { PilgrimageSite } from './pilgrimageSite'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -105,7 +106,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.Sacristy, () => PlaceholderForUse)
       .with(BuildingEnum.ForgersWorkshop, () => PlaceholderForUse)
       .with(BuildingEnum.RoundTower, () => PlaceholderForUse)
-      .with(BuildingEnum.PilgrimageSite, () => PlaceholderForUse)
+      .with(BuildingEnum.PilgrimageSite, () => PilgrimageSite)
       .with(BuildingEnum.Camera, () => PlaceholderForUse)
       .with(BuildingEnum.Dormitory, () => PlaceholderForUse)
       .with(BuildingEnum.Bulwark, () => PlaceholderForUse)

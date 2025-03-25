@@ -22,18 +22,23 @@ const decolor = (id: string) => {
   return id
 }
 
+const commandComplete = (command: string[], completion: string[] = []): boolean => {
+  if (completion[0] === '' && completion.length === 1) return true
+  return false
+}
+
 const multiplier = 0.7
 
 export const Erection = ({ id, primary = false, disabled = true, ghosted = false, onClick = () => {} }: Props) => {
   const { controls, state } = useInstanceContext()
   const partial = controls?.partial
-  const used = partial?.slice(0, 2)?.join(' ') === `USE ${id}`
+  const used = partial?.slice(0, 2)?.join(' ') === `USE ${id}` && !commandComplete(partial, controls?.completion)
 
   return (
     <div style={{ display: 'inline-block' }}>
       {onClick !== undefined && (
         <>
-          <button className={`primary`} type="button" onClick={onClick} disabled={disabled && !used}>
+          <button className={`${'used && primary'}`} type="button" onClick={onClick} disabled={disabled && !used}>
             <Image
               alt={id}
               style={{
