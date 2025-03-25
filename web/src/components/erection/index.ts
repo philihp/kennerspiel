@@ -26,6 +26,7 @@ import { Shipyard } from './shipyard'
 import { Quarry } from './quarry'
 import { PilgrimageSite } from './pilgrimageSite'
 import { ClayMound } from './clayMound'
+import { CloisterOffice } from './cloisterOffice'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -46,10 +47,10 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.FarmYardG, () => Farmyard)
       .with(BuildingEnum.FarmYardB, () => Farmyard)
       .with(BuildingEnum.FarmYardW, () => Farmyard)
-      .with(BuildingEnum.CloisterOfficeR, () => PlaceholderForUse)
-      .with(BuildingEnum.CloisterOfficeG, () => PlaceholderForUse)
-      .with(BuildingEnum.CloisterOfficeB, () => PlaceholderForUse)
-      .with(BuildingEnum.CloisterOfficeW, () => PlaceholderForUse)
+      .with(BuildingEnum.CloisterOfficeR, () => CloisterOffice)
+      .with(BuildingEnum.CloisterOfficeG, () => CloisterOffice)
+      .with(BuildingEnum.CloisterOfficeB, () => CloisterOffice)
+      .with(BuildingEnum.CloisterOfficeW, () => CloisterOffice)
       .with(BuildingEnum.Priory, () => PlaceholderForUse)
       .with(BuildingEnum.CloisterCourtyard, () => CloisterCourtyard)
       .with(BuildingEnum.GrainStorage, () => GrainStorage)
