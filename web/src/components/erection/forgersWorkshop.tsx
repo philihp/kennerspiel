@@ -24,7 +24,7 @@ export const ForgersWorkshop = () => {
   const [whiskeyUsed, setWhiskeyUsed] = useState(0)
   const [wineUsed, setWineUsed] = useState(0)
 
-  const powerGenerated = pennyUsed + nickelUsed * 5 + wineUsed * 1 + whiskeyUsed * 1
+  const coinsGenerated = pennyUsed + nickelUsed * 5 + wineUsed * 1 + whiskeyUsed * 1
 
   const command = normalize(
     join(
@@ -77,9 +77,9 @@ export const ForgersWorkshop = () => {
       <ItemRange type={ResourceEnum.Wine} to={wineUsed} onClick={() => setWineUsed(max(0, wineUsed - 1))} />
       <ItemRange type={ResourceEnum.Whiskey} to={whiskeyUsed} onClick={() => setWhiskeyUsed(max(0, whiskeyUsed - 1))} />
       <br />
-      Spending {powerGenerated} for
+      Spending {coinsGenerated} for
       <br />
-      <ItemRange type={ResourceEnum.Reliquary} to={Math.round(powerGenerated / 10)} />
+      <ItemRange type={ResourceEnum.Reliquary} to={Math.round(coinsGenerated / 10)} />
       <br />
       <div style={{ float: 'right' }}>
         <button className="primary" disabled={!includes(command, normOptions) || command !== ''} onClick={sendPartial}>
