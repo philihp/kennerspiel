@@ -1,12 +1,10 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Modal } from '../modal'
-import { always, equals, findIndex, flatten, includes, join, map, max, min, range, repeat } from 'ramda'
-import { JSX, useState } from 'react'
+import { equals, findIndex, map } from 'ramda'
+import { useState } from 'react'
 import { BuildingEnum, ResourceEnum } from 'hathora-et-labora-game/dist/types'
 import { normalize, partiallyUsed } from './util'
 
-import { ChevronsRight } from 'lucide-react'
-import { ItemRange } from '../itemRange'
 import { match, P } from 'ts-pattern'
 import { ItemList } from '../itemList'
 
@@ -74,7 +72,6 @@ export const PilgrimageSite = () => {
         </>
       )}
       <br />
-      {JSON.stringify(normOptions)}
     </Modal>
   )
 }

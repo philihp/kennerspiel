@@ -38,7 +38,7 @@ export const Erection = ({ id, primary = false, disabled = true, ghosted = false
     <div style={{ display: 'inline-block' }}>
       {onClick !== undefined && (
         <>
-          <button className={`${'used && primary'}`} type="button" onClick={onClick} disabled={disabled && !used}>
+          <button className="primary" type="button" onClick={onClick} disabled={disabled && !used}>
             <Image
               alt={id}
               style={{

@@ -32,6 +32,7 @@ import { Sacristy } from './sacristy'
 import { ForgersWorkshop } from './forgersWorkshop'
 import { HouseOfTheBrotherhood } from './houseOfTheBrotherhood'
 import { Palace } from './palace'
+import { Dormitory } from './dormitory'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -115,7 +116,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.RoundTower, () => PlaceholderForUse)
       .with(BuildingEnum.PilgrimageSite, () => PilgrimageSite)
       .with(BuildingEnum.Camera, () => PlaceholderForUse)
-      .with(BuildingEnum.Dormitory, () => PlaceholderForUse)
+      .with(BuildingEnum.Dormitory, () => Dormitory)
       .with(BuildingEnum.Bulwark, () => PlaceholderForUse)
       .with(BuildingEnum.PrintingOffice, () => PlaceholderForUse)
       .with(BuildingEnum.FestivalGround, () => PlaceholderForUse)
