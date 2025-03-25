@@ -4,6 +4,7 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import { Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { Tables } from '@/supabase.types'
 import { Frame } from './frame'
+import { FastForward, FastForwardIcon, RewindIcon } from 'lucide-react'
 
 const resetStyle = {
   margin: 0,
@@ -36,13 +37,13 @@ const sameColor = (playerColor?: PlayerColor) => (entrant: Tables<'entrant'>) =>
 const colorToStyle = (c?: string): ColorStyle => {
   switch (c) {
     case 'B':
-      return { borderColor: '#80b1d3' } // , borderColor: '#5f849e' }
+      return { borderColor: '#80b1d3', backgroundColor: '#5f849e' } // '#5f849e' } // backgroundColor: '#80b1d3',
     case 'R':
-      return { borderColor: '#fb8072' } // , borderColor: '#ad574d' }
+      return { borderColor: '#fb8072', backgroundColor: '#fceceb' } // '#ad574d' } // backgroundColor: '#fb8072',
     case 'G':
-      return { borderColor: '#b3de69' } // , borderColor: '#87a74f' }
+      return { borderColor: '#b3de69', backgroundColor: '#87a74f' } // '#87a74f' } // backgroundColor: '#b3de69',
     case 'W':
-      return { borderColor: '#d9d9d9' } // , borderColor: '#b1b1b1' }
+      return { borderColor: '#d9d9d9', backgroundColor: '#b1b1b1' } // '#b1b1b1' } // backgroundColor: '#d9d9d9',
     default:
       return {}
   }
@@ -73,22 +74,22 @@ export const MoveList = () => {
             const user = find(sameColor(player?.color), entrants ?? [])
             return (
               <div key={`player:${i}`} style={{ display: 'flex', gap: 4, alignItems: 'center', flexDirection: 'row' }}>
-                <div style={{ minWidth: 20 }}>
-                  {current && '🏵️'}
-                  {!current && active && '⌚️'}
-                </div>
                 <div
                   title={user?.id}
                   style={{
-                    ...colorToStyle(user?.color),
                     height: 32,
                     width: 32,
                     borderRadius: 16,
-                    borderWidth: 1,
+                    borderWidth: 3,
                     borderStyle: 'solid',
+                    display: 'flow',
+                    paddingTop: 3,
+                    paddingLeft: 5,
+                    ...colorToStyle(player?.color),
                   }}
                 >
-                  {' '}
+                  {current && '🏵️'}
+                  {!current && active && '⌚️'}
                 </div>
                 <div style={{}}>
                   {score?.total} points
@@ -111,10 +112,10 @@ export const MoveList = () => {
       {controls !== undefined && (
         <>
           <button type="button" disabled={!undo} onClick={handleUndo}>
-            &#x25C0; Undo
+            <RewindIcon size={16} />
           </button>
           <button type="button" disabled={!redo} onClick={handleRedo}>
-            Redo &#x25B6;
+            <FastForwardIcon size={16} />
           </button>
         </>
       )}
