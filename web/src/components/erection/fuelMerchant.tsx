@@ -66,10 +66,15 @@ const Times = ({ n, id, setComponent }: TimesProps) => {
           n={i}
           type={id}
           setParam={(n: number, param: string) => {
-            console.log('sxxxetParamContrib called with ', n, param)
-            const newArr = [...usedArr.slice(0, n), param, ...usedArr.slice(n + 1)]
-            setUsedArr(newArr)
-            setComponent(newArr.join(''))
+            if (param === '') {
+              const newArr = [...usedArr.slice(0, usedArr.length - 1)]
+              setUsedArr(newArr)
+              setComponent(newArr.join(''))
+            } else {
+              const newArr = [...usedArr, param]
+              setUsedArr(newArr)
+              setComponent(newArr.join(''))
+            }
           }}
         />
       ))}
@@ -87,30 +92,12 @@ const Inventory = ({ allowed, setParam }: InventoryProps) => {
   const { state, addPartial, setPartial, controls } = useInstanceContext()
   const player = state?.players[state?.frame?.currentPlayerIndex]
 
-  const [clayUsed, setClayUsed] = useState('')
   const [peatUsed, setPeatUsed] = useState('')
-  const [pennyUsed, setPennyUsed] = useState('')
   const [woodUsed, setWoodUsed] = useState('')
-  const [grainUsed, setGrainUsed] = useState('')
-  const [sheepUsed, setSheepUsed] = useState('')
-  const [stoneUsed, setStoneUsed] = useState('')
-  const [flourUsed, setFlourUsed] = useState('')
-  const [grapeUsed, setGrapeUsed] = useState('')
-  const [nickelUsed, setNickelUsed] = useState('')
-  const [maltUsed, setMaltUsed] = useState('')
   const [coalUsed, setCoalUsed] = useState('')
-  const [bookUsed, setBookUsed] = useState('')
-  const [ceramicUsed, setCeramicUsed] = useState('')
-  const [whiskeyUsed, setWhiskeyUsed] = useState('')
   const [strawUsed, setStrawUsed] = useState('')
-  const [meatUsed, setMeatUsed] = useState('')
-  const [ornamentUsed, setOrnamentUsed] = useState('')
-  const [breadUsed, setBreadUsed] = useState('')
-  const [wineUsed, setWineUsed] = useState('')
-  const [beerUsed, setBeerUsed] = useState('')
-  const [reliquaryUsed, setReliquaryUsed] = useState('')
 
-  const allResources = `${clayUsed}${peatUsed}${pennyUsed}${grainUsed}${sheepUsed}${stoneUsed}${flourUsed}${grapeUsed}${nickelUsed}${maltUsed}${coalUsed}${woodUsed}${bookUsed}${ceramicUsed}${whiskeyUsed}${strawUsed}${meatUsed}${ornamentUsed}${breadUsed}${wineUsed}${beerUsed}${reliquaryUsed}`
+  const allResources = `${peatUsed}${coalUsed}${woodUsed}${strawUsed}`
 
   useEffect(() => {
     setParam(allResources)
