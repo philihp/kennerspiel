@@ -107,7 +107,7 @@ export const InstanceContextProvider = ({
   }, [commands])
 
   const controls = useMemo(() => {
-    if (gameState?.status !== GameStatusEnum.PLAYING) return undefined
+    if (gameState?.status === GameStatusEnum.SETUP) return undefined
     return control(gameState as GameStatePlaying, partial)
   }, [gameState, partial])
 
