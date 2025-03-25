@@ -1,5 +1,3 @@
-import { GameStatePlaying } from 'hathora-et-labora-game'
-
 import { useInstanceContext } from '@/context/InstanceContext'
 import classes from './actions.module.css'
 import { ActionWithLaybrother } from './actionWithLaybrother'
@@ -14,6 +12,7 @@ import { ActionBuyDistrict } from './actionBuyDistrict'
 import { ActionConvert } from './actionConvert'
 import { ActionSettle } from './actionSettle'
 import { ActionCommit } from './actionCommit'
+import { map } from 'ramda'
 
 export const Actions = () => {
   const { controls, state, partial, setPartial, move, active } = useInstanceContext()
@@ -52,7 +51,35 @@ export const Actions = () => {
             Send &#x25B6;
           </button>
         )}
-        {JSON.stringify(controls?.completion)}
+        {process.env.environment !== 'production' && (
+          <ul style={{ display: 'inline' }}>
+            {map(
+              (completion) => (
+                <li
+                  style={{
+                    display: 'inline',
+                    border: '1px solid rgba(82, 0, 57, 0.09)',
+                    borderRadius: 8,
+                    backgroundColor: 'rgba(255, 206, 240, 0.45)',
+                    padding: 4,
+                    marginLeft: 4,
+                  }}
+                >
+                  <span
+                    style={{
+                      color: 'rgba(82, 0, 57, 0.28)',
+                      fontSize: 12,
+                      fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
+                    }}
+                  >
+                    {completion}
+                  </span>
+                </li>
+              ),
+              controls?.completion ?? []
+            )}
+          </ul>
+        )}
       </div>
       <div className={classes.container}>
         {completion?.includes('WITH_LAYBROTHER') === true && (
