@@ -29,6 +29,7 @@ import { ClayMound } from './clayMound'
 import { CloisterOffice } from './cloisterOffice'
 import { Grapevine } from './grapevine'
 import { Sacristy } from './sacristy'
+import { ForgersWorkshop } from './forgersWorkshop'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -108,7 +109,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.ShippingCompany, () => ShippingCompany)
       .with(BuildingEnum.Cooperage, () => PlaceholderForUse)
       .with(BuildingEnum.Sacristy, () => Sacristy)
-      .with(BuildingEnum.ForgersWorkshop, () => PlaceholderForUse)
+      .with(BuildingEnum.ForgersWorkshop, () => ForgersWorkshop)
       .with(BuildingEnum.RoundTower, () => PlaceholderForUse)
       .with(BuildingEnum.PilgrimageSite, () => PilgrimageSite)
       .with(BuildingEnum.Camera, () => PlaceholderForUse)
