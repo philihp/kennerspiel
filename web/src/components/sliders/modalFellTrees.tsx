@@ -33,7 +33,7 @@ export const ModalFellTrees = () => {
             match(param)
               .with('', () => (
                 <button key={param} className="primary" onClick={handleOK(param)}>
-                  Take {take(state?.rondel?.pointingBefore!, state?.rondel?.peat!, state?.config!)} wood with{' '}
+                  Take {take(state?.rondel?.pointingBefore!, state?.rondel?.wood!, state?.config!)} wood with{' '}
                   {symbols.wood}
                 </button>
               ))
