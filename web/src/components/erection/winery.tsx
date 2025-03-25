@@ -63,13 +63,12 @@ export const Winery = () => {
       <ItemRange
         type={ResourceEnum.Wine}
         from={wineUsed}
-        to={min((player?.wine ?? 0) + wineUsed, 1)}
-        onClick={() => setWineUsed(min(wineUsed + 1, player?.wine ?? 0))}
+        to={min((player?.wine ?? 0) + grapeUsed, 1)}
+        onClick={() => setWineUsed(wineUsed + 1)}
       />
       <ChevronsRight />
       <ItemRange type={ResourceEnum.Wine} to={wineUsed} onClick={() => setWineUsed(max(0, wineUsed - 1))} />
       <hr />
-      {param}
       <button
         style={{ float: 'right' }}
         className="primary"
