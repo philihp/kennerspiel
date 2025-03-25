@@ -30,6 +30,7 @@ import { CloisterOffice } from './cloisterOffice'
 import { Grapevine } from './grapevine'
 import { Sacristy } from './sacristy'
 import { ForgersWorkshop } from './forgersWorkshop'
+import { HouseOfTheBrotherhood } from './houseOfTheBrotherhood'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -120,7 +121,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.Estate, () => PlaceholderForUse)
       .with(BuildingEnum.Hospice, () => PlaceholderForUse)
       .with(BuildingEnum.Guesthouse, () => PlaceholderForUse)
-      .with(BuildingEnum.HouseOfTheBrotherhood, () => PlaceholderForUse)
+      .with(BuildingEnum.HouseOfTheBrotherhood, () => HouseOfTheBrotherhood)
       .exhaustive() // we want this to fail if someone adds new buildings
   )
 }
