@@ -51,6 +51,16 @@ const colorToStyle = (c?: string): ColorStyle => {
 
 export const MoveList = () => {
   const { controls, state, commands, entrants, instance, undo, redo } = useInstanceContext()
+  if (controls === undefined) return <>Missing Controls</>
+
+  const handleUndo = () => {
+    undo?.()
+  }
+  const handleRedo = () => {
+    redo?.()
+  }
+
+  const flow = collectBy((f) => `${f.round}`, controls?.flow ?? [])
 
   return (
     <div>
@@ -93,6 +103,38 @@ export const MoveList = () => {
           range(0, controls?.score?.length ?? 0)
         )}
       </div>
+
+      <hr />
+
+      {controls === undefined && (
+        <div>Waiting on {[state?.players?.[state?.frame?.activePlayerIndex ?? -1]?.color ?? -1]}...</div>
+      )}
+      {controls !== undefined && (
+        <>
+          <button type="button" disabled={!undo} onClick={handleUndo}>
+            <RewindIcon size={16} />
+          </button>
+          <button type="button" disabled={!redo} onClick={handleRedo}>
+            <FastForwardIcon size={16} />
+          </button>
+        </>
+      )}
+
+      <hr />
+
+      <ul style={resetStyle}>
+        {commands.slice(2).map((m, i) => (
+          <li key={`${i}:${m}`}>{m}</li>
+        ))}
+        {addIndex(map<Flower, React.JSX.Element>)(
+          (frame: Flower, n: number) => (
+            <li key={JSON.stringify({ n, frame })}>
+              <Frame frame={frame} />
+            </li>
+          ),
+          flatten(flow)
+        )}
+      </ul>
     </div>
   )
 }
