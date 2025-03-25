@@ -10,7 +10,7 @@ import { ItemRange } from '../itemRange'
 
 const id = BuildingEnum.Sacristy
 
-const multiplier = 1
+const multiplier = 0.75
 
 export const Sacristy = () => {
   const { state, setPartial, addPartial, controls } = useInstanceContext()
@@ -34,12 +34,11 @@ export const Sacristy = () => {
   }
 
   return (
-    <Modal title="Cloister Church" closeModal={handleClose} openModal={open} close={'Cancel'}>
-      {command}
+    <Modal title="Sacristy" closeModal={handleClose} openModal={open} close={'Cancel'}>
       <Image
         alt={id}
         src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${id}.jpg`}
-        style={{ float: 'left' }}
+        style={{ float: 'right' }}
         width={150 * multiplier}
         height={250 * multiplier}
       />
