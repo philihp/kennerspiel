@@ -6,7 +6,7 @@ import { GameCommandConfigParams } from 'hathora-et-labora-game'
 
 import styles from './rondel.module.css'
 
-const symbols = {
+export const symbols = {
   wood: '🪵',
   clay: '🧱',
   coin: '🪙',
