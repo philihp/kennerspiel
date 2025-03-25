@@ -56,6 +56,7 @@ export const Actions = () => {
             {map(
               (completion) => (
                 <li
+                  key={completion}
                   style={{
                     display: 'inline',
                     border: '1px solid rgba(82, 0, 57, 0.09)',
