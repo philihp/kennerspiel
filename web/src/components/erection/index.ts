@@ -25,6 +25,7 @@ import { ShippingCompany } from './shippingCompany'
 import { Shipyard } from './shipyard'
 import { Quarry } from './quarry'
 import { PilgrimageSite } from './pilgrimageSite'
+import { ClayMound } from './clayMound'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -37,10 +38,10 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
     match(building)
       .with(BuildingEnum.Moor, () => PlaceholderForUse)
       .with(BuildingEnum.Forest, () => PlaceholderForUse)
-      .with(BuildingEnum.ClayMoundR, () => PlaceholderForUse)
-      .with(BuildingEnum.ClayMoundG, () => PlaceholderForUse)
-      .with(BuildingEnum.ClayMoundB, () => PlaceholderForUse)
-      .with(BuildingEnum.ClayMoundW, () => PlaceholderForUse)
+      .with(BuildingEnum.ClayMoundR, () => ClayMound)
+      .with(BuildingEnum.ClayMoundG, () => ClayMound)
+      .with(BuildingEnum.ClayMoundB, () => ClayMound)
+      .with(BuildingEnum.ClayMoundW, () => ClayMound)
       .with(BuildingEnum.FarmYardR, () => Farmyard)
       .with(BuildingEnum.FarmYardG, () => Farmyard)
       .with(BuildingEnum.FarmYardB, () => Farmyard)
