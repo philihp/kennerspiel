@@ -1,0 +1,210 @@
+import { useInstanceContext } from '@/context/InstanceContext'
+import { useState } from 'react'
+import { Modal } from '../modal'
+import { BuildingEnum, ResourceEnum } from 'hathora-et-labora-game/dist/types'
+import Image from 'next/image'
+import { includes, join, map, max, min, repeat } from 'ramda'
+import { ChevronsRight } from 'lucide-react'
+import { normalize, genDenormalize, partiallyUsed } from './util'
+import { ItemRange } from '../itemRange'
+
+const id = BuildingEnum.Estate
+
+const multiplier = 0.75
+
+export const Estate = () => {
+  const { state, setPartial, addPartial, controls } = useInstanceContext()
+  const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
+  const [grainUsed, setGrainUsed] = useState(0)
+  const [flourUsed, setFlourUsed] = useState(0)
+  const [sheepUsed, setSheepUsed] = useState(0)
+  const [grapeUsed, setGrapeUsed] = useState(0)
+  const [breadUsed, setBreadUsed] = useState(0)
+  const [pennyUsed, setPennyUsed] = useState(0)
+  const [nickelUsed, setNickelUsed] = useState(0)
+  const [meatUsed, setMeatUsed] = useState(0)
+  const [beerUsed, setBeerUsed] = useState(0)
+  const [wineUsed, setWineUsed] = useState(0)
+  const [whiskeyUsed, setWhiskeyUsed] = useState(0)
+
+  const [woodUsed, setWoodUsed] = useState(0)
+  const [peatUsed, setPeatUsed] = useState(0)
+  const [coalUsed, setCoalUsed] = useState(0)
+  const [strawUsed, setStrawUsed] = useState(0)
+
+  const player = state?.players[state?.frame?.currentPlayerIndex]
+
+  const options = controls?.completion ?? []
+
+  const denormalizer = genDenormalize(options)
+
+  const foodUsed =
+    1 * grainUsed +
+    2 * sheepUsed +
+    1 * grapeUsed +
+    1 * wineUsed +
+    3 * breadUsed +
+    1 * pennyUsed +
+    5 * nickelUsed +
+    5 * meatUsed +
+    5 * beerUsed +
+    2 * whiskeyUsed
+  const energyUsed = 1 * woodUsed + 2 * peatUsed + 3 * coalUsed + 0.5 * strawUsed
+
+  const substrings = [
+    join('', repeat(ResourceEnum.Grain, grainUsed)),
+    join('', repeat(ResourceEnum.Flour, flourUsed)),
+    join('', repeat(ResourceEnum.Sheep, sheepUsed)),
+    join('', repeat(ResourceEnum.Grape, grapeUsed)),
+    join('', repeat(ResourceEnum.Wine, wineUsed)),
+    join('', repeat(ResourceEnum.Nickel, nickelUsed)),
+    join('', repeat(ResourceEnum.Meat, meatUsed)),
+    join('', repeat(ResourceEnum.Beer, beerUsed)),
+    join('', repeat(ResourceEnum.Whiskey, whiskeyUsed)),
+    join('', repeat(ResourceEnum.Wood, woodUsed)),
+    join('', repeat(ResourceEnum.Peat, peatUsed)),
+    join('', repeat(ResourceEnum.Coal, coalUsed)),
+    join('', repeat(ResourceEnum.Straw, strawUsed)),
+    join('', repeat(ResourceEnum.Bread, breadUsed)),
+    join('', repeat(ResourceEnum.Penny, pennyUsed)),
+  ]
+  const param = normalize(join('', substrings))
+
+  const handleClose = () => {
+    setPartial(['USE'])
+    setOpen(false)
+  }
+
+  const handleOK = (param: string) => () => {
+    addPartial(param)
+    setOpen(false)
+  }
+
+  return (
+    <Modal title="Estate" closeModal={handleClose} openModal={open} close={'Cancel'}>
+      <Image
+        alt={id}
+        src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${id}.jpg`}
+        style={{ float: 'right' }}
+        width={150 * multiplier}
+        height={250 * multiplier}
+      />
+      Consume
+      <hr />
+      <ItemRange
+        type={ResourceEnum.Grain}
+        from={grainUsed}
+        to={player?.grain}
+        onClick={() => setGrainUsed(min(grainUsed + 1, player?.grain ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Flour}
+        from={flourUsed}
+        to={player?.flour}
+        onClick={() => setFlourUsed(min(flourUsed + 1, player?.flour ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Sheep}
+        from={sheepUsed}
+        to={player?.sheep}
+        onClick={() => setSheepUsed(min(sheepUsed + 1, player?.sheep ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Grape}
+        from={grapeUsed}
+        to={player?.grape}
+        onClick={() => setGrapeUsed(min(grapeUsed + 1, player?.grape ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Bread}
+        from={breadUsed}
+        to={player?.bread}
+        onClick={() => setBreadUsed(min(breadUsed + 1, player?.bread ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Penny}
+        from={pennyUsed}
+        to={player?.penny}
+        onClick={() => setPennyUsed(min(pennyUsed + 1, player?.penny ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Nickel}
+        from={nickelUsed}
+        to={player?.nickel}
+        onClick={() => setNickelUsed(min(nickelUsed + 1, player?.nickel ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Meat}
+        from={meatUsed}
+        to={player?.meat}
+        onClick={() => setMeatUsed(min(meatUsed + 1, player?.meat ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Beer}
+        from={beerUsed}
+        to={player?.beer}
+        onClick={() => setBeerUsed(min(beerUsed + 1, player?.beer ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Whiskey}
+        from={whiskeyUsed}
+        to={player?.whiskey}
+        onClick={() => setWhiskeyUsed(min(whiskeyUsed + 1, player?.whiskey ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Wood}
+        from={woodUsed}
+        to={player?.wood}
+        onClick={() => setWoodUsed(min(woodUsed + 1, player?.wood ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Peat}
+        from={peatUsed}
+        to={player?.peat}
+        onClick={() => setPeatUsed(min(peatUsed + 1, player?.peat ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Coal}
+        from={coalUsed}
+        to={player?.coal}
+        onClick={() => setCoalUsed(min(coalUsed + 1, player?.coal ?? 0))}
+      />
+      <ItemRange
+        type={ResourceEnum.Straw}
+        from={strawUsed}
+        to={player?.straw}
+        onClick={() => setStrawUsed(min(strawUsed + 1, player?.straw ?? 0))}
+      />
+      <hr />
+      for {foodUsed} food and {energyUsed} energy from from
+      <br />
+      <ChevronsRight />
+      <ItemRange type={ResourceEnum.Grain} to={grainUsed} onClick={() => setGrainUsed(max(0, grainUsed - 1))} />
+      <ItemRange type={ResourceEnum.Flour} to={flourUsed} onClick={() => setFlourUsed(max(0, flourUsed - 1))} />
+      <ItemRange type={ResourceEnum.Sheep} to={sheepUsed} onClick={() => setSheepUsed(max(0, sheepUsed - 1))} />
+      <ItemRange type={ResourceEnum.Grape} to={grapeUsed} onClick={() => setGrapeUsed(max(0, grapeUsed - 1))} />
+      <ItemRange type={ResourceEnum.Bread} to={breadUsed} onClick={() => setBreadUsed(max(0, breadUsed - 1))} />
+      <ItemRange type={ResourceEnum.Penny} to={pennyUsed} onClick={() => setPennyUsed(max(0, pennyUsed - 1))} />
+      <ItemRange type={ResourceEnum.Nickel} to={nickelUsed} onClick={() => setNickelUsed(max(0, nickelUsed - 1))} />
+      <ItemRange type={ResourceEnum.Meat} to={meatUsed} onClick={() => setMeatUsed(max(0, meatUsed - 1))} />
+      <ItemRange type={ResourceEnum.Beer} to={beerUsed} onClick={() => setBeerUsed(max(0, beerUsed - 1))} />
+      <ItemRange type={ResourceEnum.Wine} to={wineUsed} onClick={() => setWineUsed(max(0, wineUsed - 1))} />
+      <ItemRange type={ResourceEnum.Whiskey} to={whiskeyUsed} onClick={() => setWhiskeyUsed(max(0, whiskeyUsed - 1))} />
+      <br />
+      <ChevronsRight />
+      <ItemRange type={ResourceEnum.Wood} to={woodUsed} onClick={() => setWoodUsed(max(0, woodUsed - 1))} />
+      <ItemRange type={ResourceEnum.Peat} to={peatUsed} onClick={() => setPeatUsed(max(0, peatUsed - 1))} />
+      <ItemRange type={ResourceEnum.Coal} to={coalUsed} onClick={() => setCoalUsed(max(0, coalUsed - 1))} />
+      <ItemRange type={ResourceEnum.Straw} to={strawUsed} onClick={() => setStrawUsed(max(0, strawUsed - 1))} />
+      <hr />
+      <button
+        style={{ float: 'right' }}
+        className="primary"
+        disabled={!includes(param, map(normalize, options))}
+        onClick={handleOK(denormalizer[param])}
+      >
+        Settle
+      </button>
+    </Modal>
+  )
+}
