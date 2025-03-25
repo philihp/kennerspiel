@@ -27,6 +27,7 @@ import { Quarry } from './quarry'
 import { PilgrimageSite } from './pilgrimageSite'
 import { ClayMound } from './clayMound'
 import { CloisterOffice } from './cloisterOffice'
+import { Grapevine } from './grapevine'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -71,7 +72,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.Houseboat, () => PlaceholderForUse)
       .with(BuildingEnum.StoneMerchant, () => StoneMerchant)
       .with(BuildingEnum.BuildersMarket, () => BuildersMarket)
-      .with(BuildingEnum.GrapevineA, () => PlaceholderForUse)
+      .with(BuildingEnum.GrapevineA, () => Grapevine)
       .with(BuildingEnum.SacredSite, () => PlaceholderForUse)
       .with(BuildingEnum.FinancedEstate, () => FinancedEstate)
       .with(BuildingEnum.DruidsHouse, () => PlaceholderForUse)
@@ -99,7 +100,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.ForestHut, () => PlaceholderForUse)
       .with(BuildingEnum.TownEstate, () => PlaceholderForUse)
       .with(BuildingEnum.Refectory, () => PlaceholderForUse)
-      .with(BuildingEnum.GrapevineB, () => PlaceholderForUse)
+      .with(BuildingEnum.GrapevineB, () => Grapevine)
       .with(BuildingEnum.CoalHarbor, () => PlaceholderForUse)
       .with(BuildingEnum.Calefactory, () => PlaceholderForUse)
       .with(BuildingEnum.FilialChurch, () => PlaceholderForUse)

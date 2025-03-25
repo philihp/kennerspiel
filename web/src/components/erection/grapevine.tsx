@@ -7,9 +7,9 @@ import { partiallyUsed } from './util'
 import { take } from '../rondel/values'
 import { symbols } from '../rondel/rondel'
 
-const ids = [BuildingEnum.QuarryA, BuildingEnum.QuarryB]
+const ids = [BuildingEnum.GrapevineA, BuildingEnum.GrapevineB]
 
-export const Quarry = () => {
+export const Grapevine = () => {
   const { state, setPartial, addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed(ids, controls?.partial))
 
@@ -25,22 +25,22 @@ export const Quarry = () => {
   const options = controls?.completion ?? []
 
   return (
-    <Modal title="Quarry" openModal={open} closeModal={handleCancel}>
+    <Modal title="Grapevine" openModal={open} closeModal={handleCancel}>
       {map<string, ReactNode>((option) => {
-        if (option === '' && state?.rondel?.stone !== undefined)
+        if (option === '' && state?.rondel?.grape !== undefined)
           return (
             <button key={`${option}`} className="primary" onClick={sendPartial(option)} style={{ float: 'right' }}>
-              Take {take(state?.rondel?.pointingBefore!, state?.rondel?.stone!, state?.config!)} stone with{' '}
-              {symbols.stone}
+              Take {take(state?.rondel?.pointingBefore!, state?.rondel?.grape!, state?.config!)} grape with{' '}
+              {symbols.grape}
             </button>
           )
         else if (
-          (option === '' && state?.rondel?.stone === undefined && state?.rondel?.joker !== undefined) ||
+          (option === '' && state?.rondel?.grape === undefined && state?.rondel?.joker !== undefined) ||
           (option === 'Jo' && state?.rondel?.joker !== undefined)
         )
           return (
             <button key={`${option}`} className="primary" onClick={sendPartial(option)} style={{ float: 'right' }}>
-              Take {take(state?.rondel?.pointingBefore!, state?.rondel?.joker!, state?.config!)} stone with{' '}
+              Take {take(state?.rondel?.pointingBefore!, state?.rondel?.joker!, state?.config!)} grape with{' '}
               {symbols.joker}
             </button>
           )
