@@ -4,7 +4,7 @@ import { useInstanceContext } from '@/context/InstanceContext'
 import { Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { Tables } from '@/supabase.types'
 import { Frame } from './frame'
-import { FastForward, FastForwardIcon, RewindIcon } from 'lucide-react'
+import { FastForwardIcon, RewindIcon } from 'lucide-react'
 
 const resetStyle = {
   margin: 0,
@@ -82,16 +82,16 @@ export const MoveList = () => {
                     borderRadius: 16,
                     borderWidth: 3,
                     borderStyle: 'solid',
-                    display: 'flow',
-                    paddingTop: 3,
-                    paddingLeft: 5,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     ...colorToStyle(player?.color),
                   }}
                 >
                   {current && '🏵️'}
                   {!current && active && '⌚️'}
                 </div>
-                <div style={{}}>
+                <div>
                   {score?.total} points
                   {score?.settlements?.length !== 0 && (
                     <div style={{ fontSize: 'x-small' }}>Settlements: {score?.settlements?.join(', ')}</div>
