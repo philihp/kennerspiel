@@ -9,8 +9,10 @@ import { ItemList } from '../itemList'
 
 import { ChevronsRight } from 'lucide-react'
 import { ItemRange } from '../itemRange'
+import Image from 'next/image'
 
 const id = BuildingEnum.Bakery
+const multiplier = 0.75
 
 export const Bakery = () => {
   const { state, setPartial, addPartial, controls } = useInstanceContext()
@@ -59,6 +61,13 @@ export const Bakery = () => {
 
   return (
     <Modal title="Bakery" openModal={open} closeModal={handleClose}>
+      <Image
+        alt={`${id}`}
+        src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${id}.jpg`}
+        style={{ float: 'right' }}
+        width={150 * multiplier}
+        height={250 * multiplier}
+      />
       Turning {flourUsed} flour into bread
       <br />
       <ItemRange
@@ -107,7 +116,6 @@ export const Bakery = () => {
       <ChevronsRight />
       <ItemRange type={ResourceEnum.Bread} to={breadUsed} onClick={() => setBreadUsed(max(0, breadUsed - 1))} />
       <hr />
-      {JSON.stringify({ param, viableOptions })}
       <div style={{ float: 'right' }}>
         <button
           className="primary"
