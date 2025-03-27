@@ -34,6 +34,7 @@ import { HouseOfTheBrotherhood } from './houseOfTheBrotherhood'
 import { Palace } from './palace'
 import { Dormitory } from './dormitory'
 import { Estate } from './estate'
+import { TownEstate } from './townEstate'
 
 type ErectionModalParams = {
   id: ErectionEnum
@@ -104,7 +105,7 @@ export const ErectionModal: (params: ErectionModalParams) => ReactNode = ({ id }
       .with(BuildingEnum.Castle, () => PlaceholderForUse)
       .with(BuildingEnum.QuarryB, () => Quarry)
       .with(BuildingEnum.ForestHut, () => PlaceholderForUse)
-      .with(BuildingEnum.TownEstate, () => PlaceholderForUse)
+      .with(BuildingEnum.TownEstate, () => TownEstate)
       .with(BuildingEnum.Refectory, () => PlaceholderForUse)
       .with(BuildingEnum.GrapevineB, () => Grapevine)
       .with(BuildingEnum.CoalHarbor, () => PlaceholderForUse)

@@ -52,7 +52,7 @@ export const Actions = () => {
             Send &#x25B6;
           </button>
         )}
-        {process.env.environment !== 'production' && (
+        {process.env.NODE_ENV !== 'production' && (
           <ul style={{ display: 'inline' }}>
             {map(
               (completion) => (

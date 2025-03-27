@@ -11,9 +11,9 @@ const id = BuildingEnum.PeatCoalKiln
 const multiplier = 1
 
 export const PeatCoalKiln = () => {
-  const { state, setPartial, addPartial, controls } = useInstanceContext()
+  const { setPartial, addPartial, controls, currentPlayer } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
-  const maxPeat = state?.players?.[0]?.peat ?? 0
+  const maxPeat = currentPlayer?.peat ?? 0
   const [peatUsed, setPeatUsed] = useState(maxPeat)
 
   const handleClose = () => {
