@@ -14,7 +14,7 @@ import {
 } from 'react'
 import { REALTIME_LISTEN_TYPES, REALTIME_SUBSCRIBE_STATES, RealtimeChannel, User } from '@supabase/supabase-js'
 import { Enums, Tables } from '@/supabase.types'
-import { Controls, GameStatusEnum, PlayerColor } from 'hathora-et-labora-game/dist/types'
+import { Controls, GameStatusEnum, PlayerColor, Tableau } from 'hathora-et-labora-game/dist/types'
 import { match } from 'ts-pattern'
 import { serverMove } from './actions'
 import { useSupabaseContext } from './SupabaseContext'
@@ -34,6 +34,7 @@ type InstanceContextType = {
   user?: User
   rawState?: GameState
   state?: GameStatePlaying
+  currentPlayer?: Tableau
   partial: string[]
   controls?: Controls
   commands: string[]
@@ -155,6 +156,7 @@ export const InstanceContextProvider = ({
         controls,
         commands,
         active,
+        currentPlayer: gameState?.players?.[(gameState as GameStatePlaying)?.frame?.currentPlayerIndex],
         setInstance,
         setEntrants,
         addPartial,

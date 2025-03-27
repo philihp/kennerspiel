@@ -14,9 +14,9 @@ const id = BuildingEnum.Dormitory
 const multiplier = 1
 
 export const Dormitory = () => {
-  const { state, setPartial, addPartial, controls } = useInstanceContext()
+  const { currentPlayer, setPartial, addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(true)
-  const max = min(state?.players?.[0]?.straw ?? 0, state?.players?.[0]?.wood ?? 0)
+  const max = min(currentPlayer?.straw ?? 0, currentPlayer?.wood ?? 0)
   const [times, setTimes] = useState(0)
 
   const options = controls?.completion ?? []

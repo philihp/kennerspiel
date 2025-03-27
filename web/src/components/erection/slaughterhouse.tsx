@@ -13,9 +13,9 @@ const id = BuildingEnum.Slaughterhouse
 const multiplier = 1
 
 export const Slaughterhouse = () => {
-  const { state, setPartial, addPartial, controls } = useInstanceContext()
+  const { state, setPartial, addPartial, controls, currentPlayer } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
-  const max = min(state?.players?.[0]?.sheep ?? 0, state?.players?.[0]?.straw ?? 0)
+  const max = min(currentPlayer?.sheep ?? 0, currentPlayer?.straw ?? 0)
   const [peatUsed, setPeatUsed] = useState(max)
 
   const options = controls?.completion ?? []

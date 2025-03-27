@@ -14,9 +14,9 @@ const id = BuildingEnum.CloisterChurch
 const multiplier = 1
 
 export const CloisterChurch = () => {
-  const { state, setPartial, addPartial, controls } = useInstanceContext()
+  const { currentPlayer, setPartial, addPartial, controls } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
-  const max = min(2, min(state?.players?.[0]?.bread ?? 0, state?.players?.[0]?.wine ?? 0))
+  const max = min(2, min(currentPlayer?.bread ?? 0, currentPlayer?.wine ?? 0))
   const [times, setTimes] = useState(0)
 
   const options = controls?.completion ?? []
