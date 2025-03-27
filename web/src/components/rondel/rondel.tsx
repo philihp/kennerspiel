@@ -26,8 +26,8 @@ const isStoneUsed = (config: GameCommandConfigParams): boolean =>
 const isGrapeUsed = (config: GameCommandConfigParams): boolean => {
   return match(config)
     .with({ players: 1 }, () => false)
-    .with({ country: 'france' }, () => false)
-    .otherwise(() => true)
+    .with({ country: 'france' }, () => true)
+    .otherwise(() => false)
 }
 
 const oraDeg = (pos?: number): number =>
@@ -94,7 +94,7 @@ export const Rondel = () => {
 
       {rondel?.grape !== undefined && state?.config && isGrapeUsed(state.config) && (
         <g id="grape" transform={`rotate(${oraDeg(rondel?.grape ?? 0)})`}>
-          <text x={50} y={BASE - 105} className={styles.token}>
+          <text x={0} y={BASE - 25} className={styles.token}>
             {symbols.grape}
           </text>
         </g>
