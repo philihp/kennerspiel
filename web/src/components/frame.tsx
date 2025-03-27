@@ -6,14 +6,7 @@ import { Erection } from './erection'
 import Dot from './dot'
 import { match } from 'ts-pattern'
 import { LucideX } from 'lucide-react'
-
-const colorToChar = (color?: PlayerColor): ReactNode =>
-  match(color)
-    .with(PlayerColor.Red, (c) => <Dot color={'#fb8072'} border={'#ad574d'} />)
-    .with(PlayerColor.Green, (c) => <Dot color={'#b3de69'} border={'#87a74f'} />)
-    .with(PlayerColor.Blue, (c) => <Dot color={'#80b1d3'} border={'#5f849e'} />)
-    .with(PlayerColor.White, (c) => <Dot color={'#d9d9d9'} border={'#b1b1b1'} />)
-    .otherwise(() => <></>)
+import { PlayerDot } from './playerDot'
 
 type FrameParams = {
   frame: Flower
@@ -28,14 +21,18 @@ export const Frame = ({ frame }: FrameParams) => {
     <>
       {frame.settle && (
         <>
-          {colorToChar(frame.player)}
+          <PlayerDot color={frame.player} />
           Settle
         </>
       )}
-      {!frame.settle && frame.bonus && <>{colorToChar(frame.player)} Bonus</>}
+      {!frame.settle && frame.bonus && (
+        <>
+          <PlayerDot color={frame.player} /> Bonus
+        </>
+      )}
       {!frame.settle && !frame.bonus && (
         <>
-          {colorToChar(frame.player)}
+          <PlayerDot color={frame.player} />
           Action, round {frame.round}
         </>
       )}

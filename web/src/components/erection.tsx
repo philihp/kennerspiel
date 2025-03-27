@@ -14,7 +14,7 @@ interface Props {
   onClick?: () => void
 }
 
-const decolor = (id: string) => {
+export const decolor = (id?: string) => {
   if (id === undefined) return id
   if (['L', 'S'].includes(id[0]) && ['R', 'G', 'B', 'W'].includes(id[1])) {
     return `${id[0]}0${id[2]}`
