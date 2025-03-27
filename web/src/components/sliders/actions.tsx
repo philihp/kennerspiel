@@ -13,6 +13,7 @@ import { ActionConvert } from './actionConvert'
 import { ActionSettle } from './actionSettle'
 import { ActionCommit } from './actionCommit'
 import { map } from 'ramda'
+import { ModalPriorChoice } from './modalPriorChoice'
 
 export const Actions = () => {
   const { controls, state, partial, setPartial, move, active } = useInstanceContext()
@@ -85,12 +86,15 @@ export const Actions = () => {
       <div className={classes.container}>
         {completion?.includes('WITH_LAYBROTHER') === true && (
           <>
+            <br />
             <ActionWithLaybrother />
             <ActionWithPrior />
+            <ModalPriorChoice />
           </>
         )}
         {completion?.includes('WITH_LAYBROTHER') === false && (
           <>
+            <br />
             <ActionCutPeat />
             <ActionFellTrees />
             <ActionBuild />
