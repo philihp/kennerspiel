@@ -71,7 +71,7 @@ export const HouseOfTheBrotherhood = () => {
   }
 
   return (
-    <Modal title="Shipping Company" openModal={open} closeModal={handleClose}>
+    <Modal title="House of the Brotherhood" openModal={open} closeModal={handleClose}>
       Pay {coinsSpent} of 5 coins from
       <br />
       {selectParam1 ? (
