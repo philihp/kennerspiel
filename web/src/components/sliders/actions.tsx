@@ -14,10 +14,13 @@ import { ActionSettle } from './actionSettle'
 import { ActionCommit } from './actionCommit'
 import { map } from 'ramda'
 import { ModalPriorChoice } from './modalPriorChoice'
+import { RectangleEllipsis, XCircle } from 'lucide-react'
 
 export const Actions = () => {
   const { controls, state, partial, setPartial, move, active } = useInstanceContext()
   const completion = controls?.completion ?? []
+
+  const cancelDisabled = !active || controls?.partial?.length === 0
 
   const handleClear = () => {
     setPartial([])
@@ -29,19 +32,42 @@ export const Actions = () => {
 
   return (
     <>
-      <div>
+      <div
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          position: 'sticky',
+          top: 0,
+          border: '1px solid white',
+          paddingLeft: 10,
+          paddingRight: 10,
+          marginRight: '10%',
+        }}
+      >
+        Pending Move
+        <button
+          style={{
+            display: 'inline-flex',
+            gap: '8px',
+          }}
+          type="button"
+          disabled={cancelDisabled}
+          onClick={handleClear}
+        >
+          <XCircle size={12} color={cancelDisabled ? '#afafaf' : '#007AFF'} />
+        </button>
         <input
           disabled
           type="text"
           value={partial.join(' ')}
           className="disabled code"
           style={{
-            padding: 8,
+            borderWidth: 0,
+            marginLeft: 3,
+            paddingLeft: 10,
+            paddingTop: 5,
+            paddingBottom: 5,
           }}
         />
-        <button type="button" disabled={!active || controls?.partial?.length === 0} onClick={handleClear}>
-          &#x25C3; Reset
-        </button>
         {controls?.completion?.includes('') && (
           <button
             type="button"
@@ -51,36 +77,6 @@ export const Actions = () => {
           >
             Send &#x25B6;
           </button>
-        )}
-        {process.env.NODE_ENV !== 'production' && (
-          <ul style={{ display: 'inline' }}>
-            {map(
-              (completion) => (
-                <li
-                  key={completion}
-                  style={{
-                    display: 'inline',
-                    border: '1px solid rgba(82, 0, 57, 0.09)',
-                    borderRadius: 8,
-                    backgroundColor: 'rgba(255, 206, 240, 0.45)',
-                    padding: 4,
-                    marginLeft: 4,
-                  }}
-                >
-                  <span
-                    style={{
-                      color: 'rgba(82, 0, 57, 0.28)',
-                      fontSize: 12,
-                      fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
-                    }}
-                  >
-                    {completion}
-                  </span>
-                </li>
-              ),
-              controls?.completion ?? []
-            )}
-          </ul>
         )}
       </div>
       <div className={classes.container}>

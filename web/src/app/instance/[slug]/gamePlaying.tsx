@@ -84,6 +84,34 @@ export const GamePlaying = () => {
       <hr />
       <i>Last Updated: </i>
       {instance.updated_at}
+      <ul style={{ display: 'inline' }}>
+        {map(
+          (completion) => (
+            <li
+              key={completion}
+              style={{
+                display: 'inline',
+                border: '1px solid rgba(82, 0, 57, 0.09)',
+                borderRadius: 8,
+                backgroundColor: 'rgba(255, 206, 240, 0.45)',
+                padding: 4,
+                marginLeft: 4,
+              }}
+            >
+              <span
+                style={{
+                  color: 'rgba(82, 0, 57, 0.28)',
+                  fontSize: 12,
+                  fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
+                }}
+              >
+                {completion}
+              </span>
+            </li>
+          ),
+          controls?.completion ?? []
+        )}
+      </ul>
     </>
   )
 }
