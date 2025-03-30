@@ -53,7 +53,7 @@ export const CloisterWorkshop = () => {
   }
 
   return (
-    <Modal title="CloisterWorkshop" openModal={open} closeModal={handleClose}>
+    <Modal title="Cloister Workshop" openModal={open} closeModal={handleClose}>
       {map(
         (n) => (
           <ItemList key={n} items="Cl" onClick={() => setClayUsed(min(clayUsed + 1, player?.clay ?? 0))} />
