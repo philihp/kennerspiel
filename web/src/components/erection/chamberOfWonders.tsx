@@ -69,7 +69,7 @@ export const ChamberOfWonders = () => {
   const param = normalize(usedResources)
 
   return (
-    <Modal title="ChamberOfWonders" openModal={open} closeModal={handleClose}>
+    <Modal title="Chamber of Wonders" openModal={open} closeModal={handleClose}>
       <Image
         alt={id}
         src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${id}.jpg`}

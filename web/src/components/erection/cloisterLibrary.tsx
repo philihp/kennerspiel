@@ -37,7 +37,7 @@ export const CloisterLibrary = () => {
   }
 
   return (
-    <Modal title="CloisterLibrary" openModal={open} closeModal={handleClose}>
+    <Modal title="Cloister Library" openModal={open} closeModal={handleClose}>
       Convert into books
       <br />
       {map(

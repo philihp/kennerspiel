@@ -28,7 +28,7 @@ export const PeatCoalKiln = () => {
   }
 
   return (
-    <Modal closeModal={handleClose} openModal={open} close={'Cancel'}>
+    <Modal title="Peat Coal Kiln" closeModal={handleClose} openModal={open} close={'Cancel'}>
       <Image
         alt={id}
         src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${id}.jpg`}

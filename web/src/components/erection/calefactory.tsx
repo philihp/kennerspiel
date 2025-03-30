@@ -9,9 +9,9 @@ import { match } from 'ts-pattern'
 import Image from 'next/image'
 
 const multiplier = 0.75
-const id = BuildingEnum.Bathhouse
+const id = BuildingEnum.Calefactory
 
-export const Bathhouse = () => {
+export const Calefactory = () => {
   const { controls, setPartial, addPartial } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
   const completion = controls?.completion ?? []
@@ -27,7 +27,7 @@ export const Bathhouse = () => {
   }
 
   return (
-    <Modal title="Bathhouse" openModal={open} closeModal={handleClose}>
+    <Modal title="Calefactory" openModal={open} closeModal={handleClose}>
       <Image
         alt={id}
         src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${id}.jpg`}
@@ -35,9 +35,7 @@ export const Bathhouse = () => {
         width={150 * multiplier}
         height={250 * multiplier}
       />
-      Pay a total of 1 coin for
-      <ItemList items={'BoCl'} />
-      and immediately return all clergy
+      Pay 1 coin for and immediately carry out fell trees and/or cut peat actions.
       <hr />
       {map(
         (option) => (
