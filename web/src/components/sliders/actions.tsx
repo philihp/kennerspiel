@@ -34,13 +34,16 @@ export const Actions = () => {
     <>
       <div
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          backgroundColor: 'rgba(255, 255, 255, 0.75)',
           position: 'sticky',
           top: 0,
           border: '1px solid white',
           paddingLeft: 10,
           paddingRight: 10,
           marginRight: '10%',
+          borderBottomLeftRadius: 8,
+          borderBottomRightRadius: 8,
+          borderTop: 0,
         }}
       >
         Pending Move

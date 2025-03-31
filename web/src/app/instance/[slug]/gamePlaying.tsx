@@ -15,6 +15,7 @@ import { PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { map, pipe, range } from 'ramda'
 import { ReactNode } from 'react'
 import { match } from 'ts-pattern'
+import { Alerts } from '@/components/alerts'
 
 const playerOrdering = (state?: GameStatePlaying) => {
   if (state === undefined) return []
@@ -72,6 +73,7 @@ export const GamePlaying = () => {
         <MoveList />
         <div>
           <Actions />
+          <Alerts />
           <Rondel />
           <UnbuiltBuildings />
           {playerBoards}
