@@ -16,7 +16,7 @@ export const Sacristy = () => {
   const { setPartial, addPartial, controls, currentPlayer } = useInstanceContext()
   const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
   const max = min(
-    2,
+    1,
     reduce(min<number>, currentPlayer?.book ?? 0, [
       currentPlayer?.ceramic ?? 0,
       currentPlayer?.ornament ?? 0,
