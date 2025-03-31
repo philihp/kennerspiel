@@ -4,7 +4,7 @@ import { useSupabaseContext } from '@/context/SupabaseContext'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-export const Connect = () => {
+export const Login = () => {
   const pathName = usePathname()
   const { setRedirectTo } = useSupabaseContext()
 
@@ -15,8 +15,8 @@ export const Connect = () => {
   }
 
   return (
-    <Link href={{ pathname: '/account/connect' }} onClick={handleClick}>
-      Connect
+    <Link href={{ pathname: '/account/login' }} onClick={handleClick}>
+      Login
     </Link>
   )
 }

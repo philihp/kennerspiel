@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server'
 
 import ChangePassword from './changePassword'
 import { LinkEmail } from './linkEmail'
-import DisconnectButton from './disconnectButton'
+import LogoutButton from './logoutButton'
 
 const SettingsPage = async () => {
   const supabase = await createClient()
@@ -14,7 +14,7 @@ const SettingsPage = async () => {
     error,
   } = await supabase.auth.getUser()
   if (error || !user) {
-    redirect('/account/connect')
+    redirect('/account/login')
   }
 
   return (
@@ -26,8 +26,8 @@ const SettingsPage = async () => {
         </>
       )}
       {!user.is_anonymous && user.email_confirmed_at && <ChangePassword />}
-      <h2>Disconnect</h2>
-      <DisconnectButton />
+      <h2>Logout</h2>
+      <LogoutButton anonymous={user.is_anonymous} verified={user.email_confirmed_at} />
     </>
   )
 }

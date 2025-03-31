@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 
 import { createClient } from '@/utils/supabase/server'
 
-export const disconnect = async (redirectTo: string) => {
+export const logout = async (redirectTo: string) => {
   const supabase = await createClient()
   const { error } = await supabase.auth.signOut({ scope: 'local' })
   if (error) {
