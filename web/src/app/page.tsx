@@ -17,8 +17,7 @@ const Home = () => {
         Source code is available at{' '}
         <Link href="https://github.com/philihp/kennerspiel">github.com/philihp/kennerspiel</Link>
       </p>
-    </main>
-  )
+    </main>  )
 }
 
 export default Home
