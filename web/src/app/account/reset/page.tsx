@@ -27,13 +27,28 @@ const ResetPage = () => {
       }}
     >
       <h1>Reset Password</h1>
-      <p>Forgot your password? Let&apos;s confirm your email to reset it.</p>
+      <p>Forgot your password? Let&apos;s verify your email to reset it.</p>
       <label htmlFor="email">Email:</label>
       <br />
       <input id="email" name="email" type="email" required onChange={handleEmailChange} />
       <br />
-      <button formAction={resetAndReturn} disabled={disabled}>
-        Send Email
+      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+        <>
+          <br />
+          <Turnstile
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            onSuccess={setCaptchaToken}
+            options={{
+              action: 'reset',
+              theme: 'light',
+              size: 'normal',
+            }}
+          />
+        </>
+      )}
+      <br />
+      <button className="primary" formAction={resetAndReturn} disabled={disabled}>
+        Re-verify Email
       </button>
       {emailSent && (
         <>
@@ -42,17 +57,6 @@ const ResetPage = () => {
           </svg>
           Check your email for a link.
         </>
-      )}
-      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-        <Turnstile
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-          onSuccess={setCaptchaToken}
-          options={{
-            action: 'reset',
-            theme: 'light',
-            size: 'normal',
-          }}
-        />
       )}
     </form>
   )

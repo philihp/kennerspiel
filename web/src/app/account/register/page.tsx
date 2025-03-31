@@ -35,19 +35,31 @@ const RegisterPage = () => {
       }}
     >
       <h1>Register</h1>
-      <p>
-        You don&apos;t need to register to play, but if you don&apos;t login, you will lose your game state if you close
-        your browser.
-      </p>
+      <p>Create an account to join an instance. </p>
       <label htmlFor="email">Email:</label>
       <br />
-      <input id="email" name="email" type="email" required onChange={handleEmailChange} />
+      <input id="email" name="email" type="email" required onChange={handleEmailChange} autoComplete="email" />
       <br />
       <label htmlFor="password">Password:</label>
       <br />
-      <input id="password" name="password" type="password" required />
+      <input id="password" name="password" type="password" required autoComplete="new-password" />
       <br />
-      <button formAction={signupAndReturn} disabled={disabled}>
+      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+        <>
+          <br />
+          <Turnstile
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            onSuccess={setCaptchaToken}
+            options={{
+              action: 'register',
+              theme: 'light',
+              size: 'normal',
+            }}
+          />
+        </>
+      )}
+      <br />
+      <button className="primary" formAction={signupAndReturn} disabled={disabled}>
         Register
       </button>
       {response && (
@@ -57,17 +69,6 @@ const RegisterPage = () => {
           </svg>
           {response}
         </>
-      )}
-      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-        <Turnstile
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-          onSuccess={setCaptchaToken}
-          options={{
-            action: 'register',
-            theme: 'light',
-            size: 'normal',
-          }}
-        />
       )}
     </form>
   )
