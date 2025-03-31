@@ -1,5 +1,5 @@
 import styles from '@/components/clergy.module.css'
-import { Cross, DiamondPlus, Locate, LocateFixed, Plus, PlusCircle } from 'lucide-react'
+import { Circle, Cross, DiamondPlus, Locate, LocateFixed, Plus, PlusCircle } from 'lucide-react'
 import { CSSProperties } from 'react'
 
 interface Props {
@@ -19,6 +19,13 @@ const stylesMap = {
   W: styles.white,
 }
 
+const backgroundMap = {
+  R: '  #fb8072',
+  G: '  #b3de69',
+  B: '  #80b1d3',
+  W: '  #d9d9d9',
+}
+
 const colorsMap = {
   R: '#ad574d',
   G: '#87a74f',
@@ -28,32 +35,16 @@ const colorsMap = {
 
 const Prior = ({ color, style }: WorkerProps) => {
   return (
-    <span
-      className={stylesMap[color]}
-      style={{
-        ...style,
-        borderWidth: 1,
-        height: 24,
-        width: 24,
-      }}
-    >
-      <PlusCircle size={22} color={colorsMap[color]} />
+    <span>
+      <PlusCircle size={36} fill={backgroundMap[color]} color={colorsMap[color]} />
     </span>
   )
 }
 
 const LayBrother = ({ color, style }: WorkerProps) => {
   return (
-    <span
-      className={stylesMap[color]}
-      style={{
-        ...style,
-        borderWidth: 1,
-        height: 24,
-        width: 24,
-      }}
-    >
-      {/* <Plus size={22} color={colorsMap[color]} /> */}
+    <span>
+      <Circle size={36} fill={backgroundMap[color]} color={colorsMap[color]} />
     </span>
   )
 }
