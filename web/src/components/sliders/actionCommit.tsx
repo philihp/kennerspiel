@@ -23,11 +23,9 @@ export const ActionCommit = () => {
           GameCommandEnum.WORK_CONTRACT,
           GameCommandEnum.SETTLE,
         ],
-        state?.frame?.bonusActions ?? []
+        controls?.completion ?? []
       )
-    ) ||
-    state?.frame?.usableBuildings?.length !== 0 ||
-    state?.frame?.mainActionUsed !== true
+    ) || state?.frame?.mainActionUsed !== true
 
   return (
     <>
