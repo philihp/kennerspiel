@@ -1,73 +1,23 @@
-'use client'
-
-import { useState } from 'react'
-import { Turnstile } from '@marsidev/react-turnstile'
-
-import { register } from './actions'
+import Link from 'next/link'
 
 const Home = () => {
-  const [disabled, setDisabled] = useState(false)
-  const [color, setColor] = useState('#000000')
-  const [response, setResponse] = useState('')
-  const [captchaToken, setCaptchaToken] = useState<string>('')
-  const signupAndReturn = async (formData: FormData) => {
-    const error = await register(formData, captchaToken)
-    if (error) {
-      setDisabled(false)
-      setResponse(error)
-      setColor('#FF0000')
-      return
-    }
-
-    setResponse('A perfect time to check your email inbox.')
-    setColor('#00AF00')
-  }
-
-  const handleEmailChange = () => {
-    setDisabled(false)
-  }
-
   return (
-    <form
-      onSubmit={() => {
-        setResponse('')
-        setDisabled(true)
-      }}
-    >
-      <h1>Identity</h1>
-      <input type="text" disabled value={'undefined'} />
-      <p>This device does not have an associated account. Generate one to join a game.</p>
-      <label htmlFor="email">Email:</label>
-      <br />
-      <input id="email" name="email" type="email" required onChange={handleEmailChange} />
-      <br />
-      <label htmlFor="password">Password:</label>
-      <br />
-      <input id="password" name="password" type="password" required />
-      <br />
-      <button formAction={signupAndReturn} disabled={disabled}>
-        Register
-      </button>
-      {response && (
-        <>
-          <svg height="10" width="20">
-            <circle cx="10" cy="5" r="5" fill={color} />
-          </svg>
-          {response}
-        </>
-      )}
-      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-        <Turnstile
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-          onSuccess={setCaptchaToken}
-          options={{
-            action: 'register',
-            theme: 'light',
-            size: 'normal',
-          }}
-        />
-      )}
-    </form>
+    <main>
+      <h1>Kennerspiel</h1>
+      <p>
+        Hi! This is a place to play turn-based board games on virtual tables with minimal client overhead. It&apos;s not
+        much too look at right now, but I coded all of this by hand without any AI assistance, so please give me that
+        much.
+      </p>
+      <p>
+        You&apos;ll probably want to start out by creating an <Link href="/instance/">instance</Link>, and either play a
+        solo game or invite some friends.
+      </p>
+      <p>
+        Source code is available at{' '}
+        <Link href="https://github.com/philihp/kennerspiel">github.com/philihp/kennerspiel</Link>
+      </p>
+    </main>
   )
 }
 
