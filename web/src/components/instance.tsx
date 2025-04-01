@@ -5,7 +5,7 @@ import { PlayerColor } from 'hathora-et-labora-game/dist/types'
 
 type Props = {
   instance: Tables<'instance'>
-  entrants?: Tables<'entrant'>[]
+  entrants?: Pick<Tables<'entrant'>, 'profile_id' | 'color'>[]
 }
 
 export const Instance = ({ instance, entrants = [] }: Props) => {
@@ -16,30 +16,27 @@ export const Instance = ({ instance, entrants = [] }: Props) => {
         padding: 10,
         border: '1px solid #ccc',
         backgroundColor: '#f0f0f0',
-        borderRadius: 5,
+        borderRadius: 7,
         margin: 10,
       }}
     >
       <b>
         <a href={`instance/${instance.id}`}>{instance.id}</a>
       </b>
-      <div>
-        {' '}
-        Created {intlFormatDistance(new Date(instance.created_at), new Date(), { style: 'long', numeric: 'auto' })}{' '}
-      </div>
-      <div>
-        {' '}
-        Updated {intlFormatDistance(new Date(instance.updated_at), new Date(), { style: 'long', numeric: 'auto' })}{' '}
-      </div>
       <hr />
-      {(entrants ?? []).map((entrant) => {
-        return (
-          <>
-            <PlayerDot color={entrant.color.slice(0, 1).toUpperCase() as PlayerColor} />
-            {entrant.profile_id}
-          </>
-        )
-      })}
+      {(entrants ?? []).map((entrant) => (
+        <div key={entrant.profile_id}>
+          <PlayerDot color={entrant.color.slice(0, 1).toUpperCase() as PlayerColor} />
+          {entrant.profile_id}
+        </div>
+      ))}
+      <hr />
+      <div>
+        <i>
+          Last updated{' '}
+          {intlFormatDistance(new Date(instance.updated_at), new Date(), { style: 'long', numeric: 'auto' })}{' '}
+        </i>
+      </div>
     </div>
   )
 }

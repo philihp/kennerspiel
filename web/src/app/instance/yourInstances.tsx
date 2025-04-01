@@ -10,7 +10,8 @@ type Props = {
   user: User | null
 }
 
-type InstanceWithEntrants = Tables<'instance'> & { entrant: Tables<'entrant'>[] }
+type PartialEntrant = Pick<Tables<'entrant'>, 'profile_id' | 'color'>
+type InstanceWithEntrants = Tables<'instance'> & { entrant: PartialEntrant[] }
 
 export const YourInstances = ({ user }: Props) => {
   const [instances, setInstances] = useState<InstanceWithEntrants[]>([])
@@ -21,14 +22,22 @@ export const YourInstances = ({ user }: Props) => {
     const supabase = createClient()
     supabase
       .from('entrant')
-      .select(`*, instance(*)`)
+      .select(
+        `
+        instance (
+          *,
+          entrant(profile_id, color)
+        )`
+      )
       .eq('profile_id', userId)
+      .order('updated_at', { ascending: false })
       .then(({ data }) => {
         const newData =
-          data?.map((entrant) => {
+          data?.map(({ instance }) => {
+            const entrant = instance?.entrant ?? []
             return {
-              ...entrant.instance,
-              entrant: [{ ...entrant }],
+              ...instance,
+              entrant,
             } as InstanceWithEntrants
           }) ?? []
         setInstances(newData)
@@ -43,7 +52,9 @@ export const YourInstances = ({ user }: Props) => {
     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {instances === undefined && <i>...</i>}
       {instances !== undefined &&
-        instances.map((instance) => <Instance key={instance.id} instance={instance} entrants={instance.entrant} />)}
+        instances.map(({ entrant, ...instance }) => (
+          <Instance key={instance.id} instance={instance} entrants={entrant} />
+        ))}
       {instances?.length === 0 && <i>(no instances)</i>}
     </div>
   )
