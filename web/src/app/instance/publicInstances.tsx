@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 type Instance = { id: string; created_at: string; commands: string[] }
 
-export const InstancesList = () => {
+export const PublicInstances = () => {
   const [instances, setInstances] = useState<Instance[] | undefined>(undefined)
 
   const handleReload = useCallback(() => {
@@ -26,9 +26,9 @@ export const InstancesList = () => {
 
   return (
     <>
-      <button onClick={handleReload} type="button">
+      {/* <button onClick={handleReload} type="button">
         Refresh
-      </button>
+      </button> */}
       <ul>
         {instances === undefined && (
           <li>
