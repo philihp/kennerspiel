@@ -4,8 +4,6 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Header from './layout/header'
 import { SupabaseContextProvider } from '@/context/SupabaseContext'
-import { FlagValues } from '@vercel/flags/react'
-import { irelandFlag } from './flags'
 export const metadata: Metadata = {
   title: 'Kennerspiel',
   description: 'Digital Tabletop',
@@ -32,7 +30,6 @@ const RootLayout = async ({
 }: Readonly<{
   children: React.ReactNode
 }>) => {
-  const ireland = await irelandFlag()
   return (
     <SupabaseContextProvider>
       <html lang="en">

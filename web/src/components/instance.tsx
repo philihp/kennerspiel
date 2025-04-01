@@ -5,7 +5,7 @@ import { PlayerColor } from 'hathora-et-labora-game/dist/types'
 
 type Props = {
   instance: Tables<'instance'>
-  entrants?: Tables<'entrant'>[]
+  entrants?: Pick<Tables<'entrant'>, 'profile_id' | 'color'>[]
 }
 
 export const Instance = ({ instance, entrants = [] }: Props) => {
@@ -34,10 +34,10 @@ export const Instance = ({ instance, entrants = [] }: Props) => {
       <hr />
       {(entrants ?? []).map((entrant) => {
         return (
-          <>
+          <div key={entrant.profile_id}>
             <PlayerDot color={entrant.color.slice(0, 1).toUpperCase() as PlayerColor} />
             {entrant.profile_id}
-          </>
+          </div>
         )
       })}
     </div>
