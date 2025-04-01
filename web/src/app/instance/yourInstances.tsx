@@ -30,6 +30,7 @@ export const YourInstances = ({ user }: Props) => {
         )`
       )
       .eq('profile_id', userId)
+      .order('updated_at', { ascending: false })
       .then(({ data }) => {
         const newData =
           data?.map(({ instance }) => {
@@ -51,9 +52,9 @@ export const YourInstances = ({ user }: Props) => {
     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {instances === undefined && <i>...</i>}
       {instances !== undefined &&
-        instances.map(({ entrant, ...instance }) => {
-          return <Instance key={instance.id} instance={instance} entrants={entrant} />
-        })}
+        instances.map(({ entrant, ...instance }) => (
+          <Instance key={instance.id} instance={instance} entrants={entrant} />
+        ))}
       {instances?.length === 0 && <i>(no instances)</i>}
     </div>
   )
