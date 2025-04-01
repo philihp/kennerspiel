@@ -31,6 +31,7 @@ const engineColorToEntrantColor = (c?: PlayerColor): Enums<'color'> | undefined 
 type InstanceContextType = {
   instance: Tables<'instance'>
   entrants: Tables<'entrant'>[]
+  flags: Record<string, any>
   user?: User
   rawState?: GameState
   state?: GameStatePlaying
@@ -52,6 +53,7 @@ type InstanceContextProviderProps = {
   user: User | null
   instance: Tables<'instance'>
   entrants: Tables<'entrant'>[]
+  flags: Record<string, any>
   children: ReactNode | ReactNode[]
 }
 
@@ -66,6 +68,7 @@ export const InstanceContextProvider = ({
   user,
   instance: providedInstance,
   entrants: providedEntrants,
+  flags,
 }: InstanceContextProviderProps) => {
   const { supabase } = useSupabaseContext()
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
@@ -156,6 +159,7 @@ export const InstanceContextProvider = ({
         controls,
         commands,
         active,
+        flags,
         currentPlayer: gameState?.players?.[(gameState as GameStatePlaying)?.frame?.currentPlayerIndex],
         setInstance,
         setEntrants,
