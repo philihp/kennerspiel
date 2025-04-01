@@ -26,11 +26,11 @@ export const Instance = ({ instance, entrants = [] }: Props) => {
       </b>
       <div>
         {' '}
-        Created {intlFormatDistance(new Date(), new Date(instance.created_at), { style: 'long', numeric: 'auto' })}{' '}
+        Created {intlFormatDistance(new Date(instance.created_at), new Date(), { style: 'long', numeric: 'auto' })}{' '}
       </div>
       <div>
         {' '}
-        Updated {intlFormatDistance(new Date(), new Date(instance.updated_at), { style: 'long', numeric: 'auto' })}{' '}
+        Updated {intlFormatDistance(new Date(instance.updated_at), new Date(), { style: 'long', numeric: 'auto' })}{' '}
       </div>
       <hr />
       {(entrants ?? []).map((entrant) => {
