@@ -1,6 +1,5 @@
 import { intlFormatDistance } from 'date-fns'
 import { Tables } from '@/supabase.types'
-import Dot from './dot'
 import { PlayerDot } from './playerDot'
 import { PlayerColor } from 'hathora-et-labora-game/dist/types'
 
