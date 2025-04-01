@@ -33,7 +33,7 @@ export const YourInstances = ({ user }: Props) => {
           }) ?? []
         setInstances(newData)
       })
-  }, [])
+  }, [setInstances, userId])
 
   useEffect(() => {
     handleReload()
