@@ -30,7 +30,7 @@ export const YourInstances = ({ user }: Props) => {
         )`
       )
       .eq('profile_id', userId)
-      .order('updated_at', { ascending: false })
+      .order('instance.updated_at', { ascending: false })
       .then(({ data }) => {
         const newData =
           data?.map(({ instance }) => {
