@@ -11,14 +11,15 @@ const configured = (country: EngineCountry, length: EngineLength, firstCommand: 
 
 type RadioPairProps = {
   disabled: boolean
+  selected: boolean
   onClick: EventHandler<SyntheticEvent<HTMLButtonElement | HTMLInputElement>> // is it even worth it?
   children: ReactNode | ReactNode[]
 }
 
-const RadioPair = ({ disabled, onClick, children }: RadioPairProps) => {
+const RadioPair = ({ disabled, selected, onClick, children }: RadioPairProps) => {
   return (
     <>
-      <input type="radio" disabled={disabled} checked={disabled} onChange={onClick} />
+      <input type="radio" disabled={disabled} checked={selected} onChange={onClick} />
       <button type="button" disabled={disabled} onClick={onClick}>
         {children}
       </button>
@@ -27,7 +28,12 @@ const RadioPair = ({ disabled, onClick, children }: RadioPairProps) => {
 }
 
 export const GameSetupVariant = () => {
-  const { instance, setInstance, entrants } = useInstanceContext()
+  const {
+    instance,
+    setInstance,
+    entrants,
+    flags: { ireland: irelandAllowed },
+  } = useInstanceContext()
 
   const [optInstance, setOptInstance] = useOptimistic<Instance, [EngineCountry, EngineLength]>(
     instance,
@@ -63,6 +69,7 @@ export const GameSetupVariant = () => {
       <hr />
       <h3>Mode</h3>
       <RadioPair
+        selected={isFranceLong}
         disabled={isFranceLong}
         onClick={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.long)}
       >
@@ -70,16 +77,19 @@ export const GameSetupVariant = () => {
       </RadioPair>
       <br />
       <RadioPair
-        disabled={isIrelandLong}
+        selected={isIrelandLong}
+        disabled={isIrelandLong || !irelandAllowed}
         onClick={() => handleConfig(entrants.length, EngineCountry.ireland, EngineLength.long)}
       >
         Ireland {entrants?.length === 2 && '(long)'}
       </RadioPair>
+      {!irelandAllowed && <i>Disabled during beta</i>}
       <br />
       {entrants.length > 1 && (
         <>
           {' '}
           <RadioPair
+            selected={isFranceShort}
             disabled={isFranceShort}
             onClick={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.short)}
           >
@@ -87,15 +97,17 @@ export const GameSetupVariant = () => {
           </RadioPair>
           <br />
           <RadioPair
-            disabled={isIrelandShort}
+            selected={isIrelandShort}
+            disabled={isIrelandShort || !irelandAllowed}
             onClick={() => handleConfig(entrants.length, EngineCountry.ireland, EngineLength.short)}
           >
             Ireland {entrants?.length >= 3 && '(short)'}
           </RadioPair>
+          {!irelandAllowed && <i>Disabled during beta</i>}
           <br />
         </>
       )}
-      <p>Country variants contain a different set of buildings.</p>
+      <p>Country variants contain a different set of buildings. </p>
     </>
   )
 }
