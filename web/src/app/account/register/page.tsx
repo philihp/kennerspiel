@@ -40,10 +40,6 @@ const RegisterPage = () => {
       <br />
       <input id="email" name="email" type="email" required onChange={handleEmailChange} autoComplete="email" />
       <br />
-      <label htmlFor="password">Password:</label>
-      <br />
-      <input id="password" name="password" type="password" required autoComplete="new-password" />
-      <br />
       {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
         <>
           <br />
