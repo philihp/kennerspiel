@@ -2,20 +2,14 @@
 
 import { createClient } from '@/utils/supabase/server'
 
-export const register = async (formData: FormData, captchaToken: string) => {
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const confirm = formData.get('confirm') as string
-
-  if (password !== confirm) {
-    return 'Passwords do not match.'
-  }
-
+export const confirmEmail = async (formData: FormData) => {
   const supabase = await createClient()
+  const email = formData.get('email') as string
+
   const {
     data: { user },
     error: authError,
-  } = await supabase.auth.signUp({ email, password, options: { captchaToken } })
+  } = await supabase.auth.updateUser({ email })
 
   if (authError || !user) {
     return authError?.message

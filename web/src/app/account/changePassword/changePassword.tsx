@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 
-import { changePassword } from './actions'
 import Dot from '../../../components/dot'
+import { changePassword } from './actions'
 
-const ChangePassword = () => {
+export const ChangePassword = () => {
   const [response, setResponse] = useState('')
   const [color, setColor] = useState('#000000')
 
@@ -23,9 +23,12 @@ const ChangePassword = () => {
 
   return (
     <>
-      <h2>Change Password</h2>
-      <p>You can set your password once you&apos;ve confirmed your email.</p>
       <form>
+        <label htmlFor="password">Old Password:</label>
+        <br />
+        <input id="password" name="password" type="password" required />
+        <br />
+        <br />
         <label htmlFor="password">New Password:</label>
         <br />
         <input id="password" name="password" type="password" required />
@@ -34,11 +37,10 @@ const ChangePassword = () => {
         <br />
         <input id="confirm" name="confirm" type="password" required />
         <br />
+        <br />
         <button formAction={changePasswordAndReturn}>Change Password</button>
       </form>
       <p>{response && <Dot color={color} response={response} />}</p>
     </>
   )
 }
-
-export default ChangePassword
