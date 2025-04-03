@@ -35,7 +35,7 @@ const RegisterPage = () => {
       }}
     >
       <h1>Register</h1>
-      <p>Create an account to join an instance. </p>
+      <p>Create an account to create or join an instance. </p>
       <label htmlFor="email">Email:</label>
       <br />
       <input id="email" name="email" type="email" required onChange={handleEmailChange} autoComplete="email" />
@@ -43,6 +43,11 @@ const RegisterPage = () => {
       <label htmlFor="password">Password:</label>
       <br />
       <input id="password" name="password" type="password" required autoComplete="new-password" />
+      <br />
+      <label htmlFor="confirm">Confirm:</label>
+      <br />
+      <input id="confirm" name="confirm" type="password" required autoComplete="new-password" />
+      <br />
       <br />
       {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
         <>

@@ -16,7 +16,7 @@ export const Settings = () => {
   }
 
   return (
-    <Link href={{ pathname: '/account/settings' }} onClick={handleClick}>
+    <Link href={{ pathname: '/account' }} onClick={handleClick}>
       Settings
     </Link>
   )

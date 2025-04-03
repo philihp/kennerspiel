@@ -13,10 +13,6 @@ const InstancePage = async () => {
   return (
     <>
       <section>
-        <h1>Public Instances</h1>
-        <PublicInstances />
-      </section>
-      <section>
         <h1>Your Instances</h1>
         <YourInstances user={user} />
       </section>

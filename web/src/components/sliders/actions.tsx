@@ -46,8 +46,8 @@ export const Actions = () => {
           borderTop: 0,
         }}
       >
-        Pending Move
         <button
+          className="primary"
           style={{
             display: 'inline-flex',
             gap: '8px',
@@ -56,7 +56,7 @@ export const Actions = () => {
           disabled={cancelDisabled}
           onClick={handleClear}
         >
-          <XCircle size={12} color={cancelDisabled ? '#afafaf' : '#007AFF'} />
+          <XCircle size={12} color={'#fff' /* '#007AFF' */} />
         </button>
         <input
           disabled

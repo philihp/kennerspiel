@@ -1,18 +1,52 @@
-'use client'
+import { redirect } from 'next/navigation'
 
-import { useState } from 'react'
-import { Turnstile } from '@marsidev/react-turnstile'
+import { createClient } from '@/utils/supabase/server'
 
-import { register } from './actions'
+import LogoutButton from './logoutButton'
+import Link from 'next/link'
 
-const AccountPage = () => {
+const SettingsPage = async () => {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
+  if (error || !user) {
+    redirect('/account/login')
+  }
+
   return (
     <>
-      <svg height="10" width="20">
-        <circle cx="10" cy="5" r="5" fill={'#666'} />
-      </svg>
+      <h1>Settings</h1>
+      <p>
+        User <code>{user?.id}</code>
+      </p>
+      <p>
+        Created
+        <br />
+        {user?.created_at}
+      </p>
+      <p>
+        Last signed in at
+        <br />
+        {user?.last_sign_in_at}
+      </p>
+      <ul>
+        <li>
+          <Link href="/account/confirmEmail">Confirm Email</Link>
+        </li>
+        <li>
+          <Link href="/account/changePassword">Change Password</Link>
+        </li>
+        <li>
+          <Link href="/account/debug">Debug</Link>
+        </li>
+      </ul>
+      <h2>Logout</h2>
+      <LogoutButton anonymous={user.is_anonymous} verified={user.email_confirmed_at} />
     </>
   )
 }
 
-export default AccountPage
+export default SettingsPage

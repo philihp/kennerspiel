@@ -29,8 +29,16 @@ const LogoutButton = ({ anonymous = false, verified }: LogoutButtonProps) => {
           <br />
         </>
       )}
-      {!verified && <>Your email is unverified!</>}
-      <button formAction={logoutAndReturn} disabled={anonymous && !confirm}>
+      {!verified && (
+        <>
+          <TriangleAlert size={24} />
+          You will be unable to reconnect unless you add an email.
+          <br />
+          <input type="checkbox" checked={confirm} onChange={(e) => setConfirm(e.target.checked)} /> I understand.
+          <br />
+        </>
+      )}
+      <button formAction={logoutAndReturn} disabled={(anonymous && !confirm) || (!verified && !confirm)}>
         Logout
       </button>
     </form>
