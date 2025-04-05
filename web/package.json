@@ -47,7 +47,7 @@
     "eslint-config-next": "15.2.4",
     "husky": "9.1.7",
     "lint-staged": "15.5.0",
-    "lucide-react": "0.485.0",
+    "lucide-react": "0.487.0",
     "prettier": "3.5.3",
     "supabase": "2.20.5",
     "typescript": "5.8.2"
