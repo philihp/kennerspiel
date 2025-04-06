@@ -1,15 +1,42 @@
 'use client'
 
-import { useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
 
-import { register } from './actions'
+import { emailUsed, register } from './actions'
+import { CheckCircle2, XCircle } from 'lucide-react'
+import { match } from 'ts-pattern'
+
+const green = '#ccebc5'
+const red = '#ffcfb3'
 
 const RegisterPage = () => {
   const [disabled, setDisabled] = useState(false)
   const [color, setColor] = useState('#000000')
   const [response, setResponse] = useState('')
   const [captchaToken, setCaptchaToken] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
+  const [valid, setValid] = useState<undefined | boolean>(undefined)
+
+  useEffect(() => {
+    let handle: NodeJS.Timeout
+    if (email === '') setValid(undefined)
+    else {
+      handle = setTimeout(async () => {
+        setValid(await emailUsed(email))
+      }, 250)
+    }
+    return () => {
+      clearTimeout(handle)
+    }
+  }, [email])
+
+  const info = {
+    disabled,
+    email,
+    valid,
+  }
+
   const signupAndReturn = async (formData: FormData) => {
     const error = await register(formData, captchaToken)
     if (error) {
@@ -23,8 +50,16 @@ const RegisterPage = () => {
     setColor('#00AF00')
   }
 
-  const handleEmailChange = () => {
-    setDisabled(false)
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    if (!e.target.value.match(mailformat)) {
+      // if the email is not valid
+      setValid(undefined)
+    } else {
+      // if this is hypothetically a valid email
+      setEmail(e.target.value)
+      setDisabled(false)
+    }
   }
 
   return (
@@ -39,6 +74,12 @@ const RegisterPage = () => {
       <label htmlFor="email">Email:</label>
       <br />
       <input id="email" name="email" type="email" required onChange={handleEmailChange} autoComplete="email" />
+      {match(valid)
+        .with(true, () => <XCircle fill={red} size={18} />)
+        .with(false, () => <CheckCircle2 fill={green} size={18} />)
+        .otherwise(() => (
+          <></>
+        ))}
       <br />
       <label htmlFor="password">Password:</label>
       <br />

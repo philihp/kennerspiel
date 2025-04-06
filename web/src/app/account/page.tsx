@@ -20,7 +20,9 @@ const SettingsPage = async () => {
     <>
       <h1>Settings</h1>
       <p>
-        User <code>{user?.id}</code>
+        User
+        <br />
+        <code>{user?.id}</code>
       </p>
       <p>
         Created
