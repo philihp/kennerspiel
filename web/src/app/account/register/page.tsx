@@ -3,7 +3,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
 
-import { emailValid, register } from './actions'
+import { emailUsed, register } from './actions'
 import { CheckCircle2, XCircle } from 'lucide-react'
 import { match } from 'ts-pattern'
 
@@ -23,8 +23,7 @@ const RegisterPage = () => {
     if (email === '') setValid(undefined)
     else {
       handle = setTimeout(async () => {
-        const res = await emailValid(email)
-        setValid(res)
+        setValid(await emailUsed(email))
       }, 250)
     }
     return () => {
