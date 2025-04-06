@@ -2,6 +2,9 @@
 
 import { createClient } from '@/utils/supabase/server'
 
+export const emailValid = async (email: string) =>
+  (await (await createClient()).from('profile').select('count').eq('email', email).maybeSingle()).data?.count === 0
+
 export const register = async (formData: FormData, captchaToken: string) => {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
