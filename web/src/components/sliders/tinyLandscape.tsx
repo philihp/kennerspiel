@@ -49,79 +49,76 @@ export const TinyLandscape = ({ landscape, offset = 0, rowMin, rowMax, showTerra
   )
 
   return (
-    <>
-      {/* <pre>{JSON.stringify({ rowsCovered })}</pre> */}
-      <table style={{ borderCollapse: 'collapse' }}>
-        <tbody>
-          {map((rowIndex) => {
-            const row = landscape[rowIndex]
-            const rowId = rowIndex - offset
-            return match<Tile[] | undefined>(row)
-              .with(undefined, () => (
-                <tr key={`${rowId}:${JSON.stringify(row)}`}>
-                  <td colSpan={4} />
-                  <td
-                    style={{
-                      width: 50,
-                      height: 50,
-                    }}
-                  >
-                    {includes(`${rowId}`, completions) && ( //
-                      <ThisRowButton onClick={handleClick(`${rowId}`)} />
-                    )}
-                  </td>
-                </tr>
-              ))
-              .otherwise(() => (
-                <tr key={`${rowId}:${JSON.stringify(row)}`}>
-                  {row.map((tile, colIndex) => {
-                    const [land, building] = tile
+    <table style={{ borderCollapse: 'collapse' }}>
+      <tbody>
+        {map((rowIndex) => {
+          const row = landscape[rowIndex]
+          const rowId = rowIndex - offset
+          return match<Tile[] | undefined>(row)
+            .with(undefined, () => (
+              <tr key={`${rowId}:${JSON.stringify(row)}`}>
+                <td colSpan={4} />
+                <td
+                  style={{
+                    width: 50,
+                    height: 50,
+                  }}
+                >
+                  {includes(`${rowId}`, completions) && ( //
+                    <ThisRowButton onClick={handleClick(`${rowId}`)} />
+                  )}
+                </td>
+              </tr>
+            ))
+            .otherwise(() => (
+              <tr key={`${rowId}:${JSON.stringify(row)}`}>
+                {row.map((tile, colIndex) => {
+                  const [land, building] = tile
 
-                    // so long as the mountain is always at the end
-                    // and a '.' is under it, this will work
-                    if (land === '.') return
-                    const rowSpan = land === 'M' ? 2 : 1
+                  // so long as the mountain is always at the end
+                  // and a '.' is under it, this will work
+                  if (land === '.') return
+                  const rowSpan = land === 'M' ? 2 : 1
 
-                    return (
-                      <td
+                  return (
+                    <td
+                      style={{
+                        border: tile.length !== 0 ? 1 : 0,
+                        borderStyle: 'solid',
+                        borderColor: '#555',
+                        textAlign: 'center',
+                        backgroundColor: landToColor(land),
+                      }}
+                      key={`${rowId}:${colIndex}`}
+                      rowSpan={rowSpan}
+                    >
+                      <div
                         style={{
-                          border: tile.length !== 0 ? 1 : 0,
-                          borderStyle: 'solid',
-                          borderColor: '#555',
-                          textAlign: 'center',
-                          backgroundColor: landToColor(land),
+                          width: 60,
+                          height: 60,
                         }}
-                        key={`${rowId}:${colIndex}`}
-                        rowSpan={rowSpan}
                       >
-                        <div
-                          style={{
-                            width: 60,
-                            height: 60,
-                          }}
-                        >
-                          {showTerrain && building === 'LMO' && (
-                            <div style={{ padding: 11 }}>
-                              <ItemList items="Pt" />
-                            </div>
-                          )}
-                          {showTerrain && building === 'LFO' && (
-                            <div style={{ padding: 11 }}>
-                              <ItemList items="Wo" />
-                            </div>
-                          )}
-                          {colIndex === 4 && completions.includes(`${rowId}`) && (
-                            <ThisRowButton onClick={handleClick(`${rowId}`)} />
-                          )}
-                        </div>
-                      </td>
-                    )
-                  })}
-                </tr>
-              ))
-          }, rowsCovered)}
-        </tbody>
-      </table>
-    </>
+                        {showTerrain && building === 'LMO' && (
+                          <div style={{ padding: 11 }}>
+                            <ItemList items="Pt" />
+                          </div>
+                        )}
+                        {showTerrain && building === 'LFO' && (
+                          <div style={{ padding: 11 }}>
+                            <ItemList items="Wo" />
+                          </div>
+                        )}
+                        {colIndex === 4 && completions.includes(`${rowId}`) && (
+                          <ThisRowButton onClick={handleClick(`${rowId}`)} />
+                        )}
+                      </div>
+                    </td>
+                  )
+                })}
+              </tr>
+            ))
+        }, rowsCovered)}
+      </tbody>
+    </table>
   )
 }
