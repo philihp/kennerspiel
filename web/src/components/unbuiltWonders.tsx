@@ -7,11 +7,11 @@ export const UnbuiltWonders = () => {
   const { wonders } = state
 
   return (
-    <div>
-      Wonders:
+    <p>
+      Remaining wonders ({wonders}):
       {range(0, wonders).map((n) => (
         <span key={n}>🖼️</span>
       ))}
-    </div>
+    </p>
   )
 }
