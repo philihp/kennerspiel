@@ -45,6 +45,7 @@ export const ModalSettle = () => {
 
   const foodUsed =
     1 * grainUsed +
+    1 * flourUsed +
     2 * sheepUsed +
     1 * grapeUsed +
     3 * breadUsed +
