@@ -75,6 +75,7 @@ export const InstanceContextProvider = ({
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
   const [partial, setPartial] = useState<string[]>([])
   const [commands, setCommands] = useState<string[]>(providedInstance.commands)
+  const [debounced, setDebounced] = useState(false)
 
   useEffect(() => {
     setCommands(instance.commands)
@@ -120,10 +121,12 @@ export const InstanceContextProvider = ({
   }
 
   const move = async () => {
+    setDebounced(true)
     const { error, commands: newCommands } = await serverMove(instance.id, [...commands, partial.join(' ')])
     if (error) return console.error(error)
     setCommands(newCommands ?? commands)
     setPartial([])
+    setDebounced(false)
   }
 
   const undo =
@@ -144,7 +147,7 @@ export const InstanceContextProvider = ({
 
   const activeColor = gameState?.players?.[(gameState as GameStatePlaying)?.frame?.activePlayerIndex]?.color
   const entrant = entrants.find((e) => e.color === engineColorToEntrantColor(activeColor))
-  const active = !!user && entrant?.profile_id === user?.id
+  const active = !!user && entrant?.profile_id === user?.id && !debounced
 
   return createElement(
     InstanceContext.Provider,

@@ -15,6 +15,7 @@ import { ActionCommit } from './actionCommit'
 import { map } from 'ramda'
 import { ModalPriorChoice } from './modalPriorChoice'
 import { RectangleEllipsis, XCircle } from 'lucide-react'
+import { useState } from 'react'
 
 export const Actions = () => {
   const { controls, state, partial, setPartial, move, active } = useInstanceContext()
