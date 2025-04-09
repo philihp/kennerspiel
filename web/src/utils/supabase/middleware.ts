@@ -28,8 +28,11 @@ export const updateSession = async (request: NextRequest) => {
 
   // This will refresh session if expired - required for Server Components
   // https://supabase.com/docs/guides/auth/server-side/nextjs
+
+  // Dangerously, I'm changing this to getSession to reduce the insane number of requests to supabase
+  // but I am not sure if this is a good idea
   const {
-    data: { session },
+    data: { session: _session },
   } = await supabase.auth.getSession()
 
   return supabaseResponse
