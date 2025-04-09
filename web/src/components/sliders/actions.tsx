@@ -1,5 +1,8 @@
-import { useInstanceContext } from '@/context/InstanceContext'
+import { XCircle } from 'lucide-react'
+
 import classes from './actions.module.css'
+import { useInstanceContext } from '@/context/InstanceContext'
+
 import { ActionWithLaybrother } from './actionWithLaybrother'
 import { ActionWithPrior } from './actionWithPrior'
 import { ActionCutPeat } from './actionCutPeat'
@@ -12,10 +15,7 @@ import { ActionBuyDistrict } from './actionBuyDistrict'
 import { ActionConvert } from './actionConvert'
 import { ActionSettle } from './actionSettle'
 import { ActionCommit } from './actionCommit'
-import { map } from 'ramda'
 import { ModalPriorChoice } from './modalPriorChoice'
-import { RectangleEllipsis, XCircle } from 'lucide-react'
-import { useState } from 'react'
 
 export const Actions = () => {
   const { controls, state, partial, setPartial, move, active } = useInstanceContext()

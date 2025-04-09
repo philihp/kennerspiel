@@ -12,7 +12,7 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { REALTIME_LISTEN_TYPES, REALTIME_SUBSCRIBE_STATES, RealtimeChannel, User } from '@supabase/supabase-js'
+import { REALTIME_LISTEN_TYPES, REALTIME_SUBSCRIBE_STATES, User } from '@supabase/supabase-js'
 import { Enums, Tables } from '@/supabase.types'
 import { Controls, GameStatusEnum, PlayerColor, Tableau } from 'hathora-et-labora-game/dist/types'
 import { match } from 'ts-pattern'
