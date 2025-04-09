@@ -145,32 +145,32 @@ export const PlayerResources = ({
   return (
     <div style={{ margin: 10 }}>
       {/* Construction stuff */}
-      <Times n={clay} id="Cl" />
-      <Times n={wood} id="Wo" />
-      <Times n={sheep} id="Sh" />
-      <Times n={straw} id="Sw" />
-      <Times n={stone} id="Sn" />
+      <Times n={clay} id={ResourceEnum.Clay} />
+      <Times n={wood} id={ResourceEnum.Wood} />
+      <Times n={sheep} id={ResourceEnum.Sheep} />
+      <Times n={straw} id={ResourceEnum.Straw} />
+      <Times n={stone} id={ResourceEnum.Stone} />
       {/* Midgame, processed stuff */}
-      <Times n={grain} id="Gn" />
-      <Times n={malt} id="Ho" />
-      <Times n={flour} id="Fl" />
-      <Times n={grape} id="Gp" />
-      <Times n={beer} id="Be" />
-      <Times n={meat} id="Mt" />
-      <Times n={bread} id="Br" />
+      <Times n={grain} id={ResourceEnum.Grain} />
+      <Times n={malt} id={ResourceEnum.Malt} />
+      <Times n={flour} id={ResourceEnum.Flour} />
+      <Times n={grape} id={ResourceEnum.Grape} />
+      <Times n={beer} id={ResourceEnum.Beer} />
+      <Times n={meat} id={ResourceEnum.Meat} />
+      <Times n={bread} id={ResourceEnum.Bread} />
       {/* Currency */}
-      <Times n={wine} id="Wn" />
-      <Times n={whiskey} id="Wh" />
-      <Times n={penny} id="Pn" />
-      <Times n={nickel} id="Ni" />
+      <Times n={wine} id={ResourceEnum.Wine} />
+      <Times n={whiskey} id={ResourceEnum.Whiskey} />
+      <Times n={penny} id={ResourceEnum.Penny} />
+      <Times n={nickel} id={ResourceEnum.Nickel} />
       {/* Energy */}
-      <Times n={peat} id="Pt" />
-      <Times n={coal} id="Co" />
+      <Times n={peat} id={ResourceEnum.Peat} />
+      <Times n={coal} id={ResourceEnum.Coal} />
       {/* Points */}
-      <Times n={book} id="Bo" />
-      <Times n={ceramic} id="Ce" />
-      <Times n={ornament} id="Or" />
-      <Times n={reliquary} id="Rq" />
+      <Times n={book} id={ResourceEnum.Book} />
+      <Times n={ceramic} id={ResourceEnum.Ceramic} />
+      <Times n={ornament} id={ResourceEnum.Ornament} />
+      <Times n={reliquary} id={ResourceEnum.Reliquary} />
     </div>
   )
 }
