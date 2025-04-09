@@ -1,13 +1,10 @@
 import { useInstanceContext } from '@/context/InstanceContext'
 import { toggleHidden } from './actions'
-import { useOptimistic, useState, useTransition } from 'react'
+import { useOptimistic, useTransition } from 'react'
 import { Tables } from '@/supabase.types'
-import { usePathname, useRouter } from 'next/navigation'
 
 export const GameSetupHidden = () => {
   const { instance, setInstance } = useInstanceContext()
-  const path = usePathname()
-  const router = useRouter()
 
   const hidden = !!instance.hidden
 
