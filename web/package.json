@@ -15,7 +15,7 @@
     "@vercel/flags": "3.1.1",
     "@vercel/speed-insights": "1.2.0",
     "date-fns": "^4.1.0",
-    "dotenv": "16.4.7",
+    "dotenv": "16.5.0",
     "flags": "3.2.0",
     "form-urlencoded": "6.1.5",
     "hathora-et-labora-game": "0.18.1",
