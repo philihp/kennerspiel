@@ -159,31 +159,31 @@ const RondelSettlementsThreeFourShort = () => (
 
 const RondelSettlementsSolitare = () => (
   <>
-    <g id="settlement-a" transform={`rotate(${rot.A})`}>
+    <g id="settlement-a" transform={`rotate(${rot.M})`}>
       <path d={`${housePath}`} style={{ fill: 'url(#housefill)', fillOpacity: 1, stroke: '#202020', strokeWidth: 1 }} />
       <text x="0" y={houseTextY} style={{ fontSize: '9px', fontWeight: 100, textAnchor: 'middle', fill: '#fff' }}>
         A
       </text>
     </g>
-    <g id="settlement-b" transform={`rotate(${rot.E})`}>
+    <g id="settlement-b" transform={`rotate(${rot.D})`}>
       <path d={`${housePath}`} style={{ fill: 'url(#housefill)', fillOpacity: 1, stroke: '#202020', strokeWidth: 1 }} />
       <text x="0" y={houseTextY} style={{ fontSize: '9px', fontWeight: 100, textAnchor: 'middle', fill: '#fff' }}>
         B
       </text>
     </g>
-    <g id="settlement-c" transform={`rotate(${rot.K})`}>
+    <g id="settlement-c" transform={`rotate(${rot.J})`}>
       <path d={`${housePath}`} style={{ fill: 'url(#housefill)', fillOpacity: 1, stroke: '#202020', strokeWidth: 1 }} />
       <text x="0" y={houseTextY} style={{ fontSize: '9px', fontWeight: 100, textAnchor: 'middle', fill: '#fff' }}>
         C
       </text>
     </g>
-    <g id="settlement-d" transform={`rotate(${rot.B})`}>
+    <g id="settlement-d" transform={`rotate(${rot.A})`}>
       <path d={`${housePath}`} style={{ fill: 'url(#housefill)', fillOpacity: 1, stroke: '#202020', strokeWidth: 1 }} />
       <text x="0" y={houseTextY} style={{ fontSize: '9px', fontWeight: 100, textAnchor: 'middle', fill: '#fff' }}>
         D
       </text>
     </g>
-    <g id="settlement-e" transform={`rotate(${rot.H})`}>
+    <g id="settlement-e" transform={`rotate(${rot.G})`}>
       <path d={`${housePath}`} style={{ fill: 'url(#housefill)', fillOpacity: 1, stroke: '#202020', strokeWidth: 1 }} />
       <text x="0" y={houseTextY} style={{ fontSize: '9px', fontWeight: 100, textAnchor: 'middle', fill: '#fff' }}>
         E
