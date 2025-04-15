@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@marsidev/react-turnstile": "1.1.0",
-    "@next/third-parties": "15.2.4",
+    "@next/third-parties": "15.3.0",
     "@philihp/prettier-config": "1.0.0",
     "@stdlib/math": "0.3.3",
     "@supabase/auth-helpers-nextjs": "0.10.0",
@@ -15,13 +15,13 @@
     "@vercel/flags": "3.1.1",
     "@vercel/speed-insights": "1.2.0",
     "date-fns": "^4.1.0",
-    "dotenv": "16.4.7",
+    "dotenv": "16.5.0",
     "flags": "3.2.0",
     "form-urlencoded": "6.1.5",
     "hathora-et-labora-game": "0.18.1",
     "jsonwebtoken": "9.0.2",
     "jwks-rsa": "3.2.0",
-    "next": "15.2.4",
+    "next": "15.3.0",
     "ramda": "0.30.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -39,21 +39,21 @@
   },
   "prettier": "@philihp/prettier-config",
   "devDependencies": {
-    "@types/node": "22.14.0",
+    "@types/node": "22.14.1",
     "@types/ramda": "0.30.2",
-    "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.1",
+    "@types/react": "19.1.1",
+    "@types/react-dom": "19.1.2",
     "eslint": "9.24.0",
-    "eslint-config-next": "15.2.4",
+    "eslint-config-next": "15.3.0",
     "husky": "9.1.7",
-    "lint-staged": "15.5.0",
-    "lucide-react": "0.487.0",
+    "lint-staged": "15.5.1",
+    "lucide-react": "0.488.0",
     "prettier": "3.5.3",
-    "supabase": "2.20.5",
+    "supabase": "2.20.12",
     "typescript": "5.8.3"
   },
   "overrides": {
-    "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.1"
+    "@types/react": "19.1.1",
+    "@types/react-dom": "19.1.2"
   }
 }
