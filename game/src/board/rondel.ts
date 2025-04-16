@@ -1,4 +1,4 @@
-import { always, assoc, curry, dissoc, equals, isNil, pathSatisfies, pipe, propSatisfies, when } from 'ramda'
+import { always, assoc, curry, equals, isNil, pathSatisfies, propSatisfies, when } from 'ramda'
 import { match } from 'ts-pattern'
 import {
   Rondel,
@@ -60,8 +60,6 @@ export const introduceGrapeToken: StateReducer = when(
 )
 
 export const introduceStoneToken: StateReducer = introduceToken('stone')
-export const introduceJokerToken: StateReducer = introduceToken('joker')
-export const removeJokerToken: StateReducer = withRondel(dissoc('joker'))
 
 export const armValues = ({ length, players }: GameCommandConfigParams) => {
   if (players === 2 && length === 'short') {
@@ -105,7 +103,7 @@ export const standardSesourceGatheringAction = (usingToken: RondelToken, withJok
       rondel: { joker, pointingBefore },
     } = state
     const main = state.rondel[usingToken]
-    const amount = take(pointingBefore, (withJoker ? joker : main ?? joker) ?? pointingBefore, config)
+    const amount = take(pointingBefore, (withJoker ? joker : (main ?? joker)) ?? pointingBefore, config)
     const resource = tokenToResource(usingToken)
     const cost = parseResourceParam(resource)
     const magnitude = multiplyGoods(amount)(cost)
