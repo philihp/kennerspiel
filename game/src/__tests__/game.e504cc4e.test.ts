@@ -2,7 +2,7 @@ import { reduce } from 'ramda'
 import { control } from '..'
 import { reducer } from '../reducer'
 import { initialState } from '../state'
-import { GameState, GameStatePlaying, GameStateSetup } from '../types'
+import { GameState, GameStatePlaying } from '../types'
 
 const commands: string[] = [
   'CONFIG 1 france long',
@@ -149,12 +149,11 @@ const commands: string[] = [
   'SETTLE SR6 3 5 MtCoCo',
   'COMMIT',
   'USE F09',
-  'USE F24 BrBrWnWn',
+  'USE LR3',
   'COMMIT',
-  'BUILD F27 4 0',
-  'BUILD F30 1 0',
-  'BUILD F32 3 1',
-  'WORK_CONTRACT F32 Wn',
+  'BUILD F27 0 1',
+  'BUILD F30 4 0',
+  'BUILD F32 3 0',
 ]
 
 describe('game 504cc4e', () => {
@@ -168,7 +167,10 @@ describe('game 504cc4e', () => {
       initialState as GameState,
       commands
     ) as GameStatePlaying
-    const controls = control(midState, ['USE', 'F32'])
-    expect(controls.completion).toStrictEqual(['Pn', ''])
+    expect(midState).not.toBeUndefined()
+    console.log(midState.players[0])
+    console.log(control(midState, ['WORK_CONTRACT', 'F32']))
+    const controls = control(midState, ['WORK_CONTRACT', 'F32'])
+    expect(controls.completion).toStrictEqual(['PnPn'])
   })
 })

@@ -4,7 +4,6 @@ import { addNeutralPlayer } from './addNeutralPlayer'
 import { gameEnd } from '../state'
 import { returnClergyIfPlaced } from './returnClergyIfPlaced'
 import { rotateRondelWithExpire } from './rotateRondel'
-import { introduceJokerToken, removeJokerToken } from '../rondel'
 import { checkSoloSettlementReady } from './checkSoloSettlementReady'
 import { introduceSettlements } from '../settlements'
 
@@ -29,14 +28,7 @@ export const nextFrameSolo: FrameFlow = {
     startingPlayer: 0,
     currentPlayerIndex: 0,
     settlementRound: SettlementRound.S,
-    upkeep: [
-      rotateRondelWithExpire,
-      returnClergyIfPlaced,
-      introduceBuildings,
-      removeJokerToken,
-      addNeutralPlayer,
-      introduceSettlements,
-    ],
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced, introduceBuildings, addNeutralPlayer, introduceSettlements],
     next: 2,
   },
   2: { next: 3 },
@@ -139,7 +131,7 @@ export const nextFrameSolo: FrameFlow = {
       /* determined by checkSoloSettlementReady */
     ],
     settlementRound: SettlementRound.A,
-    upkeep: [returnClergyIfPlaced, introduceJokerToken, checkSoloSettlementReady],
+    upkeep: [returnClergyIfPlaced, checkSoloSettlementReady],
     next: 24,
   },
 
