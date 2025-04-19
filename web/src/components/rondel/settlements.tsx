@@ -118,7 +118,7 @@ const RondelSettlementsThreeFourShort = () => (
     </g>
     <g id="settlement-c" transform={`rotate(${rot.H})`}>
       <path d={housePath} style={{ fill: 'url(#housefill)', fillOpacity: 1, stroke: '#202020', strokeWidth: 1 }} />
-      <text x="0" y={houseTextY} style={{ fontSize: '9px;', fontWeight: 100, textAnchor: 'middle', fill: '#fff' }}>
+      <text x="0" y={houseTextY} style={{ fontSize: '9px', fontWeight: 100, textAnchor: 'middle', fill: '#fff' }}>
         C
       </text>
     </g>
