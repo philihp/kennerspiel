@@ -168,8 +168,6 @@ describe('game 504cc4e', () => {
       commands
     ) as GameStatePlaying
     expect(midState).not.toBeUndefined()
-    console.log(midState.players[0])
-    console.log(control(midState, ['WORK_CONTRACT', 'F32']))
     const controls = control(midState, ['WORK_CONTRACT', 'F32'])
     expect(controls.completion).toStrictEqual(['PnPn'])
   })
