@@ -30,7 +30,7 @@ import {
 import { costPoints } from './board/resource'
 import { allBuildingPoints, allDwellingPoints } from './board/landscape'
 import { introduceBuildings, roundBuildings } from './board/buildings'
-import { introduceGrapeToken, introduceJokerToken, introduceStoneToken } from './board/rondel'
+import { introduceGrapeToken, introduceStoneToken } from './board/rondel'
 
 const computeFlow = (state: GameStatePlaying) => {
   const frameFlow = pickFrameFlow(state.config)
@@ -55,7 +55,6 @@ const computeFlow = (state: GameStatePlaying) => {
         ...(frame.upkeep?.includes(introduceBuildings) ? roundBuildings(state.config, lastSeenSettlementRound) : []),
         ...(frame.upkeep?.includes(introduceGrapeToken) ? ['grape' as RondelToken] : []),
         ...(frame.upkeep?.includes(introduceStoneToken) ? ['stone' as RondelToken] : []),
-        ...(frame.upkeep?.includes(introduceJokerToken) ? ['joker' as RondelToken] : []),
       ],
     })
     frameIndex = frame.next
