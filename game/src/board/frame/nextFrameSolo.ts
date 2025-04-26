@@ -273,6 +273,15 @@ export const nextFrameSolo: FrameFlow = {
     next: 51,
   },
   51: {
+    next: 52,
+  },
+
+  52: {
+    round: 25,
+    upkeep: [rotateRondelWithExpire, returnClergyIfPlaced],
+    next: 53,
+  },
+  53: {
     next: 54,
   },
 
