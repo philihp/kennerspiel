@@ -15,22 +15,17 @@ export const register = async (formData: FormData, captchaToken: string) => {
   }
 
   const supabase = await createClient()
-  console.log('=== Signup')
   const {
     data: { user },
     error: authError,
   } = await supabase.auth.signUp({ email, password, options: { captchaToken } })
-  console.log('=== ', user)
 
   if (authError || !user) {
-    console.log('=== ', authError)
     return authError?.message
   }
 
-  console.log('=== Upserting profile', { id: user?.id, email })
   const { error: profError } = await supabase.from('profile').upsert({ id: user?.id, email })
   if (profError) {
-    console.log('=== ', profError)
     await supabase.auth.signOut({ scope: 'local' })
     return profError?.message
   }

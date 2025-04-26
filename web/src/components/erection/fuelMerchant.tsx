@@ -84,12 +84,11 @@ const Times = ({ n, id, setComponent }: TimesProps) => {
 }
 
 interface InventoryProps {
-  allowed: string
   setParam: (param: string) => void
 }
 
-const Inventory = ({ allowed, setParam }: InventoryProps) => {
-  const { state, addPartial, setPartial, controls } = useInstanceContext()
+const Inventory = ({ setParam }: InventoryProps) => {
+  const { state } = useInstanceContext()
   const player = state?.players[state?.frame?.currentPlayerIndex]
 
   const [peatUsed, setPeatUsed] = useState('')
@@ -108,22 +107,8 @@ const Inventory = ({ allowed, setParam }: InventoryProps) => {
 
   return (
     <>
-      <Times
-        n={coal}
-        id="Co"
-        setComponent={(s: string) => {
-          console.log('setCoalUsed', s)
-          setCoalUsed(s)
-        }}
-      />
-      <Times
-        n={wood}
-        id="Wo"
-        setComponent={(s: string) => {
-          console.log('setWoodUsed', s)
-          setWoodUsed(s)
-        }}
-      />
+      <Times n={coal} id="Co" setComponent={setCoalUsed} />
+      <Times n={wood} id="Wo" setComponent={setWoodUsed} />
       <Times n={straw} id="Sw" setComponent={setStrawUsed} />
       <Times n={peat} id="Pt" setComponent={setPeatUsed} />
     </>
