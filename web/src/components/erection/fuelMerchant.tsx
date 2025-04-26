@@ -85,9 +85,10 @@ const Times = ({ n, id, setComponent }: TimesProps) => {
 
 interface InventoryProps {
   setParam: (param: string) => void
+  allowed: string
 }
 
-const Inventory = ({ setParam }: InventoryProps) => {
+const Inventory = ({ allowed, setParam }: InventoryProps) => {
   const { state } = useInstanceContext()
   const player = state?.players[state?.frame?.currentPlayerIndex]
 
