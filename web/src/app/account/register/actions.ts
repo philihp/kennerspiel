@@ -11,7 +11,7 @@ export const register = async (formData: FormData, captchaToken: string) => {
   const confirm = formData.get('confirm') as string
 
   if (password !== confirm) {
-    return 'Passwords do not match.'
+    return { message: 'Passwords do not match.' }
   }
 
   const supabase = await createClient()
@@ -21,12 +21,12 @@ export const register = async (formData: FormData, captchaToken: string) => {
   } = await supabase.auth.signUp({ email, password, options: { captchaToken } })
 
   if (authError || !user) {
-    return authError?.message
+    return authError
   }
 
   const { error: profError } = await supabase.from('profile').upsert({ id: user?.id, email })
   if (profError) {
     await supabase.auth.signOut({ scope: 'local' })
-    return profError?.message
+    return profError
   }
 }

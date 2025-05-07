@@ -1,6 +1,19 @@
+'use client'
+
+import { Component } from '@/components/component'
 import Link from 'next/link'
 
+// useEffect(() => {
+//   console.log('Component mounted')
+// }, [])
+
 const Home = () => {
+  async function serverAction() {
+    'use server'
+
+    return 'Hello from server action'
+  }
+
   return (
     <main>
       <h1>Kennerspiel</h1>
@@ -17,7 +30,10 @@ const Home = () => {
         Source code is available at{' '}
         <Link href="https://github.com/philihp/kennerspiel">github.com/philihp/kennerspiel</Link>
       </p>
-    </main>  )
+      <button onClick={() => console.log(serverAction())}>Click me</button>
+      <Component />
+    </main>
+  )
 }
 
 export default Home

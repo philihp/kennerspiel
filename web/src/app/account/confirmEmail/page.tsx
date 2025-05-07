@@ -17,18 +17,27 @@ const ConfirmEmailPage = async () => {
     <>
       <h1>Confirm Email</h1>
       <p>
-        <strong>Email:</strong>
+        <strong>Current Confirmed Email:</strong>
         {user?.email}
         <br />
         <strong>Confirmed:</strong>
         {user?.confirmed_at}
-        {user?.email_change_sent_at}
       </p>
+      {user?.new_email && (
+        <p>
+          <strong>Proposed New Email:</strong>
+          {user?.new_email}
+          <br />
+          <strong>Proposed Change</strong>
+          {user?.email_change_sent_at}
+        </p>
+      )}
+      {user.is_anonymous && (
+        <p>You are logged in anonymously. Registering a recovery email will prevent you from getting locked out.</p>
+      )}
       {!user.is_anonymous && (
         <>
-          If we have the wrong email, or you just want to change it, what should it be?
-          <br />
-          <br />
+          <p>If we have the wrong email, or you just want to change it, what should it be?</p>
           <ConfirmForm />
         </>
       )}

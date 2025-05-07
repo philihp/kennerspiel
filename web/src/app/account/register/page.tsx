@@ -1,7 +1,7 @@
 'use client'
 
-import { ChangeEvent, useEffect, useState } from 'react'
-import { Turnstile } from '@marsidev/react-turnstile'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 
 import { emailUsed, register } from './actions'
 import { CheckCircle2, XCircle } from 'lucide-react'
@@ -11,6 +11,7 @@ const green = '#ccebc5'
 const red = '#ffcfb3'
 
 const RegisterPage = () => {
+  const ref = useRef<TurnstileInstance>(null)
   const [disabled, setDisabled] = useState(false)
   const [color, setColor] = useState('#000000')
   const [response, setResponse] = useState('')
@@ -41,8 +42,10 @@ const RegisterPage = () => {
     const error = await register(formData, captchaToken)
     if (error) {
       setDisabled(false)
-      setResponse(error)
+      setResponse(error?.message ?? 'Unknown error, check frontend console log')
+      console.log(error)
       setColor('#FF0000')
+      ref.current?.reset()
       return
     }
 
@@ -94,6 +97,7 @@ const RegisterPage = () => {
         <>
           <br />
           <Turnstile
+            ref={ref}
             siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
             onSuccess={setCaptchaToken}
             options={{

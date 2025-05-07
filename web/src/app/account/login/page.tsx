@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { redirect } from 'next/navigation'
-import { Turnstile } from '@marsidev/react-turnstile'
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 
 import { login } from './actions'
 import { useSupabaseContext } from '@/context/SupabaseContext'
@@ -12,11 +12,13 @@ const Login = () => {
   const { redirectTo } = useSupabaseContext()
   const [response, setResponse] = useState<string>('')
   const [captchaToken, setCaptchaToken] = useState<string>('')
+  const ref = useRef<TurnstileInstance>(null)
 
   const handleLogin = async (formData: FormData) => {
     const error = await login(formData, captchaToken)
     if (error) {
       setResponse(error)
+      ref.current?.reset()
       return
     }
     redirect(redirectTo)
@@ -53,6 +55,7 @@ const Login = () => {
         {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
           <>
             <Turnstile
+              ref={ref}
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
               onSuccess={setCaptchaToken}
               options={{
