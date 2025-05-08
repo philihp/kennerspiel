@@ -1,26 +1,11 @@
-import { verifyAccess, type ApiData } from 'flags'
-import { getProviderData } from 'flags/next'
-import { NextResponse, type NextRequest } from 'next/server'
 import * as flags from '../../../flags'
+import { getProviderData, createFlagsDiscoveryEndpoint } from 'flags/next'
 
-//   return NextResponse.json<ApiData>({
-//     definitions: {
-//       ireland: {
-//         description: 'Allow Ireland Variant',
-//         origin: 'https://example.com/#new-feature',
-//         options: [
-//           { value: false, label: 'Locked' },
-//           { value: true, label: 'Unlocked' },
-//         ],
-//       },
-//     },
-//   })
-// }
+// This function handles the authorization check for you
+export const GET = createFlagsDiscoveryEndpoint(async (request) => {
+  // your previous logic in here to gather your feature flags
+  const apiData = await getProviderData(flags)
 
-export async function GET(request: NextRequest) {
-  const access = await verifyAccess(request.headers.get('Authorization'))
-  if (!access) return NextResponse.json(null, { status: 401 })
-
-  const providerData = getProviderData(flags)
-  return NextResponse.json<ApiData>(providerData)
-}
+  // return the ApiData directly, without a NextResponse.json object.
+  return apiData
+})
