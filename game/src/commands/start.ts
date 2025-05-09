@@ -1,4 +1,4 @@
-import fastShuffle from 'fast-shuffle'
+import { default as createShuffle } from 'fast-shuffle'
 import { createPcg32, randomInt } from 'fn-pcg'
 import { pipe, range } from 'ramda'
 import { nextFrame } from '../board/frame'
@@ -39,11 +39,11 @@ export const start = (
   if (state.config === undefined) return undefined
   if (colors.length < 1 || colors.length > 4) return undefined
   const seedUsed = seed ?? MAGIC_SEED
-
   let randGen = createPcg32({}, seedUsed, PCG_PERIOD)
   const [playerOrderSeed, randGen1] = randomInt(0, 2 ** 32 - 1, randGen)
   randGen = randGen1
-  const shuffledColors = fastShuffle(playerOrderSeed, colors)
+  console.log('createSHuffle', playerOrderSeed, colors)
+  const shuffledColors = createShuffle(playerOrderSeed, colors)
 
   const playerIndexes = range(0, state.config.players)
   const players = playerIndexes.map((i) => {
