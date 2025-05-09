@@ -106,13 +106,19 @@ export const InstanceContextProvider = ({
   const gameState = useMemo(() => {
     return [...commands]
       .map((s) => s.split(' '))
-      .reduce<
-        GameState | undefined
-      >(reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined, initialState)
+      .reduce<GameState | undefined>((state: GameState | undefined, [command, ...params]: string[]) => {
+        if (state === undefined) {
+          console.log('SKIPPED: ', [command, ...params])
+          return undefined
+        }
+        console.log('REDUCING: ', state, [command, ...params])
+        return reducer(state, [command, ...params]) as GameState | undefined
+      }, initialState)
   }, [commands])
 
   const controls = useMemo(() => {
     if (gameState?.status === GameStatusEnum.SETUP) return undefined
+    console.log('CONTROLS', gameState, partial)
     return control(gameState as GameStatePlaying, partial)
   }, [gameState, partial])
 
