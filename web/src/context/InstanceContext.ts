@@ -111,8 +111,9 @@ export const InstanceContextProvider = ({
           console.log('SKIPPED: ', [command, ...params])
           return undefined
         }
-        console.log('REDUCING: ', state, [command, ...params])
-        return reducer(state, [command, ...params]) as GameState | undefined
+        const result = reducer(state, [command, ...params])
+        console.log('REDUCING: ', state, [command, ...params], result)
+        return result
       }, initialState)
   }, [commands])
 
