@@ -205,7 +205,7 @@ export const StoneMerchant = () => {
         disabled={!includes(param, map(normalize, options))}
         onClick={handleOK(denormalizer[param])}
       >
-        Settle
+        Use
       </button>
     </Modal>
   )
