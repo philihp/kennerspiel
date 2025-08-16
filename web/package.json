@@ -39,7 +39,7 @@
   },
   "prettier": "@philihp/prettier-config",
   "devDependencies": {
-    "@types/node": "22.17.1",
+    "@types/node": "22.17.2",
     "@types/ramda": "0.31.0",
     "@types/react": "19.1.9",
     "@types/react-dom": "19.1.7",
