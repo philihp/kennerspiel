@@ -43,7 +43,7 @@
     "@types/ramda": "0.31.0",
     "@types/react": "19.1.11",
     "@types/react-dom": "19.1.7",
-    "eslint": "9.33.0",
+    "eslint": "9.34.0",
     "eslint-config-next": "15.4.6",
     "husky": "9.1.7",
     "lint-staged": "16.1.5",
