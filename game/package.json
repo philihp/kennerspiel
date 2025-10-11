@@ -34,7 +34,7 @@
   "dependencies": {
     "fast-shuffle": "6.1.1",
     "fn-pcg": "2.0.1",
-    "ramda": "0.31.3",
+    "ramda": "0.32.0",
     "ts-pattern": "5.8.0"
   },
   "devDependencies": {
