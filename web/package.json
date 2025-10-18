@@ -42,7 +42,7 @@
     "@types/node": "22.18.11",
     "@types/ramda": "0.31.1",
     "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.1",
+    "@types/react-dom": "19.2.2",
     "eslint": "9.37.0",
     "eslint-config-next": "15.5.4",
     "husky": "9.1.7",
@@ -54,6 +54,6 @@
   },
   "overrides": {
     "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.1"
+    "@types/react-dom": "19.2.2"
   }
 }
