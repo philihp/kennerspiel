@@ -48,7 +48,7 @@
     "husky": "9.1.7",
     "lint-staged": "16.2.7",
     "lucide-react": "0.562.0",
-    "prettier": "3.7.4",
+    "prettier": "3.8.0",
     "supabase": "2.72.8",
     "typescript": "5.9.3"
   },
