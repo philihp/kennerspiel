@@ -20,7 +20,7 @@ export const cloisterCourtyard = (input = '', output = '') => {
   const outputs = parseResourceParam(output)
   if (totalGoods(inputs) !== 3) return () => undefined
   if (differentGoods(inputs) !== 3) return () => undefined
-  if (totalGoods(maskGoods(ALLOWED_OUTPUT)(outputs)) !== 1 && differentGoods(outputs) !== 1) return () => undefined
+  if (totalGoods(maskGoods(ALLOWED_OUTPUT)(outputs)) !== 1 || differentGoods(outputs) !== 1) return () => undefined
   return withActivePlayer(
     pipe(
       //
