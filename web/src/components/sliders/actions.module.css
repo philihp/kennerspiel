@@ -1,59 +1,43 @@
-
 .action {
   cursor: pointer;
   padding: 7px 11px;
-  border-radius: 10px;
-  border-width: 0;
+  border-radius: 4px;
+  border: 1px solid #c8a86b;
   margin: 5px;
   font-size: small;
-
-  /* color: black; */
-  background: rgb(255,255,255,1);
-  /* box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.04) */
+  font-family: 'IM Fell English', Georgia, serif;
+  background: #fdf6e3;
+  color: #2c1810;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 245, 210, 0.6),
+    0 1px 3px rgba(44, 24, 16, 0.2);
 }
 
 .action.primary {
-  color: white;
-  background: linear-gradient(#2e93ff, #007AFF 50%);
-  /* border: 1px solid rgba(0,120,255,0.25); */
-  /* box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5); */
+  color: #fdf6e3;
+  background: linear-gradient(#a0522d, #8b4513 50%);
+  border-color: #6b3410;
+  box-shadow:
+    inset 0 1px 0 rgba(160, 82, 45, 0.4),
+    0 1px 3px rgba(44, 24, 16, 0.3);
 }
 
 .action:hover {
-  /* box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3); */
 }
 .action.primary:hover {
-  /* box-shadow: none; */
-  /* border: 1px solid rgba(255,255,255,0.1); */
 }
 
 .action:disabled {
-  /* color: rgb(0,0,0,0.25); */
-  /* border: 1px solid rgba(0,0,0,0.05); */
-  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.01); */
 }
 .action.primary:disabled {
-  color: grayText;
-  background: rgb(240,240,240,0.8);
+  color: #9c8060;
+  background: #ede0be;
+  border-color: #c8a86b;
+  box-shadow: none;
 }
 
 .action:disabled:hover {
-  /* box-shadow: none; */
 }
 
 .container {
-  /* filter: drop-shadow(2px 2px 5px rgba(255, 255, 255, 0.25));
-  background: rgba(255, 255, 255, 0.38);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-width: 1px;
-  border-top-width: 0;
-  border-style: solid;
-  border-color: rgba(255, 255, 255, 0.21);
-
-  transition: transform 500ms;
-  transition-timing-function: cubic-bezier(0.15, 0.1, 0.25, 1); */
 }

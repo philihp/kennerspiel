@@ -43,10 +43,11 @@ export const Frame = ({ frame }: FrameParams) => {
             href=""
             style={{
               textDecoration: 'none',
-              backgroundColor: '#ffffff',
-              border: '1px solid #ccc',
+              backgroundColor: '#fdf6e3',
+              border: '1px solid #c8a86b',
               padding: 3,
               borderRadius: 4,
+              color: '#2c1810',
             }}
             onClick={(e) => {
               e.preventDefault()

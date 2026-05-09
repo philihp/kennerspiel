@@ -1,44 +1,44 @@
 .red {
   background-color: #fb8072;
-  border-color: #ad574d;
+  border-color: #6b3410;
   height: 24px;
   width: 24px;
   margin: 1px;
   border-radius: 16px;
-  border-width: 1;
+  border-width: 2px;
   border-style: solid;
   display: inline-block;
 }
 .green {
   background-color: #b3de69;
-  border-color: #87a74f;
+  border-color: #4a6b10;
   height: 24px;
   width: 24px;
   margin: 1px;
   border-radius: 16px;
-  border-width: 1;
+  border-width: 2px;
   border-style: solid;
   display: inline-block;
 }
 .blue {
   background-color: #80b1d3;
-  border-color: #5f849e;
+  border-color: #2c4a6b;
   height: 24px;
   width: 24px;
   margin: 1px;
   border-radius: 16px;
-  border-width: 1;
+  border-width: 2px;
   border-style: solid;
   display: inline-block;
 }
 .white {
-  background-color: #d9d9d9;
-  border-color: #b1b1b1;
+  background-color: #fdf6e3;
+  border-color: #c8a86b;
   height: 24px;
   width: 24px;
   margin: 1px;
   border-radius: 16px;
-  border-width: 1;
+  border-width: 2px;
   border-style: solid;
   display: inline-block;
 }
