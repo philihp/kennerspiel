@@ -1,7 +1,12 @@
 .frameModal {
   text-align: left;
   min-width: 38.217124%;
+  background: #1a1a2e;
+  border: 3px solid #00ff41;
+  border-radius: 0;
+  box-shadow: 6px 6px 0 #005c18;
+  color: #e0e0e0;
 }
 .frameModal::backdrop {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
 }

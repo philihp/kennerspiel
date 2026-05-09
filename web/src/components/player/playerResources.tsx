@@ -45,7 +45,7 @@ export const Resource = ({ type }: ResourceProps) => {
         margin: 0.5,
         borderWidth: 0.5,
         borderRadius: 4,
-        borderColor: '#000',
+        borderColor: '#00ff41',
         borderStyle: 'solid',
       }}
       src={`https://hathora-et-labora.s3-us-west-2.amazonaws.com/${type}.jpg`}

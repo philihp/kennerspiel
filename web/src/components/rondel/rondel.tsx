@@ -64,8 +64,8 @@ export const Rondel = () => {
     <svg style={{ float: 'left', width: '450px', height: '450px' }} viewBox="-210.5 -210.5 420 420">
       <defs>
         <linearGradient id="housefill" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style={{ stopColor: '#004e85', stopOpacity: 1 }} />
-          <stop offset="100%" style={{ stopColor: '#1973b2', stopOpacity: 1 }} />
+          <stop offset="0%" style={{ stopColor: '#e84393', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#c4006e', stopOpacity: 1 }} />
         </linearGradient>
         <filter id="shadow">
           <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
@@ -75,19 +75,19 @@ export const Rondel = () => {
         <polyline points={mask} fill="black" filter="url(#shadow)" />
       </g>
       <g id="wheel">
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.A} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.B} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.C} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.D} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.E} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.F} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.G} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.H} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.I} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.J} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.K} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.L} />
-        <polyline fill="#fcfcfc" stroke="#b3b3b3" strokeWidth="1" points={wedge.M} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.A} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.B} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.C} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.D} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.E} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.F} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.G} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.H} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.I} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.J} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.K} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.L} />
+        <polyline fill="#16213e" stroke="#00ff41" strokeWidth="1" points={wedge.M} />
       </g>
 
       <RondelSettlements />
@@ -166,7 +166,7 @@ export const Rondel = () => {
         style={{ fontSize: '10px', textAnchor: 'middle' }}
       >
         <path d={armPath} className={styles.armPath} />
-        <path d={arrowPath} fill="#000" />
+        <path d={arrowPath} fill="#f7b731" />
         <text x="0" y={armTextY} transform={`rotate(${rot.A})`}>
           {armValues[12]}
         </text>

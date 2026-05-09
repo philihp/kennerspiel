@@ -19,13 +19,13 @@ type ColorStyle = {
 const colorToStyle = (c?: PlayerColor): ColorStyle => {
   switch (c) {
     case PlayerColor.Blue:
-      return { borderColor: '#80b1d3', backgroundColor: '#dae8f2' } // , borderColor: '#5f849e' }
+      return { borderColor: '#00ff41', backgroundColor: '#0a1628' }
     case PlayerColor.Red:
-      return { borderColor: '#fb8072', backgroundColor: '#fceceb' } // , borderColor: '#ad574d' }
+      return { borderColor: '#f7b731', backgroundColor: '#1a0a00' }
     case PlayerColor.Green:
-      return { borderColor: '#b3de69', backgroundColor: '#f2fce1' } // , borderColor: '#87a74f' }
+      return { borderColor: '#00ff41', backgroundColor: '#001a0a' }
     case PlayerColor.White:
-      return { borderColor: '#d9d9d9', backgroundColor: '#ededed' } // , borderColor: '#b1b1b1' }
+      return { borderColor: '#00ff41', backgroundColor: '#16213e' }
     default:
       return {}
   }

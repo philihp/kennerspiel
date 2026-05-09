@@ -1,6 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
 html,
 body {
-  background-color: rgba(230,230,230,1);
+  background-color: #0d0d0d;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.03) 2px,
+    rgba(0, 255, 65, 0.03) 4px
+  );
+  color: #e0e0e0;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 18px;
   text-rendering: geometricPrecision;
 }
 
@@ -14,37 +26,106 @@ img {
 }
 
 button {
-  margin: 5pt 0;
-  padding: 5pt 10pt;
-  cursor: pointer;
-  padding: 7px 11px;
-  border-radius: 10px;
-  border-width: 0;
   margin: 5px;
-  font-size: small;
-  background: rgb(255,255,255,1);
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 0;
+  border: 2px solid #00ff41;
+  font-size: 10px;
+  font-family: 'Press Start 2P', monospace;
+  line-height: 1.8;
+  background: #1a1a2e;
+  color: #00ff41;
+  box-shadow: 3px 3px 0 #005c18;
+  transition: none;
+}
+
+button:hover {
+  background: #002a0c;
+  box-shadow: 1px 1px 0 #005c18;
+  transform: translate(2px, 2px);
+}
+
+button:active {
+  box-shadow: 0 0 0 #005c18;
+  transform: translate(3px, 3px);
 }
 
 .primary,
 button.primary {
-  color: white;
-  background: linear-gradient(#2e93ff, #007AFF 50%);
+  color: #0d0d0d;
+  background: #f7b731;
+  border-color: #c4891a;
+  box-shadow: 3px 3px 0 #6b4900;
 }
 
+.primary:hover,
+button.primary:hover {
+  background: #e5a820;
+  box-shadow: 1px 1px 0 #6b4900;
+  transform: translate(2px, 2px);
+}
 
 .disabled,
 button:disabled {
   cursor: auto;
-  background: rgb(240,240,240,0.8);
+  background: #111111;
+  color: #3a3a3a;
+  border-color: #2a2a2a;
+  box-shadow: none;
+  transform: none;
 }
 
 .primary.disabled,
 button.primary:disabled {
-  color: grayText;
+  color: #3a3a3a;
   cursor: auto;
-  background: rgb(240,240,240,0.8);
+  background: #111111;
+  border-color: #2a2a2a;
+  box-shadow: none;
+  transform: none;
 }
 
 .code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: 'VT323', monospace;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Press Start 2P', monospace;
+  color: #00ff41;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+}
+
+h1 {
+  font-size: 16px;
+}
+
+h2 {
+  font-size: 12px;
+}
+
+hr {
+  border-color: #00ff41;
+  border-top-width: 2px;
+}
+
+a {
+  color: #f7b731;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ffd23f;
+  text-shadow: 0 0 6px rgba(247, 183, 49, 0.6);
+}
+
+header {
+  background: #0d0d0d;
+  border-bottom: 2px solid #00ff41;
+  padding: 8px 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
 }

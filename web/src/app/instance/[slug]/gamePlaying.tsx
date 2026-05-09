@@ -93,18 +93,18 @@ export const GamePlaying = () => {
               key={completion}
               style={{
                 display: 'inline',
-                border: '1px solid rgba(82, 0, 57, 0.09)',
-                borderRadius: 8,
-                backgroundColor: 'rgba(255, 206, 240, 0.45)',
+                border: '2px solid #00ff41',
+                borderRadius: 0,
+                backgroundColor: '#0d0d0d',
                 padding: 4,
                 marginLeft: 4,
               }}
             >
               <span
                 style={{
-                  color: 'rgba(82, 0, 57, 0.28)',
-                  fontSize: 12,
-                  fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
+                  color: '#00ff41',
+                  fontSize: 10,
+                  fontFamily: "'Press Start 2P', monospace",
                 }}
               >
                 {completion}

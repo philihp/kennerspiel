@@ -14,12 +14,12 @@ interface Props {
 
 const landToColor = (land: LandEnum | undefined) =>
   match(land)
-    .with(LandEnum.Hillside, () => '#ffffb3')
-    .with(LandEnum.Plains, () => '#ccebc5')
-    .with(LandEnum.Coast, () => '#ffffb3')
-    .with(LandEnum.Water, () => '#80b1d3')
-    .with(LandEnum.Mountain, () => '#d9d9d9')
-    .with(LandEnum.BelowMountain, () => '#d9d9d9')
+    .with(LandEnum.Hillside, () => '#1a1a2e')
+    .with(LandEnum.Plains, () => '#0d2818')
+    .with(LandEnum.Coast, () => '#1a1a00')
+    .with(LandEnum.Water, () => '#001a2e')
+    .with(LandEnum.Mountain, () => '#2e1a00')
+    .with(LandEnum.BelowMountain, () => '#1a1a1a')
     .otherwise(() => '')
 
 export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
@@ -64,7 +64,7 @@ export const PlayerLandscape = ({ landscape, offset, active }: Props) => {
                       border: 1,
                       height: 205,
                       borderStyle: 'solid',
-                      borderColor: '#555',
+                      borderColor: '#00ff41',
                       textAlign: 'center',
                       backgroundColor: landToColor(land),
                     }}

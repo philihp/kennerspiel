@@ -25,11 +25,14 @@ export const GameSetup = () => {
       <p>
         <a
           style={{
-            backgroundColor: 'white',
+            backgroundColor: '#0d0d0d',
             display: 'inline',
             padding: 10,
-            fontFamily: 'monospace',
-            boxShadow: 'inset 0 0 2px #000',
+            fontFamily: "'Press Start 2P', monospace",
+            fontSize: 10,
+            color: '#00ff41',
+            border: '2px solid #00ff41',
+            boxShadow: '3px 3px 0 #005c18',
           }}
           href={`/instance/${instance?.id}`}
         >

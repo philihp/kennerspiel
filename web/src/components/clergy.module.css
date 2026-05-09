@@ -4,8 +4,8 @@
   height: 24px;
   width: 24px;
   margin: 1px;
-  border-radius: 16px;
-  border-width: 1;
+  border-radius: 0;
+  border-width: 2px;
   border-style: solid;
   display: inline-block;
 }
@@ -15,8 +15,8 @@
   height: 24px;
   width: 24px;
   margin: 1px;
-  border-radius: 16px;
-  border-width: 1;
+  border-radius: 0;
+  border-width: 2px;
   border-style: solid;
   display: inline-block;
 }
@@ -26,8 +26,8 @@
   height: 24px;
   width: 24px;
   margin: 1px;
-  border-radius: 16px;
-  border-width: 1;
+  border-radius: 0;
+  border-width: 2px;
   border-style: solid;
   display: inline-block;
 }
@@ -37,8 +37,8 @@
   height: 24px;
   width: 24px;
   margin: 1px;
-  border-radius: 16px;
-  border-width: 1;
+  border-radius: 0;
+  border-width: 2px;
   border-style: solid;
   display: inline-block;
 }
