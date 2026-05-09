@@ -93,18 +93,18 @@ export const GamePlaying = () => {
               key={completion}
               style={{
                 display: 'inline',
-                border: '1px solid rgba(82, 0, 57, 0.09)',
-                borderRadius: 8,
-                backgroundColor: 'rgba(255, 206, 240, 0.45)',
+                border: '1px solid #e5e7eb',
+                borderRadius: 6,
+                backgroundColor: '#f9fafb',
                 padding: 4,
                 marginLeft: 4,
               }}
             >
               <span
                 style={{
-                  color: 'rgba(82, 0, 57, 0.28)',
+                  color: '#6b7280',
                   fontSize: 12,
-                  fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
+                  fontFamily: "'Inter', sans-serif",
                 }}
               >
                 {completion}

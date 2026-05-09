@@ -1,7 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
 html,
 body {
-  background-color: rgba(230,230,230,1);
-  text-rendering: geometricPrecision;
+  background-color: #f5f6f8;
+  color: #1a1a2e;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
@@ -14,37 +22,109 @@ img {
 }
 
 button {
-  margin: 5pt 0;
-  padding: 5pt 10pt;
+  margin: 4px;
+  padding: 8px 16px;
   cursor: pointer;
-  padding: 7px 11px;
-  border-radius: 10px;
-  border-width: 0;
-  margin: 5px;
-  font-size: small;
-  background: rgb(255,255,255,1);
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  background: #ffffff;
+  color: #374151;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+button:hover {
+  background: #f9fafb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border-color: #9ca3af;
+}
+
+button:active {
+  background: #f3f4f6;
+  box-shadow: none;
 }
 
 .primary,
 button.primary {
-  color: white;
-  background: linear-gradient(#2e93ff, #007AFF 50%);
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
 }
 
+.primary:hover,
+button.primary:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+}
 
 .disabled,
 button:disabled {
-  cursor: auto;
-  background: rgb(240,240,240,0.8);
+  cursor: not-allowed;
+  background: #f9fafb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  box-shadow: none;
 }
 
 .primary.disabled,
 button.primary:disabled {
-  color: grayText;
-  cursor: auto;
-  background: rgb(240,240,240,0.8);
+  background: #bfdbfe;
+  color: #93c5fd;
+  border-color: #bfdbfe;
+  box-shadow: none;
 }
 
 .code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Inter', sans-serif;
+  color: #111827;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+hr {
+  border-color: #e5e7eb;
+  border-top-width: 1px;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+header {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }

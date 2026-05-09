@@ -1,59 +1,52 @@
-
 .action {
   cursor: pointer;
-  padding: 7px 11px;
-  border-radius: 10px;
-  border-width: 0;
-  margin: 5px;
-  font-size: small;
-
-  /* color: black; */
-  background: rgb(255,255,255,1);
-  /* box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.04) */
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  margin: 4px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  background: #ffffff;
+  color: #374151;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .action.primary {
-  color: white;
-  background: linear-gradient(#2e93ff, #007AFF 50%);
-  /* border: 1px solid rgba(0,120,255,0.25); */
-  /* box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5); */
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
 }
 
 .action:hover {
-  /* box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3); */
+  background: #f9fafb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border-color: #9ca3af;
 }
 .action.primary:hover {
-  /* box-shadow: none; */
-  /* border: 1px solid rgba(255,255,255,0.1); */
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
 }
 
 .action:disabled {
-  /* color: rgb(0,0,0,0.25); */
-  /* border: 1px solid rgba(0,0,0,0.05); */
-  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.01); */
+  background: #f9fafb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  box-shadow: none;
+  cursor: not-allowed;
 }
 .action.primary:disabled {
-  color: grayText;
-  background: rgb(240,240,240,0.8);
+  background: #bfdbfe;
+  color: #93c5fd;
+  border-color: #bfdbfe;
+  box-shadow: none;
 }
 
 .action:disabled:hover {
-  /* box-shadow: none; */
 }
 
 .container {
-  /* filter: drop-shadow(2px 2px 5px rgba(255, 255, 255, 0.25));
-  background: rgba(255, 255, 255, 0.38);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-width: 1px;
-  border-top-width: 0;
-  border-style: solid;
-  border-color: rgba(255, 255, 255, 0.21);
-
-  transition: transform 500ms;
-  transition-timing-function: cubic-bezier(0.15, 0.1, 0.25, 1); */
 }

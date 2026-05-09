@@ -2,12 +2,12 @@
   font-size: 18px;
   font-weight: 100;
   text-anchor: middle;
-  fill: #000
+  fill: #374151;
 }
 
 .armPath {
-  fill: #ffffff;
+  fill: #eff6ff;
   fill-opacity: 1;
-  stroke: #686868;
+  stroke: #2563eb;
   stroke-width: 1;
 }
