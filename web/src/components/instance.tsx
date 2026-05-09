@@ -14,9 +14,9 @@ export const Instance = ({ instance, entrants = [] }: Props) => {
       style={{
         display: 'block',
         padding: 10,
-        border: '1px solid #ccc',
-        backgroundColor: '#f0f0f0',
-        borderRadius: 7,
+        border: '1px solid #333',
+        backgroundColor: '#1a1a1a',
+        borderRadius: 6,
         margin: 10,
       }}
     >

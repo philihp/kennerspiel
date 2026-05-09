@@ -37,13 +37,13 @@ const sameColor = (playerColor?: PlayerColor) => (entrant: Tables<'entrant'>) =>
 const colorToStyle = (c?: string): ColorStyle => {
   switch (c) {
     case 'R':
-      return { borderColor: '#fb8072', backgroundColor: '#fceceb' } // '#ad574d' } // backgroundColor: '#fb8072',
+      return { borderColor: '#fb8072', backgroundColor: '#2a1a1a' }
     case 'G':
-      return { borderColor: '#87a74f', backgroundColor: '#b3de69' } // '#87a74f' } // backgroundColor: '#b3de69',
+      return { borderColor: '#87a74f', backgroundColor: '#1a2a15' }
     case 'B':
-      return { borderColor: '#80b1d3', backgroundColor: '#5f849e' } // '#5f849e' } // backgroundColor: '#80b1d3',
+      return { borderColor: '#80b1d3', backgroundColor: '#182030' }
     case 'W':
-      return { borderColor: '#d9d9d9', backgroundColor: '#b1b1b1' } // '#b1b1b1' } // backgroundColor: '#d9d9d9',
+      return { borderColor: '#888', backgroundColor: '#242424' }
     default:
       return {}
   }

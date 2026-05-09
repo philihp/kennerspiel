@@ -10,9 +10,9 @@ export const Alerts = () => {
         <div
           style={{
             float: 'right',
-            backgroundColor: 'rgba(82, 0, 57, 0.19)',
-            borderRadius: 16,
-            borderColor: 'rgba(82, 0, 57, 0.49)',
+            backgroundColor: 'rgba(0, 180, 216, 0.08)',
+            borderRadius: 8,
+            borderColor: 'rgba(0, 180, 216, 0.35)',
             borderWidth: 1,
             borderStyle: 'solid',
 

@@ -1,6 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono&display=swap');
+
 html,
 body {
-  background-color: rgba(230,230,230,1);
+  background-color: #0f0f0f;
+  color: #e8e8e8;
+  font-family:
+    'IBM Plex Sans',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-weight: 300;
   text-rendering: geometricPrecision;
 }
 
@@ -14,37 +23,73 @@ img {
 }
 
 button {
-  margin: 5pt 0;
-  padding: 5pt 10pt;
-  cursor: pointer;
-  padding: 7px 11px;
-  border-radius: 10px;
-  border-width: 0;
   margin: 5px;
+  padding: 7px 11px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #444444;
   font-size: small;
-  background: rgb(255,255,255,1);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-weight: 400;
+  background: #242424;
+  color: #e8e8e8;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+button:hover {
+  background: #2e2e2e;
+  border-color: #666;
 }
 
 .primary,
 button.primary {
-  color: white;
-  background: linear-gradient(#2e93ff, #007AFF 50%);
+  color: #0f0f0f;
+  background: linear-gradient(#00c4e8, #00b4d8 50%);
+  border-color: #0077b6;
 }
-
 
 .disabled,
 button:disabled {
   cursor: auto;
-  background: rgb(240,240,240,0.8);
+  background: #1a1a1a;
+  color: #555;
+  border-color: #2a2a2a;
 }
 
 .primary.disabled,
 button.primary:disabled {
-  color: grayText;
+  color: #555;
   cursor: auto;
-  background: rgb(240,240,240,0.8);
+  background: #1a1a1a;
+  border-color: #2a2a2a;
 }
 
 .code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+h1,
+h2,
+h3 {
+  color: #e8e8e8;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+hr {
+  border-color: #333;
+  border-top-width: 1px;
+}
+
+a {
+  color: #00b4d8;
+}
+
+header {
+  background: #0f0f0f;
+  border-bottom: 1px solid #333;
+  padding: 8px 12px;
+  letter-spacing: 0.05em;
 }
