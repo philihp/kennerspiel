@@ -5,7 +5,7 @@
   width: 24px;
   margin: 1px;
   border-radius: 16px;
-  border-width: 1;
+  border-width: 1px;
   border-style: solid;
   display: inline-block;
 }
@@ -16,7 +16,7 @@
   width: 24px;
   margin: 1px;
   border-radius: 16px;
-  border-width: 1;
+  border-width: 1px;
   border-style: solid;
   display: inline-block;
 }
@@ -27,18 +27,18 @@
   width: 24px;
   margin: 1px;
   border-radius: 16px;
-  border-width: 1;
+  border-width: 1px;
   border-style: solid;
   display: inline-block;
 }
 .white {
-  background-color: #d9d9d9;
-  border-color: #b1b1b1;
+  background-color: #e6e1e5;
+  border-color: #79747e;
   height: 24px;
   width: 24px;
   margin: 1px;
   border-radius: 16px;
-  border-width: 1;
+  border-width: 1px;
   border-style: solid;
   display: inline-block;
 }
