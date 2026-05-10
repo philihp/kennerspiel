@@ -96,6 +96,10 @@ describe('buildings/cloisterCourtyard', () => {
       const s1 = cloisterCourtyard('ClWoWo', 'Sh')(s0)!
       expect(s1).toBeUndefined()
     })
+    it('fails if output is not an allowed resource', () => {
+      const s1 = cloisterCourtyard('ClWoGn', 'Br')(s0)!
+      expect(s1).toBeUndefined()
+    })
   })
 
   describe('complete', () => {
