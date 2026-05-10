@@ -90,8 +90,7 @@ export const start = (
         clergy: [],
       })
     } else {
-      const [neutralColorIndex, randGen2] = randomInt(0, 3, randGen)
-      randGen = randGen2
+      const [neutralColorIndex] = randomInt(0, 3, randGen)
       const color = neutralColor(players[0].color, neutralColorIndex)
       players.push({
         ...players[0],
@@ -105,7 +104,7 @@ export const start = (
   const newState: GameStatePlaying = {
     ...state,
     config: state.config,
-    randGen,
+    randGen: randGen1,
     status: GameStatusEnum.PLAYING,
     players,
     rondel: {
