@@ -105,7 +105,7 @@ export const start = (
   const newState: GameStatePlaying = {
     ...state,
     config: state.config,
-    randGen: randGen1,
+    randGen,
     status: GameStatusEnum.PLAYING,
     players,
     rondel: {

@@ -1156,7 +1156,7 @@ describe('board/frame', () => {
           mainActionUsed: true,
           bonusActions: ['SETTLE'],
         })
-        s = nextFrame(s)!
+        nextFrame(s)
       })
     })
   })
