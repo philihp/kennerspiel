@@ -14,9 +14,7 @@ export const login = async (formData: FormData, captchaToken: string) => {
     data: { user },
   } = await supabase.auth.signInWithPassword({ email: `${email}`, password: `${password}`, options: { captchaToken } })
   if (authError || !user) return authError?.message
-  const { error: profError } = await supabase
-    .from('profile')
-    .upsert({ id: user?.id, email, updated_at: new Date().toISOString() })
+  const { error: profError } = await supabase.from('profile').upsert({ id: user?.id, email })
   if (profError) {
     await supabase.auth.signOut({ scope: 'local' })
     return profError?.message
