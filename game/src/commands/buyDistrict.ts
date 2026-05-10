@@ -59,7 +59,7 @@ const removeDistrictFromPool = (state?: GameStatePlaying): GameStatePlaying | un
 
 const denyBuyingAnyMoreLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
   if (state === undefined) return undefined
-  const atIndex = findIndex(equals(GameCommandEnum.BUY_DISTRICT), state.frame.bonusActions)
+  const atIndex = findIndex((a: GameCommandEnum) => equals(a, GameCommandEnum.BUY_DISTRICT), state.frame.bonusActions)
   return {
     ...state,
     frame: {
