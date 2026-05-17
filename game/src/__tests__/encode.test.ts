@@ -215,4 +215,37 @@ describe('encode', () => {
     expect(vec[bonusOffset + settleIdx]).toBe(1)
     expect(vec[bonusOffset + cutPeatIdx]).toBe(0)
   })
+
+  it('encodes settlement tiles in the erection channel block', () => {
+    const tile: Tile = [LandEnum.Plains, SettlementEnum.ShantyTownR]
+    const landscape: Tile[][] = [[tile]]
+    const players = [
+      makeTableau(PlayerColor.Red, { landscape }),
+      makeTableau(PlayerColor.Green),
+      makeTableau(PlayerColor.Blue),
+    ]
+    const vec = encode({ ...baseState, players }, 0)
+
+    const settlementsLen = featureSpec.vocab.settlements.length
+    const gridStart = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1 + 1 + 4 + settlementsLen
+    const cellBase = gridStart
+    const landCh = featureSpec.vocab.lands.length
+    const settlementSlot =
+      landCh + featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.indexOf(SettlementEnum.ShantyTownR)
+    expect(vec[cellBase + settlementSlot]).toBe(1)
+  })
+
+  it('counts unplaced laybrothers in the clergy bucket', () => {
+    const players = [
+      makeTableau(PlayerColor.Red, { clergy: [Clergy.LayBrother1R, Clergy.LayBrother2R, Clergy.PriorR] }),
+      makeTableau(PlayerColor.Green),
+      makeTableau(PlayerColor.Blue),
+    ]
+    const vec = encode({ ...baseState, players }, 0)
+    const clergyOffset = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1 + 1
+    expect(vec[clergyOffset + 0]).toBe(2) // lbUnplaced
+    expect(vec[clergyOffset + 1]).toBe(0) // lbPlaced
+    expect(vec[clergyOffset + 2]).toBe(1) // priorUnplaced
+    expect(vec[clergyOffset + 3]).toBe(0) // priorPlaced
+  })
 })
