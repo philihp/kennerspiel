@@ -108,7 +108,7 @@ describe('control', () => {
           wine: 5,
           beer: 0,
           reliquary: 0,
-        } as Tableau,
+        },
         {
           color: PlayerColor.Green,
           clergy: [],
@@ -419,7 +419,7 @@ describe('control', () => {
       const f1 = {
         ...f0,
         next: 1,
-      } as Frame
+      }
       const c1 = {
         ...c0,
         players: 2,

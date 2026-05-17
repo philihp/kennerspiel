@@ -211,7 +211,7 @@ describe('commands/withLaybrother', () => {
           activePlayerIndex: 1,
           currentPlayerIndex: 2,
         },
-      } as GameStatePlaying
+      }
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['WITH_LAYBROTHER'])
     })
@@ -223,7 +223,7 @@ describe('commands/withLaybrother', () => {
           activePlayerIndex: 2,
           currentPlayerIndex: 2,
         },
-      } as GameStatePlaying
+      }
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })

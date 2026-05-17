@@ -85,14 +85,14 @@ describe('buildings/camera', () => {
     it('finish command after 1 param', () => {
       const s1 = {
         ...s0,
-      } as GameStatePlaying
+      }
       const c0 = complete(['WoSw'])(s1)
       expect(c0).toStrictEqual([''])
     })
     it('ignores more than one param', () => {
       const s1 = {
         ...s0,
-      } as GameStatePlaying
+      }
       const c0 = complete(['Or', 'Bo'])(s1)
       expect(c0).toStrictEqual([])
     })

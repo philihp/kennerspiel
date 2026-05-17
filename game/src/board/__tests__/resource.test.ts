@@ -119,13 +119,16 @@ describe('board/resource', () => {
 
   describe('settlementCostOptions', () => {
     it('mutates', () => {
-      const options = settlementCostOptions({ food: 2, energy: 1 }, {
-        peat: 1,
-        wood: 1,
-        sheep: 2,
-        grain: 1,
-        penny: 1,
-      } as Cost)
+      const options = settlementCostOptions(
+        { food: 2, energy: 1 },
+        {
+          peat: 1,
+          wood: 1,
+          sheep: 2,
+          grain: 1,
+          penny: 1,
+        }
+      )
       expect(options).toStrictEqual(['ShPt', 'ShWo', 'GnPnPt', 'GnPnWo'])
     })
   })
