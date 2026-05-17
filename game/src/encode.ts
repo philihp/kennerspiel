@@ -67,10 +67,15 @@ const RESOURCES: (keyof Required<Cost>)[] = [
   'reliquary',
 ]
 
-// Max landscape footprint we encode. The starting board is 2x9; players can
-// buy up to ~9 rows. Anything past this gets cropped.
-const H = 9
+// The landscape grid is anchored: a player's "logical row 0" (the first
+// row of their original 2-row starting board) always sits at output row
+// `ANCHOR`. With up to 9 districts + 9 plots — each 2 rows tall — that can
+// extend the board in either direction, the worst case is 18 rows above
+// and 18 rows below, plus the 2 starting rows. H = 38, ANCHOR = 18 covers
+// it. Output_row = (raw_row - landscapeOffset) + ANCHOR.
+const H = 38
 const W = 9
+const ANCHOR = 18
 const MAX_PLAYERS = 4
 const RONDEL_PERIOD = 13
 const MAX_PRICE_SLOTS = 9
@@ -83,7 +88,6 @@ const TILE_CH = LAND_CH + ERECT_CH + CLERGY_CH
 const PLAYER_SCALAR_LEN =
   RESOURCES.length + // resource counts
   1 + // wonders
-  1 + // landscapeOffset
   4 + // [lb_unplaced, lb_placed, prior_unplaced, prior_placed]
   SETTLEMENTS.length // in-hand mask
 const PLAYER_GRID_LEN = H * W * TILE_CH
@@ -114,6 +118,7 @@ export type FeatureSpec = {
   featureLen: number
   height: number
   width: number
+  gridAnchor: number
   maxPlayers: number
   tileChannels: number
   offsets: {
@@ -139,6 +144,7 @@ export const featureSpec: FeatureSpec = {
   featureLen: FEATURE_LEN,
   height: H,
   width: W,
+  gridAnchor: ANCHOR,
   maxPlayers: MAX_PLAYERS,
   tileChannels: TILE_CH,
   offsets: {
@@ -188,7 +194,6 @@ const writeTableau = (
   let o = base
   for (const r of RESOURCES) out[o++] = t[r] ?? 0
   out[o++] = t.wonders
-  out[o++] = t.landscapeOffset
 
   const unplaced = new Set<Clergy>(t.clergy)
   let lbUnplaced = 0
@@ -214,15 +219,16 @@ const writeTableau = (
   for (const s of SETTLEMENTS) out[o++] = inHand.has(s) ? 1 : 0
 
   const gridBase = o
-  const rows = Math.min(t.landscape.length, H)
-  for (let r = 0; r < rows; r++) {
+  for (let r = 0; r < t.landscape.length; r++) {
     const row = t.landscape[r]
+    const outputRow = r - t.landscapeOffset + ANCHOR
+    if (outputRow < 0 || outputRow >= H) continue
     const cols = Math.min(row.length, W)
     for (let c = 0; c < cols; c++) {
       const tile = row[c]
       if (tile === undefined) continue
       const [land, erection, clergy] = tile
-      const cell = gridBase + (r * W + c) * TILE_CH
+      const cell = gridBase + (outputRow * W + c) * TILE_CH
       if (land !== undefined) {
         const li = LANDS.indexOf(land)
         if (li >= 0) out[cell + li] = 1

@@ -160,11 +160,11 @@ describe('encode', () => {
       featureSpec.offsets.players[0] +
       featureSpec.vocab.resources.length +
       1 + // wonders
-      1 + // landscapeOffset
       4 + // clergy buckets
       settlementsLen
 
-    const cellBase = gridStart + (0 * featureSpec.width + 6) * featureSpec.tileChannels
+    // landscapeOffset is 0, so raw row 0 → logical row 0 → output row ANCHOR
+    const cellBase = gridStart + (featureSpec.gridAnchor * featureSpec.width + 6) * featureSpec.tileChannels
     const landCh = featureSpec.vocab.lands.length
     const erectCh = featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.length
 
@@ -186,9 +186,9 @@ describe('encode', () => {
     const vec = encode({ ...baseState, players }, 0)
 
     const settlementsLen = featureSpec.vocab.settlements.length
-    const gridStart = featureSpec.offsets.players[1] + featureSpec.vocab.resources.length + 1 + 1 + 4 + settlementsLen
+    const gridStart = featureSpec.offsets.players[1] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
 
-    const cellBase = gridStart + (0 * featureSpec.width + 0) * featureSpec.tileChannels
+    const cellBase = gridStart + (featureSpec.gridAnchor * featureSpec.width + 0) * featureSpec.tileChannels
     const landCh = featureSpec.vocab.lands.length
     const erectCh = featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.length
     expect(vec[cellBase + landCh + erectCh + 1]).toBe(1) // prior
@@ -227,12 +227,50 @@ describe('encode', () => {
     const vec = encode({ ...baseState, players }, 0)
 
     const settlementsLen = featureSpec.vocab.settlements.length
-    const gridStart = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1 + 1 + 4 + settlementsLen
-    const cellBase = gridStart
+    const gridStart = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
+    const cellBase = gridStart + (featureSpec.gridAnchor * featureSpec.width + 0) * featureSpec.tileChannels
     const landCh = featureSpec.vocab.lands.length
     const settlementSlot =
       landCh + featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.indexOf(SettlementEnum.ShantyTownR)
     expect(vec[cellBase + settlementSlot]).toBe(1)
+  })
+
+  it('anchors the landscape grid by landscapeOffset', () => {
+    const tile: Tile = [LandEnum.Hillside, BuildingEnum.ClayMoundR]
+    // Player A: starting board at raw rows 0-1, offset 0. ClayMound at raw row 0.
+    const landscapeA: Tile[][] = [[tile], []]
+    // Player B: same logical board but with 2 rows added above. Raw row 2 is
+    // logical row 0; offset = 2. ClayMound at raw row 2.
+    const landscapeB: Tile[][] = [[], [], [tile], []]
+    const vecA = encode(
+      {
+        ...baseState,
+        players: [
+          makeTableau(PlayerColor.Red, { landscape: landscapeA, landscapeOffset: 0 }),
+          makeTableau(PlayerColor.Green),
+          makeTableau(PlayerColor.Blue),
+        ],
+      },
+      0
+    )
+    const vecB = encode(
+      {
+        ...baseState,
+        players: [
+          makeTableau(PlayerColor.Red, { landscape: landscapeB, landscapeOffset: 2 }),
+          makeTableau(PlayerColor.Green),
+          makeTableau(PlayerColor.Blue),
+        ],
+      },
+      0
+    )
+    // The ClayMound cell in both encodings must land at the same output row
+    // (gridAnchor), so the per-player slice should match.
+    const start = featureSpec.offsets.players[0]
+    const end = start + (featureSpec.featureLen - featureSpec.offsets.players[0]) // not strict, but compare grid bytes
+    const sliceA = vecA.slice(start, end)
+    const sliceB = vecB.slice(start, end)
+    expect(sliceA).toStrictEqual(sliceB)
   })
 
   it('counts unplaced laybrothers in the clergy bucket', () => {
@@ -242,7 +280,7 @@ describe('encode', () => {
       makeTableau(PlayerColor.Blue),
     ]
     const vec = encode({ ...baseState, players }, 0)
-    const clergyOffset = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1 + 1
+    const clergyOffset = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1
     expect(vec[clergyOffset + 0]).toBe(2) // lbUnplaced
     expect(vec[clergyOffset + 1]).toBe(0) // lbPlaced
     expect(vec[clergyOffset + 2]).toBe(1) // priorUnplaced
