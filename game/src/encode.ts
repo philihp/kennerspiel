@@ -1,3 +1,4 @@
+import { range } from 'ramda'
 import {
   BuildingEnum,
   Clergy,
@@ -13,11 +14,11 @@ import {
   GameStatusEnum,
   LandEnum,
   NextUseClergy,
-  PlayerColor,
   Rondel,
   SettlementEnum,
   SettlementRound,
   Tableau,
+  Tile,
 } from './types'
 import { clergyForColor, isPrior } from './board/player'
 
@@ -174,168 +175,123 @@ const erectionIndex = (e: ErectionEnum): number => {
   return -1
 }
 
+const oneHot = <T>(domain: readonly T[], target: T | undefined): number[] =>
+  domain.map((v) => (v === target ? 1 : 0))
+
+const mask = <T>(domain: readonly T[], set: ReadonlySet<T>): number[] => domain.map((v) => (set.has(v) ? 1 : 0))
+
+const slotOneHot = (slot: number): number[] => range(0, MAX_PLAYERS).map((i) => (i === slot ? 1 : 0))
+
 // Rotate so `perspective` lands in slot 0. Slots past players.length stay
 // undefined (zero-padded block).
-const rotateOrder = (numPlayers: number, perspective: number): (number | undefined)[] => {
-  const order: (number | undefined)[] = []
-  for (let slot = 0; slot < MAX_PLAYERS; slot++) {
-    order.push(slot < numPlayers ? (perspective + slot) % numPlayers : undefined)
+const rotateOrder = (numPlayers: number, perspective: number): (number | undefined)[] =>
+  range(0, MAX_PLAYERS).map((slot) => (slot < numPlayers ? (perspective + slot) % numPlayers : undefined))
+
+const tileChannels = (tile: Tile | undefined, isSelf: boolean): number[] => {
+  const channels = range(0, TILE_CH).map(() => 0)
+  if (tile === undefined) return channels
+  const [land, erection, clergy] = tile
+  if (land !== undefined) {
+    const li = LANDS.indexOf(land)
+    if (li >= 0) channels[li] = 1
   }
-  return order
+  if (erection !== undefined) {
+    const ei = erectionIndex(erection)
+    if (ei >= 0) channels[LAND_CH + ei] = 1
+  }
+  if (clergy !== undefined) {
+    channels[LAND_CH + ERECT_CH + (isPrior(clergy) ? 1 : 0)] = 1
+    if (!isSelf) channels[LAND_CH + ERECT_CH + 2] = 1
+  }
+  return channels
 }
 
-const writeTableau = (
-  out: Float32Array,
-  base: number,
-  t: Tableau,
-  isSelf: boolean,
-  config: GameCommandConfigParams
-): number => {
-  let o = base
-  for (const r of RESOURCES) out[o++] = t[r] ?? 0
-  out[o++] = t.wonders
+const encodeGrid = (t: Tableau, isSelf: boolean): number[] =>
+  range(0, H).flatMap((outputRow) => {
+    const row = t.landscape[outputRow + t.landscapeOffset - ANCHOR]
+    return range(0, W).flatMap((c) => tileChannels(row?.[c], isSelf))
+  })
 
+const clergyBuckets = (t: Tableau, config: GameCommandConfigParams): number[] => {
   const unplaced = new Set<Clergy>(t.clergy)
-  let lbUnplaced = 0
-  let lbPlaced = 0
-  let priorUnplaced = 0
-  let priorPlaced = 0
-  for (const c of clergyForColor(config)(t.color)) {
-    const placed = !unplaced.has(c)
-    if (isPrior(c)) {
-      if (placed) priorPlaced++
-      else priorUnplaced++
-    } else {
-      if (placed) lbPlaced++
-      else lbUnplaced++
-    }
-  }
-  out[o++] = lbUnplaced
-  out[o++] = lbPlaced
-  out[o++] = priorUnplaced
-  out[o++] = priorPlaced
-
-  const inHand = new Set<SettlementEnum>(t.settlements)
-  for (const s of SETTLEMENTS) out[o++] = inHand.has(s) ? 1 : 0
-
-  const gridBase = o
-  for (let r = 0; r < t.landscape.length; r++) {
-    const row = t.landscape[r]
-    const outputRow = r - t.landscapeOffset + ANCHOR
-    if (outputRow < 0 || outputRow >= H) continue
-    const cols = Math.min(row.length, W)
-    for (let c = 0; c < cols; c++) {
-      const tile = row[c]
-      if (tile === undefined) continue
-      const [land, erection, clergy] = tile
-      const cell = gridBase + (outputRow * W + c) * TILE_CH
-      if (land !== undefined) {
-        const li = LANDS.indexOf(land)
-        if (li >= 0) out[cell + li] = 1
-      }
-      if (erection !== undefined) {
-        const ei = erectionIndex(erection)
-        if (ei >= 0) out[cell + LAND_CH + ei] = 1
-      }
-      if (clergy !== undefined) {
-        const off = cell + LAND_CH + ERECT_CH
-        out[off + (isPrior(clergy) ? 1 : 0)] = 1
-        if (!isSelf) out[off + 2] = 1
-      }
-    }
-  }
-  return base + PLAYER_BLOCK
+  const counts = clergyForColor(config)(t.color).reduce(
+    (acc, c) => {
+      const placed = !unplaced.has(c)
+      if (isPrior(c)) return placed ? { ...acc, priorPlaced: acc.priorPlaced + 1 } : { ...acc, priorUnplaced: acc.priorUnplaced + 1 }
+      return placed ? { ...acc, lbPlaced: acc.lbPlaced + 1 } : { ...acc, lbUnplaced: acc.lbUnplaced + 1 }
+    },
+    { lbUnplaced: 0, lbPlaced: 0, priorUnplaced: 0, priorPlaced: 0 }
+  )
+  return [counts.lbUnplaced, counts.lbPlaced, counts.priorUnplaced, counts.priorPlaced]
 }
 
-const writeFrame = (out: Float32Array, base: number, frame: Frame, order: (number | undefined)[]): number => {
-  let o = base
-  out[o++] = frame.round
-
-  const srIdx = SETTLEMENT_ROUNDS.indexOf(frame.settlementRound)
-  if (srIdx >= 0) out[o + srIdx] = 1
-  o += SETTLEMENT_ROUNDS.length
-
-  const currentSlot = order.indexOf(frame.currentPlayerIndex)
-  if (currentSlot >= 0) out[o + currentSlot] = 1
-  o += MAX_PLAYERS
-
-  const activeSlot = order.indexOf(frame.activePlayerIndex)
-  if (activeSlot >= 0) out[o + activeSlot] = 1
-  o += MAX_PLAYERS
-
-  out[o++] = frame.mainActionUsed ? 1 : 0
-  out[o++] = frame.neutralBuildingPhase ? 1 : 0
-  out[o++] = frame.bonusRoundPlacement ? 1 : 0
-  out[o++] = frame.canBuyLandscape ? 1 : 0
-
-  const bonusSet = new Set<GameCommandEnum>(frame.bonusActions)
-  for (const cmd of COMMANDS) out[o++] = bonusSet.has(cmd) ? 1 : 0
-
-  const nuIdx = NEXT_USES.indexOf(frame.nextUse)
-  if (nuIdx >= 0) out[o + nuIdx] = 1
-  o += NEXT_USES.length
-
-  const usable = new Set<BuildingEnum>(frame.usableBuildings)
-  for (const b of BUILDINGS) out[o++] = usable.has(b) ? 1 : 0
-  const unusable = new Set<BuildingEnum>(frame.unusableBuildings)
-  for (const b of BUILDINGS) out[o++] = unusable.has(b) ? 1 : 0
-
-  return base + FRAME_LEN
+const encodeTableau = (t: Tableau, isSelf: boolean, config: GameCommandConfigParams): number[] => {
+  const sections: number[][] = [
+    RESOURCES.map((r) => t[r] ?? 0),
+    [t.wonders],
+    clergyBuckets(t, config),
+    mask(SETTLEMENTS, new Set(t.settlements)),
+    encodeGrid(t, isSelf),
+  ]
+  return sections.flat()
 }
 
-const writeShared = (out: Float32Array, base: number, state: GameStatePlaying): number => {
-  let o = base
-  const { rondel } = state
-  for (const key of RONDEL_KEYS) {
+const encodeFrame = (frame: Frame, order: (number | undefined)[]): number[] => {
+  const sections: number[][] = [
+    [frame.round],
+    oneHot(SETTLEMENT_ROUNDS, frame.settlementRound),
+    slotOneHot(order.indexOf(frame.currentPlayerIndex)),
+    slotOneHot(order.indexOf(frame.activePlayerIndex)),
+    [
+      frame.mainActionUsed ? 1 : 0,
+      frame.neutralBuildingPhase ? 1 : 0,
+      frame.bonusRoundPlacement ? 1 : 0,
+      frame.canBuyLandscape ? 1 : 0,
+    ],
+    mask(COMMANDS, new Set(frame.bonusActions)),
+    oneHot(NEXT_USES, frame.nextUse),
+    mask(BUILDINGS, new Set(frame.usableBuildings)),
+    mask(BUILDINGS, new Set(frame.unusableBuildings)),
+  ]
+  return sections.flat()
+}
+
+const encodeRondelDeltas = (rondel: Rondel): number[] =>
+  RONDEL_KEYS.map((key) => {
     const slot = rondel[key]
-    if (slot === undefined) out[o++] = 0
-    else {
-      const delta = (((slot - rondel.pointingBefore) % RONDEL_PERIOD) + RONDEL_PERIOD) % RONDEL_PERIOD
-      out[o++] = delta / RONDEL_PERIOD
-    }
-  }
+    if (slot === undefined) return 0
+    const delta = (((slot - rondel.pointingBefore) % RONDEL_PERIOD) + RONDEL_PERIOD) % RONDEL_PERIOD
+    return delta / RONDEL_PERIOD
+  })
 
-  const available = new Set<BuildingEnum>(state.buildings)
-  for (const b of BUILDINGS) out[o++] = available.has(b) ? 1 : 0
+const padPrices = (prices: readonly number[]): number[] =>
+  range(0, MAX_PRICE_SLOTS).map((i) => prices[i] ?? 0)
 
-  for (let i = 0; i < MAX_PRICE_SLOTS; i++) out[o++] = state.plotPurchasePrices[i] ?? 0
-  for (let i = 0; i < MAX_PRICE_SLOTS; i++) out[o++] = state.districtPurchasePrices[i] ?? 0
-
-  out[o++] = state.wonders
-
-  const playerSlots = Math.min(MAX_PLAYERS, state.config.players)
-  out[o + (playerSlots - 1)] = 1
-  o += MAX_PLAYERS
-
-  const lenIdx = LENGTHS.indexOf(state.config.length)
-  if (lenIdx >= 0) out[o + lenIdx] = 1
-  o += LENGTHS.length
-
-  const countryIdx = COUNTRIES.indexOf(state.config.country)
-  if (countryIdx >= 0) out[o + countryIdx] = 1
-  o += COUNTRIES.length
-
-  return base + SHARED_LEN
+const encodeShared = (state: GameStatePlaying): number[] => {
+  const playerCountOneHot = range(0, MAX_PLAYERS).map((i) => (i === state.config.players - 1 ? 1 : 0))
+  const sections: number[][] = [
+    encodeRondelDeltas(state.rondel),
+    mask(BUILDINGS, new Set(state.buildings)),
+    padPrices(state.plotPurchasePrices),
+    padPrices(state.districtPurchasePrices),
+    [state.wonders],
+    playerCountOneHot,
+    oneHot(LENGTHS, state.config.length),
+    oneHot(COUNTRIES, state.config.country),
+  ]
+  return sections.flat()
 }
 
 export const encode = (state: GameState, perspective?: number): Float32Array => {
-  const out = new Float32Array(FEATURE_LEN)
-  if (state.status === GameStatusEnum.SETUP) return out
-
-  const playing = state
-  const p = perspective ?? playing.frame.currentPlayerIndex
-  const order = rotateOrder(playing.players.length, p)
-
-  let o = 0
-  for (let slot = 0; slot < MAX_PLAYERS; slot++) {
-    const idx = order[slot]
-    if (idx === undefined) {
-      o += PLAYER_BLOCK
-      continue
-    }
-    o = writeTableau(out, o, playing.players[idx], slot === 0, playing.config)
-  }
-  o = writeFrame(out, o, playing.frame, order)
-  o = writeShared(out, o, playing)
-  return out
+  if (state.status === GameStatusEnum.SETUP) return new Float32Array(FEATURE_LEN)
+  const p = perspective ?? state.frame.currentPlayerIndex
+  const order = rotateOrder(state.players.length, p)
+  const sections: number[][] = [
+    ...order.map((idx, slot): number[] =>
+      idx === undefined ? range(0, PLAYER_BLOCK).map(() => 0) : encodeTableau(state.players[idx], slot === 0, state.config)
+    ),
+    encodeFrame(state.frame, order),
+    encodeShared(state),
+  ]
+  return Float32Array.from(sections.flat())
 }
