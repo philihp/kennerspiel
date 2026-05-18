@@ -1,6 +1,8 @@
 export { reducer } from './reducer'
 export { control } from './control'
 export { initialState } from './state'
+export { encode, featureSpec, FEATURE_LEN } from './encode'
+export { FeatureSpec } from './encode'
 
 export { GameConfigPlayers } from './types'
 export { GameConfigLength } from './types'

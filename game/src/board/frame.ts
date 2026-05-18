@@ -59,7 +59,7 @@ const runProgression =
           nextUse: NextUseClergy.Any,
           neutralBuildingPhase: false,
           ...frameUpdates,
-        } as Frame
+        }
         return newFrame
       }),
       // and then if there are any upkeep reducer functions on the frame, run them

@@ -201,7 +201,7 @@ describe('buildings/roundTower', () => {
     it('ignores more than one param', () => {
       const s1 = {
         ...s0,
-      } as GameStatePlaying
+      }
       const c0 = complete(['Or', 'Bo'])(s1)
       expect(c0).toStrictEqual([])
     })

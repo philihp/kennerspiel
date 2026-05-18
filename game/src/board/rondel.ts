@@ -12,7 +12,6 @@ import {
 import { getCost, withActivePlayer } from './player'
 import { multiplyGoods, parseResourceParam } from './resource'
 
-// eslint-disable-next-line consistent-return
 const tokenToResource = (token: RondelToken): ResourceEnum | undefined => {
   switch (token) {
     case 'grain':

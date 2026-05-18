@@ -190,7 +190,7 @@ describe('commands/fellTrees', () => {
       const s1 = {
         ...s0,
         players: [p1],
-      } as GameStatePlaying
+      }
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })

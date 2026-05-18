@@ -64,7 +64,7 @@ describe('commands/start', () => {
             country: 'france',
             length: 'long',
             players: 3,
-          } as GameCommandConfigParams,
+          },
         },
         { seed: 1, colors: [PlayerColor.Red, PlayerColor.Green, PlayerColor.Blue] }
       )

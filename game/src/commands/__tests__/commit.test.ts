@@ -24,8 +24,8 @@ describe('commands/commit', () => {
         frame: {
           ...s0.frame,
           mainActionUsed: false,
-        } as Frame,
-      } as GameStatePlaying
+        },
+      }
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
@@ -39,7 +39,7 @@ describe('commands/commit', () => {
             // this is set in nextFrameSolo
             neutralBuildingPhase: true,
             mainActionUsed: true,
-          } as Frame,
+          },
         } as GameStatePlaying
         const c0 = complete(s1)([])
         expect(c0).toStrictEqual([])
@@ -54,7 +54,7 @@ describe('commands/commit', () => {
             neutralBuildingPhase: true,
             mainActionUsed: true,
             bonusActions: [GameCommandEnum.SETTLE],
-          } as Frame,
+          },
         } as GameStatePlaying
         const c0 = complete(s1)([])
         expect(c0).toStrictEqual(['COMMIT'])
