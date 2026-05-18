@@ -286,4 +286,36 @@ describe('encode', () => {
     expect(vec[clergyOffset + 2]).toBe(1) // priorUnplaced
     expect(vec[clergyOffset + 3]).toBe(0) // priorPlaced
   })
+
+  it('encodes the yield each rondel token would give if taken now', () => {
+    // 3p long config uses armValues = [0, 2, 3, 4, 5, 6, 6, 7, 7, 8, 8, 9, 10]
+    // take(armIndex, tokenIndex) = armVals[(armIndex - tokenIndex + 13) % 13]
+    // With pointingBefore=4 and wood at slot 1: (4-1+13)%13 = 3 → armVals[3] = 4
+    // With wood at slot 4 (same as arm): (4-4+13)%13 = 0 → armVals[0] = 0
+    const stateAtFour: GameStatePlaying = {
+      ...baseState,
+      rondel: { ...rondel, pointingBefore: 4, wood: 1, clay: 4 },
+    }
+    const vec = encode(stateAtFour)
+    const yieldsOffset = featureSpec.offsets.shared + featureSpec.vocab.rondelKeys.length
+    const woodIdx = featureSpec.vocab.rondelKeys.indexOf('wood')
+    const clayIdx = featureSpec.vocab.rondelKeys.indexOf('clay')
+    expect(vec[yieldsOffset + woodIdx]).toBeCloseTo(4 / 10)
+    expect(vec[yieldsOffset + clayIdx]).toBe(0)
+  })
+
+  it('yields 0 for rondel tokens not yet on the rondel', () => {
+    const stateNoGrape: GameStatePlaying = {
+      ...baseState,
+      rondel: { pointingBefore: 5, wood: 0, clay: 0, coin: 0, grain: 0, peat: 0, sheep: 0 },
+    }
+    const vec = encode(stateNoGrape)
+    const yieldsOffset = featureSpec.offsets.shared + featureSpec.vocab.rondelKeys.length
+    const grapeIdx = featureSpec.vocab.rondelKeys.indexOf('grape')
+    const stoneIdx = featureSpec.vocab.rondelKeys.indexOf('stone')
+    const jokerIdx = featureSpec.vocab.rondelKeys.indexOf('joker')
+    expect(vec[yieldsOffset + grapeIdx]).toBe(0)
+    expect(vec[yieldsOffset + stoneIdx]).toBe(0)
+    expect(vec[yieldsOffset + jokerIdx]).toBe(0)
+  })
 })
