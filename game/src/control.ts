@@ -27,7 +27,7 @@ import {
   completeBuyPlot,
   completeBuyDistrict,
 } from './commands'
-import { costPoints } from './board/resource'
+import { goodsPoints } from './board/resource'
 import { allBuildingPoints, allDwellingPoints } from './board/landscape'
 import { introduceBuildings, roundBuildings } from './board/buildings'
 import { introduceGrapeToken, introduceStoneToken } from './board/rondel'
@@ -103,7 +103,7 @@ export const control = (state: GameStatePlaying, partial: string[], player?: num
   const score = map(
     pipe(
       (player: Tableau): Score => ({
-        goods: costPoints(player) + 30 * player.wonders,
+        goods: goodsPoints(player) + 30 * player.wonders,
         economic: allBuildingPoints(player.landscape),
         settlements: allDwellingPoints(player.landscape),
         total: -Infinity,

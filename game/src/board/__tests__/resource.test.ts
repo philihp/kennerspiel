@@ -5,6 +5,7 @@ import {
   costEnergy,
   differentGoods,
   foodCostOptions,
+  goodsPoints,
   maskGoods,
   multiplyGoods,
   parseResourceParam,
@@ -125,7 +126,7 @@ describe('board/resource', () => {
         sheep: 2,
         grain: 1,
         penny: 1,
-      } as Cost)
+      })
       expect(options).toStrictEqual(['ShPt', 'ShWo', 'GnPnPt', 'GnPnWo'])
     })
   })
@@ -187,6 +188,52 @@ describe('board/resource', () => {
     })
     it('combines items', () => {
       expect(costEnergy({ coal: 1, peat: 1, wood: 1, straw: 1 })).toBe(6.5)
+    })
+  })
+
+  describe('goodsPoints', () => {
+    it('scores nickel at 2 each', () => {
+      expect(goodsPoints({ nickel: 3 })).toBe(6)
+    })
+    it('scores whiskey/wine at 1 each, penny at 0 when no conversion helps', () => {
+      expect(goodsPoints({ wine: 2, whiskey: 1, penny: 0 })).toBe(3)
+    })
+    it('scores reliquary/ornament/ceramic/book', () => {
+      expect(goodsPoints({ reliquary: 1, ornament: 1, ceramic: 1, book: 1 })).toBe(17)
+    })
+    it('upgrades 5 pennies into a nickel for +2', () => {
+      expect(goodsPoints({ penny: 5 })).toBe(2)
+    })
+    it('uses wine to complete a nickel when 4 pennies are stranded', () => {
+      // 4p + 1w naive = 1; converting wine to penny then 5p->n = 2
+      expect(goodsPoints({ penny: 4, wine: 1 })).toBe(2)
+    })
+    it('uses whiskey to complete a nickel when 3 pennies are stranded', () => {
+      // 3p + 1Wh naive = 1; whiskey->2p then 5p->n = 2
+      expect(goodsPoints({ penny: 3, whiskey: 1 })).toBe(2)
+    })
+    it('keeps wine as-is when conversion would cost more than it gains', () => {
+      // 5w naive = 5; converting all to pennies then 1 nickel = 2. Keep wine.
+      expect(goodsPoints({ wine: 5 })).toBe(5)
+    })
+    it('only sacrifices one wine even with many available', () => {
+      // 4p + 6w naive = 6; sacrifice 1 wine to make a nickel = 2 + 5 = 7
+      expect(goodsPoints({ penny: 4, wine: 6 })).toBe(7)
+    })
+    it('forms multiple nickels when pennies allow', () => {
+      // 9p + 1w naive = 1; convert wine -> 10p -> 2 nickels = 4
+      expect(goodsPoints({ penny: 9, wine: 1 })).toBe(4)
+    })
+    it('combines whiskey and pennies optimally', () => {
+      // 4p + 1Wh naive = 1; whiskey->2p, 5p->n, 1p leftover = 2
+      expect(goodsPoints({ penny: 4, whiskey: 1 })).toBe(2)
+    })
+    it('does not over-convert when it would be a net loss', () => {
+      // 2p + 1w + 1Wh naive = 2; any conversion to reach nickel costs >= 2. Keep as-is.
+      expect(goodsPoints({ penny: 2, wine: 1, whiskey: 1 })).toBe(2)
+    })
+    it('leaves existing nickels untouched', () => {
+      expect(goodsPoints({ nickel: 2, penny: 4, wine: 1 })).toBe(4 + 2)
     })
   })
 

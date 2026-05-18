@@ -317,6 +317,35 @@ export const costFood = ({
 export const costPoints = ({ nickel = 0, whiskey = 0, ceramic = 0, book = 0, reliquary = 0, ornament = 0, wine = 0 }) =>
   2 * nickel + 1 * whiskey + 3 * ceramic + 2 * book + 8 * reliquary + 4 * ornament + 1 * wine
 
+// Optimal cash score given that the player can still convert wine/whiskey to pennies and 5 pennies to a
+// nickel. Each nickel formed is +2, each wine/whiskey consumed costs -1. Net diff per 5-penny pool is at
+// most +2, so it is never useful to spend 5 or more of either wine or whiskey on a single tableau — bound
+// the search at 4 of each.
+const optimalCashPoints = ({ penny = 0, nickel = 0, wine = 0, whiskey = 0 }) => {
+  let best = -Infinity
+  const wMax = Math.min(4, wine)
+  const hMax = Math.min(4, whiskey)
+  for (let h = 0; h <= hMax; h++) {
+    for (let w = 0; w <= wMax; w++) {
+      const newNickels = Math.floor((penny + w + 2 * h) / 5)
+      const score = 2 * (nickel + newNickels) + (wine - w) + (whiskey - h)
+      if (score > best) best = score
+    }
+  }
+  return best
+}
+
+export const goodsPoints = ({
+  penny = 0,
+  nickel = 0,
+  whiskey = 0,
+  wine = 0,
+  ceramic = 0,
+  book = 0,
+  reliquary = 0,
+  ornament = 0,
+}) => optimalCashPoints({ penny, nickel, wine, whiskey }) + 3 * ceramic + 2 * book + 8 * reliquary + 4 * ornament
+
 export const settlementCost = (cost: Cost): SettlementCost => ({
   food: costFood(cost),
   energy: costEnergy(cost),
