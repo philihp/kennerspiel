@@ -21,6 +21,7 @@ import {
   Tile,
 } from './types'
 import { clergyForColor, isPrior } from './board/player'
+import { take } from './board/rondel'
 
 // Stable enum orderings. New entries get APPENDED; never reorder, or saved
 // model weights will silently misalign with feature slots.
@@ -104,8 +105,13 @@ const FRAME_LEN =
   NEXT_USES.length + // one-hot
   BUILDINGS.length * 2 // usableBuildings + unusableBuildings
 
+// Yields max out at 10 on either arm-value table (see armValues in
+// board/rondel.ts). Normalize by this so the feature sits in [0, 1].
+const MAX_RONDEL_YIELD = 10
+
 const SHARED_LEN =
   RONDEL_KEYS.length + // normalized rondel deltas
+  RONDEL_KEYS.length + // normalized rondel yields (what each token gives if taken now)
   BUILDINGS.length + // still-available buildings mask
   MAX_PRICE_SLOTS * 2 + // plot + district prices (zero-padded)
   1 + // wonders remaining
@@ -264,6 +270,13 @@ const encodeRondelDeltas = (rondel: Rondel): number[] =>
     return delta / RONDEL_PERIOD
   })
 
+const encodeRondelYields = (rondel: Rondel, config: GameCommandConfigParams): number[] =>
+  RONDEL_KEYS.map((key) => {
+    const slot = rondel[key]
+    if (slot === undefined) return 0
+    return take(rondel.pointingBefore, slot, config) / MAX_RONDEL_YIELD
+  })
+
 const padPrices = (prices: readonly number[]): number[] =>
   range(0, MAX_PRICE_SLOTS).map((i) => prices[i] ?? 0)
 
@@ -271,6 +284,7 @@ const encodeShared = (state: GameStatePlaying): number[] => {
   const playerCountOneHot = range(0, MAX_PLAYERS).map((i) => (i === state.config.players - 1 ? 1 : 0))
   const sections: number[][] = [
     encodeRondelDeltas(state.rondel),
+    encodeRondelYields(state.rondel, state.config),
     mask(BUILDINGS, new Set(state.buildings)),
     padPrices(state.plotPurchasePrices),
     padPrices(state.districtPurchasePrices),
