@@ -322,17 +322,9 @@ export const costPoints = ({ nickel = 0, whiskey = 0, ceramic = 0, book = 0, rel
 // most +2, so it is never useful to spend 5 or more of either wine or whiskey on a single tableau — bound
 // the search at 4 of each.
 const optimalCashPoints = ({ penny = 0, nickel = 0, wine = 0, whiskey = 0 }) => {
-  let best = -Infinity
-  const wMax = Math.min(4, wine)
-  const hMax = Math.min(4, whiskey)
-  for (let h = 0; h <= hMax; h++) {
-    for (let w = 0; w <= wMax; w++) {
-      const newNickels = Math.floor((penny + w + 2 * h) / 5)
-      const score = 2 * (nickel + newNickels) + (wine - w) + (whiskey - h)
-      if (score > best) best = score
-    }
-  }
-  return best
+  const score = (h: number, w: number) =>
+    2 * (nickel + Math.floor((penny + w + 2 * h) / 5)) + (wine - w) + (whiskey - h)
+  return Math.max(...lift(score)(range(0, Math.min(4, whiskey) + 1), range(0, Math.min(4, wine) + 1)))
 }
 
 export const goodsPoints = ({
