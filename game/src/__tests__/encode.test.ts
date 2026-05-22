@@ -1,4 +1,4 @@
-import { PCGState } from 'fn-pcg/dist/types'
+import { PCGState } from 'pcg'
 import { encode, featureSpec, FEATURE_LEN } from '../encode'
 import {
   BuildingEnum,
