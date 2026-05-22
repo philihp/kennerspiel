@@ -1,4 +1,4 @@
-import { createPcg32 } from 'fn-pcg'
+import { createPcg32 } from 'pcg'
 import {
   GameStatePlaying,
   GameStatusEnum,

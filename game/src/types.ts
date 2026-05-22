@@ -1,4 +1,4 @@
-import { PCGState } from 'fn-pcg/dist/types'
+import { PCGState } from 'pcg'
 
 export enum GameCommandEnum {
   CONFIG = 'CONFIG',

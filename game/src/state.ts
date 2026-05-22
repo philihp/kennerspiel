@@ -1,4 +1,4 @@
-import { PCGState } from 'fn-pcg/dist/types'
+import { PCGState } from 'pcg'
 import { GameStateSetup, GameStatusEnum } from './types'
 
 export const initialState: GameStateSetup = {

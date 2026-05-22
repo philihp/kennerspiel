@@ -1,5 +1,5 @@
 import { createShuffle } from 'fast-shuffle'
-import { createPcg32, randomInt } from 'fn-pcg'
+import { createPcg32, randomInt } from 'pcg'
 import { pipe, range } from 'ramda'
 import { nextFrame } from '../board/frame'
 import { districtPrices, makeLandscape, plotPrices } from '../board/landscape'
