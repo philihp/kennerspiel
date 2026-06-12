@@ -8,8 +8,8 @@ export const GET = () => {
   return NextResponse.json(
     {
       issuer: iss,
-      authorization_endpoint: `${iss}/oauth/authorize`,
-      token_endpoint: `${iss}/oauth/token`,
+      authorization_endpoint: `${iss}/authorize`,
+      token_endpoint: `${iss}/token`,
       response_types_supported: ['code'],
       grant_types_supported: ['authorization_code'],
       code_challenge_methods_supported: ['S256'],
