@@ -5,6 +5,7 @@ import { listMyGames } from '@/mcp/tools/listMyGames'
 import { getGame } from '@/mcp/tools/getGame'
 import { getLegalMoves } from '@/mcp/tools/getLegalMoves'
 import { makeMove } from '@/mcp/tools/makeMove'
+import { joinGame } from '@/mcp/tools/joinGame'
 import { errorResult } from '@/mcp/content'
 import { resolveAccessToken } from '@/oauth/store'
 
@@ -55,6 +56,24 @@ const handler = createMcpHandler(
         const userId = userIdFrom(extra)
         if (!userId) return unauthenticated()
         return getLegalMoves({ userId, instanceId: instance_id, partial: partial ?? [] })
+      }
+    )
+    server.tool(
+      'join_game',
+      'Claim a seat in an Ora et Labora lobby that has not yet started. Pass either the game instance id or its URL (e.g. https://kennerspiel.com/instance/<uuid>) along with the color you want to play. If you already have a seat in that game, your color is updated. Wait for the human to choose the variant and press START on the website before calling get_game.',
+      {
+        instance: z
+          .string()
+          .min(1)
+          .describe(
+            'Either the game instance UUID or a URL containing it, e.g. https://kennerspiel.com/instance/<uuid>'
+          ),
+        color: z.enum(['red', 'green', 'blue', 'white']).describe('Which seat color to claim'),
+      },
+      async ({ instance, color }, extra) => {
+        const userId = userIdFrom(extra)
+        if (!userId) return unauthenticated()
+        return joinGame({ userId, instanceRef: instance, color })
       }
     )
     server.tool(
