@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@marsidev/react-turnstile": "1.5.2",
+    "@modelcontextprotocol/sdk": "1.26.0",
     "@next/third-parties": "16.2.7",
     "@philihp/prettier-config": "1.0.0",
     "@stdlib/math": "0.4.1",
@@ -21,12 +22,14 @@
     "hathora-et-labora-game": "0.19.1",
     "jsonwebtoken": "9.0.3",
     "jwks-rsa": "4.0.1",
+    "mcp-handler": "1.1.0",
     "next": "16.2.7",
     "ramda": "0.32.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "sort-unwind": "3.1.0",
-    "ts-pattern": "5.9.0"
+    "ts-pattern": "5.9.0",
+    "zod": "3.25.76"
   },
   "scripts": {
     "build": "next build",
