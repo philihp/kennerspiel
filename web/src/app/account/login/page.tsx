@@ -8,6 +8,13 @@ import { login } from './actions'
 import { useSupabaseContext } from '@/context/SupabaseContext'
 import Link from 'next/link'
 
+// Only relative paths on this site, to prevent open-redirect via ?next=.
+const safeNext = (raw: string | null): string | null => {
+  if (!raw) return null
+  if (!raw.startsWith('/') || raw.startsWith('//')) return null
+  return raw
+}
+
 const Login = () => {
   const { redirectTo } = useSupabaseContext()
   const [response, setResponse] = useState<string>('')
@@ -19,17 +26,9 @@ const Login = () => {
       setResponse(error)
       return
     }
-    redirect(redirectTo)
+    const next = safeNext(new URLSearchParams(window.location.search).get('next'))
+    redirect(next ?? redirectTo)
   }
-
-  // const handleSkip = async (formData: FormData) => {
-  //   const error = await skip(formData, captchaToken)
-  //   if (error) {
-  //     setResponse(error)
-  //     return
-  //   }
-  //   redirect(redirectTo)
-  // }
 
   return (
     <>

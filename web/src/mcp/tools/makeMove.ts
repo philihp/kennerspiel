@@ -5,13 +5,15 @@ import { errorResult, jsonResult, ToolResult } from '../content'
 import { fetchInstance } from './fetchInstance'
 
 export const makeMove = async ({
+  userId,
   instanceId,
   command,
 }: {
+  userId: string
   instanceId: string
   command: string
 }): Promise<ToolResult> => {
-  const fetched = await fetchInstance(instanceId)
+  const fetched = await fetchInstance(userId, instanceId)
   if ('error' in fetched) return errorResult(fetched.error)
   const { supabase, instance, me } = fetched
 
