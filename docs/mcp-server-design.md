@@ -45,7 +45,7 @@ privileged DB key gives the agent no unfair knowledge.
 ```
 Claude (claude.ai connector / Claude Code)
         │  Streamable HTTP  (Authorization: Bearer <token>)
-        ▼  https://ora.kennerspiel.com/api/mcp
+        ▼  https://kennerspiel.com/api/mcp
 ┌──────────────────────────────────────────────────┐
 │  web/  — existing Next.js app (Vercel project    │
 │         "kennerspiel", root directory web/)      │
@@ -74,7 +74,7 @@ the existing `kennerspiel` Vercel project. The app currently has no `api/`
 directory, so nothing collides.
 
 - One deploy, one set of env vars, one domain: the MCP endpoint is
-  `https://ora.kennerspiel.com/api/mcp`.
+  `https://kennerspiel.com/api/mcp`.
 - The engine version-skew problem disappears structurally: the MCP tools and
   the UI resolve the *same* `hathora-et-labora-game` entry in
   `web/package.json`, so they can't drift apart.
@@ -321,7 +321,7 @@ New env vars on the existing `kennerspiel` Vercel project:
 Client setup, e.g. Claude Code:
 
 ```sh
-claude mcp add --transport http kennerspiel https://ora.kennerspiel.com/api/mcp \
+claude mcp add --transport http kennerspiel https://kennerspiel.com/api/mcp \
   --header "Authorization: Bearer $MCP_AUTH_TOKEN"
 ```
 
