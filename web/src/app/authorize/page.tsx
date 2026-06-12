@@ -44,7 +44,7 @@ const Authorize = async ({ searchParams }: { searchParams: Promise<AuthorizePara
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) {
-    const here = new URL('/oauth/authorize', 'https://placeholder.local')
+    const here = new URL('/authorize', 'https://placeholder.local')
     for (const [k, v] of Object.entries(params)) if (v) here.searchParams.set(k, v)
     redirect(`/account/login?next=${encodeURIComponent(here.pathname + here.search)}`)
   }
