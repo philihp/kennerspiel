@@ -1,4 +1,3 @@
-import { createHash, timingSafeEqual } from 'node:crypto'
 import { createMcpHandler, withMcpAuth } from 'mcp-handler'
 import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js'
 import { z } from 'zod'
@@ -6,6 +5,13 @@ import { listMyGames } from '@/mcp/tools/listMyGames'
 import { getGame } from '@/mcp/tools/getGame'
 import { getLegalMoves } from '@/mcp/tools/getLegalMoves'
 import { makeMove } from '@/mcp/tools/makeMove'
+import { errorResult } from '@/mcp/content'
+import { resolveAccessToken } from '@/oauth/store'
+
+const userIdFrom = (extra: { authInfo?: AuthInfo }): string | undefined =>
+  (extra.authInfo?.extra as { userId?: string } | undefined)?.userId
+
+const unauthenticated = () => errorResult('Unauthenticated: no user is bound to this MCP session.')
 
 const handler = createMcpHandler(
   (server) => {
@@ -13,7 +19,11 @@ const handler = createMcpHandler(
       'list_my_games',
       'List the Ora et Labora games this agent is seated in. Call this first to find a game, or with only_my_turn to check whether any game is waiting on you.',
       { only_my_turn: z.boolean().optional().describe('Only return games where it is currently your turn') },
-      async ({ only_my_turn }) => listMyGames({ onlyMyTurn: only_my_turn ?? false })
+      async ({ only_my_turn }, extra) => {
+        const userId = userIdFrom(extra)
+        if (!userId) return unauthenticated()
+        return listMyGames({ userId, onlyMyTurn: only_my_turn ?? false })
+      }
     )
     server.tool(
       'get_game',
@@ -25,7 +35,11 @@ const handler = createMcpHandler(
           .optional()
           .describe('summary (default) is a curated rendering; full is the raw engine state for debugging'),
       },
-      async ({ instance_id, detail }) => getGame({ instanceId: instance_id, detail: detail ?? 'summary' })
+      async ({ instance_id, detail }, extra) => {
+        const userId = userIdFrom(extra)
+        if (!userId) return unauthenticated()
+        return getGame({ userId, instanceId: instance_id, detail: detail ?? 'summary' })
+      }
     )
     server.tool(
       'get_legal_moves',
@@ -37,7 +51,11 @@ const handler = createMcpHandler(
           .optional()
           .describe('The tokens chosen so far, e.g. [] then ["BUILD"] then ["BUILD","G07"]'),
       },
-      async ({ instance_id, partial }) => getLegalMoves({ instanceId: instance_id, partial: partial ?? [] })
+      async ({ instance_id, partial }, extra) => {
+        const userId = userIdFrom(extra)
+        if (!userId) return unauthenticated()
+        return getLegalMoves({ userId, instanceId: instance_id, partial: partial ?? [] })
+      }
     )
     server.tool(
       'make_move',
@@ -46,20 +64,28 @@ const handler = createMcpHandler(
         instance_id: z.string().uuid().describe('The game instance id'),
         command: z.string().min(1).describe('A complete space-separated command'),
       },
-      async ({ instance_id, command }) => makeMove({ instanceId: instance_id, command })
+      async ({ instance_id, command }, extra) => {
+        const userId = userIdFrom(extra)
+        if (!userId) return unauthenticated()
+        return makeMove({ userId, instanceId: instance_id, command })
+      }
     )
   },
   {},
   { basePath: '/api' }
 )
 
-const sha256 = (value: string): Buffer => createHash('sha256').update(value).digest()
-
 const verifyToken = async (_req: Request, bearerToken?: string): Promise<AuthInfo | undefined> => {
-  const expected = process.env.MCP_AUTH_TOKEN
-  if (!expected || !bearerToken) return undefined
-  if (!timingSafeEqual(sha256(bearerToken), sha256(expected))) return undefined
-  return { token: bearerToken, scopes: ['play'], clientId: 'kennerspiel-agent' }
+  if (!bearerToken) return undefined
+  const resolved = await resolveAccessToken(bearerToken)
+  if (!resolved) return undefined
+  return {
+    token: bearerToken,
+    clientId: resolved.clientId,
+    scopes: resolved.scopes,
+    expiresAt: resolved.expiresAt,
+    extra: { userId: resolved.userId },
+  }
 }
 
 const authHandler = withMcpAuth(handler, verifyToken, { required: true })

@@ -1,14 +1,20 @@
 import { GameStatusEnum } from 'hathora-et-labora-game/dist/types'
 import { createServiceClient } from '@/utils/supabase/service'
 import { activePlayerColor, asPlaying, engineColorToEntrantColor, replay } from '../engine'
-import { agentProfileId, errorResult, jsonResult, ToolResult } from '../content'
+import { errorResult, jsonResult, ToolResult } from '../content'
 
-export const listMyGames = async ({ onlyMyTurn }: { onlyMyTurn: boolean }): Promise<ToolResult> => {
+export const listMyGames = async ({
+  userId,
+  onlyMyTurn,
+}: {
+  userId: string
+  onlyMyTurn: boolean
+}): Promise<ToolResult> => {
   const supabase = createServiceClient()
   const { data, error } = await supabase
     .from('entrant')
     .select('color, instance(id, commands, updated_at)')
-    .eq('profile_id', agentProfileId())
+    .eq('profile_id', userId)
   if (error) return errorResult(`Failed to list games: ${error.message}`)
 
   const games = (data ?? [])

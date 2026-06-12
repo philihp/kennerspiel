@@ -7,13 +7,15 @@ import { fetchInstance } from './fetchInstance'
 const MAX_COMPLETIONS = 200
 
 export const getLegalMoves = async ({
+  userId,
   instanceId,
   partial,
 }: {
+  userId: string
   instanceId: string
   partial: string[]
 }): Promise<ToolResult> => {
-  const fetched = await fetchInstance(instanceId)
+  const fetched = await fetchInstance(userId, instanceId)
   if ('error' in fetched) return errorResult(fetched.error)
   const { instance, me } = fetched
 

@@ -4,13 +4,15 @@ import { errorResult, jsonResult, ToolResult } from '../content'
 import { fetchInstance } from './fetchInstance'
 
 export const getGame = async ({
+  userId,
   instanceId,
   detail,
 }: {
+  userId: string
   instanceId: string
   detail: 'summary' | 'full'
 }): Promise<ToolResult> => {
-  const fetched = await fetchInstance(instanceId)
+  const fetched = await fetchInstance(userId, instanceId)
   if ('error' in fetched) return errorResult(fetched.error)
   const { instance, entrants, me } = fetched
 

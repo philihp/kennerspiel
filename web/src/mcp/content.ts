@@ -13,9 +13,3 @@ export const errorResult = (message: string): ToolResult => ({
   isError: true,
   content: [{ type: 'text', text: message }],
 })
-
-export const agentProfileId = (): string => {
-  const id = process.env.AGENT_PROFILE_ID
-  if (!id) throw new Error('AGENT_PROFILE_ID is not configured')
-  return id
-}
