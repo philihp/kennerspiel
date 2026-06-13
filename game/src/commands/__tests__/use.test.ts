@@ -1,3 +1,4 @@
+import { describe, it, expect, mock } from '../../testHelpers'
 import { identity } from 'ramda'
 import { initialState } from '../../state'
 import {
@@ -11,160 +12,163 @@ import {
   Tableau,
   Tile,
 } from '../../types'
-import {
-  alehouse,
-  bakery,
-  bathhouse,
-  brewery,
-  buildersMarket,
-  bulwark,
-  calefactory,
-  camera,
-  carpentry,
-  castle,
-  chamberOfWonders,
-  chapel,
-  clayMound,
-  cloisterChapterHouse,
-  cloisterChurch,
-  cloisterCourtyard,
-  cloisterGarden,
-  cloisterLibrary,
-  cloisterOffice,
-  cloisterWorkshop,
-  coalHarbor,
-  cooperage,
-  cottage,
-  dormitory,
-  druidsHouse,
-  estate,
-  farmyard,
-  falseLighthouse,
-  festivalGround,
-  filialChurch,
-  financedEstate,
-  forestHut,
-  forgersWorkshop,
-  fuelMerchant,
-  grainStorage,
-  granary,
-  grandManor,
-  grapevine,
-  guesthouse,
-  harborPromenade,
-  hospice,
-  houseboat,
-  houseOfTheBrotherhood,
-  inn,
-  locutory,
-  malthouse,
-  market,
-  palace,
-  peatCoalKiln,
-  pilgrimageSite,
-  portico,
-  printingOffice,
-  priory,
-  quarry,
-  refectory,
-  roundTower,
-  sacristy,
-  scriptorium,
-  sacredSite,
-  shippingCompany,
-  shipyard,
-  slaughterhouse,
-  spinningMill,
-  stoneMerchant,
-  townEstate,
-  whiskeyDistillery,
-  windmill,
-  winery,
-} from '../../buildings'
-import { complete as clayMoundComplete } from '../../buildings/clayMound'
 
-import { complete, use } from '../use'
+const clayMoundComplete = mock.fn(() => () => ['foo'])
+const clayMound = mock.fn(() => identity)
 
-jest.mock('../../buildings/clayMound', () => {
-  return {
-    complete: jest.fn().mockReturnValue(() => ['foo']),
-  }
+await mock.module('../../buildings/clayMound', {
+  namedExports: {
+    complete: clayMoundComplete,
+    clayMound,
+  },
 })
 
-jest.mock('../../buildings', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return {
-    ...jest.requireActual('../../buildings'),
-    alehouse: jest.fn().mockReturnValue(identity),
-    bakery: jest.fn().mockReturnValue(identity),
-    bathhouse: jest.fn().mockReturnValue(identity),
-    brewery: jest.fn().mockReturnValue(identity),
-    buildersMarket: jest.fn().mockReturnValue(identity),
-    bulwark: jest.fn().mockReturnValue(identity),
-    calefactory: jest.fn().mockReturnValue(identity),
-    camera: jest.fn().mockReturnValue(identity),
-    carpentry: jest.fn().mockReturnValue(identity),
-    castle: jest.fn().mockReturnValue(identity),
-    coalHarbor: jest.fn().mockReturnValue(identity),
-    cooperage: jest.fn().mockReturnValue(identity),
-    cottage: jest.fn().mockReturnValue(identity),
-    chamberOfWonders: jest.fn().mockReturnValue(identity),
-    chapel: jest.fn().mockReturnValue(identity),
-    clayMound: jest.fn().mockReturnValue(identity),
-    cloisterChapterHouse: jest.fn().mockReturnValue(identity),
-    cloisterChurch: jest.fn().mockReturnValue(identity),
-    cloisterCourtyard: jest.fn().mockReturnValue(identity),
-    cloisterGarden: jest.fn().mockReturnValue(identity),
-    cloisterLibrary: jest.fn().mockReturnValue(identity),
-    cloisterOffice: jest.fn().mockReturnValue(identity),
-    cloisterWorkshop: jest.fn().mockReturnValue(identity),
-    dormitory: jest.fn().mockReturnValue(identity),
-    druidsHouse: jest.fn().mockReturnValue(identity),
-    estate: jest.fn().mockReturnValue(identity),
-    farmyard: jest.fn().mockReturnValue(identity),
-    falseLighthouse: jest.fn().mockReturnValue(identity),
-    festivalGround: jest.fn().mockReturnValue(identity),
-    filialChurch: jest.fn().mockReturnValue(identity),
-    financedEstate: jest.fn().mockReturnValue(identity),
-    forestHut: jest.fn().mockReturnValue(identity),
-    forgersWorkshop: jest.fn().mockReturnValue(identity),
-    fuelMerchant: jest.fn().mockReturnValue(identity),
-    grainStorage: jest.fn().mockReturnValue(identity),
-    granary: jest.fn().mockReturnValue(identity),
-    grandManor: jest.fn().mockReturnValue(identity),
-    grapevine: jest.fn().mockReturnValue(identity),
-    guesthouse: jest.fn().mockReturnValue(identity),
-    harborPromenade: jest.fn().mockReturnValue(identity),
-    hospice: jest.fn().mockReturnValue(identity),
-    houseboat: jest.fn().mockReturnValue(identity),
-    houseOfTheBrotherhood: jest.fn().mockReturnValue(identity),
-    inn: jest.fn().mockReturnValue(identity),
-    locutory: jest.fn().mockReturnValue(identity),
-    malthouse: jest.fn().mockReturnValue(identity),
-    market: jest.fn().mockReturnValue(identity),
-    palace: jest.fn().mockReturnValue(identity),
-    peatCoalKiln: jest.fn().mockReturnValue(identity),
-    pilgrimageSite: jest.fn().mockReturnValue(identity),
-    portico: jest.fn().mockReturnValue(identity),
-    printingOffice: jest.fn().mockReturnValue(identity),
-    priory: jest.fn().mockReturnValue(identity),
-    quarry: jest.fn().mockReturnValue(identity),
-    refectory: jest.fn().mockReturnValue(identity),
-    roundTower: jest.fn().mockReturnValue(identity),
-    sacristy: jest.fn().mockReturnValue(identity),
-    scriptorium: jest.fn().mockReturnValue(identity),
-    sacredSite: jest.fn().mockReturnValue(identity),
-    shippingCompany: jest.fn().mockReturnValue(identity),
-    shipyard: jest.fn().mockReturnValue(identity),
-    slaughterhouse: jest.fn().mockReturnValue(identity),
-    spinningMill: jest.fn().mockReturnValue(identity),
-    stoneMerchant: jest.fn().mockReturnValue(identity),
-    townEstate: jest.fn().mockReturnValue(identity),
-    whiskeyDistillery: jest.fn().mockReturnValue(identity),
-    windmill: jest.fn().mockReturnValue(identity),
-    winery: jest.fn().mockReturnValue(identity),
-  }
+// Import after mocking clayMound so the 'complete' map picks up our mock
+const actualBuildings = await import('../../buildings')
+
+const alehouse = mock.fn(() => identity)
+const bakery = mock.fn(() => identity)
+const bathhouse = mock.fn(() => identity)
+const brewery = mock.fn(() => identity)
+const buildersMarket = mock.fn(() => identity)
+const bulwark = mock.fn(() => identity)
+const calefactory = mock.fn(() => identity)
+const camera = mock.fn(() => identity)
+const carpentry = mock.fn(() => identity)
+const castle = mock.fn(() => identity)
+const coalHarbor = mock.fn(() => identity)
+const cooperage = mock.fn(() => identity)
+const cottage = mock.fn(() => identity)
+const chamberOfWonders = mock.fn(() => identity)
+const chapel = mock.fn(() => identity)
+const cloisterChapterHouse = mock.fn(() => identity)
+const cloisterChurch = mock.fn(() => identity)
+const cloisterCourtyard = mock.fn(() => identity)
+const cloisterGarden = mock.fn(() => identity)
+const cloisterLibrary = mock.fn(() => identity)
+const cloisterOffice = mock.fn(() => identity)
+const cloisterWorkshop = mock.fn(() => identity)
+const dormitory = mock.fn(() => identity)
+const druidsHouse = mock.fn(() => identity)
+const estate = mock.fn(() => identity)
+const farmyard = mock.fn(() => identity)
+const falseLighthouse = mock.fn(() => identity)
+const festivalGround = mock.fn(() => identity)
+const filialChurch = mock.fn(() => identity)
+const financedEstate = mock.fn(() => identity)
+const forestHut = mock.fn(() => identity)
+const forgersWorkshop = mock.fn(() => identity)
+const fuelMerchant = mock.fn(() => identity)
+const grainStorage = mock.fn(() => identity)
+const granary = mock.fn(() => identity)
+const grandManor = mock.fn(() => identity)
+const grapevine = mock.fn(() => identity)
+const guesthouse = mock.fn(() => identity)
+const harborPromenade = mock.fn(() => identity)
+const hospice = mock.fn(() => identity)
+const houseOfTheBrotherhood = mock.fn(() => identity)
+const houseboat = mock.fn(() => identity)
+const inn = mock.fn(() => identity)
+const locutory = mock.fn(() => identity)
+const malthouse = mock.fn(() => identity)
+const market = mock.fn(() => identity)
+const palace = mock.fn(() => identity)
+const peatCoalKiln = mock.fn(() => identity)
+const pilgrimageSite = mock.fn(() => identity)
+const portico = mock.fn(() => identity)
+const printingOffice = mock.fn(() => identity)
+const priory = mock.fn(() => identity)
+const quarry = mock.fn(() => identity)
+const refectory = mock.fn(() => identity)
+const roundTower = mock.fn(() => identity)
+const sacristy = mock.fn(() => identity)
+const scriptorium = mock.fn(() => identity)
+const sacredSite = mock.fn(() => identity)
+const shippingCompany = mock.fn(() => identity)
+const shipyard = mock.fn(() => identity)
+const slaughterhouse = mock.fn(() => identity)
+const spinningMill = mock.fn(() => identity)
+const stoneMerchant = mock.fn(() => identity)
+const townEstate = mock.fn(() => identity)
+const whiskeyDistillery = mock.fn(() => identity)
+const windmill = mock.fn(() => identity)
+const winery = mock.fn(() => identity)
+
+await mock.module('../../buildings', {
+  namedExports: {
+    ...actualBuildings,
+    alehouse,
+    bakery,
+    bathhouse,
+    brewery,
+    buildersMarket,
+    bulwark,
+    calefactory,
+    camera,
+    carpentry,
+    castle,
+    coalHarbor,
+    cooperage,
+    cottage,
+    chamberOfWonders,
+    chapel,
+    clayMound,
+    cloisterChapterHouse,
+    cloisterChurch,
+    cloisterCourtyard,
+    cloisterGarden,
+    cloisterLibrary,
+    cloisterOffice,
+    cloisterWorkshop,
+    dormitory,
+    druidsHouse,
+    estate,
+    farmyard,
+    falseLighthouse,
+    festivalGround,
+    filialChurch,
+    financedEstate,
+    forestHut,
+    forgersWorkshop,
+    fuelMerchant,
+    grainStorage,
+    granary,
+    grandManor,
+    grapevine,
+    guesthouse,
+    harborPromenade,
+    hospice,
+    houseOfTheBrotherhood,
+    houseboat,
+    inn,
+    locutory,
+    malthouse,
+    market,
+    palace,
+    peatCoalKiln,
+    pilgrimageSite,
+    portico,
+    printingOffice,
+    priory,
+    quarry,
+    refectory,
+    roundTower,
+    sacristy,
+    scriptorium,
+    sacredSite,
+    shippingCompany,
+    shipyard,
+    slaughterhouse,
+    spinningMill,
+    stoneMerchant,
+    townEstate,
+    whiskeyDistillery,
+    windmill,
+    winery,
+  },
 })
+
+const { complete, use } = await import('../use')
 
 describe('commands/use', () => {
   const p0: Tableau = {
@@ -953,7 +957,7 @@ describe('commands/use', () => {
     })
 
     it('calls the buildingComplete with all the params', () => {
-      const c0 = complete(s0)(['USE', 'LR1', 'Jo'])
+      complete(s0)(['USE', 'LR1', 'Jo'])
       expect(clayMoundComplete).toHaveBeenCalledWith(['Jo'])
     })
 
