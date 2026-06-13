@@ -11,7 +11,7 @@
     "@stdlib/math": "0.4.1",
     "@supabase/auth-helpers-nextjs": "0.15.0",
     "@supabase/ssr": "0.12.0",
-    "@supabase/supabase-js": "2.108.0",
+    "@supabase/supabase-js": "2.108.1",
     "@vercel/analytics": "2.0.1",
     "@vercel/flags": "3.1.1",
     "@vercel/speed-insights": "2.0.0",
