@@ -1,6 +1,6 @@
 ---
 name: ora-et-labora-strategy
-description: Strategic coaching for Ora et Labora board game. Use this skill when planning moves, evaluating building priorities, assigning clergy, placing settlements, or analyzing game state. Teaches action economy discipline, clergy hierarchy (Prior > Laybrother), settlement evaluation heuristics, economic engine scaling, resource conversion discipline, the Castle (G28) settlement protocol, work contract mechanics, settlement food/fuel payment economics, and Kennerspiel engine quirks. Helps avoid wasted actions, negative settlement placements, and delayed economic scaling.
+description: Strategic coaching for Ora et Labora board game. Use this skill when planning moves, evaluating building priorities, assigning clergy, placing settlements, or analyzing game state. Teaches action economy discipline, clergy hierarchy (Prior over Laybrother), settlement evaluation heuristics, economic engine scaling, resource conversion discipline, the Castle (G28) settlement protocol, work contract mechanics, settlement food/fuel payment economics, and Kennerspiel engine quirks. Helps avoid wasted actions, negative settlement placements, and delayed economic scaling.
 compatibility: Kennerspiel MCP (list_my_games, get_game, get_legal_moves, make_move)
 ---
 
