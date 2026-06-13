@@ -1,5 +1,5 @@
 import { addIndex, collectBy, find, flatten, map, range } from 'ramda'
-import React from 'react'
+import React, { useState } from 'react'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { Tables } from '@/supabase.types'
@@ -75,7 +75,15 @@ const colorToStyle = (c?: string): ColorStyle => {
 
 export const MoveList = () => {
   const { controls, state, commands, entrants, instance, undo, redo } = useInstanceContext()
+  const [showAll, setShowAll] = useState(false)
+
   if (controls === undefined) return <>Missing Controls</>
+
+  const numPlayers = controls?.score?.length ?? 1
+  const allCommands = commands.slice(2)
+  const visibleLimit = 15 * numPlayers
+  const visibleCommands = showAll || allCommands.length <= visibleLimit ? allCommands : allCommands.slice(-visibleLimit)
+  const hiddenCount = allCommands.length - visibleCommands.length
 
   const handleUndo = () => {
     undo?.()
@@ -147,8 +155,27 @@ export const MoveList = () => {
       <hr />
 
       <ul style={resetStyle}>
-        {commands.slice(2).map((m, i) => (
-          <li key={`${i}:${m}`}>
+        {hiddenCount > 0 && (
+          <li>
+            <button
+              type="button"
+              onClick={() => setShowAll(true)}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '4px 0',
+                cursor: 'pointer',
+                color: 'inherit',
+                fontSize: 'inherit',
+                textDecoration: 'underline',
+              }}
+            >
+              ↑ Show {hiddenCount} older move{hiddenCount !== 1 ? 's' : ''}
+            </button>
+          </li>
+        )}
+        {visibleCommands.map((m, i) => (
+          <li key={`${hiddenCount + i}:${m}`}>
             <CommandDisplay command={m} />
           </li>
         ))}
