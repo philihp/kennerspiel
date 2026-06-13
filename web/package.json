@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@marsidev/react-turnstile": "1.5.3",
-    "@modelcontextprotocol/sdk": "1.26.0",
+    "@modelcontextprotocol/sdk": "1.29.0",
     "@next/third-parties": "16.2.9",
     "@philihp/prettier-config": "1.0.0",
     "@stdlib/math": "0.4.1",
