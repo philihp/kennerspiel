@@ -25,13 +25,13 @@ importers:
         version: 0.4.1
       '@supabase/auth-helpers-nextjs':
         specifier: 0.15.0
-        version: 0.15.0(@supabase/supabase-js@2.108.0)
+        version: 0.15.0(@supabase/supabase-js@2.108.1)
       '@supabase/ssr':
         specifier: 0.12.0
-        version: 0.12.0(@supabase/supabase-js@2.108.0)
+        version: 0.12.0(@supabase/supabase-js@2.108.1)
       '@supabase/supabase-js':
-        specifier: 2.108.0
-        version: 2.108.0
+        specifier: 2.108.1
+        version: 2.108.1
       '@vercel/analytics':
         specifier: 2.0.1
         version: 2.0.1(next@16.2.9(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
@@ -760,8 +760,8 @@ packages:
     peerDependencies:
       '@supabase/supabase-js': ^2.76.1
 
-  '@supabase/auth-js@2.108.0':
-    resolution: {integrity: sha512-0CzVGVqHfNOhRQVEcAmu58Mex2Ce0zL3aGfyV+iFQjTK6OntLK/hLCLr/VDRX0E8/2CdsiY99L7fZ/8ys/op4w==}
+  '@supabase/auth-js@2.108.1':
+    resolution: {integrity: sha512-Lle5rKU8f9LF3K5dDd8Or8mkkG+ptzRZZWKPVMm9B9UuovH65Ss2+iFnQqRsCqaGouvJEcTWyl0cj2riNrrDLQ==}
     engines: {node: '>=20.0.0'}
 
   '@supabase/cli-darwin-arm64@2.106.0':
@@ -808,19 +808,19 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@supabase/functions-js@2.108.0':
-    resolution: {integrity: sha512-lqEGDzT7QBUuKYzi5lHpV/XecXT9wikzcbXMbFo6krNpSDynD1sHM8wcsfB/BAqa4NkFuy3vF4JCV8MeakV8IQ==}
+  '@supabase/functions-js@2.108.1':
+    resolution: {integrity: sha512-fxBRW/A4IG7ADQztVt0NaEy5ysiO1WJ2pbldsnBchrkHuyepX0Krek9qA9T4gUQBVVTCE9Ea4pdsM5hfn3nc4A==}
     engines: {node: '>=20.0.0'}
 
   '@supabase/phoenix@0.4.2':
     resolution: {integrity: sha512-YSAGnmDAfuleFCVt3CeurQZAhxRfXWeZIIkwp7NhYzQ1UwW6ePSnzsFAiUm/mbCkfoCf70QQHKW/K6RKh52a4A==}
 
-  '@supabase/postgrest-js@2.108.0':
-    resolution: {integrity: sha512-8AwTkPqowDYv/qh016CyXeZ3Ukpw6NHyfqc7DWV4afLR2hAiapf3zRKV2ZLG+//T1LK84HrR6X8VBwfgHWmNyw==}
+  '@supabase/postgrest-js@2.108.1':
+    resolution: {integrity: sha512-9lj2MCPPMgSTaJ5y+amnhb3TWPtMFVlbDn2hmX/VV91xQU4j0AauwfMaBErHBJ+zzsSwjc0jLU+zLIZFLQzfig==}
     engines: {node: '>=20.0.0'}
 
-  '@supabase/realtime-js@2.108.0':
-    resolution: {integrity: sha512-N3xR0u7TNr+c5wuLSU60rcfu/H/8N0WBs7iHWwjI/NxKwY3XWSyLUbpbpU8bzmL0dA/Gk9Mupri8mxKUXBW+iw==}
+  '@supabase/realtime-js@2.108.1':
+    resolution: {integrity: sha512-mHGGqOjwd1XTydcoffUqEMsbFQHUi6A3uhQ0EXr3iqzpLqItxKA9nbN6gIQxrZ7JRRnuUe/iOFPUkYV9Tdc5lg==}
     engines: {node: '>=20.0.0'}
 
   '@supabase/ssr@0.12.0':
@@ -828,12 +828,12 @@ packages:
     peerDependencies:
       '@supabase/supabase-js': ^2.108.0
 
-  '@supabase/storage-js@2.108.0':
-    resolution: {integrity: sha512-zMYQmh87CId7d8i/1FIfv4fMDcXPutmIJSpoY58GLXi7M266MNzxWGNabDk4i555Oj1Nqtsu2i3Qo3rpWUXO6A==}
+  '@supabase/storage-js@2.108.1':
+    resolution: {integrity: sha512-Er0SGGt85iT6ye+SSh98Az6L2CesoZJuyzEZYH2oBOAnIxa9Nn4CtwUC3veGxYggoT56X+3tVuuQeDBP8kR8sg==}
     engines: {node: '>=20.0.0'}
 
-  '@supabase/supabase-js@2.108.0':
-    resolution: {integrity: sha512-AjPoimM9MZLZbddnlDBGmpZ/Tas1dNcJvuZy/VD1AfmrjBC8J2RSw6UOqR4ISLLlEioOLca/5t1crFnAxa0wRQ==}
+  '@supabase/supabase-js@2.108.1':
+    resolution: {integrity: sha512-V/1hRKLSCJ0zEL+9QFRBUtivvePfOsaAYQmC0HhFNSHC2F3xFs4jSF3YhkLmzex6E4V4FGvmBDOP72D/53NnZA==}
     engines: {node: '>=20.0.0'}
 
   '@swc/helpers@0.5.15':
@@ -3763,12 +3763,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@supabase/auth-helpers-nextjs@0.15.0(@supabase/supabase-js@2.108.0)':
+  '@supabase/auth-helpers-nextjs@0.15.0(@supabase/supabase-js@2.108.1)':
     dependencies:
-      '@supabase/supabase-js': 2.108.0
+      '@supabase/supabase-js': 2.108.1
       cookie: 1.1.1
 
-  '@supabase/auth-js@2.108.0':
+  '@supabase/auth-js@2.108.1':
     dependencies:
       tslib: 2.8.1
 
@@ -3796,38 +3796,38 @@ snapshots:
   '@supabase/cli-windows-x64@2.106.0':
     optional: true
 
-  '@supabase/functions-js@2.108.0':
+  '@supabase/functions-js@2.108.1':
     dependencies:
       tslib: 2.8.1
 
   '@supabase/phoenix@0.4.2': {}
 
-  '@supabase/postgrest-js@2.108.0':
+  '@supabase/postgrest-js@2.108.1':
     dependencies:
       tslib: 2.8.1
 
-  '@supabase/realtime-js@2.108.0':
+  '@supabase/realtime-js@2.108.1':
     dependencies:
       '@supabase/phoenix': 0.4.2
       tslib: 2.8.1
 
-  '@supabase/ssr@0.12.0(@supabase/supabase-js@2.108.0)':
+  '@supabase/ssr@0.12.0(@supabase/supabase-js@2.108.1)':
     dependencies:
-      '@supabase/supabase-js': 2.108.0
+      '@supabase/supabase-js': 2.108.1
       cookie: 1.1.1
 
-  '@supabase/storage-js@2.108.0':
+  '@supabase/storage-js@2.108.1':
     dependencies:
       iceberg-js: 0.8.1
       tslib: 2.8.1
 
-  '@supabase/supabase-js@2.108.0':
+  '@supabase/supabase-js@2.108.1':
     dependencies:
-      '@supabase/auth-js': 2.108.0
-      '@supabase/functions-js': 2.108.0
-      '@supabase/postgrest-js': 2.108.0
-      '@supabase/realtime-js': 2.108.0
-      '@supabase/storage-js': 2.108.0
+      '@supabase/auth-js': 2.108.1
+      '@supabase/functions-js': 2.108.1
+      '@supabase/postgrest-js': 2.108.1
+      '@supabase/realtime-js': 2.108.1
+      '@supabase/storage-js': 2.108.1
 
   '@swc/helpers@0.5.15':
     dependencies:
@@ -4490,7 +4490,7 @@ snapshots:
       eslint: 9.39.4
       eslint-import-resolver-node: 0.3.10
       eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4))(eslint@9.39.4)
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4))(eslint@9.39.4))(eslint@9.39.4)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.4)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.39.4)
       eslint-plugin-react: 7.37.5(eslint@9.39.4)
       eslint-plugin-react-hooks: 7.1.1(eslint@9.39.4)
@@ -4523,7 +4523,7 @@ snapshots:
       tinyglobby: 0.2.17
       unrs-resolver: 1.12.2
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4))(eslint@9.39.4))(eslint@9.39.4)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.4)
     transitivePeerDependencies:
       - supports-color
 
@@ -4538,7 +4538,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4))(eslint@9.39.4))(eslint@9.39.4):
+  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.61.0(eslint@9.39.4)(typescript@6.0.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.4):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.9
