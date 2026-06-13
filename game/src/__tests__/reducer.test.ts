@@ -1,43 +1,45 @@
+import { describe, it, expect, mock } from '../testHelpers'
 import { identity } from 'ramda'
-import { reducer } from '../reducer'
 import { initialState } from '../state'
-import {
-  build,
-  commit,
-  config,
-  convert,
-  cutPeat,
-  fellTrees,
-  settle,
-  start,
-  use,
-  withLaybrother,
-  withPrior,
-  workContract,
-  buyPlot,
-  buyDistrict,
-} from '../commands'
+import * as actualCommands from '../commands'
 
-jest.mock('../commands', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return {
-    ...jest.requireActual('../commands'),
-    build: jest.fn().mockReturnValue(identity),
-    commit: jest.fn().mockReturnValue(identity),
-    config: jest.fn().mockReturnValue(identity),
-    convert: jest.fn().mockReturnValue(identity),
-    cutPeat: jest.fn().mockReturnValue(identity),
-    fellTrees: jest.fn().mockReturnValue(identity),
-    settle: jest.fn().mockReturnValue(identity),
-    start: jest.fn().mockReturnValue(identity),
-    use: jest.fn().mockReturnValue(identity),
-    withPrior: jest.fn().mockReturnValue(identity),
-    withLaybrother: jest.fn().mockReturnValue(identity),
-    workContract: jest.fn().mockReturnValue(identity),
-    buyPlot: jest.fn().mockReturnValue(identity),
-    buyDistrict: jest.fn().mockReturnValue(identity),
-  }
+// Create mocks before mock.module() so we can assert on them
+const build = mock.fn(() => identity)
+const commit = mock.fn(() => identity)
+const config = mock.fn(() => identity)
+const convert = mock.fn(() => identity)
+const cutPeat = mock.fn(() => identity)
+const fellTrees = mock.fn(() => identity)
+const settle = mock.fn(() => identity)
+const start = mock.fn(() => identity)
+const use = mock.fn(() => identity)
+const withPrior = mock.fn(() => identity)
+const withLaybrother = mock.fn(() => identity)
+const workContract = mock.fn(() => identity)
+const buyPlot = mock.fn(() => identity)
+const buyDistrict = mock.fn(() => identity)
+
+await mock.module('../commands', {
+  namedExports: {
+    ...actualCommands,
+    build,
+    commit,
+    config,
+    convert,
+    cutPeat,
+    fellTrees,
+    settle,
+    start,
+    use,
+    withPrior,
+    withLaybrother,
+    workContract,
+    buyPlot,
+    buyDistrict,
+  },
 })
+
+const { reducer } = await import('../reducer')
 
 describe('reducer', () => {
   const s0 = {
@@ -50,7 +52,6 @@ describe('reducer', () => {
 
   describe('initialState', () => {
     it('exposes an initial state', () => {
-      expect.assertions(1)
       expect(initialState).toBeDefined()
     })
   })

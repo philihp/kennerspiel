@@ -1,3 +1,4 @@
+import { describe, it, expect, mock } from '../../testHelpers'
 import { view } from 'ramda'
 import { Clergy, GameCommandConfigParams, GameStatePlaying, PlayerColor, Tableau } from '../../types'
 import {
@@ -430,7 +431,7 @@ describe('board/player', () => {
     } as GameStatePlaying
 
     it('will read from activePlayer', () => {
-      const fn = jest.fn()
+      const fn = mock.fn()
       withActivePlayer(fn)(s0)
       expect(fn).toHaveBeenCalledWith(p1)
     })
@@ -448,7 +449,7 @@ describe('board/player', () => {
       })
     })
     it('does nothing if nothing changed', () => {
-      const fn = jest.fn()
+      const fn = mock.fn()
       const s1 = withActivePlayer((player) => {
         fn(player)
         return player

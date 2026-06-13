@@ -1,16 +1,12 @@
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import eslintConfigPrettier from 'eslint-config-prettier'
-import jest from 'eslint-plugin-jest'
 
 export default tseslint.config(
   {
-    // rules for all files
     files: ['src/**/*.ts'],
     extends: [
-      // standard eslint rules
       eslint.configs.recommended,
-      // and then eslint
       ...tseslint.configs.recommendedTypeChecked,
       {
         languageOptions: {
@@ -20,7 +16,6 @@ export default tseslint.config(
           },
         },
       },
-      // disable eslint rules that conflict with prettier
       eslintConfigPrettier,
     ],
     rules: {
@@ -29,12 +24,13 @@ export default tseslint.config(
     },
   },
   {
-    // rules specifically for tests
-    files: ['src/**/__tests__/*.test.ts'],
-    ...jest.configs['flat/recommended'],
+    files: ['src/**/__tests__/**/*.test.ts', 'src/testHelpers.ts'],
     rules: {
-      ...jest.configs['flat/recommended'].rules,
-      'jest/prefer-expect-assertions': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/await-thenable': 'off',
     },
   }
 )

@@ -1,6 +1,6 @@
+import { describe, it, expect, mock } from '../testHelpers'
 import { PCGState } from 'pcg'
 import { assocPath } from 'ramda'
-import { control } from '../control'
 import {
   Clergy,
   Frame,
@@ -11,44 +11,55 @@ import {
   NextUseClergy,
   PlayerColor,
   Rondel,
-  Tableau,
   Tile,
 } from '../types'
+import * as actualCommands from '../commands'
 
-import {
-  completeBuild,
-  completeCommit,
-  completeConvert,
-  completeCutPeat,
-  completeFellTrees,
-  completeSettle,
-  completeUse,
-  completeWorkContract,
-  completeWithLaybrother,
-  completeWithPrior,
-  completeBuyPlot,
-  completeBuyDistrict,
-} from '../commands'
+const completeBuildInner = mock.fn(() => ['BUILD'])
+const completeCommitInner = mock.fn(() => ['COMMIT'])
+const completeConvertInner = mock.fn(() => ['CONVERT'])
+const completeCutPeatInner = mock.fn(() => ['CUT_PEAT'])
+const completeFellTreesInner = mock.fn(() => ['FELL_TREES'])
+const completeSettleInner = mock.fn(() => ['SETTLE'])
+const completeUseInner = mock.fn(() => ['USE'])
+const completeWorkContractInner = mock.fn(() => ['WORK_CONTRACT'])
+const completeWithLaybrotherInner = mock.fn(() => ['WITH_LAYBROTHER'])
+const completeWithPriorInner = mock.fn(() => ['WITH_PRIOR'])
+const completeBuyPlotInner = mock.fn(() => ['BUY_PLOT'])
+const completeBuyDistrictInner = mock.fn(() => ['BUY_DISTRICT'])
 
-jest.mock('../commands', () => {
-  const innerUse = jest.fn().mockReturnValue(['USE'])
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return {
-    ...jest.requireActual('../commands'),
-    completeBuild: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['BUILD'])),
-    completeCommit: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['COMMIT'])),
-    completeConvert: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['CONVERT'])),
-    completeCutPeat: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['CUT_PEAT'])),
-    completeFellTrees: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['FELL_TREES'])),
-    completeSettle: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['SETTLE'])),
-    completeUse: jest.fn().mockReturnValue(innerUse),
-    completeWorkContract: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['WORK_CONTRACT'])),
-    completeWithLaybrother: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['WITH_LAYBROTHER'])),
-    completeWithPrior: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['WITH_PRIOR'])),
-    completeBuyPlot: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['BUY_PLOT'])),
-    completeBuyDistrict: jest.fn().mockReturnValue(jest.fn().mockReturnValue(['BUY_DISTRICT'])),
-  }
+const completeBuild = mock.fn(() => completeBuildInner)
+const completeCommit = mock.fn(() => completeCommitInner)
+const completeConvert = mock.fn(() => completeConvertInner)
+const completeCutPeat = mock.fn(() => completeCutPeatInner)
+const completeFellTrees = mock.fn(() => completeFellTreesInner)
+const completeSettle = mock.fn(() => completeSettleInner)
+const completeUse = mock.fn(() => completeUseInner)
+const completeWorkContract = mock.fn(() => completeWorkContractInner)
+const completeWithLaybrother = mock.fn(() => completeWithLaybrotherInner)
+const completeWithPrior = mock.fn(() => completeWithPriorInner)
+const completeBuyPlot = mock.fn(() => completeBuyPlotInner)
+const completeBuyDistrict = mock.fn(() => completeBuyDistrictInner)
+
+await mock.module('../commands', {
+  namedExports: {
+    ...actualCommands,
+    completeBuild,
+    completeCommit,
+    completeConvert,
+    completeCutPeat,
+    completeFellTrees,
+    completeSettle,
+    completeUse,
+    completeWorkContract,
+    completeWithLaybrother,
+    completeWithPrior,
+    completeBuyPlot,
+    completeBuyDistrict,
+  },
 })
+
+const { control } = await import('../control')
 
 describe('control', () => {
   describe('control/view', () => {
