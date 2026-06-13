@@ -52,7 +52,7 @@
     "lint-staged": "17.0.7",
     "lucide-react": "1.17.0",
     "prettier": "3.8.4",
-    "supabase": "2.105.0",
+    "supabase": "2.106.0",
     "typescript": "6.0.3"
   },
   "overrides": {
