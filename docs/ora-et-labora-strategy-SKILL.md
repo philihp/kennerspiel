@@ -485,3 +485,31 @@ The authoritative rules are the official Lookout/Z-Man documents (setup sheet, 4
 - Failure taxonomy this game: unverified building identities (2 burned turns on G12/G18), trusting phantom legality (4+ rejected SETTLEs), incomplete protocol knowledge (WORK_CONTRACT without the USE step), and improvising against explicit instruction.
 - White ended with SW6, SW7, SW8 unplaced — 7 + 14 + 18 = 39 initial points stranded in supply. In the 2p long game the Hilltop Village can ONLY enter via the Castle, so every settle-capable turn skipped is potentially that 18+ permanently forfeited.
 - Next game: converter window rounds 5–8 remains the decisive battle; the endgame protocol above is now solved and should cost zero rollbacks.
+
+### USE Command Grammar — Clergy Assignment and Token Selection (engine-verified)
+
+`USE <building> [token]` carries two independent degrees of freedom the engine resolves separately: **which clergyman is placed** and **which production-wheel token is reset**. Either one, set wrong, silently changes the result.
+
+**Clergyman (who mans it).**
+- Bare `USE <building>` auto-assigns a **lay brother** when one is home — the correct default for ordinary production. Do not spend the Prior reflexively.
+- To man it with the **Prior**, issue the standalone command `WITH_PRIOR` *first*, then `USE <building>`. `WITH_PRIOR` is a flag for the next USE, not a building target. (Separate from the build-time bonus, where placing the Prior on a just-built building is auto-handled and grants the immediate bonus USE.)
+
+**Token (which wheel token resets).** The optional trailing token names the production-wheel token to harvest-and-reset, defaulting to the building's natural good. The lever here is the **joker**:
+- `USE <building> Jo` still pays out the building's good, but resets the **joker** token instead of the good's own token — leaving the good's token hot to keep climbing. Use it to protect a high token (e.g. a clay token sitting at 5) while still taking the good this turn, whenever the joker has accumulated value worth spending.
+- bare (no token) resets the good's own token.
+
+**Buildings this governs (production-wheel):** Clay Mound, Cloister Office, Farmyard, Vineyard (F14), Quarry (G22).
+
+**Farmyard requires an explicit good** (it is a grain/sheep fork): `Gn` → grain (resets grain token), `Sh` → sheep (resets sheep token), `GnJo` → grain off the joker (grain token preserved), `ShJo` → sheep off the joker (sheep token preserved).
+
+**Do not conflate with conversion-input tokens.** Some buildings take a trailing token that names a *conversion input*, not a wheel selector — `USE G07 Pt` flips peat → peat coal (the Peat Coal Kiln's free flip), unrelated to the joker. Read each building's effect before assuming the trailing token is a wheel selector.
+
+### Opening Book — France, long 2p (living, not dogma)
+
+Strong tested defaults; **keep observing the opponent and re-deriving.** An opening blind to the other player's development is a memorized line waiting to be punished — explore the deltas every game and fold what wins back into this section.
+
+**Start-player round-1 block (2 actions), thin opening hand (1 each of peat/penny/clay/wood/grain/sheep):**
+1. `BUILD G07` on a central interior plains plot, then take the auto-granted bonus `USE G07 Pt`. Penny scarcity is the game's binding constraint, and G07 (1 clay — the cheapest coin-minting tile) is the earliest fix; the Prior bonus USE nets +1 coin, +1 peat coal, and flips the starting peat to coal (fuel-3 > fuel-2, free). Economic +4 immediately. G07's −2 dwelling also wants to sit interior, away from future coastal settlement pockets. The Prior parks here and recycles on the round-4 wave recall — clear of the 5–8 converter window.
+2. `FELL_TREES` on a forest. Wood is the broadest build material (G02 2w, F04 3w, G18 3w) and felling also opens a build plot, pre-empting landscape saturation; it is clergy-free, so both lay brothers stay home. +2 wood at the round-1 wheel value.
+
+**Post-opening fork (landscape-gated):** with no free coast/hillside in the heartland (the common case), F04 Windmill is unbuildable, so the accessible converter axis is stone-based — **F08 Market** (E8; "4 goods → 7 coins + bread"; D8 settlement anchor) and **F17 Cloister Library** (the book engine) — which makes **G12 Stone Merchant** the natural follow-on build, plus a coastal plot around rounds 4–5 for cheap settlement dwelling value and to unlock F04.
