@@ -22,6 +22,7 @@
     "format": "prettier . --write",
     "lint": "eslint .",
     "test": "node --import tsx/esm --experimental-test-module-mocks --test 'src/**/__tests__/**/*.test.ts'",
+    "test:coverage": "node --import tsx/esm --experimental-test-module-mocks --coverage --coverage-reporter=lcov --coverage-dir=coverage --test 'src/**/__tests__/**/*.test.ts'",
     "prepack": "npm run build",
     "prepare": "cd .. && husky game/.husky"
   },
