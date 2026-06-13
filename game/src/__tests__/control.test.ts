@@ -1,4 +1,4 @@
-import { PCGState } from 'fn-pcg/dist/types'
+import { PCGState } from 'pcg'
 import { assocPath } from 'ramda'
 import { control } from '../control'
 import {
@@ -108,7 +108,7 @@ describe('control', () => {
           wine: 5,
           beer: 0,
           reliquary: 0,
-        } as Tableau,
+        },
         {
           color: PlayerColor.Green,
           clergy: [],
@@ -419,7 +419,7 @@ describe('control', () => {
       const f1 = {
         ...f0,
         next: 1,
-      } as Frame
+      }
       const c1 = {
         ...c0,
         players: 2,

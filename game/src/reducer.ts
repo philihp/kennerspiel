@@ -93,8 +93,8 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
     .with([GameCommandEnum.CONFIG, [PPlayerCount, PCountry, PLength]], ([_, [players, country, length]]) =>
       config({
         players: Number.parseInt(players, 10) as GameConfigPlayers,
-        length: length as GameConfigLength,
-        country: country as GameConfigCountry,
+        length: length,
+        country: country,
       })(state as GameStateSetup)
     )
     .with([GameCommandEnum.START, P.array(P.string)], ([_, params]) => {

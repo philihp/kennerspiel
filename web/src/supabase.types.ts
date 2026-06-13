@@ -139,7 +139,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      append_command: {
+        Args: {
+          p_command: string
+          p_expected_count: number
+          p_instance_id: string
+        }
+        Returns: {
+          commands: string[]
+          created_at: string
+          hidden: boolean | null
+          id: string
+          owner_id: string
+          updated_at: string
+        }[]
+      }
     }
     Enums: {
       color: "red" | "green" | "blue" | "white"

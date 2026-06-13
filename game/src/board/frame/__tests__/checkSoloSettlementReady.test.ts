@@ -28,7 +28,7 @@ describe('board/frame/checkSoloSettlementReady', () => {
     nextUse: NextUseClergy.OnlyPrior,
     bonusRoundPlacement: false,
     canBuyLandscape: true,
-  } as Frame
+  }
   const s0: GameStatePlaying = {
     ...initialState,
     status: GameStatusEnum.PLAYING,

@@ -5,6 +5,30 @@ import { Flower, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { Tables } from '@/supabase.types'
 import { Frame } from './frame'
 import { FastForwardIcon, RewindIcon } from 'lucide-react'
+import { buildingName } from './buildingName'
+
+const CommandDisplay = ({ command }: { command: string }) => {
+  const tokens = command.split(' ')
+  return (
+    <>
+      {tokens.map((token, i) => {
+        const name = buildingName(token)
+        return (
+          <React.Fragment key={i}>
+            {i > 0 && ' '}
+            {name ? (
+              <span title={token} style={{ borderBottom: '1px dotted currentColor', cursor: 'help' }}>
+                {name}
+              </span>
+            ) : (
+              token
+            )}
+          </React.Fragment>
+        )
+      })}
+    </>
+  )
+}
 
 const resetStyle = {
   margin: 0,
@@ -124,7 +148,9 @@ export const MoveList = () => {
 
       <ul style={resetStyle}>
         {commands.slice(2).map((m, i) => (
-          <li key={`${i}:${m}`}>{m}</li>
+          <li key={`${i}:${m}`}>
+            <CommandDisplay command={m} />
+          </li>
         ))}
         {addIndex(map<Flower, React.JSX.Element>)(
           (frame: Flower, n: number) => (

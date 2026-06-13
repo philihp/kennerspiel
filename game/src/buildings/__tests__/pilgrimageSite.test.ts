@@ -163,14 +163,14 @@ describe('buildings/pilgrimageSite', () => {
     it('finish command after two params', () => {
       const s1 = {
         ...s0,
-      } as GameStatePlaying
+      }
       const c0 = complete(['Bo', 'Ce'])(s1)
       expect(c0).toStrictEqual([''])
     })
     it('ignores more than two param', () => {
       const s1 = {
         ...s0,
-      } as GameStatePlaying
+      }
       const c0 = complete(['Bo', 'Ce', 'Or'])(s1)
       expect(c0).toStrictEqual([])
     })
