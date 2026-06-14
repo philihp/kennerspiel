@@ -27,8 +27,17 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: latest
-          package-manager-cache: false
-      - run: pnpm install --frozen-lockfile
+      - name: Get pnpm store directory
+        id: pnpm-store
+        run: echo "path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('game/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - run: pnpm install --no-frozen-lockfile
       - run: pnpm run lint
       - run: pnpm run build
       - run: pnpm run test

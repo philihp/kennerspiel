@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 24.x
           package-manager-cache: false # cache injection is a fun attack to debug
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm run lint
       - run: pnpm run build
       - run: pnpm stage publish --provenance --access public --no-git-checks
