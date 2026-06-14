@@ -1,4 +1,4 @@
-import { pipe, view, filter, always, concat, append, set, lensPath, intersection, lensProp, map, join } from 'ramda'
+import { pipe, view, filter, always, any, concat, append, intersection, map, join } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { costForBuilding, isCloisterBuilding, removeBuildingFromUnbuilt } from '../board/buildings'
 import { addErectionAtLandscape } from '../board/erections'
@@ -11,7 +11,7 @@ import {
   erectableLocations,
   erectableLocationsCol,
 } from '../board/landscape'
-import { activeLens, payCost, subtractCoins, withActivePlayer } from '../board/player'
+import { activeLens, isPrior, payCost, subtractCoins, withActivePlayer } from '../board/player'
 import {
   BuildingEnum,
   Frame,
@@ -43,8 +43,10 @@ const buildContinuation = (state: GameStatePlaying): GameCommandEnum[] => {
     return [GameCommandEnum.SETTLE, GameCommandEnum.COMMIT]
   }
 
-  // but most of the time, we just want to allow to follow BUILD with an OnlyPrior USE.
-  return [GameCommandEnum.USE]
+  // but most of the time, we just want to allow to follow BUILD with an OnlyPrior USE,
+  // but only if any of their clergy are a prior.
+  if (any(isPrior, view(activeLens(state), state).clergy)) return [GameCommandEnum.USE]
+  return []
 }
 
 export const allowPriorToUse =
