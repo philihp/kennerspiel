@@ -21,12 +21,12 @@ jobs:
         working-directory: game
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v6
         with:
           node-version: latest
-          cache: "npm"
-          cache-dependency-path: game/package.json
-      - run: npm install
-      - run: npm run lint
-      - run: npm run build --if-present
-      - run: npm run test
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run build --if-present
+      - run: pnpm run test
