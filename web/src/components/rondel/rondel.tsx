@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { match } from 'ts-pattern'
 import { pointille } from 'pointille'
+import { filter, fromPairs, map, pipe, reduce, transduce, toPairs, zip } from 'ramda'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { RondelSettlements } from './settlements'
 import { mask, wedge, arrowPath, armPath, points, rot, armTextY, WHEEL_RADIUS } from './constants'
@@ -79,26 +80,41 @@ export const Rondel = () => {
 
   const tokenPositions = useMemo((): Partial<Record<TokenKey, [number, number]>> => {
     if (!rondel || !state?.config) return {}
+    const config = state.config
 
-    const byPos = new Map<number, TokenKey[]>()
-    for (const key of allTokenKeys) {
-      const pos = rondel[key]
-      if (pos === undefined) continue
-      if (key === 'grape' && !isGrapeUsed(state.config)) continue
-      if (key === 'stone' && !isStoneUsed(state.config)) continue
-      if (!byPos.has(pos)) byPos.set(pos, [])
-      byPos.get(pos)!.push(key)
-    }
+    // Collect active [token, rondel-position] pairs
+    const activeTokenPairs: [TokenKey, number][] = pipe(
+      filter(
+        (key: TokenKey): boolean =>
+          rondel[key] !== undefined &&
+          !(key === 'grape' && !isGrapeUsed(config)) &&
+          !(key === 'stone' && !isStoneUsed(config))
+      ),
+      map((key: TokenKey): [TokenKey, number] => [key, rondel[key]!])
+    )(allTokenKeys)
 
-    const result: Partial<Record<TokenKey, [number, number]>> = {}
-    for (const [pos, tokens] of byPos) {
-      const polygon = getWedgePolygon(pos)
-      const pts = pointille(polygon, tokens.length)
-      tokens.forEach((token, i) => {
-        result[token] = pts[i] as [number, number]
-      })
-    }
-    return result
+    // Group tokens by their shared rondel position
+    const byPos = reduce(
+      (acc: Record<number, TokenKey[]>, [key, pos]: [TokenKey, number]) => ({
+        ...acc,
+        [pos]: [...(acc[pos] ?? []), key],
+      }),
+      {} as Record<number, TokenKey[]>,
+      activeTokenPairs
+    )
+
+    // For each wedge, distribute tokens via pointille and transduce into the result object
+    return transduce(
+      map(([posStr, tokens]: [string, TokenKey[]]) =>
+        zip(tokens, pointille(getWedgePolygon(Number(posStr)), tokens.length)) as [TokenKey, [number, number]][]
+      ),
+      (acc: Partial<Record<TokenKey, [number, number]>>, pairs: [TokenKey, [number, number]][]) => ({
+        ...acc,
+        ...fromPairs(pairs),
+      }),
+      {} as Partial<Record<TokenKey, [number, number]>>,
+      toPairs(byPos) as unknown as [string, TokenKey[]][]
+    )
   }, [rondel, state?.config])
 
   const armValues =
