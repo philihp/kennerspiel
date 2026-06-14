@@ -15,10 +15,10 @@ export const makeMove = async ({
 }): Promise<ToolResult> => {
   const fetched = await fetchInstance(userId, instanceId)
   if ('error' in fetched) return errorResult(fetched.error)
-  const { supabase, instance, me } = fetched
+  const { supabase, instance, mySeats } = fetched
 
   // 1. seat check
-  if (me === undefined) return errorResult('You are not seated in this game.')
+  if (mySeats.length === 0) return errorResult('You are not seated in this game.')
 
   // 2. status check
   const playing = asPlaying(replay(instance.commands))
@@ -26,10 +26,12 @@ export const makeMove = async ({
     return errorResult('Game has not started yet; seats and setup are managed from the website lobby.')
   if (playing.status === GameStatusEnum.FINISHED) return errorResult('Game is already finished.')
 
-  // 3. turn check
+  // 3. turn check — any of the agent's seats may be the active player
   const activeColor = engineColorToEntrantColor(activePlayerColor(playing))
-  if (activeColor !== me.color) {
-    return errorResult(`It is not your turn: you are ${me.color}, and ${activeColor} is the active player.`)
+  const activeSeat = mySeats.find((s) => s.color === activeColor)
+  if (!activeSeat) {
+    const mine = mySeats.map((s) => s.color).join(', ')
+    return errorResult(`It is not your turn: you are ${mine}, and ${activeColor} is the active player.`)
   }
 
   // 4. legality check
@@ -58,6 +60,6 @@ export const makeMove = async ({
   return jsonResult({
     ok: true,
     played: tokens.join(' '),
-    state: renderSummary(updatedState, updated.commands, me.color),
+    state: renderSummary(updatedState, updated.commands, activeSeat.color),
   })
 }

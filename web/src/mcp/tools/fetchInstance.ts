@@ -6,7 +6,7 @@ type FetchedInstance = {
   supabase: SupabaseClient<Database>
   instance: Tables<'instance'>
   entrants: Tables<'entrant'>[]
-  me?: Tables<'entrant'>
+  mySeats: Tables<'entrant'>[]
 }
 
 export const fetchInstance = async (
@@ -17,6 +17,6 @@ export const fetchInstance = async (
   const { data, error } = await supabase.from('instance').select('*, entrant(*)').eq('id', instanceId).single()
   if (error || data === null) return { error: `Failed to fetch instance ${instanceId}: ${error?.message}` }
   const { entrant: entrants, ...instance } = data
-  const me = entrants.find((entrant) => entrant.profile_id === userId)
-  return { supabase, instance, entrants, me }
+  const mySeats = entrants.filter((entrant) => entrant.profile_id === userId)
+  return { supabase, instance, entrants, mySeats }
 }

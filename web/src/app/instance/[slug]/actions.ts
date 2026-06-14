@@ -46,19 +46,36 @@ export const join = async (
       return [[], undefined]
     }
 
-    // otherwise update this instance+profile with the color
-    const { data, error: upsertError } = await supabase
+    // The web flow enforces one-seat-per-profile in app code. If this profile
+    // already has a seat in this instance, change its color; otherwise insert.
+    const { data: existing } = await supabase
       .from('entrant')
-      .upsert(
-        { instance_id: instance?.id, profile_id: user.id, color, updated_at: new Date().toISOString() },
-        { onConflict: 'instance_id, profile_id' }
-      )
-      .select()
-    if (upsertError) {
-      console.error(upsertError)
-      return [[], undefined]
+      .select('id')
+      .eq('instance_id', instance.id)
+      .eq('profile_id', user.id)
+      .maybeSingle()
+    if (existing) {
+      const { data, error: updateError } = await supabase
+        .from('entrant')
+        .update({ color, updated_at: new Date().toISOString() })
+        .eq('id', existing.id)
+        .select()
+      if (updateError) {
+        console.error(updateError)
+        return [[], undefined]
+      }
+      console.log('update ', data)
+    } else {
+      const { data, error: insertError } = await supabase
+        .from('entrant')
+        .insert({ instance_id: instance.id, profile_id: user.id, color, updated_at: new Date().toISOString() })
+        .select()
+      if (insertError) {
+        console.error(insertError)
+        return [[], undefined]
+      }
+      console.log('insert ', data)
     }
-    console.log('upsert ', data)
   } else {
     const { data: entrant, error: deleteError } = await supabase
       .from('entrant')
