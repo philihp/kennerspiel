@@ -1,11 +1,10 @@
 import { useMemo } from 'react'
 import { match } from 'ts-pattern'
-import { pointille } from 'pointille'
-import { filter, fromPairs, map, pipe, reduce, transduce, toPairs, zip } from 'ramda'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { RondelSettlements } from './settlements'
-import { mask, wedge, arrowPath, armPath, points, rot, armTextY, WHEEL_RADIUS } from './constants'
+import { mask, wedge, arrowPath, armPath, points, rot, armTextY } from './constants'
 import { GameCommandConfigParams } from 'hathora-et-labora-game'
+import { allTokenKeys, computeTokenPositions, TokenKey } from './tokenPositions'
 
 import styles from './rondel.module.css'
 
@@ -19,18 +18,6 @@ export const symbols = {
   joker: '🃏',
   grape: '🍇',
   stone: '🪨',
-}
-
-const isStoneUsed = (config: GameCommandConfigParams): boolean =>
-  match(config)
-    .with({ players: 1 }, () => false)
-    .otherwise(() => true)
-
-const isGrapeUsed = (config: GameCommandConfigParams): boolean => {
-  return match(config)
-    .with({ players: 1 }, () => false)
-    .with({ country: 'france' }, () => true)
-    .otherwise(() => false)
 }
 
 const oraDeg = (pos?: number): number =>
@@ -52,66 +39,15 @@ const oraDeg = (pos?: number): number =>
 
 const armOffset = (360 * 0.5) / points.length
 
-type TokenKey = 'wood' | 'clay' | 'coin' | 'grain' | 'peat' | 'sheep' | 'joker' | 'grape' | 'stone'
-
-const allTokenKeys: TokenKey[] = ['clay', 'coin', 'grain', 'grape', 'joker', 'peat', 'sheep', 'stone', 'wood']
-
-const TOKEN_INNER_RADIUS = 65
-const TOKEN_OUTER_RADIUS = 175
-
-const getWedgePolygon = (pos: number): [number, number][] => {
-  const startIdx = (12 - pos + 13) % 13
-  const endIdx = (13 - pos + 13) % 13
-  const p0 = points[startIdx] as [number, number]
-  const p1 = points[endIdx] as [number, number]
-  const s = 1 / WHEEL_RADIUS
-  return [
-    [p0[0] * TOKEN_INNER_RADIUS * s, p0[1] * TOKEN_INNER_RADIUS * s],
-    [p0[0] * TOKEN_OUTER_RADIUS * s, p0[1] * TOKEN_OUTER_RADIUS * s],
-    [p1[0] * TOKEN_OUTER_RADIUS * s, p1[1] * TOKEN_OUTER_RADIUS * s],
-    [p1[0] * TOKEN_INNER_RADIUS * s, p1[1] * TOKEN_INNER_RADIUS * s],
-  ]
-}
-
 export const Rondel = () => {
   const { state } = useInstanceContext()
 
   const rondel = state?.rondel
 
-  const tokenPositions = useMemo((): Partial<Record<TokenKey, [number, number]>> => {
-    if (!rondel || !state?.config) return {}
-    const config = state.config
-
-    return pipe(
-      filter(
-        (key: TokenKey): boolean =>
-          rondel[key] !== undefined &&
-          !(key === 'grape' && !isGrapeUsed(config)) &&
-          !(key === 'stone' && !isStoneUsed(config))
-      ),
-      map((key: TokenKey): [TokenKey, number] => [key, rondel[key]!]),
-      reduce(
-        (acc: Record<string, TokenKey[]>, [key, pos]: [TokenKey, number]) => ({
-          ...acc,
-          [pos]: [...(acc[pos] ?? []), key],
-        }),
-        {}
-      ),
-      toPairs as (x: Record<string, TokenKey[]>) => [string, TokenKey[]][],
-      (pairs: [string, TokenKey[]][]) =>
-        transduce(
-          map(([posStr, tokens]: [string, TokenKey[]]) =>
-            zip(tokens, pointille(getWedgePolygon(Number(posStr)), tokens.length)) as [TokenKey, [number, number]][]
-          ),
-          (acc: Partial<Record<TokenKey, [number, number]>>, pts: [TokenKey, [number, number]][]) => ({
-            ...acc,
-            ...fromPairs(pts),
-          }),
-          {} as Partial<Record<TokenKey, [number, number]>>,
-          pairs
-        )
-    )(allTokenKeys) as Partial<Record<TokenKey, [number, number]>>
-  }, [rondel, state?.config])
+  const tokenPositions = useMemo(
+    () => (rondel && state?.config ? computeTokenPositions(rondel, state.config) : {}),
+    [rondel, state?.config]
+  )
 
   const armValues =
     state?.config?.length === 'short' && state?.config?.players === 2

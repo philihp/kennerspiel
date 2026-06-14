@@ -36,6 +36,7 @@
     "build": "next build",
     "dev": "next dev --turbopack",
     "lint": "next lint",
+    "test": "node --import tsx/esm --test 'src/**/__tests__/**/*.test.ts'",
     "start": "next start",
     "hourly": "node src/hourly.js",
     "prepare": "cd .. && husky web/.husky",
@@ -54,6 +55,7 @@
     "lucide-react": "1.18.0",
     "prettier": "3.8.4",
     "supabase": "2.106.0",
+    "tsx": "^4.22.4",
     "typescript": "6.0.3"
   },
   "overrides": {
