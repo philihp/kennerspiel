@@ -99,14 +99,14 @@ describe('buildings/bathhouse', () => {
       ])
     })
 
-    it('allows noop with undefined', () => {
-      const s1 = bathhouse()(s0)!
-      expect(s1).toBe(s0)
+    it('rejects with undefined when no payment is provided', () => {
+      const s1 = bathhouse()(s0)
+      expect(s1).toBeUndefined()
     })
 
-    it('allows noop with empty string', () => {
-      const s1 = bathhouse('')(s0)!
-      expect(s1).toBe(s0)
+    it('rejects with empty string when no payment is provided', () => {
+      const s1 = bathhouse('')(s0)
+      expect(s1).toBeUndefined()
     })
 
     it('will not move someone elses piece', () => {
@@ -150,7 +150,7 @@ describe('buildings/bathhouse', () => {
           ...s0.players.slice(1),
         ],
       }
-      const s2 = bathhouse()(s1)!
+      const s2 = bathhouse('Pn')(s1)!
       expect(s1.players[0].clergy).toBe(s2.players[0].clergy)
       expect(s1.players[0].landscape).toBe(s2.players[0].landscape)
     })
@@ -163,7 +163,7 @@ describe('buildings/bathhouse', () => {
   })
 
   describe('complete', () => {
-    it('when no money, only noop', () => {
+    it('when no money, no legal completions', () => {
       const s1 = {
         ...s0,
         players: [
@@ -175,9 +175,9 @@ describe('buildings/bathhouse', () => {
         ],
       } as GameStatePlaying
       const c0 = complete([])(s1)
-      expect(c0).toStrictEqual([''])
+      expect(c0).toStrictEqual([])
     })
-    it('when money, allow offer', () => {
+    it('when money, require payment', () => {
       const s1 = {
         ...s0,
         players: [
@@ -189,7 +189,7 @@ describe('buildings/bathhouse', () => {
         ],
       } as GameStatePlaying
       const c0 = complete([])(s1)
-      expect(c0).toStrictEqual(['Pn', ''])
+      expect(c0).toStrictEqual(['Pn'])
     })
   })
 })

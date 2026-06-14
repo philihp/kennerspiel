@@ -32,9 +32,9 @@ export const bathhouse =
   (param = ''): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    if (param === '') return state
+    if (param === '') return undefined
     const input = parseResourceParam(param)
-    if (costMoney(input) < 1) return state
+    if (costMoney(input) < 1) return undefined
     return withActivePlayer(
       pipe(
         //
@@ -47,7 +47,7 @@ export const bathhouse =
 
 export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
   match(partial)
-    .with([], () => (view(activeLens(state), state).penny ? ['Pn', ''] : ['']))
+    .with([], () => (view(activeLens(state), state).penny ? ['Pn'] : []))
     .with([P._], always(['']))
     .otherwise(always([]))
 )
