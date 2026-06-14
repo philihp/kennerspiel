@@ -1,5 +1,5 @@
 {
-  "version": "0.20.0",
+  "version": "0.20.1",
   "name": "hathora-et-labora-game",
   "type": "module",
   "sideEffects": false,
@@ -39,7 +39,8 @@
     "fast-shuffle": "6.2.0",
     "pcg": "3.0.0",
     "ramda": "0.32.0",
-    "ts-pattern": "5.9.0"
+    "ts-pattern": "5.9.0",
+    "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
