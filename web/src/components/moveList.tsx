@@ -7,17 +7,25 @@ import { Frame } from './frame'
 import { FastForwardIcon, RewindIcon } from 'lucide-react'
 import { buildingName } from './buildingName'
 
+const scrollToBuilding = (id: string) => (e: React.MouseEvent) => {
+  e.preventDefault()
+  document.querySelector(`[data-building-id="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
 const CommandDisplay = ({ command }: { command: string }) => {
-  const tokens = command.split(' ')
+  const [verb, ...rest] = command.split(' ')
   return (
     <>
-      {tokens.map((token, i) => {
+      <span title={verb} style={{ cursor: 'context-menu' }}>
+        {verb.toLowerCase().replace(/_/g, ' ')}
+      </span>
+      {rest.map((token, i) => {
         const name = buildingName(token)
         return (
           <React.Fragment key={i}>
-            {i > 0 && ' '}
+            {' '}
             {name ? (
-              <span title={token} style={{ borderBottom: '1px dotted currentColor', cursor: 'help' }}>
+              <span title={token} style={{ cursor: 'context-menu' }} onContextMenu={scrollToBuilding(token)}>
                 {name}
               </span>
             ) : (

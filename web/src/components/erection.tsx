@@ -35,7 +35,7 @@ export const Erection = ({ id, primary = false, disabled = true, ghosted = false
   const used = partial?.slice(0, 2)?.join(' ') === `USE ${id}` && !commandComplete(partial, controls?.completion)
 
   return (
-    <div style={{ display: 'inline-block' }}>
+    <div data-building-id={id} style={{ display: 'inline-block' }}>
       {onClick !== undefined && (
         <>
           <button className="primary" type="button" onClick={onClick} disabled={disabled && !used}>
