@@ -29,8 +29,8 @@ export const isGrapeUsed = (config: GameCommandConfigParams): boolean =>
     .otherwise(() => false)
 
 export const getWedgePolygon = (pos: number): [number, number][] => {
-  const a = (12 - pos + N_WEDGES) % N_WEDGES
-  const b = (13 - pos + N_WEDGES) % N_WEDGES
+  const a = pos % N_WEDGES
+  const b = (pos + 1) % N_WEDGES
   return [
     wedgePoint(a, TOKEN_INNER_RADIUS),
     wedgePoint(a, TOKEN_OUTER_RADIUS),
