@@ -10,6 +10,9 @@
     "uwe-rosenberg"
   ],
   "homepage": "https://kennerspiel.com",
+  "repository": {
+    "url": "https://github.com/philihp/kennerspiel"
+  },
   "license": "GPL-3.0",
   "author": {
     "name": "Philihp Busby",
