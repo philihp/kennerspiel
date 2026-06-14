@@ -87,6 +87,21 @@ Convert only for **point accumulation** or **critical resource bottleneck resolu
 **Discipline rule:**
 - Every conversion must answer: "What do I gain?" If the answer is "flexibility" or "optionality," it's likely a trap.
 
+### 6. Stone is Gated Capital, Not a Consumable
+
+Stone gates the two highest-leverage buildings in the game: the **Castle (G28, 5 stone)** and the **Sacristy (G34, 3 stone)** — each converts into 15–30+ VP. Stone spent early on Cloister Workshop (G18) ornament conversion (1 stone per +4 VP ornament) is a catastrophic misallocation against that opportunity cost.
+
+**Rule:** until the Castle is built (or the Castle line is explicitly abandoned), treat every stone as reserved. Do not feed stone into G18 ornaments, and do not let a Stone Merchant (G12) lead sit idle either — convert food + energy into stone *and bank it* toward Castle/Sacristy. In game 4 an early G12 stone lead evaporated into G18 ceramics/ornaments while the opponent routed stone into a round-24 Castle and out-settled me 7 settlements to 4 (a ~90-point settlement-column swing).
+
+### 7. The Cloister Courtyard (G02) Multiplier
+
+G02 takes **3 different goods (anything, including zero-value tiles) → 6 identical basic goods** (grain, wood, clay, peat, penny, or sheep). Three-for-six on basics looks unexciting, but its worth is as the *front* of a conversion chain, never as a terminal action:
+
+- **6 grain → F04 Windmill (Prior, flips ≤7) → 6 flour + 6 straw → F05 Bakery → 6 bread.** Six bread = 18 food (settlement fuel), or paired with wine, 6× F24 reliquaries = +48 VP.
+- The straw byproduct from the Windmill simultaneously feeds G19 Slaughterhouse and F37 Dormitory.
+
+Build G02 early — it is a cloister building (☩), so it also grows the cluster that G41 and the high-D church complex reward — and chain it relentlessly. Treating it as "3 goods for 6 basics" and stopping there forfeits its entire purpose.
+
 ---
 
 ## Mid-Game Execution: Critical Lessons from Live Play
@@ -389,6 +404,8 @@ Heartland is a fixed 2×5 strip (3 forest + 2 moor at start). Three ways to grow
 
 So a plot purchase is simultaneously a settlement-pocket decision (coastal water = cheap dwelling value) and a Castle/Hilltop enablement decision (mountain = the only G28 site) — not merely "more space."
 
+**Price ramps — buy early.** Both tracks escalate as you buy: in game 4 the district schedule ran 5, 5, 6, 7, 8 and plots 5, 5, 6, 6, 7 (cheapest remaining always on top, read live from `get_game.district_purchase_prices` / `plot_purchase_prices`). The first one or two are the cheapest they will ever be, and buying earlier also grants more rounds of building and settlement placement on the new space. Treat a round 4–8 district buy as both a discount and an option-value purchase; deferring it pays a double penalty — higher price *and* fewer turns to exploit the space. A district bought on the final turn, as I did in game 4, recovers only its raw end-game tile value with nothing built on it.
+
 ### The Castle Settlement Protocol (exact, verified sequence)
 
 When the settle-granting building sits on the **opponent's** board:
@@ -407,6 +424,19 @@ Postcondition invariants to check between steps:
 4. `COMMIT` only after the bonus action is spent. Committing early forfeits it (game ends if final turn).
 
 Cost accounting: a coin-paid WORK_CONTRACT is a wealth transfer to the opponent (their pennies increased 4→6 in game 2); a wine present is not (it returns to the supply). Either way the cost is strictly dominated by a well-chosen settlement gain (+17 here), but fold it into the move's net value — and prefer wine when holding any.
+
+### The Castle Protocol — When You Own It
+
+If you build the Castle yourself, the work-contract step disappears — you USE your own building directly, and your own Prior on it grants the immediate bonus action:
+
+```
+BUILD G28 <col> <row>           # 6 wood + 5 stone, on a hill/mountain space you own
+USE G28                         # with your Prior → bonus_actions gains "SETTLE"
+SETTLE <S> <col> <row> <pay>    # the bonus settle; pay its food + energy
+COMMIT
+```
+
+This is strictly better than contracting an opponent's Castle: no coin or wine cost, no opponent income, and — critically — it is **repeatable every recall cycle**. Each round you bring your clergy home, USE the Castle again for another settlement. It is the single highest-VP engine in the long 2p game: the opponent in game 4 placed 7 settlements (to my 4) almost entirely through a self-owned Castle from round 24 on. **Secure the materials (6 wood + 5 stone) and a mountain/hill plot to site it by roughly round 18–20**; every recall cycle after that is a free 15–25 VP settlement. (See Principle 6 — this is what the hoarded stone is *for*.)
 
 ### Settlement Payment Economics (food + fuel)
 
@@ -442,6 +472,16 @@ Payment selection is a min-cost covering problem: `get_legal_moves(["SETTLE", S,
 
 Base price: 1 coin, paid to the building's owner; the owner mans the building with one of THEIR clergymen (yours stay free). Once the Winery (F21) is built — by anyone — the price rises to 2 coins for all players for the rest of the game (hence `PnPn` in game 2). One wine may always be paid instead, regardless of price level ("present for the host") — and per the overview sheet **the wine is drunk and returned to the general supply, not given to the opponent**. So post-Winery the wine present is doubly correct: it costs you ~2 points of value instead of 2 coins, AND denies the opponent the 2-coin income — a relative-score swing of roughly 2× the coin route. The engine accepts `WORK_CONTRACT G22 Wn`.
 
+### Palace (F27) — The Anti-Work-Contract Engine
+
+The Palace (25 coins, **+25 VP**, **D = 8**, hillside) carries the most flexible ability in the game: **pay 1 wine → USE any *occupied* building**, regardless of whose clergy sits on it. This bypasses the work-contract mechanic entirely — a building another player has manned (normally locked to you) becomes usable for a single wine.
+
+Two consequences worth planning around:
+- **It defeats blocking.** An opponent occupying a key converter to deny you no longer succeeds; burn a wine and use it anyway.
+- **It enables double-firing.** Work-contract a building (1 wine, the opponent mans and uses it), then immediately Palace it (1 more wine) for a second activation of the same building in one turn.
+
+At 25 coins it is a heavy investment, but the +25 VP alone nearly repays the cost in points, the D = 8 anchors a settlement pocket, and the ability compounds every turn you hold wine. Stockpiling coins early (e.g. repeated `USE` on a coin-pull landscape to draw the coin token) is the prerequisite. In game 4 I never approached 25 coins and left this entire axis unused.
+
 ### Official Final-Action Menu (France, from the rulebook)
 
 The endgame is a one-shot argmax over this menu. Approximate net deltas:
@@ -470,6 +510,7 @@ The authoritative rules are the official Lookout/Z-Man documents (setup sheet, 4
 3. After any human rollback, re-fetch `get_game` before reasoning; in-context state is stale and `move_count` is the cheap staleness check.
 4. `join_game` takes parameter `instance`, not `instance_id`.
 5. **Round Tower dwelling value = 9, should be 2 (confirmed data bug; audited in published 0.19.1).** `pointsForDwelling(RoundTower)` returns 9 in `src/board/erections.ts` (and `dist`); both the rulebook appendix and the overview sheet print 2, and the Cloister Church is the stated *unique* highest at 9 — so the 9 is almost certainly copied from there. Ireland-only (I35), so France play is unaffected, but in an Ireland game it over-credits every adjacent settlement by 7 (and a Round Tower between two settlements leaks 14). Fix: `() => 2`, regenerate `dist`. Audit footnote: this was the *only* discrepancy across all 80 erections — every cost, every economic value, the other 79 dwelling values, and all 8 settlement food/energy costs matched canon exactly.
+6. **Sacristy (G34) build cost — engine accepts grain in place of straw (verify vs. rulebook).** The building table and overview sheet print G34's cost as 3 stone + 2 straw, but in game 4 the engine accepted `BUILD G34 4 2` while I held **zero straw**, consuming 2 grain instead. Either grain is being treated as a straw substitute for this cost, or the straw requirement is mis-encoded. *Expected (per overview):* 2 straw specifically. *Observed:* 2 grain accepted, build succeeded, and `USE G34 BoCeOrRq` then produced the Wonder. File an issue with the reproduction; until resolved, you can satisfy the G34 build with grain on hand — which makes the Wonder line materially easier, since grain is far cheaper to mass-produce (G02 → rondel) than straw.
 
 ### Final-Turn Decision Discipline
 
@@ -485,6 +526,14 @@ The authoritative rules are the official Lookout/Z-Man documents (setup sheet, 4
 - Failure taxonomy this game: unverified building identities (2 burned turns on G12/G18), trusting phantom legality (4+ rejected SETTLEs), incomplete protocol knowledge (WORK_CONTRACT without the USE step), and improvising against explicit instruction.
 - White ended with SW6, SW7, SW8 unplaced — 7 + 14 + 18 = 39 initial points stranded in supply. In the 2p long game the Hilltop Village can ONLY enter via the Castle, so every settle-capable turn skipped is potentially that 18+ permanently forfeited.
 - Next game: converter window rounds 5–8 remains the decisive battle; the endgame protocol above is now solved and should cost zero rollbacks.
+
+### Key Takeaways — Game 4 (Green 407, White 261)
+
+- 146-point loss with an *inverted* profile from game 2: I **won the goods column (+40)** — a completed Wonder via the Sacristy, plus a 19-book / 11-ceramic stockpile — but lost economic by 93 and settlements by 93. Winning goods while losing the other two columns by ~90 each is the signature of conceding the Castle-settlement engine.
+- **The decisive error was stone allocation.** An early Stone Merchant (G12) lead was spent on G18 ceramic/ornament conversion instead of being banked toward a Castle. The opponent built a self-owned Castle around round 24 and fired it every recall cycle, placing 7 settlements to my 4. Stone hoarded for Castle/Sacristy is worth multiples of stone burned on ornaments (Principle 6).
+- **The Wonder chain works end-to-end** (Sacristy build → `USE G34 BoCeOrRq` → +1 Wonder, ~+13 net in the move) and carried the goods-column win. The engine accepted the G34 build with grain substituting for straw — see Engine Quirk 6. But a single Sacristy fires the Wonder only as fast as you can recall and re-collect its four ingredients; it caps around +30–60 VP and does not, alone, out-race a Castle settlement engine.
+- **Shipyard (G26) plateaus.** Work-contracted four times for 4 ornaments + 4 nickels (~+6 VP/action), but it is once-per-turn and its ornaments compound only if a downstream multiplier exists (Sacristy, or F36 Pilgrimage Site upgrading ornament → reliquary). I ended holding 4 unspent ornaments = 16 flat VP that never multiplied.
+- **Two whole strategic axes were left unused: the self-owned Castle and the Palace.** Both were identified only in hindsight. Next game: commit to one of three openings — Castle-settle, Wonder-goods, or Cloister-cluster — by round 6, and if it is Castle-settle, route every stone and a hill/mountain plot toward G28 by round 18–20.
 
 ### USE Command Grammar — Clergy Assignment and Token Selection (engine-verified)
 
