@@ -1,5 +1,6 @@
 import { createMcpHandler, withMcpAuth } from 'mcp-handler'
 import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js'
+import { track } from '@vercel/analytics/server'
 import { z } from 'zod'
 import { listMyGames } from '@/mcp/tools/listMyGames'
 import { getGame } from '@/mcp/tools/getGame'
@@ -14,6 +15,10 @@ const userIdFrom = (extra: { authInfo?: AuthInfo }): string | undefined =>
 
 const unauthenticated = () => errorResult('Unauthenticated: no user is bound to this MCP session.')
 
+const trackToolCall = (tool: string, userId: string | undefined): void => {
+  track('mcp_tool_call', { tool, userId: userId ?? 'anonymous' }).catch(() => {})
+}
+
 const handler = createMcpHandler(
   (server) => {
     server.tool(
@@ -22,6 +27,7 @@ const handler = createMcpHandler(
       { only_my_turn: z.boolean().optional().describe('Only return games where it is currently your turn') },
       async ({ only_my_turn }, extra) => {
         const userId = userIdFrom(extra)
+        trackToolCall('list_my_games', userId)
         if (!userId) return unauthenticated()
         return listMyGames({ userId, onlyMyTurn: only_my_turn ?? false })
       }
@@ -38,6 +44,7 @@ const handler = createMcpHandler(
       },
       async ({ instance_id, detail }, extra) => {
         const userId = userIdFrom(extra)
+        trackToolCall('get_game', userId)
         if (!userId) return unauthenticated()
         return getGame({ userId, instanceId: instance_id, detail: detail ?? 'summary' })
       }
@@ -54,6 +61,7 @@ const handler = createMcpHandler(
       },
       async ({ instance_id, partial }, extra) => {
         const userId = userIdFrom(extra)
+        trackToolCall('get_legal_moves', userId)
         if (!userId) return unauthenticated()
         return getLegalMoves({ userId, instanceId: instance_id, partial: partial ?? [] })
       }
@@ -72,6 +80,7 @@ const handler = createMcpHandler(
       },
       async ({ instance, color }, extra) => {
         const userId = userIdFrom(extra)
+        trackToolCall('join_game', userId)
         if (!userId) return unauthenticated()
         return joinGame({ userId, instanceRef: instance, color })
       }
@@ -85,6 +94,7 @@ const handler = createMcpHandler(
       },
       async ({ instance_id, command }, extra) => {
         const userId = userIdFrom(extra)
+        trackToolCall('make_move', userId)
         if (!userId) return unauthenticated()
         return makeMove({ userId, instanceId: instance_id, command })
       }
