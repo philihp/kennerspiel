@@ -157,19 +157,7 @@ export const MoveList = () => {
       <ul style={resetStyle}>
         {hiddenCount > 0 && (
           <li>
-            <button
-              type="button"
-              onClick={() => setShowAll(true)}
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: '4px 0',
-                cursor: 'pointer',
-                color: 'inherit',
-                fontSize: 'inherit',
-                textDecoration: 'underline',
-              }}
-            >
+            <button type="button" onClick={() => setShowAll(true)}>
               ↑ Show {hiddenCount} older move{hiddenCount !== 1 ? 's' : ''}
             </button>
           </li>
@@ -179,6 +167,9 @@ export const MoveList = () => {
             <CommandDisplay command={m} />
           </li>
         ))}
+        <li>
+          <hr />
+        </li>
         {addIndex(map<Flower, React.JSX.Element>)(
           (frame: Flower, n: number) => (
             <li key={JSON.stringify({ n, frame })}>
