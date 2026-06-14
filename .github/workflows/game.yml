@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: latest
           package-manager-cache: false
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile --allow-build=esbuild
       - run: pnpm run lint
       - run: pnpm run build --if-present
       - run: pnpm run test
