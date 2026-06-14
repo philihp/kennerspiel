@@ -1,8 +1,10 @@
+import { useMemo } from 'react'
 import { match } from 'ts-pattern'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { RondelSettlements } from './settlements'
 import { mask, wedge, arrowPath, armPath, points, rot, armTextY } from './constants'
 import { GameCommandConfigParams } from 'hathora-et-labora-game'
+import { allTokenKeys, computeTokenPositions, TokenKey } from './tokenPositions'
 
 import styles from './rondel.module.css'
 
@@ -16,18 +18,6 @@ export const symbols = {
   joker: '🃏',
   grape: '🍇',
   stone: '🪨',
-}
-
-const isStoneUsed = (config: GameCommandConfigParams): boolean =>
-  match(config)
-    .with({ players: 1 }, () => false)
-    .otherwise(() => true)
-
-const isGrapeUsed = (config: GameCommandConfigParams): boolean => {
-  return match(config)
-    .with({ players: 1 }, () => false)
-    .with({ country: 'france' }, () => true)
-    .otherwise(() => false)
 }
 
 const oraDeg = (pos?: number): number =>
@@ -47,14 +37,17 @@ const oraDeg = (pos?: number): number =>
     .with(12, () => (360 * 0.5) / points.length)
     .otherwise(() => 0)
 
-const BASE = -50
-
 const armOffset = (360 * 0.5) / points.length
 
 export const Rondel = () => {
   const { state } = useInstanceContext()
 
   const rondel = state?.rondel
+
+  const tokenPositions = useMemo(
+    () => (rondel && state?.config ? computeTokenPositions(rondel, state.config) : {}),
+    [rondel, state?.config]
+  )
 
   const armValues =
     state?.config?.length === 'short' && state?.config?.players === 2
@@ -92,70 +85,15 @@ export const Rondel = () => {
 
       <RondelSettlements />
 
-      {rondel?.grape !== undefined && state?.config && isGrapeUsed(state.config) && (
-        <g id="grape" transform={`rotate(${oraDeg(rondel?.grape ?? 0)})`}>
-          <text x={0} y={BASE - 25} className={styles.token}>
-            {symbols.grape}
+      {allTokenKeys.map((key) => {
+        const pos = tokenPositions[key]
+        if (!pos) return null
+        return (
+          <text key={key} id={key} x={pos[0]} y={pos[1]} dominantBaseline="central" className={styles.token}>
+            {symbols[key]}
           </text>
-        </g>
-      )}
-
-      {rondel?.stone !== undefined && state?.config && isStoneUsed(state.config) && (
-        <g id="stone" transform={`rotate(${oraDeg(rondel?.stone ?? 0)})`}>
-          <text x={0} y={BASE - 114} className={styles.token}>
-            {symbols.stone}
-          </text>
-        </g>
-      )}
-      {rondel?.grain !== undefined && (
-        <g id="grain" transform={`rotate(${oraDeg(rondel?.grain ?? 0)})`}>
-          <text x={0 + 13} y={BASE - 87 - 9} className={styles.token}>
-            {symbols.grain}
-          </text>
-        </g>
-      )}
-      {rondel?.sheep !== undefined && (
-        <g id="sheep" transform={`rotate(${oraDeg(rondel?.sheep ?? 0)})`}>
-          <text x={0 - 13} y={BASE - 96} className={styles.token}>
-            {symbols.sheep}
-          </text>
-        </g>
-      )}
-      {rondel?.joker !== undefined && (
-        <g id="joker" transform={`rotate(${oraDeg(rondel?.joker ?? 0)})`}>
-          <text x={0 + 11} y={BASE - 78 + 4.5} className={styles.token}>
-            {symbols.joker}
-          </text>
-        </g>
-      )}
-      {rondel?.wood !== undefined && (
-        <g id="wood" transform={`rotate(${oraDeg(rondel?.wood ?? 0)})`}>
-          <text x={0 - 11} y={BASE - 69 - 4.5} className={styles.token}>
-            {symbols.wood}
-          </text>
-        </g>
-      )}
-      {rondel?.clay !== undefined && (
-        <g id="clay" transform={`rotate(${oraDeg(rondel?.clay ?? 0)})`}>
-          <text x={-9} y={BASE - 60 + 4.5} className={styles.token}>
-            {symbols.clay}
-          </text>
-        </g>
-      )}
-      {rondel?.peat !== undefined && (
-        <g id="peat" transform={`rotate(${oraDeg(rondel?.peat ?? 0)})`}>
-          <text x={+9} y={BASE - 51 - 4.5} className={styles.token}>
-            {symbols.peat}
-          </text>
-        </g>
-      )}
-      {rondel?.coin !== undefined && (
-        <g id="coin" transform={`rotate(${oraDeg(rondel?.coin ?? 0)})`}>
-          <text x={0} y={BASE - 42 + 5} className={styles.token}>
-            {symbols.coin}
-          </text>
-        </g>
-      )}
+        )
+      })}
 
       <g id="shadowMask" opacity="0.2" transform={`rotate(${oraDeg(rondel?.pointingBefore) - armOffset})`}>
         <path d={armPath} fill="black" filter="url(#shadow)" />
