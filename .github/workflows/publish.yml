@@ -1,4 +1,4 @@
-name: publish-game
+name: publish
 
 on:
   release:
@@ -21,10 +21,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24.x
-          registry-url: https://registry.npmjs.org
           package-manager-cache: false # cache injection is a fun attack to debug
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
       - run: pnpm run build
-      - run: pnpm publish --provenance --access public --no-git-checks
+      - run: pnpm stage publish --provenance --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
