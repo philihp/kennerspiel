@@ -82,39 +82,35 @@ export const Rondel = () => {
     if (!rondel || !state?.config) return {}
     const config = state.config
 
-    // Collect active [token, rondel-position] pairs
-    const activeTokenPairs: [TokenKey, number][] = pipe(
+    return pipe(
       filter(
         (key: TokenKey): boolean =>
           rondel[key] !== undefined &&
           !(key === 'grape' && !isGrapeUsed(config)) &&
           !(key === 'stone' && !isStoneUsed(config))
       ),
-      map((key: TokenKey): [TokenKey, number] => [key, rondel[key]!])
-    )(allTokenKeys)
-
-    // Group tokens by their shared rondel position
-    const byPos = reduce(
-      (acc: Record<number, TokenKey[]>, [key, pos]: [TokenKey, number]) => ({
-        ...acc,
-        [pos]: [...(acc[pos] ?? []), key],
-      }),
-      {} as Record<number, TokenKey[]>,
-      activeTokenPairs
-    )
-
-    // For each wedge, distribute tokens via pointille and transduce into the result object
-    return transduce(
-      map(([posStr, tokens]: [string, TokenKey[]]) =>
-        zip(tokens, pointille(getWedgePolygon(Number(posStr)), tokens.length)) as [TokenKey, [number, number]][]
+      map((key: TokenKey): [TokenKey, number] => [key, rondel[key]!]),
+      reduce(
+        (acc: Record<string, TokenKey[]>, [key, pos]: [TokenKey, number]) => ({
+          ...acc,
+          [pos]: [...(acc[pos] ?? []), key],
+        }),
+        {}
       ),
-      (acc: Partial<Record<TokenKey, [number, number]>>, pairs: [TokenKey, [number, number]][]) => ({
-        ...acc,
-        ...fromPairs(pairs),
-      }),
-      {} as Partial<Record<TokenKey, [number, number]>>,
-      toPairs(byPos) as unknown as [string, TokenKey[]][]
-    )
+      toPairs as (x: Record<string, TokenKey[]>) => [string, TokenKey[]][],
+      (pairs: [string, TokenKey[]][]) =>
+        transduce(
+          map(([posStr, tokens]: [string, TokenKey[]]) =>
+            zip(tokens, pointille(getWedgePolygon(Number(posStr)), tokens.length)) as [TokenKey, [number, number]][]
+          ),
+          (acc: Partial<Record<TokenKey, [number, number]>>, pts: [TokenKey, [number, number]][]) => ({
+            ...acc,
+            ...fromPairs(pts),
+          }),
+          {} as Partial<Record<TokenKey, [number, number]>>,
+          pairs
+        )
+    )(allTokenKeys) as Partial<Record<TokenKey, [number, number]>>
   }, [rondel, state?.config])
 
   const armValues =
