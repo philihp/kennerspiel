@@ -1,10 +1,10 @@
 [![Version](https://img.shields.io/npm/v/hathora-et-labora-game.svg)](https://www.npmjs.com/package/hathora-et-labora-game)
-[![Tests](https://github.com/philihp/hathora-et-labora/actions/workflows/game.yml/badge.svg)](https://github.com/philihp/hathora-et-labora/actions/workflows/game.yml)
-[![Coverage](https://coveralls.io/repos/github/philihp/hathora-et-labora/badge.svg?branch=main)](https://coveralls.io/github/philihp/hathora-et-labora?branch=main)
+[![Tests](https://github.com/philihp/kennerspiel/actions/workflows/game.yml/badge.svg)](https://github.com/philihp/kennerspiel/actions/workflows/game.yml)
+[![Coverage](https://coveralls.io/repos/github/philihp/kennerspiel/badge.svg?branch=main)](https://coveralls.io/github/philihp/hathora-et-labora-game?branch=main)
 ![Downloads](https://img.shields.io/npm/dt/hathora-et-labora-game)
 ![License](https://img.shields.io/npm/l/hathora-et-labora-game)
 
-## Hathora-et-Labora Game Logic Library
+## Kennerspiel Game Logic Library
 
 This is a state engine for playing a game of [Ora et Labora](https://amzn.to/3P1UYDe). I'm working on a UI for this, but
 at a minimal level every client and player should agree on the rules expressed by these state transforms. Keeping state-transition
