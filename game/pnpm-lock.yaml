@@ -20,6 +20,9 @@ importers:
       ts-pattern:
         specifier: 5.9.0
         version: 5.9.0
+      ts-toolbelt:
+        specifier: 9.6.0
+        version: 9.6.0
     devDependencies:
       '@eslint/js':
         specifier: 10.0.1
