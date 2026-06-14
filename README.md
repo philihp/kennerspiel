@@ -2,7 +2,7 @@
 )](https://github.com/philihp/kennerspiel/actions/workflows/deploy.yml)
 [![Coverage](https://coveralls.io/repos/github/philihp/kennerspiel/badge.svg?branch=main)](https://coveralls.io/github/philihp/kennerspiel?branch=main)
 
-# Ora et Labora on Kennerspiel.con
+# Ora et Labora on Kennerspiel.com
 
 This is an implementation of Uwe Rosenberg's game [Ora et Labora](https://amzn.to/3P1UYDe). Some interesting waypoints might be:
 
