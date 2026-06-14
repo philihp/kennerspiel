@@ -24,7 +24,7 @@
     "test:watch": "node --import tsx/esm --experimental-test-module-mocks --test --watch $(git diff --name-only --diff-filter=ACMR HEAD | awk '/\\.test\\.ts$/ {print} /\\.ts$/ && !/\\.test\\.ts$/ {sub(/\\.ts$/, \".test.ts\"); gsub(/src\\//, \"src/__tests__/\"); print}' | sort -u | xargs ls 2>/dev/null)",
     "test:coverage": "node --import tsx/esm --experimental-test-module-mocks --coverage --coverage-reporter=lcov --coverage-dir=coverage --test 'src/**/__tests__/**/*.test.ts'",
     "prepack": "npm run build",
-    "prepare": "cd .. && husky game/.husky"
+    "prepare": "[ -n \"$CI\" ] || (cd .. && husky game/.husky)"
   },
   "main": "./dist/index.js",
   "files": [
