@@ -6,6 +6,7 @@ import { listMyGames } from '@/mcp/tools/listMyGames'
 import { getGame } from '@/mcp/tools/getGame'
 import { getLegalMoves } from '@/mcp/tools/getLegalMoves'
 import { makeMove } from '@/mcp/tools/makeMove'
+import { undoMove } from '@/mcp/tools/undoMove'
 import { joinGame } from '@/mcp/tools/joinGame'
 import { waitForMyTurn } from '@/mcp/tools/waitForMyTurn'
 import { errorResult } from '@/mcp/content'
@@ -98,6 +99,19 @@ const handler = createMcpHandler(
         trackToolCall('make_move', userId)
         if (!userId) return unauthenticated()
         return makeMove({ userId, instanceId: instance_id, command })
+      }
+    )
+    server.tool(
+      'undo_move',
+      'Undo your most recently played command in a game. This is not part of normal play — only use it when the human asks you to, e.g. to retract a sub-optimal move so they can teach a better one. Removes one command at a time (call repeatedly to roll back a multi-command turn). Only the most recent command can be undone, and only if it was your own (active when it was played). Returns the resulting state.',
+      {
+        instance_id: z.string().uuid().describe('The game instance id'),
+      },
+      async ({ instance_id }, extra) => {
+        const userId = userIdFrom(extra)
+        trackToolCall('undo_move', userId)
+        if (!userId) return unauthenticated()
+        return undoMove({ userId, instanceId: instance_id })
       }
     )
     server.tool(
