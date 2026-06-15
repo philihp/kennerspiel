@@ -102,9 +102,15 @@ const handler = createMcpHandler(
     )
     server.tool(
       'wait_for_my_turn',
-      'Block until it becomes your turn in the given game, the game ends, or the timeout elapses. Use this instead of repeatedly polling get_game/list_my_games while waiting on other players. Returns the same shape as list_my_games plus a timed_out flag.',
+      'Block until it becomes your turn in the given game, the game ends, or the timeout elapses. Use this instead of repeatedly polling get_game/list_my_games while waiting on other players. Pass color to wait for one specific seat (useful when this agent holds multiple seats in the same game and a sibling agent is playing the other color). Returns the same shape as list_my_games plus a timed_out flag.',
       {
         instance_id: z.string().uuid().describe('The game instance id'),
+        color: z
+          .enum(['red', 'green', 'blue', 'white'])
+          .optional()
+          .describe(
+            'Wait until this specific seat becomes active. Must be a color you are seated as. Omit to wait for any of your seats.'
+          ),
         timeout_sec: z
           .number()
           .int()
@@ -113,11 +119,11 @@ const handler = createMcpHandler(
           .optional()
           .describe('How long to wait before returning, in seconds (default 50, max 55 — request maxDuration is 60s)'),
       },
-      async ({ instance_id, timeout_sec }, extra) => {
+      async ({ instance_id, color, timeout_sec }, extra) => {
         const userId = userIdFrom(extra)
         trackToolCall('wait_for_my_turn', userId)
         if (!userId) return unauthenticated()
-        return waitForMyTurn({ userId, instanceId: instance_id, timeoutSec: timeout_sec ?? 50 })
+        return waitForMyTurn({ userId, instanceId: instance_id, color, timeoutSec: timeout_sec ?? 50 })
       }
     )
   },
