@@ -685,3 +685,28 @@ Missing this repeatedly is what forced paying coins to work-contract the same bu
 - **Root cause of the soft-lock** was not a single bad move but a discipline cluster: a wasted bare `USE F23` (expected a recall, got a wasted action); a wasted bare `USE F32` (no penny paid, no FELL_TREES/CUT_PEAT bonus); a wasted bonus action (an F09 grape left unspent); and skipped FREE neutral-building uses during settlement phases. Each was individually small; together they drained coins, clergy, and bonus actions to zero on the same turn.
 - **Solo-specific lesson:** the forced neutral-building phase before SETTLE means heavyweight builds *must* land on your board in the 1–4 rounds preceding each phase, and the FREE neutral-building use *during* each phase is a recurring free action you must claim — both are easy to forget and both compound.
 - **One-line takeaway:** Build heavyweights *before* each settlement phase; never strand all clergy/coins on a normal turn; trust the `get_game` frame over the move enumerator; the bare `USE F23` does **not** recall.
+
+### Key Takeaways — Game 3, instance 282bfe7e (France long, 2p, lost 414–418)
+
+A knife-edge endgame loss decided by two avoidable misreads of building effects in the last rondel cycle. The general engine and clergy framework worked; specific French building semantics did not. Score arc: Blue led +14 at move 415 → +5 at 419 → −3 at 421 → −4 at 426 (FINISHED).
+
+**Misread 1 — F08 Market fed with scoring goods (−7 pts in one action).** F08 Market's `USE F08 <four-distinct-goods>` is a coin/bread conversion (per the canonical table: 4 different goods → 7 coins + 1 bread, observed as ~2 pennies + 1 nickel + 1 bread). The 4-distinct-input shape resembles the Sacristy's wonder-builder (G34 BoCeOrRq), but the economy is the opposite: F08 is a goods SINK that prices every input at coin/bread parity. **Feeding any high-value goods (book, ceramic, ornament, wine) into F08 is a strictly negative trade.** Rule: test any unfamiliar 4-input building with cheap inputs only (Pn/Cl/Wo/Sn) before risking scoring goods. The canonical table in this file is the first source to consult — F08 was already documented as Market, not Bakery.
+
+**Misread 2 — F24 Cloister Church needs BREAD, not book (~−5 pts).** The reliquary chain is `USE F24 BrWn` = 1 bread + 1 wine → 1 reliquary (+8 pts gross), verified at line 377 in the canonical table. Memorising it as "book + wine" left F24 work-contracted but un-fireable — the USE still fires legally without bread but produces nothing, wasting the action plus the work-contract fee already paid. **Pre-plan the bread before work-contracting F24.** Bread comes from F05 Bakery (flour → bread), fed by F04 Windmill (grain → flour); F08 Market also outputs 1 bread per 4-goods conversion as a side-effect, but never as a primary bread source.
+
+**Verified F35 Forger's Workshop spam rate.** `USE F35` at 15 pennies → 2 reliquaries (+16 pts gross, ~+10 net after threshold). Three back-to-back USEs in one rondel cycle yielded +30 for opponent while I scored +4/turn. The official menu line "+6 for 5 coins; +4 per additional reliquary at 10 coins" describes a SINGLE USE — **repeated USEs across a rondel cycle compound far beyond the headline.** This is the slope-inversion mechanism that flipped the +14 lead into a −4 loss in three opponent actions.
+
+**New principle — The Coin-Sink Threat Window.** When opponent's penny reserve exceeds ~25 and any coin-consuming converter (F35 Forger's Workshop, F17 Cloister Library, G41 House of Brotherhood, F33 Shipping Company) sits in `buildings_available`, model their next 2–3 turns as a coin dump, not as one BUILD = one USE. Three options:
+1. **Deny** — `WORK_CONTRACT` the threat building the turn it is built. Costs 2 coins post-Winery; saves 10+ pts per denied rondel cycle. The instant F35 enters available AND opponent holds >30 pennies, contract it.
+2. **Outscore** — accept and run your own compounding chain (Castle settle, Sacristy Wonder, Workshop ceramics + Library books).
+3. **Advance the rondel** — settle to push past the round-trigger that returns their clergy, capping the spam.
+
+Never assume one BUILD = one USE for coin-cheap converters. The Forger's Workshop sat in `buildings_available` for multiple turns without my reading its effect; a 2-penny defensive WC the turn it was built would have flipped a 4-pt loss into a ~10-pt win.
+
+**Failure taxonomy this game:**
+- Unverified building effect with scoring goods at risk (F08 BoCeOrWn → −7).
+- Memorised effect wrong (F24 = book+wine in memory; actually bread+wine → ~−5 plus a wasted WC).
+- Underestimated converter spam (F35 fired three times in one rondel cycle).
+- Did not WC the new threat when F35 was built — a 2-penny defensive contract on the build turn would have flipped the result.
+
+**One-line takeaway:** Consult the canonical building table in THIS file before USE on any unfamiliar building; when opponent's pennies exceed ~25 and a coin-converter is available, model the next rondel as a coin dump and either WC-deny the threat or outscore via your own compounding column.
