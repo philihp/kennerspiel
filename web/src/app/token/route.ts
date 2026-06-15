@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { ACCESS_TOKEN_TTL_SECONDS, resourceIdentifier, verifyClientCredentials } from '@/oauth/config'
-import { consumeAuthorizationCode, issueAccessToken, verifyPkce } from '@/oauth/store'
+import { ACCESS_TOKEN_TTL_SECONDS, resourceIdentifier } from '@/oauth/config'
+import { consumeAuthorizationCode, findClient, issueAccessToken, verifyClientSecret, verifyPkce } from '@/oauth/store'
 
 const errorResponse = (status: number, error: string, description?: string) =>
   NextResponse.json(
@@ -8,10 +8,9 @@ const errorResponse = (status: number, error: string, description?: string) =>
     { status, headers: { 'Cache-Control': 'no-store', 'Access-Control-Allow-Origin': '*' } }
   )
 
-const parseClientCredentials = (
-  req: Request,
-  body: URLSearchParams
-): { clientId: string; clientSecret: string } | { error: string } => {
+type ParsedCredentials = { clientId: string; clientSecret: string | null }
+
+const parseClientCredentials = (req: Request, body: URLSearchParams): ParsedCredentials | { error: string } => {
   const authHeader = req.headers.get('authorization')
   if (authHeader?.toLowerCase().startsWith('basic ')) {
     try {
@@ -27,9 +26,8 @@ const parseClientCredentials = (
     }
   }
   const clientId = body.get('client_id')
-  const clientSecret = body.get('client_secret')
-  if (!clientId || !clientSecret) return { error: 'Missing client credentials' }
-  return { clientId, clientSecret }
+  if (!clientId) return { error: 'Missing client_id' }
+  return { clientId, clientSecret: body.get('client_secret') }
 }
 
 export const POST = async (req: Request) => {
@@ -38,8 +36,17 @@ export const POST = async (req: Request) => {
 
   const creds = parseClientCredentials(req, body)
   if ('error' in creds) return errorResponse(401, 'invalid_client', creds.error)
-  if (!verifyClientCredentials(creds.clientId, creds.clientSecret))
-    return errorResponse(401, 'invalid_client', 'client_id / client_secret mismatch')
+
+  const client = await findClient(creds.clientId)
+  if (!client) return errorResponse(401, 'invalid_client', 'Unknown client_id')
+
+  if (client.tokenEndpointAuthMethod === 'none') {
+    if (creds.clientSecret) return errorResponse(401, 'invalid_client', 'Client is public; do not send a client_secret')
+  } else {
+    if (!creds.clientSecret) return errorResponse(401, 'invalid_client', 'Missing client_secret')
+    if (!(await verifyClientSecret(creds.clientId, creds.clientSecret)))
+      return errorResponse(401, 'invalid_client', 'client_secret mismatch')
+  }
 
   const grantType = body.get('grant_type')
   if (grantType !== 'authorization_code')

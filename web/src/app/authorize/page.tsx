@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
-import { allowedRedirectUris, isKnownClientId, resourceIdentifier } from '@/oauth/config'
+import { resourceIdentifier } from '@/oauth/config'
+import { findClient } from '@/oauth/store'
 import { approve } from './actions'
 
 type AuthorizeParams = {
@@ -21,23 +22,20 @@ const renderError = (message: string) => (
   </>
 )
 
-const validate = (params: AuthorizeParams): { error: string } | { ok: true } => {
-  if (params.response_type !== 'code') return { error: 'Only response_type=code is supported.' }
-  if (!params.client_id || !isKnownClientId(params.client_id)) return { error: 'Unknown client_id.' }
-  if (!params.redirect_uri || !allowedRedirectUris().includes(params.redirect_uri))
-    return { error: 'redirect_uri is not allow-listed for this client.' }
-  if (!params.code_challenge) return { error: 'Missing PKCE code_challenge (S256 required).' }
-  if (params.code_challenge_method && params.code_challenge_method !== 'S256')
-    return { error: 'Only code_challenge_method=S256 is supported.' }
-  if (params.resource && params.resource.replace(/\/$/, '') !== resourceIdentifier())
-    return { error: 'resource indicator does not match this server.' }
-  return { ok: true }
-}
-
 const Authorize = async ({ searchParams }: { searchParams: Promise<AuthorizeParams> }) => {
   const params = await searchParams
-  const check = validate(params)
-  if ('error' in check) return renderError(check.error)
+
+  if (params.response_type !== 'code') return renderError('Only response_type=code is supported.')
+  if (!params.client_id) return renderError('Missing client_id.')
+  const client = await findClient(params.client_id)
+  if (!client) return renderError('Unknown client_id.')
+  if (!params.redirect_uri || !client.redirectUris.includes(params.redirect_uri))
+    return renderError('redirect_uri is not registered for this client.')
+  if (!params.code_challenge) return renderError('Missing PKCE code_challenge (S256 required).')
+  if (params.code_challenge_method && params.code_challenge_method !== 'S256')
+    return renderError('Only code_challenge_method=S256 is supported.')
+  if (params.resource && params.resource.replace(/\/$/, '') !== resourceIdentifier())
+    return renderError('resource indicator does not match this server.')
 
   const supabase = await createClient()
   const {
@@ -52,11 +50,13 @@ const Authorize = async ({ searchParams }: { searchParams: Promise<AuthorizePara
   // Make sure the profile row exists; tools rely on profile_id == auth user id.
   await supabase.from('profile').upsert({ id: user.id, email: user.email ?? '' })
 
+  const clientLabel = client.clientName ?? 'An MCP client'
+
   return (
     <>
       <h1>Authorize MCP access</h1>
       <p>
-        An MCP client wants to play Ora et Labora on your behalf as <strong>{user.email}</strong>.
+        <strong>{clientLabel}</strong> wants to play Ora et Labora on your behalf as <strong>{user.email}</strong>.
       </p>
       <p>Granting access will let this client:</p>
       <ul>
