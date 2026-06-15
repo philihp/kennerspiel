@@ -694,9 +694,9 @@ A knife-edge endgame loss decided by two avoidable misreads of building effects 
 
 **Misread 2 — F24 Cloister Church needs BREAD, not book (~−5 pts).** The reliquary chain is `USE F24 BrWn` = 1 bread + 1 wine → 1 reliquary (+8 pts gross), verified at line 377 in the canonical table. Memorising it as "book + wine" left F24 work-contracted but un-fireable — the USE still fires legally without bread but produces nothing, wasting the action plus the work-contract fee already paid. **Pre-plan the bread before work-contracting F24.** Bread comes from F05 Bakery (flour → bread), fed by F04 Windmill (grain → flour); F08 Market also outputs 1 bread per 4-goods conversion as a side-effect, but never as a primary bread source.
 
-**Verified F35 Forger's Workshop spam rate.** `USE F35` at 15 pennies → 2 reliquaries (+16 pts gross, ~+10 net after threshold). Three back-to-back USEs in one rondel cycle yielded +30 for opponent while I scored +4/turn. The official menu line "+6 for 5 coins; +4 per additional reliquary at 10 coins" describes a SINGLE USE — **repeated USEs across a rondel cycle compound far beyond the headline.** This is the slope-inversion mechanism that flipped the +14 lead into a −4 loss in three opponent actions.
+**Verified F35 Forger's Workshop scaling — all within a single USE.** The rate is: first reliquary costs 5 coins, each additional costs 10 coins, all within **one** `USE F35`. With 105 coins you spend one action and collect 11 reliquaries (5 + 100 = 105). The official menu line "+6 for 5 coins; +4 per additional reliquary at 10 coins" is already describing within-USE scaling — not a per-USE headline. So the threat is not "repeated USEs": it is **one USE draining a large coin reserve into a pile of reliquaries in a single action.** With 35 coins a single USE yields 4 reliquaries (+32 pts gross). This is the slope-inversion mechanism that flipped the +14 lead into a −4 loss.
 
-**New principle — The Coin-Sink Threat Window.** When opponent's penny reserve exceeds ~25 and any coin-consuming converter (F35 Forger's Workshop, F17 Cloister Library, G41 House of Brotherhood, F33 Shipping Company) sits in `buildings_available`, model their next 2–3 turns as a coin dump, not as one BUILD = one USE. Three options:
+**New principle — The Coin-Sink Threat Window.** When opponent's penny reserve exceeds ~25 and any coin-consuming converter (F35 Forger's Workshop, F17 Cloister Library, G41 House of Brotherhood, F33 Shipping Company) sits in `buildings_available`, model their **next action** as a potential coin dump: a single F35 USE with 35 coins yields 4 reliquaries (+32 pts gross) in one action. Three options:
 1. **Deny** — `WORK_CONTRACT` the threat building the turn it is built. Costs 2 coins post-Winery; saves 10+ pts per denied rondel cycle. The instant F35 enters available AND opponent holds >30 pennies, contract it.
 2. **Outscore** — accept and run your own compounding chain (Castle settle, Sacristy Wonder, Workshop ceramics + Library books).
 3. **Advance the rondel** — settle to push past the round-trigger that returns their clergy, capping the spam.
@@ -706,7 +706,7 @@ Never assume one BUILD = one USE for coin-cheap converters. The Forger's Worksho
 **Failure taxonomy this game:**
 - Unverified building effect with scoring goods at risk (F08 BoCeOrWn → −7).
 - Memorised effect wrong (F24 = book+wine in memory; actually bread+wine → ~−5 plus a wasted WC).
-- Underestimated converter spam (F35 fired three times in one rondel cycle).
+- Underestimated F35 within-USE scaling — did not realise a single USE with a large coin pile converts the entire reserve into reliquaries in one action.
 - Did not WC the new threat when F35 was built — a 2-penny defensive contract on the build turn would have flipped the result.
 
 **One-line takeaway:** Consult the canonical building table in THIS file before USE on any unfamiliar building; when opponent's pennies exceed ~25 and a coin-converter is available, model the next rondel as a coin dump and either WC-deny the threat or outscore via your own compounding column.
