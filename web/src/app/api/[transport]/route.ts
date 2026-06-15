@@ -7,6 +7,7 @@ import { getGame } from '@/mcp/tools/getGame'
 import { getLegalMoves } from '@/mcp/tools/getLegalMoves'
 import { makeMove } from '@/mcp/tools/makeMove'
 import { joinGame } from '@/mcp/tools/joinGame'
+import { waitForMyTurn } from '@/mcp/tools/waitForMyTurn'
 import { errorResult } from '@/mcp/content'
 import { resolveAccessToken } from '@/oauth/store'
 
@@ -97,6 +98,26 @@ const handler = createMcpHandler(
         trackToolCall('make_move', userId)
         if (!userId) return unauthenticated()
         return makeMove({ userId, instanceId: instance_id, command })
+      }
+    )
+    server.tool(
+      'wait_for_my_turn',
+      'Block until it becomes your turn in the given game, the game ends, or the timeout elapses. Use this instead of repeatedly polling get_game/list_my_games while waiting on other players. Returns the same shape as list_my_games plus a timed_out flag.',
+      {
+        instance_id: z.string().uuid().describe('The game instance id'),
+        timeout_sec: z
+          .number()
+          .int()
+          .min(1)
+          .max(55)
+          .optional()
+          .describe('How long to wait before returning, in seconds (default 50, max 55 — request maxDuration is 60s)'),
+      },
+      async ({ instance_id, timeout_sec }, extra) => {
+        const userId = userIdFrom(extra)
+        trackToolCall('wait_for_my_turn', userId)
+        if (!userId) return unauthenticated()
+        return waitForMyTurn({ userId, instanceId: instance_id, timeoutSec: timeout_sec ?? 50 })
       }
     )
   },
