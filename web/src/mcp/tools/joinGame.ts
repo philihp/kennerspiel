@@ -35,13 +35,18 @@ export const joinGame = async ({
   const conflict = instance.entrant.find((e) => e.color === color && e.profile_id !== userId)
   if (conflict) return errorResult(`Color ${color} is already taken in this game.`)
 
-  const { error: upsertError } = await supabase
-    .from('entrant')
-    .upsert(
-      { instance_id: instanceId, profile_id: userId, color, updated_at: new Date().toISOString() },
-      { onConflict: 'instance_id, profile_id' }
-    )
-  if (upsertError) return errorResult(`Failed to claim seat: ${upsertError.message}`)
+  // MCP path lets one profile hold multiple seats in the same instance, so we
+  // key off (instance_id, color) — the DB unique — rather than upserting on
+  // (instance_id, profile_id).
+  const existing = instance.entrant.find((e) => e.profile_id === userId && e.color === color)
+  if (existing) {
+    await supabase.from('entrant').update({ updated_at: new Date().toISOString() }).eq('id', existing.id)
+  } else {
+    const { error: insertError } = await supabase
+      .from('entrant')
+      .insert({ instance_id: instanceId, profile_id: userId, color, updated_at: new Date().toISOString() })
+    if (insertError) return errorResult(`Failed to claim seat: ${insertError.message}`)
+  }
 
   // Mirror the website lobby: if there's already a CONFIG command, rewrite its
   // player count to match the new seat total so START will accept it.
@@ -68,6 +73,7 @@ export const joinGame = async ({
     ok: true,
     instance_id: instanceId,
     my_color: color,
+    my_colors: (seats ?? []).filter((s) => s.profile_id === userId).map((s) => s.color),
     seats: (seats ?? []).map((s) => ({ color: s.color, is_me: s.profile_id === userId })),
     note: 'Seat claimed. Wait for the lobby owner to choose the mode/variant and press START on the website.',
   })

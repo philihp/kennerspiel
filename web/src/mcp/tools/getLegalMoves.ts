@@ -17,7 +17,7 @@ export const getLegalMoves = async ({
 }): Promise<ToolResult> => {
   const fetched = await fetchInstance(userId, instanceId)
   if ('error' in fetched) return errorResult(fetched.error)
-  const { instance, me } = fetched
+  const { instance, mySeats } = fetched
 
   const playing = asPlaying(replay(instance.commands))
   if (playing === undefined) return errorResult('Game has not started yet; there are no moves to make.')
@@ -29,7 +29,7 @@ export const getLegalMoves = async ({
   const completions = control(playing, partial).completion ?? []
   return jsonResult({
     active_color: activeColor,
-    my_turn: me !== undefined && me.color === activeColor,
+    my_turn: activeColor !== undefined && mySeats.some((s) => s.color === activeColor),
     partial,
     partial_is_complete_command: partial.length > 0 && applyCommand(playing, partial) !== undefined,
     completions: completions.slice(0, MAX_COMPLETIONS),
