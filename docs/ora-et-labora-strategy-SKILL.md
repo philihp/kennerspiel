@@ -40,6 +40,13 @@ Prior and Laybrother are NOT interchangeable. Prior unlocks multiplicative tempo
 
 **Red flag:** Using Prior on a work contract or purely defensive action signals strategic confusion.
 
+**Clergy discipline — soft-lock prevention (CRITICAL, solo-verified):**
+
+- Clergy return to your supply **only when all three are placed at the start of a round.** Stranding one or two on production buildings means they never cycle back; you'll go entire rounds clergy-locked.
+- **Never spend your last idle clergy (or all your liquidity) on a non-settle turn without confirming you can still act next turn.** Exhausting clergy + coins + harvestable land on a normal action turn produces a **soft-lock**: no legal main action exists, the engine does NOT auto-pass, and `COMMIT`/`PASS` are both rejected. The game cannot advance — a hard rollback is the only escape (this is what cost a clean finish in the solo game at 192).
+- **The Bathhouse (F23) recall is the safety valve — and it requires the coin payment: `USE F23 Pn`.** The bare `USE F23` does NOT recall clergy (see USE Command Grammar). Keep ≥1 coin reserved if you intend to use F23 to reset clergy.
+- **Keep a coin buffer at all times.** Work contracts are your only way to act through neutral/opponent buildings when your own clergy are stuck, and they cost 1 coin (or **2 coins once any Winery is built** — including the neutral Winery in solo). Zero coins + zero idle clergy = locked.
+
 ### 3. Settlement Placement: Scout Before Paying
 
 Settlement value is **irreversible** — incorrect placement is catastrophic and unrecoverable.
@@ -101,6 +108,19 @@ G02 takes **3 different goods (anything, including zero-value tiles) → 6 ident
 - The straw byproduct from the Windmill simultaneously feeds G19 Slaughterhouse and F37 Dormitory.
 
 Build G02 early — it is a cloister building (☩), so it also grows the cluster that G41 and the high-D church complex reward — and chain it relentlessly. Treating it as "3 goods for 6 basics" and stopping there forfeits its entire purpose.
+
+### 8. Bonus-Action Discipline — Engineer Them, Spend Them
+
+A granted bonus action is a **free building USE** that costs no clergyman — among the strongest plays in the game. **Watch the `bonus_actions` array every turn and treat spending it as the default.** You usually trigger these intentionally (for the extra grape, or to borrow an effect without paying to build the building); receiving one and letting it lapse is rare and almost always wrong.
+
+- **Cloister Garden (F09):** `USE F09` → +1 grape **and** a free USE of one unoccupied orthogonal neighbor. Cheap repeatable double-action. (See Engine Quirk 8 for the engine-verified mechanic.)
+- **Hospice (F40):** `USE F40` → free use of any **unbuilt** building's effect — borrow it without paying the build cost.
+- **Palace (F27):** pay 1 wine → use any **occupied** building (see "Palace — The Anti-Work-Contract Engine" in Endgame Protocols).
+- **Castle (G28):** `USE G28` → bonus **SETTLE** (the only settle route after phase D).
+- **Calefactory (F32):** pay 1 coin → drops **both** a free `FELL_TREES` and a free `CUT_PEAT` into `bonus_actions`. The one exception to "always spend it": you can only cash these if you still have a forest/moor tile to work, so this bonus can legitimately go unused.
+- **Build-bonus (any building):** placing your prior on a newly built building grants an immediate free USE of it — the signature double-action. Do not forfeit it unless the building's effect is genuinely dead (no inputs).
+
+Past failure: forfeiting an F09 grape and waving off build-bonus USEs. Default to engineering and spending the bonus.
 
 ---
 
@@ -404,7 +424,7 @@ Heartland is a fixed 2×5 strip (3 forest + 2 moor at start). Three ways to grow
 
 So a plot purchase is simultaneously a settlement-pocket decision (coastal water = cheap dwelling value) and a Castle/Hilltop enablement decision (mountain = the only G28 site) — not merely "more space."
 
-**Price ramps — buy early.** Both tracks escalate as you buy: in game 4 the district schedule ran 5, 5, 6, 7, 8 and plots 5, 5, 6, 6, 7 (cheapest remaining always on top, read live from `get_game.district_purchase_prices` / `plot_purchase_prices`). The first one or two are the cheapest they will ever be, and buying earlier also grants more rounds of building and settlement placement on the new space. Treat a round 4–8 district buy as both a discount and an option-value purchase; deferring it pays a double penalty — higher price *and* fewer turns to exploit the space. A district bought on the final turn, as I did in game 4, recovers only its raw end-game tile value with nothing built on it.
+**Pricing direction (corrected via solo-game verification): purchases charge the HIGHEST listed price first**, and that entry is removed from the list — so landscape actually gets **cheaper over time**, not more expensive. (The earlier "cheapest on top" / "ramps up" reading of the price arrays was wrong; read prices live from `get_game.district_purchase_prices` / `plot_purchase_prices`.) **Buy early for option value, not for price.** A district bought round 4 grants ~15 more rounds of building and settlement placement on the new space; a district bought on the final turn, as I did in game 4, recovers only its raw end-game tile value with nothing built on it. The price falls, the option value falls faster.
 
 ### The Castle Settlement Protocol (exact, verified sequence)
 
@@ -499,6 +519,8 @@ The endgame is a one-shot argmax over this menu. Approximate net deltas:
 
 Run the comparison explicitly before the last COMMIT. Game 2's round-27 instance: Castle settle (+17) vs Cloister Workshop (~+8 net) — settle dominated.
 
+**Endgame goods engine — the saturated-board pivot (solo-verified, +46 goods in the recovery game).** When the board is saturated and settlements are too food/energy-expensive to keep firing, pivot to a points loop that needs no land: **Clay Mound → clay** (own), **Cloister Courtyard → wood/energy** (own or contracted), **Workshop (G18): 3 clay → 3 ceramic = +9**, **Library (F17): coins → books = +2 each**, and **Bathhouse (F23) recall via `USE F23 Pn`** so the Workshop/Library fire again next turn (the recall itself adds a book + ceramic). **Market (F08): 4 different goods → 7 coins + 1 bread** is a strong one-shot for liquidity and a little food when the loop runs short of pennies. Goods values for the comparison: reliquary 8, ornament 4, ceramic 3, book 2, nickel 2, wine 1.
+
 ### Canonical Rules & Divergence Protocol
 
 The authoritative rules are the official Lookout/Z-Man documents (setup sheet, 4-page general rules, 8-page detailed rules, 12-page glossary), public at `https://www.lookout-spiele.de/en/games/ora.html`. **The rulebook is ground truth; the Kennerspiel engine is an implementation of it.** Where the engine's behavior diverges from the rulebook, that is a *bug in the engine*, not a rule to internalize — capture it as a GitHub issue (describe observed vs. expected with a reproduction), then resume play against the engine's actual behavior. Do not silently encode buggy behavior as strategy.
@@ -511,6 +533,11 @@ The authoritative rules are the official Lookout/Z-Man documents (setup sheet, 4
 4. `join_game` takes parameter `instance`, not `instance_id`.
 5. **Round Tower dwelling value = 9, should be 2 (confirmed data bug; audited in published 0.19.1).** `pointsForDwelling(RoundTower)` returns 9 in `src/board/erections.ts` (and `dist`); both the rulebook appendix and the overview sheet print 2, and the Cloister Church is the stated *unique* highest at 9 — so the 9 is almost certainly copied from there. Ireland-only (I35), so France play is unaffected, but in an Ireland game it over-credits every adjacent settlement by 7 (and a Round Tower between two settlements leaks 14). Fix: `() => 2`, regenerate `dist`. Audit footnote: this was the *only* discrepancy across all 80 erections — every cost, every economic value, the other 79 dwelling values, and all 8 settlement food/energy costs matched canon exactly.
 6. **Sacristy (G34) build cost — engine accepts grain in place of straw (verify vs. rulebook).** The building table and overview sheet print G34's cost as 3 stone + 2 straw, but in game 4 the engine accepted `BUILD G34 4 2` while I held **zero straw**, consuming 2 grain instead. Either grain is being treated as a straw substitute for this cost, or the straw requirement is mis-encoded. *Expected (per overview):* 2 straw specifically. *Observed:* 2 grain accepted, build succeeded, and `USE G34 BoCeOrRq` then produced the Wonder. File an issue with the reproduction; until resolved, you can satisfy the G34 build with grain on hand — which makes the Wonder line materially easier, since grain is far cheaper to mass-produce (G02 → rondel) than straw.
+7. **`get_legal_moves` is heavily over-permissive on verb drill-down (solo-verified).** Beyond the phantom-SETTLE case in quirk 1, the enumerator also lists `USE` and `WORK_CONTRACT` continuations that the executor will reject — no clergy free, no coins, settle phase inactive, etc. **Ground truth is the `get_game` frame**: `clergy`, `bonusActions`, `usableBuildings`, and your coin count. If top-level `get_legal_moves([])` returns an empty completion list, you genuinely have no legal move; otherwise drilling alone is not a legality proof.
+8. **Cloister Garden (F09) combo confirmed (solo-verified).** `USE F09` → +1 grape **and** a free bonus USE of one unoccupied orthogonal neighbor, spending no clergyman. The free use appears under `USE` in `get_legal_moves` even though `bonus_actions` stays `[]`. Excellent for cheap repeated double-actions — free Windmill (grain→flour+straw), free Courtyard, etc.
+9. **Quarry (G22) yields 0 stone when the stone production-wheel value is 0.** `USE G22` against a zero-value stone token is a wasted action. For reliable stone use the **Stone Merchant (G12)** (2 food + 1 energy → 1 stone, ≤5×), or wait until the wheel value is non-zero.
+10. **Shipyard (G26) USE returns a nickel (5-coin tile, 2 pts) + 1 ornament for 2 wood** — not loose pennies. Factor the nickel's 2 VP into the per-use value.
+11. **Start-building grammar.** `USE LRx` with no argument resolves to either the **Cloister Office** (produces coins at the coin-wheel value) or the **Clay Mound** (clay) depending on which LR slot it is. The **Farmyard** is a fork that requires the explicit good: `Sh` (sheep) or `Gn` (grain). Output quantity = current rondel token value, so harvest these when the relevant token is hot.
 
 ### Final-Turn Decision Discipline
 
@@ -552,6 +579,12 @@ The authoritative rules are the official Lookout/Z-Man documents (setup sheet, 4
 **Farmyard requires an explicit good** (it is a grain/sheep fork): `Gn` → grain (resets grain token), `Sh` → sheep (resets sheep token), `GnJo` → grain off the joker (grain token preserved), `ShJo` → sheep off the joker (sheep token preserved).
 
 **Do not conflate with conversion-input tokens.** Some buildings take a trailing token that names a *conversion input*, not a wheel selector — `USE G07 Pt` flips peat → peat coal (the Peat Coal Kiln's free flip), unrelated to the joker. Read each building's effect before assuming the trailing token is a wheel selector.
+
+**Empty-completion trap — the bare `USE <bldg>` is usually a no-op (solo-game-verified).** For most converting/paying buildings, the bare-verb completion (`""`) that `get_legal_moves` offers means "occupy the building but do **nothing**" — no conversion, no payment, no effect. The action and the clergyman are spent for zero return. **Always pass the explicit conversion/payment tokens.** Concrete traps:
+- **Bathhouse (F23) recall: `USE F23 Pn`.** Bare `USE F23` does NOT recall clergy — it just seats a clergyman on F23 (the wasted-action this caused in the solo soft-lock). Keep ≥1 coin if you plan to reset clergy via F23.
+- **Calefactory (F32): `USE F32 Pn`-style.** You MUST pay the penny or the free FELL_TREES / CUT_PEAT bonus actions never appear.
+- **Slaughterhouse (G19): pair sheep and straw in equal amounts** (1 straw per livestock→meat). Run most/all of them for food (meat = 5 each), but reserve a straw or two if a build that turn needs it (straw is a common build cost).
+- **General rule.** Before sending a USE, decide the exact quantities; the engine will not "do the obvious thing" for you. The bare-verb completion is a silent waste of the action.
 
 ### Opening Book — France, long 2p (living, not dogma)
 
@@ -626,3 +659,29 @@ Correction to the section above: that "199–308" reading was a mid-collapse sna
 **The Sacristy/Wonder block, observed live.** Red's killing sequence was one block: Quarry to 10 stone, BUILD Sacristy (G34), then USE the Sacristy (book + ceramic + ornament + reliquary into a Wonder) for roughly +30. That is the single highest-value repeatable sequence in the game and it also advanced termination (the Sacristy is a display build). It confirms the section above: commit to the Sacristy line in the B/C rounds with a reliquary feed and a cloister-adjacent plot reserved — never as a round-D hail-mary, by which point it is unreachable.
 
 **Directive: never concede; maximize final score relative to the opponent (only a human ends a game).** When far behind with a stalled engine, the two levers are (1) grind your own points and (2) build the display to 3 or fewer to cap the opponent's remaining turns — choose by whether your per-turn rate beats theirs from here. Neither lever rescues a deficit already set by column allocation, so the standing lesson holds: win the compounding columns (settlements, economic, Wonders) while the board still allows it, and do not pour late actions into the linear goods column you already lead.
+
+### Solo Play (France long, 1p + neutral) — Mode-Specific Mechanics
+
+Solo France/long pits one human against a neutral player; settlement timing, the building display, and clergy cycles all behave specifically. Two relevant universal lessons from solo play — the USE empty-completion no-op, bonus-action discipline, the clergy soft-lock, the pricing-direction correction, and the endgame goods engine pivot — are already woven into Principles 2 and 8, the USE Command Grammar, the Engine Quirks, and the Final-Action Menu above. The solo-*only* mechanics are these:
+
+**Settlement phases run a forced "neutral building phase" first.** When a settlement phase (A/B/C/D) fires, every building still in the open display is forcibly built onto the **neutral player's board** (free — no cost to you), one at a time, until the display is empty. Only then do you receive the **SETTLE** bonus. **Consequence: build the high-economic buildings you want on YOUR board BEFORE the settlement phase**, or they go to neutral and you forfeit their economic value. You can still use them via work contract afterward, but the dwelling/economic value is lost to you. Plan the converter/heavyweight builds in the 1–4 rounds preceding each phase.
+
+**FREE neutral-building use during the settlement phase (do not skip this).** After buildings are placed on the neutral heartland and *before/with* the SETTLE bonus, if the neutral player's prior is free you may **use one of those neutral buildings for free** — no work-contract fee. This is a free activation EVERY settlement phase and is easy to overlook. Use it on whatever your endgame is short of:
+- **Builders' Market** (wood/clay/stone/straw)
+- **Grain Storage** (1¢ → 6 grain)
+- **Fuel Merchant** (fuel → coins)
+- **Slaughterhouse** (livestock → meat, 5 food each)
+
+Missing this repeatedly is what forced paying coins to work-contract the same buildings later in the soft-lock game.
+
+**Each settlement phase also adds a new settlement tile to your supply** (you gain SR5, SR6, SR7… as phases pass), so you almost always have more settlements than phases. The **Castle (G28)** is the only way to place the surplus once the phases are exhausted — build it. (This generalizes the multi-player "post-phase-D Castle is the only settle route" rule into "you will *always* have stranded settlements in solo without a Castle.")
+
+**Solo pacing shifts the converter window later.** The multiplayer "rounds 5–8 converter window" (Tempo Milestones above) is compressed by adversarial drafting. In solo, with no second player burning through the display, the actual converter window slides to **roughly rounds 10–16** — Windmill, Bakery, Cloister Library, Workshop, Market, then the heavyweights (Cloister Church, Shipyard, Castle, Quarry). The principle is unchanged (acquire aggressively; Prior on volume converters); only the round numbers shift. Read the active rondel state and `upcoming_turns` for the real timing, not the multiplayer milestones table.
+
+### Key Takeaways — Solo Game (192 soft-lock → 261 recovery, France long, 1p + neutral)
+
+- The first run **soft-locked at 192** on a normal action turn: zero coins, all three clergy stranded on production buildings, no harvestable land. `COMMIT`/`PASS` both rejected; no legal main action existed. A human rollback was the only way out.
+- After rollback, the corrected play finished cleanly at **261** by: restoring liquidity (keeping a ≥1-coin buffer at all times), cycling clergy via the **paid** Bathhouse recall (`USE F23 Pn`, never the bare `USE F23`), settling stranded tiles via a self-built **Castle (G28)**, and pivoting to the **endgame goods engine** (Clay Mound → Courtyard → Workshop ceramic + Library book loop with F23 recall) once the board was saturated. The pivot alone delivered **+46 goods**.
+- **Root cause of the soft-lock** was not a single bad move but a discipline cluster: a wasted bare `USE F23` (expected a recall, got a wasted action); a wasted bare `USE F32` (no penny paid, no FELL_TREES/CUT_PEAT bonus); a wasted bonus action (an F09 grape left unspent); and skipped FREE neutral-building uses during settlement phases. Each was individually small; together they drained coins, clergy, and bonus actions to zero on the same turn.
+- **Solo-specific lesson:** the forced neutral-building phase before SETTLE means heavyweight builds *must* land on your board in the 1–4 rounds preceding each phase, and the FREE neutral-building use *during* each phase is a recurring free action you must claim — both are easy to forget and both compound.
+- **One-line takeaway:** Build heavyweights *before* each settlement phase; never strand all clergy/coins on a normal turn; trust the `get_game` frame over the move enumerator; the bare `USE F23` does **not** recall.
