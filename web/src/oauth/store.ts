@@ -1,6 +1,12 @@
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
 import { createClient } from '@supabase/supabase-js'
-import { ACCESS_TOKEN_TTL_SECONDS, AUTHORIZATION_CODE_TTL_SECONDS } from './config'
+import {
+  ACCESS_TOKEN_TTL_SECONDS,
+  AUTHORIZATION_CODE_TTL_SECONDS,
+  SCOPE,
+  SUPPORTED_TOKEN_ENDPOINT_AUTH_METHODS,
+  TokenEndpointAuthMethod,
+} from './config'
 
 // The OAuth tables are not in the generated Database type, so we use a plain
 // service-role client here. All access bypasses RLS and is enforced by code.
@@ -127,4 +133,109 @@ export const verifyPkce = (codeVerifier: string, codeChallenge: string, method: 
   const expected = base64url(createHash('sha256').update(codeVerifier).digest())
   if (expected.length !== codeChallenge.length) return false
   return timingSafeEqual(Buffer.from(expected), Buffer.from(codeChallenge))
+}
+
+export type RegisteredClient = {
+  clientId: string
+  redirectUris: string[]
+  tokenEndpointAuthMethod: TokenEndpointAuthMethod
+  scope: string
+  clientName: string | null
+  hasSecret: boolean
+}
+
+export type ClientRegistrationInput = {
+  redirectUris: string[]
+  tokenEndpointAuthMethod?: string
+  clientName?: string
+  scope?: string
+}
+
+export type ClientRegistrationResult = {
+  client: RegisteredClient
+  clientSecret: string | null
+}
+
+const normalizeAuthMethod = (raw: string | undefined): TokenEndpointAuthMethod | { error: string } => {
+  const method = raw ?? 'client_secret_post'
+  if (!SUPPORTED_TOKEN_ENDPOINT_AUTH_METHODS.includes(method as TokenEndpointAuthMethod))
+    return { error: `token_endpoint_auth_method "${method}" is not supported` }
+  return method as TokenEndpointAuthMethod
+}
+
+export const registerClient = async (
+  input: ClientRegistrationInput
+): Promise<ClientRegistrationResult | { error: string }> => {
+  if (!input.redirectUris.length) return { error: 'redirect_uris must contain at least one URI' }
+  for (const uri of input.redirectUris) {
+    try {
+      const url = new URL(uri)
+      if (url.protocol !== 'https:' && url.hostname !== 'localhost' && url.hostname !== '127.0.0.1')
+        return { error: `redirect_uri must be https or localhost: ${uri}` }
+    } catch {
+      return { error: `redirect_uri is not a valid URL: ${uri}` }
+    }
+  }
+
+  const authMethod = normalizeAuthMethod(input.tokenEndpointAuthMethod)
+  if (typeof authMethod === 'object') return authMethod
+
+  const clientId = `mcp_${randomToken(18)}`
+  const clientSecret = authMethod === 'none' ? null : randomToken(32)
+  const clientSecretHash = clientSecret ? hash(clientSecret) : null
+  const scope = input.scope?.trim() || SCOPE
+
+  const { error } = await oauthClient()
+    .from('oauth_client')
+    .insert({
+      client_id: clientId,
+      client_secret_hash: clientSecretHash,
+      client_name: input.clientName ?? null,
+      redirect_uris: input.redirectUris,
+      token_endpoint_auth_method: authMethod,
+      scope,
+    })
+  if (error) throw new Error(`Failed to register client: ${error.message}`)
+
+  return {
+    client: {
+      clientId,
+      redirectUris: input.redirectUris,
+      tokenEndpointAuthMethod: authMethod,
+      scope,
+      clientName: input.clientName ?? null,
+      hasSecret: clientSecret !== null,
+    },
+    clientSecret,
+  }
+}
+
+export const findClient = async (clientId: string): Promise<RegisteredClient | undefined> => {
+  const { data, error } = await oauthClient()
+    .from('oauth_client')
+    .select('client_id, client_secret_hash, client_name, redirect_uris, token_endpoint_auth_method, scope')
+    .eq('client_id', clientId)
+    .maybeSingle()
+  if (error || !data) return undefined
+  return {
+    clientId: data.client_id,
+    redirectUris: data.redirect_uris,
+    tokenEndpointAuthMethod: data.token_endpoint_auth_method as TokenEndpointAuthMethod,
+    scope: data.scope,
+    clientName: data.client_name,
+    hasSecret: data.client_secret_hash !== null,
+  }
+}
+
+export const verifyClientSecret = async (clientId: string, clientSecret: string): Promise<boolean> => {
+  const { data, error } = await oauthClient()
+    .from('oauth_client')
+    .select('client_secret_hash')
+    .eq('client_id', clientId)
+    .maybeSingle()
+  if (error || !data?.client_secret_hash) return false
+  const expected = Buffer.from(data.client_secret_hash)
+  const actual = Buffer.from(hash(clientSecret))
+  if (expected.length !== actual.length) return false
+  return timingSafeEqual(expected, actual)
 }

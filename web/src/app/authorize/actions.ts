@@ -2,8 +2,8 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
-import { allowedRedirectUris, isKnownClientId, resourceIdentifier, SCOPE } from '@/oauth/config'
-import { issueAuthorizationCode } from '@/oauth/store'
+import { resourceIdentifier, SCOPE } from '@/oauth/config'
+import { findClient, issueAuthorizationCode } from '@/oauth/store'
 
 const fail = (redirectUri: string | null, state: string | null, error: string, description: string): never => {
   if (!redirectUri) throw new Error(`${error}: ${description}`)
@@ -24,10 +24,11 @@ export const approve = async (formData: FormData) => {
   const resource = (formData.get('resource') as string | null) ?? null
   const scope = String(formData.get('scope') ?? SCOPE)
 
-  if (!redirectUri || !allowedRedirectUris().includes(redirectUri))
-    fail(null, state, 'invalid_request', 'redirect_uri is not allow-listed')
+  const client = clientId ? await findClient(clientId) : undefined
+  if (!client) fail(null, state, 'unauthorized_client', 'Unknown client_id')
+  if (!redirectUri || !client!.redirectUris.includes(redirectUri))
+    fail(null, state, 'invalid_request', 'redirect_uri is not registered for this client')
   if (responseType !== 'code') fail(redirectUri, state, 'unsupported_response_type', 'Only code is supported')
-  if (!isKnownClientId(clientId)) fail(redirectUri, state, 'unauthorized_client', 'Unknown client_id')
   if (!codeChallenge) fail(redirectUri, state, 'invalid_request', 'PKCE code_challenge is required')
   if (codeChallengeMethod !== 'S256')
     fail(redirectUri, state, 'invalid_request', 'Only code_challenge_method=S256 is supported')
