@@ -112,7 +112,7 @@ describe('board/erections', () => {
         [BuildingEnum.CoalHarbor, 12, 0],
         [BuildingEnum.FilialChurch, 6, 7],
         [BuildingEnum.Cooperage, 5, 3],
-        [BuildingEnum.RoundTower, 6, 9],
+        [BuildingEnum.RoundTower, 6, 2],
         [BuildingEnum.Camera, 5, 3],
         [BuildingEnum.Bulwark, 8, 6],
         [BuildingEnum.FestivalGround, 3, 7],
