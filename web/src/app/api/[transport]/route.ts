@@ -9,6 +9,7 @@ import { makeMove } from '@/mcp/tools/makeMove'
 import { undoMove } from '@/mcp/tools/undoMove'
 import { joinGame } from '@/mcp/tools/joinGame'
 import { waitForMyTurn } from '@/mcp/tools/waitForMyTurn'
+import { getStrategyGuide } from '@/mcp/tools/getStrategyGuide'
 import { errorResult } from '@/mcp/content'
 import { resolveAccessToken } from '@/oauth/store'
 
@@ -112,6 +113,15 @@ const handler = createMcpHandler(
         trackToolCall('undo_move', userId)
         if (!userId) return unauthenticated()
         return undoMove({ userId, instanceId: instance_id })
+      }
+    )
+    server.tool(
+      'get_strategy_guide',
+      'Return the full strategic coaching guide for Ora et Labora (France variant, long 2p). Covers action economy, clergy hierarchy, settlement evaluation, converter priorities, building identity reference, engine quirks, endgame protocols, and opening book. Call this at the start of a session or when planning a non-trivial move.',
+      {},
+      (_args, extra) => {
+        trackToolCall('get_strategy_guide', userIdFrom(extra))
+        return getStrategyGuide()
       }
     )
     server.tool(

@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  webpack(config) {
+    config.module.rules.push({ test: /\.md$/, type: 'asset/source' })
+    return config
+  },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
