@@ -94,6 +94,8 @@ Convert only for **point accumulation** or **critical resource bottleneck resolu
 **Discipline rule:**
 - Every conversion must answer: "What do I gain?" If the answer is "flexibility" or "optionality," it's likely a trap.
 
+**G02 Cloister Courtyard late-game fuel injection (game 3 verified).** `USE G02 PnClNi Pt` → 6 peat. Cost: 1 penny + 1 clay + 1 nickel = −2 goods value. Output: 6 peat = 12 energy potential (6×2). Two USE G18 cycles powered by these 6 peat net +18 goods — pays back the conversion 9× over. Input choice matters: **prefer PnClNi** over PnClWn (saves wine for F24 bread+wine reliquary chain) and over PnClCe (saves 3 goods vs 2 for nickel). Output choice: peat (density 2) when energy is the bottleneck; wood (density 1) when also needing construction material; stone if G34 Sacristy is reachable.
+
 ### 6. Stone is Gated Capital, Not a Consumable
 
 Stone gates the two highest-leverage buildings in the game: the **Castle (G28, 5 stone)** and the **Sacristy (G34, 3 stone)** — each converts into 15–30+ VP. Stone spent early on Cloister Workshop (G18) ornament conversion (1 stone per +4 VP ornament) is a catastrophic misallocation against that opportunity cost.
@@ -119,6 +121,14 @@ A granted bonus action is a **free building USE** that costs no clergyman — am
 - **Castle (G28):** `USE G28` → bonus **SETTLE** (the only settle route after phase D).
 - **Calefactory (F32):** pay 1 coin → drops **both** a free `FELL_TREES` and a free `CUT_PEAT` into `bonus_actions`. The one exception to "always spend it": you can only cash these if you still have a forest/moor tile to work, so this bonus can legitimately go unused.
 - **Build-bonus (any building):** placing your prior on a newly built building grants an immediate free USE of it — the signature double-action. Do not forfeit it unless the building's effect is genuinely dead (no inputs).
+
+**The BUILD+Prior double-action is the single highest-value turn in the game** when a productive building is built on a turn with good inputs ready. Verified game 3, round 27:
+```
+BUILD F35 1 0 ClCl          # main action; +4 econ +4 settle adjacency
+USE F35 Pn×15               # bonus USE (15¢ → 2 reliquaries, +10 net)
+COMMIT
+```
+Net for one turn: **+18 score**. No single plain USE, settle, or WC in that game came close. When choosing a build location, evaluate the bonus-USE economics *in the same calculation* as the dwelling-adjacency score — a high-D building (F24 D=9, F08 D=8, F27 D=8) wedged between two settlements and with a productive first-fire is the canonical jackpot turn.
 
 Past failure: forfeiting an F09 grape and waving off build-bonus USEs. Default to engineering and spending the bonus.
 
@@ -281,6 +291,17 @@ When facing a decision point (multiple legal actions available):
 - Acknowledge mistake; Prior is lost
 - Revert to Laybrother-only clergy allocation for remainder of game
 - Next game: reserve Prior strictly for synergistic building activations
+
+### Pitfall: Opponent Denial WC on Your Cloister Church (F24)
+
+**Symptom (game 3):** Opponent plays `WORK_CONTRACT F24 PnPn` → `USE F24` → `COMMIT`. Their Prior parks on F24 with no conversion done (no bread+wine); costs them 2 pennies and one action. Costs you: your own Prior is now locked off its best engine, your Cloister Church is occupied, and if this is the closing turn the recall never fires — your reliquary chain dies without firing.
+
+**Why it works:** WC-with-no-useful-conversion is action-positive for the denier. They spend 2¢ to freeze your strongest engine on the final turns. Particularly devastating against F24 because USE requires bread+wine; with PRIR locked by the denier, even resupplying those goods buys you nothing.
+
+**Counter-strategy:**
+- In closing turns, keep your own PRIR resident on F24 between cycles: USE F24 yourself before the opponent can WC it — even a barren USE (no bread+wine) that produces nothing still denies the denial.
+- Schedule F24 USEs so PRIR returns home only via planned recall, never sitting idle where a 2¢ WC can grab it.
+- Track opponent's coin reserves: a 2¢ WC requires almost no liquidity. Assume it will happen in the final turns and bake it into your action order.
 
 ---
 
@@ -488,6 +509,8 @@ Therefore evaluate the full product space settlement × location × payment, and
 
 Payment selection is a min-cost covering problem: `get_legal_moves(["SETTLE", S, col, row])` enumerates the exact feasible payment set; choose the bundle with lowest residual scoring value (e.g. `NiWo` = nickel + wood cleanly covers 5 food + 1 energy with minimal point sacrifice — but a 5-coin tile IS worth 2 points, so prefer dumping zero-point commodities like grain/sheep/grapes when the combinatorics allow).
 
+**Verified Castle settle payment (game 3, Settlement D, SR8 Hilltop Village):** `SETTLE SR8 5 0 NiNiNiNiNiNiCo` — placed on a mountain-plot hillside at (5,0), adjacent to LR1 (D=3). Payment: 6 nickels = 30 food (exact match for SR8's 30F cost) + 1 peat coal = 3 energy (exact match for SR8's 3E cost). Zero overpay, zero waste. Score delta: +11 settle (own D=8 + LR1 D=3) + 10 econ (S08 economic value) − 12 goods (6 nickel chunks × 2 pts each) = **+9 net**. General rule: when food cost is divisible by 5, Ni×n is a clean exact-match payment; coal/peat-coal handle energy in 3s cleanly.
+
 ### Work Contract Pricing (rulebook-verified)
 
 Base price: 1 coin, paid to the building's owner; the owner mans the building with one of THEIR clergymen (yours stay free). Once the Winery (F21) is built — by anyone — the price rises to 2 coins for all players for the rest of the game (hence `PnPn` in game 2). One wine may always be paid instead, regardless of price level ("present for the host") — and per the overview sheet **the wine is drunk and returned to the general supply, not given to the opponent**. So post-Winery the wine present is doubly correct: it costs you ~2 points of value instead of 2 coins, AND denies the opponent the 2-coin income — a relative-score swing of roughly 2× the coin route. The engine accepts `WORK_CONTRACT G22 Wn`.
@@ -511,7 +534,7 @@ The endgame is a one-shot argmax over this menu. Approximate net deltas:
 - **Sacristy G34**: +13 (book+ceramic+ornament+reliquary → Wonder)
 - **Cloister Workshop G18**: up to +13 gross (3 ceramics + 1 ornament, minus energy)
 - **House of the Brotherhood G41**: 5 coins → 1½ pts per cloister building (2p long)
-- **Forger's Workshop F35**: +6 for 5 coins; +4 per additional reliquary at 10 coins
+- **Forger's Workshop F35**: +6 for 5 coins; +4 per additional reliquary at 10 coins (unlimited within-USE scaling — `reliquaries = 1 + floor((coins − 5) / 10)`; see Engine Quirk 12 if planning off the completion list)
 - **Printing Office F38**: up to +8 (≤4 forests → books)
 - **Dormitory F37**: +3, then +2 per straw+wood set
 - **Estate G39**: +6 or +12 dumping food/energy *(not in 2p)*
@@ -539,6 +562,7 @@ The authoritative rules are the official Lookout/Z-Man documents (setup sheet, 4
 10. **Shipyard (G26) USE returns a nickel (5-coin tile, 2 pts) + 1 ornament for 2 wood** — not loose pennies. Factor the nickel's 2 VP into the per-use value.
 11. **Start-building grammar.** `USE LRx` with no argument resolves to either the **Cloister Office** (produces coins at the coin-wheel value) or the **Clay Mound** (clay) depending on which LR slot it is. The **Farmyard** is a fork that requires the explicit good: `Sh` (sheep) or `Gn` (grain). Output quantity = current rondel token value, so harvest these when the relevant token is hot.
 12. **Forger's Workshop (F35) reliquary cap — move enumerator under-reported (fixed).** A recent game surfaced that `get_legal_moves(["USE","F35"])` only ever offered the 5¢ and 15¢ payments (1 or 2 reliquaries), even when the player held far more coin — capping the enumerated payoff at 15¢ → 2 reliquaries. The **executor was always correct**: a single `USE F35` honors the full rulebook scaling (5¢ for the 1st reliquary, +10¢ each thereafter — 5/15/25/35/45… → 1/2/3/4/5…; see the within-USE scaling note above), so the cap lived purely in the completion/enumeration path. *Fixed:* F35's `complete` now enumerates every affordable 5+10n tier (most-expensive-first), so the enumerator matches the executor. Until the deployed engine ships the fix, do **not** trust the F35 completion list as the ceiling — the executor accepts 25¢/35¢/45¢ payments the enumerator may omit; compute the reliquary count yourself from coins on hand (`reliquaries = 1 + floor((coins − 5) / 10)` for coins ≥ 5). **Rollback caution (over-permissive direction, cf. quirks 1 & 7):** F35 is a one-clergy building — a `USE` seats a clergyman and the building is occupied until a recall (round-wave or paid Bathhouse `USE F23 Pn`). The enumerator can still list a second `USE F35` before the clergy have actually recalled; attempting it triggers a rollback. Ground-truth the clergy/occupancy state in `get_game`, not the completion list, before planning a second fire.
+13. **BUILD F35 accepts ClCl (2 clay only), waiving the straw requirement (suspected bug — file an issue).** Rulebook lists F35 build cost as 2c + 1sw. The engine accepted `BUILD F35 X Y ClCl` with zero straw on hand in game 3. *Expected (rulebook):* 2 clay + 1 straw. *Workaround:* the clay-only path is usable until fixed; it makes F35 materially cheaper to place, especially early when straw is scarce.
 
 ### Final-Turn Decision Discipline
 
@@ -695,7 +719,7 @@ A knife-edge endgame loss decided by two avoidable misreads of building effects 
 
 **Misread 2 — F24 Cloister Church needs BREAD, not book (~−5 pts).** The reliquary chain is `USE F24 BrWn` = 1 bread + 1 wine → 1 reliquary (+8 pts gross), verified at line 377 in the canonical table. Memorising it as "book + wine" left F24 work-contracted but un-fireable — the USE still fires legally without bread but produces nothing, wasting the action plus the work-contract fee already paid. **Pre-plan the bread before work-contracting F24.** Bread comes from F05 Bakery (flour → bread), fed by F04 Windmill (grain → flour); F08 Market also outputs 1 bread per 4-goods conversion as a side-effect, but never as a primary bread source.
 
-**Verified F35 Forger's Workshop scaling — all within a single USE.** The rate is: first reliquary costs 5 coins, each additional costs 10 coins, all within **one** `USE F35`. With 105 coins you spend one action and collect 11 reliquaries (5 + 100 = 105). The official menu line "+6 for 5 coins; +4 per additional reliquary at 10 coins" is already describing within-USE scaling — not a per-USE headline. So the threat is not "repeated USEs": it is **one USE draining a large coin reserve into a pile of reliquaries in a single action.** With 35 coins a single USE yields 4 reliquaries (+32 pts gross). This is the slope-inversion mechanism that flipped the +14 lead into a −4 loss.
+**Verified F35 Forger's Workshop scaling — all within a single USE.** The rate is: first reliquary costs 5 coins, each additional costs 10 coins, all within **one** `USE F35` — so 105 coins yields 11 reliquaries in one action. The threat is not "repeated USEs": it is **one USE draining a large coin reserve.** With 35 coins a single USE yields 4 reliquaries (+32 pts gross). Engine note: the enumerator previously under-reported by capping at 15¢ → 2 reliquaries; PR #1798 shipped the fix so `get_legal_moves` now enumerates every 5+10n tier, matching the executor. If planning off a stale deployment, compute the count from coins on hand rather than the completion list (see Engine Quirk 12). The slope-inversion in this game (from +14 lead to −4 loss over three opponent actions) was real and the WC-deny response stands either way.
 
 **New principle — The Coin-Sink Threat Window.** When opponent's penny reserve exceeds ~25 and any coin-consuming converter (F35 Forger's Workshop, F17 Cloister Library, G41 House of Brotherhood, F33 Shipping Company) sits in `buildings_available`, model their **next action** as a potential coin dump: a single F35 USE with 35 coins yields 4 reliquaries (+32 pts gross) in one action. Three options:
 1. **Deny** — `WORK_CONTRACT` the threat building the turn it is built. Costs 2 coins post-Winery; saves 10+ pts per denied rondel cycle. The instant F35 enters available AND opponent holds >30 pennies, contract it.
@@ -711,3 +735,10 @@ Never assume one BUILD = one USE for coin-cheap converters. The Forger's Worksho
 - Did not WC the new threat when F35 was built — a 2-penny defensive contract on the build turn would have flipped the result.
 
 **One-line takeaway:** Consult the canonical building table in THIS file before USE on any unfamiliar building; when opponent's pennies exceed ~25 and a coin-converter is available, model the next rondel as a coin dump and either WC-deny the threat or outscore via your own compounding column.
+
+**Red's perspective (winner, 418–414) — additional lessons from the same game:**
+
+- **BUILD+Prior is the strongest single turn.** BUILD F35 + bonus USE F35 (15¢ → 2 reliquaries) yielded **+18 in a single turn** — more than any settle, any plain USE, or any WC in the game. When a coin reserve is ready and a productive building is buildable, doing BUILD now (rather than accumulating one more turn) captures the bonus USE and its full value.
+- **Denial WC F24 closed the game.** The terminal play was `WORK_CONTRACT F24 PnPn` → `USE F24` (no bread+wine, produces nothing) → `COMMIT`. Cost: 2 pennies. Effect: opponent's reliquary engine locked for the closing sequence, ending the game before their recall could fire. A 2¢ investment that swung the margin.
+- **Engine quirk rollback cost 10 pts but win held.** A third `USE F35` in Settlement Round D was accepted by the engine but illegal per rules (clergy had not actually recalled); rollback was required. Net cost ~+10 score forfeited. Never play to the engine's over-permissive second F35 USE in a recall-gated state — confirm `clergy_at_home = 3` before issuing it.
+- **Final margin (4 pts) is fragile.** When leading by single digits in Settlement Round D, every denial play swings 2–10 points. Track opponent's coin reserve and clergy state to predict the closing move and plan the counter before it arrives.
