@@ -108,12 +108,44 @@ describe('buildings/forgersWorkshop', () => {
       })
     })
 
+    it('can do it 3 times', () => {
+      // 25 coins (5 nickels) -> 3 reliquaries
+      const s1 = forgersWorkshop('NiNiNiNiNi')(s0)!
+      expect(s1.players[0]).toMatchObject({
+        reliquary: 3,
+        nickel: 5,
+      })
+    })
+
     it('can do it 4 times', () => {
       const s1 = forgersWorkshop('NiNiNiNiNiNiNi')(s0)!
       expect(s1.players[0]).toMatchObject({
         reliquary: 4,
         nickel: 3,
       })
+    })
+
+    it('can do it 5 times', () => {
+      // 45 coins (9 nickels) -> 5 reliquaries
+      const s1 = forgersWorkshop('NiNiNiNiNiNiNiNiNi')(s0)!
+      expect(s1.players[0]).toMatchObject({
+        reliquary: 5,
+        nickel: 1,
+      })
+    })
+
+    it('scales 5+10n: each extra reliquary costs 10 more coins', () => {
+      // Pay in pennies so the coin amount is exact (no nickel rounding).
+      const withPennies = (penny: number): GameStatePlaying => ({
+        ...s0,
+        players: [{ ...s0.players[0], nickel: 0, penny }, ...s0.players.slice(1)],
+      })
+      const pay = (penny: number) => forgersWorkshop('Pn'.repeat(penny))(withPennies(penny))!.players[0].reliquary
+      expect(pay(5)).toBe(1)
+      expect(pay(15)).toBe(2)
+      expect(pay(25)).toBe(3)
+      expect(pay(35)).toBe(4)
+      expect(pay(45)).toBe(5)
     })
   })
 
@@ -131,6 +163,33 @@ describe('buildings/forgersWorkshop', () => {
       } as GameStatePlaying
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['NiNiNi', 'Ni', ''])
+    })
+    it('offers every affordable tier beyond 15 (5+10n scaling)', () => {
+      // p0 has 10 nickels = 50 coins, so 5/15/25/35/45 are all affordable
+      // (1/2/3/4/5 reliquaries). The engine previously capped this at 15 -> 2.
+      const c0 = complete([])(s0)
+      expect(c0).toStrictEqual([
+        'NiNiNiNiNiNiNiNiNi', // 45 coins -> 5 reliquaries
+        'NiNiNiNiNiNiNi', // 35 coins -> 4 reliquaries
+        'NiNiNiNiNi', // 25 coins -> 3 reliquaries
+        'NiNiNi', // 15 coins -> 2 reliquaries
+        'Ni', // 5 coins -> 1 reliquary
+        '',
+      ])
+    })
+    it('offers usage at 5, 15, and 25', () => {
+      const s1 = {
+        ...s0,
+        players: [
+          {
+            ...s0.players[0],
+            nickel: 6, // 30 coins: affords 5/15/25 but not 35
+          },
+          ...s0.players.slice(1),
+        ],
+      }
+      const c0 = complete([])(s1)
+      expect(c0).toStrictEqual(['NiNiNiNiNi', 'NiNiNi', 'Ni', ''])
     })
     it('allows mixed inputs', () => {
       const s1 = {
