@@ -72,6 +72,7 @@ F-buildings (converters) and some G-buildings (engines) scale commodity chains i
 1. **High-priority converters**: F04 Windmill (grain→flour, ≤7), F05 Bakery (flour→bread; bread = 3 food), G19 Slaughterhouse (livestock+straw→meat; meat = 5 food), F17 Cloister Library (≤3 coins→books, then book→meat+wine), F21 Winery (grapes→wine)
    - These unlock commodity engines; delaying costs exponential points
    - Opponent acquiring the Windmill/Library chain by round 7–8 signals you're in tempo deficit
+   - **F17 Cloister Library compound move (optimal):** combine both card clauses in one USE — flip ≤3 coin tiles → 3 books, then trade 1 book → 1 meat + 1 wine. Net: −3 coin tiles (−3¢ liquidity) → +2 books (+4 pts) + 1 meat (5 food) + 1 wine (+1 pt + 1¢ + 1 food) = **+5 pts + 5 food + 1 wine per USE**. F17 competes with F04 in the converter race at rounds 5–8, not as a secondary acquisition — missing it is a convergence cost, not a deferral.
 2. **Economic engines**: G02 Cloister Courtyard (3 different goods → 6 identical basic goods), F14 Grapevine and G22 Quarry (production-wheel producers)
    - Support converters; enable resource cycling
 3. **Utility buildings**: G07 (water/stone), G12 (Stone Merchant — NOT a settlement enabler; see Endgame Protocols), LB upgrades
@@ -418,6 +419,16 @@ Columns: **E** = economic value, **D** = dwelling value (what adjacent settlemen
 
 Point-goods values: book = 2, ceramic = 3, ornament = 4, reliquary = 8, Wonder = 30, wine = 1 (also 1 coin + 1 food), 5-coin tile = 2.
 
+**Structural consequences of the 2p long build set.** Sixteen buildings are excluded from 2-player France: F03, G06, F09, F10, G13, F15, G16, F20, F23, F25, F29, F31, F32, F36, G39, F40. Seven critical bottlenecks result:
+
+1. **G34 Sacristy is the unique Wonder route** — no F25 Chamber of Wonders alternative
+2. **Reliquaries dual-sourced only** — F24 Cloister Church (bread+wine, ≤2/turn) and F35 Forger's Workshop
+3. **Stone single-sourced** — G22 wheel + G12 Merchant (≤5×: 2 food + 1 energy → 1 stone)
+4. **Grapes single-sourced** — F14 alone; controls wine→reliquaries→Palace pathways
+5. **Food→coin liquidity thin** — only F05 Bakery bread sale (≤2 bread @ 4¢) plus scattered sources (F08, G26, F30, G07)
+6. **Priory (G01) is the sole tempo amplifier** — no F09/F23 workarounds; misplaced Prior = round-long commitment
+7. **No unbuilt-building escape** — F40 Hospice removed; uncovered buildings permanently unavailable
+
 **Identity verification rule:** a building's effect is confirmed only by an observed state delta (e.g., `bonus_actions` mutation) or the official index above, never by name resemblance or prior-session summaries. Two full turns were incinerated in game 2 acting on the unverified claim "G12 enables settlement." When identity is uncertain and the action is irreversible, consult this table, inspect state, or ask the human — do not probe by executing.
 
 ### Round Structure — Long 2p (canonical, from the detailed rulebook p.8)
@@ -486,6 +497,19 @@ Every settlement costs food AND fuel simultaneously. Verified resource values:
 - **Food:** Nickel (5-coin tile) = 5, Meat = 5, Beer = 5, **Bread = 3**, Sheep/livestock = 2, Grain = Grape = Penny = Flour = Wine = 1. Wine additionally carries 1 coin + 1 point; a 5-coin tile is worth 2 points.
 - **Fuel/energy:** Peat coal = 3, Peat = 2, Wood = 1, Straw = 0.5
 
+**Settlement-payment hidden tax — prefer zero-base-point goods.** When goods are consumed for settlement payment, any endgame scoring value they carry is forfeited:
+
+| Good | Food value | Endgame point cost when paid |
+|------|-----------|------------------------------|
+| Grain / Flour / Penny | 1 | 0 |
+| Sheep / Livestock | 2 | 0 |
+| Bread | 3 | 0 |
+| Meat / Beer | 5 | 0 |
+| Wine | 1 | **1** |
+| Nickel (5-coin tile) | 5 | **2** |
+
+Strategy: a Village (S07, 15 food) paid with 3 meat costs 0 endgame points; paid with 3 nickels it forfeits 6. Prefer dumping zero-point goods (grain, sheep, bread, meat) before spending wine or nickels when the combinatorics allow.
+
 Settlement index (France; cost is energy + food, "initial value" = own dwelling + own land before neighbors):
 
 | ID | Settlement | Cost (E+F) | Dwelling | Initial | Notes |
@@ -514,6 +538,13 @@ Payment selection is a min-cost covering problem: `get_legal_moves(["SETTLE", S,
 ### Work Contract Pricing (rulebook-verified)
 
 Base price: 1 coin, paid to the building's owner; the owner mans the building with one of THEIR clergymen (yours stay free). Once the Winery (F21) is built — by anyone — the price rises to 2 coins for all players for the rest of the game (hence `PnPn` in game 2). One wine may always be paid instead, regardless of price level ("present for the host") — and per the overview sheet **the wine is drunk and returned to the general supply, not given to the opponent**. So post-Winery the wine present is doubly correct: it costs you ~2 points of value instead of 2 coins, AND denies the opponent the 2-coin income — a relative-score swing of roughly 2× the coin route. The engine accepts `WORK_CONTRACT G22 Wn`.
+
+**Winery (F21) as strategic lever.** Building F21 creates three compounding effects simultaneously:
+1. **Capture** the grapes→wine conversion chain (wine = 1 food + 1 coin + 1 point; sellable @ 7¢)
+2. **Tax** every subsequent work contract by +1¢ for both players — once F21 is built this is permanent and irreversible
+3. **Amplify** the wine-present tactic: paying 1 wine instead of 2 coins denies the opponent the 2-coin income AND saves 1 coin, making it ~2× more cost-effective than the coin route
+
+Front-load the F21 build once grapes are in hand and the opponent relies on work contracts. An opponent running a WC-heavy strategy (e.g. to access your converters) pays 1 extra coin per WC for the rest of the game — compounding across 10+ WCs this is a decisive tempo swing.
 
 ### Palace (F27) — The Anti-Work-Contract Engine
 
@@ -615,7 +646,16 @@ The authoritative rules are the official Lookout/Z-Man documents (setup sheet, 4
 
 Strong tested defaults; **keep observing the opponent and re-deriving.** An opening blind to the other player's development is a memorized line waiting to be punished — explore the deltas every game and fold what wins back into this section.
 
-**Start-player round-1 block (2 actions), thin opening hand (1 each of peat/penny/clay/wood/grain/sheep):**
+**Pick the opening by which round-2 build you intend to make, not by which production maximum looks largest in isolation.** Four viable turn-1 builds from the thin starting hand (1 each of peat/penny/clay/wood/grain/sheep):
+
+| Build | Cost | Bonus USE yield | Round-2 intent |
+|-------|------|-----------------|----------------|
+| **G07 Peat Coal Kiln** | 1 clay | +1¢ + 1 peat coal; flip peat→coal | 2¢ landscape purchase turn 2; coin-mint base |
+| **G12 Stone Merchant** | 1 wood | 2 food + 1 energy → 1 stone | Unlocks Market (F08) or Library (F17) by rounds 2–3 |
+| **G02 Cloister Courtyard** | 2 wood | 3 different basics → 6 identical | Diversity conversion base; cloister cluster seed |
+| **G01 Priory** | 1w+1c | Use an occupied building via your Prior | Rarely useful first player; viable second-player to chain opponent's prior |
+
+**Start-player round-1 block (2 actions), default opening:**
 1. `BUILD G07` on a central interior plains plot, then take the auto-granted bonus `USE G07 Pt`. Penny scarcity is the game's binding constraint, and G07 (1 clay — the cheapest coin-minting tile) is the earliest fix; the Prior bonus USE nets +1 coin, +1 peat coal, and flips the starting peat to coal (fuel-3 > fuel-2, free). Economic +4 immediately. G07's −2 dwelling also wants to sit interior, away from future coastal settlement pockets. The Prior parks here and recycles on the round-4 wave recall — clear of the 5–8 converter window.
 2. `FELL_TREES` on a forest. Wood is the broadest build material (G02 2w, F04 3w, G18 3w) and felling also opens a build plot, pre-empting landscape saturation; it is clergy-free, so both lay brothers stay home. +2 wood at the round-1 wheel value.
 
