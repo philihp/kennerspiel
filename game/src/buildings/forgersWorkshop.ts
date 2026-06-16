@@ -1,8 +1,8 @@
-import { always, ap, curry, pipe, unnest, view } from 'ramda'
+import { always, curry, map, pipe, reverse, unnest, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { coinCostOptions, costMoney, parseResourceParam } from '../board/resource'
-import { GameStatePlaying, Tableau } from '../types'
+import { GameStatePlaying } from '../types'
 
 export const forgersWorkshop = (param = '') => {
   const input = parseResourceParam(param)
@@ -21,7 +21,13 @@ export const complete = curry((partial: string[], state: GameStatePlaying): stri
   match(partial)
     .with([], () => {
       const player = view(activeLens(state), state)
-      return [...unnest(ap<Tableau, string>([coinCostOptions(15), coinCostOptions(5)], [player])), '']
+      // The rulebook lets you pay 5 coins for the 1st reliquary and 10 coins for each
+      // additional one: 5->1, 15->2, 25->3, 35->4, ... Offer every affordable tier,
+      // most expensive first (keeping the historical highest-cost-first ordering).
+      const maxCoins = costMoney(player)
+      const tiers: number[] = []
+      for (let coins = 5; coins <= maxCoins; coins += 10) tiers.push(coins)
+      return [...unnest(map((coins) => coinCostOptions(coins, player), reverse(tiers))), '']
     })
     .with([P._], always(['']))
     .otherwise(always([]))
