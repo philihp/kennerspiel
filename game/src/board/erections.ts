@@ -227,7 +227,7 @@ export const pointsForDwelling = (building: ErectionEnum): number =>
     .with(BuildingEnum.CoalHarbor, () => 0)
     .with(BuildingEnum.Bulwark, () => 6)
     .with(BuildingEnum.FestivalGround, () => 7)
-    .with(BuildingEnum.RoundTower, () => 9)
+    .with(BuildingEnum.RoundTower, () => 2)
     .with(BuildingEnum.Camera, () => 3)
     .with(BuildingEnum.Guesthouse, () => 5)
     .with(BuildingEnum.ClayMoundR, () => 3)
