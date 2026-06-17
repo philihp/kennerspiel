@@ -13,25 +13,44 @@ const Home = () => {
         You&apos;ll probably want to start out by creating an <Link href="/instance/">instance</Link>, and either play a
         solo game or invite some friends.
       </p>
-      <h2>Play with Claude</h2>
+      <h2>Play with an AI</h2>
       <p>
-        You can also let Claude take a seat at your table. Add Kennerspiel as a custom connector in Claude and it can
-        list your games, read the board, and play moves on your behalf — useful for solo learning, AI-vs-AI matches, or
-        just having a patient opponent at 2am.
+        Kennerspiel has an <Link href="https://modelcontextprotocol.io/">MCP</Link> server at{' '}
+        <code>https://kennerspiel.com/api/mcp</code>. Any MCP-compatible AI can take a seat at your table — it will
+        read the board, consult a built-in strategy guide, and play moves on your behalf. Useful for solo learning,
+        AI-vs-AI matches, or just having a patient opponent at 2am.
       </p>
+      <h3>Claude (claude.ai)</h3>
       <ol>
         <li>
-          In Claude, open <strong>Settings → Connectors → Add custom connector</strong>.
+          Open <strong>Settings → Integrations → Add integration</strong>.
         </li>
         <li>
           Paste this URL: <code>https://kennerspiel.com/api/mcp</code>
         </li>
-        <li>Click Add, then sign in to Kennerspiel when Claude opens the authorization page.</li>
+        <li>Sign in to Kennerspiel when Claude opens the authorization page, then click Authorize.</li>
       </ol>
       <p>
-        That&apos;s it — no client IDs, no secrets, no copy-pasting. After authorizing, ask Claude something like
-        &ldquo;list my Ora et Labora games&rdquo; and it&apos;ll find this server&apos;s tools.
+        No client IDs, no secrets, no copy-pasting. Ask Claude something like &ldquo;list my Ora et Labora
+        games&rdquo; and it&apos;ll find the tools automatically.
       </p>
+      <h3>Claude Code</h3>
+      <p>Run this once in your terminal:</p>
+      <pre>
+        <code>claude mcp add --transport http kennerspiel https://kennerspiel.com/api/mcp</code>
+      </pre>
+      <p>Claude Code will open a browser for the OAuth flow and redirect back automatically.</p>
+      <h3>ChatGPT</h3>
+      <p>Requires a Plus, Pro, Business, or Enterprise account with Developer mode enabled.</p>
+      <ol>
+        <li>
+          Open <strong>Settings → Connectors → Create</strong>.
+        </li>
+        <li>
+          Paste this URL: <code>https://kennerspiel.com/api/mcp</code>
+        </li>
+        <li>ChatGPT discovers the OAuth endpoints automatically and redirects you here to authorize.</li>
+      </ol>
       <p>
         Source code is available at{' '}
         <Link href="https://github.com/philihp/kennerspiel">github.com/philihp/kennerspiel</Link>
@@ -41,3 +60,4 @@ const Home = () => {
 }
 
 export default Home
+
