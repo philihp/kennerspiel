@@ -63,7 +63,7 @@ export const Player = ({ player, active }: Props) => {
       <PlayerResources {...resources} />
       <PlayerLandscape landscape={landscape} offset={landscapeOffset} active={active} />
       <PlayerWonders wonders={wonders} />
-      <PlayerSettlements settlements={settlements} color={colorToChar(color)} />
+      <PlayerSettlements settlements={settlements} landscape={landscape} color={colorToChar(color)} />
     </div>
   )
 }
