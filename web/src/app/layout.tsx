@@ -33,6 +33,10 @@ const RootLayout = async ({
   return (
     <SupabaseContextProvider>
       <html lang="en">
+        <head>
+          <link rel="service" type="application/mcp+json" href="/.well-known/mcp.json" />
+          <link rel="service-desc" href="/openapi.json" />
+        </head>
         <body>
           <Header />
           <hr />
