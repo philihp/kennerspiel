@@ -21,6 +21,7 @@ export const PlayerSettlements = ({ settlements, color }: Props) => {
     (['S', 'A', 'B'].includes(state?.frame?.settlementRound) ||
       (state?.frame?.settlementRound === 'C' && state?.flow?.[0]?.settle))
   const showS08 =
+    (state?.config?.players ?? 0) >= 3 &&
     state?.frame?.settlementRound &&
     (['S', 'A', 'B', 'C'].includes(state?.frame?.settlementRound) ||
       (state?.frame?.settlementRound === 'D' && state?.flow?.[0]?.settle))
