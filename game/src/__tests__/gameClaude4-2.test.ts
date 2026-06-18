@@ -6,7 +6,7 @@ import { control } from '../control'
 import { map, reduce, split } from 'ramda'
 
 describe('game Claude4-2', () => {
-  it('F41 is not a valid building ID — USE F41 is rejected', () => {
+  it('House of the Brotherhood Options', () => {
     const s0 = initialState
     const moves: string[][] = map(split(' '), [
       'CONFIG 3 france long',
@@ -327,9 +327,17 @@ describe('game Claude4-2', () => {
       'LR3',
     ])
 
-    const cF41 = control(sN, ['USE', 'F41'])
-    expect(cF41.completion).toStrictEqual([])
+    // G41 is not in the top-level USE completion (already used this round / not freely available)
+    expect(cUse.completion).not.toContain('G41')
 
-    expect(() => reducer(sN, ['USE', 'F41'])).toThrow()
+    // ...but the drill-down still reports the two parameter shapes G41 accepts:
+    //   - 'PnPnPnPnPn' (pay 5 pennies)
+    //   - ''           (no extra params)
+    const cG41 = control(sN, ['USE', 'G41'])
+    expect(cG41.completion).toStrictEqual(['PnPnPnPnPn', ''])
+
+    // And the reducer rejects USE G41 from this state because G41 isn't freely usable.
+    expect(reducer(sN, ['USE', 'G41'])).toBeUndefined()
+    expect(reducer(sN, ['USE', 'G41', 'PnPnPnPnPn'])).toBeUndefined()
   })
 })
