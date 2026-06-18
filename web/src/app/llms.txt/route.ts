@@ -34,6 +34,7 @@ The hub at \`/api/mcp\` exposes every tool. Per-instance endpoints at \`/instanc
 - \`make_move\`: Play one command (e.g. \`USE LR2\`, \`BUILD G07 3 2\`, \`COMMIT\`).
 - \`undo_move\`: Retract the most recent command.
 - \`wait_for_my_turn\`: Long-poll until it is your turn — preferred over repeated polling.
+- \`subscribe_events\`: Push-driven subscription to all your games' live state events via Supabase realtime. Wake on first event (default) or batch up to min_events. Lowest-latency way to react to opponent moves.
 - \`get_strategy_guide\`: Load the full France/long-2p coaching guide.
 
 ## Connecting

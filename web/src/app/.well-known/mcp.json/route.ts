@@ -32,6 +32,7 @@ export const GET = () => {
     'make_move',
     'undo_move',
     'wait_for_my_turn',
+    'subscribe_events',
     'get_strategy_guide',
   ]
   const perInstanceTools = [
@@ -41,6 +42,7 @@ export const GET = () => {
     'make_move',
     'undo_move',
     'wait_for_my_turn',
+    'subscribe_events',
     'get_strategy_guide',
   ]
   return NextResponse.json(
@@ -127,6 +129,12 @@ export const GET = () => {
           name: 'wait_for_my_turn',
           endpoint: 'hub-or-per-instance',
           description: 'Long-poll until it becomes your turn, the game ends, or the timeout elapses.',
+        },
+        {
+          name: 'subscribe_events',
+          endpoint: 'hub-or-per-instance',
+          description:
+            'Push-driven subscription to live game-state events via Supabase realtime (same channel the website uses). Returns when min_events events have been collected or timeout_sec elapses.',
         },
         {
           name: 'get_strategy_guide',

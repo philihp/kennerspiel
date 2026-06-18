@@ -9,6 +9,7 @@ import { undoMove } from '@/mcp/tools/undoMove'
 import { joinGame } from '@/mcp/tools/joinGame'
 import { waitForMyTurn } from '@/mcp/tools/waitForMyTurn'
 import { getStrategyGuide } from '@/mcp/tools/getStrategyGuide'
+import { subscribeEvents } from '@/mcp/tools/subscribeEvents'
 import { errorResult } from '@/mcp/content'
 import { resolveAccessToken } from '@/oauth/store'
 
@@ -146,6 +147,46 @@ const buildHandler = (instanceId: string) =>
         (_args, extra) => {
           trackToolCall('get_strategy_guide', userIdFrom(extra), instanceId)
           return getStrategyGuide()
+        }
+      )
+      server.tool(
+        'subscribe_events',
+        'Subscribe to live game-state events for this game (push-driven via Supabase realtime — the same channel the website uses). Returns when at least min_events events have been collected, or when timeout_sec elapses. Each event includes status, active_color, move_count, my_colors, my_turn, and the latest_command appended. Prefer this over polling — wakeup latency is single-digit ms.',
+        {
+          filter_my_turn: z
+            .boolean()
+            .optional()
+            .describe('Drop events that do not put you on turn. Default false (return every state change).'),
+          timeout_sec: z
+            .number()
+            .int()
+            .min(1)
+            .max(55)
+            .optional()
+            .describe(
+              'How long to wait before returning, in seconds (default 50, max 55 — request maxDuration is 60s).'
+            ),
+          min_events: z
+            .number()
+            .int()
+            .min(1)
+            .max(100)
+            .optional()
+            .describe('Return as soon as this many events have been collected. Default 1 (wake on first event).'),
+          max_events: z.number().int().min(1).max(500).optional().describe('Hard cap on returned events. Default 50.'),
+        },
+        async ({ filter_my_turn, timeout_sec, min_events, max_events }, extra) => {
+          const userId = userIdFrom(extra)
+          trackToolCall('subscribe_events', userId, instanceId)
+          if (!userId) return unauthenticated()
+          return subscribeEvents({
+            userId,
+            filterInstanceIds: [instanceId],
+            filterMyTurn: filter_my_turn ?? false,
+            timeoutSec: timeout_sec ?? 50,
+            minEvents: min_events ?? 1,
+            maxEvents: max_events ?? 50,
+          })
         }
       )
     },
