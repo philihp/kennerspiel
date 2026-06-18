@@ -13,7 +13,7 @@ import { Enums } from '@/supabase.types'
 import { GameStatePlaying, Tableau } from 'hathora-et-labora-game'
 import { PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { map, pipe, range } from 'ramda'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { match } from 'ts-pattern'
 import { Alerts } from '@/components/alerts'
 
@@ -37,7 +37,8 @@ const engineColorToEntrantColor = (c: PlayerColor): Enums<'color'> =>
     .exhaustive()
 
 export const GamePlaying = () => {
-  const { state, user, controls, entrants, instance, active } = useInstanceContext()
+  const { state, user, controls, entrants, instance, active, rawState } = useInstanceContext()
+  const [debugOpen, setDebugOpen] = useState(false)
   if (state === undefined) return <>Missing Game State</>
 
   const { players } = state
@@ -86,34 +87,37 @@ export const GamePlaying = () => {
       <hr />
       <i>Last Updated: </i>
       {instance.updated_at}
-      <ul style={{ display: 'inline' }}>
-        {map(
-          (completion) => (
-            <li
-              key={completion}
-              style={{
-                display: 'inline',
-                border: '1px solid rgba(82, 0, 57, 0.09)',
-                borderRadius: 8,
-                backgroundColor: 'rgba(255, 206, 240, 0.45)',
-                padding: 4,
-                marginLeft: 4,
-              }}
-            >
-              <span
-                style={{
-                  color: 'rgba(82, 0, 57, 0.28)',
-                  fontSize: 12,
-                  fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
-                }}
-              >
-                {completion}
-              </span>
-            </li>
-          ),
-          controls?.completion ?? []
-        )}
-      </ul>
+      {' '}
+      <button onClick={() => setDebugOpen(true)}>Debug</button>
+      {debugOpen && (
+        <dialog
+          open
+          style={{
+            position: 'fixed',
+            top: '10%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '80vw',
+            maxHeight: '80vh',
+            overflowY: 'auto',
+            zIndex: 1000,
+            padding: 16,
+            border: '1px solid #ccc',
+            borderRadius: 8,
+            background: '#fff',
+          }}
+        >
+          <button onClick={() => setDebugOpen(false)} style={{ float: 'right' }}>Close</button>
+          <h3 style={{ marginTop: 0 }}>State</h3>
+          <pre style={{ fontSize: 11, overflowX: 'auto', background: '#f8f8f8', padding: 8 }}>
+            {JSON.stringify(rawState, null, 2)}
+          </pre>
+          <h3>Controls</h3>
+          <pre style={{ fontSize: 11, overflowX: 'auto', background: '#f8f8f8', padding: 8 }}>
+            {JSON.stringify(controls, null, 2)}
+          </pre>
+        </dialog>
+      )}
     </>
   )
 }
