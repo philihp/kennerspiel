@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
-import { resourceIdentifier } from '@/oauth/config'
+import { isAllowedResource } from '@/oauth/config'
 import { findClient } from '@/oauth/store'
 import { approve } from './actions'
 
@@ -34,7 +34,7 @@ const Authorize = async ({ searchParams }: { searchParams: Promise<AuthorizePara
   if (!params.code_challenge) return renderError('Missing PKCE code_challenge (S256 required).')
   if (params.code_challenge_method && params.code_challenge_method !== 'S256')
     return renderError('Only code_challenge_method=S256 is supported.')
-  if (params.resource && params.resource.replace(/\/$/, '') !== resourceIdentifier())
+  if (params.resource && !isAllowedResource(params.resource))
     return renderError('resource indicator does not match this server.')
 
   const supabase = await createClient()

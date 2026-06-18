@@ -2,8 +2,9 @@ import { NextResponse } from 'next/server'
 import { issuer, SCOPE } from '@/oauth/config'
 
 // OpenAPI 3.1 description of the HTTP surface exposed by kennerspiel.com:
-// the MCP transport endpoint plus the OAuth 2.1 authorization-server endpoints
-// that gate access to it. Linked from page <head> via rel="service-desc".
+// the MCP transports (hub at /api/mcp and per-instance at /instance/{id}/mcp)
+// plus the OAuth 2.1 authorization-server endpoints. Linked from page <head>
+// via rel="service-desc".
 export const GET = () => {
   const iss = issuer()
   return NextResponse.json(
@@ -11,10 +12,10 @@ export const GET = () => {
       openapi: '3.1.0',
       info: {
         title: 'Kennerspiel',
-        version: '1.0.0',
-        summary: 'Kennerspiel MCP server and OAuth 2.1 endpoints.',
+        version: '1.1.0',
+        summary: 'Kennerspiel MCP server (hub + per-instance) and OAuth 2.1 endpoints.',
         description:
-          'HTTP surface for kennerspiel.com — the MCP transport at /api/mcp plus the OAuth 2.1 + PKCE authorization-server endpoints (RFC 7591 dynamic registration, RFC 8414 metadata, RFC 9728 protected-resource metadata) that gate it.',
+          'HTTP surface for kennerspiel.com — the cross-instance MCP hub at /api/mcp, per-game MCP endpoints at /instance/{instance_id}/mcp (also reachable as /instance/{instance_id}), and the OAuth 2.1 + PKCE authorization-server endpoints (RFC 7591 dynamic registration, RFC 8414 metadata, RFC 9728 protected-resource metadata) that gate them. One token covers every MCP endpoint on this origin.',
         license: { name: 'GPL-3.0', identifier: 'GPL-3.0' },
         contact: { name: 'philihp', url: 'https://github.com/philihp/kennerspiel' },
       },
@@ -23,7 +24,8 @@ export const GET = () => {
         securitySchemes: {
           oauth2: {
             type: 'oauth2',
-            description: 'OAuth 2.1 authorization code with PKCE. Tokens have a 30-day TTL.',
+            description:
+              'OAuth 2.1 authorization code with PKCE. Tokens have a 30-day TTL and cover every MCP endpoint on this origin.',
             flows: {
               authorizationCode: {
                 authorizationUrl: `${iss}/authorize`,
@@ -33,14 +35,23 @@ export const GET = () => {
             },
           },
         },
+        parameters: {
+          InstanceId: {
+            name: 'instance_id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+            description: 'The game instance UUID.',
+          },
+        },
       },
       paths: {
         '/api/mcp': {
           post: {
-            operationId: 'mcpRpc',
-            summary: 'Model Context Protocol transport.',
+            operationId: 'mcpHubRpc',
+            summary: 'Cross-instance MCP hub.',
             description:
-              'Streamable-HTTP MCP transport. Send JSON-RPC requests for tools/list, tools/call, etc. Tools: list_my_games, get_game, get_legal_moves, join_game, make_move, undo_move, get_strategy_guide, wait_for_my_turn.',
+              'Streamable-HTTP MCP transport. Tools: list_my_games. Use this to find a game, then switch to its per-instance endpoint to play.',
             security: [{ oauth2: [SCOPE] }],
             requestBody: {
               required: true,
@@ -52,6 +63,59 @@ export const GET = () => {
                 content: { 'application/json': { schema: { type: 'object' } } },
               },
               401: { description: 'Missing or invalid bearer token.' },
+            },
+          },
+        },
+        '/instance/{instance_id}/mcp': {
+          post: {
+            operationId: 'mcpInstanceRpc',
+            summary: 'Per-game MCP endpoint.',
+            description:
+              'Streamable-HTTP MCP transport scoped to one game. Tools: get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide. The instance_id never appears in tool arguments — it comes from the URL.',
+            security: [{ oauth2: [SCOPE] }],
+            parameters: [{ $ref: '#/components/parameters/InstanceId' }],
+            requestBody: {
+              required: true,
+              content: { 'application/json': { schema: { type: 'object' } } },
+            },
+            responses: {
+              200: {
+                description: 'JSON-RPC response.',
+                content: { 'application/json': { schema: { type: 'object' } } },
+              },
+              401: { description: 'Missing or invalid bearer token.' },
+              404: { description: 'instance_id is not a UUID.' },
+            },
+          },
+        },
+        '/instance/{instance_id}': {
+          post: {
+            operationId: 'mcpInstanceAlias',
+            summary: 'Per-game MCP endpoint (alias — /mcp suffix optional).',
+            description:
+              'Same handler as /instance/{instance_id}/mcp. Requests with a Bearer token, JSON-RPC body, or SSE Accept header are routed to the MCP handler so users can paste plain instance URLs into Claude or ChatGPT.',
+            security: [{ oauth2: [SCOPE] }],
+            parameters: [{ $ref: '#/components/parameters/InstanceId' }],
+            requestBody: {
+              required: true,
+              content: { 'application/json': { schema: { type: 'object' } } },
+            },
+            responses: {
+              200: {
+                description: 'JSON-RPC response.',
+                content: { 'application/json': { schema: { type: 'object' } } },
+              },
+              401: { description: 'Missing or invalid bearer token.' },
+            },
+          },
+          get: {
+            operationId: 'instanceHtml',
+            summary: 'Per-game HTML view (browser).',
+            description:
+              'Returns the HTML game page for browsers. MCP clients (Bearer token, SSE Accept) are rewritten to the /mcp handler before reaching this page.',
+            parameters: [{ $ref: '#/components/parameters/InstanceId' }],
+            responses: {
+              200: { description: 'HTML page.', content: { 'text/html': {} } },
             },
           },
         },
@@ -88,7 +152,14 @@ export const GET = () => {
               },
               { name: 'scope', in: 'query', required: false, schema: { type: 'string', default: SCOPE } },
               { name: 'state', in: 'query', required: false, schema: { type: 'string' } },
-              { name: 'resource', in: 'query', required: false, schema: { type: 'string', format: 'uri' } },
+              {
+                name: 'resource',
+                in: 'query',
+                required: false,
+                schema: { type: 'string', format: 'uri' },
+                description:
+                  'RFC 8707 resource indicator. Any URL whose origin matches this issuer is accepted (e.g. the origin itself, /api/mcp, or /instance/<uuid>/mcp).',
+              },
             ],
             responses: {
               302: { description: 'Redirect back to the client with code and state.' },

@@ -17,4 +17,19 @@ export const issuer = (): string => {
   throw new Error('OAUTH_ISSUER (or NEXT_PUBLIC_SITE_URL) is not configured')
 }
 
-export const resourceIdentifier = (): string => `${issuer()}/api/mcp`
+// The protected resource identifier is the origin: tokens minted for
+// kennerspiel.com cover every MCP endpoint we serve (the cross-instance hub at
+// /api/mcp and every per-instance endpoint at /instance/<id>/mcp), so users
+// only authorize the connector once.
+export const resourceIdentifier = (): string => issuer()
+
+// RFC 8707: clients may pass a `resource` indicator targeting any URL under
+// our origin. Accept anything whose origin matches the issuer; reject foreign
+// origins so a confused-deputy can't redirect tokens elsewhere.
+export const isAllowedResource = (resource: string): boolean => {
+  try {
+    return new URL(resource).origin === new URL(issuer()).origin
+  } catch {
+    return false
+  }
+}
