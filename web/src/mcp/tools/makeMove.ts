@@ -1,3 +1,4 @@
+import { control } from 'hathora-et-labora-game'
 import { GameStatusEnum } from 'hathora-et-labora-game/dist/types'
 import { activePlayerColor, applyCommand, asPlaying, engineColorToEntrantColor, replay, tokenize } from '../engine'
 import { renderSummary } from '../render'
@@ -34,12 +35,24 @@ export const makeMove = async ({
     return errorResult(`It is not your turn: you are ${mine}, and ${activeColor} is the active player.`)
   }
 
-  // 4. legality check
+  // 4. legality check — must satisfy both:
+  //   a) the reducer accepts the tokens (catches bad syntax / unknown verbs), and
+  //   b) `control()` lists "" as a completion of the tokens (catches partial
+  //      multi-token commands like `BUILD G07` without the position — the reducer
+  //      would happily apply that and park the game in a sub-step, but it isn't a
+  //      complete legal command per get_legal_moves).
   const tokens = tokenize(command)
+  if (tokens.length === 0) return errorResult('Empty command. Use get_legal_moves to find a legal command.')
   const nextState = applyCommand(playing, tokens)
   if (nextState === undefined) {
     return errorResult(
       `Illegal move: "${tokens.join(' ')}" was rejected by the game engine. Use get_legal_moves to find a legal command.`
+    )
+  }
+  const completions = control(playing, tokens).completion ?? []
+  if (!completions.includes('')) {
+    return errorResult(
+      `Incomplete move: "${tokens.join(' ')}" is a valid prefix but not a complete command. Use get_legal_moves with partial=${JSON.stringify(tokens)} to see the next tokens you still need to append.`
     )
   }
 
