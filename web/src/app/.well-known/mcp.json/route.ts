@@ -7,9 +7,13 @@ import { issuer, SCOPE } from '@/oauth/config'
 // catalog without first completing a JSON-RPC handshake.
 //
 // Two transports are advertised:
-//   - Hub at /api/mcp exposes list_my_games (cross-instance).
+//   - Hub at /api/mcp exposes every tool (per-game tools take instance_id as
+//     an argument). This is the "connect once" endpoint for claude.ai / ChatGPT
+//     integrations that are configured at the account level.
 //   - Per-instance at /instance/{instance_id}/mcp (alias: /instance/{instance_id})
-//     exposes the play-the-game tools. One OAuth token covers both.
+//     exposes the play-the-game tools with instance_id baked into the URL, for
+//     users who'd rather drop a per-game URL into a chat or Claude Code.
+// One OAuth token covers both.
 export const GET = () => {
   const iss = issuer()
   const hubUrl = `${iss}/api/mcp`
@@ -20,6 +24,25 @@ export const GET = () => {
     protected_resource: `${iss}/.well-known/oauth-protected-resource`,
     scopes: [SCOPE],
   }
+  const hubTools = [
+    'list_my_games',
+    'get_game',
+    'join_game',
+    'get_legal_moves',
+    'make_move',
+    'undo_move',
+    'wait_for_my_turn',
+    'get_strategy_guide',
+  ]
+  const perInstanceTools = [
+    'get_game',
+    'join_game',
+    'get_legal_moves',
+    'make_move',
+    'undo_move',
+    'wait_for_my_turn',
+    'get_strategy_guide',
+  ]
   return NextResponse.json(
     {
       $schema: 'https://modelcontextprotocol.io/schemas/server-card/v1.0',
@@ -46,8 +69,8 @@ export const GET = () => {
           capabilities: ['tools'],
           auth: oauth,
           description:
-            'Cross-instance hub. Exposes list_my_games. Use this to find a game, then connect to its per-instance endpoint to play.',
-          tools: ['list_my_games'],
+            'Hub. Exposes every tool — per-game tools take an instance_id argument. This is the recommended endpoint for account-level integrations (claude.ai, ChatGPT) so the user connects once and can play any game.',
+          tools: hubTools,
         },
         {
           url_template: perInstanceTemplate,
@@ -55,16 +78,8 @@ export const GET = () => {
           capabilities: ['tools'],
           auth: oauth,
           description:
-            'Per-game endpoint. The /mcp suffix is optional — POST/JSON requests to https://kennerspiel.com/instance/<uuid> are routed here. Exposes the play-the-game tools.',
-          tools: [
-            'get_game',
-            'join_game',
-            'get_legal_moves',
-            'make_move',
-            'undo_move',
-            'wait_for_my_turn',
-            'get_strategy_guide',
-          ],
+            'Per-game endpoint. The /mcp suffix is optional — POST/JSON requests to https://kennerspiel.com/instance/<uuid> are routed here. Same play-the-game tools as the hub, but the instance_id is baked into the URL.',
+          tools: perInstanceTools,
         },
       ],
       capabilities: {
@@ -82,40 +97,40 @@ export const GET = () => {
         },
         {
           name: 'get_game',
-          endpoint: 'per-instance',
+          endpoint: 'hub-or-per-instance',
           description:
-            'Read the current board state of this game: rondel, player tableaus and landscapes, scores, whose turn it is, and recent moves.',
+            'Read the current board state of a game: rondel, player tableaus and landscapes, scores, whose turn it is, and recent moves.',
         },
         {
           name: 'get_legal_moves',
-          endpoint: 'per-instance',
+          endpoint: 'hub-or-per-instance',
           description:
             'Enumerate legal next tokens of a move command. Interactive drill-down from an empty partial to a complete command.',
         },
         {
           name: 'join_game',
-          endpoint: 'per-instance',
-          description: 'Claim a seat in the lobby of this game (only while the lobby is still open).',
+          endpoint: 'hub-or-per-instance',
+          description: 'Claim a seat in the lobby of a game (only while the lobby is still open).',
         },
         {
           name: 'make_move',
-          endpoint: 'per-instance',
+          endpoint: 'hub-or-per-instance',
           description:
-            'Play one complete move command in this game when it is your turn (e.g. USE LR2, BUILD G07 3 2, COMMIT).',
+            'Play one complete move command in a game when it is your turn (e.g. USE LR2, BUILD G07 3 2, COMMIT).',
         },
         {
           name: 'undo_move',
-          endpoint: 'per-instance',
+          endpoint: 'hub-or-per-instance',
           description: 'Retract the most recent command. Only the active player can undo, one command at a time.',
         },
         {
           name: 'wait_for_my_turn',
-          endpoint: 'per-instance',
-          description: 'Long-poll until it becomes your turn in this game, the game ends, or the timeout elapses.',
+          endpoint: 'hub-or-per-instance',
+          description: 'Long-poll until it becomes your turn, the game ends, or the timeout elapses.',
         },
         {
           name: 'get_strategy_guide',
-          endpoint: 'per-instance',
+          endpoint: 'hub-or-per-instance',
           description: 'Return the full strategic coaching guide for Ora et Labora (France variant, long 2p).',
         },
       ],
