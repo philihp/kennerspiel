@@ -15,7 +15,7 @@ export const GET = () => {
         version: '1.1.0',
         summary: 'Kennerspiel MCP server (hub + per-instance) and OAuth 2.1 endpoints.',
         description:
-          'HTTP surface for kennerspiel.com — the cross-instance MCP hub at /api/mcp, per-game MCP endpoints at /instance/{instance_id}/mcp (also reachable as /instance/{instance_id}), and the OAuth 2.1 + PKCE authorization-server endpoints (RFC 7591 dynamic registration, RFC 8414 metadata, RFC 9728 protected-resource metadata) that gate them. One token covers every MCP endpoint on this origin.',
+          'HTTP surface for kennerspiel.com — the MCP hub at /api/mcp (every tool, with instance_id as an argument), per-game MCP endpoints at /instance/{instance_id}/mcp (also reachable as /instance/{instance_id}, instance_id baked into the URL), and the OAuth 2.1 + PKCE authorization-server endpoints (RFC 7591 dynamic registration, RFC 8414 metadata, RFC 9728 protected-resource metadata) that gate them. One token covers every MCP endpoint on this origin.',
         license: { name: 'GPL-3.0', identifier: 'GPL-3.0' },
         contact: { name: 'philihp', url: 'https://github.com/philihp/kennerspiel' },
       },
@@ -49,9 +49,9 @@ export const GET = () => {
         '/api/mcp': {
           post: {
             operationId: 'mcpHubRpc',
-            summary: 'Cross-instance MCP hub.',
+            summary: 'MCP hub (full toolset).',
             description:
-              'Streamable-HTTP MCP transport. Tools: list_my_games. Use this to find a game, then switch to its per-instance endpoint to play.',
+              'Streamable-HTTP MCP transport. Exposes every tool: list_my_games, get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide. Per-game tools take an instance_id argument. This is the recommended endpoint for account-level integrations (claude.ai, ChatGPT) — connect once and play any game.',
             security: [{ oauth2: [SCOPE] }],
             requestBody: {
               required: true,
@@ -71,7 +71,7 @@ export const GET = () => {
             operationId: 'mcpInstanceRpc',
             summary: 'Per-game MCP endpoint.',
             description:
-              'Streamable-HTTP MCP transport scoped to one game. Tools: get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide. The instance_id never appears in tool arguments — it comes from the URL.',
+              'Streamable-HTTP MCP transport scoped to one game. Same play-the-game tools as the hub (get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide), but instance_id is baked into the URL instead of appearing as a tool argument.',
             security: [{ oauth2: [SCOPE] }],
             parameters: [{ $ref: '#/components/parameters/InstanceId' }],
             requestBody: {

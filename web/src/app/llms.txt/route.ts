@@ -10,8 +10,8 @@ export const GET = () => {
 
 Kennerspiel exposes two MCP transports on the same OAuth credentials:
 
-- The cross-instance hub at \`${iss}/api/mcp\` exposes \`list_my_games\` for discovering your seats.
-- Each game has its own endpoint at \`${iss}/instance/{instance_id}/mcp\` — the \`/mcp\` suffix is optional, so pasting just \`${iss}/instance/{instance_id}\` into Claude or ChatGPT works too. This endpoint exposes the play-the-game tools (\`get_game\`, \`join_game\`, \`get_legal_moves\`, \`make_move\`, \`undo_move\`, \`wait_for_my_turn\`, \`get_strategy_guide\`).
+- The hub at \`${iss}/api/mcp\` exposes every tool. Per-game tools take \`instance_id\` as an argument. This is the recommended endpoint for account-level integrations (claude.ai, ChatGPT): the user adds the connector once and can play any game from any conversation.
+- Each game also has its own endpoint at \`${iss}/instance/{instance_id}/mcp\` — the \`/mcp\` suffix is optional, so pasting just \`${iss}/instance/{instance_id}\` into Claude Code or a one-off chat works too. Same play-the-game tools as the hub but instance_id is baked into the URL.
 
 One OAuth 2.1 + PKCE token (with RFC 7591 dynamic client registration) covers both the hub and every per-instance endpoint, so the user authorizes the connector only once.
 
@@ -25,13 +25,10 @@ One OAuth 2.1 + PKCE token (with RFC 7591 dynamic client registration) covers bo
 
 ## MCP tools
 
-Hub at \`/api/mcp\`:
+The hub at \`/api/mcp\` exposes every tool. Per-instance endpoints at \`/instance/{instance_id}/mcp\` expose the same play-the-game tools without an instance_id argument.
 
-- \`list_my_games\`: Find all games you're seated in; filter to games waiting on your move.
-
-Per-instance at \`/instance/{instance_id}/mcp\`:
-
-- \`join_game\`: Claim a seat in this game's lobby.
+- \`list_my_games\` (hub only): Find all games you're seated in; filter to games waiting on your move.
+- \`join_game\`: Claim a seat in a game's lobby.
 - \`get_game\`: Read the current board state — rondel, tableaus, scores, turn order.
 - \`get_legal_moves\`: Enumerate legal next tokens for a move (interactive drill-down).
 - \`make_move\`: Play one command (e.g. \`USE LR2\`, \`BUILD G07 3 2\`, \`COMMIT\`).

@@ -11,10 +11,10 @@ This is an implementation of Uwe Rosenberg's game [Ora et Labora](https://amzn.t
 
 ## Playing with AI
 
-Kennerspiel exposes an [MCP](https://modelcontextprotocol.io/) server with two endpoints:
+Kennerspiel exposes an [MCP](https://modelcontextprotocol.io/) server with two endpoints, both backed by the same OAuth session:
 
-- **Hub**: `https://kennerspiel.com/api/mcp` — exposes `list_my_games`. Use it to discover your seats.
-- **Per-game**: `https://kennerspiel.com/instance/<uuid>/mcp` — exposes `get_game`, `join_game`, `get_legal_moves`, `make_move`, `undo_move`, `wait_for_my_turn`, and `get_strategy_guide`. The `/mcp` suffix is optional: pasting plain `https://kennerspiel.com/instance/<uuid>` into Claude or ChatGPT works too (POST/JSON requests are routed to the MCP handler; browsers still get the HTML game page).
+- **Hub**: `https://kennerspiel.com/api/mcp` — exposes every tool (`list_my_games`, `get_game`, `join_game`, `get_legal_moves`, `make_move`, `undo_move`, `wait_for_my_turn`, `get_strategy_guide`). Per-game tools take an `instance_id` argument. This is the recommended endpoint for account-level integrations like claude.ai and ChatGPT: add it once and you can play any game from any conversation.
+- **Per-game**: `https://kennerspiel.com/instance/<uuid>/mcp` — same play-the-game tools as the hub, but `instance_id` is baked into the URL. The `/mcp` suffix is optional: pasting plain `https://kennerspiel.com/instance/<uuid>` into Claude or ChatGPT works too (POST/JSON requests are routed to the MCP handler; browsers still get the HTML game page). Best for Claude Code projects pinned to one game.
 
 Authentication uses standard OAuth 2.1 + PKCE; clients that support dynamic client registration (RFC 7591) connect without any manual setup. A single access token covers both the hub and every per-game endpoint, so the user only authorizes once.
 

@@ -17,7 +17,7 @@ Capability: play-ora-et-labora-hub
   Auth-Endpoint: ${iss}/authorize
   Auth-Docs: ${iss}/.well-known/oauth-authorization-server
   Scopes: play
-  Description: Cross-instance hub. Exposes list_my_games.
+  Description: MCP hub. Exposes every tool: list_my_games, get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide. Per-game tools take instance_id as an argument.
 
 Capability: play-ora-et-labora-instance
   Endpoint-Template: ${iss}/instance/{instance_id}/mcp
@@ -27,7 +27,7 @@ Capability: play-ora-et-labora-instance
   Auth-Endpoint: ${iss}/authorize
   Auth-Docs: ${iss}/.well-known/oauth-authorization-server
   Scopes: play
-  Description: Per-game endpoint. The /mcp suffix is optional. Tools: get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide.
+  Description: Per-game endpoint. Same play-the-game tools as the hub, instance_id baked into the URL. The /mcp suffix is optional.
 
 Capability: mcp-discovery
   Endpoint: ${iss}/.well-known/mcp.json

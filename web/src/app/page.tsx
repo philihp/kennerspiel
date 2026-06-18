@@ -19,17 +19,18 @@ const Home = () => {
         take a seat at your table — it will read the board, consult a built-in strategy guide, and play moves on your
         behalf. Useful for solo learning, AI-vs-AI matches, or just having a patient opponent at 2am.
       </p>
-      <p>Two endpoints share a single OAuth session:</p>
+      <p>Two ways to connect, both backed by the same OAuth session:</p>
       <ul>
         <li>
-          <strong>Hub</strong>: <code>https://kennerspiel.com/api/mcp</code> — exposes <code>list_my_games</code> so the
-          agent can find your seats.
+          <strong>Hub</strong>: <code>https://kennerspiel.com/api/mcp</code> — exposes every tool. This is the one to
+          use for claude.ai or ChatGPT integrations: add the connector once at the account level and you&apos;ll be able
+          to play any game from any conversation.
         </li>
         <li>
           <strong>Per-game</strong>: the URL of any game is also its MCP endpoint. Drop{' '}
           <code>https://kennerspiel.com/instance/&lt;uuid&gt;</code> into a chat and say &ldquo;join as white&rdquo; —
-          the agent gets <code>get_game</code>, <code>make_move</code>, the strategy guide, and everything else scoped
-          to that one game.
+          the agent gets the play-the-game tools scoped to that one game (no <code>instance_id</code> argument needed
+          because the URL already names it). Handy for Claude Code projects or one-off chats.
         </li>
       </ul>
       <h3>Claude (claude.ai)</h3>

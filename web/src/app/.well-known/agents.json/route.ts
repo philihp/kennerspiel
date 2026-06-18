@@ -17,7 +17,8 @@ export const GET = () => {
       capabilities: [
         {
           id: 'play-ora-et-labora-hub',
-          description: 'Cross-instance MCP hub. Exposes list_my_games.',
+          description:
+            'MCP hub. Exposes every tool — list_my_games, get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide. Per-game tools take instance_id as an argument.',
           endpoint: `${iss}/api/mcp`,
           method: 'POST',
           protocol: 'MCP',
@@ -29,7 +30,7 @@ export const GET = () => {
         {
           id: 'play-ora-et-labora-instance',
           description:
-            'Per-game MCP endpoint. Exposes get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide. The /mcp suffix is optional — POST/JSON requests to /instance/<uuid> are routed here.',
+            'Per-game MCP endpoint. Same play-the-game tools as the hub (get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide) but instance_id is baked into the URL. The /mcp suffix is optional — POST/JSON requests to /instance/<uuid> are routed here.',
           endpoint_template: `${iss}/instance/{instance_id}/mcp`,
           method: 'POST',
           protocol: 'MCP',
