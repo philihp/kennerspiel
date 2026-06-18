@@ -9,7 +9,7 @@ Site-Name: Kennerspiel
 Site-URL: ${iss}
 Site-Description: Digital tabletop for Uwe Rosenberg's Ora et Labora.
 
-Capability: play-ora-et-labora
+Capability: play-ora-et-labora-hub
   Endpoint: ${iss}/api/mcp
   Method: POST
   Protocol: MCP
@@ -17,7 +17,17 @@ Capability: play-ora-et-labora
   Auth-Endpoint: ${iss}/authorize
   Auth-Docs: ${iss}/.well-known/oauth-authorization-server
   Scopes: play
-  Description: List seats, read board state, enumerate legal moves, play moves, consult the strategy guide.
+  Description: Cross-instance hub. Exposes list_my_games.
+
+Capability: play-ora-et-labora-instance
+  Endpoint-Template: ${iss}/instance/{instance_id}/mcp
+  Method: POST
+  Protocol: MCP
+  Auth: oauth2
+  Auth-Endpoint: ${iss}/authorize
+  Auth-Docs: ${iss}/.well-known/oauth-authorization-server
+  Scopes: play
+  Description: Per-game endpoint. The /mcp suffix is optional. Tools: get_game, join_game, get_legal_moves, make_move, undo_move, wait_for_my_turn, get_strategy_guide.
 
 Capability: mcp-discovery
   Endpoint: ${iss}/.well-known/mcp.json
@@ -34,6 +44,8 @@ Capability: openapi-spec
   Description: OpenAPI 3.1 description of the HTTP surface.
 
 Allow: /api/mcp
+Allow: /instance/*/mcp
+Allow: /instance/*
 Allow: /.well-known/*
 Allow: /openapi.json
 Allow: /llms.txt

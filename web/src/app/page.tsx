@@ -15,11 +15,23 @@ const Home = () => {
       </p>
       <h2>Play with an AI</h2>
       <p>
-        Kennerspiel has an <Link href="https://modelcontextprotocol.io/">MCP</Link> server at{' '}
-        <code>https://kennerspiel.com/api/mcp</code>. Any MCP-compatible AI can take a seat at your table — it will
-        read the board, consult a built-in strategy guide, and play moves on your behalf. Useful for solo learning,
-        AI-vs-AI matches, or just having a patient opponent at 2am.
+        Kennerspiel has an <Link href="https://modelcontextprotocol.io/">MCP</Link> server. Any MCP-compatible AI can
+        take a seat at your table — it will read the board, consult a built-in strategy guide, and play moves on your
+        behalf. Useful for solo learning, AI-vs-AI matches, or just having a patient opponent at 2am.
       </p>
+      <p>Two endpoints share a single OAuth session:</p>
+      <ul>
+        <li>
+          <strong>Hub</strong>: <code>https://kennerspiel.com/api/mcp</code> — exposes <code>list_my_games</code> so the
+          agent can find your seats.
+        </li>
+        <li>
+          <strong>Per-game</strong>: the URL of any game is also its MCP endpoint. Drop{' '}
+          <code>https://kennerspiel.com/instance/&lt;uuid&gt;</code> into a chat and say &ldquo;join as white&rdquo; —
+          the agent gets <code>get_game</code>, <code>make_move</code>, the strategy guide, and everything else scoped
+          to that one game.
+        </li>
+      </ul>
       <h3>Claude (claude.ai)</h3>
       <ol>
         <li>
@@ -31,15 +43,19 @@ const Home = () => {
         <li>Sign in to Kennerspiel when Claude opens the authorization page, then click Authorize.</li>
       </ol>
       <p>
-        No client IDs, no secrets, no copy-pasting. Ask Claude something like &ldquo;list my Ora et Labora
-        games&rdquo; and it&apos;ll find the tools automatically.
+        Once authorized, the same token also covers any per-game URL — no re-auth when you switch games. Ask Claude
+        something like &ldquo;list my Ora et Labora games&rdquo; and it&apos;ll find the tools automatically.
       </p>
       <h3>Claude Code</h3>
-      <p>Run this once in your terminal:</p>
+      <p>Add the hub once:</p>
       <pre>
         <code>claude mcp add --transport http kennerspiel https://kennerspiel.com/api/mcp</code>
       </pre>
-      <p>Claude Code will open a browser for the OAuth flow and redirect back automatically.</p>
+      <p>Or wire up one specific game directly:</p>
+      <pre>
+        <code>claude mcp add --transport http my-game https://kennerspiel.com/instance/&lt;uuid&gt;</code>
+      </pre>
+      <p>Claude Code opens a browser for the OAuth flow and redirects back automatically.</p>
       <h3>ChatGPT</h3>
       <p>Requires a Plus, Pro, Business, or Enterprise account with Developer mode enabled.</p>
       <ol>
@@ -60,4 +76,3 @@ const Home = () => {
 }
 
 export default Home
-

@@ -8,20 +8,30 @@ export const GET = () => {
 
 > Digital tabletop for Uwe Rosenberg's Ora et Labora. Humans play in a browser; AI agents play through a hosted MCP server using the same accounts as humans.
 
-Kennerspiel exposes an MCP server at \`${iss}/api/mcp\`. Any MCP-compatible client can connect, authenticate the user via OAuth 2.1 + PKCE (with RFC 7591 dynamic client registration), and play as that account. The full strategy guide is loaded by the \`get_strategy_guide\` tool; prefer calling that over scraping pages.
+Kennerspiel exposes two MCP transports on the same OAuth credentials:
+
+- The cross-instance hub at \`${iss}/api/mcp\` exposes \`list_my_games\` for discovering your seats.
+- Each game has its own endpoint at \`${iss}/instance/{instance_id}/mcp\` — the \`/mcp\` suffix is optional, so pasting just \`${iss}/instance/{instance_id}\` into Claude or ChatGPT works too. This endpoint exposes the play-the-game tools (\`get_game\`, \`join_game\`, \`get_legal_moves\`, \`make_move\`, \`undo_move\`, \`wait_for_my_turn\`, \`get_strategy_guide\`).
+
+One OAuth 2.1 + PKCE token (with RFC 7591 dynamic client registration) covers both the hub and every per-instance endpoint, so the user authorizes the connector only once.
 
 ## Machine-readable surface
 
-- [MCP server card](${iss}/.well-known/mcp.json): Discovery document — transport, auth, tool catalog.
-- [OpenAPI 3.1 spec](${iss}/openapi.json): HTTP surface (MCP transport + OAuth endpoints).
+- [MCP server card](${iss}/.well-known/mcp.json): Discovery document — transports, auth, tool catalog.
+- [OpenAPI 3.1 spec](${iss}/openapi.json): HTTP surface (hub + per-instance MCP + OAuth endpoints).
 - [agents.json](${iss}/.well-known/agents.json): agents-txt.com capability surface.
 - [OAuth authorization-server metadata](${iss}/.well-known/oauth-authorization-server): RFC 8414.
 - [OAuth protected-resource metadata](${iss}/.well-known/oauth-protected-resource): RFC 9728.
 
 ## MCP tools
 
+Hub at \`/api/mcp\`:
+
 - \`list_my_games\`: Find all games you're seated in; filter to games waiting on your move.
-- \`join_game\`: Claim a seat in an open lobby (pass the game URL or UUID).
+
+Per-instance at \`/instance/{instance_id}/mcp\`:
+
+- \`join_game\`: Claim a seat in this game's lobby.
 - \`get_game\`: Read the current board state — rondel, tableaus, scores, turn order.
 - \`get_legal_moves\`: Enumerate legal next tokens for a move (interactive drill-down).
 - \`make_move\`: Play one command (e.g. \`USE LR2\`, \`BUILD G07 3 2\`, \`COMMIT\`).

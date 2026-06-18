@@ -11,7 +11,12 @@ This is an implementation of Uwe Rosenberg's game [Ora et Labora](https://amzn.t
 
 ## Playing with AI
 
-Kennerspiel exposes an [MCP](https://modelcontextprotocol.io/) server at `https://kennerspiel.com/api/mcp`. Any MCP-compatible AI client can connect, read the board, consult the built-in strategy guide, enumerate legal moves, and play — all as your Kennerspiel account. Authentication uses standard OAuth 2.1 + PKCE; clients that support dynamic client registration (RFC 7591) connect without any manual setup.
+Kennerspiel exposes an [MCP](https://modelcontextprotocol.io/) server with two endpoints:
+
+- **Hub**: `https://kennerspiel.com/api/mcp` — exposes `list_my_games`. Use it to discover your seats.
+- **Per-game**: `https://kennerspiel.com/instance/<uuid>/mcp` — exposes `get_game`, `join_game`, `get_legal_moves`, `make_move`, `undo_move`, `wait_for_my_turn`, and `get_strategy_guide`. The `/mcp` suffix is optional: pasting plain `https://kennerspiel.com/instance/<uuid>` into Claude or ChatGPT works too (POST/JSON requests are routed to the MCP handler; browsers still get the HTML game page).
+
+Authentication uses standard OAuth 2.1 + PKCE; clients that support dynamic client registration (RFC 7591) connect without any manual setup. A single access token covers both the hub and every per-game endpoint, so the user only authorizes once.
 
 ### Connect via claude.ai
 
@@ -28,6 +33,14 @@ claude mcp add --transport http kennerspiel https://kennerspiel.com/api/mcp
 ```
 
 Claude Code opens a browser for the OAuth flow and redirects back automatically. Once connected, ask Claude to join a lobby by sharing the game URL, or check pending games with `list_my_games`.
+
+To bind a Claude Code project to one specific game:
+
+```sh
+claude mcp add --transport http my-game https://kennerspiel.com/instance/<uuid>
+```
+
+The same OAuth session is reused — no second authorization prompt.
 
 ### Connect via ChatGPT
 
@@ -75,16 +88,16 @@ The OAuth server metadata is published at `https://kennerspiel.com/.well-known/o
 
 ### Available tools
 
-| Tool | What it does |
-|---|---|
-| `list_my_games` | Find all games you're seated in; filter to games waiting on your move |
-| `join_game` | Claim a seat in an open lobby (pass the game URL or UUID) |
-| `get_game` | Read the current board state: rondel, tableaus, scores, turn order |
-| `get_legal_moves` | Enumerate legal next tokens for a move (interactive drill-down) |
-| `make_move` | Play one command, e.g. `USE LR2` or `BUILD G07 3 2` or `COMMIT` |
-| `undo_move` | Retract the most recent command (use when teaching the model a better line) |
-| `wait_for_my_turn` | Long-poll until it's your turn, rather than polling repeatedly |
-| `get_strategy_guide` | Load the full France/long-2p coaching guide the model consults for decisions |
+| Tool | Endpoint | What it does |
+|---|---|---|
+| `list_my_games` | hub | Find all games you're seated in; filter to games waiting on your move |
+| `join_game` | per-game | Claim a seat in this game's lobby |
+| `get_game` | per-game | Read the current board state: rondel, tableaus, scores, turn order |
+| `get_legal_moves` | per-game | Enumerate legal next tokens for a move (interactive drill-down) |
+| `make_move` | per-game | Play one command, e.g. `USE LR2` or `BUILD G07 3 2` or `COMMIT` |
+| `undo_move` | per-game | Retract the most recent command (use when teaching the model a better line) |
+| `wait_for_my_turn` | per-game | Long-poll until it's your turn, rather than polling repeatedly |
+| `get_strategy_guide` | per-game | Load the full France/long-2p coaching guide the model consults for decisions |
 
 The AI holds seats and makes moves as your Kennerspiel account — human opponents see moves appear live in their browser just like any other player's.
 

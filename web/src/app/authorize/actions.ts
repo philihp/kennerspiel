@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
-import { resourceIdentifier, SCOPE } from '@/oauth/config'
+import { isAllowedResource, SCOPE } from '@/oauth/config'
 import { findClient, issueAuthorizationCode } from '@/oauth/store'
 
 const fail = (redirectUri: string | null, state: string | null, error: string, description: string): never => {
@@ -32,7 +32,7 @@ export const approve = async (formData: FormData) => {
   if (!codeChallenge) fail(redirectUri, state, 'invalid_request', 'PKCE code_challenge is required')
   if (codeChallengeMethod !== 'S256')
     fail(redirectUri, state, 'invalid_request', 'Only code_challenge_method=S256 is supported')
-  if (resource && resource.replace(/\/$/, '') !== resourceIdentifier())
+  if (resource && !isAllowedResource(resource))
     fail(redirectUri, state, 'invalid_target', 'resource does not match this server')
 
   const supabase = await createClient()
