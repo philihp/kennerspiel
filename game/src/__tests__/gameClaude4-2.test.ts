@@ -293,9 +293,7 @@ describe('game Claude4-2', () => {
     const cTop = control(sN, [])
     expect(cTop.completion).toContain('USE')
 
-    // F41 does not exist as a building ID in Ora et Labora (IDs skip from F40 Hospice to G41 HouseOfTheBrotherhood).
     const cUse = control(sN, ['USE'])
-    expect(cUse.completion).not.toContain('F41')
     expect(cUse.completion).toStrictEqual([
       'G01',
       'G02',
