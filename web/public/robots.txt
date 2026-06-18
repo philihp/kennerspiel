@@ -1,1 +1,7 @@
-User-agent: * Disallow: /
+User-agent: *
+Disallow: /
+Allow: /.well-known/
+Allow: /llms.txt
+Allow: /openapi.json
+Allow: /agents.txt
+Allow: /agents.json
