@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { createPcg32 } from 'pcg'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -81,7 +81,7 @@ describe('buildings/roundTower', () => {
     buildings: [],
     plotPurchasePrices: [1, 1, 1, 1, 1, 1],
     districtPurchasePrices: [],
-  } as GameStatePlaying
+  } as GameState
 
   describe('3 players', () => {
     it('retains undefined state', () => {
@@ -101,7 +101,7 @@ describe('buildings/roundTower', () => {
 
     it('follows happy path', () => {
       const s1 = roundTower('WhNiOrOrOrBo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         whiskey: 9,
         nickel: 9,
         penny: 10,
@@ -115,7 +115,7 @@ describe('buildings/roundTower', () => {
 
     it('can pay with pennies', () => {
       const s1 = roundTower('WhPnPnPnPnPnRqRqRqBo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         whiskey: 9,
         nickel: 10,
         penny: 5,
@@ -139,7 +139,7 @@ describe('buildings/roundTower', () => {
 
     it('noop if not enough points', () => {
       const s1 = roundTower('WhNiOrOrCeBo')(s0)!
-      expect(s1.players[0]).toBe(s0.players[0])
+      expect(s1.players![0]).toBe(s0.players![0])
     })
   })
 
@@ -149,7 +149,7 @@ describe('buildings/roundTower', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             whiskey: 1,
             nickel: 1,
             book: 0,
@@ -157,9 +157,9 @@ describe('buildings/roundTower', () => {
             ornament: 1,
             reliquary: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([
         'NiWhRqRq',
@@ -175,7 +175,7 @@ describe('buildings/roundTower', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             whiskey: 0,
             nickel: 1,
             reliquary: 2,
@@ -183,9 +183,9 @@ describe('buildings/roundTower', () => {
             ceramic: 1,
             book: 3,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })
@@ -195,7 +195,7 @@ describe('buildings/roundTower', () => {
         nickel: 1,
         whiskey: 1,
         reliquary: 2,
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['NiWhRqRq'])(s1)
       expect(c0).toStrictEqual([''])
     })

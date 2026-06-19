@@ -2,11 +2,11 @@ import { always, cond, curry, identity, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { getCost, withActivePlayer, payCost, activeLens } from '../board/player'
 import { parseResourceParam, totalGoods, differentGoods, allResource, combinations } from '../board/resource'
-import { GameStatePlaying, StateReducer } from '../types'
+import { GameState, StateReducer } from '../types'
 
 export const market = (input = ''): StateReducer => {
   const goods = parseResourceParam(input)
-  return cond<[GameStatePlaying | undefined], GameStatePlaying | undefined>([
+  return cond<[GameState | undefined], GameState | undefined>([
     [always(input === ''), identity],
     [
       always(totalGoods(goods) === 4 && differentGoods(goods) === 4),
@@ -24,7 +24,7 @@ export const market = (input = ''): StateReducer => {
   ])
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match<string[], string[]>(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

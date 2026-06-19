@@ -6,8 +6,7 @@ import { districtPrices, makeLandscape, plotPrices } from '../board/landscape'
 import { clergyForColor } from '../board/player'
 import {
   GameCommandStartParams,
-  GameStatePlaying,
-  GameStateSetup,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -32,9 +31,9 @@ const neutralColor = (notThisColor: PlayerColor, neutralColorIndex: number) =>
   ].filter((c) => c !== notThisColor)[neutralColorIndex]
 
 export const start = (
-  state: GameStateSetup,
+  state: GameState,
   { seed, colors }: GameCommandStartParams
-): GameStatePlaying | undefined => {
+): GameState | undefined => {
   if (state.rondel === undefined) return undefined
   if (state.config === undefined) return undefined
   if (colors.length < 1 || colors.length > 4) return undefined
@@ -102,7 +101,7 @@ export const start = (
     }
   }
 
-  const newState: GameStatePlaying = {
+  const newState: GameState = {
     ...state,
     config: state.config,
     randGen: randGen1,

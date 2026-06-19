@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/financedEstate', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,7 +82,7 @@ describe('buildings/financedEstate', () => {
   describe('financedEstate', () => {
     it('goes through a happy path', () => {
       const s1 = financedEstate('Pn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 0,
         book: 1,
         bread: 1,
@@ -93,18 +93,18 @@ describe('buildings/financedEstate', () => {
 
     it('allows a noop', () => {
       const s1 = financedEstate('')(s0)!
-      expect(s1.players[0]).toStrictEqual(s0.players[0])
+      expect(s1.players![0]).toStrictEqual(s0.players![0])
     })
 
     it('allows a noop with undefined', () => {
       const s1 = financedEstate()(s0)!
-      expect(s1.players[0]).toStrictEqual(s0.players[0])
+      expect(s1.players![0]).toStrictEqual(s0.players![0])
     })
 
     it('can pay with wine', () => {
-      const s1 = { ...s0, players: [{ ...s0.players[0], penny: 0, wine: 1 }, ...s0.players.slice(1)] }
+      const s1 = { ...s0, players: [{ ...s0.players![0], penny: 0, wine: 1 }, ...s0.players!.slice(1)] }
       const s2 = financedEstate('Wn')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 0,
         wine: 0,
         book: 1,
@@ -115,7 +115,7 @@ describe('buildings/financedEstate', () => {
     })
 
     it('cant pay with clay', () => {
-      const s1 = { ...s0, players: [{ ...s0.players[0], penny: 0, clay: 1 }, ...s0.players.slice(1)] }
+      const s1 = { ...s0, players: [{ ...s0.players![0], penny: 0, clay: 1 }, ...s0.players!.slice(1)] }
       const s2 = financedEstate('Cl')(s1)!
       expect(s2).toBeUndefined()
     })
@@ -127,13 +127,13 @@ describe('buildings/financedEstate', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             nickel: 0,
             whiskey: 0,
             wine: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ] as Tableau[],
       }
       const c0 = complete([], s1)
@@ -144,13 +144,13 @@ describe('buildings/financedEstate', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             nickel: 1,
             whiskey: 0,
             wine: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ] as Tableau[],
       }
       const c0 = complete([], s1)
@@ -161,13 +161,13 @@ describe('buildings/financedEstate', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             nickel: 1,
             whiskey: 1,
             wine: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ] as Tableau[],
       }
       const c0 = complete([], s1)

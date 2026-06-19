@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/falseLighthouse', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -86,7 +86,7 @@ describe('buildings/falseLighthouse', () => {
 
     it('gives a whiskey to the player', () => {
       const s1 = falseLighthouse('Wh')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 3,
         whiskey: 1,
         beer: 0,
@@ -95,7 +95,7 @@ describe('buildings/falseLighthouse', () => {
 
     it('gives a beer to the player', () => {
       const s1 = falseLighthouse('Be')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 3,
         whiskey: 0,
         beer: 1,

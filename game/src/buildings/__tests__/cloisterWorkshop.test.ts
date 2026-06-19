@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/cloisterWorkshop', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -81,7 +81,7 @@ describe('buildings/cloisterWorkshop', () => {
   describe('cloisterWorkshop', () => {
     it('allows noop with null', () => {
       const s1 = cloisterWorkshop()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 0,
         ornament: 0,
         clay: 10,
@@ -92,7 +92,7 @@ describe('buildings/cloisterWorkshop', () => {
 
     it('allows noop with empty string', () => {
       const s1 = cloisterWorkshop('')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 0,
         ornament: 0,
         clay: 10,
@@ -103,7 +103,7 @@ describe('buildings/cloisterWorkshop', () => {
 
     it('plenty of coal, make three ceramic and 1 ornament', () => {
       const s1 = cloisterWorkshop('ClClClSnCoCoCoCo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 3,
         ornament: 1,
         clay: 7,
@@ -114,7 +114,7 @@ describe('buildings/cloisterWorkshop', () => {
 
     it('when abundant clay/stone, prefer to make an ornament', () => {
       const s1 = cloisterWorkshop('ClClClSnCo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 2,
         ornament: 1,
         clay: 7, // but still everything it is given is consumed
@@ -125,7 +125,7 @@ describe('buildings/cloisterWorkshop', () => {
 
     it('eats all the energy', () => {
       const s1 = cloisterWorkshop('CoSn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 0,
         ornament: 1,
         clay: 10,
@@ -136,7 +136,7 @@ describe('buildings/cloisterWorkshop', () => {
 
     it('can be used for only ceramic', () => {
       const s1 = cloisterWorkshop('CoClCl')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 2,
         ornament: 0,
         clay: 8,
@@ -152,14 +152,14 @@ describe('buildings/cloisterWorkshop', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clay: 2,
             stone: 1,
             coal: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })
@@ -168,15 +168,15 @@ describe('buildings/cloisterWorkshop', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clay: 0,
             stone: 2,
             coal: 1,
             wood: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['SnCo', 'SnWo', ''])
     })
@@ -185,15 +185,15 @@ describe('buildings/cloisterWorkshop', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clay: 5,
             stone: 0,
             coal: 1,
             wood: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['ClClClCo', 'ClClCo', 'ClCo', 'ClWo', ''])
     })
@@ -202,15 +202,15 @@ describe('buildings/cloisterWorkshop', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clay: 5,
             stone: 3,
             coal: 1,
             wood: 3,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([
         'ClClClSnCoWo',

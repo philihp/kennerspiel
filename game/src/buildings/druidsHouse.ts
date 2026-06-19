@@ -2,7 +2,7 @@ import { addIndex, always, any, curry, filter, identity, map, max, pipe, range, 
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { basicResources, parseResourceParam, stringRepeater, combinations } from '../board/resource'
-import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { GameState, ResourceEnum, StateReducer } from '../types'
 
 export const druidsHouse = (input = '', output = ''): StateReducer => {
   const { book = 0 } = parseResourceParam(input)
@@ -21,7 +21,7 @@ export const druidsHouse = (input = '', output = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () =>
       map<number, string>(

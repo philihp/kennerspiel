@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('buildings/sacristy', () => {
     beer: 0,
     reliquary: 2,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -86,7 +86,7 @@ describe('buildings/sacristy', () => {
     })
     it('does nothing with empty input', () => {
       const s1 = sacristy('')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 2,
         ceramic: 2,
         ornament: 2,
@@ -96,7 +96,7 @@ describe('buildings/sacristy', () => {
     })
     it('does nothing with missing input', () => {
       const s1 = sacristy()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 2,
         ceramic: 2,
         ornament: 2,
@@ -106,7 +106,7 @@ describe('buildings/sacristy', () => {
     })
     it('gives a wonder with one set of inputs', () => {
       const s1 = sacristy('BoPoOrRq')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         ceramic: 1,
         ornament: 1,
@@ -117,7 +117,7 @@ describe('buildings/sacristy', () => {
     })
     it('swallows up extra but does not give more than one wonder', () => {
       const s1 = sacristy('BoCeOrRqBoCeOrRq')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 0,
         ceramic: 0,
         ornament: 0,
@@ -139,15 +139,15 @@ describe('buildings/sacristy', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 4,
             ceramic: 1,
             ornament: 2,
             reliquary: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['BoCeOrRq', ''])
     })
@@ -156,15 +156,15 @@ describe('buildings/sacristy', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 4,
             ceramic: 0,
             ornament: 2,
             reliquary: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })

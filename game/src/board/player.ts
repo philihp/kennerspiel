@@ -4,18 +4,18 @@ import {
   Clergy,
   Cost,
   GameCommandConfigParams,
-  GameStatePlaying,
+  GameState,
   PlayerColor,
   StateReducer,
   Tableau,
   TableauReducer,
 } from '../types'
 
-export const activeLens = (state?: GameStatePlaying): Lens<GameStatePlaying | undefined, Tableau> =>
+export const activeLens = (state?: GameState): Lens<GameState | undefined, Tableau> =>
   lensPath(['players', view(lensPath(['frame', 'activePlayerIndex']), state)])
 
 const withPlayer =
-  (lens: Lens<GameStatePlaying | undefined, Tableau>) =>
+  (lens: Lens<GameState | undefined, Tableau>) =>
   (func: (player: Tableau) => Tableau | undefined): StateReducer =>
   (state) => {
     if (state === undefined) return state
@@ -32,7 +32,7 @@ export const withActivePlayer =
   (state) =>
     withPlayer(activeLens(state))(func)(state)
 
-export const indexLens = (playerIndex: number): Lens<GameStatePlaying | undefined, Tableau> =>
+export const indexLens = (playerIndex: number): Lens<GameState | undefined, Tableau> =>
   lensPath(['players', playerIndex])
 
 export const withPlayerIndex =
@@ -50,7 +50,7 @@ export const withEachPlayer =
       const q = func(p)
       if (p !== q) dirty = true
       return q
-    }, state.players)
+    }, state.players!)
     if (!dirty) return state
     if (any((p) => p === undefined, players)) return undefined
     return {
@@ -83,9 +83,9 @@ export const isPrior = (clergy: Clergy | undefined): boolean =>
 
 export const isLayBrother = (clergy: Clergy | undefined): boolean => !!(clergy && !isPrior(clergy))
 
-export const priors = (state: GameStatePlaying | undefined): Clergy[] => {
+export const priors = (state: GameState | undefined): Clergy[] => {
   if (state === undefined) return []
-  const a = map(({ color }) => color, state.players)
+  const a = map(({ color }) => color, state.players!)
   const b = map(clergyForColor(state.config), a)
   const c = flatten(b)
   const d = filter(isPrior, c)

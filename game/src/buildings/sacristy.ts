@@ -3,7 +3,7 @@ import { P, match } from 'ts-pattern'
 import { activeLens, getWonder, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
 import { removeWonder } from '../board/state'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { GameState, ResourceEnum } from '../types'
 
 export const sacristy = (param = '') => {
   const input = parseResourceParam(param)
@@ -29,7 +29,7 @@ export const sacristy = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { book = 0, ceramic = 0, ornament = 0, reliquary = 0 } = view(activeLens(state), state)

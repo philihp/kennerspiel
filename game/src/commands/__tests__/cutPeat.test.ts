@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -47,7 +47,7 @@ describe('commands/cutPeat', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -89,22 +89,22 @@ describe('commands/cutPeat', () => {
       expect(s1).toBeUndefined()
     })
     it('wont go if main action already used', () => {
-      const s1 = { ...s0, frame: { ...s0.frame, mainActionUsed: true } }
+      const s1 = { ...s0, frame: { ...s0.frame!, mainActionUsed: true } }
       const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
     })
     it('if peat not on rondel, keeps token off but allows with zero peat', () => {
       const s1 = { ...s0, rondel: { pointingBefore: 0, peat: undefined } }
-      expect(s1.players[0].peat).toBe(0)
-      expect(s1.rondel.peat).toBeUndefined()
+      expect(s1.players![0].peat).toBe(0)
+      expect(s1.rondel!.peat).toBeUndefined()
       const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
-      expect(s2.players[0].peat).toBe(0)
-      expect(s2.rondel.peat).toBeUndefined()
+      expect(s2.players![0].peat).toBe(0)
+      expect(s2.rondel!.peat).toBeUndefined()
     })
 
     it('removes the peat bog', () => {
       const s1 = cutPeat({ row: 0, col: 0, useJoker: false })(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
           [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -118,23 +118,23 @@ describe('commands/cutPeat', () => {
     })
     it('moves up the joker', () => {
       const s1 = cutPeat({ row: 0, col: 0, useJoker: true })(s0)!
-      expect(s1.rondel.joker).toBe(2)
-      expect(s1.rondel.peat).toBe(1)
+      expect(s1.rondel!.joker).toBe(2)
+      expect(s1.rondel!.peat).toBe(1)
     })
     it('moves up the peat token', () => {
       const s1 = cutPeat({ row: 0, col: 0, useJoker: false })(s0)!
-      expect(s1.rondel.joker).toBe(0)
-      expect(s1.rondel.peat).toBe(2)
+      expect(s1.rondel!.joker).toBe(0)
+      expect(s1.rondel!.peat).toBe(2)
     })
     it('gives the active player peat', () => {
       const s1 = cutPeat({ row: 0, col: 0, useJoker: false })(s0)!
-      expect(s1.players[0].peat).toBe(2)
+      expect(s1.players![0].peat).toBe(2)
     })
     it('fails if in bonus round', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusRoundPlacement: true,
         },
       }
@@ -145,18 +145,18 @@ describe('commands/cutPeat', () => {
       const s1 = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
-      } as GameStatePlaying
+      } as GameState
       const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
-      expect(s2.players[0].peat).toBe(3)
-      expect(s2.players[1].peat).toBe(1)
-      expect(s2.players[2].peat).toBe(1)
+      expect(s2.players![0].peat).toBe(3)
+      expect(s2.players![1].peat).toBe(1)
+      expect(s2.players![2].peat).toBe(1)
     })
     it('gives the active player joker-peat', () => {
       const s1 = cutPeat({ row: 0, col: 0, useJoker: true })(s0)!
-      expect(s1.players[0].peat).toBe(3)
+      expect(s1.players![0].peat).toBe(3)
     })
   })
 
@@ -185,10 +185,10 @@ describe('commands/cutPeat', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
         },
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
@@ -196,11 +196,11 @@ describe('commands/cutPeat', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [GameCommandEnum.CUT_PEAT],
         },
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['CUT_PEAT'])
     })
@@ -208,7 +208,7 @@ describe('commands/cutPeat', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusRoundPlacement: true,
         },
       }
@@ -231,7 +231,7 @@ describe('commands/cutPeat', () => {
       const s1 = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           joker: undefined,
         },
       }
@@ -242,7 +242,7 @@ describe('commands/cutPeat', () => {
       const s1 = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           peat: undefined,
         },
       }

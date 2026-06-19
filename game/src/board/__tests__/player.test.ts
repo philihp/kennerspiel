@@ -1,6 +1,6 @@
 import { describe, it, expect, mock } from '../../testHelpers'
 import { view } from 'ramda'
-import { Clergy, GameCommandConfigParams, GameStatePlaying, PlayerColor, Tableau } from '../../types'
+import { Clergy, GameCommandConfigParams, GameState, PlayerColor, Tableau } from '../../types'
 import {
   activeLens,
   clergyForColor,
@@ -428,7 +428,7 @@ describe('board/player', () => {
       frame: {
         activePlayerIndex: 1,
       },
-    } as GameStatePlaying
+    } as GameState
 
     it('will read from activePlayer', () => {
       const fn = mock.fn()
@@ -478,7 +478,7 @@ describe('board/player', () => {
       frame: {
         activePlayerIndex: 1,
       },
-    } as GameStatePlaying
+    } as GameState
     it('can work on a state', () => {
       const p1 = view(activeLens(s0), s0)
       expect(p1?.color).toBe('G')
@@ -491,7 +491,7 @@ describe('board/player', () => {
       const s1 = {
         ...s0,
         frame: {},
-      } as GameStatePlaying
+      } as GameState
 
       const p1 = view(activeLens(s1), s1)
       expect(p1?.color).toBeUndefined()
@@ -502,7 +502,7 @@ describe('board/player', () => {
         frame: {
           activePlayerIndex: 4,
         },
-      } as GameStatePlaying
+      } as GameState
 
       const p1 = view(activeLens(s1), s1)
       expect(p1?.color).toBeUndefined()
@@ -528,7 +528,7 @@ describe('board/player', () => {
       frame: {
         activePlayerIndex: 1,
       },
-    } as GameStatePlaying
+    } as GameState
     it('gives the second player', () => {
       const p1 = view(indexLens(2), s0)
       expect(p1?.color).toBe('W')

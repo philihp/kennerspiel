@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/castle', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -86,7 +86,7 @@ describe('buildings/castle', () => {
     })
     it('adds a settlement bonus action', () => {
       const s1 = castle()(s0)!
-      expect(s1.frame.bonusActions).toContain('SETTLE')
+      expect(s1.frame!.bonusActions).toContain('SETTLE')
     })
   })
 

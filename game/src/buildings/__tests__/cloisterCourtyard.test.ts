@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/cloisterCourtyard', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -80,13 +80,13 @@ describe('buildings/cloisterCourtyard', () => {
   }
   describe('cloisterCourtyard', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = cloisterCourtyard()(s0)
       expect(s1).toBeUndefined()
     })
     it('goes through a happy path', () => {
       const s1 = cloisterCourtyard('ClWoGn', 'Sh')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         clay: 10,
         wood: 10,
         grain: 10,
@@ -109,7 +109,7 @@ describe('buildings/cloisterCourtyard', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 0,
             wood: 0,
             clay: 0,
@@ -117,7 +117,7 @@ describe('buildings/cloisterCourtyard', () => {
             penny: 1,
             sheep: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -128,7 +128,7 @@ describe('buildings/cloisterCourtyard', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             peat: 1,
             penny: 1,
             clay: 0,
@@ -152,7 +152,7 @@ describe('buildings/cloisterCourtyard', () => {
             beer: 0,
             reliquary: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)

@@ -1,5 +1,5 @@
 import { always } from 'ramda'
-import { BuildingEnum, GameStatePlaying } from '../types'
+import { BuildingEnum, GameState } from '../types'
 import { complete as completeAlehouse } from './alehouse'
 import { complete as completeBakery } from './bakery'
 import { complete as completeBathhouse } from './bathhouse'
@@ -140,7 +140,7 @@ export { winery } from './winery'
 
 // could just have an array, but this will make sure every command is covered, and
 // direct lookups are faster, and i could just directly import, too, i guess
-export const complete: Record<BuildingEnum, (partial: string[]) => (state: GameStatePlaying) => string[]> = {
+export const complete: Record<BuildingEnum, (partial: string[]) => (state: GameState) => string[]> = {
   [BuildingEnum.Moor]: always(always([])),
   [BuildingEnum.Forest]: always(always([])),
   [BuildingEnum.ClayMoundR]: completeClayMound,

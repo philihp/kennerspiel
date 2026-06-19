@@ -2,13 +2,13 @@ import { always, equals, findIndex, head, map, pipe, range, reject, remove, toSt
 import { P, match } from 'ts-pattern'
 import { costMoney } from '../board/resource'
 import { activeLens, subtractCoins, withActivePlayer } from '../board/player'
-import { GameStatePlaying, GameCommandBuyDistrictParams, Tile, LandEnum, BuildingEnum, GameCommandEnum } from '../types'
+import { GameState, GameCommandBuyDistrictParams, Tile, LandEnum, BuildingEnum, GameCommandEnum } from '../types'
 
-const checkCanGetLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const checkCanGetLandscape = (state?: GameState): GameState | undefined => {
   if (state === undefined) return undefined
-  if (state.frame.currentPlayerIndex !== state.frame.activePlayerIndex) return undefined
-  if (state.frame.canBuyLandscape) return state
-  if (state.frame.bonusActions.includes(GameCommandEnum.BUY_DISTRICT)) return state
+  if (state.frame!.currentPlayerIndex !== state.frame!.activePlayerIndex) return undefined
+  if (state.frame!.canBuyLandscape) return state
+  if (state.frame!.bonusActions.includes(GameCommandEnum.BUY_DISTRICT)) return state
   return undefined
 }
 
@@ -31,9 +31,9 @@ const checkForOverlap = (y: number) =>
     return player
   })
 
-const checkCanAfford = (state?: GameStatePlaying): GameStatePlaying | undefined => {
-  if (state?.frame.bonusActions?.includes(GameCommandEnum.BUY_DISTRICT)) return state
-  const cost = state?.districtPurchasePrices[0]
+const checkCanAfford = (state?: GameState): GameState | undefined => {
+  if (state?.frame!.bonusActions?.includes(GameCommandEnum.BUY_DISTRICT)) return state
+  const cost = state?.districtPurchasePrices![0]
   return withActivePlayer((player) => {
     if (cost === undefined) return undefined
     if (costMoney(player) < cost) return undefined
@@ -41,34 +41,34 @@ const checkCanAfford = (state?: GameStatePlaying): GameStatePlaying | undefined 
   })(state)
 }
 
-const payForDistrict = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const payForDistrict = (state?: GameState): GameState | undefined => {
   if (state === undefined) return undefined
-  if (state.frame.bonusActions?.includes(GameCommandEnum.BUY_DISTRICT)) return state
-  const cost = state.districtPurchasePrices[0]
+  if (state.frame!.bonusActions?.includes(GameCommandEnum.BUY_DISTRICT)) return state
+  const cost = state.districtPurchasePrices![0]
   return withActivePlayer(subtractCoins(cost))(state)
 }
 
-const removeDistrictFromPool = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const removeDistrictFromPool = (state?: GameState): GameState | undefined => {
   if (state === undefined) return undefined
-  if (state.frame.bonusActions?.includes(GameCommandEnum.BUY_DISTRICT)) return state
+  if (state.frame!.bonusActions?.includes(GameCommandEnum.BUY_DISTRICT)) return state
   return {
     ...state,
-    districtPurchasePrices: state.districtPurchasePrices.slice(1),
+    districtPurchasePrices: state.districtPurchasePrices!.slice(1),
   }
 }
 
-const denyBuyingAnyMoreLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const denyBuyingAnyMoreLandscape = (state?: GameState): GameState | undefined => {
   if (state === undefined) return undefined
-  const atIndex = findIndex((a: GameCommandEnum) => equals(a, GameCommandEnum.BUY_DISTRICT), state.frame.bonusActions)
+  const atIndex = findIndex((a: GameCommandEnum) => equals(a, GameCommandEnum.BUY_DISTRICT), state.frame!.bonusActions)
   return {
     ...state,
     frame: {
-      ...state.frame,
+      ...state.frame!!,
       // if the command was found in bonusActions
       ...(atIndex !== -1
         ? {
             // leave canBuyLandscape as it was
-            bonusActions: remove(atIndex, 1, state.frame.bonusActions),
+            bonusActions: remove(atIndex, 1, state.frame!.bonusActions),
           }
         : {
             // otherwise set canBuyLandscape to false
@@ -146,16 +146,16 @@ export const buyDistrict = ({ side, y }: GameCommandBuyDistrictParams) =>
   )
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] => {
     const player = view(activeLens(state), state)
     return match<string[], string[]>(partial)
       .with([], () => {
-        if (state.frame.bonusActions.includes(GameCommandEnum.BUY_DISTRICT) && head(state.districtPurchasePrices))
+        if (state.frame!.bonusActions.includes(GameCommandEnum.BUY_DISTRICT) && head(state.districtPurchasePrices!))
           return [GameCommandEnum.BUY_DISTRICT]
         if (checkCanGetLandscape(state) === undefined) return []
         const playerWealth = costMoney(player)
-        const nextDistrictCost = head(state.districtPurchasePrices) ?? Infinity
+        const nextDistrictCost = head(state.districtPurchasePrices!) ?? Infinity
         if (playerWealth < nextDistrictCost) return []
         return [GameCommandEnum.BUY_DISTRICT]
       })

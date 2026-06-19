@@ -2,7 +2,7 @@ import { always, concat, curry, equals, filter, lift, map, not, pipe, range, vie
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, stringRepeater } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { GameState } from '../types'
 
 export const brewery = (param = '') => {
   const { malt = 0, grain = 0, beer = 0 } = parseResourceParam(param)
@@ -19,7 +19,7 @@ export const brewery = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { malt = 0, grain = 0, beer = 0 } = view(activeLens(state), state)

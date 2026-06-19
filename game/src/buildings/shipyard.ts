@@ -2,7 +2,7 @@ import { always, curry, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { GameState } from '../types'
 
 export const shipyard = (param = '') => {
   const iterations = (parseResourceParam(param).wood ?? 0) / 2
@@ -15,7 +15,7 @@ export const shipyard = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { wood = 0 } = view(activeLens(state), state)

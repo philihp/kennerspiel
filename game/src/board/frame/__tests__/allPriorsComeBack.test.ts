@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../../testHelpers'
 import { initialState } from '../../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('board/frame/allPriorsComeBack', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -90,7 +90,7 @@ describe('board/frame/allPriorsComeBack', () => {
       ...s0,
       players: [
         {
-          ...s0.players[0],
+          ...s0.players![0],
           color: PlayerColor.Red,
           clergy: ['LB1R', 'LB2R'],
           landscape: [
@@ -101,7 +101,7 @@ describe('board/frame/allPriorsComeBack', () => {
         },
 
         {
-          ...s0.players[0],
+          ...s0.players![0],
           color: PlayerColor.Green,
           clergy: ['LB2G'],
           landscape: [
@@ -113,7 +113,7 @@ describe('board/frame/allPriorsComeBack', () => {
         },
 
         {
-          ...s0.players[0],
+          ...s0.players![0],
           color: PlayerColor.Blue,
           clergy: ['LB2B'],
           landscape: [
@@ -123,11 +123,11 @@ describe('board/frame/allPriorsComeBack', () => {
           landscapeOffset: 0,
         },
       ],
-    } as GameStatePlaying
+    } as GameState
     const s2 = allPriorsComeBack(s1)!
-    expect(s2.players[0].clergy).toContain('PRIR')
-    expect(s2.players[1].clergy).toContain('PRIG')
-    expect(s2.players[2].clergy).toContain('PRIB')
+    expect(s2.players![0].clergy).toContain('PRIR')
+    expect(s2.players![1].clergy).toContain('PRIG')
+    expect(s2.players![2].clergy).toContain('PRIB')
   })
 
   it('returns all priors if some players dont have them out', () => {
@@ -135,7 +135,7 @@ describe('board/frame/allPriorsComeBack', () => {
       ...s0,
       players: [
         {
-          ...s0.players[0],
+          ...s0.players![0],
           color: PlayerColor.Red,
           clergy: ['LB1R', 'LB2R', 'PRIR'],
           landscape: [
@@ -146,7 +146,7 @@ describe('board/frame/allPriorsComeBack', () => {
         },
 
         {
-          ...s0.players[0],
+          ...s0.players![0],
           color: PlayerColor.Green,
           clergy: ['LB2G'],
           landscape: [
@@ -158,7 +158,7 @@ describe('board/frame/allPriorsComeBack', () => {
         },
 
         {
-          ...s0.players[0],
+          ...s0.players![0],
           color: PlayerColor.Blue,
           clergy: ['LB2B'],
           landscape: [
@@ -168,14 +168,14 @@ describe('board/frame/allPriorsComeBack', () => {
           landscapeOffset: 0,
         },
       ],
-    } as GameStatePlaying
+    } as GameState
     const s2 = allPriorsComeBack(s1)!
-    expect(s2.players[0]).toBe(s1.players[0]) // keep the same object because nothing changed
-    expect(s2.players[0].clergy).toContain('PRIR')
-    expect(s2.players[1]).not.toBe(s1.players[1])
-    expect(s2.players[1].clergy).toContain('PRIG')
-    expect(s2.players[2]).not.toBe(s1.players[2])
-    expect(s2.players[2].clergy).toContain('PRIB')
+    expect(s2.players![0]).toBe(s1.players![0]) // keep the same object because nothing changed
+    expect(s2.players![0].clergy).toContain('PRIR')
+    expect(s2.players![1]).not.toBe(s1.players![1])
+    expect(s2.players![1].clergy).toContain('PRIG')
+    expect(s2.players![2]).not.toBe(s1.players![2])
+    expect(s2.players![2].clergy).toContain('PRIB')
   })
 
   it('keeps previous state if nothing changed', () => {

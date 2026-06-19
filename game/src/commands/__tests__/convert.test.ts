@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('commands/convert', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -95,16 +95,16 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 1,
             penny: 1,
             wine: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = convert({ nickel: 1 })(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         nickel: 0,
         penny: 6,
         wine: 1,
@@ -115,16 +115,16 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 2,
             penny: 6,
             wine: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = convert({ penny: 5 })(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         nickel: 3,
         penny: 1,
         wine: 1,
@@ -135,16 +135,16 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 10,
             penny: 10,
             wine: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = convert({ wine: 3 })(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         nickel: 10,
         penny: 13,
         wine: 7,
@@ -155,16 +155,16 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 10,
             penny: 10,
             whiskey: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = convert({ whiskey: 3 })(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         nickel: 10,
         penny: 16,
         whiskey: 7,
@@ -175,16 +175,16 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 2,
             wine: 4,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = convert({ penny: 5 })(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         nickel: 1,
         penny: 0,
         wine: 1,
@@ -195,16 +195,16 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 2,
             whiskey: 4,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = convert({ penny: 5 })(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         nickel: 1,
         penny: 0,
         whiskey: 4,
@@ -218,14 +218,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 0,
             grain: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -236,14 +236,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 1,
             penny: 0,
             grain: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -254,14 +254,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 4,
             grain: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -272,14 +272,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 5,
             grain: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -290,14 +290,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 0,
             grain: 1,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -308,14 +308,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 0,
             grain: 0,
             wine: 1,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -326,14 +326,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 0,
             grain: 0,
             wine: 0,
             whiskey: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -344,14 +344,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 1,
             penny: 5,
             grain: 2,
             wine: 1,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['CONVERT'])
@@ -380,14 +380,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 1,
             penny: 8,
             grain: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['CONVERT'])
@@ -398,14 +398,14 @@ describe('commands/convert', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 8,
             grain: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s0)(['CONVERT', 'PnPnPnPnPn'])

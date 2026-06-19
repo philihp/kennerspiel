@@ -1,7 +1,7 @@
 import { always, lift, map, pipe, range, reverse, view, without } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, subtractCoins, withActivePlayer } from '../board/player'
-import { GameCommandConvertParams, GameCommandEnum, GameStatePlaying, ResourceEnum, Tableau } from '../types'
+import { GameCommandConvertParams, GameCommandEnum, GameState, ResourceEnum, Tableau } from '../types'
 import { stringRepeater } from '../board/resource'
 
 const convertGrain =
@@ -67,12 +67,12 @@ export const convert = ({ grain, wine, nickel, whiskey, penny }: GameCommandConv
 }
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] =>
     match<string[], string[]>(partial)
       .with([], () => {
         if (
-          state.frame.currentPlayerIndex === state.frame.activePlayerIndex &&
+          state.frame!.currentPlayerIndex === state.frame!.activePlayerIndex &&
           withActivePlayer((player) => {
             if (!player) return player
             const { penny, grain, wine, nickel, whiskey } = player

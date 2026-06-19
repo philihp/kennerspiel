@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../testHelpers'
-import { GameStatePlaying, Tableau } from '../../types'
+import { GameState, Tableau } from '../../types'
 import { camera, complete } from '../camera'
 
 describe('buildings/camera', () => {
@@ -15,12 +15,12 @@ describe('buildings/camera', () => {
       activePlayerIndex: 0,
     },
     players: [p0],
-  } as GameStatePlaying
+  } as GameState
 
   describe('camera', () => {
     it('goes through a happy path', () => {
       const s1 = camera('BoBoCeCe')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         ceramic: 1,
         penny: 2,
@@ -46,7 +46,7 @@ describe('buildings/camera', () => {
 
     it('can only do one', () => {
       const s1 = camera('BoCe')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 2,
         ceramic: 2,
         penny: 1,
@@ -57,7 +57,7 @@ describe('buildings/camera', () => {
 
     it('if paying for more than two, only give 2', () => {
       const s1 = camera('BoBoBoCeCeCe')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         ceramic: 1,
         penny: 2,
@@ -73,13 +73,13 @@ describe('buildings/camera', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             straw: 3,
             wood: 5,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['SwSwWoWo', 'SwWo', ''])
     })

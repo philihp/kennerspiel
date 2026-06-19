@@ -4,7 +4,7 @@ import {
   BuildingEnum,
   Clergy,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -49,7 +49,7 @@ describe('commands/withPrior', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -99,14 +99,14 @@ describe('commands/withPrior', () => {
       expect(s1).toBeUndefined()
     })
     it('wont do this if there is no prior', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: ['LB1B', 'LB2B'] as Clergy[],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = withPrior(s1)
@@ -114,7 +114,7 @@ describe('commands/withPrior', () => {
     })
 
     describe('if pending work contract', () => {
-      const s0: GameStatePlaying = {
+      const s0: GameState = {
         ...initialState,
         status: GameStatusEnum.PLAYING,
         frame: {
@@ -226,7 +226,7 @@ describe('commands/withPrior', () => {
         const s1 = {
           ...s0,
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             usableBuildings: ['G01', 'G02'] as BuildingEnum[],
           },
         }
@@ -238,7 +238,7 @@ describe('commands/withPrior', () => {
         const s1 = {
           ...s0,
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             usableBuildings: [],
           },
         }
@@ -250,7 +250,7 @@ describe('commands/withPrior', () => {
         const s1 = {
           ...s0,
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             // this is what the following command would do:
             // WORK_CONTRACT F05 Pn
             // because player 2 has both prior and laybrother available
@@ -266,7 +266,7 @@ describe('commands/withPrior', () => {
           nextUse: 'free',
           usableBuildings: ['F05'],
         })
-        expect(s2.players[2]).toMatchObject({
+        expect(s2.players![2]).toMatchObject({
           clergy: ['LB1G', 'LB2G'],
           landscape: [
             [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05', 'PRIG'], ['H', 'LG1'], [], []],
@@ -283,10 +283,10 @@ describe('commands/withPrior', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.LayBrother1B, Clergy.PriorB],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -297,10 +297,10 @@ describe('commands/withPrior', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.LayBrother1B, Clergy.LayBrother2B],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -311,13 +311,13 @@ describe('commands/withPrior', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.LayBrother1B, Clergy.PriorB],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           nextUse: NextUseClergy.OnlyPrior,
         },
       }
@@ -329,13 +329,13 @@ describe('commands/withPrior', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.LayBrother1B, Clergy.PriorB],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
         },
       }
@@ -347,13 +347,13 @@ describe('commands/withPrior', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.LayBrother1B, Clergy.PriorB],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           currentPlayerIndex: 1,
           activePlayerIndex: 0,
           mainActionUsed: true, // this would be set by work_contract

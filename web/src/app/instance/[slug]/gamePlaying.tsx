@@ -10,14 +10,14 @@ import { UnbuiltPlots } from '@/components/unbuiltPlots'
 import { UnbuiltWonders } from '@/components/unbuiltWonders'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Enums } from '@/supabase.types'
-import { GameStatePlaying, Tableau } from 'hathora-et-labora-game'
+import { GameState, Tableau } from 'hathora-et-labora-game'
 import { PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { map, pipe, range } from 'ramda'
 import { ReactNode, useState } from 'react'
 import { match } from 'ts-pattern'
 import { Alerts } from '@/components/alerts'
 
-const playerOrdering = (state?: GameStatePlaying) => {
+const playerOrdering = (state?: GameState) => {
   if (state === undefined) return []
   if (state.players.length === 0) return []
   if (state.players.length === 1) return [0]
@@ -83,12 +83,9 @@ export const GamePlaying = () => {
           <UnbuiltWonders />
         </div>
       </div>
-
       <hr />
       <i>Last Updated: </i>
-      {instance.updated_at}
-      {' '}
-      <button onClick={() => setDebugOpen(true)}>Debug</button>
+      {instance.updated_at} <button onClick={() => setDebugOpen(true)}>Debug</button>
       {debugOpen && (
         <dialog
           open
@@ -107,7 +104,9 @@ export const GamePlaying = () => {
             background: '#fff',
           }}
         >
-          <button onClick={() => setDebugOpen(false)} style={{ float: 'right' }}>Close</button>
+          <button onClick={() => setDebugOpen(false)} style={{ float: 'right' }}>
+            Close
+          </button>
           <h3 style={{ marginTop: 0 }}>State</h3>
           <pre style={{ fontSize: 11, overflowX: 'auto', background: '#f8f8f8', padding: 8 }}>
             {JSON.stringify(rawState, null, 2)}

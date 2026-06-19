@@ -2,7 +2,7 @@ import { add, always, ap, concat, curry, map, min, pipe, range, reverse, unnest,
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, parseResourceParam, stringRepeater } from '../board/resource'
-import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { GameState, ResourceEnum, StateReducer } from '../types'
 
 export const cloisterLibrary = (inputs = ''): StateReducer => {
   const input = parseResourceParam(inputs)
@@ -20,7 +20,7 @@ export const cloisterLibrary = (inputs = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

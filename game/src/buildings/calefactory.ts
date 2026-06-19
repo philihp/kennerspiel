@@ -2,7 +2,7 @@ import { always, curry, identity, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { parseResourceParam, costMoney } from '../board/resource'
 import { withActivePlayer, payCost, activeLens } from '../board/player'
-import { GameCommandEnum, GameStatePlaying } from '../types'
+import { GameCommandEnum, GameState } from '../types'
 import { addBonusAction } from '../board/frame'
 
 export const calefactory = (coin = '') => {
@@ -16,7 +16,7 @@ export const calefactory = (coin = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { penny = 0 } = view(activeLens(state), state)

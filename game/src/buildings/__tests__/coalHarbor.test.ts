@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/coalHarbor', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,7 +82,7 @@ describe('buildings/coalHarbor', () => {
   describe('coalHarbor', () => {
     it('goes through a happy path', () => {
       const s1 = coalHarbor('PtPtPt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         peat: 7,
         whiskey: 3,
         nickel: 1,
@@ -103,7 +103,7 @@ describe('buildings/coalHarbor', () => {
     })
     it('can consume partially', () => {
       const s1 = coalHarbor('Pt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         peat: 9,
         whiskey: 1,
         nickel: 0,
@@ -118,12 +118,12 @@ describe('buildings/coalHarbor', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -132,12 +132,12 @@ describe('buildings/coalHarbor', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['CoCo', 'Co', ''])
     })
@@ -146,12 +146,12 @@ describe('buildings/coalHarbor', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 100,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['CoCoCo', 'CoCo', 'Co', ''])
     })
@@ -160,12 +160,12 @@ describe('buildings/coalHarbor', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Co'], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -174,12 +174,12 @@ describe('buildings/coalHarbor', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Co', 'Co'], s1)
       expect(c0).toStrictEqual([])
     })

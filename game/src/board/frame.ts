@@ -13,7 +13,7 @@ import {
   FrameFlow,
   GameCommandConfigParams,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   NextUseClergy,
   StateReducer,
   Tile,
@@ -24,7 +24,7 @@ import { isSettlement } from './buildings'
 export const withFrame =
   (func: (frame: Frame) => Frame | undefined): StateReducer =>
   (state) => {
-    if (state === undefined) return state
+    if (state === undefined || state.frame === undefined) return undefined
     const frame = func(state.frame)
     if (frame === undefined) return undefined
     return {
@@ -42,7 +42,7 @@ export const addBonusAction = (command: GameCommandEnum) =>
 const runProgression =
   (withFlow: FrameFlow): StateReducer =>
   (state) => {
-    const nextFrameIndex = state?.frame.next
+    const nextFrameIndex = state?.frame?.next
     if (nextFrameIndex === undefined) return undefined
     const { upkeep = [], ...frameUpdates } = withFlow[nextFrameIndex] ?? {}
     return pipe(
@@ -64,7 +64,7 @@ const runProgression =
       }),
       // and then if there are any upkeep reducer functions on the frame, run them
       (state) => {
-        return upkeep.reduce((accum: GameStatePlaying | undefined, f) => f(accum), state)
+        return upkeep.reduce((accum: GameState | undefined, f) => f(accum), state)
       }
     )(state)
   }
@@ -146,14 +146,14 @@ export const allowFreeUsageToNeighborsOf =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return state
-    const location = whichIndexHasBuilding(building)(state.players.map((p) => p.landscape))
+    const location = whichIndexHasBuilding(building)(state.players!.map((p) => p.landscape))
     if (location === undefined) return state
     const [player, row, col] = location
     return setFrameToAllowFreeUsage(
       reduce(
         (accum, curr: [number, number, number]) => {
           const [p, r, c] = curr
-          const landStack = state.players[p].landscape?.[r]?.[c]
+          const landStack = state.players![p].landscape?.[r]?.[c]
           if (landStack === undefined) return accum
           const [_, building, clergy] = landStack
           if (building === undefined) return accum
@@ -174,7 +174,7 @@ export const allowFreeUsageToNeighborsOf =
 
 export const allOccupiedBuildingsUsable: StateReducer = (state) => {
   if (state === undefined) return state
-  return setFrameToAllowFreeUsage(occupiedBuildingsForPlayers(state.players))(state)
+  return setFrameToAllowFreeUsage(occupiedBuildingsForPlayers(state.players!))(state)
 }
 
 export const checkNotBonusRound: StateReducer = withFrame((frame) => {

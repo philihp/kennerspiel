@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/scriptorium', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -83,7 +83,7 @@ describe('buildings/scriptorium', () => {
     it('supports a noop with empty strings', () => {
       const s1 = scriptorium('')(s0)!
       expect(s1).toBe(s0)
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 1,
         book: 0,
         meat: 0,
@@ -94,7 +94,7 @@ describe('buildings/scriptorium', () => {
     it('supports a noop with no params', () => {
       const s1 = scriptorium()(s0)!
       expect(s1).toBe(s0)
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 1,
         book: 0,
         meat: 0,
@@ -104,7 +104,7 @@ describe('buildings/scriptorium', () => {
 
     it('works ordinarily', () => {
       const s1 = scriptorium('Pn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 0,
         book: 1,
         meat: 1,
@@ -114,7 +114,7 @@ describe('buildings/scriptorium', () => {
 
     it('consumes everything you give it', () => {
       const s1 = scriptorium('Wh')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 1,
         book: 1,
         meat: 1,
@@ -129,13 +129,13 @@ describe('buildings/scriptorium', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             nickel: 0,
             whiskey: 0,
             wine: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ] as Tableau[],
       }
       const c0 = complete([], s1)
@@ -146,13 +146,13 @@ describe('buildings/scriptorium', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             nickel: 1,
             whiskey: 0,
             wine: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ] as Tableau[],
       }
       const c0 = complete([], s1)
@@ -163,13 +163,13 @@ describe('buildings/scriptorium', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             nickel: 1,
             whiskey: 1,
             wine: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ] as Tableau[],
       }
       const c0 = complete([], s1)

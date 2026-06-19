@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -13,7 +13,7 @@ import { printingOffice, complete } from '../printingOffice'
 
 describe('buildings/printingOffice', () => {
   it('retains undefined state', () => {
-    const s0: GameStatePlaying | undefined = undefined
+    const s0: GameState | undefined = undefined
     const s1 = printingOffice()(s0)
     expect(s1).toBeUndefined()
   })
@@ -54,7 +54,7 @@ describe('buildings/printingOffice', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -93,12 +93,12 @@ describe('buildings/printingOffice', () => {
   describe('use', () => {
     it('can do a noop', () => {
       const s1 = printingOffice()(s0)!
-      expect(s1.players[0]).toMatchObject(s0.players[0])
+      expect(s1.players![0]).toMatchObject(s0.players![0])
     })
 
     it('can convert 1 forest', () => {
       const s1 = printingOffice('2', '-2')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
@@ -114,7 +114,7 @@ describe('buildings/printingOffice', () => {
 
     it('can convert 2 forests', () => {
       const s1 = printingOffice('2', '0', '2', '-2')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 2,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
@@ -130,7 +130,7 @@ describe('buildings/printingOffice', () => {
 
     it('can convert 3 forests', () => {
       const s1 = printingOffice('2', '0', '1', '-2', '2', '-2')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 3,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
@@ -145,7 +145,7 @@ describe('buildings/printingOffice', () => {
     })
     it('can convert 4 forests', () => {
       const s1 = printingOffice('2', '0', '1', '-2', '2', '-2', '1', '1')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 4,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
@@ -160,7 +160,7 @@ describe('buildings/printingOffice', () => {
     })
     it('ignores anything past the 4th forest', () => {
       const s1 = printingOffice('2', '0', '1', '-2', '2', '-2', '1', '1', '2', '1')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 4,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
@@ -181,14 +181,14 @@ describe('buildings/printingOffice', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
             landscapeOffset: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([], s1)
@@ -199,14 +199,14 @@ describe('buildings/printingOffice', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
             landscapeOffset: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['1'])(s1)
@@ -217,7 +217,7 @@ describe('buildings/printingOffice', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -226,7 +226,7 @@ describe('buildings/printingOffice', () => {
             ] as Tile[][],
             landscapeOffset: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['1', '0'], s1)
@@ -237,7 +237,7 @@ describe('buildings/printingOffice', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -246,7 +246,7 @@ describe('buildings/printingOffice', () => {
             ] as Tile[][],
             landscapeOffset: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['1', '0', '1'], s1)
@@ -257,7 +257,7 @@ describe('buildings/printingOffice', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -266,7 +266,7 @@ describe('buildings/printingOffice', () => {
             ] as Tile[][],
             landscapeOffset: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['1', '0', '2', '0', '1', '1', '2'], s1)
@@ -277,7 +277,7 @@ describe('buildings/printingOffice', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -286,7 +286,7 @@ describe('buildings/printingOffice', () => {
             ] as Tile[][],
             landscapeOffset: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['2', '0', '0', '1', '2', '1', '0', '2'], s1)
@@ -297,14 +297,14 @@ describe('buildings/printingOffice', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LFO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
             landscapeOffset: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['0', '0', '1', '0', '2', '0', '0', '1', '1'], s1)

@@ -126,14 +126,14 @@ const checkLandTypeMatchesPlayer = (row: number, col: number, erection: Erection
 export const checkLandTypeMatches =
   (row: number, col: number, erection: ErectionEnum): StateReducer =>
   (state) => {
-    if (state?.frame.neutralBuildingPhase) return state
+    if (state?.frame?.neutralBuildingPhase) return state
     return withActivePlayer(checkLandTypeMatchesPlayer(row, col, erection))(state)
   }
 
 export const checkLandscapeFree =
   (row: number, col: number, toBuild: ErectionEnum): StateReducer =>
   (state) => {
-    if (state?.frame.neutralBuildingPhase && isSettlement(toBuild) === false) {
+    if (state?.frame?.neutralBuildingPhase && isSettlement(toBuild) === false) {
       return withPlayerIndex(1)((player) => {
         const [, existing] = player.landscape?.[row + player.landscapeOffset]?.[col + 2] ?? []
         if (existing === undefined) return player
@@ -186,7 +186,7 @@ export const checkCloisterAdjacencyPlayer = (row: number, col: number, building:
 export const checkCloisterAdjacency =
   (row: number, col: number, building: ErectionEnum): StateReducer =>
   (state) => {
-    if (state?.frame.neutralBuildingPhase) {
+    if (state?.frame?.neutralBuildingPhase) {
       return withPlayerIndex(1)(checkCloisterAdjacencyPlayer(row, col, building))(state)
     }
     return withActivePlayer(checkCloisterAdjacencyPlayer(row, col, building))(state)
@@ -196,17 +196,17 @@ export const moveClergyToOwnBuilding =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    if (state.frame.nextUse === NextUseClergy.Free) return state
-    const player = state.players[state.frame.activePlayerIndex]
+    if (state.frame!.nextUse === NextUseClergy.Free) return state
+    const player = state.players![state.frame!.activePlayerIndex]
     const matrixLocation = findBuildingWithoutOffset(building)(player.landscape)
     if (matrixLocation === undefined) return undefined
     const [row, col] = matrixLocation
     const [land, ,] = player.landscape[row][col]
 
     const priors = player.clergy.filter(isPrior)
-    if (state.frame.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
+    if (state.frame!.nextUse === NextUseClergy.OnlyPrior && priors.length === 0) return undefined
     // ^this line unnecessary
-    const nextClergy = match(state.frame.nextUse)
+    const nextClergy = match(state.frame!.nextUse)
       .with(NextUseClergy.Any, () => player.clergy[0])
       .with(NextUseClergy.OnlyPrior, () => priors[0])
       .exhaustive()
@@ -226,13 +226,13 @@ export const moveClergyToNeutralBuilding =
   (building: BuildingEnum, withPrior: boolean): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    const neutralPlayer = state.players[1]
+    const neutralPlayer = state.players![1]
     const matrixLocation = findBuildingWithoutOffset(building)(neutralPlayer.landscape)
     if (matrixLocation === undefined) return undefined
     const [row, col] = matrixLocation
     const [land, ,] = neutralPlayer.landscape[row][col]
     const nextClergy =
-      withPrior || state.frame.nextUse === NextUseClergy.OnlyPrior
+      withPrior || state.frame!.nextUse === NextUseClergy.OnlyPrior
         ? find(isPrior, neutralPlayer.clergy)
         : neutralPlayer.clergy[0]
     if (nextClergy === undefined) return undefined
@@ -281,7 +281,7 @@ const clearBonusRoundPlacement: StateReducer = (state) => {
   return {
     ...state,
     frame: {
-      ...state.frame,
+      ...state.frame!!,
       bonusRoundPlacement: false,
     },
   }
@@ -292,10 +292,10 @@ export const moveClergyInBonusRoundTo =
   (state) => {
     if (state === undefined) return undefined
 
-    const playerIndexes = range(0, state.config.players)
+    const playerIndexes = range(0, state.config!.players)
     const foundWithPlayer = reduce(
       (accum: [number, number, number] | undefined, elem: number) => {
-        const searchResult = findBuildingWithoutOffset(building)(state.players[elem].landscape)
+        const searchResult = findBuildingWithoutOffset(building)(state.players![elem].landscape)
         if (searchResult === undefined) return accum
         const [searchRow, searchCol] = searchResult
         const result: [number, number, number] = [elem, searchRow, searchCol]
@@ -307,7 +307,7 @@ export const moveClergyInBonusRoundTo =
     if (foundWithPlayer === undefined) return undefined
 
     const [p, r, c] = foundWithPlayer
-    const [prior] = state.players[state.frame.activePlayerIndex].clergy.filter(isPrior)
+    const [prior] = state.players![state.frame!.activePlayerIndex].clergy.filter(isPrior)
 
     return pipe(
       //

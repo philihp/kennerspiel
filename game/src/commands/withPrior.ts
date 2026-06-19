@@ -3,7 +3,7 @@ import { match } from 'ts-pattern'
 import { addBonusAction, revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import { moveClergyToOwnBuilding } from '../board/landscape'
 import { activeLens, isLayBrother, isPrior } from '../board/player'
-import { GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { GameCommandEnum, GameState, NextUseClergy, StateReducer } from '../types'
 
 // there are two modes of this, really...
 
@@ -12,7 +12,7 @@ import { GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '
 // -> otherwise set the nextUse = NextUseClergy.OnlyPrior
 const withPriorForCurrentPlayer: StateReducer = (state) => {
   if (state === undefined) return undefined
-  if (state.players[state.frame.activePlayerIndex].clergy.some(isPrior) === false) return undefined
+  if (state.players![state.frame!.activePlayerIndex].clergy.some(isPrior) === false) return undefined
   return withFrame((frame) => ({
     ...frame,
     nextUse: NextUseClergy.OnlyPrior,
@@ -26,19 +26,19 @@ const withPriorForCurrentPlayer: StateReducer = (state) => {
 // -> set the activePlayer back to currentPlayer
 const withPriorForWorkContract: StateReducer = (state) => {
   if (state === undefined) return undefined
-  if (state.frame.usableBuildings.length !== 1) return undefined
+  if (state.frame!.usableBuildings.length !== 1) return undefined
   return pipe(
     //
     withPriorForCurrentPlayer,
-    moveClergyToOwnBuilding(state.frame.usableBuildings[0]),
-    setFrameToAllowFreeUsage([state.frame.usableBuildings[0]]),
+    moveClergyToOwnBuilding(state.frame!.usableBuildings[0]),
+    setFrameToAllowFreeUsage([state.frame!.usableBuildings[0]]),
     revertActivePlayerToCurrent
   )(state)
 }
 
 export const withPrior: StateReducer = (state) => {
   if (state === undefined) return undefined
-  if (state.frame.activePlayerIndex === state.frame.currentPlayerIndex) {
+  if (state.frame!.activePlayerIndex === state.frame!.currentPlayerIndex) {
     return pipe(
       //
       withPriorForCurrentPlayer,
@@ -49,12 +49,12 @@ export const withPrior: StateReducer = (state) => {
 }
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] =>
     match<string[], string[]>(partial)
       .with([], () => {
         const player = view(activeLens(state), state)
-        const control = view(lensProp('frame'), state)
+        const control = state.frame!
         if (control.activePlayerIndex === control.currentPlayerIndex) {
           // this is the normal case, outside of work_contract
           if (control.nextUse === NextUseClergy.OnlyPrior) return []

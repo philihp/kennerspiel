@@ -6,7 +6,7 @@ import {
   Frame,
   GameCommandConfigParams,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -28,18 +28,18 @@ const completeWithPriorInner = mock.fn(() => ['WITH_PRIOR'])
 const completeBuyPlotInner = mock.fn(() => ['BUY_PLOT'])
 const completeBuyDistrictInner = mock.fn(() => ['BUY_DISTRICT'])
 
-const completeBuild = mock.fn(() => completeBuildInner)
-const completeCommit = mock.fn(() => completeCommitInner)
-const completeConvert = mock.fn(() => completeConvertInner)
-const completeCutPeat = mock.fn(() => completeCutPeatInner)
-const completeFellTrees = mock.fn(() => completeFellTreesInner)
-const completeSettle = mock.fn(() => completeSettleInner)
-const completeUse = mock.fn(() => completeUseInner)
-const completeWorkContract = mock.fn(() => completeWorkContractInner)
-const completeWithLaybrother = mock.fn(() => completeWithLaybrotherInner)
-const completeWithPrior = mock.fn(() => completeWithPriorInner)
-const completeBuyPlot = mock.fn(() => completeBuyPlotInner)
-const completeBuyDistrict = mock.fn(() => completeBuyDistrictInner)
+const completeBuild = mock.fn((_state: GameState) => completeBuildInner)
+const completeCommit = mock.fn((_state: GameState) => completeCommitInner)
+const completeConvert = mock.fn((_state: GameState) => completeConvertInner)
+const completeCutPeat = mock.fn((_state: GameState) => completeCutPeatInner)
+const completeFellTrees = mock.fn((_state: GameState) => completeFellTreesInner)
+const completeSettle = mock.fn((_state: GameState) => completeSettleInner)
+const completeUse = mock.fn((_state: GameState) => completeUseInner)
+const completeWorkContract = mock.fn((_state: GameState) => completeWorkContractInner)
+const completeWithLaybrother = mock.fn((_state: GameState) => completeWithLaybrotherInner)
+const completeWithPrior = mock.fn((_state: GameState) => completeWithPriorInner)
+const completeBuyPlot = mock.fn((_state: GameState) => completeBuyPlotInner)
+const completeBuyDistrict = mock.fn((_state: GameState) => completeBuyDistrictInner)
 
 await mock.module('../commands', {
   namedExports: {
@@ -137,7 +137,7 @@ describe('control', () => {
       rondel: {} as Rondel,
       wonders: 0,
       randGen: {} as PCGState,
-    } as GameStatePlaying
+    } as GameState
 
     it('adds the points for wonders to score', () => {
       const p0 = control(s0, [], 0)
@@ -421,7 +421,7 @@ describe('control', () => {
       const s1 = {
         ...s0,
         status: GameStatusEnum.FINISHED,
-      } as GameStatePlaying
+      } as GameState
       const c1 = control(s1, [], 0)
       expect(c1.completion).toStrictEqual([])
     })
@@ -440,7 +440,7 @@ describe('control', () => {
         ...s0,
         config: c1,
         frame: f1,
-      } as GameStatePlaying
+      } as GameState
       expect(() => control(s1, [], 0)).not.toThrow()
       expect(control(s1, [], 0).flow?.length).toBeLessThan(100)
     })

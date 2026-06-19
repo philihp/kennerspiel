@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../testHelpers'
-import { GameStatePlaying, control, reducer } from '..'
+import { GameState, control, reducer } from '..'
 import { spiel } from '../spiel'
 import { NextUseClergy } from '../types'
 
@@ -60,7 +60,7 @@ USE F08 PnGnWoSw
 BUY_PLOT 0 COAST
 COMMIT
 BUILD F11 -1 1
-COMMIT` as GameStatePlaying
+COMMIT` as GameState
 
   it('gives options to build or buy land', () => {
     const c0 = control(s0, [])
@@ -73,7 +73,7 @@ COMMIT` as GameStatePlaying
     ])
   })
   it('does not have option to buy if used', () => {
-    const s1 = reducer(s0, ['BUY_PLOT', '0', 'MOUNTAIN']) as GameStatePlaying
+    const s1 = reducer(s0, ['BUY_PLOT', '0', 'MOUNTAIN']) as GameState
     const c1 = control(s1, [])
     expect(c1.completion).toStrictEqual([
       //
@@ -102,7 +102,7 @@ COMMIT` as GameStatePlaying
       '4 1',
     ])
 
-    const s1 = reducer(s0, ['BUILD', 'G02', '3', '1']) as GameStatePlaying
+    const s1 = reducer(s0, ['BUILD', 'G02', '3', '1']) as GameState
 
     expect(control(s1, [])?.completion).toStrictEqual([
       //
@@ -115,7 +115,7 @@ COMMIT` as GameStatePlaying
     ])
 
     // if they settle, then the WORK_CONTRACT goes away, because the neutral building phase is over
-    const s2x = reducer(s1, ['SETTLE', 'SR2', '1', '2', 'BrCo']) as GameStatePlaying
+    const s2x = reducer(s1, ['SETTLE', 'SR2', '1', '2', 'BrCo']) as GameState
     expect(control(s2x, [])?.completion).toStrictEqual([
       //
       'BUY_PLOT',
@@ -128,10 +128,10 @@ COMMIT` as GameStatePlaying
     // and are still visible
     expect(control(s1, ['WORK_CONTRACT'])?.completion).toStrictEqual(['G02'])
 
-    const s3y = reducer(s1, ['WORK_CONTRACT', 'G02', 'Pn']) as GameStatePlaying
+    const s3y = reducer(s1, ['WORK_CONTRACT', 'G02', 'Pn']) as GameState
 
     // make sure it puts the PRIOR on it
-    expect(s3y.players[1].landscape[1][5][2]).toBe('PRIB')
+    expect(s3y.players![1].landscape[1][5][2]).toBe('PRIB')
     expect(s3y.frame).toMatchObject({
       nextUse: NextUseClergy.Free,
       usableBuildings: ['G02'],
@@ -147,11 +147,11 @@ COMMIT` as GameStatePlaying
       'COMMIT',
     ])
 
-    const s4 = reducer(s3y, ['USE', 'G02', 'PnGnBr', 'Pn']) as GameStatePlaying
+    const s4 = reducer(s3y, ['USE', 'G02', 'PnGnBr', 'Pn']) as GameState
     expect(s4.frame).toMatchObject({
       neutralBuildingPhase: false,
     })
-    expect(s4.players[0].penny).toBe(6)
+    expect(s4.players![0].penny).toBe(6)
 
     expect(control(s4, [])?.completion).toStrictEqual([
       //

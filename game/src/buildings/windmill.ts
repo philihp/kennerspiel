@@ -2,7 +2,7 @@ import { always, curry, map, min, range, reverse, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, withActivePlayer } from '../board/player'
 import { parseResourceParam, stringRepeater } from '../board/resource'
-import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { GameState, ResourceEnum, StateReducer } from '../types'
 
 export const windmill = (param = ''): StateReducer => {
   const { grain = 0 } = parseResourceParam(param)
@@ -17,7 +17,7 @@ export const windmill = (param = ''): StateReducer => {
     }))(state)
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { grain = 0 } = view(activeLens(state), state)

@@ -1,10 +1,10 @@
 import { describe, it, expect } from '../../../testHelpers'
 import { initialState } from '../../../state'
-import { BuildingEnum, Frame, GameCommandConfigParams, GameStatePlaying, GameStatusEnum, Tableau } from '../../../types'
+import { BuildingEnum, Frame, GameCommandConfigParams, GameState, GameStatusEnum, Tableau } from '../../../types'
 import { checkFinalPhase } from '../checkFinalPhase'
 
 describe('board/frame/checkFinalPhase', () => {
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -21,7 +21,7 @@ describe('board/frame/checkFinalPhase', () => {
     plotPurchasePrices: [],
     districtPurchasePrices: [],
     frame: { next: 3 } as Frame,
-  } as GameStatePlaying
+  } as GameState
 
   it('retains undefined state', () => {
     const s1 = checkFinalPhase(2)(undefined)!
@@ -35,7 +35,7 @@ describe('board/frame/checkFinalPhase', () => {
       frame: { next: 50 } as Frame,
     }
     const s2 = checkFinalPhase(200)(s1)!
-    expect(s2.frame.next).toBe(50)
+    expect(s2.frame!.next).toBe(50)
   })
   it('2p long keeps frame as it was if not ending', () => {
     const s1 = {
@@ -45,7 +45,7 @@ describe('board/frame/checkFinalPhase', () => {
       frame: { next: 50 } as Frame,
     }
     const s2 = checkFinalPhase(200)(s1)!
-    expect(s2.frame.next).toBe(50)
+    expect(s2.frame!.next).toBe(50)
   })
   it('2p short sets next to be ending', () => {
     const s1 = {
@@ -55,7 +55,7 @@ describe('board/frame/checkFinalPhase', () => {
       frame: { next: 50 } as Frame,
     }
     const s2 = checkFinalPhase(200)(s1)!
-    expect(s2.frame.next).toBe(200)
+    expect(s2.frame!.next).toBe(200)
   })
   it('2p long sets next to be ending', () => {
     const s1 = {
@@ -65,6 +65,6 @@ describe('board/frame/checkFinalPhase', () => {
       frame: { next: 50 } as Frame,
     }
     const s2 = checkFinalPhase(200)(s1)!
-    expect(s2.frame.next).toBe(200)
+    expect(s2.frame!.next).toBe(200)
   })
 })

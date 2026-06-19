@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../../testHelpers'
 import { reducer } from '../../..'
 import { control } from '../../../control'
 import { spiel } from '../../../spiel'
-import { GameCommandConfigParams, GameStatePlaying, PlayerColor } from '../../../types'
+import { GameCommandConfigParams, GameState, PlayerColor } from '../../../types'
 
 describe('board/frame/nextFrame3Short', () => {
   it('gives a nice flow', () => {
@@ -18,7 +18,7 @@ describe('board/frame/nextFrame3Short', () => {
         next: 2,
         activePlayerIndex: 0,
       },
-    } as GameStatePlaying
+    } as GameState
     const s2 = control(s1, ['CONVERT'], 0)
     expect(s2.flow.map(({ round, player, bonus, settle }) => [round, player, bonus, settle])).toStrictEqual([
       [1, 'R', false, false],
@@ -94,7 +94,7 @@ describe('board/frame/nextFrame3Short', () => {
     const s0 = spiel`
 CONFIG 3 france short
 START B W R`
-    const s1 = reducer(s0!, ['USE', 'LB1']) as GameStatePlaying
+    const s1 = reducer(s0!, ['USE', 'LB1']) as GameState
     expect(s0?.players?.map((s) => s.clay)).toStrictEqual([1, 1, 1])
     expect(s1?.players?.map((s) => s.clay)).toStrictEqual([4, 2, 2])
   })

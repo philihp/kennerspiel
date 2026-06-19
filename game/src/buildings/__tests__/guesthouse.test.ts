@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   BuildingEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('buildings/guesthouse', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -89,12 +89,12 @@ describe('buildings/guesthouse', () => {
 
     it('makes next use free', () => {
       const s1 = guesthouse()(s0)!
-      expect(s1.frame.nextUse).toBe('free')
+      expect(s1.frame!.nextUse).toBe('free')
     })
 
     it('adds usable buildings', () => {
       const s1 = guesthouse()(s0)!
-      expect(s1.frame.usableBuildings.sort()).toStrictEqual(['I27', 'G28', 'I29', 'I30'].sort())
+      expect(s1.frame!.usableBuildings.sort()).toStrictEqual(['I27', 'G28', 'I29', 'I30'].sort())
     })
   })
 

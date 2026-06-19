@@ -1,5 +1,5 @@
 import { control } from 'hathora-et-labora-game'
-import { GameStatePlaying, RondelToken, Tableau, Tile } from 'hathora-et-labora-game/dist/types'
+import { GameState, RondelToken, Tableau, Tile } from 'hathora-et-labora-game/dist/types'
 import { take } from 'hathora-et-labora-game/dist/board/rondel'
 import { activePlayerColor, engineColorToEntrantColor } from './engine'
 
@@ -58,7 +58,7 @@ const renderResources = (player: Tableau): Partial<Record<(typeof RESOURCE_KEYS)
     {} as Partial<Record<(typeof RESOURCE_KEYS)[number], number>>
   )
 
-export const renderSummary = (state: GameStatePlaying, commands: string[], myColor?: string) => {
+export const renderSummary = (state: GameState, commands: string[], myColor?: string) => {
   const controls = control(state, [])
   const active = engineColorToEntrantColor(activePlayerColor(state))
   return {

@@ -16,13 +16,13 @@ import {
 import { P, match } from 'ts-pattern'
 import { costMoney } from '../board/resource'
 import { activeLens, subtractCoins, withActivePlayer } from '../board/player'
-import { GameStatePlaying, GameCommandBuyPlotParams, Tile, LandEnum, GameCommandEnum } from '../types'
+import { GameState, GameCommandBuyPlotParams, Tile, LandEnum, GameCommandEnum } from '../types'
 
-const checkCanGetLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const checkCanGetLandscape = (state?: GameState): GameState | undefined => {
   if (state === undefined) return undefined
-  if (state.frame.currentPlayerIndex !== state.frame.activePlayerIndex) return undefined
-  if (state.frame.canBuyLandscape) return state
-  if (state.frame.bonusActions.includes(GameCommandEnum.BUY_PLOT)) return state
+  if (state.frame!.currentPlayerIndex !== state.frame!.activePlayerIndex) return undefined
+  if (state.frame!.canBuyLandscape) return state
+  if (state.frame!.bonusActions.includes(GameCommandEnum.BUY_PLOT)) return state
   return undefined
 }
 
@@ -76,43 +76,43 @@ const checkForOverlap = (y: number, side: 'COAST' | 'MOUNTAIN') =>
     return player
   })
 
-const checkCanAfford = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const checkCanAfford = (state?: GameState): GameState | undefined => {
   if (state?.frame?.bonusActions?.includes(GameCommandEnum.BUY_PLOT)) return state
-  const cost = state?.plotPurchasePrices[0] ?? 999
+  const cost = state?.plotPurchasePrices![0] ?? 999
   return withActivePlayer((player) => {
     if (costMoney(player) < cost) return undefined
     return player
   })(state)
 }
 
-const payForPlot = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const payForPlot = (state?: GameState): GameState | undefined => {
   if (state === undefined) return undefined
-  if (state.frame.bonusActions?.includes(GameCommandEnum.BUY_PLOT)) return state
-  const cost = state.plotPurchasePrices[0]
+  if (state.frame!.bonusActions?.includes(GameCommandEnum.BUY_PLOT)) return state
+  const cost = state.plotPurchasePrices![0]
   return withActivePlayer(subtractCoins(cost))(state)
 }
 
-const removePlotFromPool = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const removePlotFromPool = (state?: GameState): GameState | undefined => {
   if (state === undefined) return undefined
-  if (state.frame.bonusActions?.includes(GameCommandEnum.BUY_PLOT)) return state
+  if (state.frame!.bonusActions?.includes(GameCommandEnum.BUY_PLOT)) return state
   return {
     ...state,
-    plotPurchasePrices: state.plotPurchasePrices.slice(1),
+    plotPurchasePrices: state.plotPurchasePrices!.slice(1),
   }
 }
 
-const denyBuyingAnyMoreLandscape = (state?: GameStatePlaying): GameStatePlaying | undefined => {
+const denyBuyingAnyMoreLandscape = (state?: GameState): GameState | undefined => {
   if (state === undefined) return undefined
-  const atIndex = findIndex((a: GameCommandEnum) => equals(a, GameCommandEnum.BUY_PLOT), state.frame.bonusActions)
+  const atIndex = findIndex((a: GameCommandEnum) => equals(a, GameCommandEnum.BUY_PLOT), state.frame!.bonusActions)
   return {
     ...state,
     frame: {
-      ...state.frame,
+      ...state.frame!!,
       // if the command was found in bonusActions
       ...(atIndex !== -1
         ? {
             // leave canBuyLandscape as it was
-            bonusActions: remove(atIndex, 1, state.frame.bonusActions),
+            bonusActions: remove(atIndex, 1, state.frame!.bonusActions),
           }
         : {
             // otherwise set canBuyLandscape to false
@@ -194,16 +194,16 @@ export const buyPlot = ({ side, y }: GameCommandBuyPlotParams) =>
   )
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] => {
     const player = view(activeLens(state), state)
     return match<string[], string[]>(partial)
       .with([], () => {
-        if (state.frame.bonusActions.includes(GameCommandEnum.BUY_PLOT) && head(state.plotPurchasePrices))
+        if (state.frame!.bonusActions.includes(GameCommandEnum.BUY_PLOT) && head(state.plotPurchasePrices!))
           return [GameCommandEnum.BUY_PLOT]
         if (checkCanGetLandscape(state) === undefined) return []
         const playerWealth = costMoney(player)
-        const nextPlotCost = head(state.plotPurchasePrices) ?? Infinity
+        const nextPlotCost = head(state.plotPurchasePrices!) ?? Infinity
         if (playerWealth < nextPlotCost) return []
         return [GameCommandEnum.BUY_PLOT]
       })

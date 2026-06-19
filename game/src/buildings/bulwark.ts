@@ -2,7 +2,7 @@ import { always, curry, identity, map, pipe, range, reverse, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { parseResourceParam, stringRepeater } from '../board/resource'
 import { withActivePlayer, payCost, activeLens } from '../board/player'
-import { GameCommandEnum, GameStatePlaying, ResourceEnum } from '../types'
+import { GameCommandEnum, GameState, ResourceEnum } from '../types'
 import { addBonusAction } from '../board/frame'
 
 export const bulwark = (coin = '') => {
@@ -16,7 +16,7 @@ export const bulwark = (coin = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { book = 0 } = view(activeLens(state), state)

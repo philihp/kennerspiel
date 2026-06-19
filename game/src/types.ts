@@ -422,36 +422,28 @@ export type GameAction =
   | GameActionFellTrees
   | GameActionUndefined
 
-export type GameStateSetup = {
-  status: GameStatusEnum.SETUP
-  randGen: PCGState
-  players?: Tableau[]
+export type GameState = {
+  status: GameStatusEnum
+  randGen?: PCGState
   config?: GameCommandConfigParams
   rondel?: Rondel
-}
-export type GameStatePlaying = {
-  status: GameStatusEnum.PLAYING | GameStatusEnum.FINISHED
-  randGen?: PCGState
-  config: GameCommandConfigParams
-  rondel: Rondel
-  wonders: number
-  players: Tableau[]
+  wonders?: number
+  players?: Tableau[]
   neutralPlayer?: Tableau
-  buildings: BuildingEnum[]
-  plotPurchasePrices: number[]
-  districtPurchasePrices: number[]
-  frame: Frame
+  buildings?: BuildingEnum[]
+  plotPurchasePrices?: number[]
+  districtPurchasePrices?: number[]
+  frame?: Frame
 }
-export type GameState = GameStateSetup | GameStatePlaying
 
-export type StateReducer = (state: GameStatePlaying | undefined) => GameStatePlaying | undefined
+export type StateReducer = (state: GameState | undefined) => GameState | undefined
 
 export type CostReducer = (cost: Cost | undefined) => Cost | undefined
 
 export type TableauReducer = (state: Tableau | undefined) => Tableau | undefined
 
 export type OrdinalFrame = {
-  upkeep?: ((state: GameStatePlaying | undefined) => GameStatePlaying | undefined)[]
+  upkeep?: ((state: GameState | undefined) => GameState | undefined)[]
   next: number
 } & Partial<Frame>
 

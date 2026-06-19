@@ -9,7 +9,7 @@ import {
   shortGameBonusProduction,
 } from '../board/resource'
 import { advanceJokerOnRondel, takePlayerJoker } from '../board/rondel'
-import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { GameState, ResourceEnum, StateReducer } from '../types'
 
 export const shippingCompany = (inputRaw = ''): StateReducer => {
   const input = parseResourceParam(inputRaw)
@@ -32,7 +32,7 @@ export const shippingCompany = (inputRaw = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => [
       ...ap<string, string>(

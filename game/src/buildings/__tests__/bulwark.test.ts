@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/bulwark', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -94,11 +94,11 @@ describe('buildings/bulwark', () => {
 
     it('goes through a happy path', () => {
       const s1 = bulwark('Bo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 4,
       })
       expect(s1.frame).toMatchObject({
-        canBuyLandscape: s0.frame.canBuyLandscape,
+        canBuyLandscape: s0.frame!.canBuyLandscape,
         bonusActions: ['BUY_DISTRICT', 'BUY_PLOT'],
       })
     })
@@ -110,12 +110,12 @@ describe('buildings/bulwark', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 4,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['Bo', ''])
     })
@@ -124,12 +124,12 @@ describe('buildings/bulwark', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })

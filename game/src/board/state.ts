@@ -2,7 +2,7 @@ import { GameStatusEnum, StateReducer } from '../types'
 
 export const removeWonder: StateReducer = (state) => {
   if (state === undefined) return state
-  const { wonders } = state
+  const wonders = state.wonders ?? 0
   if (wonders === 0) return undefined
   return {
     ...state,

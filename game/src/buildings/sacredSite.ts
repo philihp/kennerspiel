@@ -2,7 +2,7 @@ import { always, curry } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
-import { GameStatePlaying, StateReducer } from '../types'
+import { GameState, StateReducer } from '../types'
 
 export const sacredSite = (param = ''): StateReducer => {
   const { grain = 0, malt = 0, beer = 0, whiskey = 0 } = parseResourceParam(param)
@@ -18,7 +18,7 @@ export const sacredSite = (param = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], always(['GnGnBe', 'GnGnWh', 'MaMaBe', 'MaMaWh']))
     .with([P._], always(['']))

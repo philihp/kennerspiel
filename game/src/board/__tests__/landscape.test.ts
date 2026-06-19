@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../testHelpers'
-import { BuildingEnum, Clergy, Frame, GameStatePlaying, LandEnum, PlayerColor, Tableau, Tile } from '../../types'
+import { BuildingEnum, Clergy, Frame, GameState, LandEnum, PlayerColor, Tableau, Tile } from '../../types'
 import {
   findBuildingWithoutOffset,
   districtPrices,
@@ -81,7 +81,7 @@ describe('board/landscape', () => {
         neutralBuildingPhase: false,
         activePlayerIndex: 0,
       } as Frame,
-    } as GameStatePlaying
+    } as GameState
     const building = BuildingEnum.CloisterWorkshop
 
     it('returns state if building is not a cloister', () => {
@@ -106,7 +106,7 @@ describe('board/landscape', () => {
       } as Tableau
       const s1 = {
         ...s0,
-        players: [p1, ...s0.players.slice(1)],
+        players: [p1, ...s0.players!.slice(1)],
       }
       expect(checkCloisterAdjacency(2, 4, building)(s1)).toBe(s1)
     })
@@ -130,7 +130,7 @@ describe('board/landscape', () => {
       } as Tableau
       const s1 = {
         ...s0,
-        players: [p1, ...s0.players.slice(1)],
+        players: [p1, ...s0.players!.slice(1)],
       }
       expect(checkCloisterAdjacency(1, 6, building)(s1)).toBe(s1)
     })
@@ -147,7 +147,7 @@ describe('board/landscape', () => {
       } as Tableau
       const s1 = {
         ...s0,
-        players: [p1, ...s0.players.slice(1)],
+        players: [p1, ...s0.players!.slice(1)],
       }
       expect(checkCloisterAdjacency(0, 6, building)(s1)).toBe(s1)
     })
@@ -165,7 +165,7 @@ describe('board/landscape', () => {
       } as Tableau
       const s1 = {
         ...s0,
-        players: [p1, ...s0.players.slice(1)],
+        players: [p1, ...s0.players!.slice(1)],
       }
       expect(checkCloisterAdjacency(1, 5, building)(s1)).toBeUndefined()
     })
@@ -183,7 +183,7 @@ describe('board/landscape', () => {
       } as Tableau
       const s1 = {
         ...s0,
-        players: [p1, ...s0.players.slice(1)],
+        players: [p1, ...s0.players!.slice(1)],
       }
       expect(checkCloisterAdjacency(2, 5, building)(s1)).toBe(s1)
     })
@@ -201,7 +201,7 @@ describe('board/landscape', () => {
       } as Tableau
       const s1 = {
         ...s0,
-        players: [p1, ...s0.players.slice(1)],
+        players: [p1, ...s0.players!.slice(1)],
       }
       expect(checkCloisterAdjacency(3, 5, building)(s1)).toBe(s1)
     })
@@ -220,7 +220,7 @@ describe('board/landscape', () => {
       } as Tableau
       const s1 = {
         ...s0,
-        players: [p1, ...s0.players.slice(1)],
+        players: [p1, ...s0.players!.slice(1)],
       }
       expect(checkCloisterAdjacency(0, 5, building)(s1)).toBeUndefined()
     })
@@ -238,7 +238,7 @@ describe('board/landscape', () => {
       } as Tableau
       const s1 = {
         ...s0,
-        players: [p1, ...s0.players.slice(1)],
+        players: [p1, ...s0.players!.slice(1)],
       }
       expect(checkCloisterAdjacency(1, 5, building)(s1)).toBe(s1)
     })
@@ -256,7 +256,7 @@ describe('board/landscape', () => {
       } as Tableau
       const s1 = {
         ...s0,
-        players: [p1, ...s0.players.slice(1)],
+        players: [p1, ...s0.players!.slice(1)],
       }
       expect(checkCloisterAdjacency(2, 5, building)(s1)).toBe(s1)
     })
@@ -336,15 +336,15 @@ describe('board/landscape', () => {
         neutralBuildingPhase: false,
         activePlayerIndex: 0,
       } as Frame,
-    } as GameStatePlaying
+    } as GameState
 
     it('works for a null board', () => {
       expect(allBuildingPoints([[]])).toBe(0)
     })
 
     it('calculates the score of boards', () => {
-      expect(allBuildingPoints(s0.players[0].landscape)).toBe(26)
-      expect(allBuildingPoints(s0.players[1].landscape)).toBe(17)
+      expect(allBuildingPoints(s0.players![0].landscape)).toBe(26)
+      expect(allBuildingPoints(s0.players![1].landscape)).toBe(17)
     })
   })
   describe('allDwellingPoints', () => {
@@ -386,14 +386,14 @@ describe('board/landscape', () => {
         neutralBuildingPhase: false,
         activePlayerIndex: 0,
       } as Frame,
-    } as GameStatePlaying
+    } as GameState
 
     it('works for a null board', () => {
       expect(allDwellingPoints([[]])).toStrictEqual([])
     })
 
     it('detects mountain tiles adjacency', () => {
-      const scores = allDwellingPoints(s0.players[0].landscape)
+      const scores = allDwellingPoints(s0.players![0].landscape)
       expect(scores).toHaveLength(4)
       expect(scores).toContain(3) // SW5
       expect(scores).toContain(11) // SW1
@@ -404,14 +404,14 @@ describe('board/landscape', () => {
     it('calculates a settlement on a mountain tile', () => {
       // no dwarves here, no settlements can be put into a mountain...
       // but maybe an expansion might, so lets have a test against it!
-      const scores = allDwellingPoints(s0.players[1].landscape)
+      const scores = allDwellingPoints(s0.players![1].landscape)
       expect(scores).toHaveLength(2)
       expect(scores).toContain(5) // SB1
       expect(scores).toContain(12) // SB2
     })
 
     it('calculates values of water tiles as 3', () => {
-      const scores = allDwellingPoints(s0.players[2].landscape)
+      const scores = allDwellingPoints(s0.players![2].landscape)
       expect(scores).toHaveLength(2)
       expect(scores).toContain(13) // SR4 // water should have a 3 settlement value
       expect(scores).toContain(18) // SR7 // but if it has Houseboat, it's 6 settlement value

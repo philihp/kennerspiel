@@ -1,8 +1,8 @@
-import { GameCommandConfigParams, GameStateSetup } from '../types'
+import { GameCommandConfigParams, GameState } from '../types'
 
 export const config =
   (params: GameCommandConfigParams) =>
-  (state: GameStateSetup): GameStateSetup | undefined => {
+  (state: GameState): GameState | undefined => {
     return {
       ...state,
       config: params,

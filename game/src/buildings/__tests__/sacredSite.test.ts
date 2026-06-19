@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/sacredSite', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -86,7 +86,7 @@ describe('buildings/sacredSite', () => {
     })
     it('allows a noop with empty string', () => {
       const s1 = sacredSite('')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grain: 0,
         malt: 0,
         whiskey: 0,
@@ -96,7 +96,7 @@ describe('buildings/sacredSite', () => {
     })
     it('allows a noop with missing param', () => {
       const s1 = sacredSite()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grain: 0,
         malt: 0,
         whiskey: 0,
@@ -106,7 +106,7 @@ describe('buildings/sacredSite', () => {
     })
     it('gives grain and beer', () => {
       const s1 = sacredSite('GnBe')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grain: 2,
         malt: 0,
         whiskey: 0,
@@ -116,7 +116,7 @@ describe('buildings/sacredSite', () => {
     })
     it('gives malt and whiskey', () => {
       const s1 = sacredSite('MaWh')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grain: 0,
         malt: 2,
         whiskey: 1,
@@ -126,7 +126,7 @@ describe('buildings/sacredSite', () => {
     })
     it('gives neither if both are specified', () => {
       const s1 = sacredSite('GnMaBe')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grain: 0,
         malt: 0,
         whiskey: 0,

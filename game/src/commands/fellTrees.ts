@@ -7,7 +7,7 @@ import {
   BuildingEnum,
   GameCommandEnum,
   StateReducer,
-  GameStatePlaying,
+  GameState,
 } from '../types'
 import { standardSesourceGatheringAction, updateToken, withRondel } from '../board/rondel'
 import { checkNotBonusRound, oncePerFrame } from '../board/frame'
@@ -55,7 +55,7 @@ export const fellTrees = ({ row, col, useJoker }: GameCommandFellTreesParams): S
   )
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] => {
     const player = view(activeLens(state), state)
     return (

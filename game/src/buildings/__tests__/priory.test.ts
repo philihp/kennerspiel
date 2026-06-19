@@ -3,7 +3,7 @@ import { initialState } from '../../state'
 import {
   BuildingEnum,
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   LandEnum,
   NextUseClergy,
@@ -48,7 +48,7 @@ describe('buildings/proiry', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -106,7 +106,7 @@ describe('buildings/proiry', () => {
   }
   describe('use', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = priory()(s0)
       expect(s1).toBeUndefined()
     })
@@ -116,7 +116,7 @@ describe('buildings/proiry', () => {
         nextUse: NextUseClergy.Free,
         usableBuildings: [BuildingEnum.GrainStorage],
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 1,
         grain: 1,
       })
@@ -125,15 +125,15 @@ describe('buildings/proiry', () => {
       const s1 = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
         players: [
-          { ...s0.players[0], clergy: [Clergy.LayBrother1R, Clergy.PriorR] },
-          { ...s0.players[1], clergy: [Clergy.LayBrother1G] },
-          { ...s0.players[2], clergy: [Clergy.LayBrother1B, Clergy.PriorB] },
+          { ...s0.players![0], clergy: [Clergy.LayBrother1R, Clergy.PriorR] },
+          { ...s0.players![1], clergy: [Clergy.LayBrother1G] },
+          { ...s0.players![2], clergy: [Clergy.LayBrother1B, Clergy.PriorB] },
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = priory()(s1)!
       expect(s2.frame).toMatchObject({
         nextUse: NextUseClergy.Free,

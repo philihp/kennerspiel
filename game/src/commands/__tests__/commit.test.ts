@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../testHelpers'
-import { BuildingEnum, Frame, GameCommandEnum, GameStatePlaying } from '../../types'
+import { BuildingEnum, Frame, GameCommandEnum, GameState } from '../../types'
 import { complete } from '../commit'
 
 describe('commands/commit', () => {
@@ -7,7 +7,7 @@ describe('commands/commit', () => {
     frame: {
       mainActionUsed: true,
     } as Frame,
-  } as GameStatePlaying
+  } as GameState
 
   describe('commit', () => {
     it('stub', () => {
@@ -23,7 +23,7 @@ describe('commands/commit', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: false,
         },
       }
@@ -36,12 +36,12 @@ describe('commands/commit', () => {
           ...s0,
           buildings: [BuildingEnum.Bakery],
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             // this is set in nextFrameSolo
             neutralBuildingPhase: true,
             mainActionUsed: true,
           },
-        } as GameStatePlaying
+        } as GameState
         const c0 = complete(s1)([])
         expect(c0).toStrictEqual([])
       })
@@ -50,13 +50,13 @@ describe('commands/commit', () => {
           ...s0,
           buildings: [],
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             // this is set in nextFrameSolo
             neutralBuildingPhase: true,
             mainActionUsed: true,
             bonusActions: [GameCommandEnum.SETTLE],
           },
-        } as GameStatePlaying
+        } as GameState
         const c0 = complete(s1)([])
         expect(c0).toStrictEqual(['COMMIT'])
       })

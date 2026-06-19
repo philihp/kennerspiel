@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -47,7 +47,7 @@ describe('commands/fellTrees', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -89,19 +89,19 @@ describe('commands/fellTrees', () => {
       expect(s1).toBeUndefined()
     })
     it('wont go if main action already used', () => {
-      const s1 = { ...s0, frame: { ...s0.frame, mainActionUsed: true } }
+      const s1 = { ...s0, frame: { ...s0.frame!, mainActionUsed: true } }
       const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
       expect(s2).toBeUndefined()
     })
     it('if wood not on rondel, keeps wood off but allows with zero wood', () => {
       const s1 = { ...s0, rondel: { pointingBefore: 0, wood: undefined } }
       const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
-      expect(s2.rondel.wood).toBeUndefined()
-      expect(s2.players[0].wood).toBe(0)
+      expect(s2.rondel!.wood).toBeUndefined()
+      expect(s2.players![0].wood).toBe(0)
     })
     it('removes the forest', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
           [['W'], ['C'], ['P', 'LMO'], ['P'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -126,18 +126,18 @@ describe('commands/fellTrees', () => {
     })
     it('moves up the wood token', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(s0)!
-      expect(s1.rondel.joker).toBe(0)
-      expect(s1.rondel.wood).toBe(2)
+      expect(s1.rondel!.joker).toBe(0)
+      expect(s1.rondel!.wood).toBe(2)
     })
     it('gives the active player wood', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: false })(s0)!
-      expect(s1.players[0].wood).toBe(2)
+      expect(s1.players![0].wood).toBe(2)
     })
     it('fails if in bonus round', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusRoundPlacement: true,
         },
       }
@@ -148,18 +148,18 @@ describe('commands/fellTrees', () => {
       const s1 = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
-      } as GameStatePlaying
+      } as GameState
       const s2 = fellTrees({ row: 0, col: 1, useJoker: false })(s1)!
-      expect(s2.players[0].wood).toBe(3)
-      expect(s2.players[1].wood).toBe(1)
-      expect(s2.players[2].wood).toBe(1)
+      expect(s2.players![0].wood).toBe(3)
+      expect(s2.players![1].wood).toBe(1)
+      expect(s2.players![2].wood).toBe(1)
     })
     it('gives the active player joker-wood', () => {
       const s1 = fellTrees({ row: 0, col: 1, useJoker: true })(s0)!
-      expect(s1.players[0].wood).toBe(3)
+      expect(s1.players![0].wood).toBe(3)
     })
   })
 
@@ -172,7 +172,7 @@ describe('commands/fellTrees', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusRoundPlacement: true,
         },
       }
@@ -199,10 +199,10 @@ describe('commands/fellTrees', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
         },
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
@@ -210,11 +210,11 @@ describe('commands/fellTrees', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [GameCommandEnum.FELL_TREES],
         },
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual(['FELL_TREES'])
     })
@@ -234,7 +234,7 @@ describe('commands/fellTrees', () => {
       const s1 = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           wood: undefined,
         },
       }
@@ -245,7 +245,7 @@ describe('commands/fellTrees', () => {
       const s1 = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           joker: undefined,
         },
       }

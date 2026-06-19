@@ -3,7 +3,7 @@ import { match, P } from 'ts-pattern'
 import { activeLens, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, shortGameBonusProduction } from '../board/resource'
 import { advanceJokerOnRondel, takePlayerJoker } from '../board/rondel'
-import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { GameState, ResourceEnum, StateReducer } from '../types'
 
 export const cooperage = (input = '', output = ''): StateReducer => {
   const { wood = 0 } = parseResourceParam(input)
@@ -22,7 +22,7 @@ export const cooperage = (input = '', output = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { wood = 0 } = view(activeLens(state), state)

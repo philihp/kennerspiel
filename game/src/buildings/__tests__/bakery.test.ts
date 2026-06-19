@@ -1,6 +1,6 @@
 import { describe, it, expect } from '../../testHelpers'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/bakery', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -81,7 +81,7 @@ describe('buildings/bakery', () => {
 
   describe('bakery', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = bakery()(s0)
       expect(s1).toBeUndefined()
     })
@@ -90,13 +90,13 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             flour: 10,
             wood: 10,
             bread: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bakery('WoFlFlFl')(s1)!
@@ -107,17 +107,17 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             flour: 10,
             wood: 10,
             bread: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bakery('WoFlFlBrBr')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grain: 10,
         flour: 8,
         wood: 9,
@@ -131,18 +131,18 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             flour: 10,
             wood: 10,
             bread: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bakery('WoFlFlBrBr')(s1)!
       const s3 = bakery('WoFlFlBr')(s2)!
-      expect(s3.players[0]).toMatchObject({
+      expect(s3.players![0]).toMatchObject({
         flour: 6,
         wood: 8,
         bread: 11,
@@ -155,17 +155,17 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             flour: 10,
             wood: 10,
             bread: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bakery('WoFlFlBrBr')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grain: 10,
         flour: 8,
         wood: 9,
@@ -174,7 +174,7 @@ describe('buildings/bakery', () => {
         nickel: 1,
       })
       const s3 = bakery('WoFlFl')(s2)!
-      expect(s3.players[0]).toMatchObject({
+      expect(s3.players![0]).toMatchObject({
         flour: 6,
         wood: 8,
         bread: 12,
@@ -187,17 +187,17 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             flour: 10,
             wood: 10,
             bread: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bakery('WoFlFlBrBr')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grain: 10,
         flour: 8,
         wood: 9,
@@ -206,7 +206,7 @@ describe('buildings/bakery', () => {
         nickel: 1,
       })
       const s3 = bakery('WoFl')(s2)!
-      expect(s3.players[0]).toMatchObject({
+      expect(s3.players![0]).toMatchObject({
         bread: 11,
         flour: 7,
         nickel: 1,
@@ -219,17 +219,17 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             flour: 10,
             wood: 10,
             bread: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bakery('BrBr')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grain: 10,
         flour: 10,
         wood: 10,
@@ -243,17 +243,17 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             flour: 10,
             wood: 10,
             bread: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bakery('WoFlBrBr')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grain: 10,
         flour: 9,
         wood: 9,
@@ -267,13 +267,13 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             flour: 10,
             wood: 10,
             bread: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bakery('BrBr')(s1)!
@@ -287,7 +287,7 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             flour: 0,
             wood: 1,
             coal: 1,
@@ -295,7 +295,7 @@ describe('buildings/bakery', () => {
             straw: 1,
             bread: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -306,7 +306,7 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             flour: 3,
             wood: 1,
             coal: 1,
@@ -314,7 +314,7 @@ describe('buildings/bakery', () => {
             straw: 1,
             bread: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -345,7 +345,7 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             flour: 1,
             wood: 0,
             coal: 0,
@@ -353,7 +353,7 @@ describe('buildings/bakery', () => {
             straw: 1,
             bread: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -364,7 +364,7 @@ describe('buildings/bakery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             flour: 0,
             wood: 2,
             coal: 1,
@@ -372,7 +372,7 @@ describe('buildings/bakery', () => {
             straw: 3,
             bread: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)

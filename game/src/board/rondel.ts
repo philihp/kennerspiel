@@ -5,7 +5,7 @@ import {
   GameCommandConfigParams,
   StateReducer,
   Cost,
-  GameStatePlaying,
+  GameState,
   ResourceEnum,
   RondelToken,
 } from '../types'
@@ -36,7 +36,7 @@ const tokenToResource = (token: RondelToken): ResourceEnum | undefined => {
 export const withRondel = (func: (rondel: Rondel) => Rondel | undefined): StateReducer => {
   return (state) => {
     if (state === undefined) return state
-    const rondel = func(state.rondel)
+    const rondel = func(state.rondel!)
     if (rondel === undefined) return undefined
     return assoc('rondel', rondel, state)
   }
@@ -75,10 +75,8 @@ export const take = (armIndex: number, tokenIndex: number, config: GameCommandCo
 export const takePlayerJoker = (unitCost: Cost): StateReducer => {
   return (state) => {
     if (state === undefined) return undefined
-    const {
-      rondel: { pointingBefore, joker },
-      config,
-    } = state
+    const { pointingBefore, joker } = state.rondel!
+    const config = state.config!
     const takeValue = take(pointingBefore, joker ?? pointingBefore, config)
     return withActivePlayer(getCost(multiplyGoods(takeValue)(unitCost)))(state)
   }
@@ -97,11 +95,9 @@ export const updateToken = (withToken: RondelToken, withJoker: boolean) => (rond
 export const standardSesourceGatheringAction = (usingToken: RondelToken, withJoker: boolean): StateReducer => {
   return (state) => {
     if (state === undefined) return state
-    const {
-      config,
-      rondel: { joker, pointingBefore },
-    } = state
-    const main = state.rondel[usingToken]
+    const { joker, pointingBefore } = state.rondel!
+    const config = state.config!
+    const main = state.rondel![usingToken]
     const amount = take(pointingBefore, (withJoker ? joker : (main ?? joker)) ?? pointingBefore, config)
     const resource = tokenToResource(usingToken)
     const cost = parseResourceParam(resource)
@@ -111,9 +107,9 @@ export const standardSesourceGatheringAction = (usingToken: RondelToken, withJok
 }
 
 export const standardSesourceGatheringCompletion = curry(
-  (usingToken: RondelToken, partial: string[], state: GameStatePlaying) => {
-    const jokerAvailable = state.rondel.joker !== undefined
-    const mainAvailable = state.rondel[usingToken] !== undefined
+  (usingToken: RondelToken, partial: string[], state: GameState) => {
+    const jokerAvailable = state.rondel!.joker !== undefined
+    const mainAvailable = state.rondel![usingToken] !== undefined
     return match<string[], string[]>(partial)
       .with([], () => {
         if (jokerAvailable && mainAvailable) return ['', 'Jo']

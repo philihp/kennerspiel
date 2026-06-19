@@ -2,7 +2,7 @@ import { curry, pipe } from 'ramda'
 import { match } from 'ts-pattern'
 import { revertActivePlayerToCurrent, setFrameToAllowFreeUsage, withFrame } from '../board/frame'
 import { moveClergyToOwnBuilding } from '../board/landscape'
-import { GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer } from '../types'
+import { GameCommandEnum, GameState, NextUseClergy, StateReducer } from '../types'
 
 const withAnyForCurrentPlayer: StateReducer = withFrame((frame) => ({
   ...frame,
@@ -26,14 +26,14 @@ export const withLaybrother: StateReducer = (state) => {
     checkActivePlayerIsNotCurrent,
     checkHasExactlyOneUsableBuilding,
     withAnyForCurrentPlayer,
-    moveClergyToOwnBuilding(state.frame.usableBuildings[0]),
-    setFrameToAllowFreeUsage([state.frame.usableBuildings[0]]),
+    moveClergyToOwnBuilding(state.frame!.usableBuildings[0]),
+    setFrameToAllowFreeUsage([state.frame!.usableBuildings[0]]),
     revertActivePlayerToCurrent
   )(state)
 }
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] =>
     match<string[], string[]>(partial)
       .with([], () => (checkActivePlayerIsNotCurrent(state) ? [GameCommandEnum.WITH_LAYBROTHER] : []))

@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -111,21 +111,21 @@ describe('buildings/farmyard', () => {
       usableBuildings: [],
       nextUse: NextUseClergy.Any,
     },
-  } as GameStatePlaying
+  } as GameState
 
   describe('farmyard', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = farmyard()(s0)
       expect(s1).toBeUndefined()
     })
     it('retains undefined state given sheep', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = farmyard('Sh')(s0)
       expect(s1).toBeUndefined()
     })
     it('retains undefined state given grain', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = farmyard('Gn')(s0)
       expect(s1).toBeUndefined()
     })
@@ -139,7 +139,7 @@ describe('buildings/farmyard', () => {
     })
     it('can get sheep with the sheep token', () => {
       const s1 = farmyard('Sh')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         sheep: 4,
         grain: 0,
       })
@@ -152,7 +152,7 @@ describe('buildings/farmyard', () => {
     })
     it('can get sheep with the joker', () => {
       const s1 = farmyard('JoSh')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         sheep: 3,
         grain: 0,
       })
@@ -164,10 +164,10 @@ describe('buildings/farmyard', () => {
       })
     })
     it('if sheep is not there, fallback to joker', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           pointingBefore: 5,
           joker: 3,
           grain: 1,
@@ -175,7 +175,7 @@ describe('buildings/farmyard', () => {
         },
       }
       const s2 = farmyard('Sh')(s1)!
-      expect(s2.players[0].sheep).toBe(3)
+      expect(s2.players![0].sheep).toBe(3)
       expect(s2.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 5,
@@ -185,7 +185,7 @@ describe('buildings/farmyard', () => {
     })
     it('can get grain with the grain token', () => {
       const s1 = farmyard('Gn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grain: 5,
         sheep: 0,
       })
@@ -198,7 +198,7 @@ describe('buildings/farmyard', () => {
     })
     it('can get grain with the joker', () => {
       const s1 = farmyard('GnJo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grain: 3,
         sheep: 0,
       })
@@ -210,10 +210,10 @@ describe('buildings/farmyard', () => {
       })
     })
     it('if grain is not there, do nothing', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           pointingBefore: 5,
           joker: 3,
           grain: undefined,
@@ -221,7 +221,7 @@ describe('buildings/farmyard', () => {
         },
       }
       const s2 = farmyard('Gn')(s1)!
-      expect(s2.players[0].sheep).toBe(0)
+      expect(s2.players![0].sheep).toBe(0)
       expect(s1.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 3,
@@ -230,28 +230,28 @@ describe('buildings/farmyard', () => {
       })
     })
     describe('in a short game', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
       }
       it('gives grain if you take with grain', () => {
         const s2 = farmyard('Gn')(s1)!
-        expect(s2.players.map((p) => p.grain)).toStrictEqual([6, 1, 1])
+        expect(s2.players!.map((p) => p.grain)).toStrictEqual([6, 1, 1])
       })
       it('gives sheep if you take with sheep', () => {
         const s2 = farmyard('Sh')(s1)!
-        expect(s2.players.map((p) => p.sheep)).toStrictEqual([5, 1, 1])
+        expect(s2.players!.map((p) => p.sheep)).toStrictEqual([5, 1, 1])
       })
       it('gives grain if you take grain with joker', () => {
         const s2 = farmyard('GnJo')(s1)!
-        expect(s2.players.map((p) => p.grain)).toStrictEqual([4, 1, 1])
+        expect(s2.players!.map((p) => p.grain)).toStrictEqual([4, 1, 1])
       })
       it('gives sheep if you take sheep with joker', () => {
         const s2 = farmyard('ShJo')(s1)!
-        expect(s2.players.map((p) => p.sheep)).toStrictEqual([4, 1, 1])
+        expect(s2.players!.map((p) => p.sheep)).toStrictEqual([4, 1, 1])
       })
     })
   })

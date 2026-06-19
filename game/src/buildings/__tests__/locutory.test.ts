@@ -3,7 +3,7 @@ import { createPcg32 } from 'pcg'
 import { initialState } from '../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -47,7 +47,7 @@ describe('buildings/locutory', () => {
     beer: 0,
     reliquary: 0,
   } as Tableau
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     randGen: createPcg32({}, 42, 56),
     status: GameStatusEnum.PLAYING,
@@ -104,18 +104,18 @@ describe('buildings/locutory', () => {
 
     it('consumes two pennies', () => {
       const s1 = locutory('PnPn')(s0)!
-      expect(s1.players[0].penny).toBe(3)
+      expect(s1.players![0].penny).toBe(3)
     })
     it('removes prior', () => {
       const s1 = locutory('PnPn')(s0)!
-      expect(s1.players[0].landscape).toStrictEqual([
+      expect(s1.players![0].landscape).toStrictEqual([
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LW1'], [], []],
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LW2'], ['P'], ['P', 'LW3', 'LB1W'], [], []],
       ])
     })
     it('returns prior', () => {
       const s1 = locutory('PnPn')(s0)!
-      expect(s1.players[0].clergy).toStrictEqual(['LB2W', 'PRIW'])
+      expect(s1.players![0].clergy).toStrictEqual(['LB2W', 'PRIW'])
     })
     it('allows for a building action', () => {
       const s1 = locutory('PnPn')(s0)!
@@ -131,10 +131,10 @@ describe('buildings/locutory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -145,10 +145,10 @@ describe('buildings/locutory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -159,11 +159,11 @@ describe('buildings/locutory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             nickel: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)

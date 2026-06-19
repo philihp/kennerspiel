@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/pilgrimageSite', () => {
     beer: 0,
     reliquary: 10,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -88,7 +88,7 @@ describe('buildings/pilgrimageSite', () => {
 
     it('allows noop', () => {
       const s1 = pilgrimageSite()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 10,
         ornament: 10,
         ceramic: 10,
@@ -97,7 +97,7 @@ describe('buildings/pilgrimageSite', () => {
     })
     it('can do one conversion', () => {
       const s1 = pilgrimageSite('Bo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 9,
         ornament: 10,
         ceramic: 11,
@@ -106,7 +106,7 @@ describe('buildings/pilgrimageSite', () => {
     })
     it('can do two conversions', () => {
       const s1 = pilgrimageSite('Or', 'Or')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 10,
         ornament: 8,
         ceramic: 10,
@@ -115,7 +115,7 @@ describe('buildings/pilgrimageSite', () => {
     })
     it('can do two conversions on the same thing', () => {
       const s1 = pilgrimageSite('Bo', 'Po')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 9,
         ornament: 11,
         ceramic: 10,
@@ -134,14 +134,14 @@ describe('buildings/pilgrimageSite', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 1,
             ceramic: 0,
             ornament: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['Bo', 'Or', ''])
     })
@@ -150,14 +150,14 @@ describe('buildings/pilgrimageSite', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 1,
             ceramic: 0,
             ornament: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Bo'])(s1)
       expect(c0).toStrictEqual(['Ce', 'Or', ''])
     })

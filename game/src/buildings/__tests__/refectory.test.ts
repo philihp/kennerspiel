@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/refectory', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,7 +82,7 @@ describe('buildings/refectory', () => {
   describe('refectory', () => {
     it('allows noop with undefined still gives beer and meat', () => {
       const s1 = refectory()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         beer: 1,
         meat: 4,
       })
@@ -90,7 +90,7 @@ describe('buildings/refectory', () => {
 
     it('allows noop with empty string', () => {
       const s1 = refectory('')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         beer: 1,
         meat: 4,
       })
@@ -103,7 +103,7 @@ describe('buildings/refectory', () => {
 
     it('can spend meat as it is acquired', () => {
       const s1 = refectory('MtMtMtMt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         beer: 1,
         meat: 0,
         ceramic: 4,
@@ -112,7 +112,7 @@ describe('buildings/refectory', () => {
 
     it('can underspend meat', () => {
       const s1 = refectory('MtMtMtMt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         beer: 1,
         meat: 0,
         ceramic: 4,
@@ -126,12 +126,12 @@ describe('buildings/refectory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             meat: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['Mt', ''])
     })
@@ -140,12 +140,12 @@ describe('buildings/refectory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             meat: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['MtMtMt', 'MtMt', 'Mt', ''])
     })
@@ -154,12 +154,12 @@ describe('buildings/refectory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             meat: 100,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['MtMtMtMt', 'MtMtMt', 'MtMt', 'Mt', ''])
     })
@@ -168,12 +168,12 @@ describe('buildings/refectory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             meat: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Mt'], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -182,12 +182,12 @@ describe('buildings/refectory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             meat: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Mt', 'Mt'], s1)
       expect(c0).toStrictEqual([])
     })

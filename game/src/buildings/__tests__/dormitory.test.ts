@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/dormitory', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -81,27 +81,27 @@ describe('buildings/dormitory', () => {
 
   describe('use', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = dormitory()(s0)
       expect(s1).toBeUndefined()
     })
     it('accepts null input', () => {
       const s1 = dormitory()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 1,
         book: 0,
       })
     })
     it('accepts empty input', () => {
       const s1 = dormitory('')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 1,
         book: 0,
       })
     })
     it('can make two books', () => {
       const s1 = dormitory('WoWoSwSw')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 2,
         wood: 1,
         straw: 1,
@@ -109,7 +109,7 @@ describe('buildings/dormitory', () => {
     })
     it('will let you give it more wood than you need', () => {
       const s1 = dormitory('WoWoWoSw')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         wood: 0,
         straw: 2,
@@ -117,7 +117,7 @@ describe('buildings/dormitory', () => {
     })
     it('will let you give it more straw than you need', () => {
       const s1 = dormitory('WoSwSwSw')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         wood: 2,
         straw: 0,

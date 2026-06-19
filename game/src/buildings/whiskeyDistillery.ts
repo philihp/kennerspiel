@@ -2,7 +2,7 @@ import { always, curry, lift, map, min, pipe, props, range, view, zip, zipWith }
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, resourceArray, zip3 } from '../board/resource'
-import { Cost, GameStatePlaying, ResourceEnum, Tableau } from '../types'
+import { Cost, GameState, ResourceEnum, Tableau } from '../types'
 
 export const whiskeyDistillery = (input = '') => {
   const { malt = 0, wood = 0, peat = 0 } = parseResourceParam(input)
@@ -16,7 +16,7 @@ export const whiskeyDistillery = (input = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const iterations = Math.min(

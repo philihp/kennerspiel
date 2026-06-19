@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/forgersWorkshop', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -94,7 +94,7 @@ describe('buildings/forgersWorkshop', () => {
 
     it('can do both things', () => {
       const s1 = forgersWorkshop('NiNiNi')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         reliquary: 2,
         nickel: 7,
       })
@@ -102,7 +102,7 @@ describe('buildings/forgersWorkshop', () => {
 
     it('can do just one', () => {
       const s1 = forgersWorkshop('Ni')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         reliquary: 1,
         nickel: 9,
       })
@@ -111,7 +111,7 @@ describe('buildings/forgersWorkshop', () => {
     it('can do it 3 times', () => {
       // 25 coins (5 nickels) -> 3 reliquaries
       const s1 = forgersWorkshop('NiNiNiNiNi')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         reliquary: 3,
         nickel: 5,
       })
@@ -119,7 +119,7 @@ describe('buildings/forgersWorkshop', () => {
 
     it('can do it 4 times', () => {
       const s1 = forgersWorkshop('NiNiNiNiNiNiNi')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         reliquary: 4,
         nickel: 3,
       })
@@ -128,7 +128,7 @@ describe('buildings/forgersWorkshop', () => {
     it('can do it 5 times', () => {
       // 45 coins (9 nickels) -> 5 reliquaries
       const s1 = forgersWorkshop('NiNiNiNiNiNiNiNiNi')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         reliquary: 5,
         nickel: 1,
       })
@@ -136,11 +136,11 @@ describe('buildings/forgersWorkshop', () => {
 
     it('scales 5+10n: each extra reliquary costs 10 more coins', () => {
       // Pay in pennies so the coin amount is exact (no nickel rounding).
-      const withPennies = (penny: number): GameStatePlaying => ({
+      const withPennies = (penny: number): GameState => ({
         ...s0,
-        players: [{ ...s0.players[0], nickel: 0, penny }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], nickel: 0, penny }, ...s0.players!.slice(1)],
       })
-      const pay = (penny: number) => forgersWorkshop('Pn'.repeat(penny))(withPennies(penny))!.players[0].reliquary
+      const pay = (penny: number) => forgersWorkshop('Pn'.repeat(penny))(withPennies(penny))!.players![0].reliquary
       expect(pay(5)).toBe(1)
       expect(pay(15)).toBe(2)
       expect(pay(25)).toBe(3)
@@ -155,12 +155,12 @@ describe('buildings/forgersWorkshop', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 4,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['NiNiNi', 'Ni', ''])
     })
@@ -182,10 +182,10 @@ describe('buildings/forgersWorkshop', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 6, // 30 coins: affords 5/15/25 but not 35
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -196,14 +196,14 @@ describe('buildings/forgersWorkshop', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 2,
             whiskey: 2,
             penny: 3,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([
         'NiNiPnWhWh',
@@ -221,12 +221,12 @@ describe('buildings/forgersWorkshop', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })
@@ -235,12 +235,12 @@ describe('buildings/forgersWorkshop', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['Ni', ''])
     })

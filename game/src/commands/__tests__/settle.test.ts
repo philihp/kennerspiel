@@ -4,7 +4,7 @@ import {
   BuildingEnum,
   Clergy,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -52,7 +52,7 @@ describe('commands/build', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -100,25 +100,25 @@ describe('commands/build', () => {
       expect(s1).toBeUndefined()
     })
     it('fails when player cant afford settlement', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 0,
             meat: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = settle({ row: -2, col: -1, resources: 'CoCoMtMt', settlement: SettlementEnum.FishingVillageB })(s1)!
       expect(s2).toBeUndefined()
     })
     it('fails when no bonus action available', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusActions: [],
         },
       }
@@ -129,7 +129,7 @@ describe('commands/build', () => {
       const s1 = settle({ row: -2, col: -1, resources: 'CoCoMtMt', settlement: SettlementEnum.FishingVillageB })(s0)!
       expect(s1).toBeDefined()
       expect(s1.buildings).not.toContain(BuildingEnum.Windmill)
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
           [['W'], ['C', 'SB4'], [], [], [], [], [], [], []],
@@ -142,22 +142,22 @@ describe('commands/build', () => {
       })
     })
     it('does not autoconvert grain to energy', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 0,
             meat: 0,
             wood: 2,
             grain: 3,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = settle({ row: -2, col: -1, resources: 'GnWo', settlement: SettlementEnum.ShantyTownB })(s1)!
       expect(s2).toBeDefined()
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
           [['W'], ['C', 'SB1'], [], [], [], [], [], [], []],
@@ -170,22 +170,22 @@ describe('commands/build', () => {
       })
     })
     it('settles on the player board during single player after building remaining buildings', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         buildings: [],
         config: {
-          ...s0.config,
+          ...s0.config!,
           players: 1,
         },
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusActions: [GameCommandEnum.SETTLE],
           activePlayerIndex: 0,
           neutralBuildingPhase: true,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G06'], ['H', 'LR1'], [], []],
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H', 'F09'], ['M']],
@@ -199,7 +199,7 @@ describe('commands/build', () => {
             settlements: [SettlementEnum.FarmingVillageR],
           },
           {
-            ...s0.players[1],
+            ...s0.players![1],
             landscape: [
               [[], [], ['P', 'G13'], ['P'], ['P', 'F08'], ['P', 'F11'], ['H', 'LW1'], [], []],
               [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],
@@ -208,7 +208,7 @@ describe('commands/build', () => {
         ],
       }
       const s2 = settle({ col: 3, row: 2, resources: 'BrCo', settlement: SettlementEnum.FarmingVillageR })(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P', 'G07'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'G06'], ['H', 'LR1'], [], []],
           [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], ['H', 'F09'], ['M']],
@@ -221,7 +221,7 @@ describe('commands/build', () => {
         coal: 0,
         settlements: [],
       })
-      expect(s2.players[1]).toMatchObject({
+      expect(s2.players![1]).toMatchObject({
         landscape: [
           [[], [], ['P', 'G13'], ['P'], ['P', 'F08'], ['P', 'F11'], ['H', 'LW1'], [], []],
           [[], [], ['P'], ['P'], ['P', 'LW2'], ['P', 'G02'], ['P', 'LW3'], [], []],
@@ -232,10 +232,10 @@ describe('commands/build', () => {
 
   describe('complete', () => {
     it('allows running if in a settlement frame', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusActions: [GameCommandEnum.SETTLE],
         },
       }
@@ -243,11 +243,11 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['SETTLE'])
     })
     it('allows running if in a settlement frame of neutral building phase', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         buildings: [],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           neutralBuildingPhase: true,
           mainActionUsed: true,
           bonusActions: [GameCommandEnum.SETTLE],
@@ -257,10 +257,10 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['SETTLE'])
     })
     it('does not allow running if not in a settlement frame', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusActions: [],
         },
       }
@@ -268,59 +268,59 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual([])
     })
     it('does not allow if none of their settlements can be built', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             settlements: ['SR1', 'SR2', 'SR3', 'SR4'] as SettlementEnum[],
             coal: 0,
             meat: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
       expect(c0).toStrictEqual([])
     })
     it('gives all of the active player settlements, if there are any', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             settlements: ['SR1', 'SR3', 'SR5', 'SR6'] as SettlementEnum[],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['SETTLE'])
       expect(c0).toStrictEqual(['SR1', 'SR3', 'SR5', 'SR6'])
     })
     it('only gives settlements that the player can afford', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             settlements: ['SR1', 'SR2', 'SR3', 'SR4'] as SettlementEnum[],
             wood: 1,
             peat: 0,
             coal: 0,
             straw: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['SETTLE'])
       expect(c0).toStrictEqual(['SR1', 'SR3'])
     })
     it('only gives spots that match the building', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['P', 'LB1'], [], []],
@@ -328,18 +328,18 @@ describe('commands/build', () => {
             ] as Tile[][],
             landscapeOffset: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['SETTLE', 'SR4']) // Fishing Village can only be on coast
       expect(c0).toStrictEqual(['-1 -1', '-1 0'])
     })
     it('gives no settlements if there are none', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['P', 'LB1'], [], []],
@@ -347,18 +347,18 @@ describe('commands/build', () => {
             ] as Tile[][],
             landscapeOffset: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['SETTLE', 'SR6'])
       expect(c0).toStrictEqual(['-1 -1', '3 -1', '4 -1', '-1 0', '3 0', '3 1'])
     })
     it('gives rows that the first col is free', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['P', 'LB1'], [], []],
@@ -366,18 +366,18 @@ describe('commands/build', () => {
             ] as Tile[][],
             landscapeOffset: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['SETTLE', 'SR8', '3'])
       expect(c0).toStrictEqual(['-1', '0'])
     })
     it('gives ways of paying for the given thing', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['P', 'LB1'], [], []],
@@ -407,7 +407,7 @@ describe('commands/build', () => {
             beer: 0,
             reliquary: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['SETTLE', 'SR6', '-1', '0'])
@@ -426,11 +426,11 @@ describe('commands/build', () => {
     })
 
     it('gives a termination if the command is complete', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['H'], [], []],
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H'], ['P', 'LB1'], [], []],
@@ -460,7 +460,7 @@ describe('commands/build', () => {
             beer: 0,
             reliquary: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['SETTLE', 'SR6', '-1', '0', 'MtCoCo'])
@@ -472,7 +472,7 @@ describe('commands/build', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             color: PlayerColor.Red,
             clergy: ['PRIR', 'LB2R'] as Clergy[],
             settlements: ['SR4', 'SR7', 'SR8'] as SettlementEnum[],
@@ -508,7 +508,7 @@ describe('commands/build', () => {
             beer: 0,
             reliquary: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c1 = complete(s1)(['SETTLE', 'SR8', '5', '2'])

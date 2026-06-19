@@ -1,6 +1,6 @@
 'use client'
 
-import { control, GameState, GameStatePlaying, initialState, reducer } from 'hathora-et-labora-game'
+import { control, GameState, initialState, reducer } from 'hathora-et-labora-game'
 import {
   createContext,
   createElement,
@@ -34,7 +34,7 @@ type InstanceContextType = {
   flags: Record<string, any>
   user?: User
   rawState?: GameState
-  state?: GameStatePlaying
+  state?: GameState
   currentPlayer?: Tableau
   partial: string[]
   controls?: Controls
@@ -78,6 +78,7 @@ export const InstanceContextProvider = ({
   const [debounced, setDebounced] = useState(false)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCommands(instance.commands)
   }, [instance.commands, setCommands])
 
@@ -113,7 +114,7 @@ export const InstanceContextProvider = ({
 
   const controls = useMemo(() => {
     if (gameState?.status === GameStatusEnum.SETUP) return undefined
-    return control(gameState as GameStatePlaying, partial)
+    return control(gameState as GameState, partial)
   }, [gameState, partial])
 
   const addPartial = (command: string) => {
@@ -145,7 +146,7 @@ export const InstanceContextProvider = ({
           setPartial([])
         }
 
-  const activeColor = gameState?.players?.[(gameState as GameStatePlaying)?.frame?.activePlayerIndex]?.color
+  const activeColor = gameState?.players?.[(gameState as GameState)?.frame?.activePlayerIndex]?.color
   const entrant = entrants.find((e) => e.color === engineColorToEntrantColor(activeColor))
   const active = !!user && entrant?.profile_id === user?.id && !debounced
 
@@ -157,13 +158,13 @@ export const InstanceContextProvider = ({
         instance,
         entrants,
         rawState: gameState,
-        state: gameState as GameStatePlaying,
+        state: gameState as GameState,
         partial,
         controls,
         commands,
         active,
         flags,
-        currentPlayer: gameState?.players?.[(gameState as GameStatePlaying)?.frame?.currentPlayerIndex],
+        currentPlayer: gameState?.players?.[(gameState as GameState)?.frame?.currentPlayerIndex],
         setInstance,
         setEntrants,
         addPartial,

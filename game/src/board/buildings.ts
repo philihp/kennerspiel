@@ -481,7 +481,7 @@ export const introduceBuildings: StateReducer = (state) => {
   if (state === undefined) return undefined
   return {
     ...state,
-    buildings: union(state.buildings, roundBuildings(state.config, state.frame.settlementRound)),
+    buildings: union(state.buildings!, roundBuildings(state.config!, state.frame!.settlementRound)),
   }
 }
 
@@ -489,11 +489,11 @@ export const removeBuildingFromUnbuilt =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    if (!state.buildings.includes(building)) return undefined
+    if (!state.buildings!.includes(building)) return undefined
     return (
       state && {
         ...state,
-        buildings: filter((b) => b !== building, state?.buildings),
+        buildings: filter((b) => b !== building, state?.buildings!),
       }
     )
   }

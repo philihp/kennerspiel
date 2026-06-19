@@ -3,7 +3,7 @@ import { P, match } from 'ts-pattern'
 import { isCloisterBuilding } from '../board/buildings'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, costPoints, parseResourceParam, rewardCostOptions, coinCostOptions } from '../board/resource'
-import { GameCommandConfigParams, GameStatePlaying, Tile } from '../types'
+import { GameCommandConfigParams, GameState, Tile } from '../types'
 
 const pointsPerCloister = (config: GameCommandConfigParams) =>
   match(config)
@@ -17,15 +17,15 @@ const cloistersInRow = map(([_, building]: Tile) => (isCloisterBuilding(building
 // given a list of rows, do the thing
 const cloistersInLandscape = map((landRow: Tile[]) => cloistersInRow(landRow))
 
-const entitledPointCount = (state: GameStatePlaying | undefined): number => {
+const entitledPointCount = (state: GameState | undefined): number => {
   if (state === undefined) return -1
-  const multiplier = pointsPerCloister(state.config)
-  const cloisters = sum(flatten(cloistersInLandscape(state.players[state.frame.activePlayerIndex].landscape)))
+  const multiplier = pointsPerCloister(state.config!)
+  const cloisters = sum(flatten(cloistersInLandscape(state.players![state.frame!.activePlayerIndex].landscape)))
   return multiplier * cloisters
 }
 
 // TODO: turn into R.when
-const checkCloistersForPoints = (points: number) => (state: GameStatePlaying | undefined) => {
+const checkCloistersForPoints = (points: number) => (state: GameState | undefined) => {
   if (entitledPointCount(state) < points) return undefined
   return state
 }
@@ -48,7 +48,7 @@ export const houseOfTheBrotherhood = (param1 = '', param2 = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] => {
+export const complete = curry((partial: string[], state: GameState): string[] => {
   const player = view(activeLens(state), state)
   return match(partial)
     .with([], () => [...coinCostOptions(5, player), ''])

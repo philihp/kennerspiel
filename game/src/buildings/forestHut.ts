@@ -1,7 +1,7 @@
 import { always, curry, identity, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, withActivePlayer } from '../board/player'
-import { BuildingEnum, GameStatePlaying, StateReducer, TableauReducer } from '../types'
+import { BuildingEnum, GameState, StateReducer, TableauReducer } from '../types'
 import { forestLocations, forestLocationsForCol } from '../board/landscape'
 
 // TODO: refactor this with carpentry
@@ -42,7 +42,7 @@ export const forestHut = (row?: number, col?: number): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] => {
+export const complete = curry((partial: string[], state: GameState): string[] => {
   const player = view(activeLens(state), state)
   return match(partial)
     .with([], () => [...forestLocations(player), ''])

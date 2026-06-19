@@ -10,7 +10,7 @@ import {
   Cost,
   GameCommandEnum,
   GameCommandSettleParams,
-  GameStatePlaying,
+  GameState,
   SettlementEnum,
   StateReducer,
 } from '../types'
@@ -53,7 +53,7 @@ export const settle = ({ row, col, settlement, resources }: GameCommandSettlePar
 }
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] => {
     const player = view(activeLens(state), state)
     return (

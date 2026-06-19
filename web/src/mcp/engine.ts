@@ -1,4 +1,4 @@
-import { GameState, GameStatePlaying, initialState, reducer } from 'hathora-et-labora-game'
+import { GameState, initialState, reducer } from 'hathora-et-labora-game'
 import { GameStatusEnum, PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { match } from 'ts-pattern'
 import { Enums } from '@/supabase.types'
@@ -30,10 +30,10 @@ export const applyCommand = (state: GameState, command: string[]): GameState | u
   }
 }
 
-export const asPlaying = (state?: GameState): GameStatePlaying | undefined =>
-  state !== undefined && state.status !== GameStatusEnum.SETUP ? (state as GameStatePlaying) : undefined
+export const asPlaying = (state?: GameState): GameState | undefined =>
+  state !== undefined && state.status !== GameStatusEnum.SETUP ? (state as GameState) : undefined
 
-export const activePlayerColor = (state: GameStatePlaying): PlayerColor | undefined =>
+export const activePlayerColor = (state: GameState): PlayerColor | undefined =>
   state.players?.[state.frame.activePlayerIndex]?.color
 
 export const engineColorToEntrantColor = (c?: PlayerColor): Enums<'color'> | undefined =>

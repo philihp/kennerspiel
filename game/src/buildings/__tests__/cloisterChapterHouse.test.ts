@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/cloisterChapterHouse', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -81,7 +81,7 @@ describe('buildings/cloisterChapterHouse', () => {
   describe('cloisterChapterHouse', () => {
     it('goes through a happy path', () => {
       const s1 = cloisterChapterHouse()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         clay: 1,
         sheep: 1,
         penny: 1,

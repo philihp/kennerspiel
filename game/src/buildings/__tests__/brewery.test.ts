@@ -1,6 +1,6 @@
 import { describe, it, expect } from '../../testHelpers'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/brewery', () => {
     bread: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -88,7 +88,7 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             malt: 10,
             wood: 10,
@@ -96,11 +96,11 @@ describe('buildings/brewery', () => {
             penny: 0,
             nickel: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = brewery('GnMaMaBe')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grain: 9,
         malt: 8,
         beer: 10,
@@ -113,18 +113,18 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             malt: 10,
             beer: 10,
             nickel: 0,
             penny: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = brewery('GnMa')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grain: 9,
         malt: 9,
         beer: 11,
@@ -137,16 +137,16 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 0,
             malt: 0,
             beer: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = brewery('Be')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grain: 0,
         malt: 0,
         beer: 0,
@@ -159,13 +159,13 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 10,
             malt: 10,
             wood: 10,
             beer: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = brewery('BeBe')(s1)!
@@ -179,12 +179,12 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 0,
             malt: 0,
             beer: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -195,12 +195,12 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 4,
             malt: 0,
             beer: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -211,12 +211,12 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 0,
             malt: 4,
             beer: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -227,12 +227,12 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 1,
             malt: 1,
             beer: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -243,12 +243,12 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 2,
             malt: 2,
             beer: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -259,12 +259,12 @@ describe('buildings/brewery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 2,
             malt: 5,
             beer: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)

@@ -7,8 +7,7 @@ import {
   Frame,
   GameCommandConfigParams,
   GameCommandEnum,
-  GameStatePlaying,
-  GameStateSetup,
+  GameState,
   GameStatusEnum,
   LandEnum,
   NextUseClergy,
@@ -88,7 +87,7 @@ const rondel: Rondel = {
   stone: 9,
 }
 
-const baseState: GameStatePlaying = {
+const baseState: GameState = {
   status: GameStatusEnum.PLAYING,
   config,
   rondel,
@@ -103,7 +102,7 @@ const baseState: GameStatePlaying = {
 
 describe('encode', () => {
   it('returns a zero vector of FEATURE_LEN for SETUP', () => {
-    const setup: GameStateSetup = {
+    const setup: GameState = {
       status: GameStatusEnum.SETUP,
       randGen: {} as PCGState,
     }
@@ -158,7 +157,7 @@ describe('encode', () => {
 
     const settlementsLen = featureSpec.vocab.settlements.length
     const gridStart =
-      featureSpec.offsets.players[0] +
+      featureSpec.offsets.players![0] +
       featureSpec.vocab.resources.length +
       1 + // wonders
       4 + // clergy buckets
@@ -167,10 +166,10 @@ describe('encode', () => {
     // landscapeOffset is 0, so raw row 0 → logical row 0 → output row ANCHOR
     const cellBase = gridStart + (featureSpec.gridAnchor * featureSpec.width + 6) * featureSpec.tileChannels
     const landCh = featureSpec.vocab.lands.length
-    const erectCh = featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.length
+    const erectCh = featureSpec.vocab.buildings!.length + featureSpec.vocab.settlements.length
 
     expect(vec[cellBase + featureSpec.vocab.lands.indexOf(LandEnum.Hillside)]).toBe(1)
-    expect(vec[cellBase + landCh + featureSpec.vocab.buildings.indexOf(BuildingEnum.ClayMoundR)]).toBe(1)
+    expect(vec[cellBase + landCh + featureSpec.vocab.buildings!.indexOf(BuildingEnum.ClayMoundR)]).toBe(1)
     // laybrother is channel 0 in the clergy block; not opponent-owned for self
     expect(vec[cellBase + landCh + erectCh + 0]).toBe(1)
     expect(vec[cellBase + landCh + erectCh + 2]).toBe(0)
@@ -187,17 +186,17 @@ describe('encode', () => {
     const vec = encode({ ...baseState, players }, 0)
 
     const settlementsLen = featureSpec.vocab.settlements.length
-    const gridStart = featureSpec.offsets.players[1] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
+    const gridStart = featureSpec.offsets.players![1] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
 
     const cellBase = gridStart + (featureSpec.gridAnchor * featureSpec.width + 0) * featureSpec.tileChannels
     const landCh = featureSpec.vocab.lands.length
-    const erectCh = featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.length
+    const erectCh = featureSpec.vocab.buildings!.length + featureSpec.vocab.settlements.length
     expect(vec[cellBase + landCh + erectCh + 1]).toBe(1) // prior
     expect(vec[cellBase + landCh + erectCh + 2]).toBe(1) // opponent flag
   })
 
   it('encodes the bonusActions bitmask in the frame block', () => {
-    const stateWithBonus: GameStatePlaying = {
+    const stateWithBonus: GameState = {
       ...baseState,
       frame: { ...frame, bonusActions: [GameCommandEnum.BUILD, GameCommandEnum.SETTLE] },
     }
@@ -228,11 +227,11 @@ describe('encode', () => {
     const vec = encode({ ...baseState, players }, 0)
 
     const settlementsLen = featureSpec.vocab.settlements.length
-    const gridStart = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
+    const gridStart = featureSpec.offsets.players![0] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
     const cellBase = gridStart + (featureSpec.gridAnchor * featureSpec.width + 0) * featureSpec.tileChannels
     const landCh = featureSpec.vocab.lands.length
     const settlementSlot =
-      landCh + featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.indexOf(SettlementEnum.ShantyTownR)
+      landCh + featureSpec.vocab.buildings!.length + featureSpec.vocab.settlements.indexOf(SettlementEnum.ShantyTownR)
     expect(vec[cellBase + settlementSlot]).toBe(1)
   })
 
@@ -267,8 +266,8 @@ describe('encode', () => {
     )
     // The ClayMound cell in both encodings must land at the same output row
     // (gridAnchor), so the per-player slice should match.
-    const start = featureSpec.offsets.players[0]
-    const end = start + (featureSpec.featureLen - featureSpec.offsets.players[0]) // not strict, but compare grid bytes
+    const start = featureSpec.offsets.players![0]
+    const end = start + (featureSpec.featureLen - featureSpec.offsets.players![0]) // not strict, but compare grid bytes
     const sliceA = vecA.slice(start, end)
     const sliceB = vecB.slice(start, end)
     expect(sliceA).toStrictEqual(sliceB)
@@ -281,7 +280,7 @@ describe('encode', () => {
       makeTableau(PlayerColor.Blue),
     ]
     const vec = encode({ ...baseState, players }, 0)
-    const clergyOffset = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1
+    const clergyOffset = featureSpec.offsets.players![0] + featureSpec.vocab.resources.length + 1
     expect(vec[clergyOffset + 0]).toBe(2) // lbUnplaced
     expect(vec[clergyOffset + 1]).toBe(0) // lbPlaced
     expect(vec[clergyOffset + 2]).toBe(1) // priorUnplaced
@@ -293,7 +292,7 @@ describe('encode', () => {
     // take(armIndex, tokenIndex) = armVals[(armIndex - tokenIndex + 13) % 13]
     // With pointingBefore=4 and wood at slot 1: (4-1+13)%13 = 3 → armVals[3] = 4
     // With wood at slot 4 (same as arm): (4-4+13)%13 = 0 → armVals[0] = 0
-    const stateAtFour: GameStatePlaying = {
+    const stateAtFour: GameState = {
       ...baseState,
       rondel: { ...rondel, pointingBefore: 4, wood: 1, clay: 4 },
     }
@@ -306,7 +305,7 @@ describe('encode', () => {
   })
 
   it('yields 0 for rondel tokens not yet on the rondel', () => {
-    const stateNoGrape: GameStatePlaying = {
+    const stateNoGrape: GameState = {
       ...baseState,
       rondel: { pointingBefore: 5, wood: 0, clay: 0, coin: 0, grain: 0, peat: 0, sheep: 0 },
     }

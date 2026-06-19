@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -115,7 +115,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -159,14 +159,14 @@ describe('buildings/houseOfTheBrotherhood', () => {
 
     it('searches landscape for all cloisters', () => {
       const s1 = houseOfTheBrotherhood('Ni', 'BoBoBo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 3,
       })
     })
 
     it('can request 5 when entitled to 6', () => {
       const s1 = houseOfTheBrotherhood('Ni', 'BoCe')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         ceramic: 1,
       })
@@ -174,7 +174,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
 
     it('can request 6 when entitled to 6', () => {
       const s1 = houseOfTheBrotherhood('Ni', 'CeCe')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 2,
       })
     })
@@ -254,7 +254,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
       beer: 0,
       reliquary: 0,
     }
-    const s0: GameStatePlaying = {
+    const s0: GameState = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
       frame: {
@@ -292,7 +292,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
 
     it('3 cloisters gets 4.5 points, so you can get 2 books', () => {
       const s1 = houseOfTheBrotherhood('Ni', 'BoBo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 2,
       })
     })
@@ -337,7 +337,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
       beer: 0,
       reliquary: 0,
     }
-    const s0: GameStatePlaying = {
+    const s0: GameState = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
       frame: {
@@ -375,7 +375,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
 
     it('gets 1 point per cloister, so 2 can be requested', () => {
       const s1 = houseOfTheBrotherhood('Ni', 'Bo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         ceramic: 0,
         nickel: 0,
@@ -384,7 +384,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
 
     it('gets 1 point per cloister, so 3 can be requested', () => {
       const s1 = houseOfTheBrotherhood('Ni', 'Ce')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 0,
         ceramic: 1,
       })
@@ -397,7 +397,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
 
     it('allows a noop', () => {
       const s1 = houseOfTheBrotherhood('', '')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 0,
         ceramic: 0,
       })
@@ -405,7 +405,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
 
     it('will take free money', () => {
       const s1 = houseOfTheBrotherhood('Ni', '')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 0,
         ceramic: 0,
         nickel: 0,
@@ -420,15 +420,15 @@ describe('buildings/houseOfTheBrotherhood', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 1,
             penny: 3,
             whiskey: 2,
             wine: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['Ni', 'PnWhWh', 'PnPnWhWh', 'PnPnPnWh', ''])
     })
@@ -437,15 +437,15 @@ describe('buildings/houseOfTheBrotherhood', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 0,
             penny: 0,
             whiskey: 0,
             wine: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -454,12 +454,12 @@ describe('buildings/houseOfTheBrotherhood', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Ni'], s1)
       expect(c0).toStrictEqual(['CeCe', 'BoBoBo', 'CeBo', 'Or', 'BoBo', 'Ce', 'Bo', ''])
     })
@@ -468,17 +468,17 @@ describe('buildings/houseOfTheBrotherhood', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
         config: {
-          ...s0.config,
+          ...s0.config!,
           players: 2,
           length: 'long',
         },
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Ni'], s1)
       expect(c0).toStrictEqual(['Or', 'BoBo', 'Ce', 'Bo', ''])
     })
@@ -487,12 +487,12 @@ describe('buildings/houseOfTheBrotherhood', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Ni', 'CeCe'])(s1)
       expect(c0).toStrictEqual([''])
     })
