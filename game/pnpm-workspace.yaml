@@ -2,5 +2,7 @@ packages:
   - .
 allowBuilds:
   esbuild: true
+minimumReleaseAgeExclude:
+  - '@types/ramda@0.32.0'
 onlyBuiltDependencies:
   - esbuild
