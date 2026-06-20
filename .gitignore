@@ -9,3 +9,4 @@ dist
 !/client/prototype-ui/plugins
 .DS_Store
 .vercel
+package-lock.json
