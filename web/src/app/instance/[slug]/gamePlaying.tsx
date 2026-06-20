@@ -10,14 +10,14 @@ import { UnbuiltPlots } from '@/components/unbuiltPlots'
 import { UnbuiltWonders } from '@/components/unbuiltWonders'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Enums } from '@/supabase.types'
-import { GameState, Tableau } from 'hathora-et-labora-game'
+import { GameStatePlaying, Tableau } from 'hathora-et-labora-game'
 import { PlayerColor } from 'hathora-et-labora-game/dist/types'
 import { map, pipe, range } from 'ramda'
 import { ReactNode, useState } from 'react'
 import { match } from 'ts-pattern'
 import { Alerts } from '@/components/alerts'
 
-const playerOrdering = (state?: GameState) => {
+const playerOrdering = (state?: GameStatePlaying) => {
   if (state === undefined) return []
   if (state.players.length === 0) return []
   if (state.players.length === 1) return [0]

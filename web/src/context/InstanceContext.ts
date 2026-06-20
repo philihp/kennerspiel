@@ -1,6 +1,6 @@
 'use client'
 
-import { control, GameState, initialState, reducer } from 'hathora-et-labora-game'
+import { control, GameState, GameStatePlaying, initialState, reducer } from 'hathora-et-labora-game'
 import {
   createContext,
   createElement,
@@ -34,7 +34,7 @@ type InstanceContextType = {
   flags: Record<string, any>
   user?: User
   rawState?: GameState
-  state?: GameState
+  state?: GameStatePlaying
   currentPlayer?: Tableau
   partial: string[]
   controls?: Controls
@@ -114,7 +114,7 @@ export const InstanceContextProvider = ({
 
   const controls = useMemo(() => {
     if (gameState?.status === GameStatusEnum.SETUP) return undefined
-    return control(gameState as GameState, partial)
+    return control(gameState as GameStatePlaying, partial)
   }, [gameState, partial])
 
   const addPartial = (command: string) => {
@@ -146,7 +146,7 @@ export const InstanceContextProvider = ({
           setPartial([])
         }
 
-  const activeColor = gameState?.players?.[(gameState as GameState)?.frame?.activePlayerIndex]?.color
+  const activeColor = gameState?.players?.[(gameState as GameStatePlaying)?.frame?.activePlayerIndex]?.color
   const entrant = entrants.find((e) => e.color === engineColorToEntrantColor(activeColor))
   const active = !!user && entrant?.profile_id === user?.id && !debounced
 
@@ -158,13 +158,13 @@ export const InstanceContextProvider = ({
         instance,
         entrants,
         rawState: gameState,
-        state: gameState as GameState,
+        state: gameState as GameStatePlaying,
         partial,
         controls,
         commands,
         active,
         flags,
-        currentPlayer: gameState?.players?.[(gameState as GameState)?.frame?.currentPlayerIndex],
+        currentPlayer: gameState?.players?.[(gameState as GameStatePlaying)?.frame?.currentPlayerIndex],
         setInstance,
         setEntrants,
         addPartial,
