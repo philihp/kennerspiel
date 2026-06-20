@@ -166,7 +166,7 @@ describe('board/frame/nextFrameSolo', () => {
           next: 23,
         },
       }
-      expect(nextFrameSolo[s3.frame!.next].upkeep).toContain(returnClergyIfPlaced)
+      expect(nextFrameSolo[s3.frame.next].upkeep).toContain(returnClergyIfPlaced)
       const s4 = nextFrame(s3)
       expect(s4).toBeDefined()
       expect(s4!.players![0]).toMatchObject({
@@ -193,7 +193,7 @@ describe('board/frame/nextFrameSolo', () => {
           next: 32,
         },
       }
-      expect(nextFrameSolo[s3.frame!.next].upkeep).toContain(returnClergyIfPlaced)
+      expect(nextFrameSolo[s3.frame.next].upkeep).toContain(returnClergyIfPlaced)
       const s4 = nextFrame(s3)
       expect(s4).toBeDefined()
       expect(s4!.players![0]).toMatchObject({
@@ -220,7 +220,7 @@ describe('board/frame/nextFrameSolo', () => {
           next: 45,
         },
       }
-      expect(nextFrameSolo[s3.frame!.next].upkeep).toContain(returnClergyIfPlaced)
+      expect(nextFrameSolo[s3.frame.next].upkeep).toContain(returnClergyIfPlaced)
       const s4 = nextFrame(s3)
       expect(s4).toBeDefined()
       expect(s4!.players![0]).toMatchObject({
@@ -247,7 +247,7 @@ describe('board/frame/nextFrameSolo', () => {
           next: 55,
         },
       }
-      expect(nextFrameSolo[s3.frame!.next].upkeep).toContain(returnClergyIfPlaced)
+      expect(nextFrameSolo[s3.frame.next].upkeep).toContain(returnClergyIfPlaced)
       const s4 = nextFrame(s3)
       expect(s4).toBeDefined()
       expect(s4!.players![0]).toMatchObject({

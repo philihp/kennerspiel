@@ -151,8 +151,8 @@ describe('buildings/bathhouse', () => {
         ],
       }
       const s2 = bathhouse()(s1)!
-      expect(s1.players![0].clergy).toBe(s2.players![0].clergy)
-      expect(s1.players![0].landscape).toBe(s2.players![0].landscape)
+      expect(s1.players[0].clergy).toBe(s2.players![0].clergy)
+      expect(s1.players[0].landscape).toBe(s2.players![0].landscape)
     })
 
     it('fails if no pennies', () => {

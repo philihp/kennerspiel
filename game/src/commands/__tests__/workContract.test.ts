@@ -249,8 +249,8 @@ describe('commands/workContract', () => {
         ...s0,
         frame: { ...s0.frame!, settlementRound: SettlementRound.B },
       }
-      expect(s1.frame!.settlementRound).not.toBe('S')
-      expect(s1.frame!.settlementRound).not.toBe('A')
+      expect(s1.frame.settlementRound).not.toBe('S')
+      expect(s1.frame.settlementRound).not.toBe('A')
       expect(s1.buildings).not.toContain('F21')
       const s2 = workContract('G02' as BuildingEnum, 'PnPn')(s1)!
       expect(s2.players![0].penny).toBe(2)
@@ -621,7 +621,7 @@ describe('commands/workContract', () => {
         START R G
         USE LR3
         COMMIT
-      `! as GameState
+      `!
       it('can complete WITH_PRIOR if reasonable', () => {
         const c0 = control(s0, ['WORK_CONTRACT', 'LG2', 'Pn'])
         expect(c0.completion).toStrictEqual(['', 'WITH_PRIOR'])

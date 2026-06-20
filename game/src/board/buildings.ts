@@ -493,7 +493,7 @@ export const removeBuildingFromUnbuilt =
     return (
       state && {
         ...state,
-        buildings: filter((b) => b !== building, state?.buildings!),
+        buildings: filter((b) => b !== building, state.buildings ?? []),
       }
     )
   }

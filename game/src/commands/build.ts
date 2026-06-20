@@ -64,7 +64,7 @@ export const allowPriorToUse =
     return {
       ...state,
       frame: {
-        ...state.frame!!,
+        ...state.frame!,
         bonusActions,
         nextUse: NextUseClergy.OnlyPrior,
         usableBuildings,

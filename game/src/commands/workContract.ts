@@ -47,7 +47,7 @@ const workContractCost = (state: GameState | undefined): number =>
   state?.frame?.settlementRound === SettlementRound.A ||
   (state?.config?.players === 1 &&
     state?.frame?.settlementRound === SettlementRound.B &&
-    state.frame!.neutralBuildingPhase) ||
+    state.frame.neutralBuildingPhase) ||
   state?.buildings!.includes(BuildingEnum.WhiskeyDistillery) ||
   state?.buildings!.includes(BuildingEnum.Winery)
     ? 1

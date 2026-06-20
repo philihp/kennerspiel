@@ -176,11 +176,11 @@ describe('buildings/stoneMerchant', () => {
         ...s1,
         players: [
           {
-            ...s1.players![0],
+            ...s1.players[0],
             sheep: 1,
             wood: 1,
           },
-          ...s1.players!.slice(1),
+          ...s1.players.slice(1),
         ],
       }
       const c0 = complete([])(s2)
@@ -191,11 +191,11 @@ describe('buildings/stoneMerchant', () => {
         ...s1,
         players: [
           {
-            ...s1.players![0],
+            ...s1.players[0],
             sheep: 2,
             wood: 2,
           },
-          ...s1.players!.slice(1),
+          ...s1.players.slice(1),
         ],
       }
       const c0 = complete([])(s2)
@@ -206,12 +206,12 @@ describe('buildings/stoneMerchant', () => {
         ...s1,
         players: [
           {
-            ...s1.players![0],
+            ...s1.players[0],
             sheep: 1,
             wood: 1,
             grain: 2,
           },
-          ...s1.players!.slice(1),
+          ...s1.players.slice(1),
         ],
       }
       const c0 = complete([])(s2)
@@ -222,14 +222,14 @@ describe('buildings/stoneMerchant', () => {
         ...s1,
         players: [
           {
-            ...s1.players![0],
+            ...s1.players[0],
             sheep: 1,
             meat: 1,
             grain: 1,
             wood: 2,
             coal: 1,
           },
-          ...s1.players!.slice(1),
+          ...s1.players.slice(1),
         ],
       }
       const c0 = complete([])(s2)
@@ -240,7 +240,7 @@ describe('buildings/stoneMerchant', () => {
         ...s1,
         players: [
           {
-            ...s1.players![0],
+            ...s1.players[0],
             meat: 5,
             grain: 6,
             beer: 5,
@@ -249,7 +249,7 @@ describe('buildings/stoneMerchant', () => {
             coal: 2,
             penny: 10,
           },
-          ...s1.players!.slice(1),
+          ...s1.players.slice(1),
         ],
       }
       const c0 = complete([])(s2)
@@ -261,11 +261,11 @@ describe('buildings/stoneMerchant', () => {
         ...s1,
         players: [
           {
-            ...s1.players![0],
+            ...s1.players[0],
             sheep: 10,
             wood: 10,
           },
-          ...s1.players!.slice(1),
+          ...s1.players.slice(1),
         ],
       }
       const c0 = complete([])(s2)

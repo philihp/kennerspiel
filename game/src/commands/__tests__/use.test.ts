@@ -381,8 +381,8 @@ describe('commands/use', () => {
       }
       const s2 = use(BuildingEnum.FarmYardR, ['ShJo'])(s1)!
       expect(s1.frame!.activePlayerIndex).toBe(0)
-      expect(s1.players![0].landscape[2][4]).toStrictEqual(['P', 'LR2'])
-      expect(s1.players![0].clergy).toStrictEqual(['PRIR'])
+      expect(s1.players[0].landscape[2][4]).toStrictEqual(['P', 'LR2'])
+      expect(s1.players[0].clergy).toStrictEqual(['PRIR'])
       expect(s2.players![0].clergy).toStrictEqual([])
       expect(s2.players![0].landscape[2][4]).toStrictEqual(['P', 'LR2', 'PRIR'])
     })

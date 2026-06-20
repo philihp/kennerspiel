@@ -204,13 +204,13 @@ describe('game Claude4-1', () => {
       'WORK_CONTRACT G26 Wn',
     ])
 
-    const s1 = reduce<string[], GameState>((state, move) => reducer(state, move)!, s0, moves) as GameState
+    const s1 = reduce<string[], GameState>((state, move) => reducer(state, move)!, s0, moves)
     expect(s1).toBeDefined()
     expect(s1.frame!.usableBuildings).toContain('G26')
     const c1 = control(s1, [])
     expect(c1.completion).toContain('WITH_LAYBROTHER')
 
-    const s2 = reducer(s1, ['WITH_LAYBROTHER'])! as GameState
+    const s2 = reducer(s1, ['WITH_LAYBROTHER'])!
     expect(s2).toBeDefined()
     // After WITH_LAYBROTHER, activePlayer should revert to Red (currentPlayer)
     expect(s2.frame!.activePlayerIndex).toBe(s2.frame!.currentPlayerIndex)
@@ -225,7 +225,7 @@ describe('game Claude4-1', () => {
     expect(c2use.completion).toContain('G26')
 
     // Actually USE G26 (Shipping Company) to verify it works
-    const s3 = reducer(s2, ['USE', 'G26'])! as GameState
+    const s3 = reducer(s2, ['USE', 'G26'])!
     expect(s3).toBeDefined()
   })
 })

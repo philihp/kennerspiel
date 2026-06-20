@@ -281,7 +281,7 @@ const clearBonusRoundPlacement: StateReducer = (state) => {
   return {
     ...state,
     frame: {
-      ...state.frame!!,
+      ...state.frame!,
       bonusRoundPlacement: false,
     },
   }

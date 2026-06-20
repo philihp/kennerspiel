@@ -107,7 +107,7 @@ const denyBuyingAnyMoreLandscape = (state?: GameState): GameState | undefined =>
   return {
     ...state,
     frame: {
-      ...state.frame!!,
+      ...state.frame!,
       // if the command was found in bonusActions
       ...(atIndex !== -1
         ? {

@@ -157,7 +157,7 @@ describe('encode', () => {
 
     const settlementsLen = featureSpec.vocab.settlements.length
     const gridStart =
-      featureSpec.offsets.players![0] +
+      featureSpec.offsets.players[0] +
       featureSpec.vocab.resources.length +
       1 + // wonders
       4 + // clergy buckets
@@ -166,10 +166,10 @@ describe('encode', () => {
     // landscapeOffset is 0, so raw row 0 → logical row 0 → output row ANCHOR
     const cellBase = gridStart + (featureSpec.gridAnchor * featureSpec.width + 6) * featureSpec.tileChannels
     const landCh = featureSpec.vocab.lands.length
-    const erectCh = featureSpec.vocab.buildings!.length + featureSpec.vocab.settlements.length
+    const erectCh = featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.length
 
     expect(vec[cellBase + featureSpec.vocab.lands.indexOf(LandEnum.Hillside)]).toBe(1)
-    expect(vec[cellBase + landCh + featureSpec.vocab.buildings!.indexOf(BuildingEnum.ClayMoundR)]).toBe(1)
+    expect(vec[cellBase + landCh + featureSpec.vocab.buildings.indexOf(BuildingEnum.ClayMoundR)]).toBe(1)
     // laybrother is channel 0 in the clergy block; not opponent-owned for self
     expect(vec[cellBase + landCh + erectCh + 0]).toBe(1)
     expect(vec[cellBase + landCh + erectCh + 2]).toBe(0)
@@ -186,11 +186,11 @@ describe('encode', () => {
     const vec = encode({ ...baseState, players }, 0)
 
     const settlementsLen = featureSpec.vocab.settlements.length
-    const gridStart = featureSpec.offsets.players![1] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
+    const gridStart = featureSpec.offsets.players[1] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
 
     const cellBase = gridStart + (featureSpec.gridAnchor * featureSpec.width + 0) * featureSpec.tileChannels
     const landCh = featureSpec.vocab.lands.length
-    const erectCh = featureSpec.vocab.buildings!.length + featureSpec.vocab.settlements.length
+    const erectCh = featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.length
     expect(vec[cellBase + landCh + erectCh + 1]).toBe(1) // prior
     expect(vec[cellBase + landCh + erectCh + 2]).toBe(1) // opponent flag
   })
@@ -227,11 +227,11 @@ describe('encode', () => {
     const vec = encode({ ...baseState, players }, 0)
 
     const settlementsLen = featureSpec.vocab.settlements.length
-    const gridStart = featureSpec.offsets.players![0] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
+    const gridStart = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1 + 4 + settlementsLen
     const cellBase = gridStart + (featureSpec.gridAnchor * featureSpec.width + 0) * featureSpec.tileChannels
     const landCh = featureSpec.vocab.lands.length
     const settlementSlot =
-      landCh + featureSpec.vocab.buildings!.length + featureSpec.vocab.settlements.indexOf(SettlementEnum.ShantyTownR)
+      landCh + featureSpec.vocab.buildings.length + featureSpec.vocab.settlements.indexOf(SettlementEnum.ShantyTownR)
     expect(vec[cellBase + settlementSlot]).toBe(1)
   })
 
@@ -266,8 +266,8 @@ describe('encode', () => {
     )
     // The ClayMound cell in both encodings must land at the same output row
     // (gridAnchor), so the per-player slice should match.
-    const start = featureSpec.offsets.players![0]
-    const end = start + (featureSpec.featureLen - featureSpec.offsets.players![0]) // not strict, but compare grid bytes
+    const start = featureSpec.offsets.players[0]
+    const end = start + (featureSpec.featureLen - featureSpec.offsets.players[0]) // not strict, but compare grid bytes
     const sliceA = vecA.slice(start, end)
     const sliceB = vecB.slice(start, end)
     expect(sliceA).toStrictEqual(sliceB)
@@ -280,7 +280,7 @@ describe('encode', () => {
       makeTableau(PlayerColor.Blue),
     ]
     const vec = encode({ ...baseState, players }, 0)
-    const clergyOffset = featureSpec.offsets.players![0] + featureSpec.vocab.resources.length + 1
+    const clergyOffset = featureSpec.offsets.players[0] + featureSpec.vocab.resources.length + 1
     expect(vec[clergyOffset + 0]).toBe(2) // lbUnplaced
     expect(vec[clergyOffset + 1]).toBe(0) // lbPlaced
     expect(vec[clergyOffset + 2]).toBe(1) // priorUnplaced

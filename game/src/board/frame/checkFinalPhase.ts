@@ -9,7 +9,7 @@ export const checkFinalPhase =
     return {
       ...state,
       frame: {
-        ...state.frame!!,
+        ...state.frame!,
         next,
       },
     }

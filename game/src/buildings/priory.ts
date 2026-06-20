@@ -8,7 +8,7 @@ import { BuildingEnum, ErectionEnum, GameState, StateReducer, Tableau, Tile } fr
 export const priory = (): StateReducer => (state) => {
   if (state === undefined) return undefined
   const landscapes = map<Tableau, Tile[][]>(({ landscape }) => landscape)(state.players!)
-  const clergyLocation = map<Tile[][], [number, number, Tile][]>(findClergy(priors(state)), landscapes as Tile[][][])
+  const clergyLocation = map<Tile[][], [number, number, Tile][]>(findClergy(priors(state)), landscapes)
   const foundClergy = reject<[number, number, Tile][], [number, number, Tile][][]>(
     (l) => l.length === 0,
     clergyLocation

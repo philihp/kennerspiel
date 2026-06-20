@@ -28,7 +28,7 @@ describe('game Claude4', () => {
       'BUILD G12 2 0',
     ])
 
-    const s1 = reduce<string[], GameState>((state, move) => reducer(state, move)!, s0, openingMoves) as GameState
+    const s1 = reduce<string[], GameState>((state, move) => reducer(state, move)!, s0, openingMoves)
     const { flow, ...c2 } = control(s1, [])
     expect(s1.frame!.bonusActions).not.toContain('USE')
     expect(c2.completion).not.toContain('USE') // because it was already used!

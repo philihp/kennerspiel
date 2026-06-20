@@ -284,7 +284,7 @@ const encodeShared = (state: GameState): number[] => {
   const sections: number[][] = [
     encodeRondelDeltas(state.rondel!),
     encodeRondelYields(state.rondel!, state.config!),
-    mask(BUILDINGS, new Set(state.buildings!)),
+    mask(BUILDINGS, new Set(state.buildings)),
     padPrices(state.plotPurchasePrices!),
     padPrices(state.districtPurchasePrices!),
     [state.wonders!],

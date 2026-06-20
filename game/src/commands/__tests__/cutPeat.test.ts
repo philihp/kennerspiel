@@ -96,7 +96,7 @@ describe('commands/cutPeat', () => {
     it('if peat not on rondel, keeps token off but allows with zero peat', () => {
       const s1 = { ...s0, rondel: { pointingBefore: 0, peat: undefined } }
       expect(s1.players![0].peat).toBe(0)
-      expect(s1.rondel!.peat).toBeUndefined()
+      expect(s1.rondel.peat).toBeUndefined()
       const s2 = cutPeat({ row: 0, col: 0, useJoker: false })(s1)!
       expect(s2.players![0].peat).toBe(0)
       expect(s2.rondel!.peat).toBeUndefined()

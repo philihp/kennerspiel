@@ -242,7 +242,7 @@ describe('board/resource', () => {
     test('does not give resources in short 2p game', () => {
       const s0 = spiel`
         CONFIG 2 france short
-        START B W`! as GameState
+        START B W`!
       const s1 = shortGameBonusProduction({ reliquary: 1 })(s0)!
       expect(s1.players![0].reliquary).toBe(0)
       expect(s1.players![1].reliquary).toBe(0)
@@ -250,7 +250,7 @@ describe('board/resource', () => {
     test('dispenses resources in short 3p game', () => {
       const s0 = spiel`
         CONFIG 3 france short
-        START B W R`! as GameState
+        START B W R`!
       const s1 = shortGameBonusProduction({ reliquary: 1 })(s0)!
       expect(s1.players![0].reliquary).toBe(1)
       expect(s1.players![1].reliquary).toBe(1)
@@ -259,7 +259,7 @@ describe('board/resource', () => {
     test('dispenses resources in short 4p game', () => {
       const s0 = spiel`
         CONFIG 4 france short
-        START B W G R`! as GameState
+        START B W G R`!
       const s1 = shortGameBonusProduction({ stone: 1 })(s0)!
       expect(s1.players![0].stone).toBe(1)
       expect(s1.players![1].stone).toBe(1)
@@ -269,7 +269,7 @@ describe('board/resource', () => {
     test('does not give resources in long 3p game', () => {
       const s0 = spiel`
         CONFIG 3 france long
-        START B W R`! as GameState
+        START B W R`!
       const s1 = shortGameBonusProduction({ reliquary: 1 })(s0)!
       expect(s1.players![0].reliquary).toBe(0)
       expect(s1.players![1].reliquary).toBe(0)
@@ -278,7 +278,7 @@ describe('board/resource', () => {
     test('does not give resources in long 2p game', () => {
       const s0 = spiel`
         CONFIG 2 france long
-        START W R`! as GameState
+        START W R`!
       const s1 = shortGameBonusProduction({ reliquary: 1 })(s0)!
       expect(s1.players![0].reliquary).toBe(0)
       expect(s1.players![1].reliquary).toBe(0)
@@ -286,7 +286,7 @@ describe('board/resource', () => {
     test('does not give resources in long 4p game', () => {
       const s0 = spiel`
         CONFIG 4 france long
-        START B W G R`! as GameState
+        START B W G R`!
       const s1 = shortGameBonusProduction({ stone: 1 })(s0)!
       expect(s1.players![0].stone).toBe(0)
       expect(s1.players![1].stone).toBe(0)
