@@ -2,7 +2,7 @@ import { always, curry, map, min, pipe, range, reverse, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, stringRepeater } from '../board/resource'
-import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { GameState, ResourceEnum, StateReducer } from '../types'
 
 export const coalHarbor = (param = ''): StateReducer => {
   const { peat = 0 } = parseResourceParam(param)
@@ -20,7 +20,7 @@ export const coalHarbor = (param = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { coal = 0 } = view(activeLens(state), state)

@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/cooperage', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,23 +82,23 @@ describe('buildings/cooperage', () => {
 
   describe('cooperage', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = cooperage()(s0)
       expect(s1).toBeUndefined()
     })
     it('allows using with no input', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = cooperage()(s0)
       expect(s0).toBe(s1)
     })
     it('allows using with empty string', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = cooperage('')(s0)
       expect(s0).toBe(s1)
     })
     it('uses joker to get whiskey', () => {
       const s1 = cooperage('WoWoWo', 'Wh')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wood: 0,
         beer: 0,
         whiskey: 5,
@@ -106,7 +106,7 @@ describe('buildings/cooperage', () => {
     })
     it('uses joker to get beer', () => {
       const s1 = cooperage('WoWoWo', 'Be')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wood: 0,
         beer: 5,
         whiskey: 0,
@@ -114,7 +114,7 @@ describe('buildings/cooperage', () => {
     })
     it('fails if nothing specified', () => {
       const s1 = cooperage('WoWoWo', '')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wood: 0,
         beer: 0,
         whiskey: 0,
@@ -122,7 +122,7 @@ describe('buildings/cooperage', () => {
     })
     it('prefers whiskey if both requested', () => {
       const s1 = cooperage('WoWoWo', 'BeWh')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wood: 0,
         beer: 0,
         whiskey: 5,
@@ -136,19 +136,19 @@ describe('buildings/cooperage', () => {
       const s1 = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
-      } as GameStatePlaying
+      } as GameState
       it('gives bonus whiskey', () => {
         const s2 = cooperage('WoWoWo', 'Wh')(s1)
-        expect(s2?.players.map((p) => p.whiskey)).toStrictEqual([6, 1, 1])
-        expect(s2?.players.map((p) => p.beer)).toStrictEqual([0, 0, 0])
+        expect(s2?.players!.map((p) => p.whiskey)).toStrictEqual([6, 1, 1])
+        expect(s2?.players!.map((p) => p.beer)).toStrictEqual([0, 0, 0])
       })
       it('gives bonus beer', () => {
         const s2 = cooperage('WoWoWo', 'Be')(s1)
-        expect(s2?.players.map((p) => p.whiskey)).toStrictEqual([0, 0, 0])
-        expect(s2?.players.map((p) => p.beer)).toStrictEqual([6, 1, 1])
+        expect(s2?.players!.map((p) => p.whiskey)).toStrictEqual([0, 0, 0])
+        expect(s2?.players!.map((p) => p.beer)).toStrictEqual([6, 1, 1])
       })
     })
   })
@@ -159,12 +159,12 @@ describe('buildings/cooperage', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })
@@ -173,12 +173,12 @@ describe('buildings/cooperage', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 5,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['BeWoWoWo', 'WhWoWoWo', ''])
     })

@@ -2,7 +2,7 @@ import { always, curry, map, max, min, pipe, range, reverse, unnest, view } from
 import { P, match } from 'ts-pattern'
 import { getCost, withActivePlayer, payCost, activeLens } from '../board/player'
 import { costEnergy, costFood, parseResourceParam, settlementCostOptions } from '../board/resource'
-import { GameStatePlaying, StateReducer } from '../types'
+import { GameState, StateReducer } from '../types'
 
 export const stoneMerchant = (param = ''): StateReducer => {
   const inputs = parseResourceParam(param)
@@ -16,7 +16,7 @@ export const stoneMerchant = (param = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match<string[], string[]>(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

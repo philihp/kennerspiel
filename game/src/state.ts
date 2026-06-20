@@ -1,7 +1,7 @@
 import { PCGState } from 'pcg'
-import { GameStateSetup, GameStatusEnum } from './types'
+import { GameState, GameStatusEnum } from './types'
 
-export const initialState: GameStateSetup = {
+export const initialState: GameState = {
   randGen: {} as PCGState,
   status: GameStatusEnum.SETUP,
 }

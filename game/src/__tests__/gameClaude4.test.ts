@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../testHelpers'
 import { reducer } from '../reducer'
 import { initialState } from '../state'
-import { GameState, GameStatePlaying } from '../types'
+import { GameState } from '../types'
 import { control } from '../control'
 import { map, reduce, split } from 'ramda'
 
@@ -28,9 +28,9 @@ describe('game Claude4', () => {
       'BUILD G12 2 0',
     ])
 
-    const s1 = reduce<string[], GameState>((state, move) => reducer(state, move)!, s0, openingMoves) as GameStatePlaying
+    const s1 = reduce<string[], GameState>((state, move) => reducer(state, move)!, s0, openingMoves)
     const { flow, ...c2 } = control(s1, [])
-    expect(s1.frame.bonusActions).not.toContain('USE')
+    expect(s1.frame!.bonusActions).not.toContain('USE')
     expect(c2.completion).not.toContain('USE') // because it was already used!
   })
 })

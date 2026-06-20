@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/cloisterLibrary', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -82,7 +82,7 @@ describe('buildings/cloisterLibrary', () => {
   describe('cloisterLibrary', () => {
     it('supports a noop with empty strings', () => {
       const s1 = cloisterLibrary('')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 10,
         book: 10,
         meat: 0,
@@ -92,7 +92,7 @@ describe('buildings/cloisterLibrary', () => {
 
     it('supports a noop with no params', () => {
       const s1 = cloisterLibrary()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 10,
         book: 10,
         meat: 0,
@@ -102,7 +102,7 @@ describe('buildings/cloisterLibrary', () => {
 
     it('goes through a happy path', () => {
       const s1 = cloisterLibrary('PnPnPnBo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 7,
         book: 12,
         meat: 1,
@@ -112,7 +112,7 @@ describe('buildings/cloisterLibrary', () => {
 
     it('might only consume books', () => {
       const s1 = cloisterLibrary('Bo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 10,
         book: 9,
         meat: 1,
@@ -122,7 +122,7 @@ describe('buildings/cloisterLibrary', () => {
 
     it('maybe only makes books', () => {
       const s1 = cloisterLibrary('PnPn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 8,
         book: 12,
         meat: 0,
@@ -135,16 +135,16 @@ describe('buildings/cloisterLibrary', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             nickel: 1,
             penny: 0,
             book: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = cloisterLibrary('Ni')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         nickel: 0,
         penny: 0,
         book: 3,
@@ -156,10 +156,10 @@ describe('buildings/cloisterLibrary', () => {
     it('can make meat out of wine', () => {
       const s1 = {
         ...s0,
-        players: [{ ...s0.players[0], nickel: 0, penny: 0, wine: 1, book: 0, meat: 0 }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], nickel: 0, penny: 0, wine: 1, book: 0, meat: 0 }, ...s0.players!.slice(1)],
       }
       const s2 = cloisterLibrary('WnBo')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         nickel: 0,
         penny: 0,
         book: 0,
@@ -175,14 +175,14 @@ describe('buildings/cloisterLibrary', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 0,
             penny: 2,
             nickel: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -193,14 +193,14 @@ describe('buildings/cloisterLibrary', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 2,
             penny: 0,
             nickel: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -211,14 +211,14 @@ describe('buildings/cloisterLibrary', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 0,
             penny: 1,
             nickel: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -229,14 +229,14 @@ describe('buildings/cloisterLibrary', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             book: 0,
             penny: 6,
             nickel: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)

@@ -2,7 +2,7 @@ import { T, __, always, cond, curry, gte, identity, map, pipe, unnest, view } fr
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costEnergy, energyCostOptions, parseResourceParam } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { GameState } from '../types'
 
 export const fuelMerchant = (param = '') => {
   const inputs = parseResourceParam(param)
@@ -20,7 +20,7 @@ export const fuelMerchant = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       return unnest(

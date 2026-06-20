@@ -38,3 +38,5 @@ next-env.d.ts
 
 pnpm-workspace.yaml
 pnpm-lock.yaml
+# only pnpm-lock.yaml should be committed; npm install should not be run in this package
+package-lock.json

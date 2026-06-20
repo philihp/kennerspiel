@@ -93,14 +93,14 @@ import {
   winery,
   complete as completeBuilding,
 } from '../buildings'
-import { BuildingEnum, GameCommandEnum, GameStatePlaying, NextUseClergy, StateReducer, Tableau, Tile } from '../types'
+import { BuildingEnum, GameCommandEnum, GameState, NextUseClergy, StateReducer, Tableau, Tile } from '../types'
 import { activeLens, isPrior } from '../board/player'
 
 const checkIfUseCanHappen =
   (building?: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    if (state.frame.activePlayerIndex !== state.frame.currentPlayerIndex) return undefined
+    if (state.frame!.activePlayerIndex !== state.frame!.currentPlayerIndex) return undefined
 
     // try to consume bonusAction and mainAction first
     const usedAction = oncePerFrame(GameCommandEnum.USE)(state)
@@ -110,13 +110,13 @@ const checkIfUseCanHappen =
     // usableBuildings allows AND the building in question isn't in unusableBuildings
     if (building) {
       if (
-        state.frame.usableBuildings.includes(building) === true &&
-        state.frame.unusableBuildings.includes(building) === false &&
-        [NextUseClergy.Free, NextUseClergy.OnlyPrior].includes(state.frame.nextUse)
+        state.frame!.usableBuildings.includes(building) === true &&
+        state.frame!.unusableBuildings.includes(building) === false &&
+        [NextUseClergy.Free, NextUseClergy.OnlyPrior].includes(state.frame!.nextUse)
       ) {
         return state
       }
-    } else if (without(state.frame.unusableBuildings, state.frame.usableBuildings).length > 0) {
+    } else if (without(state.frame!.unusableBuildings, state.frame!.usableBuildings).length > 0) {
       return state
     }
 
@@ -130,7 +130,7 @@ const moveClergyTo =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    if (state.frame.bonusRoundPlacement) return moveClergyInBonusRoundTo(building)(state)
+    if (state.frame!.bonusRoundPlacement) return moveClergyInBonusRoundTo(building)(state)
     return moveClergyToOwnBuilding(building)(state)
   }
 
@@ -230,32 +230,32 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
   )
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] => {
-    const player = state.players[state.frame.activePlayerIndex]
+    const player = state.players![state.frame!.activePlayerIndex]
     return match<string[], string[]>(partial)
       .with([], () => {
         if (checkIfUseCanHappen()(state) === undefined) return []
         const hasClergyAvailable = view(activeLens(state), state).clergy?.length > 0
         const hasPriorAvailable = any(identity, map(isPrior, view(activeLens(state), state).clergy))
         if (
-          state.frame.bonusRoundPlacement === false &&
-          ((state.frame.nextUse === NextUseClergy.Any && !hasClergyAvailable) ||
-            (state.frame.nextUse === NextUseClergy.OnlyPrior && !hasPriorAvailable))
+          state.frame!.bonusRoundPlacement === false &&
+          ((state.frame!.nextUse === NextUseClergy.Any && !hasClergyAvailable) ||
+            (state.frame!.nextUse === NextUseClergy.OnlyPrior && !hasPriorAvailable))
         )
           return []
-        if (state.frame.neutralBuildingPhase && state.frame.nextUse !== NextUseClergy.Free) return []
+        if (state.frame!.neutralBuildingPhase && state.frame!.nextUse !== NextUseClergy.Free) return []
         return [GameCommandEnum.USE]
       })
       .with([GameCommandEnum.USE], () => {
-        if (!isEmpty(state.frame.usableBuildings)) return state.frame.usableBuildings
-        if (state.frame.bonusRoundPlacement) {
+        if (!isEmpty(state.frame!.usableBuildings)) return state.frame!.usableBuildings
+        if (state.frame!.bonusRoundPlacement) {
           return pipe(
             map<Tableau, Tile[][]>((player) => player.landscape),
             map(allBuiltBuildings),
             flatten,
             sortBy((s) => s.substring(1))
-          )(state.players)
+          )(state.players!)
         }
         return allVacantUsableBuildings(player.landscape)
       })

@@ -1,7 +1,7 @@
 import { always, any, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, withActivePlayer } from '../board/player'
-import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer, GameStatePlaying } from '../types'
+import { GameCommandCutPeatParams, Tile, BuildingEnum, GameCommandEnum, StateReducer, GameState } from '../types'
 import { standardSesourceGatheringAction, updateToken, withRondel } from '../board/rondel'
 import { checkNotBonusRound, oncePerFrame } from '../board/frame'
 import { moorLocations, moorLocationsForCol } from '../board/landscape'
@@ -47,7 +47,7 @@ export const cutPeat = ({ row, col, useJoker }: GameCommandCutPeatParams): State
   )
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] => {
     const player = view(activeLens(state), state)
     return (

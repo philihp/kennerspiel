@@ -2,7 +2,7 @@ import { always, curry, map, pipe, range, reverse, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, stringRepeater } from '../board/resource'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { GameState, ResourceEnum } from '../types'
 
 export const cloisterChurch = (param = '') => {
   const inputs = parseResourceParam(param)
@@ -16,7 +16,7 @@ export const cloisterChurch = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { bread = 0, wine = 0 } = view(activeLens(state), state)

@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/peatCoalKiln', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -88,16 +88,16 @@ describe('buildings/peatCoalKiln', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 0,
             penny: 0,
             peat: 5,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = peatCoalKiln('PtPt')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         peat: 3,
         coal: 3,
         penny: 1,
@@ -108,16 +108,16 @@ describe('buildings/peatCoalKiln', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 0,
             penny: 0,
             peat: 5,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = peatCoalKiln()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         peat: 5,
         coal: 1,
         penny: 1,
@@ -131,10 +131,10 @@ describe('buildings/peatCoalKiln', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             peat: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -145,10 +145,10 @@ describe('buildings/peatCoalKiln', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             peat: 3,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)

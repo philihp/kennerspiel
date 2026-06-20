@@ -5,7 +5,7 @@ import {
   Clergy,
   Frame,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('commands/withLaybrother', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -139,7 +139,7 @@ describe('commands/withLaybrother', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           // this is what the following command would do:
           // WORK_CONTRACT F05 Pn
           // because player 2 has both prior and laybrother available
@@ -155,7 +155,7 @@ describe('commands/withLaybrother', () => {
         nextUse: 'free',
         usableBuildings: ['F05'],
       })
-      expect(s2.players[2]).toMatchObject({
+      expect(s2.players![2]).toMatchObject({
         clergy: ['LB2G', 'PRIG'],
         landscape: [
           [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P', 'F05', 'LB1G'], ['H', 'LG1'], [], []],
@@ -168,7 +168,7 @@ describe('commands/withLaybrother', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: false,
           activePlayerIndex: 0,
           currentPlayerInde: 0,
@@ -182,7 +182,7 @@ describe('commands/withLaybrother', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           usableBuildings: ['G01', 'G02'] as BuildingEnum[],
         },
       }
@@ -194,7 +194,7 @@ describe('commands/withLaybrother', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           usableBuildings: [],
         },
       }
@@ -208,7 +208,7 @@ describe('commands/withLaybrother', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 1,
           currentPlayerIndex: 2,
         },
@@ -220,7 +220,7 @@ describe('commands/withLaybrother', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 2,
           currentPlayerIndex: 2,
         },

@@ -1,16 +1,16 @@
 import { always, pipe } from 'ramda'
 import { match } from 'ts-pattern'
 import { nextFrame } from '../board/frame'
-import { GameCommandEnum, GameStatePlaying, StateReducer } from '../types'
+import { GameCommandEnum, GameState, StateReducer } from '../types'
 
 const checkCanCommit: StateReducer = (state) => {
   if (state === undefined) return state
-  if (state.frame.currentPlayerIndex !== state.frame.activePlayerIndex) return undefined
-  if (state.frame.neutralBuildingPhase) {
-    if (state.buildings.length !== 0) return undefined
+  if (state.frame!.currentPlayerIndex !== state.frame!.activePlayerIndex) return undefined
+  if (state.frame!.neutralBuildingPhase) {
+    if (state.buildings!.length !== 0) return undefined
     return state
   }
-  if (state.frame.mainActionUsed) return state
+  if (state.frame!.mainActionUsed) return state
   return undefined
 }
 
@@ -21,7 +21,7 @@ export const commit: StateReducer = pipe(
 )
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] => {
     return match<string[], string[]>(partial)
       .with([], () => {

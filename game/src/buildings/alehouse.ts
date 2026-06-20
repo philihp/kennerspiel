@@ -2,7 +2,7 @@ import { always, curry, lift, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { concatStr, parseResourceParam, resourceArray } from '../board/resource'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { GameState, ResourceEnum } from '../types'
 
 export const alehouse = (input = '') => {
   const { beer = 0, whiskey = 0 } = parseResourceParam(input)
@@ -19,7 +19,7 @@ export const alehouse = (input = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { beer = 0, whiskey = 0 } = view(activeLens(state), state)

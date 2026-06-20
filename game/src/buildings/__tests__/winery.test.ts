@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/winery', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,7 +82,7 @@ describe('buildings/winery', () => {
   describe('winery', () => {
     it('goes through a happy path', () => {
       const s1 = winery('GpGpGpWn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grape: 7,
         wine: 12,
         nickel: 1,
@@ -93,11 +93,11 @@ describe('buildings/winery', () => {
     it('convert to wine then immediately to grape', () => {
       const s1 = {
         ...s0,
-        players: [{ ...s0.players[0], grape: 1, wine: 0, penny: 0, nickel: 0 }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], grape: 1, wine: 0, penny: 0, nickel: 0 }, ...s0.players!.slice(1)],
       }
 
       const s2 = winery('GpWn')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grape: 0,
         wine: 0,
         penny: 2,
@@ -108,10 +108,10 @@ describe('buildings/winery', () => {
     it('can skip grape part', () => {
       const s1 = {
         ...s0,
-        players: [{ ...s0.players[0], grape: 0, wine: 1, penny: 0, nickel: 0 }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], grape: 0, wine: 1, penny: 0, nickel: 0 }, ...s0.players!.slice(1)],
       }
       const s2 = winery('Wn')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         wine: 0,
         penny: 2,
         nickel: 1,
@@ -121,10 +121,10 @@ describe('buildings/winery', () => {
     it('can have a noop', () => {
       const s1 = {
         ...s0,
-        players: [{ ...s0.players[0], grape: 0, wine: 0, penny: 0, nickel: 0 }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], grape: 0, wine: 0, penny: 0, nickel: 0 }, ...s0.players!.slice(1)],
       }
       const s2 = winery()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         wine: 0,
         penny: 0,
         nickel: 0,
@@ -138,11 +138,11 @@ describe('buildings/winery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grape: 0,
             wine: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -153,11 +153,11 @@ describe('buildings/winery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grape: 0,
             wine: 3,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -168,11 +168,11 @@ describe('buildings/winery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grape: 5,
             wine: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)

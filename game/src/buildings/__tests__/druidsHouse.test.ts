@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../testHelpers'
-import { GameStatePlaying, Tableau } from '../../types'
+import { GameState, Tableau } from '../../types'
 import { druidsHouse, complete } from '../druidsHouse'
 
 describe('buildings/druidsHouse', () => {
@@ -32,12 +32,12 @@ describe('buildings/druidsHouse', () => {
       activePlayerIndex: 0,
     },
     players: [{ ...p0 }],
-  } as GameStatePlaying
+  } as GameState
 
   describe('druidsHouse', () => {
     it('works as normal', () => {
       const s1 = druidsHouse('Bo', 'WoWoWoWoWoPtPtPt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 0,
         wood: 5,
         peat: 3,

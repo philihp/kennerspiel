@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../../testHelpers'
 import { assocPath } from 'ramda'
 import { control } from '../../../control'
-import { Frame, GameCommandConfigParams, GameStatePlaying, GameStatusEnum, PlayerColor, Tableau } from '../../../types'
+import { Frame, GameCommandConfigParams, GameState, GameStatusEnum, PlayerColor, Tableau } from '../../../types'
 import { nextFrame } from '../../frame'
 import { initialState } from '../../..'
 import { nextFrameSolo } from '../nextFrameSolo'
@@ -43,7 +43,7 @@ describe('board/frame/nextFrameSolo', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s1: GameStatePlaying = {
+  const s1: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: c1,
@@ -60,7 +60,7 @@ describe('board/frame/nextFrameSolo', () => {
       round: 1,
       next: 2,
     } as Frame,
-  } as GameStatePlaying
+  } as GameState
 
   it('gives a nice flow', () => {
     const s2 = control(s1, ['CONVERT'])
@@ -138,7 +138,7 @@ describe('board/frame/nextFrameSolo', () => {
       ...s1,
       players: [
         {
-          ...s1.players[0],
+          ...s1.players![0],
           color: PlayerColor.Red,
           landscape: [
             [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1', 'PRIR'], [], []],
@@ -147,7 +147,7 @@ describe('board/frame/nextFrameSolo', () => {
           clergy: [],
         },
         {
-          ...s1.players[1],
+          ...s1.players![1],
           color: PlayerColor.Blue,
           landscape: [
             [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LB1', 'PRIB'], [], []],
@@ -156,27 +156,27 @@ describe('board/frame/nextFrameSolo', () => {
           clergy: [],
         },
       ],
-    } as GameStatePlaying
+    } as GameState
 
     it('returns clergy home before settlement A', () => {
       const s3 = {
         ...s2,
         frame: {
-          ...s2.frame,
+          ...s2.frame!,
           next: 23,
         },
       }
       expect(nextFrameSolo[s3.frame.next].upkeep).toContain(returnClergyIfPlaced)
       const s4 = nextFrame(s3)
       expect(s4).toBeDefined()
-      expect(s4!.players[0]).toMatchObject({
+      expect(s4!.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
           [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['H', 'LR3'], [], []],
         ],
         clergy: ['LB1R', 'LB2R', 'PRIR'],
       })
-      expect(s4!.players[1]).toMatchObject({
+      expect(s4!.players![1]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
           [[], [], ['P'], ['P'], ['P', 'LB2'], ['P'], ['H', 'LB3'], [], []],
@@ -189,21 +189,21 @@ describe('board/frame/nextFrameSolo', () => {
       const s3 = {
         ...s2,
         frame: {
-          ...s2.frame,
+          ...s2.frame!,
           next: 32,
         },
       }
       expect(nextFrameSolo[s3.frame.next].upkeep).toContain(returnClergyIfPlaced)
       const s4 = nextFrame(s3)
       expect(s4).toBeDefined()
-      expect(s4!.players[0]).toMatchObject({
+      expect(s4!.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
           [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['H', 'LR3'], [], []],
         ],
         clergy: ['LB1R', 'LB2R', 'PRIR'],
       })
-      expect(s4!.players[1]).toMatchObject({
+      expect(s4!.players![1]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
           [[], [], ['P'], ['P'], ['P', 'LB2'], ['P'], ['H', 'LB3'], [], []],
@@ -216,21 +216,21 @@ describe('board/frame/nextFrameSolo', () => {
       const s3 = {
         ...s2,
         frame: {
-          ...s2.frame,
+          ...s2.frame!,
           next: 45,
         },
       }
       expect(nextFrameSolo[s3.frame.next].upkeep).toContain(returnClergyIfPlaced)
       const s4 = nextFrame(s3)
       expect(s4).toBeDefined()
-      expect(s4!.players[0]).toMatchObject({
+      expect(s4!.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
           [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['H', 'LR3'], [], []],
         ],
         clergy: ['LB1R', 'LB2R', 'PRIR'],
       })
-      expect(s4!.players[1]).toMatchObject({
+      expect(s4!.players![1]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
           [[], [], ['P'], ['P'], ['P', 'LB2'], ['P'], ['H', 'LB3'], [], []],
@@ -243,21 +243,21 @@ describe('board/frame/nextFrameSolo', () => {
       const s3 = {
         ...s2,
         frame: {
-          ...s2.frame,
+          ...s2.frame!,
           next: 55,
         },
       }
       expect(nextFrameSolo[s3.frame.next].upkeep).toContain(returnClergyIfPlaced)
       const s4 = nextFrame(s3)
       expect(s4).toBeDefined()
-      expect(s4!.players[0]).toMatchObject({
+      expect(s4!.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
           [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['H', 'LR3'], [], []],
         ],
         clergy: ['LB1R', 'LB2R', 'PRIR'],
       })
-      expect(s4!.players[1]).toMatchObject({
+      expect(s4!.players![1]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
           [[], [], ['P'], ['P'], ['P', 'LB2'], ['P'], ['H', 'LB3'], [], []],

@@ -1,7 +1,7 @@
 import { always, curry } from 'ramda'
 import { match } from 'ts-pattern'
 import { getCost, withActivePlayer } from '../board/player'
-import { GameStatePlaying } from '../types'
+import { GameState } from '../types'
 
 export const harborPromenade = () =>
   withActivePlayer(
@@ -13,7 +13,7 @@ export const harborPromenade = () =>
     })
   )
 
-export const complete = curry((partial: string[], _state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], _state: GameState): string[] =>
   match(partial)
     .with([], always(['']))
     .otherwise(always([]))

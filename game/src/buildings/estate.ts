@@ -9,7 +9,7 @@ import {
   foodCostOptions,
   parseResourceParam,
 } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { GameState } from '../types'
 
 export const estate = (param = '') => {
   const input = parseResourceParam(param)
@@ -23,7 +23,7 @@ export const estate = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

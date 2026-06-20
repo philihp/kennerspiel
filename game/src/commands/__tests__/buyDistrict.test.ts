@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('commands/buyDistrict', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -81,7 +81,7 @@ describe('commands/buyDistrict', () => {
   }
 
   it('can buyDistrict to top', () => {
-    expect(s0.players[0]).toMatchObject({
+    expect(s0.players![0]).toMatchObject({
       nickel: 1,
       penny: 0,
       landscapeOffset: 0,
@@ -97,7 +97,7 @@ describe('commands/buyDistrict', () => {
       },
       districtPurchasePrices: [3, 4, 4, 5, 5, 6, 7, 8],
     })
-    expect(s1.players[0]).toMatchObject({
+    expect(s1.players![0]).toMatchObject({
       penny: 3,
       landscapeOffset: 1,
       landscape: [
@@ -110,7 +110,7 @@ describe('commands/buyDistrict', () => {
 
   describe('buyDistrict', () => {
     it('fails if overlapping', () => {
-      expect(s0.players[0]).toMatchObject({
+      expect(s0.players![0]).toMatchObject({
         nickel: 1,
         penny: 0,
         landscapeOffset: 0,
@@ -124,7 +124,7 @@ describe('commands/buyDistrict', () => {
     })
 
     it('fails if no connection', () => {
-      expect(s0.players[0]).toMatchObject({
+      expect(s0.players![0]).toMatchObject({
         nickel: 1,
         penny: 0,
         landscapeOffset: 0,
@@ -161,7 +161,7 @@ describe('commands/buyDistrict', () => {
         },
         districtPurchasePrices: [3, 4, 4, 5, 5, 6, 7, 8],
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 3,
         landscapeOffset: 0,
         landscape: [
@@ -173,11 +173,11 @@ describe('commands/buyDistrict', () => {
     })
 
     it('can buy a district with a gap', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LR1'], [], []],
               [['W'], ['C'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
@@ -185,7 +185,7 @@ describe('commands/buyDistrict', () => {
               [['W'], ['C'], [], [], [], [], [], [], []],
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = buyDistrict({ side: 'PLAINS', y: 3 })(s1)!
@@ -195,7 +195,7 @@ describe('commands/buyDistrict', () => {
         },
         districtPurchasePrices: [3, 4, 4, 5, 5, 6, 7, 8],
       })
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 3,
         landscapeOffset: 0,
         landscape: [
@@ -211,17 +211,17 @@ describe('commands/buyDistrict', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: false,
           bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
         },
       }
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         nickel: 1,
         penny: 0,
       })
       const s2 = buyDistrict({ side: 'PLAINS', y: 2 })(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         nickel: 1,
         penny: 0,
         landscape: [
@@ -236,7 +236,7 @@ describe('commands/buyDistrict', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
         },
@@ -255,7 +255,7 @@ describe('commands/buyDistrict', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: false,
           bonusActions: [],
         },
@@ -270,7 +270,7 @@ describe('commands/buyDistrict', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
         },
       }
@@ -281,7 +281,7 @@ describe('commands/buyDistrict', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: false,
         },
       }
@@ -292,7 +292,7 @@ describe('commands/buyDistrict', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: false,
           bonusActions: [GameCommandEnum.BUY_DISTRICT],
         },
@@ -305,16 +305,16 @@ describe('commands/buyDistrict', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             nickel: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
         },
       }
@@ -326,16 +326,16 @@ describe('commands/buyDistrict', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             nickel: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: false,
           bonusActions: [GameCommandEnum.BUY_DISTRICT],
         },
@@ -348,16 +348,16 @@ describe('commands/buyDistrict', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             nickel: 1,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_DISTRICT],
         },
@@ -371,7 +371,7 @@ describe('commands/buyDistrict', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscapeOffset: 2,
             landscape: [
               [['W'], ['C'], ['P'], ['P'], ['P'], ['H'], ['H'], ['H'], ['M']],
@@ -383,10 +383,10 @@ describe('commands/buyDistrict', () => {
             ] as Tile[][],
             nickel: 5,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
         },
         districtPurchasePrices: [],

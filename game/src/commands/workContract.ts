@@ -34,7 +34,7 @@ import {
   Cost,
   Frame,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   NextUseClergy,
   SettlementRound,
   StateReducer,
@@ -42,21 +42,21 @@ import {
 } from '../types'
 import { isSettlement } from '../board/buildings'
 
-const workContractCost = (state: GameStatePlaying | undefined): number =>
+const workContractCost = (state: GameState | undefined): number =>
   state?.frame?.settlementRound === SettlementRound.S ||
   state?.frame?.settlementRound === SettlementRound.A ||
   (state?.config?.players === 1 &&
     state?.frame?.settlementRound === SettlementRound.B &&
     state.frame.neutralBuildingPhase) ||
-  state?.buildings.includes(BuildingEnum.WhiskeyDistillery) ||
-  state?.buildings.includes(BuildingEnum.Winery)
+  state?.buildings!.includes(BuildingEnum.WhiskeyDistillery) ||
+  state?.buildings!.includes(BuildingEnum.Winery)
     ? 1
     : 2
 
 const checkWithPriorOnlyOnSinglePlayer =
   (withPrior: boolean): StateReducer =>
   (state) => {
-    if (withPrior && state?.config.players !== 1) return undefined
+    if (withPrior && state?.config!.players !== 1) return undefined
     return state
   }
 
@@ -74,14 +74,14 @@ const transferActiveToOwnerOf =
   (building: BuildingEnum): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    if (state.config.players === 1) {
-      return findBuildingWithoutOffset(building)(state.players[1].landscape) ? state : undefined
+    if (state.config!.players === 1) {
+      return findBuildingWithoutOffset(building)(state.players![1].landscape) ? state : undefined
     }
 
     // this makes it so we dont look at the current player's landscape... prevent work contract on yourself
-    const playerIndexes = without<number>([state.frame.activePlayerIndex], range(0, state.config.players))
+    const playerIndexes = without<number>([state.frame!.activePlayerIndex], range(0, state.config!.players))
     const foundWithPlayer = find(
-      (i) => !!findBuildingWithoutOffset(building)(state.players[i].landscape),
+      (i) => !!findBuildingWithoutOffset(building)(state.players![i].landscape),
       playerIndexes
     )
     if (foundWithPlayer === undefined) return undefined
@@ -91,7 +91,7 @@ const transferActiveToOwnerOf =
 const checkModalPlayerBuildingUnoccupied =
   (building: BuildingEnum): StateReducer =>
   (state) => {
-    const whichPlayer = state?.config?.players === 1 ? 1 : state?.frame.activePlayerIndex ?? 0
+    const whichPlayer = state?.config?.players === 1 ? 1 : state?.frame!.activePlayerIndex ?? 0
     return withPlayerIndex(whichPlayer)((player) => {
       const location = findBuildingWithoutOffset(building)(player.landscape)
       // should not actually ever get this
@@ -107,12 +107,12 @@ const checkModalPlayerHasPriorOption =
   (building: BuildingEnum, withPrior: boolean): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    const { clergy } = state.players[state.config.players === 1 ? 1 : state.frame.activePlayerIndex]
+    const { clergy } = state.players![state.config!.players === 1 ? 1 : state.frame!.activePlayerIndex]
 
     // if theyre trying to work contract someone with no people, stop it all right here
     if (clergy.length === 0) return undefined
 
-    if (state.config.players === 1) {
+    if (state.config!.players === 1) {
       return pipe(
         //
         moveClergyToNeutralBuilding(building, withPrior),
@@ -141,8 +141,8 @@ export const workContract = (building: BuildingEnum, paymentGift: string, withPr
     // Only allow if mainAction not consumed, and consume it
     (state) => {
       if (
-        state?.frame.neutralBuildingPhase &&
-        state?.buildings.length === 0 &&
+        state?.frame!.neutralBuildingPhase &&
+        state?.buildings!.length === 0 &&
         state?.frame?.nextUse === NextUseClergy.OnlyPrior
       )
         return state
@@ -176,17 +176,17 @@ export const workContract = (building: BuildingEnum, paymentGift: string, withPr
 }
 
 export const complete =
-  (state: GameStatePlaying) =>
+  (state: GameState) =>
   (partial: string[]): string[] =>
     match<string[], string[]>(partial)
       .with([], () => {
         if (
-          !state.frame.bonusActions.includes(GameCommandEnum.WORK_CONTRACT) &&
-          state.frame.mainActionUsed &&
+          !state.frame!.bonusActions.includes(GameCommandEnum.WORK_CONTRACT) &&
+          state.frame!.mainActionUsed &&
           !(
-            state.frame.neutralBuildingPhase === true &&
-            state.buildings.length === 0 &&
-            state.frame.nextUse === NextUseClergy.OnlyPrior &&
+            state.frame!.neutralBuildingPhase === true &&
+            state.buildings!.length === 0 &&
+            state.frame!.nextUse === NextUseClergy.OnlyPrior &&
             any(isPrior, state?.players?.[1]?.clergy ?? [])
           )
         )
@@ -202,7 +202,7 @@ export const complete =
               player === activePlayer ||
               //
               player.clergy.length === 0,
-            state.players
+            state.players!
           )
         )
           return []
@@ -211,11 +211,11 @@ export const complete =
         return [GameCommandEnum.WORK_CONTRACT]
       })
       .with([GameCommandEnum.WORK_CONTRACT], () => {
-        if (state.frame.neutralBuildingPhase) return state.frame.usableBuildings
+        if (state.frame!.neutralBuildingPhase) return state.frame!.usableBuildings
         return reduce<number, BuildingEnum[]>(
           (accum: BuildingEnum[], i: number) => {
-            if (state.frame.activePlayerIndex === i) return accum
-            const player = state.players[i]
+            if (state.frame!.activePlayerIndex === i) return accum
+            const player = state.players![i]
             if (player.clergy.length === 0) return accum
             forEach<Tile[]>(
               forEach((landStack: Tile) => {
@@ -232,7 +232,7 @@ export const complete =
             return accum
           },
           [] as BuildingEnum[],
-          range(0, state.players.length)
+          range(0, state.players!.length)
         )
       })
       .with([GameCommandEnum.WORK_CONTRACT, P._], () => {
@@ -246,9 +246,9 @@ export const complete =
       })
       .with([GameCommandEnum.WORK_CONTRACT, P._, P._], () => {
         if (
-          state.config.players === 1 &&
-          any(isPrior, state.players[1].clergy) &&
-          any(isLayBrother, state.players[1].clergy)
+          state.config!.players === 1 &&
+          any(isPrior, state.players![1].clergy) &&
+          any(isLayBrother, state.players![1].clergy)
         )
           return ['', 'WITH_PRIOR']
         return ['']

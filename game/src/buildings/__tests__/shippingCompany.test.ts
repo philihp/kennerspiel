@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   BuildingEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('buildings/shippingCompany', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -95,7 +95,7 @@ describe('buildings/shippingCompany', () => {
     })
     it('burns wood and makes meat', () => {
       const s1 = shippingCompany('WoWoWoMt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         meat: 3,
         wood: 7,
       })
@@ -106,14 +106,14 @@ describe('buildings/shippingCompany', () => {
     })
     it('burns peat and makes bread', () => {
       const s1 = shippingCompany('PtPtBr')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         peat: 8,
         bread: 3,
       })
     })
     it('burns coal and makes wine', () => {
       const s1 = shippingCompany('CoWn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         coal: 9,
         wine: 3,
       })
@@ -126,27 +126,27 @@ describe('buildings/shippingCompany', () => {
       const s1 = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
-      } as GameStatePlaying
+      } as GameState
       it('gives bonus wine', () => {
         const s2 = shippingCompany('CoWn')(s1)
-        expect(s2?.players.map((p) => p.wine)).toStrictEqual([4, 1, 1])
-        expect(s2?.players.map((p) => p.meat)).toStrictEqual([0, 0, 0])
-        expect(s2?.players.map((p) => p.bread)).toStrictEqual([0, 0, 0])
+        expect(s2?.players!.map((p) => p.wine)).toStrictEqual([4, 1, 1])
+        expect(s2?.players!.map((p) => p.meat)).toStrictEqual([0, 0, 0])
+        expect(s2?.players!.map((p) => p.bread)).toStrictEqual([0, 0, 0])
       })
       it('gives bonus meat', () => {
         const s2 = shippingCompany('CoMt')(s1)
-        expect(s2?.players.map((p) => p.wine)).toStrictEqual([0, 0, 0])
-        expect(s2?.players.map((p) => p.meat)).toStrictEqual([4, 1, 1])
-        expect(s2?.players.map((p) => p.bread)).toStrictEqual([0, 0, 0])
+        expect(s2?.players!.map((p) => p.wine)).toStrictEqual([0, 0, 0])
+        expect(s2?.players!.map((p) => p.meat)).toStrictEqual([4, 1, 1])
+        expect(s2?.players!.map((p) => p.bread)).toStrictEqual([0, 0, 0])
       })
       it('gives bonus bread', () => {
         const s2 = shippingCompany('CoBr')(s1)
-        expect(s2?.players.map((p) => p.wine)).toStrictEqual([0, 0, 0])
-        expect(s2?.players.map((p) => p.meat)).toStrictEqual([0, 0, 0])
-        expect(s2?.players.map((p) => p.bread)).toStrictEqual([4, 1, 1])
+        expect(s2?.players!.map((p) => p.wine)).toStrictEqual([0, 0, 0])
+        expect(s2?.players!.map((p) => p.meat)).toStrictEqual([0, 0, 0])
+        expect(s2?.players!.map((p) => p.bread)).toStrictEqual([4, 1, 1])
       })
     })
   })
@@ -157,14 +157,14 @@ describe('buildings/shippingCompany', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             peat: 0,
             wood: 0,
             coal: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })
@@ -173,14 +173,14 @@ describe('buildings/shippingCompany', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             peat: 0,
             wood: 0,
             coal: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['MtCo', 'BrCo', 'WnCo', ''])
     })
@@ -189,14 +189,14 @@ describe('buildings/shippingCompany', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             peat: 1,
             wood: 1,
             coal: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['MtCo', 'MtPtWo', 'BrCo', 'BrPtWo', 'WnCo', 'WnPtWo', ''])
     })

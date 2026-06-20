@@ -3,7 +3,7 @@ import { initialState } from '../../state'
 import {
   BuildingEnum,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -48,7 +48,7 @@ describe('board/frame', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -99,22 +99,22 @@ describe('board/frame', () => {
 
   describe('oncePerFrame', () => {
     it('consumes the main action if still true', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: false,
         },
       }
       const s2 = oncePerFrame(GameCommandEnum.FELL_TREES)(s1)!
       expect(s2).toBeDefined()
-      expect(s2.frame.mainActionUsed).toBeTruthy()
+      expect(s2.frame!.mainActionUsed).toBeTruthy()
     })
     it('removes command from bonus actions', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           // this could result from using the Calefactory,
           // or the Bulwark in the case of buying landscape
@@ -124,29 +124,29 @@ describe('board/frame', () => {
       }
       const s2 = oncePerFrame(GameCommandEnum.FELL_TREES)(s1)!
       expect(s2).toBeDefined()
-      expect(s2.frame.bonusActions).toStrictEqual([GameCommandEnum.CUT_PEAT])
+      expect(s2.frame!.bonusActions).toStrictEqual([GameCommandEnum.CUT_PEAT])
     })
     it('prefer to use mainAction, if it is available', () => {
       // hard to imagine a situation where this happens, but if it does, i want to
       // assume that the bonusAction will be consumed first
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: false,
           bonusActions: [GameCommandEnum.BUILD],
         },
       }
       const s2 = oncePerFrame(GameCommandEnum.BUILD)(s1)!
       expect(s2).toBeDefined()
-      expect(s2.frame.mainActionUsed).toBeFalsy()
-      expect(s2.frame.bonusActions).toStrictEqual([])
+      expect(s2.frame!.mainActionUsed).toBeFalsy()
+      expect(s2.frame!.bonusActions).toStrictEqual([])
     })
     it('only removes one copy of the command', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           // this is a bit of future proofing, since no existing buildings would
           // give you a way of getting multiple bonus runs of the same command, but
@@ -157,15 +157,15 @@ describe('board/frame', () => {
       }
       const s2 = oncePerFrame(GameCommandEnum.BUILD)(s1)!
       expect(s2).toBeDefined()
-      expect(s2.frame.bonusActions).toHaveLength(2)
-      expect(s2.frame.bonusActions).toContain(GameCommandEnum.BUILD)
-      expect(s2.frame.bonusActions).toContain(GameCommandEnum.CUT_PEAT)
+      expect(s2.frame!.bonusActions).toHaveLength(2)
+      expect(s2.frame!.bonusActions).toContain(GameCommandEnum.BUILD)
+      expect(s2.frame!.bonusActions).toContain(GameCommandEnum.CUT_PEAT)
     })
   })
 
   describe('nextFrame', () => {
     describe('3 player long', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         config: {
           country: 'france',
@@ -1168,20 +1168,20 @@ describe('board/frame', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P'], ['P', 'LPE'], ['P', 'LFO'], ['P', 'G01'], ['P'], ['H', 'F10'], ['M']],
               [[], [], ['P'], ['P', 'SB1'], ['P', 'F09'], ['P', 'F03'], ['H'], ['H', 'F05'], ['.']],
               [[], [], ['P'], ['P', 'LFO'], ['P', 'F04'], ['P', 'LFO'], ['P'], [], []],
             ],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = allowFreeUsageToNeighborsOf(BuildingEnum.CloisterGarden)(s1)!
-      expect(s2.frame.usableBuildings).toHaveLength(2)
-      expect(s2.frame.usableBuildings).toContain('F03')
-      expect(s2.frame.usableBuildings).toContain('F04')
+      expect(s2.frame!.usableBuildings).toHaveLength(2)
+      expect(s2.frame!.usableBuildings).toContain('F03')
+      expect(s2.frame!.usableBuildings).toContain('F04')
     })
   })
 })

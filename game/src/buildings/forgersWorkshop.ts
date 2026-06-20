@@ -2,7 +2,7 @@ import { always, curry, map, pipe, reverse, unnest, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { coinCostOptions, costMoney, parseResourceParam } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { GameState } from '../types'
 
 export const forgersWorkshop = (param = '') => {
   const input = parseResourceParam(param)
@@ -17,7 +17,7 @@ export const forgersWorkshop = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

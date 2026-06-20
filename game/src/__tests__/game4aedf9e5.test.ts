@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../testHelpers'
 import { reducer } from '../reducer'
 import { initialState } from '../state'
-import { GameState, GameStatePlaying } from '../types'
+import { GameState } from '../types'
 import { control } from '../control'
 import { map, reduce, split } from 'ramda'
 
@@ -289,13 +289,13 @@ describe('game 4aedf9e5', () => {
       'USE F40',
     ])
 
-    const sN = reduce<string[], GameState>((state, move) => reducer(state, move)!, s0, moves) as GameStatePlaying
+    const sN = reduce<string[], GameState | undefined>((state, move) => state !== undefined ? reducer(state, move) : undefined, s0, moves)
     expect(sN).toBeDefined()
 
-    const cTop = control(sN, [])
+    const cTop = control(sN!, [])
     expect(cTop.completion).toContain('USE')
 
-    const cUse = control(sN, ['USE'])
+    const cUse = control(sN!, ['USE'])
     expect(cUse.completion).toStrictEqual([
       'G06',
       'F11',
@@ -313,10 +313,10 @@ describe('game 4aedf9e5', () => {
       'G41',
     ])
 
-    const cG41 = control(sN, ['USE', 'G41'])
+    const cG41 = control(sN!, ['USE', 'G41'])
     expect(cG41.completion).toStrictEqual(['Ni', ''])
 
-    const cNi = control(sN, ['USE', 'G41', 'Ni'])
+    const cNi = control(sN!, ['USE', 'G41', 'Ni'])
     expect(cG41.completion).not.toStrictEqual([])
 
     // // And the reducer rejects USE G41 from this state because G41 isn't freely usable.

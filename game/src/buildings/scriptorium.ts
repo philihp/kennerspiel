@@ -2,7 +2,7 @@ import { always, curry, evolve, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { GameState } from '../types'
 
 export const scriptorium = (pennies = '') => {
   const input = parseResourceParam(pennies)
@@ -19,7 +19,7 @@ export const scriptorium = (pennies = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const outputs: string[] = []

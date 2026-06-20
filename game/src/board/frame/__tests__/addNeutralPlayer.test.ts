@@ -3,7 +3,7 @@ import { createPcg32 } from 'pcg'
 import { initialState } from '../../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -48,7 +48,7 @@ describe('board/frame/addNeutralPlayer', () => {
       beer: 0,
       reliquary: 0,
     }
-    const s0: GameStatePlaying = {
+    const s0: GameState = {
       ...initialState,
       randGen: createPcg32({}, 42, 1),
       status: GameStatusEnum.PLAYING,
@@ -91,11 +91,11 @@ describe('board/frame/addNeutralPlayer', () => {
 
     it('creates appropriate landscapes', () => {
       const s1 = addNeutralPlayer(s0)!
-      expect(s1.players[0].landscape).toStrictEqual([
+      expect(s1.players![0].landscape).toStrictEqual([
         [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
         [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
       ])
-      expect(s1.players[1].landscape).toStrictEqual([
+      expect(s1.players![1].landscape).toStrictEqual([
         [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['H', 'LR1'], [], []],
         [[], [], ['P'], ['P'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
       ])
@@ -103,8 +103,8 @@ describe('board/frame/addNeutralPlayer', () => {
 
     it('creates appropriate clergy', () => {
       const s1 = addNeutralPlayer(s0)!
-      expect(s1.players[0].clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
-      expect(s1.players[1].clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
+      expect(s1.players![0].clergy).toStrictEqual(['LB1B', 'LB2B', 'PRIB'])
+      expect(s1.players![1].clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
     })
   })
 })

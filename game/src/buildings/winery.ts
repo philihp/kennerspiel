@@ -2,7 +2,7 @@ import { add, always, ap, curry, map, min, pipe, range, reverse, unnest, view } 
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, resourceArray, stringRepeater } from '../board/resource'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { GameState, ResourceEnum } from '../types'
 
 export const winery = (input = '') => {
   const { wine = 0, grape = 0 } = parseResourceParam(input)
@@ -20,7 +20,7 @@ export const winery = (input = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

@@ -3,7 +3,7 @@ import { P, match } from 'ts-pattern'
 import { activeLens, getWonder, payCost, withActivePlayer } from '../board/player'
 import { coinCostOptions, costPoints, parseResourceParam, pointCostOptions } from '../board/resource'
 import { removeWonder } from '../board/state'
-import { CostReducer, GameStatePlaying, ResourceEnum } from '../types'
+import { CostReducer, GameState, ResourceEnum } from '../types'
 
 const removeWhiskey: CostReducer = (cost) => {
   if (!cost) return undefined
@@ -49,7 +49,7 @@ export const roundTower = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

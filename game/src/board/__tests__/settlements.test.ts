@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -151,7 +151,7 @@ describe('board/settlements', () => {
       beer: 0,
       reliquary: 0,
     }
-    const s0: GameStatePlaying = {
+    const s0: GameState = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
       config: {
@@ -192,8 +192,8 @@ describe('board/settlements', () => {
 
     it('adds some settlements', () => {
       const s1 = introduceSettlements(s0)!
-      expect(s0.players[0].settlements).toHaveLength(0)
-      expect(s1.players[0].settlements).not.toHaveLength(0)
+      expect(s0.players![0].settlements).toHaveLength(0)
+      expect(s1.players![0].settlements).not.toHaveLength(0)
     })
   })
 })

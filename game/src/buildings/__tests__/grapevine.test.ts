@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { dissocPath } from 'ramda'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('buildings/grapevine', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -90,7 +90,7 @@ describe('buildings/grapevine', () => {
         joker: 2,
         grape: 3,
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grape: 3,
       })
     })
@@ -99,14 +99,14 @@ describe('buildings/grapevine', () => {
       const s1 = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
-      } as GameStatePlaying
+      } as GameState
       const s2 = grapevine()(s1)!
-      expect(s2.players[0].grape).toBe(4)
-      expect(s2.players[1].grape).toBe(1)
-      expect(s2.players[2].grape).toBe(1)
+      expect(s2.players![0].grape).toBe(4)
+      expect(s2.players![1].grape).toBe(1)
+      expect(s2.players![2].grape).toBe(1)
     })
 
     it('can use the joker', () => {
@@ -116,7 +116,7 @@ describe('buildings/grapevine', () => {
         joker: 3,
         grape: 1,
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         grape: 2,
       })
     })
@@ -125,14 +125,14 @@ describe('buildings/grapevine', () => {
       const s1 = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
-      } as GameStatePlaying
+      } as GameState
       const s2 = grapevine('Jo')(s1)!
-      expect(s2.players[0].grape).toBe(3)
-      expect(s2.players[1].grape).toBe(1)
-      expect(s2.players[2].grape).toBe(1)
+      expect(s2.players![0].grape).toBe(3)
+      expect(s2.players![1].grape).toBe(1)
+      expect(s2.players![2].grape).toBe(1)
     })
   })
 
@@ -142,7 +142,7 @@ describe('buildings/grapevine', () => {
       expect(c0).toStrictEqual(['', 'Jo'])
     })
     it('does not allow Joker if undefined', () => {
-      const s1 = dissocPath<GameStatePlaying>(['rondel', 'joker'], s0)
+      const s1 = dissocPath<GameState>(['rondel', 'joker'], s0)
       const c1 = complete([])(s1)
       expect(c1).not.toContain('Jo')
     })

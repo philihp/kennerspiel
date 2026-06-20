@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/windmill', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -80,7 +80,7 @@ describe('buildings/windmill', () => {
   }
   describe('windmill', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = windmill()(s0)
       expect(s1).toBeUndefined()
     })
@@ -89,16 +89,16 @@ describe('buildings/windmill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 5,
             flour: 0,
             straw: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = windmill('GnGnGn')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         grain: 2,
         flour: 3,
         straw: 4,
@@ -112,10 +112,10 @@ describe('buildings/windmill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -126,10 +126,10 @@ describe('buildings/windmill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 3,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -140,10 +140,10 @@ describe('buildings/windmill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             grain: 100,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)

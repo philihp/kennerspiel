@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('commands/buyPlot', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -86,7 +86,7 @@ describe('commands/buyPlot', () => {
     })
 
     it('starts out with a buffer on the left', () => {
-      expect(s0.players[0]).toMatchObject({
+      expect(s0.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
           [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
@@ -100,7 +100,7 @@ describe('commands/buyPlot', () => {
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
@@ -116,7 +116,7 @@ describe('commands/buyPlot', () => {
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
@@ -138,13 +138,13 @@ describe('commands/buyPlot', () => {
       ] as Tile[][]
       const s1 = buyPlot({ side: 'COAST', y: -2 })({
         ...s0,
-        players: [{ ...s0.players[0], landscape: connectedCoast }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], landscape: connectedCoast }, ...s0.players!.slice(1)],
       })!
       expect(s1).toMatchObject({
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [['W'], ['C'], [], [], [], [], [], [], []],
@@ -162,7 +162,7 @@ describe('commands/buyPlot', () => {
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
@@ -184,13 +184,13 @@ describe('commands/buyPlot', () => {
       ] as Tile[][]
       const s1 = buyPlot({ side: 'COAST', y: +2 })({
         ...s0,
-        players: [{ ...s0.players[0], landscape: connectedCoast }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], landscape: connectedCoast }, ...s0.players!.slice(1)],
       })!
       expect(s1).toMatchObject({
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [['W'], ['C'], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
@@ -208,7 +208,7 @@ describe('commands/buyPlot', () => {
       ] as Tile[][]
       const s1 = buyPlot({ side: 'COAST', y: +1 })({
         ...s0,
-        players: [{ ...s0.players[0], landscape: connectedCoast }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], landscape: connectedCoast }, ...s0.players!.slice(1)],
       })!
       expect(s1).toBeUndefined()
     })
@@ -221,7 +221,7 @@ describe('commands/buyPlot', () => {
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
@@ -237,7 +237,7 @@ describe('commands/buyPlot', () => {
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [[], [], [], [], [], [], [], ['H'], ['M']],
@@ -259,13 +259,13 @@ describe('commands/buyPlot', () => {
       ] as Tile[][]
       const s1 = buyPlot({ side: 'MOUNTAIN', y: -2 })({
         ...s0,
-        players: [{ ...s0.players[0], landscape: connectedMountain }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], landscape: connectedMountain }, ...s0.players!.slice(1)],
       })!
       expect(s1).toMatchObject({
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [[], [], [], [], [], [], [], ['H'], ['M']],
@@ -283,7 +283,7 @@ describe('commands/buyPlot', () => {
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], [], []],
@@ -305,13 +305,13 @@ describe('commands/buyPlot', () => {
       ] as Tile[][]
       const s1 = buyPlot({ side: 'MOUNTAIN', y: +2 })({
         ...s0,
-        players: [{ ...s0.players[0], landscape: connectedMountain }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], landscape: connectedMountain }, ...s0.players!.slice(1)],
       })!
       expect(s1).toMatchObject({
         plotPurchasePrices: [3, 4, 4, 5, 6],
         frame: { canBuyLandscape: false },
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 98,
         landscape: [
           [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
@@ -327,13 +327,13 @@ describe('commands/buyPlot', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: false,
           bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
         },
       }
       const s2 = buyPlot({ side: 'MOUNTAIN', y: 0 })(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 100,
         landscape: [
           [[], [], ['P'], ['P'], ['P'], ['P'], ['P'], ['H'], ['M']],
@@ -346,7 +346,7 @@ describe('commands/buyPlot', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_DISTRICT, GameCommandEnum.BUY_PLOT],
         },
@@ -365,7 +365,7 @@ describe('commands/buyPlot', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: false,
           bonusActions: [],
         },
@@ -381,14 +381,14 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [2, 3, 4, 4, 5, 6],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [],
         },
@@ -401,14 +401,14 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [2, 3, 4, 4, 5, 6],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [],
         },
@@ -421,14 +421,14 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [2, 3, 4, 4, 5, 6],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: false,
           bonusActions: [],
         },
@@ -441,14 +441,14 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [2, 3, 4, 4, 5, 6],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_PLOT],
         },
@@ -461,14 +461,14 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_PLOT],
         },
@@ -481,7 +481,7 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], [], [], [], [], [], /* -------- */ [], []], // -2
               [['W'], ['C'], ['P'], ['P'], ['P'], ['H'], ['H'], [], []], // -1
@@ -492,11 +492,11 @@ describe('commands/buyPlot', () => {
             landscapeOffset: 2,
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_PLOT],
         },
@@ -509,7 +509,7 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], [], [], [], [], [], /* -------- */ [], []], // -2
               [['W'], ['C'], ['P'], ['P'], ['P'], ['H'], ['H'], [], []], // -1
@@ -520,11 +520,11 @@ describe('commands/buyPlot', () => {
             landscapeOffset: 2,
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_PLOT],
         },
@@ -537,7 +537,7 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], [], [], [], [], [], /* -------- */ [], []], // -2
               [['W'], ['C'], ['P'], ['P'], ['P'], ['H'], ['H'], [], []], // -1
@@ -548,11 +548,11 @@ describe('commands/buyPlot', () => {
             landscapeOffset: 2,
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_PLOT],
         },
@@ -565,7 +565,7 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], [], [], [], [], [], /* -------- */ [], []], // -2
               [['W'], ['C'], ['P'], ['P'], ['P'], ['H'], ['H'], [], []], // -1
@@ -576,11 +576,11 @@ describe('commands/buyPlot', () => {
             landscapeOffset: 2,
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_PLOT],
         },
@@ -593,7 +593,7 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], [], [], [], [], [], /* -------- */ ['H'], ['M']], // -2
               [['W'], ['C'], ['P'], ['P'], ['P'], ['H'], ['H'], ['H'], ['.']], // -1
@@ -604,11 +604,11 @@ describe('commands/buyPlot', () => {
             landscapeOffset: 2,
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_PLOT],
         },
@@ -621,7 +621,7 @@ describe('commands/buyPlot', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], [], [], [], [], [], /* -------- */ ['H'], ['M']], // -2
               [['W'], ['C'], ['P'], ['P'], ['P'], ['H'], ['H'], ['H'], ['.']], // -1
@@ -632,11 +632,11 @@ describe('commands/buyPlot', () => {
             landscapeOffset: 2,
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         plotPurchasePrices: [],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           canBuyLandscape: true,
           bonusActions: [GameCommandEnum.BUY_PLOT],
         },

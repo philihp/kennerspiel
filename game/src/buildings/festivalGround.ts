@@ -2,7 +2,7 @@ import { always, curry, identity, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costPoints, parseResourceParam, rewardCostOptions } from '../board/resource'
-import { Cost, GameStatePlaying, StateReducer, TableauReducer, Tile } from '../types'
+import { Cost, GameState, StateReducer, TableauReducer, Tile } from '../types'
 import { LANDSCAPES, forestLocations, moorLocations } from '../board/landscape'
 
 // TODO: refactor this with houseOfTheBrotherhood
@@ -41,7 +41,7 @@ export const festivalGround = (input = '', output = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] => {
+export const complete = curry((partial: string[], state: GameState): string[] => {
   const player = view(activeLens(state), state)
   return match(partial)
     .with([], () => {

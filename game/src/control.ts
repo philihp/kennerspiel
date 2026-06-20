@@ -4,7 +4,7 @@ import { pickFrameFlow } from './board/frame'
 import {
   Flower,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   OrdinalFrame,
   Controls,
   Tableau,
@@ -32,13 +32,13 @@ import { allBuildingPoints, allDwellingPoints } from './board/landscape'
 import { introduceBuildings, roundBuildings } from './board/buildings'
 import { introduceGrapeToken, introduceStoneToken } from './board/rondel'
 
-const computeFlow = (state: GameStatePlaying) => {
-  const frameFlow = pickFrameFlow(state.config)
+const computeFlow = (state: GameState) => {
+  const frameFlow = pickFrameFlow(state.config!)
   const flow: Flower[] = []
   let limit = 200
   let frameIndex
-  let playerIndex = state.frame.activePlayerIndex
-  let { frame }: { frame: OrdinalFrame } = state
+  let playerIndex = state.frame!.activePlayerIndex
+  let frame: OrdinalFrame = state.frame!
   let { round } = frame
   let lastSeenSettlementRound = SettlementRound.S
   do {
@@ -52,7 +52,7 @@ const computeFlow = (state: GameStatePlaying) => {
       settle,
       bonus: !!frame.bonusRoundPlacement,
       introduced: [
-        ...(frame.upkeep?.includes(introduceBuildings) ? roundBuildings(state.config, lastSeenSettlementRound) : []),
+        ...(frame.upkeep?.includes(introduceBuildings) ? roundBuildings(state.config!, lastSeenSettlementRound) : []),
         ...(frame.upkeep?.includes(introduceGrapeToken) ? ['grape' as RondelToken] : []),
         ...(frame.upkeep?.includes(introduceStoneToken) ? ['stone' as RondelToken] : []),
       ],
@@ -63,7 +63,7 @@ const computeFlow = (state: GameStatePlaying) => {
   return flow
 }
 
-export const control = (state: GameStatePlaying, partial: string[], player?: number): Controls => {
+export const control = (state: GameState, partial: string[], player?: number): Controls => {
   const completion = match(head(partial))
     .with(undefined, () =>
       state.status === GameStatusEnum.FINISHED
@@ -113,10 +113,10 @@ export const control = (state: GameStatePlaying, partial: string[], player?: num
         total: sum([...score.settlements, score.goods, score.economic]),
       })
     ),
-    state.players.slice(0, state.config.players) // this will remove neutral player
+    state.players!.slice(0, state.config!.players) // this will remove neutral player
   )
   return {
-    active: player === state.frame.activePlayerIndex,
+    active: player === state.frame!.activePlayerIndex,
     flow: computeFlow(state),
     partial,
     completion,

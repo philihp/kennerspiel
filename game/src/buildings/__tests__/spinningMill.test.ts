@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/spinningMill', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -89,14 +89,14 @@ describe('buildings/spinningMill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             sheep: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = spinningMill()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 0,
       })
     })
@@ -105,14 +105,14 @@ describe('buildings/spinningMill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             sheep: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = spinningMill()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 3,
       })
     })
@@ -121,14 +121,14 @@ describe('buildings/spinningMill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             sheep: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = spinningMill()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 3,
       })
     })
@@ -137,14 +137,14 @@ describe('buildings/spinningMill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             sheep: 4,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = spinningMill()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 3,
       })
     })
@@ -153,14 +153,14 @@ describe('buildings/spinningMill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             sheep: 5,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = spinningMill()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 5,
       })
     })
@@ -169,14 +169,14 @@ describe('buildings/spinningMill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             sheep: 6,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = spinningMill()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 5,
       })
     })
@@ -185,14 +185,14 @@ describe('buildings/spinningMill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             sheep: 8,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = spinningMill()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 5,
       })
     })
@@ -201,14 +201,14 @@ describe('buildings/spinningMill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             sheep: 9,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = spinningMill()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 6,
       })
     })
@@ -217,14 +217,14 @@ describe('buildings/spinningMill', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             sheep: 10,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const s2 = spinningMill()(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 6,
       })
     })

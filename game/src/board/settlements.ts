@@ -108,14 +108,14 @@ export const introduceSettlements: StateReducer = (state) => {
       when(isNotNil, (player) =>
         assoc(
           'settlements',
-          union(player.settlements, roundSettlements(player.color, state?.frame.settlementRound)),
+          union(player.settlements, roundSettlements(player.color, state?.frame?.settlementRound)),
           player
         )
       )
     ),
     (state) => {
       if (state === undefined) return state
-      if (state.config.players !== 1) return state
+      if (state.config!.players !== 1) return state
       return set(lensPath(['players', 1, 'settlements']), [], state)
     }
   )(state)

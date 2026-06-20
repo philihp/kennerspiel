@@ -5,7 +5,7 @@ import {
   Frame,
   GameCommandConfigParams,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   SettlementRound,
@@ -30,7 +30,7 @@ describe('board/frame/checkSoloSettlementReady', () => {
     bonusRoundPlacement: false,
     canBuyLandscape: true,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -47,7 +47,7 @@ describe('board/frame/checkSoloSettlementReady', () => {
     plotPurchasePrices: [],
     districtPurchasePrices: [],
     frame: f0,
-  } as GameStatePlaying
+  } as GameState
 
   it('retains undefined state', () => {
     const s1 = checkSoloSettlementReady(undefined)!

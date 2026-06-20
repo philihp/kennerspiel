@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { dissocPath } from 'ramda'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -48,7 +48,7 @@ describe('buildings/quarry', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -92,7 +92,7 @@ describe('buildings/quarry', () => {
         joker: 2,
         stone: 3,
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         stone: 3,
       })
     })
@@ -101,19 +101,19 @@ describe('buildings/quarry', () => {
       const s1 = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
-      } as GameStatePlaying
+      } as GameState
       const s2 = quarry()(s1)!
       expect(s2.rondel).toMatchObject({
         pointingBefore: 3,
         joker: 2,
         stone: 3,
       })
-      expect(s2.players[0].stone).toBe(4)
-      expect(s2.players[1].stone).toBe(1)
-      expect(s2.players[2].stone).toBe(1)
+      expect(s2.players![0].stone).toBe(4)
+      expect(s2.players![1].stone).toBe(1)
+      expect(s2.players![2].stone).toBe(1)
     })
 
     it('can use the joker', () => {
@@ -123,7 +123,7 @@ describe('buildings/quarry', () => {
         joker: 3,
         stone: 1,
       })
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         stone: 2,
       })
     })
@@ -135,7 +135,7 @@ describe('buildings/quarry', () => {
       expect(c0).toStrictEqual(['', 'Jo'])
     })
     it('does not allow Joker if undefined', () => {
-      const s1 = dissocPath<GameStatePlaying>(['rondel', 'joker'], s0)
+      const s1 = dissocPath<GameState>(['rondel', 'joker'], s0)
       const c1 = complete([])(s1)
       expect(c1).not.toContain('Jo')
     })
@@ -159,18 +159,18 @@ describe('buildings/quarry', () => {
       },
       players: [
         {
-          ...s0.players[0],
+          ...s0.players![0],
           stone: 0,
         },
       ],
-    } as GameStatePlaying
+    } as GameState
     expect(s1.rondel).toMatchObject({
       stone: undefined,
       joker: 11,
       pointingBefore: 8,
     })
     const s2 = quarry('')(s1)!
-    expect(s2.players[0]).toMatchObject({
+    expect(s2.players![0]).toMatchObject({
       stone: 8,
     })
   })

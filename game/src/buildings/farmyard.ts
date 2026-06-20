@@ -1,7 +1,7 @@
 import { always, cond, curry, pipe, when } from 'ramda'
 import { match, P } from 'ts-pattern'
 import { updateRondel, withRondel, standardSesourceGatheringAction } from '../board/rondel'
-import { GameStatePlaying, ResourceEnum, Rondel, StateReducer } from '../types'
+import { GameState, ResourceEnum, Rondel, StateReducer } from '../types'
 import { parseResourceParam, shortGameBonusProduction } from '../board/resource'
 
 export const farmyard = (param = ''): StateReducer => {
@@ -38,13 +38,13 @@ export const farmyard = (param = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       return [
-        ...(state.rondel.sheep !== undefined ? ['Sh'] : []),
-        ...(state.rondel.grain !== undefined ? ['Gn'] : []),
-        ...(state.rondel.joker !== undefined ? ['JoSh', 'JoGn'] : []),
+        ...(state.rondel!.sheep !== undefined ? ['Sh'] : []),
+        ...(state.rondel!.grain !== undefined ? ['Gn'] : []),
+        ...(state.rondel!.joker !== undefined ? ['JoSh', 'JoGn'] : []),
       ]
     })
     .with(

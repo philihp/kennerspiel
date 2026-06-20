@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../testHelpers'
 import { reducer } from '../reducer'
 import { initialState } from '../state'
-import { GameState, GameStatePlaying } from '../types'
+import { GameState } from '../types'
 import { control } from '../control'
 import { map, reduce, split } from 'ramda'
 
@@ -204,18 +204,18 @@ describe('game Claude4-1', () => {
       'WORK_CONTRACT G26 Wn',
     ])
 
-    const s1 = reduce<string[], GameState>((state, move) => reducer(state, move)!, s0, moves) as GameStatePlaying
+    const s1 = reduce<string[], GameState>((state, move) => reducer(state, move)!, s0, moves)
     expect(s1).toBeDefined()
-    expect(s1.frame.usableBuildings).toContain('G26')
+    expect(s1.frame!.usableBuildings).toContain('G26')
     const c1 = control(s1, [])
     expect(c1.completion).toContain('WITH_LAYBROTHER')
 
-    const s2 = reducer(s1, ['WITH_LAYBROTHER'])! as GameStatePlaying
+    const s2 = reducer(s1, ['WITH_LAYBROTHER'])!
     expect(s2).toBeDefined()
     // After WITH_LAYBROTHER, activePlayer should revert to Red (currentPlayer)
-    expect(s2.frame.activePlayerIndex).toBe(s2.frame.currentPlayerIndex)
+    expect(s2.frame!.activePlayerIndex).toBe(s2.frame!.currentPlayerIndex)
     // The Shipping Company should be marked as freely usable
-    expect(s2.frame.usableBuildings).toContain('G26')
+    expect(s2.frame!.usableBuildings).toContain('G26')
 
     const c2 = control(s2, [])
     // Red should be able to USE G26 (Shipping Company)
@@ -225,7 +225,7 @@ describe('game Claude4-1', () => {
     expect(c2use.completion).toContain('G26')
 
     // Actually USE G26 (Shipping Company) to verify it works
-    const s3 = reducer(s2, ['USE', 'G26'])! as GameStatePlaying
+    const s3 = reducer(s2, ['USE', 'G26'])!
     expect(s3).toBeDefined()
   })
 })

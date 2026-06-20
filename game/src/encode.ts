@@ -10,7 +10,6 @@ import {
   GameConfigCountry,
   GameConfigLength,
   GameState,
-  GameStatePlaying,
   GameStatusEnum,
   LandEnum,
   NextUseClergy,
@@ -280,31 +279,31 @@ const encodeRondelYields = (rondel: Rondel, config: GameCommandConfigParams): nu
 const padPrices = (prices: readonly number[]): number[] =>
   range(0, MAX_PRICE_SLOTS).map((i) => prices[i] ?? 0)
 
-const encodeShared = (state: GameStatePlaying): number[] => {
-  const playerCountOneHot = range(0, MAX_PLAYERS).map((i) => (i === state.config.players - 1 ? 1 : 0))
+const encodeShared = (state: GameState): number[] => {
+  const playerCountOneHot = range(0, MAX_PLAYERS).map((i) => (i === state.config!.players - 1 ? 1 : 0))
   const sections: number[][] = [
-    encodeRondelDeltas(state.rondel),
-    encodeRondelYields(state.rondel, state.config),
+    encodeRondelDeltas(state.rondel!),
+    encodeRondelYields(state.rondel!, state.config!),
     mask(BUILDINGS, new Set(state.buildings)),
-    padPrices(state.plotPurchasePrices),
-    padPrices(state.districtPurchasePrices),
-    [state.wonders],
+    padPrices(state.plotPurchasePrices!),
+    padPrices(state.districtPurchasePrices!),
+    [state.wonders!],
     playerCountOneHot,
-    oneHot(LENGTHS, state.config.length),
-    oneHot(COUNTRIES, state.config.country),
+    oneHot(LENGTHS, state.config!.length),
+    oneHot(COUNTRIES, state.config!.country),
   ]
   return sections.flat()
 }
 
 export const encode = (state: GameState, perspective?: number): Float32Array => {
   if (state.status === GameStatusEnum.SETUP) return new Float32Array(FEATURE_LEN)
-  const p = perspective ?? state.frame.currentPlayerIndex
-  const order = rotateOrder(state.players.length, p)
+  const p = perspective ?? state.frame!.currentPlayerIndex
+  const order = rotateOrder(state.players!.length, p)
   const sections: number[][] = [
     ...order.map((idx, slot): number[] =>
-      idx === undefined ? range(0, PLAYER_BLOCK).map(() => 0) : encodeTableau(state.players[idx], slot === 0, state.config)
+      idx === undefined ? range(0, PLAYER_BLOCK).map(() => 0) : encodeTableau(state.players![idx], slot === 0, state.config!)
     ),
-    encodeFrame(state.frame, order),
+    encodeFrame(state.frame!, order),
     encodeShared(state),
   ]
   return Float32Array.from(sections.flat())

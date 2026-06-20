@@ -83,12 +83,9 @@ export const GamePlaying = () => {
           <UnbuiltWonders />
         </div>
       </div>
-
       <hr />
       <i>Last Updated: </i>
-      {instance.updated_at}
-      {' '}
-      <button onClick={() => setDebugOpen(true)}>Debug</button>
+      {instance.updated_at} <button onClick={() => setDebugOpen(true)}>Debug</button>
       {debugOpen && (
         <dialog
           open
@@ -107,7 +104,9 @@ export const GamePlaying = () => {
             background: '#fff',
           }}
         >
-          <button onClick={() => setDebugOpen(false)} style={{ float: 'right' }}>Close</button>
+          <button onClick={() => setDebugOpen(false)} style={{ float: 'right' }}>
+            Close
+          </button>
           <h3 style={{ marginTop: 0 }}>State</h3>
           <pre style={{ fontSize: 11, overflowX: 'auto', background: '#f8f8f8', padding: 8 }}>
             {JSON.stringify(rawState, null, 2)}

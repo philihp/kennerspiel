@@ -5,7 +5,7 @@ import { spiel } from '../../spiel'
 import { initialState } from '../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -50,7 +50,7 @@ describe('buildings/clayMound', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -119,13 +119,13 @@ describe('buildings/clayMound', () => {
 
   describe('use', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = clayMound()(s0)
       expect(s1).toBeUndefined()
     })
     it('can get clay with the clay token', () => {
       const s1 = clayMound()(s0)!
-      expect(s1.players[0].clay).toBe(4)
+      expect(s1.players![0].clay).toBe(4)
       expect(s1.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 3,
@@ -134,7 +134,7 @@ describe('buildings/clayMound', () => {
     })
     it('can get clay with the joker', () => {
       const s1 = clayMound('Jo')(s0)!
-      expect(s1.players[0].clay).toBe(3)
+      expect(s1.players![0].clay).toBe(3)
       expect(s1.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 5,
@@ -142,17 +142,17 @@ describe('buildings/clayMound', () => {
       })
     })
     it('if clay is not there, fallback to joker', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           pointingBefore: 5,
           joker: 3,
           clay: undefined,
         },
       }
       const s2 = clayMound()(s1)!
-      expect(s2.players[0].clay).toBe(3)
+      expect(s2.players![0].clay).toBe(3)
       expect(s1.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 3,
@@ -162,7 +162,7 @@ describe('buildings/clayMound', () => {
     it('dispenses clay in a 3p short game to everyone', () => {
       const s0 = spiel`
         CONFIG 3 france short
-        START B W R`! as GameStatePlaying
+        START B W R`!
       const s1 = reducer(s0, ['USE', 'LB1'])!
       expect(s1.players?.[0].clay).toBe(4)
       expect(s1.players?.[1].clay).toBe(2)
@@ -177,7 +177,7 @@ describe('buildings/clayMound', () => {
       expect(c0).toContain('Jo')
     })
     it('does not allow Joker if undefined', () => {
-      const s1 = dissocPath<GameStatePlaying>(['rondel', 'joker'], s0)
+      const s1 = dissocPath<GameState>(['rondel', 'joker'], s0)
       const c1 = complete([])(s1)
       expect(c1).not.toContain('Jo')
     })

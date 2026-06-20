@@ -2,7 +2,7 @@ import { always, concat, curry, lift, min, pipe, unnest, view, zip, zipWith } fr
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { concatStr, parseResourceParam, resourceArray } from '../board/resource'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { GameState, ResourceEnum } from '../types'
 
 export const chapel = (param = '') => {
   const { penny = 0, whiskey = 0, beer = 0 } = parseResourceParam(param)
@@ -17,7 +17,7 @@ export const chapel = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { beer = 0, whiskey = 0, penny = 0 } = view(activeLens(state), state)

@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/shipyard', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,17 +82,17 @@ describe('buildings/shipyard', () => {
   describe('shipyard', () => {
     it('allows a noop', () => {
       const s1 = shipyard('')(s0)!
-      expect(s1.players[0]).toStrictEqual(s0.players[0])
+      expect(s1.players![0]).toStrictEqual(s0.players![0])
     })
 
     it('allows a noop with undefined', () => {
       const s1 = shipyard()(s0)!
-      expect(s1.players[0]).toStrictEqual(s0.players[0])
+      expect(s1.players![0]).toStrictEqual(s0.players![0])
     })
 
     it('turns two wood into 1 ornament and 1 nickel', () => {
       const s1 = shipyard('WoWo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wood: 8,
         ornament: 1,
         nickel: 1,
@@ -106,12 +106,12 @@ describe('buildings/shipyard', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 4,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['WoWo', ''])
     })
@@ -120,12 +120,12 @@ describe('buildings/shipyard', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })

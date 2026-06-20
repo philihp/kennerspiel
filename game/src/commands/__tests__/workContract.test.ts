@@ -6,7 +6,7 @@ import {
   BuildingEnum,
   Clergy,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -47,7 +47,7 @@ describe('commands/workContract', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -143,12 +143,12 @@ describe('commands/workContract', () => {
         usableBuildings: ['G02'],
         nextUse: 'free',
       })
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 3,
         wine: 4,
         grain: 4,
       })
-      expect(s2.players[1]).toMatchObject({
+      expect(s2.players![1]).toMatchObject({
         landscape: [
           [['W'], ['C'], [], [], [], [], [], ['H'], ['M']],
           [['W'], ['C', 'F04', 'PRIB'], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], ['H'], ['.']],
@@ -162,7 +162,7 @@ describe('commands/workContract', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           currentPlayerIndex: 2,
           activePlayerIndex: 2,
         },
@@ -173,7 +173,7 @@ describe('commands/workContract', () => {
         usableBuildings: ['G01'],
         nextUse: 'free',
       })
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         wine: 4,
         grain: 4,
         landscape: [
@@ -182,7 +182,7 @@ describe('commands/workContract', () => {
         ],
         clergy: [],
       })
-      expect(s2.players[2]).toMatchObject({
+      expect(s2.players![2]).toMatchObject({
         penny: 0,
         clergy: ['LB1G', 'LB2G', 'PRIG'],
       })
@@ -197,12 +197,12 @@ describe('commands/workContract', () => {
         activePlayerIndex: 2,
         usableBuildings: ['F05'],
       })
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 3,
         wine: 4,
         grain: 4,
       })
-      expect(s2.players[2]).toMatchObject({
+      expect(s2.players![2]).toMatchObject({
         penny: 2,
         clergy: ['LB1G', 'LB2G', 'PRIG'] as Clergy[],
         landscape: [
@@ -222,12 +222,12 @@ describe('commands/workContract', () => {
         usableBuildings: ['G02'],
         nextUse: 'free',
       })
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 4,
         wine: 3,
         grain: 4,
       })
-      expect(s2.players[1]).toMatchObject({
+      expect(s2.players![1]).toMatchObject({
         penny: 0,
         wine: 0,
         landscape: [
@@ -240,27 +240,27 @@ describe('commands/workContract', () => {
     })
     it('can work contract with a penny, which is gifted', () => {
       const s2 = workContract('G02' as BuildingEnum, 'Pn')(s0)!
-      expect(s2.players[0].penny).toBe(3)
-      expect(s2.players[1].penny).toBe(1)
+      expect(s2.players![0].penny).toBe(3)
+      expect(s2.players![1].penny).toBe(1)
     })
 
     it('can work contract with gifted pennies, which costs two once the winery has been built', () => {
       const s1 = {
         ...s0,
-        frame: { ...s0.frame, settlementRound: SettlementRound.B },
+        frame: { ...s0.frame!, settlementRound: SettlementRound.B },
       }
       expect(s1.frame.settlementRound).not.toBe('S')
       expect(s1.frame.settlementRound).not.toBe('A')
       expect(s1.buildings).not.toContain('F21')
       const s2 = workContract('G02' as BuildingEnum, 'PnPn')(s1)!
-      expect(s2.players[0].penny).toBe(2)
-      expect(s2.players[1].penny).toBe(2)
+      expect(s2.players![0].penny).toBe(2)
+      expect(s2.players![1].penny).toBe(2)
     })
 
     it('fail if payment insufficient', () => {
       const s1 = {
         ...s0,
-        frame: { ...s0.frame, settlementRound: SettlementRound.B },
+        frame: { ...s0.frame!, settlementRound: SettlementRound.B },
       }
       const s2 = workContract('G02' as BuildingEnum, 'Pn')(s1)!
       expect(s2).toBeUndefined()
@@ -269,10 +269,10 @@ describe('commands/workContract', () => {
     it('gifts for the host are still 1 wine, regardless of if winery is built', () => {
       const s1 = {
         ...s0,
-        frame: { ...s0.frame, settlementRound: SettlementRound.B },
+        frame: { ...s0.frame!, settlementRound: SettlementRound.B },
       }
       const s2 = workContract('G02' as BuildingEnum, 'Wn')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         wine: 3,
         penny: 4,
       })
@@ -288,7 +288,7 @@ describe('commands/workContract', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusRoundPlacement: true,
         },
       }
@@ -306,17 +306,17 @@ describe('commands/workContract', () => {
         const s1 = {
           ...s0,
           config: {
-            ...s0.config,
+            ...s0.config!,
             players: 1,
           },
           players: [
             {
-              ...s0.players[0],
+              ...s0.players![0],
               penny: 3,
             },
-            s0.players[1],
+            s0.players![1],
           ],
-        } as GameStatePlaying
+        } as GameState
         const s2 = workContract('G02' as BuildingEnum, 'Pn', true)(s1)!
         expect(s2).toBeUndefined()
       })
@@ -324,24 +324,24 @@ describe('commands/workContract', () => {
         const s1 = {
           ...s0,
           config: {
-            ...s0.config,
+            ...s0.config!,
             players: 1,
           },
           players: [
             {
-              ...s0.players[0],
+              ...s0.players![0],
               penny: 5,
             },
-            s0.players[1],
+            s0.players![1],
           ],
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             neutralBuildingPhase: true,
             settlementRound: 'B',
           },
-        } as GameStatePlaying
+        } as GameState
         const s2 = workContract('G02' as BuildingEnum, 'Pn')(s1)!
-        expect(s2.players[0]).toMatchObject({
+        expect(s2.players![0]).toMatchObject({
           penny: 4,
         })
       })
@@ -354,12 +354,12 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -370,15 +370,15 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusRoundPlacement: true,
         },
       }
@@ -390,12 +390,12 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.map((p) => ({
+          ...s0.players!.map((p) => ({
             ...p,
             clergy: [],
           })),
@@ -409,12 +409,12 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             wine: 1,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -425,12 +425,12 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             wine: 0,
             whiskey: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -441,16 +441,16 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             wine: 0,
             whiskey: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusActions: [GameCommandEnum.WORK_CONTRACT, GameCommandEnum.SETTLE],
           neutralBuildingPhase: true,
           mainActionUsed: true,
@@ -465,12 +465,12 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)([])
@@ -481,19 +481,19 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 2,
             wine: 0,
             whiskey: 0,
             landscape: [
-              [['P', 'F21'], ...s0.players[0].landscape[0].slice(1)],
-              ...s0.players[0].landscape.slice(1),
+              [['P', 'F21'], ...s0.players![0].landscape[0].slice(1)],
+              ...s0.players![0].landscape.slice(1),
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           settlementRound: SettlementRound.C,
         },
       }
@@ -505,19 +505,19 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             wine: 0,
             whiskey: 0,
             landscape: [
-              [['P', 'F21'], ...s0.players[0].landscape[0].slice(1)],
-              ...s0.players[0].landscape.slice(1),
+              [['P', 'F21'], ...s0.players![0].landscape[0].slice(1)],
+              ...s0.players![0].landscape.slice(1),
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           settlementRound: SettlementRound.C,
         },
       }
@@ -530,12 +530,12 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['WORK_CONTRACT'])
@@ -546,17 +546,17 @@ describe('commands/workContract', () => {
       const s1 = {
         ...s0,
         players: [
-          s0.players[0],
+          s0.players![0],
           {
-            ...s0.players[1],
+            ...s0.players![1],
             penny: 1,
             wine: 0,
             whiskey: 0,
           },
-          ...s0.players.slice(2),
+          ...s0.players!.slice(2),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 1,
         },
       }
@@ -569,12 +569,12 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 1,
             wine: 1,
             whiskey: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(s1)(['WORK_CONTRACT', 'G02'])
@@ -585,19 +585,19 @@ describe('commands/workContract', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 2,
             wine: 2,
             whiskey: 2,
             landscape: [
-              [['P', 'F21'], ...s0.players[0].landscape[0].slice(1)],
-              ...s0.players[0].landscape.slice(1),
+              [['P', 'F21'], ...s0.players![0].landscape[0].slice(1)],
+              ...s0.players![0].landscape.slice(1),
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           settlementRound: SettlementRound.C,
         },
       }
@@ -621,7 +621,7 @@ describe('commands/workContract', () => {
         START R G
         USE LR3
         COMMIT
-      `! as GameStatePlaying
+      `!
       it('can complete WITH_PRIOR if reasonable', () => {
         const c0 = control(s0, ['WORK_CONTRACT', 'LG2', 'Pn'])
         expect(c0.completion).toStrictEqual(['', 'WITH_PRIOR'])
@@ -651,7 +651,7 @@ describe('commands/workContract', () => {
         const s1 = {
           ...s0,
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             mainActionUsed: true,
             neutralBuildingPhase: true,
             bonusActions: ['BUILD'],
@@ -659,7 +659,7 @@ describe('commands/workContract', () => {
             nextUse: NextUseClergy.Any,
           },
           buildings: [BuildingEnum.Winery, BuildingEnum.Windmill],
-        } as GameStatePlaying
+        } as GameState
         const c1 = control(s1, [])
         expect(c1.completion).not.toContain('WORK_CONTRACT')
       })
@@ -668,7 +668,7 @@ describe('commands/workContract', () => {
         const s1 = {
           ...s0,
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             mainActionUsed: true,
             neutralBuildingPhase: true,
             bonusActions: ['BUILD'],
@@ -677,15 +677,15 @@ describe('commands/workContract', () => {
             usableBuildings: [BuildingEnum.Winery, BuildingEnum.Windmill],
           },
           players: [
-            s0.players[0],
+            s0.players![0],
             {
-              ...s0.players[1],
+              ...s0.players![1],
               color: PlayerColor.Green,
               clergy: ['PRIG'],
             },
           ],
           buildings: [],
-        } as GameStatePlaying
+        } as GameState
         const c1 = control(s1, [])
         expect(c1.completion).toContain('WORK_CONTRACT')
       })
@@ -694,7 +694,7 @@ describe('commands/workContract', () => {
         const s1 = {
           ...s0,
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             mainActionUsed: true,
             neutralBuildingPhase: true,
             bonusActions: ['BUILD'],
@@ -703,15 +703,15 @@ describe('commands/workContract', () => {
             usableBuildings: [BuildingEnum.Winery, BuildingEnum.Windmill],
           },
           players: [
-            s0.players[0],
+            s0.players![0],
             {
-              ...s0.players[1],
+              ...s0.players![1],
               color: PlayerColor.Green,
               clergy: ['LB2G'],
             },
           ],
           buildings: [],
-        } as GameStatePlaying
+        } as GameState
         const c1 = control(s1, [])
         expect(c1.completion).not.toContain('WORK_CONTRACT')
       })

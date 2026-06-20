@@ -5,7 +5,7 @@ import { clergyForColor } from '../player'
 export const addNeutralPlayer: StateReducer = (state) => {
   if (state === undefined) return state
 
-  const { color } = state.players[1]
+  const { color } = state.players![1]
   const clergy = clergyForColor(state.config)(color)
   const [row0, row1] = makeLandscape(color)
   const landscape: Tile[][] = [
@@ -36,9 +36,9 @@ export const addNeutralPlayer: StateReducer = (state) => {
   return {
     ...state,
     players: [
-      state.players[0],
+      state.players![0],
       {
-        ...state.players[1],
+        ...state.players![1],
         color,
         clergy,
         landscape,

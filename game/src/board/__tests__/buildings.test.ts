@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import {
   BuildingEnum,
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -48,7 +48,7 @@ describe('build/buildings', () => {
       beer: 0,
       reliquary: 0,
     }
-    const s0: GameStatePlaying = {
+    const s0: GameState = {
       ...initialState,
       status: GameStatusEnum.PLAYING,
       config: {

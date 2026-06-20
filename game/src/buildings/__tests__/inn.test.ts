@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/inn', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,7 +82,7 @@ describe('buildings/inn', () => {
   describe('inn', () => {
     it('goes through a happy path', () => {
       const s1 = inn('WnMtGnGnGn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wine: 9,
         meat: 9,
         grain: 7,
@@ -93,7 +93,7 @@ describe('buildings/inn', () => {
 
     it('has a max payout of 13, with 1 nickel and 8 pennies', () => {
       const s1 = inn('WnMtMtMtMtMtMt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wine: 9,
         meat: 4,
         grain: 10,
@@ -104,7 +104,7 @@ describe('buildings/inn', () => {
 
     it('pays out 6 if only given wine', () => {
       const s1 = inn('Wn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wine: 9,
         meat: 10,
         grain: 10,
@@ -115,7 +115,7 @@ describe('buildings/inn', () => {
 
     it('pays out 7 if only given two wine', () => {
       const s1 = inn('WnWn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wine: 8,
         meat: 10,
         grain: 10,
@@ -126,7 +126,7 @@ describe('buildings/inn', () => {
 
     it('pays out 1 if given 1 food', () => {
       const s1 = inn('Gn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wine: 10,
         meat: 10,
         grain: 9,
@@ -142,13 +142,13 @@ describe('buildings/inn', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wine: 1,
             meat: 2,
             sheep: 0,
             grain: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -159,14 +159,14 @@ describe('buildings/inn', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wine: 2,
             meat: 0,
             sheep: 0,
             grain: 2,
             penny: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -205,14 +205,14 @@ describe('buildings/inn', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wine: 1,
             meat: 2,
             sheep: 4,
             grain: 1,
             penny: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)

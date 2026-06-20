@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../../testHelpers'
-import { GameStatePlaying } from '../../../types'
+import { GameState } from '../../../types'
 import { rotateRondel, rotateRondelWithExpire } from '../rotateRondel'
 
 describe('board/frame', () => {
@@ -12,7 +12,7 @@ describe('board/frame', () => {
       joker: 4,
       grain: 0,
     },
-  } as GameStatePlaying
+  } as GameState
 
   describe('rotateRondel', () => {
     it('rotates things forward, normally', () => {
@@ -37,7 +37,7 @@ describe('board/frame', () => {
       const s1 = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           pointingBefore: 5,
           wood: 3,
           clay: 6,
@@ -64,7 +64,7 @@ describe('board/frame', () => {
       const s1 = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           pointingBefore: 12,
           wood: 12,
           clay: 11,
@@ -91,7 +91,7 @@ describe('board/frame', () => {
       const s1 = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           pointingBefore: 5,
           wood: 3,
           clay: 6,

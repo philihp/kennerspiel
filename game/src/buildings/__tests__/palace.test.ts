@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -115,7 +115,7 @@ describe('buildings/palace', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -152,20 +152,20 @@ describe('buildings/palace', () => {
   }
   describe('palace', () => {
     it('supports a noop with no params', () => {
-      const s1 = palace()(s0) as GameStatePlaying
+      const s1 = palace()(s0) as GameState
       expect(s1).toBe(s1)
     })
     it('supports a noop with empty string', () => {
-      const s1 = palace('')(s0) as GameStatePlaying
+      const s1 = palace('')(s0) as GameState
       expect(s1).toBe(s1)
     })
     it('can take wine', () => {
       const s1 = palace('Wn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wine: 0,
       })
-      expect(s1.frame.nextUse).toBe('free')
-      expect(s1.frame.usableBuildings?.sort()).toStrictEqual(['LB3', 'G26', 'LR3', 'G28', 'G19'].sort())
+      expect(s1.frame!.nextUse).toBe('free')
+      expect(s1.frame!.usableBuildings?.sort()).toStrictEqual(['LB3', 'G26', 'LR3', 'G28', 'G19'].sort())
     })
   })
 
@@ -175,12 +175,12 @@ describe('buildings/palace', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wine: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['Wn', ''])
     })
@@ -189,12 +189,12 @@ describe('buildings/palace', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wine: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -203,12 +203,12 @@ describe('buildings/palace', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wine: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Wn'], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -217,12 +217,12 @@ describe('buildings/palace', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wine: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Wn', 'Wn'], s1)
       expect(c0).toStrictEqual([])
     })

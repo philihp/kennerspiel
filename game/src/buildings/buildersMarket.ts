@@ -2,7 +2,7 @@ import { always, curry, identity, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { GameState } from '../types'
 
 export const buildersMarket = (param = '') => {
   const { penny = 0 } = parseResourceParam(param)
@@ -15,7 +15,7 @@ export const buildersMarket = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       if (costMoney(view(activeLens(state), state)) < 2) return ['']

@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/townEstate', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,7 +82,7 @@ describe('buildings/townEstate', () => {
   describe('townEstate', () => {
     it('can convert ceramic', () => {
       const s1 = townEstate('Ce')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 2,
         nickel: 2,
         penny: 2,
@@ -91,7 +91,7 @@ describe('buildings/townEstate', () => {
 
     it('allows noop', () => {
       const s1 = townEstate()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         ceramic: 3,
         nickel: 0,
         penny: 0,
@@ -99,9 +99,9 @@ describe('buildings/townEstate', () => {
     })
 
     it('does not upchange', () => {
-      const s1 = { ...s0, players: [{ ...s0.players[0], ceramic: 3, penny: 3, nickel: 0 }, ...s0.players.slice(1)] }
+      const s1 = { ...s0, players: [{ ...s0.players![0], ceramic: 3, penny: 3, nickel: 0 }, ...s0.players!.slice(1)] }
       const s2 = townEstate('Po')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         ceramic: 2,
         nickel: 2,
         penny: 5,
@@ -120,12 +120,12 @@ describe('buildings/townEstate', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             ceramic: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['Ce', ''])
     })
@@ -134,12 +134,12 @@ describe('buildings/townEstate', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             ceramic: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -148,12 +148,12 @@ describe('buildings/townEstate', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             ceramic: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Ce'], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -162,12 +162,12 @@ describe('buildings/townEstate', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             ceramic: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Wn', 'Wn'], s1)
       expect(c0).toStrictEqual([])
     })

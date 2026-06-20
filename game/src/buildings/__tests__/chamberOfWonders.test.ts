@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/chamberOfWonders', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -105,7 +105,7 @@ describe('buildings/chamberOfWonders', () => {
     it('baseline happy path', () => {
       const s1 = chamberOfWonders('PtPnClWoGnShSnFlGpCoBoPoSw')(s0)!
       expect(s1.wonders).toBe(7)
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         peat: 0,
         penny: 0,
         clay: 0,
@@ -130,7 +130,7 @@ describe('buildings/chamberOfWonders', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             peat: 1,
             penny: 2,
             clay: 3,
@@ -154,9 +154,9 @@ describe('buildings/chamberOfWonders', () => {
             beer: 0,
             reliquary: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })
@@ -165,7 +165,7 @@ describe('buildings/chamberOfWonders', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             peat: 1,
             penny: 2,
             clay: 3,
@@ -189,9 +189,9 @@ describe('buildings/chamberOfWonders', () => {
             beer: 0,
             reliquary: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['PtPnGnClWoShSnFlGpNiMaCoBo', ''])
     })
@@ -200,7 +200,7 @@ describe('buildings/chamberOfWonders', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             peat: 1,
             penny: 2,
             clay: 3,
@@ -224,9 +224,9 @@ describe('buildings/chamberOfWonders', () => {
             beer: 0,
             reliquary: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([
         'PtPnGnClWoShSnFlGpNiMaCoBo',

@@ -4,7 +4,7 @@ import { addBonusAction } from '../board/frame'
 import { findClergy } from '../board/landscape'
 import { payCost, isPrior, clergyForColor, withActivePlayer, activeLens } from '../board/player'
 import { costMoney, parseResourceParam } from '../board/resource'
-import { GameCommandEnum, GameStatePlaying, StateReducer, Tableau } from '../types'
+import { GameCommandEnum, GameState, StateReducer, Tableau } from '../types'
 
 const returnPrior = (player: Tableau | undefined): Tableau | undefined => {
   if (player === undefined) return undefined
@@ -42,7 +42,7 @@ export const locutory = (param = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       if (costMoney(view(activeLens(state), state)) < 2) return ['']

@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../testHelpers'
-import { GameStatePlaying, Tableau } from '../../types'
+import { GameState, Tableau } from '../../types'
 import { whiskeyDistillery, complete } from '../whiskeyDistillery'
 
 describe('buildings/whiskeyDistillery', () => {
@@ -32,12 +32,12 @@ describe('buildings/whiskeyDistillery', () => {
       activePlayerIndex: 0,
     },
     players: [p0],
-  } as GameStatePlaying
+  } as GameState
 
   describe('whiskeyDistillery', () => {
     it('goes through a happy path', () => {
       const s1 = whiskeyDistillery('MaWoPtMaWoPt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         malt: 8,
         wood: 8,
         peat: 8,
@@ -62,13 +62,13 @@ describe('buildings/whiskeyDistillery', () => {
 
     it('only makes the minimum of the inputs', () => {
       const s1 = whiskeyDistillery('MaWoPtMaWo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         whiskey: 2,
       })
     })
     it('consumes everything given', () => {
       const s1 = whiskeyDistillery('MaMaMaPtWo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         malt: 7,
         wood: 9,
         peat: 9,
@@ -82,14 +82,14 @@ describe('buildings/whiskeyDistillery', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             malt: 4,
             wood: 3,
             peat: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['MaMaWoWoPtPt', 'MaWoPt', ''])
     })

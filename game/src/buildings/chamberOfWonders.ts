@@ -3,7 +3,7 @@ import { P, match } from 'ts-pattern'
 import { activeLens, getWonder, payCost, withActivePlayer } from '../board/player'
 import { allResource, combinations, differentGoods, parseResourceParam } from '../board/resource'
 import { removeWonder } from '../board/state'
-import { Cost, GameStatePlaying, Tableau } from '../types'
+import { Cost, GameState, Tableau } from '../types'
 
 const check13DifferentGoods =
   (input: Cost) =>
@@ -15,7 +15,7 @@ const check13DifferentGoods =
 
 export const chamberOfWonders =
   (param = '') =>
-  (state?: GameStatePlaying): GameStatePlaying | undefined => {
+  (state?: GameState): GameState | undefined => {
     const inputs = parseResourceParam(param)
     return pipe(
       withActivePlayer(
@@ -30,7 +30,7 @@ export const chamberOfWonders =
     )(state)
   }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match<string[], string[]>(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

@@ -2,7 +2,7 @@ import { always, curry, identity, map, min, pipe, range, reverse, view } from 'r
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam, stringRepeater } from '../board/resource'
-import { GameStatePlaying, ResourceEnum, StateReducer } from '../types'
+import { GameState, ResourceEnum, StateReducer } from '../types'
 
 export const camera = (param = ''): StateReducer => {
   const { book = 0, ceramic = 0 } = parseResourceParam(param)
@@ -17,7 +17,7 @@ export const camera = (param = ''): StateReducer => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { book = 0, ceramic = 0 } = view(activeLens(state), state)

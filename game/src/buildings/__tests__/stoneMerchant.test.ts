@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/stoneMerchant', () => {
     beer: 10,
     reliquary: 10,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -81,7 +81,7 @@ describe('buildings/stoneMerchant', () => {
   describe('stoneMerchant', () => {
     it('goes through a happy path', () => {
       const s1 = stoneMerchant('ShShCo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         sheep: 8,
         coal: 9,
         stone: 12,
@@ -90,7 +90,7 @@ describe('buildings/stoneMerchant', () => {
 
     it('does not give energy change', () => {
       const s1 = stoneMerchant('ShCo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wood: 10,
         sheep: 9,
         coal: 9,
@@ -99,7 +99,7 @@ describe('buildings/stoneMerchant', () => {
     })
     it('does not give food change', () => {
       const s1 = stoneMerchant('GnCo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         wood: 10,
         grain: 9,
         coal: 9,
@@ -109,7 +109,7 @@ describe('buildings/stoneMerchant', () => {
 
     it('can be used up to 5 times', () => {
       const s1 = stoneMerchant('ShShShShShWoWoWoWoWo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         sheep: 5,
         wood: 5,
         stone: 15,
@@ -118,7 +118,7 @@ describe('buildings/stoneMerchant', () => {
 
     it('max output is 5, but still consumes everything', () => {
       const s1 = stoneMerchant('ShShShShShShShWoWoWoWoWoWoWo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         sheep: 3,
         wood: 3,
         stone: 15,
@@ -128,7 +128,7 @@ describe('buildings/stoneMerchant', () => {
     it('does not consume what it doesnt have', () => {
       const s1 = {
         ...s0,
-        players: [{ ...s0.players[0], sheep: 0, wood: 0, stone: 0 }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], sheep: 0, wood: 0, stone: 0 }, ...s0.players!.slice(1)],
       }
       const s2 = stoneMerchant('ShWo')(s1)!
       expect(s2).toBeUndefined()
@@ -140,7 +140,7 @@ describe('buildings/stoneMerchant', () => {
       ...s0,
       players: [
         {
-          ...s0.players[0],
+          ...s0.players![0],
           peat: 0,
           penny: 0,
           clay: 0,
@@ -164,7 +164,7 @@ describe('buildings/stoneMerchant', () => {
           beer: 0,
           reliquary: 0,
         },
-        ...s0.players.slice(1),
+        ...s0.players!.slice(1),
       ],
     }
     it("returns [''] still if nothing to do", () => {

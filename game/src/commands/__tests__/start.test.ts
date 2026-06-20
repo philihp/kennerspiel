@@ -1,6 +1,6 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
-import { GameCommandConfigParams, GameStateSetup, GameStatusEnum, PlayerColor } from '../../types'
+import { GameCommandConfigParams, GameState, GameStatusEnum, PlayerColor } from '../../types'
 import { config } from '../config'
 import { start } from '../start'
 
@@ -159,7 +159,7 @@ describe('commands/start', () => {
           country: 'france',
           length: 'long',
         },
-      } as GameStateSetup
+      } as GameState
 
       const dst1 = start(src, {
         seed: 153,
@@ -178,10 +178,10 @@ describe('commands/start', () => {
         colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
       })
 
-      const p1 = dst1?.players.map((p) => p.color)
-      const p2 = dst2?.players.map((p) => p.color)
-      const p3 = dst3?.players.map((p) => p.color)
-      const p4 = dst4?.players.map((p) => p.color)
+      const p1 = dst1?.players!.map((p) => p.color)
+      const p2 = dst2?.players!.map((p) => p.color)
+      const p3 = dst3?.players!.map((p) => p.color)
+      const p4 = dst4?.players!.map((p) => p.color)
       expect(p1).toStrictEqual(p2)
       expect(p2).toStrictEqual(p3)
       expect(p3).not.toStrictEqual(p4)
@@ -204,10 +204,10 @@ describe('commands/start', () => {
         },
         { colors }
       )
-      expect(dst?.players[0].color).toBe(colors[0])
-      expect(dst?.players[1].color).toBe(colors[1])
-      expect(dst?.players[2].color).toBe(colors[2])
-      expect(dst?.players[3].color).toBe(colors[3])
+      expect(dst?.players![0].color).toBe(colors[0])
+      expect(dst?.players![1].color).toBe(colors[1])
+      expect(dst?.players![2].color).toBe(colors[2])
+      expect(dst?.players![3].color).toBe(colors[3])
     })
 
     it('will not shuffle if no seed for 3p', () => {
@@ -227,9 +227,9 @@ describe('commands/start', () => {
         },
         { colors }
       )
-      expect(dst?.players[0].color).toBe(colors[0])
-      expect(dst?.players[1].color).toBe(colors[1])
-      expect(dst?.players[2].color).toBe(colors[2])
+      expect(dst?.players![0].color).toBe(colors[0])
+      expect(dst?.players![1].color).toBe(colors[1])
+      expect(dst?.players![2].color).toBe(colors[2])
     })
 
     it('will not shuffle if no seed for 2p', () => {
@@ -249,8 +249,8 @@ describe('commands/start', () => {
         },
         { colors }
       )
-      expect(dst?.players[0].color).toBe(colors[0])
-      expect(dst?.players[1].color).toBe(colors[1])
+      expect(dst?.players![0].color).toBe(colors[0])
+      expect(dst?.players![1].color).toBe(colors[1])
     })
 
     it('will not shuffle if no seed for 1p', () => {
@@ -270,8 +270,8 @@ describe('commands/start', () => {
         },
         { colors }
       )
-      expect(dst?.players[0].color).toBe(colors[0])
-      expect(dst?.players[1].color).toBe(colors[1])
+      expect(dst?.players![0].color).toBe(colors[0])
+      expect(dst?.players![1].color).toBe(colors[1])
     })
 
     it('sets round, and moveInRound, and a starting player', () => {
@@ -281,8 +281,8 @@ describe('commands/start', () => {
         colors: [PlayerColor.Red, PlayerColor.White, PlayerColor.Blue, PlayerColor.Green],
         seed: 12345,
       })!
-      expect(s2.frame.startingPlayer).toBeGreaterThanOrEqual(0)
-      expect(s2.frame.startingPlayer).toBeLessThan(4)
+      expect(s2.frame!.startingPlayer).toBeGreaterThanOrEqual(0)
+      expect(s2.frame!.startingPlayer).toBeLessThan(4)
     })
 
     it('starts up with buildings and settlements', () => {
@@ -294,7 +294,7 @@ describe('commands/start', () => {
       })!
       const buildings = ['G01', 'G02', 'F03', 'F04', 'F05', 'G06', 'G07', 'F08', 'F09', 'F10', 'F11', 'G12', 'G13']
       expect(s2.buildings).toStrictEqual(buildings)
-      expect(s2.players[0].settlements).toStrictEqual(['SR1', 'SR2', 'SR3', 'SR4'])
+      expect(s2.players![0].settlements).toStrictEqual(['SR1', 'SR2', 'SR3', 'SR4'])
     })
   })
 })

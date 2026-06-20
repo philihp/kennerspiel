@@ -78,6 +78,7 @@ export const InstanceContextProvider = ({
   const [debounced, setDebounced] = useState(false)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCommands(instance.commands)
   }, [instance.commands, setCommands])
 

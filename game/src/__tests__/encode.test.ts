@@ -7,8 +7,7 @@ import {
   Frame,
   GameCommandConfigParams,
   GameCommandEnum,
-  GameStatePlaying,
-  GameStateSetup,
+  GameState,
   GameStatusEnum,
   LandEnum,
   NextUseClergy,
@@ -88,7 +87,7 @@ const rondel: Rondel = {
   stone: 9,
 }
 
-const baseState: GameStatePlaying = {
+const baseState: GameState = {
   status: GameStatusEnum.PLAYING,
   config,
   rondel,
@@ -103,7 +102,7 @@ const baseState: GameStatePlaying = {
 
 describe('encode', () => {
   it('returns a zero vector of FEATURE_LEN for SETUP', () => {
-    const setup: GameStateSetup = {
+    const setup: GameState = {
       status: GameStatusEnum.SETUP,
       randGen: {} as PCGState,
     }
@@ -197,7 +196,7 @@ describe('encode', () => {
   })
 
   it('encodes the bonusActions bitmask in the frame block', () => {
-    const stateWithBonus: GameStatePlaying = {
+    const stateWithBonus: GameState = {
       ...baseState,
       frame: { ...frame, bonusActions: [GameCommandEnum.BUILD, GameCommandEnum.SETTLE] },
     }
@@ -293,7 +292,7 @@ describe('encode', () => {
     // take(armIndex, tokenIndex) = armVals[(armIndex - tokenIndex + 13) % 13]
     // With pointingBefore=4 and wood at slot 1: (4-1+13)%13 = 3 → armVals[3] = 4
     // With wood at slot 4 (same as arm): (4-4+13)%13 = 0 → armVals[0] = 0
-    const stateAtFour: GameStatePlaying = {
+    const stateAtFour: GameState = {
       ...baseState,
       rondel: { ...rondel, pointingBefore: 4, wood: 1, clay: 4 },
     }
@@ -306,7 +305,7 @@ describe('encode', () => {
   })
 
   it('yields 0 for rondel tokens not yet on the rondel', () => {
-    const stateNoGrape: GameStatePlaying = {
+    const stateNoGrape: GameState = {
       ...baseState,
       rondel: { pointingBefore: 5, wood: 0, clay: 0, coin: 0, grain: 0, peat: 0, sheep: 0 },
     }

@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/calefactory', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -81,16 +81,16 @@ describe('buildings/calefactory', () => {
 
   describe('calefactory', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = calefactory()(s0)
       expect(s1).toBeUndefined()
     })
 
     it('adds a fell_trees to bonus actions', () => {
       const s1 = calefactory('Pn')(s0)!
-      expect(s1.frame.bonusActions).toContain('CUT_PEAT')
-      expect(s1.frame.bonusActions).toContain('FELL_TREES')
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.frame!.bonusActions).toContain('CUT_PEAT')
+      expect(s1.frame!.bonusActions).toContain('FELL_TREES')
+      expect(s1.players![0]).toMatchObject({
         wine: 1,
         penny: 0,
       })
@@ -98,9 +98,9 @@ describe('buildings/calefactory', () => {
 
     it('allows paying for this with wine', () => {
       const s1 = calefactory('Wn')(s0)!
-      expect(s1.frame.bonusActions).toContain('CUT_PEAT')
-      expect(s1.frame.bonusActions).toContain('FELL_TREES')
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.frame!.bonusActions).toContain('CUT_PEAT')
+      expect(s1.frame!.bonusActions).toContain('FELL_TREES')
+      expect(s1.players![0]).toMatchObject({
         wine: 0,
         penny: 1,
       })
@@ -108,8 +108,8 @@ describe('buildings/calefactory', () => {
 
     it('allows a noop with empty string', () => {
       const s1 = calefactory('')(s0)!
-      expect(s1.frame.bonusActions).toHaveLength(0)
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.frame!.bonusActions).toHaveLength(0)
+      expect(s1.players![0]).toMatchObject({
         wine: 1,
         penny: 1,
       })
@@ -122,12 +122,12 @@ describe('buildings/calefactory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -136,12 +136,12 @@ describe('buildings/calefactory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 4,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['Pn', ''])
     })
@@ -150,12 +150,12 @@ describe('buildings/calefactory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             meat: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Pn'], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -164,12 +164,12 @@ describe('buildings/calefactory', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             meat: 2,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Mt', 'Mt'], s1)
       expect(c0).toStrictEqual([])
     })

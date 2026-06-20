@@ -2,7 +2,7 @@ import { __, add, always, ap, concat, curry, map, min, multiply, pipe, range, re
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { canAfford, costEnergy, energyCostOptions, parseResourceParam, stringRepeater } from '../board/resource'
-import { GameStatePlaying } from '../types'
+import { GameState } from '../types'
 
 export const bakery = (param = '') => {
   // parse the input string and create variables for each resource, defaulting to 0 if none
@@ -30,7 +30,7 @@ export const bakery = (param = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

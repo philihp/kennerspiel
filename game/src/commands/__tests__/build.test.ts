@@ -3,7 +3,7 @@ import { initialState } from '../../state'
 import {
   BuildingEnum,
   GameCommandEnum,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   LandEnum,
   NextUseClergy,
@@ -48,7 +48,7 @@ describe('commands/build', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -86,41 +86,41 @@ describe('commands/build', () => {
 
   describe('build', () => {
     it('fails when building is not available', () => {
-      const s3: GameStatePlaying = {
+      const s3: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 10,
             penny: 10,
             clay: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
-        buildings: s0.buildings.filter((b) => b !== ('G07' as BuildingEnum)),
+        buildings: s0.buildings!.filter((b) => b !== ('G07' as BuildingEnum)),
       }
       const s4 = build({ row: 1, col: 3, building: BuildingEnum.Calefactory })(s3)!
       expect(s4).toBeUndefined()
     })
     it('fails when erection present', () => {
-      const s3: GameStatePlaying = {
+      const s3: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 10,
             penny: 10,
             clay: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.Calefactory],
       }
@@ -128,15 +128,15 @@ describe('commands/build', () => {
       expect(s4).toBeUndefined()
     })
     it('fails when building off-board', () => {
-      const s3: GameStatePlaying = {
+      const s3: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
               [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -147,7 +147,7 @@ describe('commands/build', () => {
             stone: 10,
             straw: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.Windmill],
       }
@@ -155,22 +155,22 @@ describe('commands/build', () => {
       expect(s4).toBeUndefined()
     })
     it('fails when player cant afford building', () => {
-      const s3: GameStatePlaying = {
+      const s3: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 0,
             penny: 0,
             clay: 0,
             stone: 0,
             straw: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.PeatCoalKiln],
       }
@@ -178,21 +178,21 @@ describe('commands/build', () => {
       expect(s4).toBeUndefined()
     })
     it('fails if building cloister without being neighbors to another', () => {
-      const s3: GameStatePlaying = {
+      const s3: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 10,
             penny: 10,
             clay: 10,
             stone: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.Priory],
       }
@@ -200,15 +200,15 @@ describe('commands/build', () => {
       expect(s4).toBeUndefined()
     })
     it('builds just fine', () => {
-      const s3: GameStatePlaying = {
+      const s3: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
               [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -219,14 +219,14 @@ describe('commands/build', () => {
             stone: 10,
             straw: 10,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.Windmill],
       }
       const s4 = build({ row: 1, col: -1, building: BuildingEnum.Windmill })(s3)!
       expect(s4).toBeDefined()
       expect(s4.buildings).not.toContain(BuildingEnum.Windmill)
-      expect(s4.players[0]).toMatchObject({
+      expect(s4.players![0]).toMatchObject({
         wood: 7,
         clay: 8,
         stone: 10,
@@ -238,15 +238,15 @@ describe('commands/build', () => {
       })
     })
     it('automatically converts grain into straw', () => {
-      const s3: GameStatePlaying = {
+      const s3: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
               [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -259,14 +259,14 @@ describe('commands/build', () => {
             grain: 1, // convert to straw and consume
             flour: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.Inn],
       }
       const s4 = build({ row: 1, col: -1, building: BuildingEnum.Inn })(s3)!
       expect(s4).toBeDefined()
       expect(s4.buildings).not.toContain(BuildingEnum.Windmill)
-      expect(s4.players[0]).toMatchObject({
+      expect(s4.players![0]).toMatchObject({
         wood: 1,
         penny: 0,
         clay: 0,
@@ -281,15 +281,15 @@ describe('commands/build', () => {
       })
     })
     it('accounts for landscape Y offset', () => {
-      const s3: GameStatePlaying = {
+      const s3: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           activePlayerIndex: 0,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 10,
             penny: 10,
             clay: 10,
@@ -302,14 +302,14 @@ describe('commands/build', () => {
               [[], [], [LandEnum.Plains], [LandEnum.Plains], [LandEnum.Plains], [], []],
             ],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.GrainStorage],
       }
       const s4 = build({ row: -1, col: 1, building: BuildingEnum.GrainStorage })(s3)!
       expect(s4).toBeDefined()
       expect(s4.buildings).not.toContain(BuildingEnum.GrainStorage)
-      expect(s4.players[0]).toMatchObject({
+      expect(s4.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P', 'F03'], ['P'], [], []],
           [[], [], ['P'], ['P'], ['P'], [], []],
@@ -324,7 +324,7 @@ describe('commands/build', () => {
           ...s0,
           players: [
             {
-              ...s0.players[0],
+              ...s0.players![0],
               color: PlayerColor.Red,
               landscape: [
                 [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
@@ -338,7 +338,7 @@ describe('commands/build', () => {
               nickel: 0,
             },
             {
-              ...s0.players[0],
+              ...s0.players![0],
               color: PlayerColor.White,
               landscape: [
                 [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
@@ -351,11 +351,11 @@ describe('commands/build', () => {
               penny: 0,
               nickel: 0,
             },
-            ...s0.players.slice(1),
+            ...s0.players!.slice(1),
           ],
           buildings: [BuildingEnum.Windmill, BuildingEnum.Bakery],
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             activePlayerIndex: 0,
             neutralBuildingPhase: true,
             mainActionUsed: true,
@@ -367,7 +367,7 @@ describe('commands/build', () => {
         expect(s2).toBeDefined()
         expect(s2.buildings).not.toContain(BuildingEnum.Windmill)
         expect(s2.buildings).toContain(BuildingEnum.Bakery)
-        expect(s2.players[0]).toMatchObject({
+        expect(s2.players![0]).toMatchObject({
           wood: 0,
           clay: 0,
           stone: 0,
@@ -379,7 +379,7 @@ describe('commands/build', () => {
             [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
           ],
         })
-        expect(s2.players[1]).toMatchObject({
+        expect(s2.players![1]).toMatchObject({
           wood: 0,
           clay: 0,
           stone: 0,
@@ -405,7 +405,7 @@ describe('commands/build', () => {
           ...s0,
           players: [
             {
-              ...s0.players[0],
+              ...s0.players![0],
               color: PlayerColor.Red,
               landscape: [
                 [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
@@ -419,7 +419,7 @@ describe('commands/build', () => {
               nickel: 0,
             },
             {
-              ...s0.players[0],
+              ...s0.players![0],
               color: PlayerColor.White,
               landscape: [
                 [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
@@ -432,11 +432,11 @@ describe('commands/build', () => {
               penny: 0,
               nickel: 0,
             },
-            ...s0.players.slice(1),
+            ...s0.players!.slice(1),
           ],
           buildings: [BuildingEnum.Bakery],
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             activePlayerIndex: 0,
             neutralBuildingPhase: true,
             mainActionUsed: true,
@@ -454,7 +454,7 @@ describe('commands/build', () => {
           ...s0,
           players: [
             {
-              ...s0.players[0],
+              ...s0.players![0],
               color: PlayerColor.Red,
               landscape: [
                 [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
@@ -468,7 +468,7 @@ describe('commands/build', () => {
               nickel: 0,
             },
             {
-              ...s0.players[0],
+              ...s0.players![0],
               color: PlayerColor.White,
               landscape: [
                 [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
@@ -481,11 +481,11 @@ describe('commands/build', () => {
               penny: 0,
               nickel: 0,
             },
-            ...s0.players.slice(1),
+            ...s0.players!.slice(1),
           ],
           buildings: [BuildingEnum.Bakery],
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             activePlayerIndex: 0,
             neutralBuildingPhase: true,
             mainActionUsed: true,
@@ -503,7 +503,7 @@ describe('commands/build', () => {
           ...s0,
           players: [
             {
-              ...s0.players[0],
+              ...s0.players![0],
               color: PlayerColor.Red,
               landscape: [
                 [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LR1'], [], []],
@@ -517,7 +517,7 @@ describe('commands/build', () => {
               nickel: 0,
             },
             {
-              ...s0.players[0],
+              ...s0.players![0],
               color: PlayerColor.White,
               landscape: [
                 [[], [], ['P', 'G13'], ['P'], ['P'], ['P'], ['P', 'LW1'], [], []],
@@ -530,11 +530,11 @@ describe('commands/build', () => {
               penny: 0,
               nickel: 0,
             },
-            ...s0.players.slice(1),
+            ...s0.players!.slice(1),
           ],
           buildings: [BuildingEnum.Bakery],
           frame: {
-            ...s0.frame,
+            ...s0.frame!,
             activePlayerIndex: 0,
             neutralBuildingPhase: true,
             mainActionUsed: true,
@@ -546,7 +546,7 @@ describe('commands/build', () => {
         const s2 = build({ row: 1, col: 1, building: BuildingEnum.Bakery })(s1)!
         expect(s2).toBeDefined()
         expect(s2.buildings).toStrictEqual([])
-        expect(s2.players[0]).toMatchObject({
+        expect(s2.players![0]).toMatchObject({
           wood: 0,
           clay: 0,
           stone: 0,
@@ -558,7 +558,7 @@ describe('commands/build', () => {
             [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LR2'], ['P'], ['P', 'LR3'], [], []],
           ],
         })
-        expect(s2.players[1]).toMatchObject({
+        expect(s2.players![1]).toMatchObject({
           wood: 0,
           clay: 0,
           stone: 0,
@@ -584,23 +584,23 @@ describe('commands/build', () => {
 
   describe('complete', () => {
     it('allows running if BUILD is in bonus acitons', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [GameCommandEnum.BUILD],
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 25,
             clay: 25,
             stone: 25,
             penny: 25,
             straw: 25,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.Priory, BuildingEnum.CloisterCourtyard],
       }
@@ -608,23 +608,23 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['BUILD'])
     })
     it('allows running if main action not used yet', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: false,
           bonusActions: [],
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 25,
             clay: 25,
             stone: 25,
             penny: 25,
             straw: 25,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.Priory, BuildingEnum.CloisterCourtyard],
       }
@@ -632,10 +632,10 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['BUILD'])
     })
     it('disallows running if no buildings are buildable', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: false,
           bonusActions: [],
         },
@@ -645,23 +645,23 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual([])
     })
     it('allows running if buildings are buildable', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: false,
           bonusActions: [],
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 25,
             clay: 25,
             stone: 25,
             penny: 25,
             straw: 25,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         buildings: [BuildingEnum.Priory, BuildingEnum.CloisterCourtyard],
       }
@@ -669,10 +669,10 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['BUILD'])
     })
     it('does not allow running if not not permitted by frame', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
         },
@@ -681,7 +681,7 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual([])
     })
     it('gives all the buildings which may be built', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         buildings: [
           BuildingEnum.Priory, // WoCl
@@ -700,7 +700,7 @@ describe('commands/build', () => {
         ],
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 1,
             clay: 1,
             straw: 1,
@@ -708,10 +708,10 @@ describe('commands/build', () => {
             penny: 2,
             wine: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
         },
@@ -730,7 +730,7 @@ describe('commands/build', () => {
     })
 
     it('suggests buildings which require autoconversion of grain', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         buildings: [
           BuildingEnum.Priory, // WoCl
@@ -740,16 +740,16 @@ describe('commands/build', () => {
         ],
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 2,
             clay: 2,
             grain: 2,
             stone: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
         },
@@ -761,7 +761,7 @@ describe('commands/build', () => {
       ])
     })
     it('gives all buildings, regardless of building materials, when in neutralBuildingPhase', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         buildings: [
           BuildingEnum.Priory, // WoCl
@@ -772,7 +772,7 @@ describe('commands/build', () => {
         ],
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             wood: 0,
             clay: 0,
             straw: 0,
@@ -780,10 +780,10 @@ describe('commands/build', () => {
             penny: 0,
             wine: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           neutralBuildingPhase: true,
           mainActionUsed: true,
           bonusActions: [GameCommandEnum.BUILD],
@@ -793,21 +793,21 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(s1.buildings)
     })
     it('gives all the places the given building can be built', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['H', 'LB1'], [], []],
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['H', 'LB3'], [], []],
             ] as Tile[][],
             landscapeOffset: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusActions: [],
         },
         buildings: [BuildingEnum.StoneMerchant],
@@ -816,11 +816,11 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['3 0', '3 1'])
     })
     it('gives all the places a cloister can be built', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['H'], ['P'], ['P'], ['H'], ['H'], [], []],
               [['W'], ['C'], ['H'], ['P'], ['P'], ['P'], ['P', 'LG1'], [], []],
@@ -829,10 +829,10 @@ describe('commands/build', () => {
             ] as Tile[][],
             landscapeOffset: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
         },
@@ -841,18 +841,18 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['3 0', '3 2', '4 2'])
     })
     it('neutral building phase building a cloister only on adjacent or overbuild', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           players: 1,
         },
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
           },
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'G12'], ['P'], ['P'], ['P'], ['P', 'LG1'], [], []],
               [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'G01'], ['H', 'LG3'], [], []],
@@ -861,7 +861,7 @@ describe('commands/build', () => {
           },
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           neutralBuildingPhase: true,
           bonusActions: [GameCommandEnum.BUILD],
@@ -871,19 +871,19 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['3 0', '3 1', '4 1'])
     })
     it('neutral building phase building a regular building', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           players: 1,
         },
         buildings: [BuildingEnum.Market],
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
           },
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'G12'], ['P'], ['P'], ['P'], ['P', 'LG1'], [], []],
               [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'G01'], ['H', 'LG3'], [], []],
@@ -892,7 +892,7 @@ describe('commands/build', () => {
           },
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           neutralBuildingPhase: true,
           bonusActions: [GameCommandEnum.BUILD],
@@ -902,11 +902,11 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['0 0', '1 0', '2 0', '3 0', '4 0', '0 1', '1 1', '2 1'])
     })
     it('considers terrain type', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], [], [], [], [], [], [], []],
               [['W'], ['C'], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -916,10 +916,10 @@ describe('commands/build', () => {
             ] as Tile[][],
             landscapeOffset: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           bonusActions: [],
         },
       }
@@ -927,11 +927,11 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['-1 -1', '-1 0', '-1 2', '-1 3'])
     })
     it('gives all the places a cloister can be built if given a col', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [['W'], ['C'], ['H'], ['P'], ['P'], ['H'], ['H'], [], []],
               [['W'], ['C'], ['H'], ['P'], ['P', 'G05'], ['P'], ['P', 'LG1'], [], []],
@@ -940,10 +940,10 @@ describe('commands/build', () => {
             ] as Tile[][],
             landscapeOffset: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
         },
@@ -952,16 +952,16 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual(['0', '2'])
     })
     it('complete if given all necessary params', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
         },
@@ -970,16 +970,16 @@ describe('commands/build', () => {
       expect(c0).toStrictEqual([''])
     })
     it('cant complete if too many params', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
         },

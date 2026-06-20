@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -115,7 +115,7 @@ describe('buildings/festivalGround', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -169,14 +169,14 @@ describe('buildings/festivalGround', () => {
 
     it('given a beer, returns 2 points in a book', () => {
       const s1 = festivalGround('Be', 'Bo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
       })
     })
 
     it('given a beer, returns 5 points in a book+ceramic', () => {
       const s1 = festivalGround('Be', 'CeBo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         ceramic: 1,
       })
@@ -199,12 +199,12 @@ describe('buildings/festivalGround', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             beer: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['Be', ''])
     })
@@ -213,12 +213,12 @@ describe('buildings/festivalGround', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             beer: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual([''])
     })
@@ -227,7 +227,7 @@ describe('buildings/festivalGround', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscapeOffset: 1,
             landscape: [
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['H', 'LFO'], ['H'], [], []],
@@ -237,9 +237,9 @@ describe('buildings/festivalGround', () => {
             ] as Tile[][],
             beer: 1,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete(['Be'], s1)
       expect(c0).toStrictEqual([
         // different ways of giving at most 9 points, ordered by most points first

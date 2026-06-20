@@ -15,7 +15,7 @@ import {
 } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, withActivePlayer } from '../board/player'
-import { BuildingEnum, GameStatePlaying, Tableau, Tile } from '../types'
+import { BuildingEnum, GameState, Tableau, Tile } from '../types'
 import { forestLocations, forestLocationsForCol } from '../board/landscape'
 
 const removeForestAt = (player: Tableau | undefined, [col, row]: [number, number]): Tableau | undefined => {
@@ -89,7 +89,7 @@ const forestPairsWithColumn = (player: Tableau) => (coords: string[]) => {
 }
 
 // TODO: this can be better
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] => {
+export const complete = curry((partial: string[], state: GameState): string[] => {
   const player = view(activeLens(state), state)
   return match(partial)
     .with([], forestPairs(player))

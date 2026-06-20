@@ -2,7 +2,7 @@ import { always, curry, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { parseResourceParam } from '../board/resource'
-import { GameStatePlaying, ResourceEnum } from '../types'
+import { GameState, ResourceEnum } from '../types'
 
 export const pilgrimageSite = (param1 = '', param2 = '') => {
   const { book: book1 = 0, ceramic: ceramic1 = 0, ornament: ornament1 = 0 } = parseResourceParam(param1)
@@ -19,7 +19,7 @@ export const pilgrimageSite = (param1 = '', param2 = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match(partial)
     .with([], () => {
       const { book = 0, ceramic = 0, ornament = 0 } = view(activeLens(state), state)

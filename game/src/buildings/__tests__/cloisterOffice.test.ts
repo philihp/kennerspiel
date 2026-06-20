@@ -3,7 +3,7 @@ import { dissocPath } from 'ramda'
 import { initialState } from '../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -48,7 +48,7 @@ describe('buildings/cloisterOffice', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -117,13 +117,13 @@ describe('buildings/cloisterOffice', () => {
 
   describe('use', () => {
     it('retains undefined state', () => {
-      const s0: GameStatePlaying | undefined = undefined
+      const s0: GameState | undefined = undefined
       const s1 = cloisterOffice()(s0)
       expect(s1).toBeUndefined()
     })
     it('can get pennies with the coin token', () => {
       const s1 = cloisterOffice()(s0)!
-      expect(s1.players[0].penny).toBe(4)
+      expect(s1.players![0].penny).toBe(4)
       expect(s1.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 3,
@@ -134,14 +134,14 @@ describe('buildings/cloisterOffice', () => {
       const s1 = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           length: 'short',
         },
-      } as GameStatePlaying
+      } as GameState
       const s2 = cloisterOffice()(s1)!
-      expect(s2.players[0].penny).toBe(5)
-      expect(s2.players[1].penny).toBe(1)
-      expect(s2.players[2].penny).toBe(1)
+      expect(s2.players![0].penny).toBe(5)
+      expect(s2.players![1].penny).toBe(1)
+      expect(s2.players![2].penny).toBe(1)
       expect(s2.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 3,
@@ -150,7 +150,7 @@ describe('buildings/cloisterOffice', () => {
     })
     it('can get pennies with the joker', () => {
       const s1 = cloisterOffice('Jo')(s0)!
-      expect(s1.players[0].penny).toBe(3)
+      expect(s1.players![0].penny).toBe(3)
       expect(s1.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 5,
@@ -158,18 +158,18 @@ describe('buildings/cloisterOffice', () => {
       })
     })
     it('fallback to joker if no main token', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           pointingBefore: 5,
           joker: 3,
           coin: undefined,
         },
       }
-      expect(s1.players[0].penny).toBe(0)
+      expect(s1.players![0].penny).toBe(0)
       const s2 = cloisterOffice()(s1)!
-      expect(s2.players[0].penny).toBe(3)
+      expect(s2.players![0].penny).toBe(3)
       expect(s2.rondel).toMatchObject({
         pointingBefore: 5,
         joker: 5,
@@ -185,7 +185,7 @@ describe('buildings/cloisterOffice', () => {
       expect(c0).toContain('Jo')
     })
     it('does not allow Joker if undefined', () => {
-      const s1 = dissocPath<GameStatePlaying>(['rondel', 'joker'], s0)
+      const s1 = dissocPath<GameState>(['rondel', 'joker'], s0)
       const c1 = complete([])(s1)
       expect(c1).not.toContain('Jo')
     })

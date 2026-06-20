@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/slaughterhouse', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,7 +82,7 @@ describe('buildings/slaughterhouse', () => {
   describe('slaughterhouse', () => {
     it('goes through a happy path', () => {
       const s1 = slaughterhouse('ShShShSwSwSw')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         sheep: 7,
         straw: 2,
         meat: 3,
@@ -91,7 +91,7 @@ describe('buildings/slaughterhouse', () => {
 
     it('consumes everything if not enough straw', () => {
       const s1 = slaughterhouse('ShShShSwSw')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         sheep: 7,
         straw: 3,
         meat: 2,
@@ -100,7 +100,7 @@ describe('buildings/slaughterhouse', () => {
 
     it('consumes everything if not enough sheep', () => {
       const s1 = slaughterhouse('ShShSwSwSw')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         sheep: 8,
         straw: 2,
         meat: 2,

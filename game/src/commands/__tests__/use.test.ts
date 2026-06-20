@@ -4,7 +4,7 @@ import { initialState } from '../../state'
 import {
   BuildingEnum,
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -205,7 +205,7 @@ describe('commands/use', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -278,14 +278,14 @@ describe('commands/use', () => {
   const s1Bonus = {
     ...s0,
     config: {
-      ...s0.config,
+      ...s0.config!,
       country: 'france',
       length: 'long',
       players: 3,
     },
     players: [
       {
-        ...s0.players[0],
+        ...s0.players![0],
         color: PlayerColor.Red,
         clergy: ['PRIR', 'LB2R'],
         landscape: [
@@ -301,7 +301,7 @@ describe('commands/use', () => {
         meat: 0,
       },
       {
-        ...s0.players[0],
+        ...s0.players![0],
         color: PlayerColor.Blue,
         clergy: ['PRIB'],
         landscape: [
@@ -324,7 +324,7 @@ describe('commands/use', () => {
         landscapeOffset: 2,
       },
       {
-        ...s0.players[0],
+        ...s0.players![0],
         color: PlayerColor.Green,
         clergy: ['PRIG'],
         landscape: [
@@ -341,7 +341,7 @@ describe('commands/use', () => {
       },
     ],
     frame: {
-      ...s0.frame,
+      ...s0.frame!,
       startingPlayer: 0,
       settlementRound: 'D',
       currentPlayerIndex: 0,
@@ -354,7 +354,7 @@ describe('commands/use', () => {
       usableBuildings: [],
       nextUse: 'only-prior',
     },
-  } as GameStatePlaying
+  } as GameState
 
   describe('use', () => {
     it('throws errors on invalid building', () => {
@@ -369,22 +369,22 @@ describe('commands/use', () => {
         ...s0,
       }
       const s2 = use(BuildingEnum.FarmYardR, ['Sh'])(s1)!
-      expect(s1.frame.activePlayerIndex).toBe(0)
-      expect(s1.players[0].clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
-      expect(s2.players[0].clergy).toStrictEqual(['LB2R', 'PRIR'])
-      expect(s2.players[0].landscape[2][4]).toStrictEqual(['P', 'LR2', 'LB1R'])
+      expect(s1.frame!.activePlayerIndex).toBe(0)
+      expect(s1.players![0].clergy).toStrictEqual(['LB1R', 'LB2R', 'PRIR'])
+      expect(s2.players![0].clergy).toStrictEqual(['LB2R', 'PRIR'])
+      expect(s2.players![0].landscape[2][4]).toStrictEqual(['P', 'LR2', 'LB1R'])
     })
     it('fallback to prior if laypeople are used', () => {
       const s1 = {
         ...s0,
-        players: [{ ...s0.players[0], clergy: [Clergy.PriorR] }, ...s0.players.slice(1)],
+        players: [{ ...s0.players![0], clergy: [Clergy.PriorR] }, ...s0.players!.slice(1)],
       }
       const s2 = use(BuildingEnum.FarmYardR, ['ShJo'])(s1)!
-      expect(s1.frame.activePlayerIndex).toBe(0)
+      expect(s1.frame!.activePlayerIndex).toBe(0)
       expect(s1.players[0].landscape[2][4]).toStrictEqual(['P', 'LR2'])
       expect(s1.players[0].clergy).toStrictEqual(['PRIR'])
-      expect(s2.players[0].clergy).toStrictEqual([])
-      expect(s2.players[0].landscape[2][4]).toStrictEqual(['P', 'LR2', 'PRIR'])
+      expect(s2.players![0].clergy).toStrictEqual([])
+      expect(s2.players![0].landscape[2][4]).toStrictEqual(['P', 'LR2', 'PRIR'])
     })
     it('gathers the goods', () => {
       const s1 = {
@@ -397,7 +397,7 @@ describe('commands/use', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
           usableBuildings: [],
@@ -411,7 +411,7 @@ describe('commands/use', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
           usableBuildings: [BuildingEnum.Brewery],
@@ -425,7 +425,7 @@ describe('commands/use', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
           usableBuildings: [BuildingEnum.CloisterGarden],
@@ -440,7 +440,7 @@ describe('commands/use', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           bonusActions: [],
           usableBuildings: [],
@@ -715,15 +715,15 @@ describe('commands/use', () => {
       expect(winery).toHaveBeenCalled()
     })
     it('can use anothers building during extra round', () => {
-      expect(s1Bonus.players[0]).toMatchObject({
+      expect(s1Bonus.players![0]).toMatchObject({
         clergy: ['PRIR', 'LB2R'],
       })
       const s2 = use(BuildingEnum.Slaughterhouse, ['ShShSwSw'])(s1Bonus)!
       expect(slaughterhouse).toHaveBeenCalled()
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         clergy: ['LB2R'],
       })
-      expect(s2.players[2].landscape[3][2]).toStrictEqual(['P', 'G19', 'PRIR'])
+      expect(s2.players![2].landscape[3][2]).toStrictEqual(['P', 'G19', 'PRIR'])
     })
   })
 
@@ -736,7 +736,7 @@ describe('commands/use', () => {
       const s1 = {
         ...s0,
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
         },
       }
@@ -749,13 +749,13 @@ describe('commands/use', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: false,
           nextUse: NextUseClergy.Any,
         },
@@ -769,13 +769,13 @@ describe('commands/use', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.PriorB],
           },
-          ...s0.players,
+          ...s0.players!,
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           nextUse: NextUseClergy.OnlyPrior,
           usableBuildings: [BuildingEnum.Priory],
@@ -790,13 +790,13 @@ describe('commands/use', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.LayBrother1B],
           },
-          ...s0.players,
+          ...s0.players!,
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           nextUse: NextUseClergy.OnlyPrior,
           usableBuildings: [BuildingEnum.Priory],
@@ -811,13 +811,13 @@ describe('commands/use', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.LayBrother1B],
           },
-          ...s0.players,
+          ...s0.players!,
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           nextUse: NextUseClergy.Free,
           usableBuildings: [BuildingEnum.CloisterGarden],
@@ -832,13 +832,13 @@ describe('commands/use', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [],
           },
-          ...s0.players,
+          ...s0.players!,
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           nextUse: NextUseClergy.Free,
           usableBuildings: [BuildingEnum.CloisterGarden],
@@ -853,13 +853,13 @@ describe('commands/use', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.LayBrother1R, Clergy.LayBrother2R],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           nextUse: NextUseClergy.OnlyPrior,
           usableBuildings: [BuildingEnum.Priory],
@@ -873,13 +873,13 @@ describe('commands/use', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: [Clergy.PriorR, Clergy.LayBrother1R],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           nextUse: NextUseClergy.OnlyPrior,
           usableBuildings: [BuildingEnum.Priory],
@@ -892,12 +892,12 @@ describe('commands/use', () => {
     it('allows when main action unavailable, but usage is allowed maybe from Priory, but no clergy', () => {
       const s1 = {
         ...s0,
-        players: s0.players.map((p) => ({
+        players: s0.players!.map((p) => ({
           ...p,
           clergy: [],
         })),
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           nextUse: NextUseClergy.Free,
           usableBuildings: [BuildingEnum.GrainStorage, BuildingEnum.BuildersMarket],
@@ -979,10 +979,10 @@ describe('commands/use', () => {
           country: 'france',
           length: 'long',
         },
-        players: [s0.players[0], s0.players[1]],
+        players: [s0.players![0], s0.players![1]],
         buildings: ['G18', 'G19'],
         frame: {
-          ...s0.frame,
+          ...s0.frame!,
           mainActionUsed: true,
           neutralBuildingPhase: true,
           canBuyLandscape: true,
@@ -992,7 +992,7 @@ describe('commands/use', () => {
           usableBuildings: ['F15'],
           nextUse: 'only-prior',
         },
-      } as GameStatePlaying
+      } as GameState
       it('does not complete USE', () => {
         const c1 = complete(s1)([])
         expect(c1).not.toContain('USE')

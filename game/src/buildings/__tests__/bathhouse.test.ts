@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
   Clergy,
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -46,7 +46,7 @@ describe('buildings/bathhouse', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -85,15 +85,15 @@ describe('buildings/bathhouse', () => {
   describe('bathhouse', () => {
     it('follows happy path', () => {
       const s1 = bathhouse('Pn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         penny: 0,
         book: 1,
         ceramic: 1,
       })
-      expect(s1.players[0].clergy).toContain('PRIB')
-      expect(s1.players[0].clergy).toContain('LB1B')
-      expect(s1.players[0].clergy).toContain('LB2B')
-      expect(s1.players[0].landscape).toStrictEqual([
+      expect(s1.players![0].clergy).toContain('PRIB')
+      expect(s1.players![0].clergy).toContain('LB1B')
+      expect(s1.players![0].clergy).toContain('LB2B')
+      expect(s1.players![0].landscape).toStrictEqual([
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], [], []],
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
       ])
@@ -115,20 +115,20 @@ describe('buildings/bathhouse', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P'], ['P', 'LFO', 'LB1R'], ['P', 'LFO'], ['P'], ['P', 'LB1', 'PRIB'], [], []],
               [[], [], ['P'], ['P', 'LFO'], ['P', 'LB2', 'LB1B'], ['P'], ['P', 'LB3'], [], []],
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bathhouse('Pn')(s1)!
-      expect(s2.players[0].clergy).toContain('PRIB')
-      expect(s2.players[0].clergy).toContain('LB1B')
-      expect(s2.players[0].clergy).toContain('LB2B')
-      expect(s2.players[0].landscape).toStrictEqual([
+      expect(s2.players![0].clergy).toContain('PRIB')
+      expect(s2.players![0].clergy).toContain('LB1B')
+      expect(s2.players![0].clergy).toContain('LB2B')
+      expect(s2.players![0].landscape).toStrictEqual([
         [[], [], ['P'], ['P', 'LFO', 'LB1R'], ['P', 'LFO'], ['P'], ['P', 'LB1'], [], []],
         [[], [], ['P'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
       ])
@@ -140,23 +140,23 @@ describe('buildings/bathhouse', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             clergy: ['LB1B', 'LB2B', 'PRIB'] as Clergy[],
             landscape: [
               [[], [], ['P'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P', 'LB1'], [], []],
               [[], [], ['P'], ['P', 'LFO'], ['P', 'LB2'], ['P'], ['P', 'LB3'], [], []],
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = bathhouse()(s1)!
-      expect(s1.players[0].clergy).toBe(s2.players[0].clergy)
-      expect(s1.players[0].landscape).toBe(s2.players[0].landscape)
+      expect(s1.players[0].clergy).toBe(s2.players![0].clergy)
+      expect(s1.players[0].landscape).toBe(s2.players![0].landscape)
     })
 
     it('fails if no pennies', () => {
-      const s1 = { ...s0, players: [{ ...s0.players[0], penny: 0 }, ...s0.players.slice(1)] }
+      const s1 = { ...s0, players: [{ ...s0.players![0], penny: 0 }, ...s0.players!.slice(1)] }
       const s2 = bathhouse('Pn')(s1)!
       expect(s2).toBeUndefined()
     })
@@ -168,12 +168,12 @@ describe('buildings/bathhouse', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual([''])
     })
@@ -182,12 +182,12 @@ describe('buildings/bathhouse', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             penny: 4,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([])(s1)
       expect(c0).toStrictEqual(['Pn', ''])
     })

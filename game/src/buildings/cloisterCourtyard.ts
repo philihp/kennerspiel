@@ -11,7 +11,7 @@ import {
   combinations,
   basicResources,
 } from '../board/resource'
-import { Cost, GameStatePlaying, ResourceEnum } from '../types'
+import { Cost, GameState, ResourceEnum } from '../types'
 
 const ALLOWED_OUTPUT: (keyof Cost)[] = ['peat', 'clay', 'wood', 'sheep', 'grain', 'penny']
 
@@ -30,7 +30,7 @@ export const cloisterCourtyard = (input = '', output = '') => {
   )
 }
 
-export const complete = curry((partial: string[], state: GameStatePlaying): string[] =>
+export const complete = curry((partial: string[], state: GameState): string[] =>
   match<string[], string[]>(partial)
     .with([], () => {
       const player = view(activeLens(state), state)

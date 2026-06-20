@@ -7,7 +7,7 @@ import {
   SettlementRound,
   Tableau,
   Tile,
-  GameStatePlaying,
+  GameState,
 } from '../../types'
 import { cloisterGarden, complete } from '../cloisterGarden'
 
@@ -45,7 +45,7 @@ describe('buildings/cloisterGarden', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -89,7 +89,7 @@ describe('buildings/cloisterGarden', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P'], ['P'], ['P', 'F04'], ['P', 'F17', 'PRIR'], ['P', 'G01'], [], []],
               [[], [], ['P'], ['P'], ['P', 'G16'], ['P', 'F09'], ['P', 'LG1'], [], []],
@@ -98,18 +98,18 @@ describe('buildings/cloisterGarden', () => {
             landscapeOffset: 1,
             grape: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = cloisterGarden()(s1)!
-      expect(s2.frame.usableBuildings).toHaveLength(2)
-      expect(s2.frame.usableBuildings).not.toContain('F17')
-      expect(s2.frame.usableBuildings).toContain('G16')
-      expect(s2.frame.usableBuildings).toContain('LG1')
-      expect(s2.frame.usableBuildings).not.toContain('F08')
-      expect(s2.frame.unusableBuildings).toContain('F09')
-      expect(s2.frame.nextUse).toBe('free')
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.frame!.usableBuildings).toHaveLength(2)
+      expect(s2.frame!.usableBuildings).not.toContain('F17')
+      expect(s2.frame!.usableBuildings).toContain('G16')
+      expect(s2.frame!.usableBuildings).toContain('LG1')
+      expect(s2.frame!.usableBuildings).not.toContain('F08')
+      expect(s2.frame!.unusableBuildings).toContain('F09')
+      expect(s2.frame!.nextUse).toBe('free')
+      expect(s2.players![0]).toMatchObject({
         grape: 1,
       })
     })
@@ -119,7 +119,7 @@ describe('buildings/cloisterGarden', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P'], ['P'], ['P', 'G16'], ['P'], ['P', 'LG1'], [], []],
               [[], [], ['P'], ['P'], ['P', 'LG2'], ['P', 'F08', 'LB1R'], ['P', 'LG3'], [], []],
@@ -127,7 +127,7 @@ describe('buildings/cloisterGarden', () => {
             landscapeOffset: 0,
             grape: 0,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const s2 = cloisterGarden()(s1)!
@@ -135,7 +135,7 @@ describe('buildings/cloisterGarden', () => {
       expect(s2.frame).toMatchObject({
         usableBuildings: [],
       })
-      expect(s2.players[0].grape).toBe(1)
+      expect(s2.players![0].grape).toBe(1)
     })
   })
 

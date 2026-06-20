@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/cloisterChurch', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -84,7 +84,7 @@ describe('buildings/cloisterChurch', () => {
   describe('cloisterChurch', () => {
     it('works twice', () => {
       const s1 = cloisterChurch('BrBrWnWn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         bread: 1,
         wine: 2,
         reliquary: 2,
@@ -93,7 +93,7 @@ describe('buildings/cloisterChurch', () => {
 
     it('works once', () => {
       const s1 = cloisterChurch('BrWn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         bread: 2,
         wine: 3,
         reliquary: 1,
@@ -102,7 +102,7 @@ describe('buildings/cloisterChurch', () => {
 
     it('works once with extra just consumed', () => {
       const s1 = cloisterChurch('BrWnWn')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         bread: 2,
         wine: 2,
         reliquary: 1,
@@ -111,7 +111,7 @@ describe('buildings/cloisterChurch', () => {
 
     it('works with nothing, and gives nothing', () => {
       const s1 = cloisterChurch('')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         bread: 3,
         wine: 4,
         reliquary: 0,
@@ -125,11 +125,11 @@ describe('buildings/cloisterChurch', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             bread: 3,
             wine: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -140,11 +140,11 @@ describe('buildings/cloisterChurch', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             bread: 1,
             wine: 1,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -155,11 +155,11 @@ describe('buildings/cloisterChurch', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             bread: 3,
             wine: 2,
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['BrWn'])(s1)
@@ -170,9 +170,9 @@ describe('buildings/cloisterChurch', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['Br', 'Wn'])(s1)

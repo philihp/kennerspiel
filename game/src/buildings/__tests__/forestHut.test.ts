@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/forestHut', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     frame: {
@@ -82,7 +82,7 @@ describe('buildings/forestHut', () => {
   describe('forestHut', () => {
     it('goes through a happy path', () => {
       const s1 = forestHut(0, 2)(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
           [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
@@ -110,13 +110,13 @@ describe('buildings/forestHut', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([], s1)
@@ -127,13 +127,13 @@ describe('buildings/forestHut', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P'], ['P', 'LMO'], ['P'], ['P'], ['P', 'LG1'], [], []],
               [[], [], ['P'], ['P', 'LMO'], ['P', 'LG2'], ['P'], ['P', 'LG3'], [], []],
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete([])(s1)
@@ -144,13 +144,13 @@ describe('buildings/forestHut', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['1'], s1)
@@ -161,13 +161,13 @@ describe('buildings/forestHut', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             landscape: [
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
               [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P', 'LFO'], ['P'], ['P'], [], []],
             ] as Tile[][],
           },
-          ...s0.players.slice(1),
+          ...s0.players!.slice(1),
         ],
       }
       const c0 = complete(['0'], s1)

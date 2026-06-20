@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../testHelpers'
-import { GameStatePlaying, Rondel, Tableau } from '../../types'
+import { GameState, Rondel, Tableau } from '../../types'
 import {
   introduceGrapeToken,
   introduceStoneToken,
@@ -53,21 +53,21 @@ describe('board/rondel', () => {
       config: {
         country: 'france',
       },
-    } as GameStatePlaying
+    } as GameState
     it('adds a grape token right behind the arm', () => {
       const s1 = introduceGrapeToken(s0)!
-      expect(s1.rondel.grape).toBe(s1.rondel.pointingBefore)
+      expect(s1.rondel!.grape).toBe(s1.rondel!.pointingBefore)
     })
     it('does not add grape if not in france', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         config: {
-          ...s0.config,
+          ...s0.config!,
           country: 'ireland',
         },
       }
       const s2 = introduceGrapeToken(s1)!
-      expect(s2.rondel.grape).toBeUndefined()
+      expect(s2.rondel!.grape).toBeUndefined()
     })
     it('keeps all remaining tokens where they were', () => {
       const s1 = introduceGrapeToken(s0)!
@@ -93,10 +93,10 @@ describe('board/rondel', () => {
       })
     })
     it('if introducing a token already existing, for some reason, it will do nothing', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           grape: 5,
         },
       }
@@ -122,10 +122,10 @@ describe('board/rondel', () => {
       config: {
         country: 'france',
       },
-    } as GameStatePlaying
+    } as GameState
     it('adds a stone token right behind the arm', () => {
       const s1 = introduceStoneToken(s0)!
-      expect(s1.rondel.stone).toBe(s1.rondel.pointingBefore)
+      expect(s1.rondel!.stone).toBe(s1.rondel!.pointingBefore)
     })
     it('keeps all remaining tokens where they were', () => {
       const s1 = introduceStoneToken(s0)!
@@ -140,10 +140,10 @@ describe('board/rondel', () => {
       })
     })
     it('if introducing a token already existing, for some reason, it will do nothing', () => {
-      const s1: GameStatePlaying = {
+      const s1: GameState = {
         ...s0,
         rondel: {
-          ...s0.rondel,
+          ...s0.rondel!,
           stone: 6,
         },
       }
@@ -210,14 +210,14 @@ describe('board/rondel', () => {
         frame: {
           activePlayerIndex: 0,
         },
-      } as GameStatePlaying
+      } as GameState
       it('takes from the grain token', () => {
         const s1 = standardSesourceGatheringAction('grain', false)(s0)!
-        expect(s1.players[0].grain).toBe(5)
+        expect(s1.players![0].grain).toBe(5)
       })
       it('takes from the joker token', () => {
         const s1 = standardSesourceGatheringAction('grain', true)(s0)!
-        expect(s1.players[0].grain).toBe(7)
+        expect(s1.players![0].grain).toBe(7)
       })
     })
     describe('when no joker available', () => {
@@ -240,14 +240,14 @@ describe('board/rondel', () => {
         frame: {
           activePlayerIndex: 0,
         },
-      } as GameStatePlaying
+      } as GameState
       it('takes from the sheep token', () => {
         const s1 = standardSesourceGatheringAction('sheep', false)(s0)!
-        expect(s1.players[0].sheep).toBe(5)
+        expect(s1.players![0].sheep).toBe(5)
       })
       it('does not default back to sheep when joker specified', () => {
         const s1 = standardSesourceGatheringAction('sheep', true)(s0)!
-        expect(s1.players[0].sheep).toBe(1)
+        expect(s1.players![0].sheep).toBe(1)
       })
     })
     describe('when no main token available', () => {
@@ -270,14 +270,14 @@ describe('board/rondel', () => {
         frame: {
           activePlayerIndex: 0,
         },
-      } as GameStatePlaying
+      } as GameState
       it('falls back to joker even if main is gone', () => {
         const s1 = standardSesourceGatheringAction('sheep', false)(s0)!
-        expect(s1.players[0].sheep).toBe(6)
+        expect(s1.players![0].sheep).toBe(6)
       })
       it('takes with the joker token', () => {
         const s1 = standardSesourceGatheringAction('sheep', true)(s0)!
-        expect(s1.players[0].sheep).toBe(6)
+        expect(s1.players![0].sheep).toBe(6)
       })
     })
   })
@@ -291,7 +291,7 @@ describe('board/rondel', () => {
       } as Rondel
       const s0 = {
         rondel: r0,
-      } as GameStatePlaying
+      } as GameState
 
       const c0 = standardSesourceGatheringCompletion('sheep')([], s0)
       expect(c0).toStrictEqual(['', 'Jo'])
@@ -304,7 +304,7 @@ describe('board/rondel', () => {
       } as Rondel
       const s0 = {
         rondel: r0,
-      } as GameStatePlaying
+      } as GameState
 
       const c0 = standardSesourceGatheringCompletion('sheep')([], s0)
       expect(c0).toStrictEqual([''])
@@ -317,7 +317,7 @@ describe('board/rondel', () => {
       } as Rondel
       const s0 = {
         rondel: r0,
-      } as GameStatePlaying
+      } as GameState
 
       const c0 = standardSesourceGatheringCompletion('sheep')([], s0)
       expect(c0).toStrictEqual([''])
@@ -330,7 +330,7 @@ describe('board/rondel', () => {
       } as Rondel
       const s0 = {
         rondel: r0,
-      } as GameStatePlaying
+      } as GameState
 
       const c0 = standardSesourceGatheringCompletion('sheep')([], s0)
       expect(c0).toStrictEqual([])

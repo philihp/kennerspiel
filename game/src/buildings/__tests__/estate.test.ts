@@ -1,7 +1,7 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
 import {
-  GameStatePlaying,
+  GameState,
   GameStatusEnum,
   NextUseClergy,
   PlayerColor,
@@ -45,7 +45,7 @@ describe('buildings/estate', () => {
     beer: 0,
     reliquary: 0,
   }
-  const s0: GameStatePlaying = {
+  const s0: GameState = {
     ...initialState,
     status: GameStatusEnum.PLAYING,
     config: {
@@ -89,7 +89,7 @@ describe('buildings/estate', () => {
 
     it('allows noop', () => {
       const s1 = estate()(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 0,
         ornament: 0,
         meat: 10,
@@ -99,7 +99,7 @@ describe('buildings/estate', () => {
 
     it('can convert 10 food', () => {
       const s1 = estate('MtMt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         ornament: 1,
         meat: 8,
@@ -108,7 +108,7 @@ describe('buildings/estate', () => {
     })
     it('can convert 15 food and just loses the extra', () => {
       const s1 = estate('MtMtMt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         ornament: 1,
         meat: 7,
@@ -117,7 +117,7 @@ describe('buildings/estate', () => {
     })
     it('can convert 20 food', () => {
       const s1 = estate('MtMtMtMt')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 2,
         ornament: 2,
         meat: 6,
@@ -127,7 +127,7 @@ describe('buildings/estate', () => {
 
     it('can convert 10 food and 6 energy', () => {
       const s1 = estate('MtMtCoCo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 2,
         ornament: 2,
         meat: 8,
@@ -137,7 +137,7 @@ describe('buildings/estate', () => {
 
     it('can convert 6 energy', () => {
       const s1 = estate('CoCo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 1,
         ornament: 1,
         meat: 10,
@@ -146,7 +146,7 @@ describe('buildings/estate', () => {
     })
     it('can convert 12 energy', () => {
       const s1 = estate('CoCoCoCo')(s0)!
-      expect(s1.players[0]).toMatchObject({
+      expect(s1.players![0]).toMatchObject({
         book: 2,
         ornament: 2,
         meat: 10,
@@ -161,16 +161,16 @@ describe('buildings/estate', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             coal: 4,
             peat: 6,
             wood: 1,
             meat: 2,
             sheep: 5,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual([
         // ways of doing 12 fuel

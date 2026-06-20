@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../testHelpers'
-import { GameStatePlaying, Tableau } from '../../types'
+import { GameState, Tableau } from '../../types'
 import { chapel, complete } from '../chapel'
 
 describe('buildings/chapel', () => {
@@ -32,7 +32,7 @@ describe('buildings/chapel', () => {
       activePlayerIndex: 0,
     },
     players: [{ ...p0 }],
-  } as GameStatePlaying
+  } as GameState
 
   describe('chapel', () => {
     it('goes through a happy path', () => {
@@ -48,7 +48,7 @@ describe('buildings/chapel', () => {
         ],
       }
       const s2 = chapel('PnWhBeWhBeWhBe')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 0,
         beer: 0,
         whiskey: 0,
@@ -85,7 +85,7 @@ describe('buildings/chapel', () => {
         ],
       }
       const s2 = chapel('PnWhBeWhBeWhBeWhBe')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 0,
         beer: 1,
         whiskey: 1,
@@ -107,7 +107,7 @@ describe('buildings/chapel', () => {
         ],
       }
       const s2 = chapel('Pn')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 0,
         beer: 5,
         whiskey: 5,
@@ -129,7 +129,7 @@ describe('buildings/chapel', () => {
         ],
       }
       const s2 = chapel('BeWh')(s1)!
-      expect(s2.players[0]).toMatchObject({
+      expect(s2.players![0]).toMatchObject({
         penny: 1,
         beer: 1,
         whiskey: 4,
@@ -145,14 +145,14 @@ describe('buildings/chapel', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             beer: 4,
             whiskey: 4,
             penny: 4,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['BeBeBeWhWhWhPn', 'BeBeBeWhWhWh', 'BeBeWhWhPn', 'BeBeWhWh', 'BeWhPn', 'BeWh', 'Pn', ''])
     })
@@ -161,14 +161,14 @@ describe('buildings/chapel', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             beer: 4,
             whiskey: 0,
             penny: 4,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['Pn', ''])
     })
@@ -177,14 +177,14 @@ describe('buildings/chapel', () => {
         ...s0,
         players: [
           {
-            ...s0.players[0],
+            ...s0.players![0],
             beer: 2,
             whiskey: 3,
             penny: 0,
           },
-          s0.players.slice(1),
+          s0.players!.slice(1),
         ],
-      } as GameStatePlaying
+      } as GameState
       const c0 = complete([], s1)
       expect(c0).toStrictEqual(['BeBeWhWh', 'BeWh', ''])
     })
