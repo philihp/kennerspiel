@@ -185,7 +185,7 @@ export const use = (building: BuildingEnum, params: string[]): StateReducer =>
       .with(BuildingEnum.FilialChurch, () => filialChurch(params[0]))
       .with(BuildingEnum.FinancedEstate, () => financedEstate(params[0]))
       .with(BuildingEnum.ForestHut, () =>
-        forestHut((Number.parseInt(params[0] ?? '', 10), Number.parseInt(params[1] ?? '', 10)))
+        forestHut(Number.parseInt(params[0] ?? '', 10), Number.parseInt(params[1] ?? '', 10))
       )
       .with(BuildingEnum.ForgersWorkshop, () => forgersWorkshop(params[0]))
       .with(BuildingEnum.FuelMerchant, () => fuelMerchant(params[0]))
