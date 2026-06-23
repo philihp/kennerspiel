@@ -5,34 +5,34 @@ import { activeLens, withActivePlayer } from '../board/player'
 import { BuildingEnum, GameCommandEnum, GameState } from '../types'
 import { forestLocations, forestLocationsForCol } from '../board/landscape'
 
-const checkSpotIsForest = (row: number, col: number) =>
+const checkSpotIsForest = (col: number, row: number) =>
   withActivePlayer((player) => {
-    if (player.landscape[row][col + 2][1] !== BuildingEnum.Forest) return undefined
+    if (player.landscape[row + player.landscapeOffset][col + 2][1] !== BuildingEnum.Forest) return undefined
     return player
   })
 
-const removeForestAt = (row: number, col: number) =>
+const removeForestAt = (col: number, row: number) =>
   withActivePlayer(
     (player) =>
       player && {
         ...player,
         landscape: [
-          ...player.landscape.slice(0, row),
+          ...player.landscape.slice(0, row + player.landscapeOffset),
           [
-            ...player.landscape[row].slice(0, col + 2),
-            [player.landscape[row][col + 2][0]],
-            ...player.landscape[row].slice(col + 2 + 1),
+            ...player.landscape[row + player.landscapeOffset].slice(0, col + 2),
+            [player.landscape[row + player.landscapeOffset][col + 2][0]],
+            ...player.landscape[row + player.landscapeOffset].slice(col + 2 + 1),
           ],
-          ...player.landscape.slice(row + 1),
+          ...player.landscape.slice(row + player.landscapeOffset + 1),
         ],
       }
   )
 
-export const carpentry = (row: number, col: number) =>
+export const carpentry = (col: number, row: number) =>
   pipe(
     //
-    checkSpotIsForest(row, col),
-    removeForestAt(row, col),
+    checkSpotIsForest(col, row),
+    removeForestAt(col, row),
     addBonusAction(GameCommandEnum.BUILD)
   )
 

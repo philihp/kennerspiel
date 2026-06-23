@@ -81,7 +81,7 @@ describe('buildings/carpentry', () => {
   }
   describe('carpentry', () => {
     it('goes through a happy path', () => {
-      const s1 = carpentry(0, 2)(s0)!
+      const s1 = carpentry(2, 0)(s0)!
       expect(s1.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
