@@ -49,7 +49,7 @@ export const Inn = () => {
     2 * whiskeyUsed +
     1 * wineUsed
 
-  const coinsMade = 1 * min(foodUsed - max(wineUsed - 1, 0), MAX_FOOD) + COINS_FOR_WINE * min(1, wineUsed)
+  const coinsMade = 1 * min(foodUsed - min(wineUsed, 1), MAX_FOOD) + COINS_FOR_WINE * min(1, wineUsed)
 
   const substrings = [
     join('', repeat(ResourceEnum.Grain, grainUsed)),
