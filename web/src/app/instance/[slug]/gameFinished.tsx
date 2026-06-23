@@ -10,8 +10,10 @@ import { UnbuiltPlots } from '@/components/unbuiltPlots'
 import { UnbuiltWonders } from '@/components/unbuiltWonders'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Enums } from '@/supabase.types'
-import { GameStatePlaying, Tableau } from 'hathora-et-labora-game'
-import { PlayerColor } from 'hathora-et-labora-game/dist/types'
+import { GameState, Tableau } from 'hathora-et-labora-game'
+import { Frame, GameCommandConfigParams, PlayerColor } from 'hathora-et-labora-game/dist/types'
+
+type GameStatePlaying = GameState & { players: Tableau[]; frame: Frame; config: GameCommandConfigParams }
 import { map, pipe, range } from 'ramda'
 import { ReactNode } from 'react'
 import { match } from 'ts-pattern'
