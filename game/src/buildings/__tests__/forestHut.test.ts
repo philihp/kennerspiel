@@ -1,14 +1,6 @@
 import { describe, it, expect } from '../../testHelpers'
 import { initialState } from '../../state'
-import {
-  GameState,
-  GameStatusEnum,
-  NextUseClergy,
-  PlayerColor,
-  SettlementRound,
-  Tableau,
-  Tile,
-} from '../../types'
+import { GameState, GameStatusEnum, NextUseClergy, PlayerColor, SettlementRound, Tableau, Tile } from '../../types'
 import { forestHut, complete } from '../forestHut'
 
 describe('buildings/forestHut', () => {
@@ -81,7 +73,7 @@ describe('buildings/forestHut', () => {
 
   describe('forestHut', () => {
     it('goes through a happy path', () => {
-      const s1 = forestHut(0, 2)(s0)!
+      const s1 = forestHut(2, 0)(s0)!
       expect(s1.players![0]).toMatchObject({
         landscape: [
           [[], [], ['P', 'LMO'], ['P', 'LFO'], ['P'], ['P'], ['P'], [], []],
