@@ -1,6 +1,6 @@
 'use client'
 
-import { control, GameState, GameStatePlaying, initialState, reducer } from 'hathora-et-labora-game'
+import { control, GameState, initialState, reducer } from 'hathora-et-labora-game'
 import {
   createContext,
   createElement,
@@ -14,7 +14,27 @@ import {
 } from 'react'
 import { REALTIME_LISTEN_TYPES, REALTIME_SUBSCRIBE_STATES, User } from '@supabase/supabase-js'
 import { Enums, Tables } from '@/supabase.types'
-import { Controls, GameStatusEnum, PlayerColor, Tableau } from 'hathora-et-labora-game/dist/types'
+import {
+  BuildingEnum,
+  Controls,
+  Frame,
+  GameCommandConfigParams,
+  GameStatusEnum,
+  PlayerColor,
+  Rondel,
+  Tableau,
+} from 'hathora-et-labora-game/dist/types'
+
+type GameStatePlaying = GameState & {
+  config: GameCommandConfigParams
+  rondel: Rondel
+  wonders: number
+  players: Tableau[]
+  buildings: BuildingEnum[]
+  plotPurchasePrices: number[]
+  districtPurchasePrices: number[]
+  frame: Frame
+}
 import { match } from 'ts-pattern'
 import { serverMove } from './actions'
 import { useSupabaseContext } from './SupabaseContext'

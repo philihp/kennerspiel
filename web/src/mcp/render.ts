@@ -1,7 +1,7 @@
 import { control } from 'hathora-et-labora-game'
-import { GameStatePlaying, RondelToken, Tableau, Tile } from 'hathora-et-labora-game/dist/types'
+import { RondelToken, Tableau, Tile } from 'hathora-et-labora-game/dist/types'
 import { take } from 'hathora-et-labora-game/dist/board/rondel'
-import { activePlayerColor, engineColorToEntrantColor } from './engine'
+import { activePlayerColor, engineColorToEntrantColor, GameStatePlaying } from './engine'
 
 const RONDEL_TOKENS: RondelToken[] = ['wood', 'clay', 'coin', 'joker', 'grain', 'peat', 'sheep', 'grape', 'stone']
 

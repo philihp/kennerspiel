@@ -1,7 +1,14 @@
-import { GameState, GameStatePlaying, initialState, reducer } from 'hathora-et-labora-game'
-import { GameStatusEnum, PlayerColor } from 'hathora-et-labora-game/dist/types'
+import { GameState, initialState, reducer, Tableau } from 'hathora-et-labora-game'
+import { Frame, GameCommandConfigParams, GameStatusEnum, PlayerColor, Rondel } from 'hathora-et-labora-game/dist/types'
 import { match } from 'ts-pattern'
 import { Enums } from '@/supabase.types'
+
+export type GameStatePlaying = GameState & {
+  players: Tableau[]
+  frame: Frame
+  config: GameCommandConfigParams
+  rondel: Rondel
+}
 
 type CommandReducer = (state: GameState | undefined, command: string[]) => GameState | undefined
 
