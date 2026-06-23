@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.20.3] - 2026-06-23
+
+### Fixed
+- Wine/food correctly consumed with the Inn; had the 7 and 6 reversed (#1838)
+- Carpentry col/row params reversed and inconsistent with completion (#1840)
+
 ## [0.20.2] - 2026-06-16
 
 ### Fixed
