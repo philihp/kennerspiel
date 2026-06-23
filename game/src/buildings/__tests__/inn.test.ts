@@ -134,6 +134,93 @@ describe('buildings/inn', () => {
         nickel: 0,
       })
     })
+
+    const withSheep = (sheep: number): GameState => ({
+      ...s0,
+      players: [{ ...s0.players![0], sheep }, ...s0.players!.slice(1)],
+    })
+
+    it('pays out 6 for 3 sheep', () => {
+      const s1 = inn('ShShSh')(withSheep(3))!
+      expect(s1.players![0]).toMatchObject({
+        sheep: 0,
+        wine: 10,
+        penny: 6,
+        nickel: 0,
+      })
+    })
+
+    it('pays out 12 for 3 sheep + 1 wine', () => {
+      const s1 = inn('WnShShSh')(withSheep(3))!
+      expect(s1.players![0]).toMatchObject({
+        sheep: 0,
+        wine: 9,
+        penny: 7,
+        nickel: 1,
+      })
+    })
+
+    it('pays out 7 for 3 sheep + 1 grain', () => {
+      const s1 = inn('ShShShGn')(withSheep(3))!
+      expect(s1.players![0]).toMatchObject({
+        sheep: 0,
+        grain: 9,
+        wine: 10,
+        penny: 7,
+        nickel: 0,
+      })
+    })
+
+    it('pays out 13 for 3 sheep + 1 grain + 1 wine', () => {
+      const s1 = inn('WnShShShGn')(withSheep(3))!
+      expect(s1.players![0]).toMatchObject({
+        sheep: 0,
+        grain: 9,
+        wine: 9,
+        penny: 8,
+        nickel: 1,
+      })
+    })
+
+    it('pays out 7 for 4 sheep (food cap, 1 sheep worth wasted)', () => {
+      const s1 = inn('ShShShSh')(withSheep(4))!
+      expect(s1.players![0]).toMatchObject({
+        sheep: 0,
+        wine: 10,
+        penny: 7,
+        nickel: 0,
+      })
+    })
+
+    it('pays out 13 for 4 sheep + 1 wine', () => {
+      const s1 = inn('WnShShShSh')(withSheep(4))!
+      expect(s1.players![0]).toMatchObject({
+        sheep: 0,
+        wine: 9,
+        penny: 8,
+        nickel: 1,
+      })
+    })
+
+    it('pays out 7 for 2 meat (food cap, 3 food wasted)', () => {
+      const s1 = inn('MtMt')(s0)!
+      expect(s1.players![0]).toMatchObject({
+        meat: 8,
+        wine: 10,
+        penny: 7,
+        nickel: 0,
+      })
+    })
+
+    it('pays out 13 for 2 meat + 1 wine', () => {
+      const s1 = inn('WnMtMt')(s0)!
+      expect(s1.players![0]).toMatchObject({
+        meat: 8,
+        wine: 9,
+        penny: 8,
+        nickel: 1,
+      })
+    })
   })
 
   describe('complete', () => {
