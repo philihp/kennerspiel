@@ -321,5 +321,35 @@ describe('board/resource', () => {
       const options = rewardCostOptions(6)
       expect(options).toContain('OrBo')
     })
+
+    it('includes Rq, OrOr, OrCeBo, and CeCeCe for 9 points', () => {
+      const options = rewardCostOptions(9)
+      expect(options).toContain('Rq')
+      expect(options).toContain('OrOr')
+      expect(options).toContain('OrCeBo')
+      expect(options).toContain('CeCeCe')
+    })
+
+    it('includes RqBo, OrOrBo, BoBoBoBoBo, and CeCeCe for 10 points', () => {
+      const options = rewardCostOptions(10)
+      expect(options).toContain('RqBo')
+      expect(options).toContain('OrOrBo')
+      expect(options).toContain('BoBoBoBoBo')
+      expect(options).toContain('CeCeCe')
+    })
+
+    it('includes RqBo, CeCeCeBo, and RqCe for 11 points', () => {
+      const options = rewardCostOptions(11)
+      expect(options).toContain('RqBo')
+      expect(options).toContain('CeCeCeBo')
+      expect(options).toContain('RqCe')
+    })
+
+    it('includes RqOr, RqCe, and RqBoBo for 12 points', () => {
+      const options = rewardCostOptions(12)
+      expect(options).toContain('RqOr')
+      expect(options).toContain('RqCe')
+      expect(options).toContain('RqBoBo')
+    })
   })
 })
