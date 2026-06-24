@@ -1,9 +1,13 @@
 # Changelog
 
+## [0.21.1] - 2026-06-24
+
+- The combination of Ornament + Book with the HouseOfTheBrotherhood wasn't offered for points of 6. (#1846)
+
 ## [0.21.0] - 2026-06-24
 
-- GameStatePlaying, GameStateSetup, GameStateFinished: all of these are now just GameState
-- Carpentry allows NoOp
+- GameStatePlaying, GameStateSetup, GameStateFinished: all of these are now just GameState (#1818)
+- Carpentry allows NoOp (#1843)
 
 ## [0.20.3] - 2026-06-23
 
