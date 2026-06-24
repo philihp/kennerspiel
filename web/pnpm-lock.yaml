@@ -54,8 +54,8 @@ importers:
         specifier: 6.1.7
         version: 6.1.7
       hathora-et-labora-game:
-        specifier: 0.21.0
-        version: 0.21.0
+        specifier: 0.21.1
+        version: 0.21.1
       jsonwebtoken:
         specifier: 9.0.3
         version: 9.0.3
@@ -1971,8 +1971,8 @@ packages:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
 
-  hathora-et-labora-game@0.21.0:
-    resolution: {integrity: sha512-hqs5f5B0480+s7zB28j2oZHxYXsc4DUUKNXkie65bbkVx4zyt/Ix8p17MQ7esX1x+nGsAN7oa0ejgrKYt68TuA==}
+  hathora-et-labora-game@0.21.1:
+    resolution: {integrity: sha512-Nedt/ir76ZuAHu2hIUWUKmRnqatvrOyTedzeSmhxOTPV2Ej3I+uCgDv0PtgslYM5ID82nMO1AvHDWlo/tieyaQ==}
 
   hermes-estree@0.25.1:
     resolution: {integrity: sha512-0wUoCcLp+5Ev5pDW2OriHC2MJCbwLwuRx+gAqMTOkGKJJiBCLjtrvy4PWUGn6MIVefecRpzoOZ/UV6iGdOr+Cw==}
@@ -5101,7 +5101,7 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hathora-et-labora-game@0.21.0:
+  hathora-et-labora-game@0.21.1:
     dependencies:
       fast-shuffle: 6.2.0
       pcg: 3.0.0
