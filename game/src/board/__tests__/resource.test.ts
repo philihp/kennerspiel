@@ -10,6 +10,7 @@ import {
   maskGoods,
   multiplyGoods,
   parseResourceParam,
+  rewardCostOptions,
   settlementCostOptions,
   shortGameBonusProduction,
   totalGoods,
@@ -121,13 +122,16 @@ describe('board/resource', () => {
 
   describe('settlementCostOptions', () => {
     it('mutates', () => {
-      const options = settlementCostOptions({ food: 2, energy: 1 }, {
-        peat: 1,
-        wood: 1,
-        sheep: 2,
-        grain: 1,
-        penny: 1,
-      })
+      const options = settlementCostOptions(
+        { food: 2, energy: 1 },
+        {
+          peat: 1,
+          wood: 1,
+          sheep: 2,
+          grain: 1,
+          penny: 1,
+        }
+      )
       expect(options).toStrictEqual(['ShPt', 'ShWo', 'GnPnPt', 'GnPnWo'])
     })
   })
@@ -292,6 +296,30 @@ describe('board/resource', () => {
       expect(s1.players![1].stone).toBe(0)
       expect(s1.players![2].stone).toBe(0)
       expect(s1.players![3].stone).toBe(0)
+    })
+  })
+
+  // Regression for the House of the Brotherhood (F10) bug observed in
+  // instance 2952eea3-1e7b-4827-8a9f-9302a38931ad: with 14 points of entitlement
+  // (7 cloisters in a 4p long game), the player should be able to take
+  // Book + Ornament + Reliquary (2 + 4 + 8 = 14), but the option was missing.
+  describe('rewardCostOptions', () => {
+    it('includes RqOrBo (Book + Ornament + Reliquary) for 14 points', () => {
+      const options = rewardCostOptions(14)
+      expect(options).toContain('RqOrBo')
+    })
+
+    it('includes OrOrOrBo (3 Ornaments + Book) for 14 points', () => {
+      const options = rewardCostOptions(14)
+      expect(options).toContain('OrOrOrBo')
+    })
+
+    it('includes OrBo (Book + Ornament) for 6 points', () => {
+      // 4 + 2 = 6 — a real, in-budget combination that the algorithm currently misses
+      // because the Ornament stage prunes branches whose leftover is < 3 (Ceramic cost)
+      // even though a Book (2 points) could still fit.
+      const options = rewardCostOptions(6)
+      expect(options).toContain('OrBo')
     })
   })
 })
