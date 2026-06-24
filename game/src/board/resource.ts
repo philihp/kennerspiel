@@ -363,9 +363,12 @@ export const rewardCostOptions = curry((totalPoints: number): string[] => {
   // give the player money or whiskey/wine, but also there's an infinite amount of
   // each thing they can get, so that's nice
   const output: string[] = []
+  // pointsNext is the minimum cost of any later stage. Books cost 2 and are
+  // always last, so any leftover of >= 2 must be carried forward — otherwise
+  // combinations like RqOrBo (14) or OrBo (6) get pruned before Books get a chance.
   pipe(
-    rewardOptions(output, ResourceEnum.Reliquary, 8, 4),
-    rewardOptions(output, ResourceEnum.Ornament, 4, 3),
+    rewardOptions(output, ResourceEnum.Reliquary, 8, 2),
+    rewardOptions(output, ResourceEnum.Ornament, 4, 2),
     rewardOptions(output, ResourceEnum.Ceramic, 3, 2),
     rewardOptions(output, ResourceEnum.Book, 2, Infinity)
   )([['', totalPoints]])

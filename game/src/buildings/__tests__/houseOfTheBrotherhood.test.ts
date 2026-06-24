@@ -461,7 +461,7 @@ describe('buildings/houseOfTheBrotherhood', () => {
         ],
       } as GameState
       const c0 = complete(['Ni'], s1)
-      expect(c0).toStrictEqual(['CeCe', 'BoBoBo', 'CeBo', 'Or', 'BoBo', 'Ce', 'Bo', ''])
+      expect(c0).toStrictEqual(['CeCe', 'OrBo', 'BoBoBo', 'CeBo', 'Or', 'BoBo', 'Ce', 'Bo', ''])
     })
     it('with 5 coins, offers ways of making points in long 2p game', () => {
       const s1 = {
