@@ -1,4 +1,4 @@
-import { always, curry, pipe, view } from 'ramda'
+import { always, curry, identity, pipe, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { addBonusAction } from '../board/frame'
 import { activeLens, withActivePlayer } from '../board/player'
@@ -28,13 +28,15 @@ const removeForestAt = (col: number, row: number) =>
       }
   )
 
-export const carpentry = (col: number, row: number) =>
-  pipe(
+export const carpentry = (col: number, row: number) => {
+  if (Number.isNaN(col) || Number.isNaN(row)) return identity
+  return pipe(
     //
     checkSpotIsForest(col, row),
     removeForestAt(col, row),
     addBonusAction(GameCommandEnum.BUILD)
   )
+}
 
 export const complete = curry((partial: string[], state: GameState): string[] => {
   const player = view(activeLens(state), state)
