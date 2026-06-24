@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.21.0] - 2026-06-24
+
+- GameStatePlaying, GameStateSetup, GameStateFinished: all of these are now just GameState
+- Carpentry allows NoOp
+
 ## [0.20.3] - 2026-06-23
 
 ### Fixed
