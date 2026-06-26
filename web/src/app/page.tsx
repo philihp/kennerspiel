@@ -3,56 +3,33 @@ import Link from 'next/link'
 const Home = () => {
   return (
     <main>
-      <h1>Kennerspiel</h1>
+      <h2>Kennerspiel</h2>
       <p>
-        Hi! This is a place to play turn-based board games on virtual tables with minimal client overhead. It&apos;s not
-        much too look at right now, but I coded all of this by hand without any AI assistance, so please give me that
-        much.
+        Hi! This is a place to play turn-based open-information and deterministic board games on virtual tables with
+        minimal client overhead. I started out with Uwe Rosenberg&apos;s game{' '}
+        <Link href="https://amzn.to/3P1UYDe">Ora et Labora</Link>, and I&apos;ve been having fun teaching Claude how
+        to play it with me. It&apos;s a work in progress, but playable right now.
       </p>
+
+      <h3>Quickstart</h3>
       <p>
-        You&apos;ll probably want to start out by creating an <Link href="/instance/">instance</Link>, and either play a
-        solo game or invite some friends.
+        Create an <Link href="/instance/">instance</Link> and share the URL with friends.
       </p>
-      <h2>Play with an AI</h2>
-      <p>
-        Kennerspiel has an <Link href="https://modelcontextprotocol.io/">MCP</Link> server. Any MCP-compatible AI can
-        take a seat at your table — it will read the board, consult a built-in strategy guide, and play moves on your
-        behalf. Useful for solo learning, AI-vs-AI matches, or just having a patient opponent at 2am.
-      </p>
-      <p>
-        Both Claude.ai and ChatGPT can connect via the <code>https://kennerspiel.com/api/mcp</code> connector. Add it
-        once at the account level and you&apos;ll be able to play any game from any conversation.
-      </p>
-      <h3>Claude.ai</h3>
-      <ol>
+
+      <h3>Connect to an AI</h3>
+      <ul>
         <li>
-          Open <strong>Settings → Integrations → Add integration</strong>.
+          <strong>(Claude)</strong> Customize → Connectors → Add Custom Connector.
         </li>
         <li>
-          Paste this URL: <code>https://kennerspiel.com/api/mcp</code>
+          <strong>(ChatGPT)</strong> Settings → Apps (or Apps & connectors) → Enable Developer mode if prompted. →
+          Click Create App (or Add custom connector on some accounts).
         </li>
-        <li>Sign in to Kennerspiel when Claude opens the authorization page, then click Authorize.</li>
-      </ol>
+      </ul>
       <p>
-        Once authorized, just share a game URL and ask &ldquo;please play as white in https://kennerspiel.com/instance/&lt;uuid&gt;&rdquo;.
+        Add <code>https://kennerspiel.com/api/mcp</code>, your agent will attempt to OAuth to this site
       </p>
-      <h3>ChatGPT</h3>
-      <p>Requires a Plus, Pro, Business, or Enterprise account with Developer mode enabled.</p>
-      <ol>
-        <li>
-          Open <strong>Settings → Connectors → Create</strong>.
-        </li>
-        <li>
-          Paste this URL: <code>https://kennerspiel.com/api/mcp</code>
-        </li>
-        <li>ChatGPT discovers the OAuth endpoints automatically and redirects you here to authorize.</li>
-      </ol>
-      <p>
-        Alternatively, if you prefer the command line, you can add the connector with:
-      </p>
-      <pre>
-        <code>claude mcp add --transport http kennerspiel https://kennerspiel.com/api/mcp</code>
-      </pre>
+
       <p>
         Source code is available at{' '}
         <Link href="https://github.com/philihp/kennerspiel">github.com/philihp/kennerspiel</Link>
