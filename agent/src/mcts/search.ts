@@ -9,7 +9,7 @@
 
 import { apply, isTerminal, numPlayers, outcome, playerToMove } from '../engine'
 import type { Move } from '../engine'
-import type { GameState } from '../game'
+import type { GameState } from 'hathora-et-labora-game'
 import { enumerateMoves, sampleMove, type EnumerateOpts } from '../moves'
 import type { Rng } from '../rng'
 

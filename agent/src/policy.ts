@@ -1,4 +1,4 @@
-import type { GameState } from './game'
+import type { GameState } from 'hathora-et-labora-game'
 import type { Move } from './engine'
 import type { Rng } from './rng'
 

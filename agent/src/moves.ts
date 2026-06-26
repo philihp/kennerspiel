@@ -12,8 +12,8 @@
 //  - sampleMove: random walk down the tree → one legal command WITHOUT
 //    enumerating. Rollouts use this to dodge the branching blow-up entirely.
 
-import { control } from './game'
-import type { GameState } from './game'
+import { control } from 'hathora-et-labora-game'
+import type { GameState } from 'hathora-et-labora-game'
 import { apply, type Move } from './engine'
 import { choice, type Rng } from './rng'
 

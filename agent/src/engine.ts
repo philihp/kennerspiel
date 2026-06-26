@@ -2,8 +2,8 @@
 // the policies need. A "move" is one complete command (e.g. ['USE','LR2'] or
 // ['BUILD','G07','3','2'] or ['COMMIT']).
 
-import { reducer, control, initialState, GameStatusEnum } from './game'
-import type { GameState, Score } from './game'
+import { reducer, control, initialState, GameStatusEnum } from 'hathora-et-labora-game'
+import type { GameState, Score } from 'hathora-et-labora-game'
 
 export type Move = string[]
 export { initialState }
