@@ -2,6 +2,7 @@
 // the policies need. A "move" is one complete command (e.g. ['USE','LR2'] or
 // ['BUILD','G07','3','2'] or ['COMMIT']).
 
+import { count } from 'ramda'
 import { reducer, control, initialState, GameStatusEnum } from 'hathora-et-labora-game'
 import type { GameState, Score } from 'hathora-et-labora-game'
 
@@ -48,13 +49,9 @@ export const outcome = (state: GameState): number[] => {
   const n = totals.length
   if (n === 1) return [totals[0]!] // solo: raw score (no opponents to rank against)
   return totals.map((mine, i) => {
-    let beaten = 0
-    let tied = 0
-    for (let j = 0; j < n; j++) {
-      if (j === i) continue
-      if (mine > totals[j]!) beaten++
-      else if (mine === totals[j]!) tied++
-    }
+    const others = totals.filter((_, j) => j !== i)
+    const beaten = count((t) => mine > t, others)
+    const tied = count((t) => mine === t, others)
     return (beaten + 0.5 * tied) / (n - 1)
   })
 }

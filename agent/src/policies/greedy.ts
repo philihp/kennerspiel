@@ -1,5 +1,4 @@
 import type { Policy } from '../policy'
-import type { Move } from '../engine'
 import { apply, playerToMove, scores } from '../engine'
 import { enumerateMoves, type EnumerateOpts } from '../moves'
 import { choice } from '../rng'
@@ -11,21 +10,15 @@ export const greedyPolicy = (opts: EnumerateOpts = { maxPerLevel: 12, maxMoves: 
   name: 'greedy',
   pick: (state, rng) => {
     const me = playerToMove(state)
-    const moves = enumerateMoves(state, opts)
-    if (moves.length === 0) return undefined
-    let best = -Infinity
-    let bestMoves: Move[] = []
-    for (const m of moves) {
-      const next = apply(state, m)
-      if (next === undefined) continue
-      const total = scores(next)[me]?.total ?? -Infinity
-      if (total > best) {
-        best = total
-        bestMoves = [m]
-      } else if (total === best) {
-        bestMoves.push(m)
-      }
-    }
-    return bestMoves.length > 0 ? choice(rng, bestMoves) : undefined
+    const scored = enumerateMoves(state, opts).map((move) => {
+      const next = apply(state, move)
+      return { move, total: next ? (scores(next)[me]?.total ?? -Infinity) : -Infinity }
+    })
+    if (scored.length === 0) return undefined
+    const best = Math.max(...scored.map((s) => s.total))
+    return choice(
+      rng,
+      scored.filter((s) => s.total === best).map((s) => s.move)
+    )
   },
 })

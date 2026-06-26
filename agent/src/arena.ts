@@ -1,6 +1,7 @@
 // Match harness: play seated policies against each other and score the result.
 // Deterministic given seeds, so matches are reproducible.
 
+import { range, sum } from 'ramda'
 import { apply, replay, isPlaying, isTerminal, playerToMove, scores, outcome } from './engine'
 import type { Move } from './engine'
 import { mulberry32, type Rng } from './rng'
@@ -87,27 +88,20 @@ const eloFromWinRate = (p: number): number => {
 export const runMatch = (a: Policy, b: Policy, opts: MatchOptions): MatchResult => {
   const cfg = opts.cfg ?? CONFIG_2P_LONG
   const baseSeed = opts.baseSeed ?? 1
-  let aWins = 0
-  let bWins = 0
-  let draws = 0
-  let totalSteps = 0
-  let finished = 0
-  for (let g = 0; g < opts.games; g++) {
-    const swap = g % 2 === 1
-    const policies = swap ? [b, a] : [a, b]
+
+  const results = range(0, opts.games).map((g) => {
+    const swap = g % 2 === 1 // alternate which policy sits at seat 0
     const seed = baseSeed + g
-    const rng = mulberry32(seed * 7919 + 1)
-    const res = playGame(policies, cfg, seed, rng)
-    totalSteps += res.steps
-    if (res.finished) finished++
-    const aSeat = swap ? 1 : 0
-    const bSeat = swap ? 0 : 1
-    const ao = res.outcome[aSeat] ?? 0
-    const bo = res.outcome[bSeat] ?? 0
-    if (ao > bo) aWins++
-    else if (bo > ao) bWins++
-    else draws++
-  }
+    const res = playGame(swap ? [b, a] : [a, b], cfg, seed, mulberry32(seed * 7919 + 1))
+    const ao = res.outcome[swap ? 1 : 0] ?? 0
+    const bo = res.outcome[swap ? 0 : 1] ?? 0
+    return { winner: ao > bo ? 'a' : bo > ao ? 'b' : 'draw', steps: res.steps, finished: res.finished }
+  })
+
+  const tally = (w: string) => results.filter((r) => r.winner === w).length
+  const aWins = tally('a')
+  const bWins = tally('b')
+  const draws = tally('draw')
   const aWinRate = (aWins + 0.5 * draws) / opts.games
   return {
     a: a.name,
@@ -118,7 +112,7 @@ export const runMatch = (a: Policy, b: Policy, opts: MatchOptions): MatchResult 
     draws,
     aWinRate,
     eloDiff: eloFromWinRate(aWinRate),
-    avgSteps: totalSteps / opts.games,
-    finishedRate: finished / opts.games,
+    avgSteps: sum(results.map((r) => r.steps)) / opts.games,
+    finishedRate: results.filter((r) => r.finished).length / opts.games,
   }
 }

@@ -11,10 +11,16 @@ importers:
       hathora-et-labora-game:
         specifier: workspace:*
         version: link:../game
+      ramda:
+        specifier: 0.32.0
+        version: 0.32.0
     devDependencies:
       '@types/node':
         specifier: 24.13.2
         version: 24.13.2
+      '@types/ramda':
+        specifier: 0.32.0
+        version: 0.32.0
       tsx:
         specifier: 4.22.4
         version: 4.22.4

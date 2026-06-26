@@ -6,6 +6,11 @@
 // to move at that node. This is correct for runs of same-player nodes (a turn
 // is several commands) and for WORK_CONTRACT interrupts, since each node keys
 // off its own activePlayerIndex.
+//
+// The selection arg-max, rollout, and back-up loops below are deliberately
+// imperative: they run on the order of sims × depth times per move, so the
+// per-call array allocation of a functional style would dominate. Cold paths
+// (engine.outcome, arena aggregation, …) use ramda instead.
 
 import { apply, isTerminal, numPlayers, outcome, playerToMove } from '../engine'
 import type { Move } from '../engine'
