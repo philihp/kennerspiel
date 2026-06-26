@@ -34,17 +34,8 @@ const Home = () => {
         <li>Sign in to Kennerspiel when Claude opens the authorization page, then click Authorize.</li>
       </ol>
       <p>
-        Once authorized, you can play in two ways:
+        Once authorized, just share a game URL and ask &ldquo;please play as white in https://kennerspiel.com/instance/&lt;uuid&gt;&rdquo;.
       </p>
-      <ul>
-        <li>
-          List your games: ask Claude something like &ldquo;list my Ora et Labora games&rdquo; and it&apos;ll find the
-          tools automatically.
-        </li>
-        <li>
-          Quick play: just share a game URL and ask &ldquo;please play as white in https://kennerspiel.com/instance/&lt;uuid&gt;&rdquo;.
-        </li>
-      </ul>
       <h3>ChatGPT</h3>
       <p>Requires a Plus, Pro, Business, or Enterprise account with Developer mode enabled.</p>
       <ol>
