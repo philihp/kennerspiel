@@ -19,21 +19,11 @@ const Home = () => {
         take a seat at your table — it will read the board, consult a built-in strategy guide, and play moves on your
         behalf. Useful for solo learning, AI-vs-AI matches, or just having a patient opponent at 2am.
       </p>
-      <p>Two ways to connect, both backed by the same OAuth session:</p>
-      <ul>
-        <li>
-          <strong>Hub</strong>: <code>https://kennerspiel.com/api/mcp</code> — exposes every tool. This is the one to
-          use for claude.ai or ChatGPT integrations: add the connector once at the account level and you&apos;ll be able
-          to play any game from any conversation.
-        </li>
-        <li>
-          <strong>Per-game</strong>: the URL of any game is also its MCP endpoint. Drop{' '}
-          <code>https://kennerspiel.com/instance/&lt;uuid&gt;</code> into a chat and say &ldquo;join as white&rdquo; —
-          the agent gets the play-the-game tools scoped to that one game (no <code>instance_id</code> argument needed
-          because the URL already names it). Handy for Claude Code projects or one-off chats.
-        </li>
-      </ul>
-      <h3>Claude (claude.ai)</h3>
+      <p>
+        Both Claude.ai and ChatGPT can connect via the <code>https://kennerspiel.com/api/mcp</code> connector. Add it
+        once at the account level and you&apos;ll be able to play any game from any conversation.
+      </p>
+      <h3>Claude.ai</h3>
       <ol>
         <li>
           Open <strong>Settings → Integrations → Add integration</strong>.
@@ -44,19 +34,9 @@ const Home = () => {
         <li>Sign in to Kennerspiel when Claude opens the authorization page, then click Authorize.</li>
       </ol>
       <p>
-        Once authorized, the same token also covers any per-game URL — no re-auth when you switch games. Ask Claude
-        something like &ldquo;list my Ora et Labora games&rdquo; and it&apos;ll find the tools automatically.
+        Once authorized, ask Claude something like &ldquo;list my Ora et Labora games&rdquo; and it&apos;ll find the
+        tools automatically.
       </p>
-      <h3>Claude Code</h3>
-      <p>Add the hub once:</p>
-      <pre>
-        <code>claude mcp add --transport http kennerspiel https://kennerspiel.com/api/mcp</code>
-      </pre>
-      <p>Or wire up one specific game directly:</p>
-      <pre>
-        <code>claude mcp add --transport http my-game https://kennerspiel.com/instance/&lt;uuid&gt;</code>
-      </pre>
-      <p>Claude Code opens a browser for the OAuth flow and redirects back automatically.</p>
       <h3>ChatGPT</h3>
       <p>Requires a Plus, Pro, Business, or Enterprise account with Developer mode enabled.</p>
       <ol>
@@ -68,6 +48,12 @@ const Home = () => {
         </li>
         <li>ChatGPT discovers the OAuth endpoints automatically and redirects you here to authorize.</li>
       </ol>
+      <p>
+        Alternatively, if you prefer the command line, you can add the connector with:
+      </p>
+      <pre>
+        <code>claude mcp add --transport http kennerspiel https://kennerspiel.com/api/mcp</code>
+      </pre>
       <p>
         Source code is available at{' '}
         <Link href="https://github.com/philihp/kennerspiel">github.com/philihp/kennerspiel</Link>
