@@ -1,18 +1,31 @@
-// Run a head-to-head match between two baseline policies.
+// Head-to-head match between two policies.
 //
-//   pnpm arena [games] [short|long]
+//   pnpm arena [games] [short|long] [policyA] [policyB]
 //
-// e.g. `pnpm arena 20 short` plays greedy vs random over 20 short games.
+// policy spec: `random` | `greedy` | `mcts[:sims]`  (default mcts:64)
+//   e.g. `pnpm arena 10 short mcts:64 random`
+//        `pnpm arena 20 long greedy random`
 
 import { runMatch, CONFIG_2P_LONG, CONFIG_2P_SHORT } from '../arena'
+import type { Policy } from '../policy'
 import { randomPolicy } from '../policies/random'
 import { greedyPolicy } from '../policies/greedy'
+import { mctsPolicy } from '../policies/mcts'
+
+const parsePolicy = (spec: string): Policy => {
+  if (spec === 'random') return randomPolicy()
+  if (spec === 'greedy') return greedyPolicy()
+  if (spec.startsWith('mcts')) {
+    const sims = Number.parseInt(spec.split(':')[1] ?? '64', 10)
+    return mctsPolicy({ sims })
+  }
+  throw new Error(`unknown policy: ${spec}`)
+}
 
 const games = Number.parseInt(process.argv[2] ?? '10', 10)
 const cfg = process.argv[3] === 'long' ? CONFIG_2P_LONG : CONFIG_2P_SHORT
-
-const a = greedyPolicy()
-const b = randomPolicy()
+const a = parsePolicy(process.argv[4] ?? 'mcts:64')
+const b = parsePolicy(process.argv[5] ?? 'random')
 
 console.log(`Match: ${a.name} vs ${b.name} — ${games} games, 2p ${cfg.country} ${cfg.length}`)
 const t0 = Date.now()
