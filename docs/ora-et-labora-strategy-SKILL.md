@@ -1,12 +1,292 @@
 ---
 name: ora-et-labora-strategy
-description: Strategic coaching for Ora et Labora board game. Use this skill when planning moves, evaluating building priorities, assigning clergy, placing settlements, or analyzing game state. Teaches action economy discipline, clergy hierarchy (Prior over Laybrother), settlement evaluation heuristics, economic engine scaling, resource conversion discipline, the Castle (G28) settlement protocol, work contract mechanics, settlement food/fuel payment economics, scoring-column allocation (goods scale linearly while settlements and economic buildings compound), and Kennerspiel engine quirks. Helps avoid wasted actions, negative settlement placements, and delayed economic scaling.
+description: Rules reference AND strategic coaching for the Ora et Labora board game (France variant). Parts I–V are the authoritative rules and reference — turn/round structure by mode, the three main actions, settlement phases, the three scoring columns, work contracts, conversions, and a complete engine-verified building table (every building's cost, landscape, cloister flag, economic value, dwelling value, stage Start/A/B/C/D, and player-count availability), a settlement table, a goods/resource table (food/energy/coin/point values and how each good is produced and used), landscape geometry (district hills/plains sides, coastal/mountain plots) and the district/plot price ramp (rising normally, reversed in solo). Parts VI–VII are strategy distilled from played games: action economy, clergy hierarchy (Prior over Lay Brother), settlement evaluation, economic-engine scaling, the Castle (G28) protocol, scoring-column allocation, and Kennerspiel engine quirks. Use when planning moves, evaluating building priorities, assigning clergy, placing settlements, or analyzing game state.
 compatibility: Kennerspiel MCP (list_my_games, get_game, get_legal_moves, make_move)
 ---
 
-# Ora et Labora Strategic Coach
+# Ora et Labora — Rules, Reference & Strategic Coach
 
-Strategic decision framework for improving play quality in Ora et Labora (long game, France variant).
+This skill has two halves. **Parts I–V are the authoritative rules and reference** — every fact below is verified against the official Lookout/Z-Man rulebook + appendix AND this repository's engine source (`game/src/board/`). **Parts VI–VII are strategy** distilled from played games. When strategy prose and the reference disagree, the reference wins. The default assumed mode is **France, long 2-player**, but the reference covers all modes.
+
+> **Sources of truth, in order:** (1) the engine source in `game/src/board/` — `buildings.ts` (cost, roster-by-stage/player), `erections.ts` (economic value, dwelling value, terrain, cloister flag), `settlements.ts` (settlement cost), `resource.ts` (food/energy/coin/point values); (2) the official rulebook/appendix for design intent. Live game state (`get_game`) overrides both for the *current* round, prices, and rondel position.
+
+---
+
+# PART I — RULES OF THE GAME
+
+## I.1 Shape of the game
+
+- **1–4 players**, two map variants: **France** (grain→flour→bread, grapes→wine) and **Ireland** (grain→malt→beer, malt+wood+peat→whiskey). This engine and skill assume **France**.
+- **Goal:** most total points (three scoring columns, §I.10). Solo goal: reach 500 points (France long).
+- Each player starts with a **2×5 heartland**: 3 forest cards + 2 moor cards on empty spaces, plus the three **basic buildings** — Farmyard (grain *or* livestock), Clay Mound (clay), Cloister Office (coins). (In the *short* game each player leaves the top-left forest+moor off, starting with one fewer of each.)
+- **Clergy:** 1 Prior + 2 Lay Brothers per player (the *short* game uses 1 Prior + 1 Lay Brother). Clergy never leave your own diocese; opponents place *your* clergy on *your* buildings via work contracts.
+
+## I.2 Turn / round structure by mode
+
+| Mode | Production wheel | Action cadence | Settlement phases | Bonus round | Game end |
+|------|------------------|----------------|-------------------|-------------|----------|
+| **3–4p long** | front `0,2,3,4,…` | each player 1 action per round; start player takes a 2nd at round end (4 actions/round in 3p, 5 in 4p) | A, B, C, D + final **E** | yes (round 25) | after the 5th settlement phase |
+| **Regular 2p** | back `0,1,2,2,…` | per turn: rotate wheel, that player takes **2 actions** | A, B, C, D (no E) | no | when D-cards are out **and ≤1 building** left in display |
+| **Long 2p** | front `0,2,3,4,…` | round-based: start player takes **2 actions**, other takes **1**, then swap | A, B, C, D (no E) | no | when D-cards are out **and ≤3 buildings** left in display |
+| **Short 3–4p** | front `0,2,3,4,…` | 12 rounds + bonus; extra bonus-production rules | A, B, C, D + E | yes (round 13) | after final settlement phase |
+| **Solo (1p + neutral)** | front `0,2,3,4,…` | like 2p: rotate wheel, take **2 actions** | A, B, C, D + final **E** | no | after the final settlement phase |
+
+**Engine wheel values** (`rondel.ts armValues`): the engine uses the **back side** `[0,1,2,2,3,4,4,5,6,6,7,8,10]` **only for the regular 2-player game** (the condition is `players === 2 && length === 'short'` — the rulebook's "normal two player game"). **Every other configuration uses the front side** `[0,2,3,4,5,6,6,7,7,8,8,9,10]` — long 2p, solo, *and all 3–4p games (long and short multiplayer)*. (The rulebook agrees: the short *multiplayer* game uses the front wheel; only the normal 2p game uses the back.)
+
+**Goods-indicator entry (France long / multiplayer):** the **grapes** indicator enters in **round 8**, the **stone** indicator in **round 13**. (Short game: grapes round 4, stone round 6. Regular 2p: grapes round 11, stone round 18.) Until an indicator is in play, use the **joker** to produce that good. In the **solo game the grapes and stone indicators are removed entirely** — grapes/stone are *only* ever produced via the joker. Always read the live rondel from `get_game` for the exact round.
+
+## I.3 Sequence of a round (multiplayer / long)
+
+1. **Recall clergy** — every player who placed *all* their clergy takes them all back. (Placed only 1–2 → none come back. You must take them back.)
+2. **Rotate the production wheel** one space counterclockwise → nearly all production increases at once.
+3. **Settlement phase** if the wheel beam passed the next card pile (A→B→C→D, then E).
+4. **Actions** — each player one action in order; start player gets a second at the end.
+5. **Pass the start-player marker** clockwise.
+
+## I.4 The production wheel (rondel)
+
+- Seven indicators start in play: **clay, coins, grain, livestock, wood, peat, joker**. Grapes and stone enter later (§I.2).
+- A production building (board-outline in its function box) takes goods = the value at that good's indicator, then resets that indicator to **0**. It then climbs again one step per rotation.
+- An indicator pushed past space 10 stays on 10 (multiplayer); in **solo** it is removed from the game entirely.
+- **Joker** (shared by all players): substitutes for any good's indicator on any production action — even for grapes/stone before their own indicators exist. `USE <bldg> Jo` harvests at the **joker's** value and resets the **joker**, leaving the good's own indicator untouched. So `Jo` pays only when joker ≥ the good's own value.
+
+## I.5 The three main actions (exactly one per action slot)
+
+**A) Place a clergyman to use a building** — place your Prior or a Lay Brother on one of *your own* unoccupied buildings and trigger its function; OR issue a **work contract** (§I.7) to use an opponent's unoccupied building. A function fires on *placement*, never on merely sitting. A clergyman can be placed without using the function. Only buildings on the landscape (not the side display) can be used.
+
+**B) Fell trees / Cut peat** — remove (max) 1 **forest** card (→ wood) or 1 **moor** card (→ peat) from your landscape; take goods = the wood/peat indicator, then reset it to 0. **Uses no clergyman.** Frees the space to build on. Legal even at indicator 0 (you just get nothing) and even with no cards left (no effect).
+
+**C) Build a building** — pay the cost (top-left of the card: wood, clay, stone, straw, sometimes coins) and place it on an empty landscape space of an allowed terrain. **Cloister buildings (☩) must be orthogonally adjacent to another cloister building.** If your **Prior is free**, you may immediately place it on the just-built building for a bonus USE — the signature **build→USE double action**. Some buildings are *financed* (paid in coins) instead of built with materials; this still counts as the build action.
+
+## I.6 Free / extra actions (any number, before or after the main action)
+
+- **Buy a landscape** — at most **1 per turn** and **1 per settlement phase** (long 2p: up to 2 across your 3-in-a-row actions). Must be placed immediately. See §I.9.
+- **Trade coins** — 5 pennies ↔ 1 nickel (5-coin tile) anytime; trade 1 wine → 1 coin (Ireland: 1 whiskey → 2 coins) anytime.
+- **Flip grain → straw** — at any time, irreversibly. **Grain is the only tile freely flippable.** Straw can never become grain. Because both faces count as *different* goods, flipping lets one grain stockpile pay both a "grain" and a "straw" cost.
+
+## I.7 Work contracts
+
+- To use an opponent's building, pay the owner **1 coin** (→ **2 coins** permanently once *any* Winery/Whiskey Distillery is built, by anyone). The owner seats one of *their* free clergy on the building; *you* get the function. Your clergy stay home.
+- You cannot contract a player who has placed all clergy. A contract cannot be refused. Pay immediately (before seeing the benefit). You may contract without using the function.
+- **Present instead of coins:** return **1 wine** (France) / 1 whiskey (Ireland) to the *general supply* instead of paying — the owner receives nothing (the present is "drunk"). This is correct post-Winery: it costs ~1 point of wine instead of 2 coins AND denies the opponent the income.
+- Engine: after `WORK_CONTRACT <bldg> <pay>`, the building owner responds `WITH_LAYBROTHER` or `WITH_PRIOR`.
+- **Solo:** using a neutral building costs coins paid to the supply (you pick which neutral clergy); the present rule still applies.
+
+## I.8 The Prior, clergy hierarchy, and recall
+
+- **Prior** = same as a Lay Brother, plus the build→USE bonus (must be home at build time). Reserve it for build-bonuses and high-multiplier activations; default a **Lay Brother** for ordinary production and for work-contract responses.
+- **Recall** only at round start, and only when *all* clergy are placed. Stranding 1–2 clergy means they never cycle back — a common soft-lock cause. The **Bathhouse (F23, `USE F23 Pn`)** recalls all *your* clergy immediately, mid-turn (it needs the coin payment).
+
+## I.9 Landscape expansion (heartland → districts + plots)
+
+The heartland is a fixed 2×5 strip. Three ways to grow it:
+
+- **Districts** (`BUY_DISTRICT`) — 1×5 strips that stack **flush above or below** the heartland (no left/right offset). Each district has two sides you choose at placement:
+  - **Hills side** = *Moor / Forest / Forest / Hillside / Hillside* → you place **1 moor card + 2 forest cards**; the 2 hillside spaces stay empty (buildable).
+  - **Plains side** = *Forest / Plains / Plains / Plains / Hillside* → you place **1 forest card**; the 3 plains + 1 hillside spaces stay empty.
+  - (So the hills side yields 2 forests + 1 moor + 2 hillside spaces; the plains side yields just 1 forest + more open building space.)
+- **Coastal plots** (`BUY_PLOT … COAST`) — attach to the **left**: **2 Water + 2 Coast** spaces. Water carries dwelling **3** even unbuilt. Unlocks coast-only buildings (F04 Windmill, F11 Harbor Promenade, G26 Shipyard, F33 Shipping Company) and the Fishing Village.
+- **Mountain plots** (`BUY_PLOT … MOUNTAIN`) — attach to the **right**: **2 Hillside + 1 Mountain** spaces (each mountain borders two hillsides). The only source of Mountain spaces (Quarry, Castle) and a source of Hillside (Grapevine, Palace, Castle, Hilltop Village).
+
+**Landscape pricing — the price RAMP (and its solo reversal).** The piles are sorted cheapest-on-top, so each purchase costs more than the last. Engine arrays (`board/landscape.ts`), consumed from index 0:
+
+| Mode | District prices (in buy order) | Plot prices (in buy order) |
+|------|--------------------------------|----------------------------|
+| **2 / 3 / 4 players** | `2, 3, 4, 4, 5, 5, 6, 7, 8` (**rising**) | `3, 4, 4, 5, 5, 5, 6, 6, 7` (**rising**) |
+| **Solo (1 player)** | `8, 7, 6, 5, 5, 4, 4, 3, 2` (**reversed — falling**) | `7, 6, 6, 5, 5, 5, 4, 4, 3` (**reversed — falling**) |
+
+So in 2/3/4-player games landscape gets **more expensive** the longer you wait (buy early), while in the **solo game the piles are flipped** (most expensive first) so landscape gets **cheaper** over time. Always read live `district_purchase_prices` / `plot_purchase_prices` from `get_game`.
+
+## I.10 Settlement phases
+
+- Triggered when the wheel beam passes the next card pile (A→B→C→D, then E in multiplayer/solo). Long 2p and regular 2p have **only A–D** (no E).
+- Each player may build **≤1 settlement** from supply, paying its **food + energy** cost (top-left of the card). Excess food/energy is wasted (no change). You may buy ≤1 landscape first.
+- Restrictions: Fishing Village = **Coast** only; Hilltop Village = **Hillside** only; never on Mountain/Water; a settlement may not be built via the normal build action; you can't build it "for later".
+- After settling, distribute the letter's new building cards into the shared display, and give each player **1 new settlement card** (A→Artist's Colony, B→Hamlet, C→Village, D→Hilltop Village).
+- The **Castle (G28)** `USE G28` builds one settlement (paying its cost) on demand — the *only* way to place settlements after the last settlement phase, and the only route to the Hilltop Village in 2p.
+
+## I.11 Scoring (three independent columns)
+
+1. **Goods** — point values on held tiles: **book 2, ceramic 3, ornament 4, reliquary 8, Wonder 30, wine/whiskey 1, 5-coin nickel 2**. Raw basic goods score **0**; loose pennies optimally convert 5→nickel = 2 pts at scoring.
+2. **Economic** — sum the economic values of *all* your buildings **and** settlements (dwelling values irrelevant here).
+3. **Settlement dwelling** — each settlement scores its own dwelling value **plus** the dwelling value of every orthogonally adjacent card: buildings, *other settlements*, and Water spaces (3). A high-dwelling building between *k* settlements pays each of them. Negative dwellings only matter when adjacent to a settlement.
+
+The winner is the highest total. Ties → multiple winners.
+
+---
+
+# PART II — BUILDING REFERENCE (France, engine-verified)
+
+**How to read these tables.** **Cost:** `w`=wood, `c`=clay, `st`=stone, `sw`=straw, `¢`=coins. **E** = economic value (scores directly). **D** = dwelling value (what adjacent settlements score). **☩** = cloister building (must be built orthogonally adjacent to another cloister building). **Land:** allowed terrain (C/P/H = Coast/Plains/Hillside, the default). **P** = player counts in which this France card appears, from the engine's `roundBuildings` (`1`=solo, `2`,`3`,`4`). **Stage** = when it enters the display: **Start** (bible symbol, present from the opening) or settlement-phase tier **A/B/C/D**.
+
+> **Engine roster note.** In *this* engine, the **2-player game uses 24 France buildings for BOTH short and long length** — only cards whose **P** column contains a `2`. Seventeen France cards are therefore absent from 2-player play: **G01, F03, G06, F09, F10, G13** (Start), **F15, G16** (A), **F20, F23, F25** (B), **F29, F31, F32** (C), **F36, G39, F40** (D). This is a **deliberate implementation choice, not a bug:** `roundBuildings` keys only on `(country, players)` and ignores `length`, and the test suite explicitly pins it — `buildings.test.ts` asserts `roundBuildings({players: 2, country: 'france', length: 'long'}, …).not.toContain('G01')`. (The printed rulebook's *long* 2-player game would instead use nearly all buildings — only F10/F31/F29 removed — so this engine intentionally departs from the printed long-2p roster. Treat the **P** column as authoritative for what actually appears here.)
+
+### Basic buildings (start on every heartland; not in any pile)
+
+| ID | Building | Cost | E | D | ☩ | Land | Function |
+|----|----------|------|---|---|---|------|----------|
+| — | **Farmyard** | start | 0 | 2 | – | heartland | Production wheel: **grain *or* livestock** (pick one) |
+| — | **Clay Mound** | start | 0 | 3 | – | heartland | Production wheel: **clay** |
+| — | **Cloister Office** | start | 0 | 2 | ☩ | heartland | Production wheel: **coins** (a cloister building) |
+
+### Start buildings (bible symbol — in the display from round 1)
+
+| ID | Building | Cost | E | D | ☩ | Land | P | Function |
+|----|----------|------|---|---|---|------|---|----------|
+| G01 | Priory | 1w+1c | 4 | 3 | ☩ | C/P/H | 1·3·4 | Use a building occupied by a prior (yours or an opponent's); pay only the Priory's work-contract, not the target's |
+| G02 | Cloister Courtyard | 2w | 4 | 4 | ☩ | C/P/H | all | **3 different goods → 6 identical basic goods** (clay/wood/peat/grain/livestock/coin) |
+| F03 | Grain Storage | 1w+1sw | 3 | 4 | – | C/P/H | 1·4 | Pay 1 coin → 6 grain (indicator unaffected) |
+| F04 | **Windmill** | 3w+2c | 10 | 6 | – | **Coast/Hill** | all | Flip ≤7 grain → straw; take **1 flour per flip** |
+| F05 | **Bakery** | 2c+1sw | 4 | 5 | – | C/P/H | all | Flip flour → **bread** at ½ energy each; may sell ≤2 bread @ 4¢ |
+| G06 | Fuel Merchant | 1c+1sw | 5 | 2 | – | C/P/H | 1·3·4 | Sell 3 / 6 / 9 energy → 5 / 8 / 10 coins |
+| G07 | Peat Coal Kiln | 1c | 4 | **−2** | – | C/P/H | all | Take 1 peat coal + 1 coin; also flip any peat → peat coal freely |
+| F08 | Market | 2st | 5 | **8** | – | C/P/H | all | **4 different goods → 7 coins + 1 bread** |
+| F09 | Cloister Garden | 3¢ | 5 | 0 | ☩ | C/P/H | 1·3·4 | +1 grapes, then a **free USE of one unoccupied neighbor** (1×/turn) |
+| F10 | Carpentry | 2w+1c | 7 | 0 | – | C/P/H | 4 | Remove 1 forest → carry out a free **Build** action |
+| F11 | Harbor Promenade | 1w+1st | 1 | **7** | – | **Coast** | all | Take 1 ceramic + 1 wine + 1 wood + 1 coin (no input) |
+| G12 | Stone Merchant | 1w | 6 | 1 | – | C/P/H | all | ≤5×: **2 food + 1 energy → 1 stone** |
+| G13 | Builders' Market | 2c | 6 | 1 | – | C/P/H | 1·4 | Pay 2 coins → 2 wood + 2 clay + 1 stone + 1 straw (neutral-owned in solo) |
+
+### A buildings (enter at settlement phase A)
+
+| ID | Building | Cost | E | D | ☩ | Land | P | Function |
+|----|----------|------|---|---|---|------|---|----------|
+| F14 | Grapevine (A) | 1w | 3 | 6 | – | **Hillside** | 2·3·4 | Production wheel: **grapes** (joker until grapes indicator enters; *not* in solo) |
+| F15 | Financed Estate | 1c+1st | 4 | 6 | – | C/P/H | 1·4 | Flip 1 coin → book; take 1 bread + 2 grapes + 2 flour |
+| G16 | Cloister Chapter House | 3c+1sw | 2 | 5 | ☩ | C/P/H | 1·3·4 | Take 1 of **each** of the 6 basic goods |
+| F17 | Cloister Library | 2st+1sw | 7 | **7** | ☩ | C/P/H | all | Flip ≤3 coins → books; and/or trade **1 book → 1 meat + 1 wine** |
+| G18 | Cloister Workshop | 3w | 7 | 2 | ☩ | C/P/H | all | Flip ≤3 clay → ceramic and/or 1 stone → ornament, **1 energy per tile** |
+| G19 | Slaughterhouse | 2w+2c | 8 | **−3** | – | C/P/H | all | Flip livestock → **meat**, **1 straw each** (2 food → 5 food) |
+
+### B buildings (enter at settlement phase B)
+
+| ID | Building | Cost | E | D | ☩ | Land | P | Function |
+|----|----------|------|---|---|---|------|---|----------|
+| F20 | Inn | 2w+2sw | 4 | 6 | – | C/P/H | 1·3·4 | Sell ≤7 food @ 1¢ each; and/or 1 wine @ 6¢ |
+| F21 | **Winery** | 2c+2sw | 4 | 5 | – | C/P/H | all | Grapes → **wine**; sell 1 wine @ 7¢. **Raises work-contract price to 2¢ for everyone** |
+| G22 | Quarry (B) | 5¢ | 7 | **−4** | – | **Mountain** | all | Production wheel: **stone** |
+| F23 | Bathhouse | 1st+1sw | 2 | 6 | ☩ | C/P/H | 1·4 | Flip 1 coin → book, +1 ceramic; **recall ALL your clergy immediately** |
+| F24 | **Cloister Church** | 5c+3st | 12 | **9** | ☩ | C/P/H | all | ≤2×: **1 bread + 1 wine → 1 reliquary**. Highest dwelling in the game |
+| F25 | Chamber of Wonders | 1w+1c | 0 | 6 | – | C/P/H | 1·4 | **13 different goods → 1 Wonder** |
+| G26 | Shipyard | 4c+1st | 15 | **−2** | – | **Coast** | all | 2 wood → 5 coins + 1 ornament (1×/turn) |
+
+### C buildings (enter at settlement phase C)
+
+| ID | Building | Cost | E | D | ☩ | Land | P | Function |
+|----|----------|------|---|---|---|------|---|----------|
+| F27 | **Palace** | 25¢ | 25 | **8** | – | **Hillside** | all | Pay 1 wine → **USE any occupied building** (yours or theirs), no work-contract |
+| G28 | **Castle** | 6w+5st | 15 | 7 | – | **Hill/Mtn** | all | **Build 1 settlement** from supply, paying its food + energy |
+| F29 | Quarry (C) | 5¢ | 7 | **−4** | – | **Mountain** | 3·4 | Production wheel: stone (the second Quarry) |
+| F30 | Town Estate | 2st+2sw | 6 | 5 | – | C/P/H | all | Sell 1 ceramic → 12 coins (1×/turn) |
+| F31 | Grapevine (C) | 1w | 3 | 6 | – | **Hillside** | 4 | Production wheel: grapes (the second Grapevine) |
+| F32 | Calefactory | 1st | 2 | 5 | ☩ | C/P/H | 1·3·4 | Pay 1 coin → a free fell-trees and/or cut-peat |
+| F33 | Shipping Company | 3w+3c | 8 | 4 | – | **Coast** | all | Pay 3 energy → joker-wheel production of **meat, bread, OR wine** |
+
+### D buildings (enter at settlement phase D)
+
+| ID | Building | Cost | E | D | ☩ | Land | P | Function |
+|----|----------|------|---|---|---|------|---|----------|
+| G34 | **Sacristy** | 3st+2sw | 10 | 7 | ☩ | C/P/H | all | **book + ceramic + ornament + reliquary → 1 Wonder** (1×/turn) |
+| F35 | Forger's Workshop | 2c+1sw | 4 | 2 | – | C/P/H | all | Buy reliquaries: 5¢ for the 1st, **+10¢ each** thereafter (one USE: 5/15/25… → 1/2/3…) |
+| F36 | Pilgrimage Site | 6¢ | 2 | 6 | – | C/P/H | 1·3·4 | Upgrade book→ceramic→ornament→reliquary, up to **2 steps** per use |
+| F37 | Dormitory | 3c | 3 | 4 | ☩ | C/P/H | all | Take 1 ceramic; then **1 straw + 1 wood → 1 book**, repeatable |
+| F38 | Printing Office | 1w+2st | 5 | 5 | – | C/P/H | all | Remove ≤4 forest cards → **1 book each** |
+| G39 | Estate | 2w+2st | 5 | 6 | – | C/P/H | 1·4 | ≤2×: **10 food OR 6 energy → 1 book + 1 ornament** |
+| F40 | Hospice | 3w+1sw | 7 | 5 | ☩ | C/P/H | 1·3·4 | Use the function of any **unbuilt** building, free |
+| G41 | House of the Brotherhood | 1c+1st | 3 | 3 | ☩ | C/P/H | all | 5¢ → **2 pts per cloister building** you built (1½ in long 2p, 1 in solo) |
+
+### Cloister buildings (☩) — the adjacency-chain set (France)
+
+Cloister Office (basic) · **G01** Priory · **G02** Cloister Courtyard · **F09** Cloister Garden · **G16** Cloister Chapter House · **F17** Cloister Library · **G18** Cloister Workshop · **F23** Bathhouse · **F24** Cloister Church · **F32** Calefactory · **F37** Dormitory · **G34** Sacristy · **F40** Hospice · **G41** House of the Brotherhood. Each must be built orthogonally adjacent to another ☩ building; the cloister grows as one connected cluster, and **G41 scores per ☩ building you built**, so the cluster size is itself a scoring resource.
+
+### Terrain restrictions at a glance
+
+- **Coast only:** F11 Harbor Promenade, G26 Shipyard, F33 Shipping Company, **Fishing Village (S04)**.
+- **Coast or Hillside:** F04 Windmill.
+- **Hillside only:** F14 / F31 Grapevine, F27 Palace, **Hilltop Village (S08)**.
+- **Mountain only:** G22 / F29 Quarry.
+- **Hillside or Mountain:** G28 Castle.
+- **Everything else:** Coast / Plains / Hillside. (Plains = any space cleared of forest/moor.)
+- Settlements may never be placed on Mountain or Water.
+
+---
+
+# PART III — SETTLEMENT REFERENCE (France, engine-verified)
+
+Each player owns all 8 settlements: the four **Start** settlements (S01–S04) from the opening, then S05/S06/S07/S08 received one each at settlement phases A/B/C/D. Cost is **food + energy**, paid from goods (excess wasted). A settlement's *own* contribution is its **E** (added to the economic column) plus its **D** (the base of its settlement-column score, before neighbor adjacency) — e.g. the appendix's "initial value" of the Hilltop Village is E10 + D8 = 18.
+
+| ID | Settlement | Stage | Food | Energy | E | D | Terrain | Notes |
+|----|-----------|-------|------|--------|---|---|---------|-------|
+| S01 | Shanty Town | Start | 1 | 1 | 0 | **−3** | C/P/H | Cheapest; own −3 leaks to *adjacent settlements* — never place beside another settlement |
+| S02 | Farming Village | Start | 3 | 3 | 1 | 1 | C/P/H | |
+| S03 | Market Town | Start | 7 | 0 | 2 | 2 | C/P/H | Zero energy cost |
+| S04 | Fishing Village | Start | 8 | 3 | 4 | 6 | **Coast** | Coast only; pairs with water (D3) for a cheap high pocket |
+| S05 | Artist's Colony | A | 5 | 1 | **−1** | 5 | C/P/H | Negative economic value |
+| S06 | Hamlet | B | 5 | 6 | 3 | 4 | C/P/H | |
+| S07 | Village | C | 15 | 9 | 8 | 6 | C/P/H | |
+| S08 | Hilltop Village | D | 30 | 3 | 10 | 8 | **Hillside** | Hillside only; in 2p only placeable via the **Castle** |
+
+---
+
+# PART IV — GOODS / RESOURCE REFERENCE (engine-verified)
+
+Engine value functions (`board/resource.ts`): **food** = `costFood`, **energy** = `costEnergy`, **money** = `costMoney`, **points** = `costPoints`/`goodsPoints`. **Coins, wine, and whiskey count as food** for settlement payment (this surprises people). Energy: peat coal 3, peat 2, wood 1, straw ½.
+
+| Good | Food | Energy | Coin | Pts | Produced by (key sources) | Used for |
+|------|:----:|:------:|:----:|:---:|---------------------------|----------|
+| Grain | 1 | – | – | 0 | Farmyard; Cloister Courtyard; Grain Storage (¢→6); Chapter House | Flip → straw; Windmill → flour; "different goods" inputs |
+| Straw | – | ½ | – | 0 | **Flip grain (free)**; Builders' Market | Building material; energy; Slaughterhouse meat; Dormitory books |
+| Wood | – | 1 | – | 0 | Fell trees; Cloister Courtyard; Builders' Market; Harbor | Building material; energy; Shipyard; Whiskey (Ireland) |
+| Clay | – | – | – | 0 | Clay Mound; Cloister Courtyard; Builders' Market | Building material; Workshop → ceramic |
+| Peat | – | 2 | – | 0 | Cut peat; Cloister Courtyard | Energy; Peat Coal Kiln → peat coal |
+| Peat coal | – | 3 | – | 0 | Peat Coal Kiln (flip peat) | Densest energy (settlements, Bakery, Workshop, Stone Merchant) |
+| Livestock (sheep) | 2 | – | – | 0 | Farmyard; Forest Hut (Ire) | Food; Slaughterhouse (+straw) → meat |
+| Penny (1 coin) | 1 | – | 1 | 0\* | Cloister Office; many sales | Landscapes; work contracts; buying buildings; flip → book |
+| Nickel (5 coins) | 5 | – | 5 | **2** | Trade 5 pennies; Shipyard; sales | Liquidity; food for settlements (forfeits 2 pts) |
+| Stone | – | – | – | 0 | Quarry; Stone Merchant; Builders' Market | Gates Market, Church, Castle, Sacristy; Workshop → ornament |
+| **Grapes** | 1 | – | – | 0 | Grapevine; Financed Estate | Winery → wine |
+| **Flour** | 1 | – | – | 0 | Windmill (flip grain) | Bakery → bread |
+| **Meat** | 5 | – | – | 0 | Slaughterhouse; Cloister Library; Shipping Co; Refectory(Ire) | High-density settlement food |
+| **Bread** | 3 | – | – | 0 | Bakery; Market; Shipping Co; Financed Estate | Cloister Church reliquary; settlement food |
+| **Wine** | 1 | – | 1 | **1** | Winery; Harbor; Cloister Library; Shipping Co | Cloister Church + bread → reliquary; **Palace**; work-contract present |
+| Book | – | – | – | **2** | Flip coin → book (Library, Bathhouse, Financed Estate); Printing Office (forest → book); Dormitory (straw+wood → book) | Sacristy Wonder; Druid's House / Bulwark (Ire) |
+| Ceramic | – | – | – | **3** | Cloister Workshop (clay+energy); Harbor; Bathhouse; Dormitory | Sacristy Wonder; Town Estate → 12¢; Pilgrimage upgrade |
+| Ornament | – | – | – | **4** | Cloister Workshop (stone+energy); Shipyard; Estate | Sacristy Wonder; Pilgrimage → reliquary |
+| Reliquary | – | – | – | **8** | Cloister Church (bread+wine); Forger's Workshop; Pilgrimage | Sacristy Wonder; Portico (Ire) → many goods |
+| Wonder | – | – | – | **30** | Sacristy; Chamber of Wonders | Pure points (only 8 exist) |
+
+\* Pennies score 0 held loose, but 5 pennies → 1 nickel = 2 pts at scoring. (Point values are from `resource.ts` `costPoints`/`goodsPoints`, except the **Wonder**'s 30, which is per the rulebook — Wonders are tallied separately, not inside those functions.)
+
+**The core France conversion chains:**
+- **Reliquary engine (the decisive chain):** grain → **F04 Windmill** → flour → **F05 Bakery** → bread; grapes → **F21 Winery** → wine; bread + wine → **F24 Cloister Church** → reliquary (8 pts).
+- **Wonder engine:** book + ceramic + ornament + reliquary → **G34 Sacristy** → Wonder (30 pts); or 13 different goods → **F25 Chamber of Wonders** → Wonder.
+- **Goods/points loop:** clay + energy → ceramic, stone + energy → ornament (**G18 Workshop**); coins → books (**F17 Library**); recall via **F23 Bathhouse** to re-fire.
+- **Food engine:** livestock + straw → meat (**G19 Slaughterhouse**, 5 food) — fuels expensive settlements and the Castle.
+- **Liquidity:** energy → coins (**G06 Fuel Merchant**); ceramic → 12¢ (**F30 Town Estate**); food/wine → coins (**F20 Inn**); the **Cloister Office** mints coins for free.
+- **Stone:** **G12 Stone Merchant** (2 food + 1 energy → 1 stone, ≤5×) and **G22 Quarry** (production wheel) — gates the Castle/Sacristy/Market/Church.
+
+---
+
+# PART V — KEY UNDERSTANDINGS (review notes)
+
+1. **Grain → straw is one-way and free, anytime.** Grain is the *only* tile that flips freely. Straw never reverts to grain. Both faces are *different goods*, so one grain pile can satisfy a "1 grain + 1 straw" cost by flipping one tile.
+2. **District sides give different cards.** The **hills side** lays down **2 forests + 1 moor** (plus 2 hillside spaces); the **plains side** lays down only **1 forest** (plus 3 plains + 1 hillside). Pick hills for fuel (forest=wood, moor=peat) + hillside building room; pick plains for maximum open build space.
+3. **Plot composition is fixed:** coastal plot (left) = 2 Water + 2 Coast; mountain plot (right) = 2 Hillside + 1 Mountain. Water = dwelling 3 free; Mountain is the only Quarry/Castle terrain.
+4. **Landscape price ramps up as you buy (2/3/4p), and is reversed in solo** (most expensive first, getting cheaper). See §I.9 for the exact arrays. In multiplayer, *buy land early* — it is cheaper and arms more rounds of building/settling.
+5. **Coins and wine pay food.** A settlement's food cost can be met with pennies (1), nickels (5), or wine (1) — but spending nickels/wine forfeits their scoring points; prefer zero-point food (grain/sheep/bread/meat).
+6. **Negative dwellings only bite beside settlements** — G22 Quarry (−4), G19 Slaughterhouse (−3), G07 Peat Coal Kiln (−2), G26 Shipyard (−2), S01 Shanty Town (−3). Site them away from your settlement pockets; the Shanty Town's −3 also leaks to each *adjacent settlement*.
+7. **Cloister buildings chain.** Every ☩ building must touch another ☩ building; the cloister grows as one cluster, which the Cloister Church / Sacristy / House of the Brotherhood all reward. Once your cloister is boxed in by non-cloister buildings, you can build no more ☩ buildings — protect an open cloister-adjacent space.
+8. **The work-contract present (wine) returns to the supply, not the opponent** — so post-Winery it both saves coins and denies income.
+9. **Production indicators enter on a schedule** (grapes r8, stone r13 in France long); the **joker** substitutes earlier, but pays only the joker's own value and is shared by everyone.
+10. **The Castle is the only post-phase settlement route** (and the only way to place the Hilltop Village in 2p) — it builds settlements without advancing the display, so it does not end the game.
+11. **Engine ≠ printed long-2p roster (intentional).** This engine's 2-player game uses the 24-building set (P-column contains `2`) for *both* short and long length — `roundBuildings` ignores `length`, and a test explicitly pins 2p-long to exclude G01. The printed long-2p "nearly all buildings" rule is deliberately not implemented; the 24-set is what actually appears, so build strategy on it.
+12. **Round Tower dwelling is 2 in the current engine** (`pointsForDwelling` = 2) — the historical "9" data bug noted in Part VII is fixed in this codebase. (Round Tower is Ireland-only anyway.)
+
+---
+
+# PART VI — STRATEGIC COACHING
+
+The remainder of this document is hard-won strategy from played games (mostly France long 2p, some 4p and solo). It builds on the rules and reference above; where any older embedded table or claim conflicts with Parts I–V, Parts I–V win.
 
 ## Core Strategic Principles
 
@@ -364,62 +644,15 @@ get_legal_moves(["SETTLE","SW5","-1","0"]) → feasible payment bundles, e.g. "N
 
 Everything below was verified empirically against the Kennerspiel engine, not inferred from rules memory. Trust observed state transitions over assumed building identities.
 
-### Building Identity Reference — France variant (rulebook-verified)
+### Building Identity Reference → see Part II
 
-Building IDs map to the official index. Engine prefixes (G/F) match the card numbers; settlements are S01–S08 with color prefix (SW5 = white's S05).
+The full, engine-verified building table (cost, landscape, cloister flag, economic value, dwelling value, stage, and player-count availability for **every** France building) is now **Part II — Building Reference**; settlements are in **Part III**, goods values and sources in **Part IV**. Consult those before any unfamiliar `BUILD` or `USE` — identify a building by its verified row, never by name resemblance.
 
-Columns: **E** = economic value, **D** = dwelling value (what adjacent settlements score). Cost: w=wood, c=clay, st=stone, sw=straw, ¢=coins. Loc: blank = Coast/Plains/Hillside; ☩ = must also be adjacent to a cloister building. **2p** = present in the 2-player long game (build pool is filtered by player count — buildings marked – never appear).
+**Dwelling-value geometry (settlement anchors).** Wrap settlements around the highest-D buildings: F24 Cloister Church (9), F08 Market (8), F27 Palace (8), F11 Harbor / F17 Library / G28 Castle / G34 Sacristy (7); plus settlements themselves (Fishing Village 6, Hilltop 8) and Water (3). Keep settlements away from negative-D traps: G22/F29 Quarry (−4), G19 Slaughterhouse (−3), G07 Peat Coal Kiln (−2), G26 Shipyard (−2), S01 Shanty Town (−3). Cloister buildings (☩) cluster by rule, co-locating the high-D church complex — reserve a settlement pocket beside it, and remember G41 scores per ☩ building you built.
 
-| ID  | Building | E | D | Cost | Loc | 2p | Function (compressed) |
-|-----|----------|---|---|------|-----|----|----------------------|
-| —   | Farmyard / Clay Mound / Cloister Office | 0 | 2/3/2 | start | ☩(Office) | ✓ | Production wheel: grain-or-livestock / clay / coins |
-| G01 | Priory | 4 | 3 | 1w+1c | ☩ | – | Use a building occupied by any prior (pay only the Priory's contract) |
-| G02 | Cloister Courtyard | 4 | 4 | 2w | ☩ | ✓ | 3 different goods → 6 identical basic goods |
-| F03 | Grain Storage | 3 | 4 | 1w+1sw | | – | 1 coin → 6 grain |
-| F04 | Windmill | 10 | 6 | 3w+2c | Coast/Hill | ✓ | Flip ≤7 grain→straw, +1 flour each |
-| F05 | Bakery | 4 | 5 | 2c+1sw | | ✓ | Flip flour→bread @ ½ energy each; may sell ≤2 bread @ 4¢ |
-| G06 | Fuel Merchant | 5 | 2 | 1c+1sw | | – | Sell 3/6/9 energy → 5/8/10 coins |
-| G07 | Peat Coal Kiln | 4 | **−2** | 1c | | ✓ | +1 peat coal +1 coin; flip peat→peat coal freely |
-| F08 | Market | 5 | **8** | 2st | | ✓ | 4 different goods → 7 coins + 1 bread |
-| F09 | Cloister Garden | 5 | 0 | 3¢ | ☩ | – | +1 grapes; then use an unoccupied neighbor (once/turn) |
-| F10 | Carpentry | 7 | 0 | 2w+1c | | – | Remove 1 forest → free Build action (excluded from 2p long) |
-| F11 | Harbor Promenade | 1 | **7** | 1w+1st | Coast | ✓ | +1 ceramic, 1 wine, 1 wood, 1 coin |
-| G12 | Stone Merchant | 6 | 1 | 1w | | ✓ | ≤5×: 2 food + 1 energy → 1 stone |
-| G13 | Builders' Market | 6 | 1 | 2c | | – | 2¢ → 2w + 2c + 1st + 1sw |
-| F14 | Grapevine (A) | 3 | 6 | 1w | Hillside | ✓ | Production wheel: grapes |
-| F15 | Financed Estate | 4 | 6 | 1c+1st | | – | Flip 1 coin→book; +1 bread, 2 grapes, 2 flour |
-| G16 | Cloister Chapter House | 2 | 5 | 3c+1sw | ☩ | – | +1 of each of the 6 basic goods |
-| F17 | Cloister Library | 7 | **7** | 2st+1sw | ☩ | ✓ | Flip ≤3 coins→books; then 1 book → 1 meat + 1 wine |
-| G18 | Cloister Workshop | 7 | 2 | 3w | ☩ | ✓ | Flip ≤3 clay→ceramic and ≤1 stone→ornament, 1 energy/tile |
-| G19 | Slaughterhouse | 8 | **−3** | 2w+2c | | ✓ | Flip livestock→meat, 1 straw each (2 food → 5 food) |
-| F20 | Inn | 4 | 6 | 2w+2sw | | – | Sell ≤7 food @ 1¢ each; +1 wine @ 6¢ |
-| F21 | Winery | 4 | 5 | 2c+2sw | | ✓ | Grapes→wine; sell 1 wine @ 7¢. **Raises work-contract price to 2¢ for everyone** |
-| G22 | Quarry (B) | 7 | **−4** | 5¢ | Mountain | ✓ | Production wheel: stone |
-| F23 | Bathhouse | 2 | 6 | 1st+1sw | ☩ | – | Flip 1 coin→book, +1 ceramic; recall ALL your clergy immediately |
-| F24 | Cloister Church | 12 | **9** | 5c+3st | ☩ | ✓ | ≤2× (1 bread + 1 wine) → 1 reliquary. Highest D in the game |
-| F25 | Chamber of Wonders | 0 | 6 | 1w+1c | | – | 13 different goods → 1 Wonder |
-| G26 | Shipyard | 15 | **−2** | 4c+1st | Coast | ✓ | 2 wood → 5 coins + 1 ornament (once/turn) |
-| F27 | Palace | 25 | **8** | 25¢ | Hillside | ✓ | Pay 1 wine → use ANY occupied building |
-| G28 | **Castle** | 15 | **7** | 6w+5st | Hill/Mtn | ✓ | Build 1 settlement from your supply, paying its food + energy |
-| F29 | Quarry (C) | 7 | −4 | 5¢ | Mountain | – | Second quarry (removed in 2p long) |
-| F30 | Town Estate | 6 | 5 | 2st+2sw | | ✓ | Sell 1 ceramic @ 12 coins (once/turn) |
-| F31 | Grapevine (C) | 3 | 6 | 1w | Hillside | – | Second grapevine (removed in 2p long) |
-| F32 | Calefactory | 2 | 5 | 1st | ☩ | – | 1¢ → fell-trees and/or cut-peat actions |
-| F33 | Shipping Company | 8 | 4 | 3w+3c | Coast | ✓ | 3 energy → joker-wheel production of meat, bread, or wine |
-| G34 | Sacristy | 10 | **7** | 3st+2sw | ☩ | ✓ | book+ceramic+ornament+reliquary → 1 Wonder (net +13) |
-| F35 | Forger's Workshop | 4 | 2 | 2c+1sw | | ✓ | 5¢ → 1 reliquary; each additional @ 10¢ |
-| F36 | Pilgrimage Site | 2 | 6 | 6¢ | | – | Upgrade book→ceramic→ornament→reliquary, ≤2 steps |
-| F37 | Dormitory | 3 | 4 | 3c | ☩ | ✓ | +1 ceramic; then (1 straw + 1 wood → 1 book)×∞ |
-| F38 | Printing Office | 5 | 5 | 1w+2st | | ✓ | Remove ≤4 forest → 1 book each |
-| G39 | Estate | 5 | 6 | 2w+2st | | – | ≤2×: 10 food or 6 energy → 1 book + 1 ornament |
-| F40 | Hospice | 7 | 5 | 3w+1sw | ☩ | – | Use the function of any UNBUILT building, free |
-| G41 | House of the Brotherhood | 3 | 3 | 1c+1st | ☩ | ✓ | 5¢ → 1½ pts per cloister building (2p long rate) |
+Point-goods values: book 2, ceramic 3, ornament 4, reliquary 8, Wonder 30, wine 1 (also 1 coin + 1 food), 5-coin nickel 2.
 
-**Dwelling-value geometry (2p):** settlement anchors worth chasing are F24 Cloister Church (9), F08 Market (8), F27 Palace (8), F11/F17/G28/G34 (7), settlements themselves (Fishing Village 6, Hilltop 8). Negative-D traps to keep settlements away from: G22 Quarry (−4), G19 Slaughterhouse (−3), G07 Peat Coal Kiln (−2), G26 Shipyard (−2), Shanty Town (−3). Cloister buildings (☩) cluster by rule, which naturally co-locates the high-D church complex — plan a settlement pocket beside it. Also note G41 pays per ☩ building, so the cloister count is itself a scoring resource.
-
-Point-goods values: book = 2, ceramic = 3, ornament = 4, reliquary = 8, Wonder = 30, wine = 1 (also 1 coin + 1 food), 5-coin tile = 2.
-
-**Structural consequences of the 2p long build set.** Sixteen buildings are excluded from 2-player France: F03, G06, F09, F10, G13, F15, G16, F20, F23, F25, F29, F31, F32, F36, G39, F40. Seven critical bottlenecks result:
+**Structural consequences of the 2p build set.** Per the engine's `roundBuildings`, **seventeen** France cards never appear in 2-player play (the 24-building 2p roster excludes them; see Part II): **G01** Priory, F03, G06, F09, F10, G13 (Start); F15, G16 (A); F20, F23, F25 (B); F29, F31, F32 (C); F36, G39, F40 (D). (Earlier notes said "sixteen" and omitted G01 — corrected.) Seven critical bottlenecks result:
 
 1. **G34 Sacristy is the unique Wonder route** — no F25 Chamber of Wonders alternative
 2. **Reliquaries dual-sourced only** — F24 Cloister Church (bread+wine, ≤2/turn) and F35 Forger's Workshop
@@ -456,7 +689,7 @@ Heartland is a fixed 2×5 strip (3 forest + 2 moor at start). Three ways to grow
 
 So a plot purchase is simultaneously a settlement-pocket decision (coastal water = cheap dwelling value) and a Castle/Hilltop enablement decision (mountain = the only G28 site) — not merely "more space."
 
-**Pricing direction is version-dependent — READ IT LIVE** from `get_game.district_purchase_prices` / `plot_purchase_prices` and verify before relying on it; the engine has flip-flopped across builds. A solo-game verification once showed the **highest** listed price charged first (landscape getting *cheaper* over time); the 4-player long game (Game 1, this build) showed the **opposite — cheapest-first**, with districts opening at 2¢ and plots at 3¢, each ramping *up* as more were bought. When pricing is cheapest-first there is **no early-bird discount** — do not pre-buy a plot whose spaces sit idle (a mountain plot bought round 2 for a round-13 Castle gains nothing on price). **Buy early only for option value, not for price:** a district bought round 4 grants ~15 more rounds of building and settlement placement on the new space, while one bought on the final turn recovers only its raw end-game tile value with nothing built on it. Whichever way prices move, that option value falls as the game shortens.
+**Pricing direction is resolved (Part I.9), but still READ IT LIVE** from `get_game.district_purchase_prices` / `plot_purchase_prices` for the exact next price. In **2/3/4-player** games the piles are cheapest-on-top, so prices **rise** as you buy (districts `2,3,4,4,5,5,6,7,8`; plots `3,4,4,5,5,5,6,6,7`) — there *is* an early-bird discount, so buy land early. In the **solo** game the piles are flipped (most expensive first), so prices **fall** as you buy (districts `8,7,6,5,5,4,4,3,2`; plots `7,6,6,5,5,5,4,4,3`) — no rush on price, but option value still argues for buying when you can use the space. **Either way, buy for option value:** a district bought round 4 grants ~15 more rounds of building/settling on the new space, while one bought on the final turn recovers only its raw tile value with nothing built on it — and that option value falls as the game shortens. (The historical "the engine flip-flopped" note is superseded: 2/3/4p rises, solo falls — verified in `board/landscape.ts`.)
 
 ### The Castle Settlement Protocol (exact, verified sequence)
 
@@ -585,7 +818,7 @@ The authoritative rules are the official Lookout/Z-Man documents (setup sheet, 4
 2. An empty-string completion with `partial_is_complete_command: false` means "syntactically complete, semantically unverified" — not a guarantee the engine will accept the command.
 3. After any human rollback, re-fetch `get_game` before reasoning; in-context state is stale and `move_count` is the cheap staleness check.
 4. `join_game` takes parameter `instance`, not `instance_id`.
-5. **Round Tower dwelling value = 9, should be 2 (confirmed data bug; audited in published 0.19.1).** `pointsForDwelling(RoundTower)` returns 9 in `src/board/erections.ts` (and `dist`); both the rulebook appendix and the overview sheet print 2, and the Cloister Church is the stated *unique* highest at 9 — so the 9 is almost certainly copied from there. Ireland-only (I35), so France play is unaffected, but in an Ireland game it over-credits every adjacent settlement by 7 (and a Round Tower between two settlements leaks 14). Fix: `() => 2`, regenerate `dist`. Audit footnote: this was the *only* discrepancy across all 80 erections — every cost, every economic value, the other 79 dwelling values, and all 8 settlement food/energy costs matched canon exactly.
+5. **Round Tower dwelling value — FIXED in the current source (now 2).** `pointsForDwelling(RoundTower)` returns **2** in `src/board/erections.ts` today, matching the rulebook/overview; the historical `9` data bug (which over-credited adjacent settlements in Ireland games) is resolved. Round Tower is Ireland-only (I35), so France play was never affected. Audit footnote retained: in the broader audit this was the *only* erection discrepancy — every cost, economic value, the other dwelling values, and all 8 settlement food/energy costs match canon (and were re-verified against the engine when Parts I–V above were written).
 6. **Sacristy (G34) build cost — engine accepts grain in place of straw (verify vs. rulebook).** The building table and overview sheet print G34's cost as 3 stone + 2 straw, but in game 4 the engine accepted `BUILD G34 4 2` while I held **zero straw**, consuming 2 grain instead. Either grain is being treated as a straw substitute for this cost, or the straw requirement is mis-encoded. *Expected (per overview):* 2 straw specifically. *Observed:* 2 grain accepted, build succeeded, and `USE G34 BoCeOrRq` then produced the Wonder. File an issue with the reproduction; until resolved, you can satisfy the G34 build with grain on hand — which makes the Wonder line materially easier, since grain is far cheaper to mass-produce (G02 → rondel) than straw.
 7. **`get_legal_moves` is heavily over-permissive on verb drill-down (solo-verified).** Beyond the phantom-SETTLE case in quirk 1, the enumerator also lists `USE` and `WORK_CONTRACT` continuations that the executor will reject — no clergy free, no coins, settle phase inactive, etc. **Ground truth is the `get_game` frame**: `clergy`, `bonusActions`, `usableBuildings`, and your coin count. If top-level `get_legal_moves([])` returns an empty completion list, you genuinely have no legal move; otherwise drilling alone is not a legality proof.
 8. **Cloister Garden (F09) combo confirmed (solo-verified).** `USE F09` → +1 grape **and** a free bonus USE of one unoccupied orthogonal neighbor, spending no clergyman. The free use appears under `USE` in `get_legal_moves` even though `bonus_actions` stays `[]`. Excellent for cheap repeated double-actions — free Windmill (grain→flour+straw), free Courtyard, etc.
