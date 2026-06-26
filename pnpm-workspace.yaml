@@ -1,0 +1,22 @@
+# pnpm workspace root.
+#
+# `game` (published to npm as hathora-et-labora-game) and `agent` (the MCTS
+# self-play tooling) are members, so `agent` consumes `game` via the
+# `workspace:` protocol instead of reaching across folder boundaries.
+#
+# `web` is deliberately NOT a member: it deploys to Vercel as a standalone
+# project (Root Directory = web) and consumes the *published* game from npm.
+# It declares its own single-package workspace (web/pnpm-workspace.yaml), which
+# pnpm honors as the nearer root, keeping its lockfile and Vercel build fully
+# independent of this workspace.
+packages:
+  - game
+  - agent
+
+# (moved here from game/pnpm-workspace.yaml)
+allowBuilds:
+  esbuild: true
+minimumReleaseAgeExclude:
+  - '@types/ramda@0.32.0'
+onlyBuiltDependencies:
+  - esbuild

@@ -12,7 +12,7 @@
     "selfplay": "node --import tsx/esm src/cli/selfplay.ts"
   },
   "dependencies": {
-    "hathora-et-labora-game": "file:../game"
+    "hathora-et-labora-game": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "24.13.2",
