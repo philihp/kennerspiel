@@ -104,17 +104,9 @@ const settlementTypeKey = (s: SettlementEnum): string => {
   return `Settlement${m ? m[1] : s}`
 }
 
-const dedupeInOrder = (keys: string[]): string[] => {
-  const seen = new Set<string>()
-  const out: string[] = []
-  for (const k of keys) {
-    if (!seen.has(k)) {
-      seen.add(k)
-      out.push(k)
-    }
-  }
-  return out
-}
+// Keep first occurrence only. Runs once at module load over tiny vocab arrays,
+// so the O(n^2) indexOf is irrelevant — this is not the hot path.
+const dedupeInOrder = (keys: string[]): string[] => keys.filter((k, i) => keys.indexOf(k) === i)
 
 const GENERIC_BUILDINGS = dedupeInOrder(BUILDINGS.map(genericBuildingKey)) // 72
 const SETTLEMENT_TYPES = dedupeInOrder(SETTLEMENTS.map(settlementTypeKey)) // 8
