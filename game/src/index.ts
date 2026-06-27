@@ -4,6 +4,13 @@ export { initialState } from './state'
 export { encode, featureSpec, FEATURE_LEN } from './encode'
 export type { FeatureSpec } from './encode'
 
+// runtime enums (values), needed by consumers that branch on game state
+export { GameStatusEnum } from './types'
+export { GameCommandEnum } from './types'
+export { PlayerColor } from './types'
+
+export type { Controls } from './types'
+export type { Score } from './types'
 export type { GameConfigPlayers } from './types'
 export type { GameConfigLength } from './types'
 export type { GameConfigCountry } from './types'

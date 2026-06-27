@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022"],
+    "strict": true,
+    // Note: no noUncheckedIndexedAccess — the paths alias pulls the game's
+    // TypeScript source into this program, and that source targets the game's
+    // own (laxer) tsconfig. The game package is the authority for its own code.
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "noEmit": true,
+    "paths": {
+      // The workspace dependency (workspace:* in package.json) symlinks the
+      // game package, but its published `dist` uses extensionless ESM imports
+      // that only a bundler resolves. Point the package name at the game's
+      // TypeScript source so tsx/tsc consume it directly — no build step, which
+      // also means instant iteration across game + agent.
+      "hathora-et-labora-game": ["../game/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"]
+}

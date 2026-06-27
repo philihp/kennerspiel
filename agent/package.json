@@ -1,0 +1,25 @@
+{
+  "name": "hathora-et-labora-agent",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MCTS self-play agent and position evaluator for Ora et Labora",
+  "license": "GPL-3.0",
+  "scripts": {
+    "test": "node --import tsx/esm --test 'src/**/__tests__/**/*.test.ts'",
+    "typecheck": "tsc --noEmit",
+    "arena": "node --import tsx/esm src/cli/arena.ts",
+    "selfplay": "node --import tsx/esm src/cli/selfplay.ts"
+  },
+  "dependencies": {
+    "hathora-et-labora-game": "workspace:*",
+    "ramda": "0.32.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.2",
+    "@types/ramda": "0.32.0",
+    "tsx": "4.22.4",
+    "typescript": "6.0.3"
+  },
+  "packageManager": "pnpm@11.8.0"
+}
