@@ -19,14 +19,8 @@ export const apply = (state: GameState, move: Move): GameState | undefined => {
   }
 }
 
-export const replay = (commands: Move[]): GameState | undefined => {
-  let state: GameState | undefined = initialState
-  for (const cmd of commands) {
-    if (state === undefined) return undefined
-    state = apply(state, cmd)
-  }
-  return state
-}
+export const replay = (commands: Move[]): GameState | undefined =>
+  commands.reduce<GameState | undefined>((state, cmd) => (state === undefined ? undefined : apply(state, cmd)), initialState)
 
 export const isPlaying = (state: GameState): boolean => state.status === GameStatusEnum.PLAYING
 

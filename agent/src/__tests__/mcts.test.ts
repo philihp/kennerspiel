@@ -19,7 +19,7 @@ describe('mcts', () => {
     assert.notEqual(apply(s, r.best!), undefined)
     const totalVisits = r.visits.reduce((a, v) => a + v.n, 0)
     assert.ok(totalVisits > 0 && totalVisits <= 24)
-    for (const v of r.visits) assert.ok(v.q >= 0 && v.q <= 1)
+    r.visits.forEach((v) => assert.ok(v.q >= 0 && v.q <= 1))
   })
 
   it('is deterministic for a fixed seed', () => {

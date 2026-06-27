@@ -37,7 +37,7 @@ describe('engine adapter', () => {
     const s = replay(OPENING)!
     const sc = scores(s)
     assert.equal(sc.length, 2)
-    for (const p of sc) assert.equal(typeof p.total, 'number')
+    sc.forEach((p) => assert.equal(typeof p.total, 'number'))
   })
 
   it('outcome is a per-player value vector summing to ~ (n-1)/... rank semantics', () => {
@@ -45,7 +45,7 @@ describe('engine adapter', () => {
     const s = replay(OPENING)!
     const o = outcome(s)
     assert.equal(o.length, 2)
-    for (const v of o) assert.ok(v >= 0 && v <= 1)
+    o.forEach((v) => assert.ok(v >= 0 && v <= 1))
     // 2-player zero-sum-ish: the two values sum to 1 (win+loss) or 1 (0.5+0.5 tie)
     assert.equal(o[0]! + o[1]!, 1)
   })

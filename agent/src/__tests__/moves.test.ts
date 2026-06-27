@@ -15,10 +15,10 @@ describe('move generation', () => {
     const s = replay(OPENING)!
     const moves = enumerateMoves(s)
     assert.ok(moves.length > 0)
-    for (const m of moves) {
+    moves.forEach((m) => {
       assert.ok(m.length > 0)
       assert.notEqual(apply(s, m), undefined, `expected legal: ${m.join(' ')}`)
-    }
+    })
   })
 
   it('always offers COMMIT-or-equivalent progress (no dead state at the opening)', () => {
@@ -32,7 +32,7 @@ describe('move generation', () => {
     const { moves, truncated } = enumerateMovesInfo(s, { maxPerLevel: 4, maxMoves: 30 })
     assert.ok(moves.length <= 30)
     // every capped move is still a legal command
-    for (const m of moves) assert.notEqual(apply(s, m), undefined)
+    moves.forEach((m) => assert.notEqual(apply(s, m), undefined))
     assert.equal(typeof truncated, 'boolean')
   })
 
