@@ -16,7 +16,10 @@ packages:
 # (moved here from game/pnpm-workspace.yaml)
 allowBuilds:
   esbuild: true
-minimumReleaseAgeExclude:
-  - '@types/ramda@0.32.0'
+# Supply-chain age gate disabled. pnpm 11 defaults minimumReleaseAge to 24h,
+# which fails CI whenever a dependency bump (e.g. a Renovate eslint/prettier
+# update) lands within that window. 0 turns it off; the exclude list is then
+# moot and removed.
+minimumReleaseAge: 0
 onlyBuiltDependencies:
   - esbuild
