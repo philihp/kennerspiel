@@ -16,10 +16,11 @@ describe('commands/commit', () => {
   })
 
   describe('complete', () => {
-    it('does not allow commit if main action not used', () => {
-      // this was a bit of a judgement call. the rules say each player "gets to carry out an action", but
-      // i can't figure out a single instance where a player would want to pass on this, so i'm going to say
-      // no commits without doing a thing
+    it('allows commit even if main action not used (a pass)', () => {
+      // The rules say each player "gets to carry out one action" — an
+      // entitlement, not an obligation — so a player may pass (end their turn
+      // without using the main action). This also avoids softlocking end-game
+      // states where no legal action remains.
       const s1 = {
         ...s0,
         frame: {
@@ -28,7 +29,7 @@ describe('commands/commit', () => {
         },
       }
       const c0 = complete(s1)([])
-      expect(c0).toStrictEqual([])
+      expect(c0).toStrictEqual(['COMMIT'])
     })
     describe('neutral building phase', () => {
       it('does not allow commit if still buildings', () => {
