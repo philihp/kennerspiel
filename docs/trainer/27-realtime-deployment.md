@@ -72,20 +72,20 @@ humans watch each command land live.
 Two layers, because realtime alone is not reliable enough to stake a human's
 game on:
 
-1. **Supabase Realtime subscription** per seated game on the broadcast topic
+1. **Supabase Realtime subscription** per seated game on broadcast topic
    `instance:<id>` (the trigger in
    `supabase/migrations/20250222000341_realtime_instance_broadcasts.sql`
    already publishes every update). A broadcast is a *wake-up*, never trusted
-   as state: on wake, fetch + replay + check `activePlayerIndex` color against
-   the bot's entrant colors.
+   as state: on wake, fetch + replay + check the active color against the
+   bot's entrant colors.
 2. **Slow poll** (default 30 s) over the same seated-games query — catches
-   dropped websockets, and is also how the bot discovers *new* games it was
-   just invited to (there is no broadcast for `entrant` inserts).
+   dropped websockets, and discovers *new* games the bot was just invited to
+   (there is no broadcast for `entrant` inserts).
 
 A single scheduler serializes work per game (one in-flight decision per
-`instance_id`) and caps global search concurrency at 1 in v1 — several games
-in flight simply queue, which keeps CPU and latency predictable. One seat per
-game; a wake for a game where it is not the bot's turn is a no-op.
+`instance_id`) and caps global search concurrency at 1 in v1 — concurrent
+games simply queue, keeping CPU and latency predictable. One seat per game;
+a wake when it is not the bot's turn is a no-op.
 
 ### Time-bounded search
 
@@ -110,13 +110,13 @@ Every fallback is tagged in the move log; a healthy deploy shows zero.
 
 ### Model management
 
-`BOT_MODEL=best@runs/<id>` reuses [22](22-arena-gating.md)'s `best@` resolution:
-read `best.json`, resolve `onnx` run-relative (an rsync'd copy of the run dir
-works — paths are run-relative by design). The daemon polls `best.json`'s
-mtime (~60 s); on change it constructs a fresh evaluator (spec assertion
-included), swaps it **between** moves only, and keeps the old one if the new
-load fails. `spec.netId` (e.g. `gen-007`) is logged with every move — "which
-net played this" is auditable per move, matching JSONL provenance in
+`BOT_MODEL=best@runs/<id>` reuses [22](22-arena-gating.md)'s `best@`
+resolution: read `best.json`, resolve `onnx` run-relative (an rsync'd copy of
+the run dir works — paths are run-relative by design). The daemon polls
+`best.json`'s mtime (~60 s); on change it constructs a fresh evaluator (spec
+assertion included), swaps it **between** moves only, and keeps the old one
+if the new load fails. `spec.netId` (e.g. `gen-007`) is logged with every
+move — "which net played this" stays auditable, matching JSONL provenance in
 [14](14-selfplay-v2.md).
 
 ### Human-experience knobs
