@@ -77,7 +77,19 @@ by delegation, not reimplementation:
 - `initial` = `replay(opening(cfg, seed))` (moving `GameConfig`/`opening`
   from `arena.ts` into the adapter; a bad opening throws).
 - `apply`/`isTerminal`/`playerToMove`/`numPlayers`/`outcome` = the `engine.ts`
-  functions verbatim; `heuristic` = `scores(state).map(s => s.total)` (kept
+  functions verbatim — **except solo**: `engine.ts` returns the raw score for
+  1-player games, which violates the `[0,1]` contract (it would swamp UCT's
+  exploration term and saturate the sigmoid value head). The adapter maps
+  solo to `σ((score − 500) / 100)`: 0.5 exactly at the score-500 success
+  threshold, monotone in score so maximizing value maximizes score, and a
+  useful gradient across the realistic 200–800 range. The threshold/scale
+  live in the adapter's config (`solo: { target: 500, scale: 100 }`), not in
+  code — the binary "score > 500" rate stays the *reported* success metric
+  ([22](22-arena-gating.md)/[26](26-first-run.md)); the squash is what search
+  backs up and the net trains on (denser signal per expensive solo game than
+  a sparse 0/1 label, at the cost of baking a fixed squash into the target —
+  revisit the scale only if solo value calibration looks flat).
+  `heuristic` = `scores(state).map(s => s.total)` (kept
   optional on the interface because it's a baseline convenience, not a core
   requirement for a new game).
 - `legalMoves(state, caps)` = `enumerateMoves(state, caps)` piped through

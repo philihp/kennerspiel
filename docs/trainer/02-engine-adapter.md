@@ -52,9 +52,13 @@ outcome(state): number[]                    // per-player value in [0, 1]
 - **`outcome`** maps score totals to a per-player rank vector:
   `(#opponents beaten + 0.5 · #ties) / #opponents`, i.e. 2p → win 1 /
   draw 0.5 / loss 0. Solo (`n === 1`) returns the raw score total, since
-  there is no opponent to rank against. Because it ranks *current* totals, it
-  is meaningful on non-terminal states too — [05](05-uct-search.md) uses this
-  as its rollout score-margin cutoff.
+  there is no opponent to rank against — **a known contract violation**: the
+  raw score (hundreds of points) breaks the `[0,1]` scale that UCT's
+  exploration constant and the sigmoid value head assume. The adapter
+  ([09](09-game-adapter.md)) remaps solo to `σ((score − 500)/100)`, anchored
+  on the solo success criterion (score > 500 ⇒ value > 0.5). Because it
+  ranks *current* totals, `outcome` is meaningful on non-terminal states
+  too — [05](05-uct-search.md) uses this as its rollout score-margin cutoff.
 
 ### RNG (`agent/src/rng.ts`)
 

@@ -22,7 +22,10 @@ self-contained; their **Status** column below reflects reality.
 | Stack | Node self-play (TS engine) · PyTorch training · ONNX for Node inference |
 | Hardware | One machine: RX 7800 XT 16 GB on bare-metal Ubuntu + ROCm (`gfx1101`, HSA override). Plain PyTorch so a ≤$50 CUDA rental or CPU works identically — see [25](25-rocm-runbook.md) |
 | Core interface | Game-agnostic `GameAdapter` — see [09](09-game-adapter.md) |
-| First config | 2-player · long · France |
+| Configs in scope | **All 16**: 1–4 players × short/long × Ireland/France, one config-conditioned net (the config one-hots are already in the encoder's shared block). Self-play samples a weighted config mix; gating evaluates a per-bucket panel — see [14](14-selfplay-v2.md)/[22](22-arena-gating.md) |
+| Solo value target | Success = **final score > 500**. Value/search target = `σ((score − 500)/100)` (0.5 exactly at 500, monotone in score); the binary >500 rate is the reported metric — see [09](09-game-adapter.md) |
+| Future countries | More countries will be added later: the encoder's country one-hot gets reserved capacity now, while no trained weights exist — see [07](07-engine-fast-paths.md) |
+| Bring-up config | 2-player · long · France first (matches the strategy guide), then widen to the full mix — see [26](26-first-run.md) |
 | Durable data | JSONL of games (commands + per-decision candidates/visits); tensors regenerated per training run |
 
 ## The generation loop
@@ -135,7 +138,7 @@ graph LR
 | M4 — Search v2 | 12–15 | PUCT-with-uniform-priors ≈ UCT strength at equal sims; JSONL v2 round-trips |
 | M5 — Training pipeline | 16–20 | Overfit test on 10 games; Node↔Python shard round-trip bit-exact; torch↔ONNX parity |
 | M6 — Closed loop | 21–24 | `pnpm loop --config tiny.json --gens 2` finishes end-to-end in minutes |
-| M7 — Real run | 25, 26 | A promoted generation beats pure UCT at equal sims |
+| M7 — Real run | 25, 26 | A promoted generation beats pure UCT at equal sims (2–4p buckets) and beats pure UCT's score>500 rate in solo |
 
 ## Run directory layout (shared vocabulary)
 
@@ -165,5 +168,7 @@ building more infrastructure — that is what 08 exists for.
   [`docs/mcp-server-design.md`](../mcp-server-design.md)).
 - Second game onboarding: implement `GameAdapter` + `ActionSpec` for the new
   game; search/selfplay/exporter/trainer are reused unchanged.
-- 3–4 player configs: value head is already a per-player vector; no
-  architecture change.
+- Additional countries: append the country to the reserved config slot and
+  the new buildings to the append-only erection vocab (both capacity-reserved
+  — [01](01-state-encoder.md)/[07](07-engine-fast-paths.md)); re-export
+  shards and keep training — no architecture change.

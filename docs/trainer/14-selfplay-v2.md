@@ -60,7 +60,7 @@ selfPlayGame(adapter, evaluator, cfg, seed, rng, opts): Promise<SelfPlayGameV2>
 | --- | --- | --- |
 | `v` | `2` | schema version, first field, cheap to sniff |
 | `gameId` | `string` | `"g" + seed` — stable, dedupe-able across resumes |
-| `cfg` | `GameConfig` | `{ players, country, length, colors }` (`agent/src/arena.ts`) |
+| `cfg` | `GameConfig` | `{ players, country, length, colors }` (`agent/src/arena.ts`) — per game, so one generation's files mix configs freely (the run config's weighted mix, [15](15-selfplay-workers.md)); solo games label `outcome` with the σ((score−500)/100) mapping from [09](09-game-adapter.md) |
 | `seed` | `number` | opening + rng-derivation seed (see above) |
 | `netId` | `string` | `evaluator.id` — `"rollout"` or e.g. `"gen-007"` |
 | `search` | `object` | `{ sims, cPuct, dirichlet: {epsilon, alphaScale} \| null, tempMoves, curation: {maxPerLevel, maxMoves} }` |

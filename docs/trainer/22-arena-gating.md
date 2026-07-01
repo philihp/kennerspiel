@@ -90,6 +90,31 @@ The candidate-vs-`mcts:400` yardstick is always played and logged, never
 gated on: it is the fixed-strength ruler showing absolute progress across
 the whole run, whereas promoted-vs-promoted only shows relative progress.
 
+### Config panel and the solo bucket
+
+One net serves all configs (1–4 players × short/long × both countries), so
+the gate evaluates a **panel of config buckets** from `config.json`
+(`gate.panel`), not one config. Gating on all 16 buckets at ≥100 games each
+is a day of compute, so the panel is a representative subset (e.g.
+`2p-long-france`, `4p-short-ireland`, `1p-long-france`) with per-bucket game
+counts; ungated buckets are covered statistically by self-play sampling the
+full mix and by rotating one "guest" bucket through the panel across
+generations.
+
+- **2–4 player buckets**: head-to-head `runMatch` vs the champion exactly as
+  above (seat-alternated; for 3–4p the remaining seats are filled with
+  champion copies, and the candidate's mean rank-outcome is the score).
+- **Solo bucket**: there is no opponent — candidate and champion each play
+  the *same fixed seed set* and the comparison is **paired**: per seed,
+  candidate wins the pair if its final score is higher (success counting per
+  [09](09-game-adapter.md): the reported metric is the score>500 rate, also
+  logged per side). Pairing on identical seeds cancels board-setup variance,
+  which for N=50-ish solo games is the difference between signal and noise.
+- **Promotion rule**: weighted mean of per-bucket win rates ≥ `threshold`
+  (0.55) **and** no panel bucket below 0.45 — a net that trades 4p collapse
+  for 2p gains must not ratchet in. Per-bucket results all land in
+  `arena.json`.
+
 ### best.json atomic update
 
 On promotion, write `runs/<id>/best.json`:

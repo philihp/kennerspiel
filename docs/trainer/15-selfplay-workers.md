@@ -55,11 +55,15 @@ to `runs/<id>/gen-NNN/selfplay/worker-K.jsonl`.
 | main → worker | `{ type: 'stop' }` | drain and exit |
 
 Seeds are `baseSeed + gameIndex` for `gameIndex ∈ [0, games)`, `baseSeed`
-from config (default `gen * 1_000_000`). The *set* of games is therefore
-fixed by the target count alone; the dispenser hands out the lowest
-not-yet-done index on every `ready`/`done`, so assignment is
-work-stealing while the corpus stays deterministic
-([14](14-selfplay-v2.md) makes each game a pure function of its seed).
+from config (default `gen * 1_000_000`). Each `game` message also carries a
+`cfg`: the run config's `game` field is a **weighted config mix** (e.g. all
+16 player-count × length × country combinations, weighted toward the configs
+that matter most right now), and `gameIndex` maps to a cfg by deterministic
+weighted round-robin — so the *set* of (seed, cfg) games is fixed by the
+target count alone. The dispenser hands out the lowest not-yet-done index on
+every `ready`/`done`, so assignment is work-stealing while the corpus stays
+deterministic ([14](14-selfplay-v2.md) makes each game a pure function of
+its seed and cfg, and each JSONL line records its own `cfg`).
 
 ### Resume protocol
 

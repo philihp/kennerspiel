@@ -104,14 +104,27 @@ All changes in `game/`; agent call sites migrate in [08](08-benchmarks.md) /
    map.get(e) ?? 0` — identical output for every enum value including the
    unknown→0 fallback (today `indexOf` returns −1 and `+1` yields 0).
 
-6. **Exports** — from `game/src/index.ts`, additive only: `completions`,
+6. **Country capacity in the encoder** — the shared block's country one-hot
+   is currently exactly `COUNTRIES.length = 2` wide, so adding a third
+   country would change `FEATURE_LEN` and strand every trained checkpoint.
+   More countries are a stated plan, and right now zero trained weights
+   exist — this is the one moment a `FEATURE_LEN` change is free. Widen the
+   config country field to a reserved `COUNTRY_CAPACITY = 8` (same
+   append-only pattern as the 256-slot erection vocab; the country list in
+   `featureSpec.vocab.countries` stays the source of truth for live ids) and
+   bump the featureSpec version. `config.players` (max 4) and `length` (2)
+   are closed sets and stay exact-size.
+
+7. **Exports** — from `game/src/index.ts`, additive only: `completions`,
    `scores`, `encodeInto`, `erectionId`, and `parseResourceParam` (from
    `game/src/board/resource.ts`). Exporting `parseResourceParam` requires also
    exporting the `Cost` type (and `ResourceEnum`, useful for
    [11](11-action-encoder.md)); neither is exported today.
 
-7. **Version bump** — `hathora-et-labora-game` is published (currently
-   `0.21.1`); this is additive, so bump minor → `0.22.0`.
+8. **Version bump** — `hathora-et-labora-game` is published (currently
+   `0.21.1`); this is additive except the `FEATURE_LEN` change in step 6
+   (nothing ships trained weights yet, so it is safe now and never again);
+   bump minor → `0.22.0`.
 
 ## Edge cases
 
@@ -136,8 +149,10 @@ All changes in `game/`; agent call sites migrate in [08](08-benchmarks.md) /
 - New exports from `hathora-et-labora-game`: `completions`, `scores`,
   `encodeInto`, `erectionId`, `parseResourceParam` (+ `Cost`, `ResourceEnum`
   types).
+- Country one-hot widened to `COUNTRY_CAPACITY = 8` (new `FEATURE_LEN`,
+  featureSpec version bump) so future countries never change shapes again.
 - A minor version bump of the package (`0.21.1` → `0.22.0`); `control()` and
-  `encode()` behavior unchanged.
+  `encode()` behavior otherwise unchanged.
 
 ## How it runs / verification
 

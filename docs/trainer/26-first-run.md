@@ -10,7 +10,9 @@
 ## Goal
 
 The AlphaZero "it works" moment: a promoted generation that beats pure UCT
-at equal simulations, on the 2-player · long · France config.
+at equal simulations — brought up on 2-player · long · France, then widened
+to the full config matrix (1–4 players × short/long × both countries, solo
+success = score > 500; see "Widening to the full config mix" below).
 
 ## Starting configuration
 
@@ -140,6 +142,45 @@ widen `window` to 7–8 first (more diverse outcomes), then consider net
 scale (below). If *policy* loss plateaus **and** gates stall for 3+
 generations (the [23](23-orchestrator.md) halt), that is the real "look at
 everything" signal.
+
+## Widening to the full config mix
+
+The bring-up run above is deliberately single-config (2p·long·France — one
+bucket, one yardstick, fewest moving parts while pipeline bugs are still
+live). The target state is **all 16 configs** (1–4 players × short/long ×
+Ireland/France) served by the one config-conditioned net; the encoder
+already carries players/length/country one-hots, so this is a config change,
+not a code change. As soon as criteria 1–2 below hold on the bring-up run,
+start `runs/all-configs-v1` by widening `game` to a weighted mix, e.g.:
+
+```jsonc
+"game": { "mix": [
+  { "cfg": { "players": 2, "country": "france",  "length": "long"  }, "weight": 4 },
+  { "cfg": { "players": 2, "country": "ireland", "length": "long"  }, "weight": 2 },
+  { "cfg": { "players": 1, "country": "france",  "length": "long"  }, "weight": 2 },
+  { "cfg": { "players": 3, "country": "france",  "length": "long"  }, "weight": 2 },
+  { "cfg": { "players": 4, "country": "france",  "length": "long"  }, "weight": 2 },
+  { "cfg": { "players": 2, "country": "france",  "length": "short" }, "weight": 2 }
+  // …remaining combinations at weight 1
+]},
+"gate": { "panel": [
+  { "bucket": "2p-long-france",  "games": 100 },
+  { "bucket": "4p-short-ireland","games": 60 },
+  { "bucket": "1p-long-france",  "games": 50 }   // paired-seed, score>500 rate
+], "threshold": 0.55, "bucketFloor": 0.45 }
+```
+
+Self-play assigns each game's cfg by deterministic weighted round-robin over
+the mix ([15](15-selfplay-workers.md)); JSONL/shards are config-heterogeneous
+by design (every game line carries its `cfg`, every state row carries the
+config one-hots). **Solo success = final score > 500**: search and training
+use the `σ((score−500)/100)` value mapping from [09](09-game-adapter.md),
+and the journal tracks the solo bucket's score>500 rate alongside per-bucket
+gate results ([22](22-arena-gating.md)). Warm-start the all-configs run from
+the bring-up run's best checkpoint — the config planes were constant during
+bring-up, so the net treats new configs as unfamiliar inputs, not
+contradictory ones; expect a few generations before the 3–4p and solo
+buckets catch up.
 
 ## Success criteria
 
