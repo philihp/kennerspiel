@@ -138,7 +138,7 @@ symmetries to exploit.
   comment + tests pinning specific ids) rather than by a checksum; a vocab
   hash in shard metadata is a cheap later hardening ([16](16-shard-exporter.md)).
 - **Color collapse.** Chosen: collapse colored duplicates, keep country
-  variants. Halves the vocab-ish (100 raw enums → 80 ids) and removes a
+  variants. Shrinks the vocab (113 raw enum values → 80 ids) and removes a
   spurious feature dimension. Cost: relies on the invariant that colored tiles
   only appear on their owner's board — true in this game, an assumption to
   re-verify for future games.
