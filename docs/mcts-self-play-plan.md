@@ -1,5 +1,10 @@
 # MCTS Self-Play & Position-Evaluation Plan
 
+> **Superseded** by [`docs/trainer/README.md`](trainer/README.md) — the
+> full-AlphaZero (policy + value) trainer plan. Phases 1–3 below shipped and
+> correspond to projects 01–06 there; this document is kept for its
+> measurements and historical record.
+
 Plan for building a Monte Carlo Tree Search (MCTS) agent that plays Ora et
 Labora against itself, learns a position evaluator (value network) from that
 self-play, and is ultimately served for real-time human-vs-computer play.
