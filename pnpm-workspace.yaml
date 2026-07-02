@@ -10,9 +10,9 @@ packages:
   - web
 
 # Give each workspace project its own pnpm-lock.yaml instead of a single shared
-# one at the workspace root. `game` is a published library and gitignores its
-# lockfile so it always resolves against the latest of its declared deps;
-# `agent` commits its lockfile for reproducible self-play/training runs.
+# one at the workspace root. All three projects commit their lockfiles: CI
+# installs with --frozen-lockfile so test and publish runs are reproducible,
+# and `agent` needs it for reproducible self-play/training runs.
 sharedWorkspaceLockfile: false
 
 # (moved here from game/pnpm-workspace.yaml)

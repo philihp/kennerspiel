@@ -33,7 +33,7 @@
     "zod": "4.4.3"
   },
   "scripts": {
-    "build": "next build",
+    "build": "pnpm --filter hathora-et-labora-game run build && next build",
     "dev": "next dev --turbopack",
     "lint": "next lint",
     "test": "node --import tsx/esm --test 'src/**/__tests__/**/*.test.ts'",
@@ -61,5 +61,6 @@
   "overrides": {
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3"
-  }
+  },
+  "packageManager": "pnpm@11.9.0"
 }

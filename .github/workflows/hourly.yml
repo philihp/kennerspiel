@@ -13,13 +13,16 @@ jobs:
         working-directory: web
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: web/package.json
       - uses: actions/setup-node@v6
         with:
           node-version: latest
-          cache: npm
-          cache-dependency-path: web/package-lock.json
-      - run: npm install
-      - run: npm run hourly
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run hourly
         env:
           SUPABASE_URL: ${{ vars.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
