@@ -34,10 +34,10 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('game/package.json') }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('game/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm install --frozen-lockfile
       - run: pnpm run lint
       - run: pnpm run build
       - run: pnpm run test
