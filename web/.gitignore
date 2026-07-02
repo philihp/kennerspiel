@@ -36,9 +36,5 @@ yarn-error.log*
 next-env.d.ts
 .env
 
-# pnpm-workspace.yaml IS committed here on purpose: it pins web as its own
-# single-package workspace root, isolating it from the repo-root workspace
-# (game + agent) so web's Vercel build and lockfile stay independent.
-pnpm-lock.yaml
-# only pnpm-lock.yaml should be committed; npm install should not be run in this package
+# pnpm-lock.yaml IS committed; only npm's lockfile is ignored.
 package-lock.json

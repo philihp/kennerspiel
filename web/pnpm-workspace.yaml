@@ -1,9 +1,0 @@
-# web is its own single-package workspace root, on purpose.
-#
-# It deploys to Vercel as a standalone project (Root Directory = web) and
-# consumes the published hathora-et-labora-game from npm. Because Vercel's build
-# can see the repo root (next.config sets outputFileTracingRoot to ../), this
-# nearer pnpm-workspace.yaml shadows the repo-root workspace so pnpm treats web
-# as standalone — its lockfile and install stay independent of game/agent.
-packages:
-  - .
