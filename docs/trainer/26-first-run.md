@@ -28,7 +28,7 @@ success = score > 500; see "Widening to the full config mix" below).
     "workers": 12,
     "sims": 200,
     "cPuct": 1.5,
-    "dirichlet": { "epsilon": 0.25, "alpha": 0.5 },
+    "dirichlet": { "epsilon": 0.25, "alphaScale": 10 },
     "temperature": { "tau": 1.0, "moves": 30 },
     "curation": { "maxPerLevel": 24, "maxMoves": 64 },
     "gen0": { "evaluator": "rollout", "sims": 400, "rolloutDepth": 60 },
@@ -56,8 +56,8 @@ success = score > 500; see "Widening to the full config mix" below).
 }
 ```
 
-Rationale for the non-obvious values: `dirichlet.alpha` 0.5 ≈ 10/⟨branching
-18⟩ per [13](13-puct-search.md); `gen0.sims` 400 because gen-0 data quality
+Rationale for the non-obvious values: `dirichlet.alphaScale` 10 yields
+α ≈ 10/⟨branching 18⟩ ≈ 0.55 per [13](13-puct-search.md); `gen0.sims` 400 because gen-0 data quality
 sets the ceiling for gen-1 and is paid only once; `tempMoves` 30 covers the
 settlement-and-early-building phase where opening diversity matters.
 

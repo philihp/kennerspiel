@@ -22,7 +22,7 @@ uv run oel-export-onnx --ckpt gen-NNN/ckpt/model.pt --out gen-NNN/model.onnx
 
 ### Graph interface (fixed contract with [21](21-onnx-evaluator.md))
 
-- inputs: `states [B, 14670] f32` · `cand_feats [M, moveFeatureLen] f32` ·
+- inputs: `states [B, featureLen] f32` · `cand_feats [M, moveFeatureLen] f32` ·
   `cand_offsets [B+1] i64` (prefix sums, `offsets[0] = 0`, `offsets[B] = M`)
 - outputs: `values [B, maxPlayers] f32` (post-sigmoid) · `logits [M] f32`
   (raw, pre-softmax)
@@ -100,7 +100,7 @@ without a re-export.
 ### `spec.json` + golden-batch fixture (shared with [21](21-onnx-evaluator.md))
 
 `spec.json` is written next to the model: featureSpec + actionSpec versions,
-`featureLen: 14670`, `moveFeatureLen`, `maxPlayers: 4`, graph interface
+`featureLen` (from `featureSpec`), `moveFeatureLen: 91`, `maxPlayers: 4`, graph interface
 version, opset, and source ckpt path — every consumer asserts it before
 inference.
 
@@ -113,7 +113,7 @@ the Node parity test in [21](21-onnx-evaluator.md) replays against the same
   "tolerance": 1e-4,
   "cases": [ { "B": 7, "M": 131,
     "inputs":   { "states":       { "shape": [7, 14670], "dtype": "f32", "b64": "…" },
-                  "cand_feats":   { "shape": [131, 90],  "dtype": "f32", "b64": "…" },
+                  "cand_feats":   { "shape": [131, 91],  "dtype": "f32", "b64": "…" },
                   "cand_offsets": { "shape": [8],        "dtype": "i64", "b64": "…" } },
     "expected": { "values": { "shape": [7, 4], "dtype": "f32", "b64": "…" },
                   "logits": { "shape": [131],  "dtype": "f32", "b64": "…" } } } ] }

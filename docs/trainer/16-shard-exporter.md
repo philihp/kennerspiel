@@ -20,13 +20,15 @@ strands data (re-export is a replay away).
 
 ### Dimensions (recomputed from `game/src/encode.ts`)
 
-`FEATURE_LEN = 14,670`: 4 player blocks of 3,455 (35 scalars — 22 resources +
-1 wonders + 4 clergy buckets + 8 settlement types — plus a 38×9×10 grid =
-3,420) + frame 549 + shared 301. Block offsets: players at
-`[0, 3455, 6910, 10365]`, frame at 13,820, shared at 14,369. One f16 state row
-is 29,340 bytes (~28.7 KiB). `moveFeatureLen ≈ 90` per
-[11](11-action-encoder.md) (14 command + 1 erection id + 9 col + 38 row + 22
-resources + ~6 scalars).
+`FEATURE_LEN = 14,670` today: 4 player blocks of 3,455 (35 scalars — 22
+resources + 1 wonders + 4 clergy buckets + 8 settlement types — plus a
+38×9×10 grid = 3,420) + frame 549 + shared 301. Block offsets: players at
+`[0, 3455, 6910, 10365]`, frame at 13,820, shared at 14,369. Once
+[07](07-engine-fast-paths.md) reserves `COUNTRY_CAPACITY = 8`, shared grows
+to 307 and `featureLen` to 14,676 — the exporter always writes whatever
+`featureSpec.featureLen` says, never a literal. One f16 state row is
+~28.7 KiB. `moveFeatureLen = 91` per [11](11-action-encoder.md) (14 command +
+1 erection id + 9 col + 38 row + 4 buy-side + 22 resources + 3 scalars).
 
 ### Shard directory layout
 
@@ -34,15 +36,15 @@ Shards of 4,096 decisions, zero-padded sequence names:
 
 ```
 gen-NNN/shards/shard-00042/
-  states.npy        [N, 14670]           <f2   (~28.7 KiB/row)
+  states.npy        [N, featureLen]      <f2   (~28.7 KiB/row)
   values.npy        [N, maxPlayers=4]    <f4   (outcome rotated: slot0 = perspective)
   value_mask.npy    [N, 4]               |u1   (live seats)
   cand_feats.npy    [M, moveFeatureLen]  <f2   (ragged concat)
   cand_offsets.npy  [N+1]                <i8   (prefix sums into M; offsets[0]=0)
   policy.npy        [M]                  <f4   (visit fractions, sum to 1 per slice)
   chosen.npy        [N]                  <i4   (index into the decision's slice)
-  meta.json         { featureSpecVersion, actionSpecVersion, featureLen: 14670,
-                      moveFeatureLen, rows, cands, games, netId, exporterGitSha }
+  meta.json         { featureSpecVersion, actionSpecVersion, featureLen,
+                      moveFeatureLen: 91, rows, cands, games, netId, exporterGitSha }
 ```
 
 Sizing at first-config scale: ~250–350 decisions/game × 500–2,000 games/gen →

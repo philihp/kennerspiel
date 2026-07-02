@@ -8,7 +8,11 @@ the core is game-agnostic so similar games can plug in later.
 This index links one design doc per project. Each project doc states how it
 runs, what it consumes, and what it produces. Projects already implemented in
 the repo are included as specs (phrased forward-looking) so the plan is
-self-contained; their **Status** column below reflects reality.
+self-contained; their **Status** column below reflects reality. Every
+cross-project data contract (config.json, JSONL v2, shards, spec.json, the
+ONNX graph interface, best.json, STATE, logs) is pinned in
+[**schemas.md**](schemas.md) — when two project docs disagree about a shape,
+schemas.md wins.
 
 > Supersedes [`docs/mcts-self-play-plan.md`](../mcts-self-play-plan.md), whose
 > Phases 1–3 correspond to projects 01–06 here.
@@ -73,6 +77,11 @@ NN-guided PUCT beating pure UCT at equal simulations.
 | [24](24-smoke-e2e.md) | Smoke end-to-end run | repo | 23 | M6 | planned |
 | [25](25-rocm-runbook.md) | ROCm hardware bring-up | `trainer/` | 17 | M7 | planned |
 | [26](26-first-run.md) | First real training run | ops | 24, 25 | M7 | planned |
+| [27](27-realtime-deployment.md) | Real-time deployment (bot daemon) | `bot/` | 13, 21, 22, 26 | M8 | planned |
+| [28](28-second-game-onboarding.md) | Second-game onboarding | `agent/` + new engine | 09–24 | M9 | planned |
+
+Reference (not a project): [schemas.md](schemas.md) — canonical data
+contracts shared across projects.
 
 ## Dependency graph
 
@@ -126,6 +135,12 @@ graph LR
   P17 --> P25[25 ROCm runbook]
   P24 --> P26[26 first run]
   P25 --> P26
+  P13 --> P27[27 realtime bot]
+  P21 --> P27
+  P22 --> P27
+  P26 --> P27
+  P09 --> P28[28 second game]
+  P24 --> P28
 ```
 
 ## Milestones (each ships as one or a few PRs)
@@ -139,6 +154,8 @@ graph LR
 | M5 — Training pipeline | 16–20 | Overfit test on 10 games; Node↔Python shard round-trip bit-exact; torch↔ONNX parity |
 | M6 — Closed loop | 21–24 | `pnpm loop --config tiny.json --gens 2` finishes end-to-end in minutes |
 | M7 — Real run | 25, 26 | A promoted generation beats pure UCT at equal sims (2–4p buckets) and beats pure UCT's score>500 rate in solo |
+| M8 — Play humans | 27 | The bot daemon completes a full game vs a human through the web UI within its time budget |
+| M9 — Second game | 28 | A new game's adapter passes the acceptance ladder and closes a tiny smoke loop end-to-end |
 
 ## Run directory layout (shared vocabulary)
 
@@ -164,10 +181,6 @@ building more infrastructure — that is what 08 exists for.
 
 ## Later (out of scope here)
 
-- Real-time deployment behind the web/MCP `make_move` seam (see
-  [`docs/mcp-server-design.md`](../mcp-server-design.md)).
-- Second game onboarding: implement `GameAdapter` + `ActionSpec` for the new
-  game; search/selfplay/exporter/trainer are reused unchanged.
 - Additional countries: append the country to the reserved config slot and
   the new buildings to the append-only erection vocab (both capacity-reserved
   — [01](01-state-encoder.md)/[07](07-engine-fast-paths.md)); re-export

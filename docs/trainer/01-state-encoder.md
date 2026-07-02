@@ -35,14 +35,16 @@ than throwing.
 ### Layout
 
 `FEATURE_LEN = MAX_PLAYERS(4) × PLAYER_BLOCK(3,455) + FRAME(549) + SHARED(301)
-= 14,670` floats (~57 KB dense f32, ~29 KB f16).
+= 14,670` floats (~57 KB dense f32, ~29 KB f16). ([07](07-engine-fast-paths.md)
+reserves `COUNTRY_CAPACITY = 8` for the country one-hot, growing SHARED to 307
+and `FEATURE_LEN` to 14,676; pipeline docs downstream of 07 quote that number.)
 
 | Block | Size | Contents |
 | --- | --- | --- |
 | Player scalars | 35 | 22 resource counts, wonders, 4 clergy buckets `[lb_unplaced, lb_placed, prior_unplaced, prior_placed]`, 8-bit in-hand settlement-type mask |
 | Player grid | 38×9×10 = 3,420 | per tile: 6 land one-hots, 1 categorical erection-id channel, 3 clergy flags `[laybrother, prior, opponent-owned]` |
 | Frame | 549 | round (raw), settlementRound one-hot (7), current/active player one-hots over *rotated slots* (4+4), 4 booleans, bonusActions command bitmask (14), nextUse one-hot (3), usable + unusable building masks (256+256) |
-| Shared | 301 | rondel deltas (9) and yields (9), still-available buildings mask (256), plot + district prices (9+9, zero-padded), wonders remaining, config one-hots: players (4), length (2), country (2) |
+| Shared | 301 | rondel deltas (9) and yields (9), still-available buildings mask (256), plot + district prices (9+9, zero-padded), wonders remaining, config one-hots: players (4), length (2), country (2 today; reserved to 8 by [07](07-engine-fast-paths.md)) |
 
 Empty player slots (games with <4 players) are zero blocks.
 
