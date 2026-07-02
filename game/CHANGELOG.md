@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.21.2] - 2026-07-02
+
+- Allow a COMMIT when the main action hasn't been used. Any human looking only one turn ahead can avoid this state, but an MCTS random walk encounters it quite often.
+
 ## [0.21.1] - 2026-06-24
 
 - The combination of Ornament + Book with the HouseOfTheBrotherhood wasn't offered for points of 6. (#1846)
