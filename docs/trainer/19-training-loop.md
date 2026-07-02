@@ -86,7 +86,7 @@ agreement should climb from ~1/branching, entropy should fall from
 { "model": state_dict, "optimizer": state_dict, "sched_step": int,
   "global_step": int, "rows_seen": int,
   "spec": { "featureSpecVersion": …, "actionSpecVersion": …,
-            "featureLen": 14670, "moveFeatureLen": … },
+            "featureLen": …,     "moveFeatureLen": 91 },   // from spec.json, never hardcoded
   "window": { "gens": [0,1,2,3], "shards": 512, "rows": 2_100_000 },
   "rng": { "torch": …, "numpy": …, "python": … },
   "config_hash": "…", "torch_version": "2.5.1" }

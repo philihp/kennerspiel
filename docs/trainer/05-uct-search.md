@@ -103,7 +103,10 @@ drop are invisible to search), and no virtual loss (single-threaded only).
   maxⁿ (paranoid opponents are not modeled), the standard multiplayer-MCTS
   compromise.
 - **UCB1 with `c = 1.4`.** `√2 ≈ 1.414` is the textbook constant for rewards
-  in `[0,1]`, which the rank-based `outcome()` guarantees by construction —
+  in `[0,1]`, which the rank-based `outcome()` guarantees by construction for
+  2–4 players (solo's raw-score `outcome()` violates that scale and is
+  remapped to `σ((score − 500)/100)` by the adapter —
+  [09](09-game-adapter.md)) —
   the constant and the value scale were chosen together. Not tuned further:
   this searcher's job is to be a *stable* yardstick; PUCT (13) is where
   exploration tuning effort goes.

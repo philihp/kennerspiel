@@ -29,7 +29,7 @@ pipeline regressions are caught before burning a GPU-day.
     "workers": 2,
     "sims": 16,
     "cPuct": 1.5,
-    "dirichlet": { "epsilon": 0.25, "alpha": 0.5 },
+    "dirichlet": { "epsilon": 0.25, "alphaScale": 10 },
     "temperature": { "tau": 1.0, "moves": 8 },
     "curation": { "maxPerLevel": 8, "maxMoves": 32 },
     "gen0": { "evaluator": "rollout", "sims": 16, "rolloutDepth": 30 },

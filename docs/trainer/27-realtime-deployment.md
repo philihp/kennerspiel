@@ -23,13 +23,13 @@ A new top-level `bot/` package — not `agent/`, not `web/`. `agent/` stays
 deployment-blind (no Supabase dependency, no daemon loop); `web/` stays
 inference-free (`onnxruntime-node` must never enter the Vercel bundle, per
 [21](21-onnx-evaluator.md)'s "`game/` and `web/` never see it"). `bot/`
-depends on both worlds: it imports the OeL adapter ([09](09-game-adapter.md)),
-`puct` ([13](13-puct-search.md)) and `createOnnxEvaluator` ([21](21-onnx-evaluator.md))
-from `agent/`, plus `@supabase/supabase-js` for the game store.
+bridges both: it imports the OeL adapter ([09](09-game-adapter.md)), `puct`
+([13](13-puct-search.md)) and `createOnnxEvaluator`
+([21](21-onnx-evaluator.md)) from `agent/`, plus `@supabase/supabase-js`.
 
-It runs as one long-lived Node process on an always-on box (the Linux training
-machine or the trashcan Mac Pro — both have `onnxruntime-node` prebuilds).
-Alternatives rejected:
+It runs as one long-lived Node process on an always-on box (the Linux
+training machine or the trashcan Mac Pro — both have `onnxruntime-node`
+prebuilds). Alternatives rejected:
 
 - **Inference in the Next.js API on Vercel** — `onnxruntime-node` is a large
   native addon squeezed against serverless bundle limits; cold starts re-create
@@ -146,11 +146,10 @@ scope for v1 — Ora et Labora ends by structure, not by resignation.
 
 ## Implementation plan
 
-1. `bot/package.json` + workspace entry in `pnpm-workspace.yaml`; deps:
-   `agent` (workspace), `@supabase/supabase-js`; `bot/src/config.ts` (env +
-   difficulty table).
-2. `agent/src/mcts/puct.ts`: add `budgetMs`/`minSims` to options (tested:
-   budget respected, `minSims` floor, no behavior change when unset).
+1. `bot/package.json` + workspace entry in `pnpm-workspace.yaml` (deps:
+   workspace `agent`, `@supabase/supabase-js`); `bot/src/config.ts`.
+2. `agent/src/mcts/puct.ts`: add `budgetMs`/`minSims` options (tested: budget
+   respected, floor holds, bit-identical when unset).
 3. `bot/src/db.ts` — service client, `listSeatedGames()`, `fetchCommands()`,
    `appendCommand()` (CAS + zero-rows handling).
 4. `bot/src/turns.ts` — realtime subscriptions + slow poll, per-game queue.
@@ -159,8 +158,8 @@ scope for v1 — Ora et Labora ends by structure, not by resignation.
    pacing → append; the move-log line lives here.
 7. `bot/src/main.ts` (daemon wiring) + `bot/src/health.ts`.
 8. `bot/src/__tests__/` — CAS-conflict retry, ladder selection, budget/pacing
-   math, hot-reload swap (all against a stub client + fixture games).
-9. `bot/deploy/kennerspiel-bot.service`; runbook notes in this doc's How-it-runs.
+   math, hot-reload swap (stub client + fixture games).
+9. `bot/deploy/kennerspiel-bot.service`.
 
 ## Inputs
 
@@ -184,11 +183,10 @@ pnpm --dir bot test
 
 - **Dry-run** replays a fixture command list and prints the chosen move +
   stats — no network, safe anywhere.
-- **Staging**: seat two bot profiles in one real game (branch deploy + real
-  Supabase); the daemon plays itself through the production write path to
-  completion.
+- **Staging**: seat two bot profiles in one real game; the daemon plays
+  itself to completion through the production write path.
 - **Latency assertion**: over a staged game, p95 `elapsedMs ≤ budgetMs + 500`
-  and every move ≥ `minDelayMs` — checked from the move log by a test script.
+  and every move ≥ `minDelayMs`, checked from the move log by a script.
 - **Acceptance**: one full game vs a human via the web UI, with the move log
   showing budgeted searches, zero fallbacks, and the expected `netId`.
 
