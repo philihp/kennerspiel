@@ -143,9 +143,9 @@ partial); dirs are built in `.tmp-*` and atomically renamed, `meta.json`
 written last.
 
 Dimensions: `moveFeatureLen = 91` (doc 11). `featureLen = featureSpec.featureLen`
-from `game/src/encode.ts` — **14,670** for the current encoder;
-**14,676** once project 07's `COUNTRY_CAPACITY = 8` lands (+6 in the shared
-block, featureSpecVersion bump). Never hardcode it downstream; assert it.
+from `game/src/encode.ts` — **14,676** as of project 07's `COUNTRY_CAPACITY = 8`
+(`featureSpec.version = 2`; the pre-07 layout was **14,670** / v1, +6 in the
+shared block on the bump). Never hardcode it downstream; assert it.
 
 | File | Shape | dtype | Contents |
 | --- | --- | --- | --- |

@@ -57,7 +57,7 @@ NN-guided PUCT beating pure UCT at equal simulations.
 | [04](04-baselines-arena.md) | Baseline policies & arena | `agent/` | 02, 03 | — | ✅ done |
 | [05](05-uct-search.md) | Pure UCT search | `agent/` | 02, 03 | — | ✅ done |
 | [06](06-selfplay-v1.md) | Self-play generator v1 | `agent/` | 04, 05 | — | ✅ done |
-| [07](07-engine-fast-paths.md) | Engine fast paths | `game/` | 01 | M1 | planned |
+| [07](07-engine-fast-paths.md) | Engine fast paths | `game/` | 01 | M1 | ✅ done |
 | [08](08-benchmarks.md) | Benchmark harness | `agent/` | 03, 07 | M1 | planned |
 | [09](09-game-adapter.md) | GameAdapter interface | `agent/` | 02–06 | M2 | planned |
 | [10](10-move-canonicalization.md) | Move canonicalization | `agent/` | 03, 07 | M2 | planned |
