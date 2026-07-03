@@ -572,6 +572,7 @@ Cloister Office (basic) · G01 Priory · G02 Courtyard · F09 Garden · G16 Chap
 
 - **Buy land FIRST — everything else stands on it** (g9's universal lesson: the winner bought six rows in rounds 2–4 at 3–4¢; every losing color bought ≤1, late, and forfeited settle phases to saturation). Prices ramp with each purchase, so late buyers pay most for least. Targets: **first district by ~round 4, two by round 8; a coast plot by 6–8** (water D3 + F04/F11 unlock); **a mountain plot before the Castle's stone arrives**.
 - A district is simultaneously fuel (forests/moors), build space, and settlement real estate; a plot purchase is a settlement-pocket AND Castle/Hilltop decision. Buying is a FREE action — it never costs tempo, only coins.
+- **The settle turn is itself a land-buying window.** BUY_PLOT / BUY_DISTRICT stay free during a settlement turn — buy the pocket, THEN place the settlement into it in the same turn (g12: white bought zero landscape after round 1 and forfeited every settle phase to a saturated three-row board it could have expanded mid-settle).
 - Hills side for fuel + hillsides; plains side for maximum open space.
 - Fuel discipline: once the moors are cut out, peat is gone and every energy engine stalls — retain a moor, buy a moor district, or keep G02 access.
 
@@ -622,7 +623,7 @@ Seven straight 2p losses shared one profile: competent goods/economic engine, bu
 
 Every early action serves the named plan; "balanced economic development" is the documented losing pattern, treat drift as a bug.
 
-**Round-8 checkpoint (2p):** (a) do I own or reliably WC F04? (b) is a settlement cluster forming beside a high-D anchor? (c) is stone banking toward a Castle OR the reliquary chain online? **Two "no"s = you are losing — pivot THIS round.**
+**Round-8 checkpoint (2p):** (a) do I own or reliably WC F04? (b) is a settlement cluster forming beside a high-D anchor? (c) is stone banking toward a Castle OR the reliquary chain online? **Two "no"s = you are losing — pivot THIS round.** In 4p, run the checkpoint and the column audit PER COLOR against each color's named arc milestone (V.5), not vibes — g12's win conditions all held to ~r6 and then drifted unchecked.
 
 **Column audit every ~5 rounds:** read all three score columns; pivot INTO the one running away from you. Never pour actions into a column you already lead (g6: tied economic, won goods, lost settlements 33–153). Goods scale linearly; settlements and economic compound.
 
@@ -631,6 +632,8 @@ Every early action serves the named plan; "balanced economic development" is the
 - Every conversion answers "what do I gain in points or unblocked bottleneck?" — "flexibility" is a trap. Pure A→B→A cycles are action theft.
 - **The BUILD + prior-bonus USE with inputs already staged is the strongest turn in the game** (+18 and +30 observed). A build whose bonus fires into missing inputs is half value — gather inputs the turn BEFORE the build. The build-bonus requires the prior HOME at build time.
 - Watch `bonus_actions` every turn; spending a granted bonus is the default (F09 grape+neighbor, F40, G28 settle, Calefactory fell/cut). Letting one lapse is almost always wrong.
+- **F09-first hard check (violated twice in g12 despite g8 doctrine):** before ANY `USE` targeting a building orthogonal to your own UNOCCUPIED F09 Cloister Garden, route through F09 — same USE plus a free grape. Using the neighbor directly forfeits the grape AND self-occupies the neighbor, so the next F09 firing finds its best target blocked until recall (g12-white paid this twice on one G16).
+- **Hoard-flush rule:** holding ≥ two buildings' worth of material with the named win-condition building gone or unreachable (g12-green: wood 5 + stone 8, Castle taken) ⇒ BUILD the best available card NOW and on every prior-home turn after. Material→economic is the best point ROI on the board and each build re-arms the +18 BUILD+prior benchmark; a hoard is tempo already paid for and not yet banked.
 - Never pay a WORK_CONTRACT without a concrete same-turn USE plan; never COMMIT with the main action unspent.
 
 ## V.3 Clergy
@@ -646,7 +649,7 @@ Every early action serves the named plan; "balanced economic development" is the
 - **Chain access:** F04/F05 bread pipeline when the opponent owns the chain — pre-stage grain/flour/fuel; two main actions per cycle.
 - **Denial (2p specialty):** contract the building the opponent most needs free, timed for that turn — their engine (g3's Workshop shutoff), a fresh F35 when their coins > ~25 (the coin-sink threat window), or a barren F24 park in the closing turns. Denial leverage SCALES DOWN with player count: in 3–4p, advancing your own board usually dominates hampering one of several rivals.
 - **Payment:** wine present > coins once F21 exists (saves 1¢ AND denies income). The engine makes change from nickels.
-- **Multi-color note (running several seats):** in-family WCs move the fee between your own colors (net zero) and can deliberately trip the contracted color's recall.
+- **Multi-color note (running several seats):** in-family WCs move the fee between your own colors (net zero) and can deliberately trip the contracted color's recall. Default to one whenever a sibling color owns a converter you lack (g12: blue's only midgame energy source was one wine paid through green's G07).
 
 ## V.5 Opening books
 
@@ -654,7 +657,7 @@ Every early action serves the named plan; "balanced economic development" is the
 1. `BUILD G07` central-interior + prior bonus `USE G07 Pt` (+1¢ +1 coal, peat flipped; economic +4). 2. `FELL_TREES` (wood is the broadest build input; frees a plot; clergy-free).
 Then: G12 for stone → F08/F17 if the heartland lacks coast/hillside; coast plot ~r4–5 to unlock F04 and the water pocket. Alternative turn-1 builds: G12 (stone race), G02 (chain front). Keep re-deriving against the opponent — an opening blind to their development is a memorized line waiting to be punished.
 
-**4p long:** start player's 2 actions are SPLIT (first and last turn of the round) — a build+bonus must fit in one turn, and hot wheel tokens may not survive to your second. Full 41-card deck is live; round-1 display: G01 G02 F03 F04 F05 G06 G07 F08 F09 F10 F11 G12 G13. With multiple Claude colors: diversify win conditions by pick order (opener grabs the scarcest engine, e.g. G12; later seats take the Windmill chain or the cloister-cluster); don't point two colors at the same hot token; use `Jo` to harvest while PRESERVING a good's token for a later-acting friendly color (and to drain the shared joker away from the human).
+**4p long:** start player's 2 actions are SPLIT (first and last turn of the round) — a build+bonus must fit in one turn, and hot wheel tokens may not survive to your second. Full 41-card deck is live; round-1 display: G01 G02 F03 F04 F05 G06 G07 F08 F09 F10 F11 G12 G13. With multiple Claude colors: diversify win conditions by pick order (opener grabs the scarcest engine, e.g. G12; later seats take the Windmill chain or the cloister-cluster); don't point two colors at the same hot token; use `Jo` to harvest while PRESERVING a good's token for a later-acting friendly color (and to drain the shared joker away from the human). Progression arcs (g12; each color names one at session open, audited per color at the r8 checkpoint): **A — land-then-chain**: r1 engine build + prior USE; r2–4 two districts + a coast plot while prices ≤5¢; F04→F05 by r8; F21 by r11; F24 on cloister adjacency. **B — Castle tempo**: G12 + mountain plot in r1, stone ≥5 by r5, then BUILD G28 by r8–10 — waiting past r12 strands the stone (the display moves on and settle turns arrive without earmarked energy). **C — hoard-flush cloister**: any color whose material stock outruns its plan pivots to build-every-prior-cycle; the phase-D E-tier flood always leaves cheap high-E cards for a material-rich board. On table-wide free-USE bonus turns, hit opponents' CONVERTERS, not gathering: F08 (4 goods → 7¢ + bread), G18 (clay→ceramic / stone→ornament, +13 observed), F04 grain flip — a free any-building USE spent on a gather wastes its uniqueness.
 
 **Solo:** converter window slides to ~rounds 10–16 (no rival draining the display). Two solo-only mechanics dominate planning: (1) **each settlement phase force-builds the entire display onto the NEUTRAL board first** — land your heavyweights on YOUR board in the 1–4 rounds before each phase or forfeit their economic value; (2) **during each phase you may use one neutral building FREE** (if the neutral prior is free) — claim it every time (Builders' Market, Grain Storage, Fuel Merchant, Slaughterhouse). Land prices FALL over time (reversed piles). Surplus settlement cards make the Castle near-mandatory.
 
@@ -700,6 +703,7 @@ Then: G12 for stone → F08/F17 if the heartland lacks coast/hillside; coast plo
 
 Opponent-owned: `WORK_CONTRACT G28 <pay>` (their clergy mans it; you may pay `Wn`) → `USE G28` (→ `bonus_actions: ["SETTLE"]`; not legal before this) → `SETTLE <S> <col> <row> <pay>` → `COMMIT`. One turn; the USE costs no second main action; COMMIT early forfeits the settle.
 Self-owned: `BUILD G28 <col> <row>` → prior bonus `USE G28` → `SETTLE …` → `COMMIT`; then re-fire every recall cycle free. Strictly better than renting — no fee, no opponent income, repeatable.
+Energy earmark: SETTLE needs food AND energy IN HAND at the moment of the command. Earmark the energy a round ahead and refuse to spend it into converters (g12-blue: its only coal went into an F08 conversion one turn before the settle window — three settle attempts died for want of 1 energy, with the Castle built and 4 stone banked since round 5).
 
 ## Engine quirks & suspected bugs (numbered; append new ones)
 
@@ -718,6 +722,8 @@ Self-owned: `BUILD G28 <col> <row>` → prior bonus `USE G28` → `SETTLE …` �
 13. **F35 build accepted `ClCl`** (straw waived) — cheaper until fixed.
 14. WITH_LAYBROTHER/WITH_PRIOR after a WC must be played by the building's OWNER — in 2p vs a human, an AFK human stalls your pipeline.
 15. (g8, unresolved) Bare `USE G01` seated the prior but granted no bonus despite prior-occupied targets — precondition unclear; verify before relying.
+16. **SETTLE piece enumeration ignores affordability:** `["SETTLE"]` lists every unplaced tile regardless of stock; feasibility only surfaces at the payment level (`["SETTLE","<S>","<col>","<row>"]` → payment bundles, or empty = unaffordable). Drill to payment before concluding a settle is live — three g12-blue turns died on the piece list alone. Full verified grammar: `SETTLE <S> <col> <row> <food+energy tokens>`.
+17. **L-slot IDs are per-color placement order, not fixed functions:** blue's Clay Mound sat at LB1 while white's was LW1 and the Farmyards at LB2/LW2 forked differently. Read the landscape legend row for ground truth; never map slot→function across colors (g12: one no-op action + one mis-planned harvest). When in doubt, identify by completion shape: `["", "Jo"]` = production building or Cloister Office (bare USE, no token argument); `["Sh","Gn","JoSh","JoGn"]` = the Farmyard fork. Sending a token to a production building returns a misleading "incomplete move" error, and a bare USE at wheel-token 0 seats a clergyman for nothing (same class as quirk 9).
 
 ## Solo-mode mechanics
 
@@ -767,3 +773,8 @@ Soft-lock from stacked discipline leaks (bare F23/F32, lapsed bonus, skipped fre
 
 #### 11. 282bfe7e (2p long) · L 414–418 (knife-edge)
 Led +14 late; lost to F08 goods-sink misread (−7), F24 bread-not-book (−5), and red's F35 coin dump + terminal barren-WC denial of F24. Encoded: F08 sink warning, F24 inputs, F35 scaling + coin-sink threat window, denial-WC counter, BUILD+prior +18 benchmark.
+
+#### 12. 089d5bd0 (4p long, 3 colors vs human red) · at r24 reflection: red 239 / G119 / W111 / B96
+Win conditions named (B Castle-settle, G reliquary chain, W cloister-cluster) — held early, drifted mid-game; third consecutive 4p game where every Claude color was goods-rich and land-poor while red bought fresh land every 2–3 rounds and built onto it.
+Decided by: W bought zero landscape after round 1 (settle phases forfeited to saturation, never used the mid-settle buying window); B built the Castle off a round-1 mountain plot and round-5 stone but never earmarked energy — three settle attempts died; G ran the F04→F05 chain well (bread + coins) but sat on wood 5 + stone 8 without flushing the hoard into buildings.
+Encoded: F09-first hard check, land-during-settle window, hoard-flush rule, Castle energy earmark, quirks 16–17 (SETTLE affordability enumeration, L-slot identity), 4p progression arcs A/B/C, bonus-round converter targets.
