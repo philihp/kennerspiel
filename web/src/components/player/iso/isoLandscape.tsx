@@ -4,9 +4,17 @@ import { Tile } from 'hathora-et-labora-game'
 import { Clergy, ErectionEnum, LandEnum } from 'hathora-et-labora-game/dist/types'
 import { match } from 'ts-pattern'
 import { buildingName } from '@/components/buildingName'
+import { decolor } from '@/components/erection'
 import { ErectionModal } from '@/components/erection/'
 import styles from './iso.module.css'
 import { HALF_H, HALF_W, TILE_H, diamond, groundTransform, tallDiamond, toScreen } from './projection'
+
+// Moor and Forest are raw terrain, not purchasable buildings, so they have no card art
+const TERRAIN_TILES = ['LFO', 'LMO']
+
+const CARD_BASE_URL = 'https://hathora-et-labora.s3-us-west-2.amazonaws.com'
+const CARD_W = 60
+const CARD_H = 100
 
 interface Props {
   landscape: Tile[][]
@@ -126,6 +134,7 @@ export const IsoLandscape = ({ landscape, offset, active }: Props) => {
           const cx = tall ? x + HALF_W / 2 : x
           const cy = tall ? y + TILE_H * 0.75 : y + HALF_H
           const name = building && (buildingName(building) ?? building)
+          const isTerrain = building !== undefined && TERRAIN_TILES.includes(building)
 
           return (
             <g
@@ -133,9 +142,30 @@ export const IsoLandscape = ({ landscape, offset, active }: Props) => {
               className={selectable ? styles.clickable : undefined}
               onClick={selectable ? handleClick : undefined}
             >
-              <title>{`${key} ${land}${building ? ` ${building}` : ''}`}</title>
+              <title>{`${key} ${land}${building ? ` ${building}` : ''}${name ? ` (${name})` : ''}`}</title>
               <polygon className={styles.top} points={points} fill={landToColor(land)} stroke="#555" strokeWidth={1} />
-              {name && (
+              {building && !isTerrain && (
+                <g transform={groundTransform(cx, clergy ? cy - 8 : cy)} className={styles.card}>
+                  <image
+                    href={`${CARD_BASE_URL}/${decolor(building)}.jpg`}
+                    x={-CARD_W / 2}
+                    y={-CARD_H / 2}
+                    width={CARD_W}
+                    height={CARD_H}
+                    preserveAspectRatio="xMidYMid slice"
+                  />
+                  <rect
+                    x={-CARD_W / 2}
+                    y={-CARD_H / 2}
+                    width={CARD_W}
+                    height={CARD_H}
+                    fill="none"
+                    stroke={primary && selectable ? '#e0a933' : '#333'}
+                    strokeWidth={primary && selectable ? 2 : 1}
+                  />
+                </g>
+              )}
+              {isTerrain && name && (
                 <text
                   transform={groundTransform(cx, clergy ? cy - 8 : cy)}
                   textAnchor="middle"
