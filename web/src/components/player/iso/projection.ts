@@ -24,6 +24,16 @@ export const tallDiamond = (x: number, y: number): string =>
     `${x - HALF_W},${y + HALF_H}`,
   ].join(' ')
 
-// lays flat content (text, markers) onto the ground plane: baseline climbs to
-// the upper-right at 30° and glyph verticals lean down-right to match
-export const groundTransform = (cx: number, cy: number): string => `translate(${cx} ${cy}) rotate(-30) skewX(30)`
+// unit vectors along the diamond's own edges (the col axis climbs to the
+// upper-right, the row axis descends to the lower-right), so flat content
+// mapped through these lies exactly parallel to the tile's actual 2:1 slope
+// (atan(HALF_H / HALF_W) ≈ 26.565°) rather than a generic 30°
+const GROUND_LEN = Math.hypot(HALF_W, HALF_H)
+const GROUND_UX = HALF_W / GROUND_LEN
+const GROUND_UY = -HALF_H / GROUND_LEN
+const GROUND_VX = HALF_W / GROUND_LEN
+const GROUND_VY = HALF_H / GROUND_LEN
+
+// lays flat content (text, markers, card art) onto the ground plane
+export const groundTransform = (cx: number, cy: number): string =>
+  `matrix(${GROUND_UX} ${GROUND_UY} ${GROUND_VX} ${GROUND_VY} ${cx} ${cy})`
