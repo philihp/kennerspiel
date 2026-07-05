@@ -81,8 +81,8 @@ importers:
         specifier: 19.2.7
         version: 19.2.7(react@19.2.7)
       sort-unwind:
-        specifier: 3.1.0
-        version: 3.1.0
+        specifier: 4.1.0
+        version: 4.1.0
       ts-pattern:
         specifier: 5.9.0
         version: 5.9.0
@@ -2714,9 +2714,9 @@ packages:
     resolution: {integrity: sha512-stxByr12oeeOyY2BlviTNQlYV5xOj47GirPr4yA1hE9JCtxfQN0+tVbkxwCtYDQWhEKWFHsEK48ORg5jrouCAg==}
     engines: {node: '>=20'}
 
-  sort-unwind@3.1.0:
-    resolution: {integrity: sha512-9NJPZtqwIHNXBqY3SWZrwd/VU+lFo2i1Q79cuaRpMMkZFuf+Y54XVAADyy/w6r8t409KkNwo6cKaEKM56XaSNQ==}
-    engines: {node: '>=18.0.0'}
+  sort-unwind@4.1.0:
+    resolution: {integrity: sha512-Hh8/g0txeWYjnbO9oHhvoWAJP4Ls8KknQcmogAU4wUzhXjcuzedecJf0alEZM3k8vDmapZ49eAO4Co6SrEzpeQ==}
+    engines: {node: '>=22.0.0'}
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -5943,7 +5943,7 @@ snapshots:
       ansi-styles: 6.2.3
       is-fullwidth-code-point: 5.1.0
 
-  sort-unwind@3.1.0: {}
+  sort-unwind@4.1.0: {}
 
   source-map-js@1.2.1: {}
 
