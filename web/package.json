@@ -6,12 +6,12 @@
   "dependencies": {
     "@marsidev/react-turnstile": "1.5.3",
     "@modelcontextprotocol/sdk": "1.29.0",
-    "@next/third-parties": "16.2.9",
+    "@next/third-parties": "16.2.10",
     "@philihp/prettier-config": "1.0.0",
     "@stdlib/math": "0.4.1",
     "@supabase/auth-helpers-nextjs": "0.15.0",
     "@supabase/ssr": "0.12.0",
-    "@supabase/supabase-js": "2.108.2",
+    "@supabase/supabase-js": "2.110.0",
     "@vercel/analytics": "2.0.1",
     "@vercel/flags": "3.1.1",
     "@vercel/speed-insights": "2.0.0",
@@ -23,12 +23,12 @@
     "jsonwebtoken": "9.0.3",
     "jwks-rsa": "4.1.0",
     "mcp-handler": "1.1.0",
-    "next": "16.2.9",
+    "next": "16.2.10",
     "pointille": "^1.0.1",
     "ramda": "0.32.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
-    "sort-unwind": "3.1.0",
+    "sort-unwind": "4.1.0",
     "ts-pattern": "5.9.0",
     "zod": "4.4.3"
   },
@@ -49,12 +49,12 @@
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "eslint": "10.6.0",
-    "eslint-config-next": "16.2.9",
+    "eslint-config-next": "16.2.10",
     "husky": "9.1.7",
     "lint-staged": "17.0.8",
-    "lucide-react": "1.21.0",
-    "prettier": "3.8.5",
-    "supabase": "2.108.0",
+    "lucide-react": "1.23.0",
+    "prettier": "3.9.4",
+    "supabase": "2.109.0",
     "tsx": "^4.22.4",
     "typescript": "6.0.3"
   },
@@ -62,5 +62,5 @@
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3"
   },
-  "packageManager": "pnpm@11.9.0"
+  "packageManager": "pnpm@11.10.0"
 }
