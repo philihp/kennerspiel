@@ -63,8 +63,12 @@ const computeFlow = (state: GameState) => {
   return flow
 }
 
-export const control = (state: GameState, partial: string[], player?: number): Controls => {
-  const completion = match(head(partial))
+// The completion enumeration extracted from control(). Move enumeration in the
+// agent hits this once per DFS node — hundreds of times per position — so it is
+// exposed on its own to skip the flow + score work control() also does.
+// control() is defined in terms of this (below), so parity is structural.
+export const completions = (state: GameState, partial: string[] = []): string[] =>
+  match(head(partial))
     .with(undefined, () =>
       state.status === GameStatusEnum.FINISHED
         ? []
@@ -100,7 +104,11 @@ export const control = (state: GameState, partial: string[], player?: number): C
     .with(GameCommandEnum.COMMIT, () => completeCommit(state)(partial))
     .otherwise(always([]))
 
-  const score = map(
+// Per-player scoring extracted from control(). engine.ts reads this every
+// rollout cutoff and terminal outcome, so it is exposed without the completion
+// enumeration control() otherwise pays for. Neutral player is sliced off.
+export const scores = (state: GameState): Score[] =>
+  map(
     pipe(
       (player: Tableau): Score => ({
         goods: goodsPoints(player) + 30 * player.wonders,
@@ -115,11 +123,11 @@ export const control = (state: GameState, partial: string[], player?: number): C
     ),
     state.players!.slice(0, state.config!.players) // this will remove neutral player
   )
-  return {
-    active: player === state.frame!.activePlayerIndex,
-    flow: computeFlow(state),
-    partial,
-    completion,
-    score,
-  }
-}
+
+export const control = (state: GameState, partial: string[], player?: number): Controls => ({
+  active: player === state.frame!.activePlayerIndex,
+  flow: computeFlow(state),
+  partial,
+  completion: completions(state, partial),
+  score: scores(state),
+})

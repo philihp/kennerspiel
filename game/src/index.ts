@@ -1,16 +1,19 @@
 export { reducer } from './reducer'
-export { control } from './control'
+export { control, completions, scores } from './control'
 export { initialState } from './state'
-export { encode, featureSpec, FEATURE_LEN } from './encode'
+export { encode, encodeInto, erectionId, featureSpec, FEATURE_LEN } from './encode'
 export type { FeatureSpec } from './encode'
+export { parseResourceParam } from './board/resource'
 
 // runtime enums (values), needed by consumers that branch on game state
 export { GameStatusEnum } from './types'
 export { GameCommandEnum } from './types'
 export { PlayerColor } from './types'
+export { ResourceEnum } from './types'
 
 export type { Controls } from './types'
 export type { Score } from './types'
+export type { Cost } from './types'
 export type { GameConfigPlayers } from './types'
 export type { GameConfigLength } from './types'
 export type { GameConfigCountry } from './types'

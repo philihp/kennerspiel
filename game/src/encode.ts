@@ -92,8 +92,6 @@ const RESOURCES: (keyof Required<Cost>)[] = [
 // so color is fully redundant with which player's grid the tile is in. We
 // collapse it. Country variants (F03 vs I03) stay DISTINCT — they are
 // different buildings, not colors.
-const SETTLEMENT_SET = new Set<string>(SETTLEMENTS)
-
 const genericBuildingKey = (b: BuildingEnum): string => {
   const m = /^L([RGBW])([123])$/.exec(b)
   if (m) return ['', 'ClayMound', 'FarmYard', 'CloisterOffice'][Number(m[2])]
@@ -119,12 +117,18 @@ BUILDINGS.forEach((b) => buildingMaskIndex.set(b, GENERIC_BUILDINGS.indexOf(gene
 const settlementHandIndex = new Map<SettlementEnum, number>()
 SETTLEMENTS.forEach((s) => settlementHandIndex.set(s, SETTLEMENT_TYPES.indexOf(settlementTypeKey(s))))
 
-// erection id: 1..ERECTION_VOCAB.length (0 reserved for empty)
-const erectionId = (e: ErectionEnum): number => {
-  if (SETTLEMENT_SET.has(e))
-    return GENERIC_BUILDINGS.length + SETTLEMENT_TYPES.indexOf(settlementTypeKey(e as SettlementEnum)) + 1
-  return GENERIC_BUILDINGS.indexOf(genericBuildingKey(e as BuildingEnum)) + 1
-}
+// erection id: 1..ERECTION_VOCAB.length (0 reserved for empty). Runs per
+// occupied tile per encode, so it uses a precomputed Map (same pattern as the
+// two mask indexes above) rather than an indexOf chain. Buildings map to their
+// generic-vocab slot + 1; settlements sit after the buildings; any enum value
+// not in the table (should never happen) falls back to 0, matching the old
+// indexOf's −1 + 1.
+const erectionIdMap = new Map<ErectionEnum, number>()
+BUILDINGS.forEach((b) => erectionIdMap.set(b, GENERIC_BUILDINGS.indexOf(genericBuildingKey(b)) + 1))
+SETTLEMENTS.forEach((s) =>
+  erectionIdMap.set(s, GENERIC_BUILDINGS.length + SETTLEMENT_TYPES.indexOf(settlementTypeKey(s)) + 1)
+)
+export const erectionId = (e: ErectionEnum): number => erectionIdMap.get(e) ?? 0
 
 // --- Dimensions -----------------------------------------------------------
 // Grid is anchored: a player's logical row 0 always lands at output row
@@ -140,6 +144,13 @@ const MAX_RONDEL_YIELD = 10 // armValues cap; normalizes yields into [0, 1]
 // Reserved capacity for every building/settlement-vocab feature, so new
 // expansion buildings never change FEATURE_LEN.
 const VOCAB_CAPACITY = 256
+
+// Reserved capacity for the config country one-hot. Only `ireland`/`france`
+// exist today, but more countries are a stated plan; reserving slots now (same
+// append-only idea as VOCAB_CAPACITY) means adding one never changes
+// FEATURE_LEN and strands trained weights. `featureSpec.vocab.countries` stays
+// the source of truth for which slot each live country id occupies.
+const COUNTRY_CAPACITY = 8
 
 const LAND_LEN = LANDS.length // 6
 const ERECT_ID_LEN = 1 // categorical
@@ -174,11 +185,16 @@ const SHARED_LEN =
   1 + // wonders remaining
   MAX_PLAYERS + // config.players one-hot
   LENGTHS.length + // config.length one-hot
-  COUNTRIES.length // config.country one-hot
+  COUNTRY_CAPACITY // config.country one-hot (reserved capacity for future countries)
 
 export const FEATURE_LEN = MAX_PLAYERS * PLAYER_BLOCK + FRAME_LEN + SHARED_LEN
 
 export type FeatureSpec = {
+  // Bumped whenever the layout changes shape; guards every downstream artifact
+  // (shard meta, ckpt, spec.json, ONNX evaluator) — see docs/trainer/schemas.md.
+  // v1 was the 14,670-float layout; v2 widens the country one-hot to
+  // COUNTRY_CAPACITY (14,676), the last free FEATURE_LEN change before weights ship.
+  version: number
   featureLen: number
   height: number
   width: number
@@ -222,6 +238,7 @@ export type FeatureSpec = {
 }
 
 export const featureSpec: FeatureSpec = {
+  version: 2,
   featureLen: FEATURE_LEN,
   height: H,
   width: W,
@@ -387,20 +404,34 @@ const writeShared = (w: Writer, state: GameState): void => {
   w.put(state.wonders!)
   w.hot(MAX_PLAYERS, config.players - 1)
   w.hot(LENGTHS.length, LENGTHS.indexOf(config.length))
-  w.hot(COUNTRIES.length, COUNTRIES.indexOf(config.country))
+  w.hot(COUNTRY_CAPACITY, COUNTRIES.indexOf(config.country))
 }
 
-export const encode = (state: GameState, perspective?: number): Float32Array => {
-  const buf = new Float32Array(FEATURE_LEN)
-  if (state.status === GameStatusEnum.SETUP) return buf
+// Encode straight into a caller-supplied buffer at `offset`, writing exactly
+// FEATURE_LEN floats in [offset, offset + FEATURE_LEN). Lets the shard exporter
+// pack many states into one big buffer without a per-state allocation.
+export const encodeInto = (state: GameState, perspective: number | undefined, out: Float32Array, offset = 0): void => {
+  if (out.length < offset + FEATURE_LEN)
+    throw new RangeError(`encodeInto: buffer too small (need ${offset + FEATURE_LEN}, have ${out.length})`)
+  // The Writer only ever sets 1s (one-hots/masks) and explicit puts; skipped
+  // player blocks and one-hot gaps rely on zeroed memory, so a reused scratch
+  // buffer must be cleared or stale values leak through.
+  out.fill(0, offset, offset + FEATURE_LEN)
+  if (state.status === GameStatusEnum.SETUP) return
   const p = perspective ?? state.frame!.currentPlayerIndex
   const order = rotateOrder(state.players!.length, p)
-  const w = new Writer(buf)
+  const w = new Writer(out)
+  w.pos = offset
   order.forEach((idx, slot) => {
     if (idx === undefined) w.skip(PLAYER_BLOCK)
     else writeTableau(w, state.players![idx], slot === 0, state.config!)
   })
   writeFrame(w, state.frame!, order)
   writeShared(w, state)
+}
+
+export const encode = (state: GameState, perspective?: number): Float32Array => {
+  const buf = new Float32Array(FEATURE_LEN)
+  encodeInto(state, perspective, buf)
   return buf
 }

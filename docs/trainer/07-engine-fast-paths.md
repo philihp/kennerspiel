@@ -2,7 +2,7 @@
 
 | | |
 | --- | --- |
-| Status | planned |
+| Status | ✅ done |
 | Package | `game/` |
 | Depends on | [01](01-state-encoder.md) |
 | Milestone | M1 |
