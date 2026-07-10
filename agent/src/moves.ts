@@ -1,9 +1,10 @@
-// Move generation over the completion-tree the engine exposes via control().
+// Move generation over the completion-tree the engine exposes via completions().
 //
-// control(state, partial).completion returns the legal next *tokens* after a
-// partial command; an empty-string token ('') means `partial` is itself a
-// complete, submittable command. So a full legal move = a path from [] down to
-// a '' leaf.
+// completions(state, partial) returns the legal next *tokens* after a partial
+// command; an empty-string token ('') means `partial` is itself a complete,
+// submittable command. So a full legal move = a path from [] down to a '' leaf.
+// (completions() is control()'s completion enumeration without the flow/score
+// work — see docs/trainer/07-engine-fast-paths.md.)
 //
 // Two generators:
 //  - enumerateMoves: DFS the whole tree → every legal complete command. Has
@@ -12,7 +13,7 @@
 //  - sampleMove: random walk down the tree → one legal command WITHOUT
 //    enumerating. Rollouts use this to dodge the branching blow-up entirely.
 
-import { control } from 'hathora-et-labora-game'
+import { completions } from 'hathora-et-labora-game'
 import type { GameState } from 'hathora-et-labora-game'
 import { apply, type Move } from './engine'
 import { choice, type Rng } from './rng'
@@ -37,7 +38,7 @@ export const enumerateMovesInfo = (state: GameState, opts: EnumerateOpts = {}): 
       truncated = true
       return
     }
-    const completion = control(state, partial).completion ?? []
+    const completion = completions(state, partial)
     if (completion.includes('')) out.push(partial)
     const nexts = completion.filter((t) => t !== '')
     if (nexts.length > maxPerLevel) truncated = true
@@ -67,7 +68,7 @@ export const sampleMove = (state: GameState, rng: Rng, maxDepth = 16): Move | un
     const partial: string[] = []
     let walked = true
     for (let depth = 0; depth < maxDepth; depth++) {
-      const completion = control(state, partial).completion ?? []
+      const completion = completions(state, partial)
       if (completion.length === 0) {
         walked = false
         break

@@ -9,7 +9,8 @@
     "test": "node --import tsx/esm --test 'src/**/__tests__/**/*.test.ts'",
     "typecheck": "tsc --noEmit",
     "arena": "node --import tsx/esm src/cli/arena.ts",
-    "selfplay": "node --import tsx/esm src/cli/selfplay.ts"
+    "selfplay": "node --import tsx/esm src/cli/selfplay.ts",
+    "bench": "node --import tsx/esm src/cli/bench.ts"
   },
   "dependencies": {
     "hathora-et-labora-game": "workspace:*",
