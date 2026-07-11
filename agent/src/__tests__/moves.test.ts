@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { replay, apply } from '../engine'
 import type { Move } from '../engine'
 import { enumerateMoves, enumerateMovesInfo, sampleMove } from '../moves'
-import { mulberry32 } from '../rng'
+import { pcg32 } from '../rng'
 
 const OPENING: Move[] = [
   ['CONFIG', '2', 'france', 'long'],
@@ -38,8 +38,8 @@ describe('move generation', () => {
 
   it('sampleMove returns a legal move and is deterministic for a fixed seed', () => {
     const s = replay(OPENING)!
-    const a = sampleMove(s, mulberry32(123))
-    const b = sampleMove(s, mulberry32(123))
+    const a = sampleMove(s, pcg32(123))
+    const b = sampleMove(s, pcg32(123))
     assert.ok(a)
     assert.notEqual(apply(s, a!), undefined)
     assert.deepEqual(a, b) // same seed → same move
@@ -47,7 +47,7 @@ describe('move generation', () => {
 
   it('sampleMove can drive a full game to a terminal state', () => {
     let s = replay(OPENING)!
-    const rng = mulberry32(7)
+    const rng = pcg32(7)
     let steps = 0
     while (s.status === 'PLAYING' && steps < 5000) {
       const m = sampleMove(s, rng)

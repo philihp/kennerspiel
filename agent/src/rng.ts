@@ -1,21 +1,22 @@
-// Tiny seeded PRNG (mulberry32) for reproducible self-play, rollouts, and
-// arena scheduling. Deterministic given a seed — same seed, same games.
+// Tiny seeded PRNG for reproducible self-play, rollouts, and arena scheduling.
+// Deterministic given a seed — same seed, same games.
 //
-// Delegates to the `pcg` library's mulberry32 (the same generator the game
-// engine's START shuffle uses) rather than hand-rolling the algorithm. `pcg`'s
-// API is immutable (state-threading); we wrap it in the mutable `() => number`
-// closure this codebase expects. `getOutput` then `nextState` reproduces the
-// canonical mulberry32 sequence bit-for-bit (verified against the previous
-// hand-rolled implementation), so seeded behavior is unchanged.
+// Uses the pcg library's PCG32 generator (the same family the game engine's
+// START shuffle uses). pcg's API is immutable (state-threading); we wrap it in
+// the mutable `() => number` closure this codebase expects — `getOutput` reads
+// the current output, `nextState` advances. The stream id is fixed, so the seed
+// alone selects the sequence (its starting point within the one periodic series).
 
-import { createMulberry32, getOutput, nextState } from 'pcg'
+import { createPcg32, getOutput, nextState } from 'pcg'
 
 export type Rng = () => number // returns a float in [0, 1)
 
 const UINT32 = 0x1_0000_0000 // 2^32
+// Fixed stream id — distinct seeds give distinct sequences within this series.
+const STREAM_ID = 0xda3e39cb
 
-export const mulberry32 = (seed: number): Rng => {
-  let state = createMulberry32(seed)
+export const pcg32 = (seed: number): Rng => {
+  let state = createPcg32({}, seed, STREAM_ID)
   return () => {
     const value = getOutput(state)
     state = nextState(state)

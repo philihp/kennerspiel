@@ -74,7 +74,7 @@ advance STATE → gated either way
 
 **Seat/seed schedule.** `runMatch` already alternates which policy takes
 seat 0 (`swap = g % 2 === 1`) and derives per-game determinism from
-`seed = baseSeed + g` with `mulberry32(seed * 7919 + 1)` — the gate reuses
+`seed = baseSeed + g` with `pcg32(seed * 7919 + 1)` — the gate reuses
 this unchanged. The per-generation `baseSeed` offset means no two gates
 replay the identical opening set (which would correlate outcomes across
 generations), while any gate is exactly reproducible from `config.json`.

@@ -59,7 +59,7 @@ a game is a pure function of `(cfg, seed, rng seed, options)`.
 
 `pnpm --dir agent selfplay [games] [short|long] [sims]` — defaults
 `1 short 64`. Game `g` uses board seed `1000 + g` and rng
-`mulberry32(seed * 7919 + 3)` (a different stream than the arena's `+1`).
+`pcg32(seed * 7919 + 3)` (a different stream than the arena's `+1`).
 Each finished game is `JSON.stringify`-ed and **appended** as one line to
 `selfplay-data/games-{length}-sims{N}.jsonl` (directory auto-created), with a
 per-game progress line (steps, finished flag, outcome, seconds) on stdout.

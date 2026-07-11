@@ -91,7 +91,7 @@ type SelfPlayGameV2 = {
   v: 2                          // first field — cheap to sniff
   gameId: string                // "g" + seed; stable across resumes
   cfg: GameConfig               // { players, country, length, colors } — full, incl. colors
-  seed: number                  // opening seed AND rng derivation: mulberry32(seed*7919+3)
+  seed: number                  // opening seed AND rng derivation: pcg32(seed*7919+3)
   netId: string                 // evaluator.id: "rollout" | "gen-NNN"
   search: { sims: number; cPuct: number
             dirichlet: { epsilon: number; alphaScale: number } | null

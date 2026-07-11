@@ -64,13 +64,14 @@ outcome(state): number[]                    // per-player value in [0, 1]
 
 ```ts
 export type Rng = () => number              // float in [0, 1)
-mulberry32(seed: number): Rng
+pcg32(seed: number): Rng
 randInt(rng, n): number
 choice<T>(rng, xs: readonly T[]): T
 ```
 
-mulberry32 is a 32-bit state PRNG: one add, two `Math.imul` mixes, a few
-shifts per draw. Everything downstream (rollouts, arena scheduling, self-play)
+`pcg32` is the `pcg` library's PCG32 generator (the same family the engine
+already uses for game setup), wrapped in the mutable `() => number` closure this
+codebase expects. Everything downstream (rollouts, arena scheduling, self-play)
 takes an `Rng` parameter and never touches `Math.random`, so a seed fully
 determines a game.
 
@@ -105,12 +106,13 @@ a SETUP state is a caller bug; `replay` gives no diagnostics on failure.
   Cost: throws away margin information (a 1-point win equals a 40-point win),
   which weakens the rollout-cutoff signal in lopsided positions — accepted,
   and revisited only if value targets prove noisy.
-- **mulberry32 vs PCG (or xoshiro).** Chosen: mulberry32. ~5 integer ops per
-  draw, 32-bit state, trivially embeddable, and statistically far better than
-  needed for move sampling; the engine itself already uses PCG internally for
-  game setup, where stream quality matters more. Cost: small state/period and
-  no stream splitting — mitigated by deriving independent seeds per game
-  (`seed * 7919 + k` in the arena/self-play CLIs).
+- **PCG32 vs mulberry32 vs xoshiro.** Chosen: PCG32, via the `pcg` library the
+  engine already depends on for game setup — one generator across the codebase,
+  no hand-rolled PRNG to maintain, and better stream quality than the original
+  mulberry32. A fixed stream id makes the seed alone select the sequence, and
+  independent seeds per game (`seed * 7919 + k` in the arena/self-play CLIs)
+  keep games decorrelated. The `Rng` interface (a mutable `() => number`) is
+  unchanged — only the generator behind it.
 - **Wrapping the engine at all vs calling it directly.** One place to
   normalize errors and semantics (`activePlayerIndex`, `config.players`) and
   a surface small enough that [09](09-game-adapter.md) can later swap the
