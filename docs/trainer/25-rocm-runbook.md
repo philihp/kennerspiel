@@ -31,8 +31,11 @@ alternate.
    repurposed from Windows), stock kernel. Note the kernel version
    (`uname -r`) in this doc once installed — ROCm's dkms module is
    kernel-sensitive.
-2. **ROCm 6.x** via the `amdgpu-install` bootstrap (verify the latest 6.x
-   point release and exact URL against the ROCm install docs first):
+2. **ROCm 6.x** via the `amdgpu-install` bootstrap (verify the latest
+   point release and exact URL against the ROCm install docs first — this
+   doc was written against the 6.x era; if a newer major series is current
+   at install time the procedure is identical, but re-verify the gfx1101
+   and Ubuntu support matrix and the torch wheel index for it):
 
    ```sh
    wget https://repo.radeon.com/amdgpu-install/<6.x.y>/ubuntu/noble/amdgpu-install_<...>_all.deb

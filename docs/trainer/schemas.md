@@ -6,11 +6,10 @@ about a shape, this doc wins.** Each contract: who writes / who reads / what
 version-bumps it, a typed definition, then validator invariants.
 
 Corrections canonicalized here (see "Change procedure" for how to evolve):
-`moveFeatureLen` is **91** (doc 11; doc 16's "≈90" and doc 20's `[131, 90]`
-example are stale); the Dirichlet config key is **`alphaScale`** (docs 13/14;
-the `"alpha": 0.5` in docs 24/26 example configs should read
-`"alphaScale": 10`); `STATE` is written **only by the orchestrator** (doc 23;
-stage docs saying "STATE → x" mean "the orchestrator advances STATE after me").
+`moveFeatureLen` is **91** and the Dirichlet config key is **`alphaScale`**
+(docs 11/13/14; the project docs' examples now match); `STATE` is written
+**only by the orchestrator** (doc 23; stage docs saying "STATE → x" mean
+"the orchestrator advances STATE after me").
 
 ---
 
@@ -43,7 +42,7 @@ type RunConfig = {
     gen0: { evaluator: 'rollout'; sims: number; rolloutDepth: number } // used until first promotion
     baseSeed: number                             // game seed = baseSeed + gameIndex (default gen * 1_000_000)
   }
-  solo: { target: number; scale: number }        // value mapping σ((score − target)/scale); defaults { target: 500, scale: 100 }
+  solo?: { target: number; scale: number }       // value mapping σ((score − target)/scale); default { target: 500, scale: 100 } — docs 24/26's example configs omit it
   train: {
     device: 'auto'|'cpu'|'cuda'
     window: number                               // K generations of shards (doc 19: 5)
