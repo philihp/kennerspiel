@@ -30,6 +30,34 @@ describe('mcts', () => {
     assert.deepEqual(a, b)
   })
 
+  it('is bit-identical with no budget set (and reports sims run)', () => {
+    const s = replay(OPENING)!
+    const a = search(oel, s, mulberry32(9), { sims: 24, rolloutDepth: 10 })
+    const b = search(oel, s, mulberry32(9), { sims: 24, rolloutDepth: 10, budgetMs: undefined, minSims: undefined })
+    assert.deepEqual(a.visits, b.visits)
+    assert.equal(a.sims, 24)
+    assert.equal(b.sims, 24)
+  })
+
+  it('budgetMs stops the loop early; minSims floor holds', () => {
+    const s = replay(OPENING)!
+    // an already-expired budget: only the minSims floor keeps it going
+    const r = search(oel, s, mulberry32(9), { sims: 10_000, rolloutDepth: 10, budgetMs: 0, minSims: 5 })
+    assert.equal(r.sims, 5)
+    assert.ok(r.best)
+    assert.notEqual(apply(s, r.best!), undefined)
+    const totalVisits = r.visits.reduce((a, v) => a + v.n, 0)
+    assert.equal(totalVisits, 5)
+  })
+
+  it('a generous budget changes nothing', () => {
+    const s = replay(OPENING)!
+    const a = search(oel, s, mulberry32(4), { sims: 16, rolloutDepth: 8 })
+    const b = search(oel, s, mulberry32(4), { sims: 16, rolloutDepth: 8, budgetMs: 60_000, minSims: 1 })
+    assert.deepEqual(a.visits, b.visits)
+    assert.equal(b.sims, 16)
+  })
+
   it('mctsPolicy returns a legal move', async () => {
     const s = replay(OPENING)!
     const m = await mctsPolicy(oel, { sims: 16, rolloutDepth: 8 }).pick(s, mulberry32(2))
