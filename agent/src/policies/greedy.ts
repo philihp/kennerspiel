@@ -1,18 +1,20 @@
+import type { GameAdapter, Caps } from '../game/adapter'
 import type { Policy } from '../policy'
-import { apply, playerToMove, scores } from '../engine'
-import { enumerateMoves, type EnumerateOpts } from '../moves'
 import { choice } from '../rng'
 
-// 1-ply greedy: among (curated) legal commands, play the one that maximizes my
-// own score total in the resulting state. Ties broken randomly. A weak but
-// non-trivial baseline — it always grabs immediate points before COMMITting.
-export const greedyPolicy = (opts: EnumerateOpts = { maxPerLevel: 12, maxMoves: 64 }): Policy => ({
+// 1-ply greedy: among (curated) legal moves, play the one that maximizes my own
+// heuristic (score total) in the resulting state. Ties broken randomly. A weak
+// but non-trivial baseline — it always grabs immediate points before COMMITting.
+export const greedyPolicy = <TState, TMove>(
+  adapter: GameAdapter<TState, TMove>,
+  caps: Caps = { maxPerLevel: 12, maxMoves: 64 }
+): Policy<TState, TMove> => ({
   name: 'greedy',
-  pick: (state, rng) => {
-    const me = playerToMove(state)
-    const scored = enumerateMoves(state, opts).map((move) => {
-      const next = apply(state, move)
-      return { move, total: next ? (scores(next)[me]?.total ?? -Infinity) : -Infinity }
+  pick: async (state, rng) => {
+    const me = adapter.playerToMove(state)
+    const scored = adapter.legalMoves(state, caps).map((move) => {
+      const next = adapter.apply(state, move)
+      return { move, total: next ? (adapter.heuristic?.(next)?.[me] ?? -Infinity) : -Infinity }
     })
     if (scored.length === 0) return undefined
     const best = Math.max(...scored.map((s) => s.total))

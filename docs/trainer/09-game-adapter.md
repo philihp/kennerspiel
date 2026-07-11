@@ -2,7 +2,7 @@
 
 | | |
 | --- | --- |
-| Status | planned |
+| Status | ✅ done |
 | Package | `agent/` |
 | Depends on | [02](02-engine-adapter.md)–[06](06-selfplay-v1.md) |
 | Milestone | M2 |
@@ -165,8 +165,24 @@ change no rng-call ordering — same seeds produce the same games.
   suite passes through the adapter with **identical seeded behavior** (same
   seeds ⇒ same command lists as before the refactor); the golden-game
   regression test pins this.
-- Grep-level check: nothing under `agent/src/` outside `game/` and
-  `engine.ts`/`moves.ts` imports `hathora-et-labora-game`.
+- Grep-level check: nothing under `agent/src/` outside `game/`,
+  `engine.ts`/`moves.ts`, and `bench/` imports `hathora-et-labora-game`. The
+  search/self-play/arena/CLI core is game-blind. `bench/` is the intentional
+  exception — it benchmarks the raw engine API directly (`control` vs
+  `completions`, `encode` vs `encodeInto`), which the adapter deliberately
+  hides, so routing it through the adapter would defeat its purpose.
+
+**As built (minor deviations from the interface sketch above):**
+
+- The adapter gained an `opening(cfg, seed): TMove[]` method alongside
+  `initial` — a generic harness needs the replayable command prefix to log a
+  full command list (self-play JSONL requires the CONFIG/START opening).
+- `legalMoves` is **identity** (raw `enumerateMoves`, no dedupe) in M2, so the
+  refactor is provably behavior-preserving; canonicalization + dedupe-by-
+  `moveKey` land in [10](10-move-canonicalization.md). `moveKey` (join-space)
+  is exported now for that.
+- `MatchOptions.cfg` is required (was optional with an OeL default) — the
+  generic `runMatch` can't default to an OeL config.
 - A 10-game `pnpm --dir agent arena` smoke run matches pre-refactor results
   for the same seeds.
 

@@ -18,6 +18,8 @@ import type { GameState } from 'hathora-et-labora-game'
 import { apply, initialState, isPlaying } from '../engine'
 import type { Move } from '../engine'
 import { playGame, type GameConfig } from '../arena'
+import { oel } from '../game/oel'
+import type { Policy } from '../policy'
 import { greedyPolicy } from '../policies/greedy'
 import { randomPolicy } from '../policies/random'
 import { mulberry32, type Rng } from '../rng'
@@ -50,16 +52,19 @@ const replayCollect = (commands: Move[]): ReplayResult => {
 // A handful of deterministic policy games across player counts, so the corpus
 // isn't only the two hand-authored fixtures. Random games are cheap and finish;
 // one greedy game adds enumeration-heavy late states.
-const generatedGames = (): { name: string; commands: Move[] }[] => {
-  const specs: { name: string; cfg: GameConfig; seed: number; policies: ReturnType<typeof randomPolicy>[] }[] = [
-    { name: 'gen:2p-random', cfg: cfg(2), seed: 101, policies: [randomPolicy(), randomPolicy()] },
-    { name: 'gen:3p-random', cfg: cfg(3), seed: 202, policies: [randomPolicy(), randomPolicy(), randomPolicy()] },
-    { name: 'gen:2p-greedy', cfg: cfg(2), seed: 303, policies: [greedyPolicy(), randomPolicy()] },
+const generatedGames = async (): Promise<{ name: string; commands: Move[] }[]> => {
+  const specs: { name: string; cfg: GameConfig; seed: number; policies: Policy<GameState, Move>[] }[] = [
+    { name: 'gen:2p-random', cfg: cfg(2), seed: 101, policies: [randomPolicy(oel), randomPolicy(oel)] },
+    { name: 'gen:3p-random', cfg: cfg(3), seed: 202, policies: [randomPolicy(oel), randomPolicy(oel), randomPolicy(oel)] },
+    { name: 'gen:2p-greedy', cfg: cfg(2), seed: 303, policies: [greedyPolicy(oel), randomPolicy(oel)] },
   ]
-  return specs.map(({ name, cfg, seed, policies }) => ({
-    name,
-    commands: playGame(policies, cfg, seed, mulberry32(seed * 7919 + 1)).commands,
-  }))
+  // Sequential (not Promise.all): deterministic order for a stable corpus.
+  const out: { name: string; commands: Move[] }[] = []
+  for (const { name, cfg: gcfg, seed, policies } of specs) {
+    const { commands } = await playGame(oel, policies, gcfg, seed, mulberry32(seed * 7919 + 1))
+    out.push({ name, commands })
+  }
+  return out
 }
 
 const COLORS = ['R', 'G', 'B', 'W']
@@ -96,11 +101,11 @@ export type Corpus = {
   sources: string[]
 }
 
-export const buildCorpus = (opts: { size: number; seed: number; gamesPath?: string }): Corpus => {
+export const buildCorpus = async (opts: { size: number; seed: number; gamesPath?: string }): Promise<Corpus> => {
   const games: { name: string; commands: Move[] }[] = [
     { name: 'fixture:4aedf9e5-3p', commands: loadFixture('game4aedf9e5-3p.json') },
     { name: 'fixture:21872-4p', commands: loadFixture('game21872-4p.json') },
-    ...generatedGames(),
+    ...(await generatedGames()),
     ...(opts.gamesPath ? loadJsonl(opts.gamesPath) : []),
   ]
 

@@ -7,17 +7,17 @@
 //        `pnpm arena 20 long greedy random`
 
 import { runMatch, CONFIG_2P_LONG, CONFIG_2P_SHORT } from '../arena'
-import type { Policy } from '../policy'
+import { oel } from '../game/oel'
 import { randomPolicy } from '../policies/random'
 import { greedyPolicy } from '../policies/greedy'
 import { mctsPolicy } from '../policies/mcts'
 
-const parsePolicy = (spec: string): Policy => {
-  if (spec === 'random') return randomPolicy()
-  if (spec === 'greedy') return greedyPolicy()
+const parsePolicy = (spec: string) => {
+  if (spec === 'random') return randomPolicy(oel)
+  if (spec === 'greedy') return greedyPolicy(oel)
   if (spec.startsWith('mcts')) {
     const sims = Number.parseInt(spec.split(':')[1] ?? '64', 10)
-    return mctsPolicy({ sims })
+    return mctsPolicy(oel, { sims })
   }
   throw new Error(`unknown policy: ${spec}`)
 }
@@ -29,7 +29,7 @@ const b = parsePolicy(process.argv[5] ?? 'random')
 
 console.log(`Match: ${a.name} vs ${b.name} — ${games} games, 2p ${cfg.country} ${cfg.length}`)
 const t0 = Date.now()
-const r = runMatch(a, b, { games, cfg })
+const r = await runMatch(oel, a, b, { games, cfg })
 const secs = (Date.now() - t0) / 1000
 
 console.log(
