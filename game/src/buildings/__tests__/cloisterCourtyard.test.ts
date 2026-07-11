@@ -84,6 +84,11 @@ describe('buildings/cloisterCourtyard', () => {
       const s1 = cloisterCourtyard()(s0)
       expect(s1).toBeUndefined()
     })
+    it('using it and converting nothing is a legal no-op', () => {
+      // complete([]) offers the bare form; the reducer must accept it
+      const s1 = cloisterCourtyard()(s0)
+      expect(s1).toBe(s0)
+    })
     it('goes through a happy path', () => {
       const s1 = cloisterCourtyard('ClWoGn', 'Sh')(s0)!
       expect(s1.players![0]).toMatchObject({

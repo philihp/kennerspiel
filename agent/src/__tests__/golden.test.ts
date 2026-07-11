@@ -12,6 +12,11 @@ import { mulberry32 } from '../rng'
 // already-resolved promises reorders no rng draws, so the same seeds must still
 // produce the same command lists. (djb2 over the JSON of the command list.)
 //
+// Seed-1 recaptured after the engine's bare-USE fixes (cloisterCourtyard /
+// forgersWorkshop): 'USE G02' now applies instead of forcing a sampleMove
+// retry, so that walk's rng consumption legitimately changed (759 -> 715
+// commands). Seeds 2/3 never hit the affected paths and are unchanged.
+//
 // Captured in isolation but verified stable under heavy prior apply/enumerate
 // work, so test order in the shared runner does not perturb them.
 const djb2 = (s: string): number => {
@@ -25,8 +30,8 @@ const randoms = () => [randomPolicy(oel), randomPolicy(oel)]
 describe('golden: seeded behavior survives the adapter/async refactor', () => {
   it('random-vs-random 2p short games are unchanged (seeds 1, 2)', async () => {
     const g1 = await playGame(oel, randoms(), CONFIG_2P_SHORT, 1, rng(1))
-    assert.equal(g1.commands.length, 759)
-    assert.equal(djb2(JSON.stringify(g1.commands)), 3387465242)
+    assert.equal(g1.commands.length, 715)
+    assert.equal(djb2(JSON.stringify(g1.commands)), 1526401044)
 
     const g2 = await playGame(oel, randoms(), CONFIG_2P_SHORT, 2, rng(2))
     assert.equal(g2.commands.length, 446)
