@@ -56,7 +56,7 @@
     "prettier": "3.9.5",
     "supabase": "2.109.1",
     "tsx": "^4.22.4",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2"
   },
   "overrides": {
     "@types/react": "19.2.17",
