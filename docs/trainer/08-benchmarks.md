@@ -2,7 +2,7 @@
 
 | | |
 | --- | --- |
-| Status | planned |
+| Status | ✅ done |
 | Package | `agent/` |
 | Depends on | [03](03-move-enumeration.md), [07](07-engine-fast-paths.md) |
 | Milestone | M1 |
@@ -102,17 +102,45 @@ pnpm --dir agent bench --json > bench.json
 - The M1 exit criterion reads off this table: `completions()` ≫ `control()`
   on enumeration-heavy states, `encodeInto` ≤ 0.5 ms.
 
-## Baseline (previously measured, to re-verify)
+## Baseline
 
-Historical single-machine spot measurements; the first bench run replaces
-this table with percentile rows per op.
+`pnpm --dir agent bench` (default corpus: 500 states sampled seed 12345 from
+3,182 replayed states — the two fixtures plus three seeded policy games). Run
+on a shared cloud runner, so treat absolute ms as machine-relative; the durable
+claims are the **ratios** and the shape of the tail.
 
-| Op | Cost |
-| --- | --- |
-| `reducer` apply | ~0.011 ms |
-| `control(state, [])` | ~0.33 ms |
-| `encode` (pre-rewrite figure; expect far less from the imperative `Writer`) | ~13.3 ms |
-| Branching (raw, pre-dedupe) | median 18 · p90 126 · p99 1,114 · max 1,675 |
+| Op | p50 | p90 | p99 | max | mean |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `reducer` apply (per command) | 0.038 | 0.098 | 0.280 | 2.99 | 0.057 |
+| `control(state, [])` | 0.626 | 0.960 | 1.837 | 2.06 | 0.642 |
+| **`completions(state, [])`** | **0.085** | **0.164** | **0.311** | 0.36 | **0.100** |
+| `control(state, []).score` | 0.640 | 1.022 | 1.833 | 2.20 | 0.654 |
+| **`scores(state)`** | **0.452** | **0.746** | **1.709** | 1.98 | **0.462** |
+| `enumerateMoves` (capped 24/128) | 0.338 | 2.397 | 12.71 | 43.8 | 1.196 |
+| `enumerateMoves` (uncapped) | 0.352 | 7.199 | 84.84 | 153.7 | 3.294 |
+| `sampleMove` | 0.151 | 0.338 | 1.302 | 5.87 | 0.211 |
+| `encode` | 0.029 | 0.050 | 0.165 | 1.21 | 0.036 |
+| **`encodeInto`** (reused scratch) | **0.020** | **0.034** | **0.044** | 0.22 | **0.021** |
+| branching (raw, pre-dedupe) *(count)* | 23 | 550 | 2,306 | 17,144 | 237 |
+
+**M1 exit criterion met.** `completions()` is ≈**7×** `control()` at the median
+(0.085 vs 0.626 ms) and ≈**6×** at p99 — enumeration no longer pays for `flow`
++ `score` on every DFS node. `scores()` shaves the flow/completion work off the
+rollout/`outcome()` path (0.452 vs 0.640 ms). `encodeInto` is **≈0.02 ms**
+(well under the 0.5 ms target) and ≈1.5× cheaper than `encode`'s per-call
+allocation. The branching tail (p99 2,306, max 17,144 on random-policy SETTLE
+states) is why enumeration is capped in search and why move canonicalization
+([10](10-move-canonicalization.md)) is the next lever.
+
+> **Engine note (out of scope for 08, worth fixing later).** `enumerateMoves`
+> is deterministic for a *fixed* state within a fresh sequence (self-play and
+> the mcts determinism tests rely on this and pass), but its result on a given
+> state can shift depending on prior `reducer`/`apply` calls in the same
+> process — the completion enumeration carries module-level mutable state. The
+> bench's reproducibility `checksum` therefore covers only the pure read ops
+> (`control`/`completions`/`scores`/`encode`/`encodeInto`); `enumerateMoves`
+> and `sampleMove` are timed but excluded from it. This is orthogonal to
+> project 07 — `completions` is byte-identical to `control().completion`.
 
 ## Design notes & tradeoffs
 

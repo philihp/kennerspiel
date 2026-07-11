@@ -3,11 +3,15 @@
 // ['BUILD','G07','3','2'] or ['COMMIT']).
 
 import { count } from 'ramda'
-import { reducer, control, initialState, GameStatusEnum } from 'hathora-et-labora-game'
-import type { GameState, Score } from 'hathora-et-labora-game'
+import { reducer, initialState, GameStatusEnum, scores } from 'hathora-et-labora-game'
+import type { GameState } from 'hathora-et-labora-game'
 
 export type Move = string[]
 export { initialState }
+// Per-player score breakdown (totals etc.) — valid mid-game and at terminal.
+// The game engine's own scores(): control(state, []).score without the flow +
+// completion enumeration control() also computes (docs/trainer/07-engine-fast-paths.md).
+export { scores }
 
 // The reducer throws on commands it cannot parse; normalize that (and ordinary
 // illegal moves) to undefined.
@@ -31,9 +35,6 @@ export const isTerminal = (state: GameState): boolean => state.status === GameSt
 export const playerToMove = (state: GameState): number => state.frame!.activePlayerIndex
 
 export const numPlayers = (state: GameState): number => state.config!.players
-
-// Per-player score breakdown (totals etc.) — valid mid-game and at terminal.
-export const scores = (state: GameState): Score[] => control(state, []).score
 
 // Terminal reward as a per-player value vector in [0, 1], higher = better.
 // Rank-based so it generalizes past 2 players: a player scores
