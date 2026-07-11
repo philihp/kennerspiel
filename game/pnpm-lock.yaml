@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       fast-shuffle:
-        specifier: 6.2.0
-        version: 6.2.0
+        specifier: 6.2.1
+        version: 6.2.1
       pcg:
         specifier: 3.0.0
         version: 3.0.0
@@ -494,8 +494,8 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
-  fast-shuffle@6.2.0:
-    resolution: {integrity: sha512-Y7MexltTgkdI2UzeRx7zVIWiHSuQ41dD+2PPwukkIZW2b1wCSaciISyKNSKFVW6ImkH+QQivlDsmY552EO22Ig==}
+  fast-shuffle@6.2.1:
+    resolution: {integrity: sha512-a5xCB8x4LI0VhqRf6nFYO4H4tdalIywqzVU8xc3CoZ0xF8exohNIz12ugArWF2Zm9juXHWTbwt7t4fZgRk/TkQ==}
     engines: {node: '>=14'}
 
   fdir@6.5.0:
@@ -1184,7 +1184,7 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
-  fast-shuffle@6.2.0:
+  fast-shuffle@6.2.1:
     dependencies:
       pcg: 3.0.0
 
