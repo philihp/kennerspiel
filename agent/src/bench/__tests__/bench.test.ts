@@ -15,9 +15,9 @@ import { runBench } from '../bench'
 // they feed `sink` rather than `checksum`.)
 
 describe('bench corpus', () => {
-  it('is byte-identical across builds for a fixed seed', () => {
-    const a = buildCorpus({ size: 25, seed: 7 })
-    const b = buildCorpus({ size: 25, seed: 7 })
+  it('is byte-identical across builds for a fixed seed', async () => {
+    const a = await buildCorpus({ size: 25, seed: 7 })
+    const b = await buildCorpus({ size: 25, seed: 7 })
     assert.equal(a.totalStates, b.totalStates)
     assert.equal(a.states.length, b.states.length)
     for (let i = 0; i < a.states.length; i++) {
@@ -25,16 +25,16 @@ describe('bench corpus', () => {
     }
   })
 
-  it('samples a different corpus for a different seed', () => {
-    const a = buildCorpus({ size: 25, seed: 7 })
-    const b = buildCorpus({ size: 25, seed: 999 })
+  it('samples a different corpus for a different seed', async () => {
+    const a = await buildCorpus({ size: 25, seed: 7 })
+    const b = await buildCorpus({ size: 25, seed: 999 })
     assert.equal(a.totalStates, b.totalStates) // same underlying games
     const sig = (c: typeof a) => c.states.map((s) => JSON.stringify(s)).join('')
     assert.notEqual(sig(a), sig(b)) // different sampled subset
   })
 
-  it('collects hundreds of real mid-game states from the default sources', () => {
-    const c = buildCorpus({ size: 25, seed: 7 })
+  it('collects hundreds of real mid-game states from the default sources', async () => {
+    const c = await buildCorpus({ size: 25, seed: 7 })
     assert.ok(c.totalStates > 100, `expected >100 states, got ${c.totalStates}`)
     assert.equal(c.states.length, 25)
     assert.ok(c.sources.includes('fixture:4aedf9e5-3p'))
@@ -44,13 +44,13 @@ describe('bench corpus', () => {
 })
 
 describe('bench report', () => {
-  it('produces a reproducible checksum for a fixed corpus', () => {
-    const c = buildCorpus({ size: 25, seed: 7 })
+  it('produces a reproducible checksum for a fixed corpus', async () => {
+    const c = await buildCorpus({ size: 25, seed: 7 })
     assert.equal(runBench(c).checksum, runBench(c).checksum)
   })
 
-  it('reports every measured op', () => {
-    const names = runBench(buildCorpus({ size: 25, seed: 7 })).ops.map((o) => o.name)
+  it('reports every measured op', async () => {
+    const names = runBench(await buildCorpus({ size: 25, seed: 7 })).ops.map((o) => o.name)
     for (const expected of [
       'control(state, [])',
       'completions(state, [])',
@@ -66,8 +66,8 @@ describe('bench report', () => {
     }
   })
 
-  it('reports branching as counts, reducer-apply as ms, and ordered percentiles', () => {
-    const r = runBench(buildCorpus({ size: 25, seed: 7 }))
+  it('reports branching as counts, reducer-apply as ms, and ordered percentiles', async () => {
+    const r = runBench(await buildCorpus({ size: 25, seed: 7 }))
     assert.equal(r.branching.unit, 'count')
     assert.equal(r.reducerApplyMs.unit, 'ms')
     r.ops.forEach((o) => assert.equal(o.unit, 'ms'))

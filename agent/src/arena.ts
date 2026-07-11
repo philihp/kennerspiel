@@ -1,69 +1,59 @@
 // Match harness: play seated policies against each other and score the result.
-// Deterministic given seeds, so matches are reproducible.
+// Deterministic given seeds, so matches are reproducible. Game-blind: reaches
+// the game only through a GameAdapter.
 
-import { range, sum } from 'ramda'
-import { apply, replay, isPlaying, isTerminal, playerToMove, scores, outcome } from './engine'
-import type { Move } from './engine'
-import { mulberry32, type Rng } from './rng'
+import { sum } from 'ramda'
+import type { GameAdapter } from './game/adapter'
 import type { Policy } from './policy'
+import { mulberry32, type Rng } from './rng'
 
-export type GameConfig = {
-  players: number
-  country: 'france' | 'ireland'
-  length: 'short' | 'long'
-  colors: string[]
-}
+// GameConfig / opening / the 2p presets moved to the OeL adapter (project 09);
+// re-exported here so existing importers keep working.
+export { CONFIG_2P_LONG, CONFIG_2P_SHORT, opening } from './game/oel'
+export type { GameConfig } from './game/oel'
 
-export const CONFIG_2P_LONG: GameConfig = { players: 2, country: 'france', length: 'long', colors: ['R', 'G'] }
-export const CONFIG_2P_SHORT: GameConfig = { players: 2, country: 'france', length: 'short', colors: ['R', 'G'] }
-
-export const opening = (cfg: GameConfig, seed: number): Move[] => [
-  ['CONFIG', String(cfg.players), cfg.country, cfg.length],
-  ['START', String(seed), ...cfg.colors],
-]
-
-export type GameResult = {
+export type GameResult<TMove> = {
   totals: number[]
   outcome: number[]
   steps: number
   finished: boolean
-  commands: Move[]
+  commands: TMove[]
 }
 
 // Play one game. policies[seat] chooses for that seat. Stops at a terminal
 // state, when no legal move is offered, or at maxSteps (safety).
-export const playGame = (
-  policies: Policy[],
-  cfg: GameConfig,
+export const playGame = async <TState, TMove, TCfg>(
+  adapter: GameAdapter<TState, TMove, TCfg>,
+  policies: Policy<TState, TMove>[],
+  cfg: TCfg,
   seed: number,
   rng: Rng,
   maxSteps = 8000
-): GameResult => {
-  const commands = opening(cfg, seed)
-  let state = replay(commands)
-  if (state === undefined) throw new Error(`bad opening: ${JSON.stringify(commands)}`)
+): Promise<GameResult<TMove>> => {
+  const commands: TMove[] = [...adapter.opening(cfg, seed)] // replayable log incl. opening
+  let state = adapter.initial(cfg, seed)
   let steps = 0
-  while (isPlaying(state) && steps < maxSteps) {
-    const seat = playerToMove(state)
+  while (!adapter.isTerminal(state) && steps < maxSteps) {
+    const seat = adapter.playerToMove(state)
     const policy = policies[seat % policies.length]!
-    const move = policy.pick(state, rng)
+    const move = await policy.pick(state, rng)
     if (move === undefined) break
-    const next = apply(state, move)
+    const next = adapter.apply(state, move)
     if (next === undefined) break
     commands.push(move)
     state = next
     steps++
   }
   return {
-    totals: scores(state).map((s) => s.total),
-    outcome: outcome(state),
+    totals: adapter.heuristic?.(state) ?? [],
+    outcome: adapter.outcome(state),
     steps,
-    finished: isTerminal(state),
+    finished: adapter.isTerminal(state),
     commands,
   }
 }
 
-export type MatchOptions = { games: number; cfg?: GameConfig; baseSeed?: number }
+export type MatchOptions<TCfg> = { games: number; cfg: TCfg; baseSeed?: number }
 export type MatchResult = {
   a: string
   b: string
@@ -84,19 +74,25 @@ const eloFromWinRate = (p: number): number => {
 }
 
 // Head-to-head match. Alternates which policy takes seat 0 each game to cancel
-// any first-player/turn-order advantage.
-export const runMatch = (a: Policy, b: Policy, opts: MatchOptions): MatchResult => {
-  const cfg = opts.cfg ?? CONFIG_2P_LONG
+// any first-player/turn-order advantage. Sequential (not Promise.all) so game
+// order — and therefore any shared-process state — stays deterministic.
+export const runMatch = async <TState, TMove, TCfg>(
+  adapter: GameAdapter<TState, TMove, TCfg>,
+  a: Policy<TState, TMove>,
+  b: Policy<TState, TMove>,
+  opts: MatchOptions<TCfg>
+): Promise<MatchResult> => {
   const baseSeed = opts.baseSeed ?? 1
 
-  const results = range(0, opts.games).map((g) => {
+  const results: { winner: 'a' | 'b' | 'draw'; steps: number; finished: boolean }[] = []
+  for (let g = 0; g < opts.games; g++) {
     const swap = g % 2 === 1 // alternate which policy sits at seat 0
     const seed = baseSeed + g
-    const res = playGame(swap ? [b, a] : [a, b], cfg, seed, mulberry32(seed * 7919 + 1))
+    const res = await playGame(adapter, swap ? [b, a] : [a, b], opts.cfg, seed, mulberry32(seed * 7919 + 1))
     const ao = res.outcome[swap ? 1 : 0] ?? 0
     const bo = res.outcome[swap ? 0 : 1] ?? 0
-    return { winner: ao > bo ? 'a' : bo > ao ? 'b' : 'draw', steps: res.steps, finished: res.finished }
-  })
+    results.push({ winner: ao > bo ? 'a' : bo > ao ? 'b' : 'draw', steps: res.steps, finished: res.finished })
+  }
 
   const tally = (w: string) => results.filter((r) => r.winner === w).length
   const aWins = tally('a')

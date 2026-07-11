@@ -10,6 +10,7 @@ import { mkdirSync, appendFileSync } from 'node:fs'
 import { range } from 'ramda'
 import { selfPlayGame } from '../selfplay'
 import { CONFIG_2P_LONG, CONFIG_2P_SHORT } from '../arena'
+import { oel } from '../game/oel'
 import { mulberry32 } from '../rng'
 
 const games = Number.parseInt(process.argv[2] ?? '1', 10)
@@ -21,14 +22,14 @@ mkdirSync(dir, { recursive: true })
 const out = `${dir}/games-${cfg.length}-sims${sims}.jsonl`
 
 console.log(`Self-play: ${games} games, 2p ${cfg.country} ${cfg.length}, mcts sims=${sims} → ${out}`)
-range(0, games).forEach((g) => {
+for (const g of range(0, games)) {
   const seed = 1000 + g
   const rng = mulberry32(seed * 7919 + 3)
   const t0 = Date.now()
-  const game = selfPlayGame(cfg, seed, rng, { sims })
+  const game = await selfPlayGame(oel, cfg, seed, rng, { sims })
   appendFileSync(out, JSON.stringify(game) + '\n')
   console.log(
     `  game ${g + 1}/${games}: ${game.steps} moves, finished=${game.finished}, ` +
       `outcome=[${game.outcome.map((x) => x.toFixed(2)).join(', ')}] (${((Date.now() - t0) / 1000).toFixed(1)}s)`
   )
-})
+}

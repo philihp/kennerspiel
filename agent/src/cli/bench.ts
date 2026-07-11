@@ -24,6 +24,6 @@ const seed = Number.parseInt(getOpt('--seed') ?? '12345', 10)
 const gamesPath = getOpt('--games')
 const json = hasFlag('--json')
 
-const corpus = buildCorpus({ size, seed, gamesPath })
+const corpus = await buildCorpus({ size, seed, gamesPath })
 const report = runBench(corpus)
 console.log(json ? JSON.stringify(report, null, 2) : formatMarkdown(report))

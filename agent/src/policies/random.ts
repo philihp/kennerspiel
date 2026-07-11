@@ -1,8 +1,8 @@
+import type { GameAdapter } from '../game/adapter'
 import type { Policy } from '../policy'
-import { sampleMove } from '../moves'
 
 // Uniform-ish random over the completion tree (cheap; no enumeration).
-export const randomPolicy = (): Policy => ({
+export const randomPolicy = <TState, TMove>(adapter: GameAdapter<TState, TMove>): Policy<TState, TMove> => ({
   name: 'random',
-  pick: (state, rng) => sampleMove(state, rng),
+  pick: async (state, rng) => adapter.sampleMove(state, rng),
 })
