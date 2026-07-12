@@ -11,6 +11,11 @@ import { pcg32 } from '../rng'
 // move ordering, or the game loop is caught. Captured in isolation but verified
 // stable under heavy prior apply/enumerate work, so shared-runner test order
 // does not perturb them.
+//
+// Recaptured after the engine's bare-USE fixes (cloisterCourtyard /
+// forgersWorkshop): those buildings' bare 'USE' now applies instead of forcing
+// a sampleMove retry, so any random walk that reaches them consumes rng
+// differently than the pre-fix pcg32 capture on main.
 const djb2 = (s: string): number => {
   let h = 5381
   for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0
@@ -22,12 +27,12 @@ const randoms = () => [randomPolicy(oel), randomPolicy(oel)]
 describe('golden: seeded games are deterministic (pcg32 rng)', () => {
   it('random-vs-random 2p short games (seeds 1, 2)', async () => {
     const g1 = await playGame(oel, randoms(), CONFIG_2P_SHORT, 1, rng(1))
-    assert.equal(g1.commands.length, 644)
-    assert.equal(djb2(JSON.stringify(g1.commands)), 1889008079)
+    assert.equal(g1.commands.length, 689)
+    assert.equal(djb2(JSON.stringify(g1.commands)), 2548227665)
 
     const g2 = await playGame(oel, randoms(), CONFIG_2P_SHORT, 2, rng(2))
-    assert.equal(g2.commands.length, 613)
-    assert.equal(djb2(JSON.stringify(g2.commands)), 3891132861)
+    assert.equal(g2.commands.length, 733)
+    assert.equal(djb2(JSON.stringify(g2.commands)), 742051434)
   })
 
   it('a bounded self-play game (seed 3, sims 8, 20 steps)', async () => {

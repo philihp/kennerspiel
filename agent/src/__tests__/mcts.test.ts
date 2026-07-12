@@ -32,8 +32,8 @@ describe('mcts', () => {
 
   it('is bit-identical with no budget set (and reports sims run)', () => {
     const s = replay(OPENING)!
-    const a = search(oel, s, mulberry32(9), { sims: 24, rolloutDepth: 10 })
-    const b = search(oel, s, mulberry32(9), { sims: 24, rolloutDepth: 10, budgetMs: undefined, minSims: undefined })
+    const a = search(oel, s, pcg32(9), { sims: 24, rolloutDepth: 10 })
+    const b = search(oel, s, pcg32(9), { sims: 24, rolloutDepth: 10, budgetMs: undefined, minSims: undefined })
     assert.deepEqual(a.visits, b.visits)
     assert.equal(a.sims, 24)
     assert.equal(b.sims, 24)
@@ -42,7 +42,7 @@ describe('mcts', () => {
   it('budgetMs stops the loop early; minSims floor holds', () => {
     const s = replay(OPENING)!
     // an already-expired budget: only the minSims floor keeps it going
-    const r = search(oel, s, mulberry32(9), { sims: 10_000, rolloutDepth: 10, budgetMs: 0, minSims: 5 })
+    const r = search(oel, s, pcg32(9), { sims: 10_000, rolloutDepth: 10, budgetMs: 0, minSims: 5 })
     assert.equal(r.sims, 5)
     assert.ok(r.best)
     assert.notEqual(apply(s, r.best!), undefined)
@@ -52,8 +52,8 @@ describe('mcts', () => {
 
   it('a generous budget changes nothing', () => {
     const s = replay(OPENING)!
-    const a = search(oel, s, mulberry32(4), { sims: 16, rolloutDepth: 8 })
-    const b = search(oel, s, mulberry32(4), { sims: 16, rolloutDepth: 8, budgetMs: 60_000, minSims: 1 })
+    const a = search(oel, s, pcg32(4), { sims: 16, rolloutDepth: 8 })
+    const b = search(oel, s, pcg32(4), { sims: 16, rolloutDepth: 8, budgetMs: 60_000, minSims: 1 })
     assert.deepEqual(a.visits, b.visits)
     assert.equal(b.sims, 16)
   })

@@ -1,4 +1,4 @@
-import { addIndex, always, curry, filter, join, keys, map, pipe, reduce, view } from 'ramda'
+import { addIndex, always, curry, filter, identity, join, keys, map, pipe, reduce, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import {
@@ -18,6 +18,9 @@ const ALLOWED_OUTPUT: (keyof Cost)[] = ['peat', 'clay', 'wood', 'sheep', 'grain'
 export const cloisterCourtyard = (input = '', output = '') => {
   const inputs = parseResourceParam(input)
   const outputs = parseResourceParam(output)
+  // using the building and converting nothing is legal (complete() offers the
+  // bare form), same as druidsHouse/shippingCompany's no-op convention
+  if (totalGoods(inputs) === 0 && totalGoods(outputs) === 0) return identity
   if (totalGoods(inputs) !== 3) return () => undefined
   if (differentGoods(inputs) !== 3) return () => undefined
   if (totalGoods(maskGoods(ALLOWED_OUTPUT)(outputs)) !== 1 || differentGoods(outputs) !== 1) return () => undefined

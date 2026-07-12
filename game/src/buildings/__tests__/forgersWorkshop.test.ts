@@ -92,6 +92,18 @@ describe('buildings/forgersWorkshop', () => {
       expect(s1).toBeUndefined()
     })
 
+    it('bare use is a legal no-op, never a negative reliquary', () => {
+      // complete([]) offers '' even for a broke player; the reducer must
+      // accept it without granting floor((0-5)/10) = -1 reliquaries
+      const s1 = forgersWorkshop()(s0)
+      expect(s1).toBe(s0)
+    })
+
+    it('rejects paying 1-4 coins (buys nothing)', () => {
+      const s1 = forgersWorkshop('Pn')(s0)
+      expect(s1).toBeUndefined()
+    })
+
     it('can do both things', () => {
       const s1 = forgersWorkshop('NiNiNi')(s0)!
       expect(s1.players![0]).toMatchObject({

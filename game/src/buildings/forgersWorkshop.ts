@@ -1,4 +1,4 @@
-import { always, curry, map, pipe, reverse, unnest, view } from 'ramda'
+import { always, curry, identity, map, pipe, reverse, unnest, view } from 'ramda'
 import { P, match } from 'ts-pattern'
 import { activeLens, getCost, payCost, withActivePlayer } from '../board/player'
 import { coinCostOptions, costMoney, parseResourceParam } from '../board/resource'
@@ -7,12 +7,17 @@ import { GameState } from '../types'
 export const forgersWorkshop = (param = '') => {
   const input = parseResourceParam(param)
   const coins = costMoney(input)
+  // 5 coins buy the 1st reliquary, 10 each additional (matching complete()'s
+  // tiers). Bare use is a legal no-op; paying 1-4 coins buys nothing and is
+  // rejected rather than granting floor((coins-5)/10) = -1 reliquaries.
+  const reliquaries = coins >= 5 ? 1 + Math.floor((coins - 5) / 10) : 0
+  if (coins === 0) return identity
+  if (reliquaries === 0) return () => undefined
   return withActivePlayer(
     pipe(
       //
       payCost(input),
-      getCost({ reliquary: coins >= 5 ? 1 : 0 }),
-      getCost({ reliquary: Math.floor((coins - 5) / 10) })
+      getCost({ reliquary: reliquaries })
     )
   )
 }
