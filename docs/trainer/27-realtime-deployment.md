@@ -149,7 +149,9 @@ scope for v1 — Ora et Labora ends by structure, not by resignation.
 1. `bot/package.json` + workspace entry in `pnpm-workspace.yaml` (deps:
    workspace `agent`, `@supabase/supabase-js`); `bot/src/config.ts`.
 2. `agent/src/mcts/puct.ts`: add `budgetMs`/`minSims` options (tested: budget
-   respected, floor holds, bit-identical when unset).
+   respected, floor holds, bit-identical when unset). The pure-UCT `search`
+   (`agent/src/mcts/search.ts`) already carries exactly these options and a
+   `sims`-run field in its result — mirror that shape.
 3. `bot/src/db.ts` — service client, `listSeatedGames()`, `fetchCommands()`,
    `appendCommand()` (CAS + zero-rows handling).
 4. `bot/src/turns.ts` — realtime subscriptions + slow poll, per-game queue.
