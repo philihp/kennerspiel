@@ -4,8 +4,8 @@
 | --- | --- |
 | Status | planned |
 | Package | `agent/` + the new game's engine package |
-| Depends on | [09](09-game-adapter.md)–[22](22-arena-gating.md) |
-| Milestone | M9 (new) |
+| Depends on | [09](09-game-adapter.md)–[24](24-smoke-e2e.md) |
+| Milestone | M9 |
 
 ## Goal
 
@@ -55,7 +55,10 @@ thresholds in adapter config, the binary rate stays the reported metric).
 
 Implement `agent/src/game/<game>.ts` item by item, each with its OeL lesson:
 
-- `name`, `initial(cfg, seed)` — replay the opening; a bad opening throws.
+- `name`, `opening(cfg, seed)`, `initial(cfg, seed)` — `initial` replays the
+  opening; a bad opening throws. `opening` is a separate method so a generic
+  harness can log a fully replayable command list (JSONL v2 lines start with
+  the opening — schemas.md §2).
 - `apply` — reducer + throw→`undefined`; never partially mutates.
 - `isTerminal` / `playerToMove` / `numPlayers` — trivial delegations, but
   `playerToMove` must be right during sub-turns (see above).
@@ -68,9 +71,10 @@ Implement `agent/src/game/<game>.ts` item by item, each with its OeL lesson:
   policy mass and wastes curation budget. Write the game's `canonicalize` +
   in-DFS seen-set first; prove it with the never-merge-distinct-states
   property over a state corpus.
-- `moveKey(move)` — canonical serialization that **round-trips**
-  (`parseMoveKey(moveKey(m))` reapplies identically) and contains **no
-  whitespace inside a token**, so join-with-space/`split(' ')` is unambiguous.
+- `moveKey(move)` — canonical serialization that **round-trips** (re-parsing
+  `moveKey(m)` — for token-list games just `key.split(' ')` — yields a move
+  that reapplies identically) and contains **no whitespace inside a token**,
+  so join-with-space/`split(' ')` is unambiguous.
   This key is the JSONL v2 and shard identity
   ([14](14-selfplay-v2.md)/[16](16-shard-exporter.md)).
 - `sampleMove(state, rng)` — **cheap**: a random completion walk or
