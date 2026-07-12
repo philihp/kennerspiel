@@ -22,6 +22,13 @@ export type MctsOptions = {
   c?: number // UCT exploration constant
   rolloutDepth?: number // max commands played in a rollout before cutoff
   curation?: Caps // caps on per-node move enumeration
+  // Wall-clock budget (docs/trainer/27-realtime-deployment.md): stop early
+  // once elapsed ≥ budgetMs, but never before minSims simulations, so a GC
+  // pause cannot reduce a move to noise. Unset ⇒ exactly `sims` simulations,
+  // bit-identical to before these options existed — arena and self-play stay
+  // reproducible by never setting a budget.
+  budgetMs?: number
+  minSims?: number // floor under budgetMs (default 1); ignored when budgetMs is unset
 }
 
 const DEFAULTS = {
@@ -88,6 +95,9 @@ export type SearchResult<TMove> = {
   best: TMove | undefined
   // visit distribution over root moves (for a future policy target)
   visits: { move: TMove; n: number; q: number }[]
+  // simulations actually run: equals options.sims unless a budget cut in
+  // (the realtime move log records it — strength stays auditable)
+  sims: number
 }
 
 export const search = <TState, TMove>(
@@ -103,7 +113,16 @@ export const search = <TState, TMove>(
 
   const root = new Node(adapter, state, curation)
 
+  // Budget bookkeeping only exists when asked for: the unset path takes no
+  // clock readings and runs the exact historical loop.
+  const budgetMs = options.budgetMs
+  const minSims = Math.min(options.minSims ?? 1, options.sims)
+  const deadline = budgetMs === undefined ? Infinity : performance.now() + budgetMs
+
+  let simsRun = 0
   for (let i = 0; i < options.sims; i++) {
+    if (budgetMs !== undefined && i >= minSims && performance.now() >= deadline) break
+    simsRun++
     let node = root
     const path: Edge<TState, TMove>[] = []
     const visited: Node<TState, TMove>[] = [root]
@@ -144,5 +163,5 @@ export const search = <TState, TMove>(
     .map((e) => ({ move: e.move, n: e.n, q: e.n > 0 ? e.w[root.mover]! / e.n : 0 }))
     .sort((x, y) => y.n - x.n)
 
-  return { best: visits[0]?.move, visits }
+  return { best: visits[0]?.move, visits, sims: simsRun }
 }

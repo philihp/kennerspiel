@@ -4,11 +4,11 @@ import { playGame, runMatch, CONFIG_2P_SHORT } from '../arena'
 import { oel } from '../game/oel'
 import { randomPolicy } from '../policies/random'
 import { greedyPolicy } from '../policies/greedy'
-import { mulberry32 } from '../rng'
+import { pcg32 } from '../rng'
 
 describe('arena + baselines', () => {
   it('plays a full random-vs-random game and reports a result', async () => {
-    const res = await playGame(oel, [randomPolicy(oel), randomPolicy(oel)], CONFIG_2P_SHORT, 5, mulberry32(5))
+    const res = await playGame(oel, [randomPolicy(oel), randomPolicy(oel)], CONFIG_2P_SHORT, 5, pcg32(5))
     assert.equal(res.totals.length, 2)
     assert.equal(res.outcome.length, 2)
     assert.ok(res.steps > 10)

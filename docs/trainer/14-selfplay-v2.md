@@ -37,7 +37,7 @@ selfPlayGame(adapter, evaluator, cfg, seed, rng, opts): Promise<SelfPlayGameV2>
   sample the move (below); `apply`; push onto `commands`. Stops on terminal,
   `maxSteps`, or `best === undefined` (engine stall ⇒ `finished: false`).
   Per-game `rng` derivation stays a pure function of `seed` (v1 uses
-  `mulberry32(seed * 7919 + 3)`), so a game is reproducible from its JSONL
+  `pcg32(seed * 7919 + 3)`), so a game is reproducible from its JSONL
   line alone, independent of worker assignment.
 - **Temperature schedule**: for the first `tempMoves = 30` *decisions*,
   sample `π(a) ∝ visits(a)^(1/τ)` with τ = 1 (i.e. sample proportional to

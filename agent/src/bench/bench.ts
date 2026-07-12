@@ -8,7 +8,7 @@
 import type { GameState } from 'hathora-et-labora-game'
 import { control, completions, scores, encode, encodeInto, FEATURE_LEN } from 'hathora-et-labora-game'
 import { enumerateMoves, sampleMove } from '../moves'
-import { mulberry32 } from '../rng'
+import { pcg32 } from '../rng'
 import type { Corpus } from './corpus'
 
 // The search's per-node enumeration caps (DEFAULTS in mcts/search.ts).
@@ -71,7 +71,7 @@ const OPS: Op[] = [
   { name: 'scores(state)', reps: 20, det: true, run: (s) => scores(s).length },
   { name: 'enumerateMoves (capped 24/128)', reps: 4, det: false, run: (s) => enumerateMoves(s, CURATION).length },
   { name: 'enumerateMoves (uncapped)', reps: 1, det: false, run: (s) => enumerateMoves(s).length },
-  { name: 'sampleMove', reps: 6, det: false, run: (s, i) => sampleMove(s, mulberry32(i + 1))?.length ?? 0 },
+  { name: 'sampleMove', reps: 6, det: false, run: (s, i) => sampleMove(s, pcg32(i + 1))?.length ?? 0 },
   { name: 'encode', reps: 6, det: true, run: (s) => encode(s)[0]! },
   {
     name: 'encodeInto (reused scratch)',

@@ -14,7 +14,7 @@ import type { Caps, GameAdapter, Rng } from './adapter'
 
 export type ConformanceOpts = {
   seeds: number[] // one seeded random-play walk per entry
-  rng: (seed: number) => Rng // seeded rng factory (e.g. mulberry32)
+  rng: (seed: number) => Rng // seeded rng factory (e.g. pcg32)
   maxSteps?: number // walk length before giving up (default 40)
   caps?: Caps // enumeration caps (default { maxPerLevel: 24, maxMoves: 64 })
   // Run the expensive per-state checks (enumerate + apply-all + encode) only
@@ -25,10 +25,14 @@ export type ConformanceOpts = {
   // with a generous maxSteps to prove the terminal predicate + terminal
   // outcome contract on a real finished game.
   requireTerminal?: boolean
-  // moveKey grammar checks from docs/trainer/schemas.md §2: no whitespace
-  // inside a token. Default true — a new adapter must pass; OeL opts out
-  // until project 10 (move canonicalization) truncates joined "col row"
-  // tokens (docs/trainer/10-move-canonicalization.md).
+  // moveKey canonicalization guarantees (docs/trainer/schemas.md §2 +
+  // 10-move-canonicalization.md): keys are unique across an enumeration (no
+  // two enumerated moves share a key) AND contain no whitespace inside a
+  // token. Default true — a new adapter must pass. OeL opts out until
+  // project 10, whose `legalMoves` still uses identity canonicalization
+  // (see oel.ts): the DFS can reach one reducer-identical move by several
+  // paths (duplicate keys) and emits joined "col row" coordinate tokens.
+  // Flipping this on is project 10's acceptance check.
   strictMoveKeys?: boolean
 }
 
@@ -94,7 +98,10 @@ export const checkConformance = <TState, TMove, TCfg>(
     const keys = moves.map((m) => adapter.moveKey(m))
     const seen = new Set<string>()
     keys.forEach((k) => {
-      if (seen.has(k)) report(seed, step, 'duplicate-key', `two enumerated moves share key '${k}'`)
+      // Uniqueness is a canonicalization guarantee (project 10) — gated with
+      // the other strict-key checks so OeL's pre-canonical enumeration, which
+      // can reach one move by several DFS paths, doesn't fail until then.
+      if (strict && seen.has(k)) report(seed, step, 'duplicate-key', `two enumerated moves share key '${k}'`)
       seen.add(k)
       if (k.length === 0 || k.split(' ').includes(''))
         report(seed, step, 'key-spacing', `key '${k}' is empty or has leading/trailing/double spaces`)

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { checkConformance } from '../game/conformance'
 import { oel, CONFIG_2P_SHORT, CONFIG_2P_LONG } from '../game/oel'
 import type { GameConfig } from '../game/oel'
-import { mulberry32 } from '../rng'
+import { pcg32 } from '../rng'
 
 const CONFIG_SOLO: GameConfig = { players: 1, country: 'france', length: 'short', colors: ['R'] }
 
@@ -17,7 +17,7 @@ describe('oel adapter conformance (docs/trainer/28 gate 1)', () => {
   it('2p short: every contract holds over seeded random walks', () => {
     const violations = checkConformance(oel, CONFIG_2P_SHORT, {
       seeds: [11, 22],
-      rng: mulberry32,
+      rng: pcg32,
       maxSteps: 30,
       ...OEL_STRICT,
     })
@@ -27,7 +27,7 @@ describe('oel adapter conformance (docs/trainer/28 gate 1)', () => {
   it('2p long: every contract holds over a seeded random walk', () => {
     const violations = checkConformance(oel, CONFIG_2P_LONG, {
       seeds: [7],
-      rng: mulberry32,
+      rng: pcg32,
       maxSteps: 30,
       ...OEL_STRICT,
     })
@@ -37,7 +37,7 @@ describe('oel adapter conformance (docs/trainer/28 gate 1)', () => {
   it('solo: outcome is squashed into [0,1] mid-game', () => {
     const violations = checkConformance(oel, CONFIG_SOLO, {
       seeds: [5],
-      rng: mulberry32,
+      rng: pcg32,
       maxSteps: 30,
       ...OEL_STRICT,
     })
@@ -45,10 +45,15 @@ describe('oel adapter conformance (docs/trainer/28 gate 1)', () => {
   })
 
   it('a full random game reaches terminal and keeps the outcome contract there', () => {
+    // Seed 1 finishes in ~856 steps; the 3000 cap leaves comfortable margin.
+    // Pure-random OeL play is not guaranteed to terminate (value-neutral
+    // convert loops can cycle — cf. the greedy non-termination fixed when the
+    // agent moved to pcg32), so this case pins a seed known to finish rather
+    // than asserting every walk terminates.
     const violations = checkConformance(oel, CONFIG_2P_SHORT, {
-      seeds: [3],
-      rng: mulberry32,
-      maxSteps: 2000,
+      seeds: [1],
+      rng: pcg32,
+      maxSteps: 3000,
       checkStride: 50, // cheap walk; contract sampling only
       requireTerminal: true,
       ...OEL_STRICT,

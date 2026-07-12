@@ -22,7 +22,7 @@ import { oel } from '../game/oel'
 import type { Policy } from '../policy'
 import { greedyPolicy } from '../policies/greedy'
 import { randomPolicy } from '../policies/random'
-import { mulberry32, type Rng } from '../rng'
+import { pcg32, type Rng } from '../rng'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 
@@ -53,15 +53,20 @@ const replayCollect = (commands: Move[]): ReplayResult => {
 // isn't only the two hand-authored fixtures. Random games are cheap and finish;
 // one greedy game adds enumeration-heavy late states.
 const generatedGames = async (): Promise<{ name: string; commands: Move[] }[]> => {
-  const specs: { name: string; cfg: GameConfig; seed: number; policies: Policy<GameState, Move>[] }[] = [
-    { name: 'gen:2p-random', cfg: cfg(2), seed: 101, policies: [randomPolicy(oel), randomPolicy(oel)] },
-    { name: 'gen:3p-random', cfg: cfg(3), seed: 202, policies: [randomPolicy(oel), randomPolicy(oel), randomPolicy(oel)] },
-    { name: 'gen:2p-greedy', cfg: cfg(2), seed: 303, policies: [greedyPolicy(oel), randomPolicy(oel)] },
-  ]
+  // maxSteps bounds the greedy game: greedy enumerates + scores every step, so a
+  // full game is slow; a few hundred steps already reach enumeration-heavy
+  // mid/late states, which is all the corpus needs. Random games are cheap
+  // (no enumeration) and run to their natural end.
+  const specs: { name: string; cfg: GameConfig; seed: number; policies: Policy<GameState, Move>[]; maxSteps?: number }[] =
+    [
+      { name: 'gen:2p-random', cfg: cfg(2), seed: 101, policies: [randomPolicy(oel), randomPolicy(oel)] },
+      { name: 'gen:3p-random', cfg: cfg(3), seed: 202, policies: [randomPolicy(oel), randomPolicy(oel), randomPolicy(oel)] },
+      { name: 'gen:2p-greedy', cfg: cfg(2), seed: 303, policies: [greedyPolicy(oel), randomPolicy(oel)], maxSteps: 250 },
+    ]
   // Sequential (not Promise.all): deterministic order for a stable corpus.
   const out: { name: string; commands: Move[] }[] = []
-  for (const { name, cfg: gcfg, seed, policies } of specs) {
-    const { commands } = await playGame(oel, policies, gcfg, seed, mulberry32(seed * 7919 + 1))
+  for (const { name, cfg: gcfg, seed, policies, maxSteps } of specs) {
+    const { commands } = await playGame(oel, policies, gcfg, seed, pcg32(seed * 7919 + 1), maxSteps)
     out.push({ name, commands })
   }
   return out
@@ -117,7 +122,7 @@ export const buildCorpus = async (opts: { size: number; seed: number; gamesPath?
     applyNs.push(...ns)
   }
 
-  const shuffled = seededShuffle(allStates, mulberry32(opts.seed))
+  const shuffled = seededShuffle(allStates, pcg32(opts.seed))
   return {
     states: shuffled.slice(0, opts.size),
     applyNs,

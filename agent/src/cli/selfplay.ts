@@ -11,7 +11,7 @@ import { range } from 'ramda'
 import { selfPlayGame } from '../selfplay'
 import { CONFIG_2P_LONG, CONFIG_2P_SHORT } from '../arena'
 import { oel } from '../game/oel'
-import { mulberry32 } from '../rng'
+import { pcg32 } from '../rng'
 
 const games = Number.parseInt(process.argv[2] ?? '1', 10)
 const cfg = process.argv[3] === 'long' ? CONFIG_2P_LONG : CONFIG_2P_SHORT
@@ -24,7 +24,7 @@ const out = `${dir}/games-${cfg.length}-sims${sims}.jsonl`
 console.log(`Self-play: ${games} games, 2p ${cfg.country} ${cfg.length}, mcts sims=${sims} → ${out}`)
 for (const g of range(0, games)) {
   const seed = 1000 + g
-  const rng = mulberry32(seed * 7919 + 3)
+  const rng = pcg32(seed * 7919 + 3)
   const t0 = Date.now()
   const game = await selfPlayGame(oel, cfg, seed, rng, { sims })
   appendFileSync(out, JSON.stringify(game) + '\n')

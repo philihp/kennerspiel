@@ -4,41 +4,38 @@ import { playGame, CONFIG_2P_SHORT } from '../arena'
 import { selfPlayGame } from '../selfplay'
 import { oel } from '../game/oel'
 import { randomPolicy } from '../policies/random'
-import { mulberry32 } from '../rng'
+import { pcg32 } from '../rng'
 
-// Golden regression for the project-09 game-agnostic refactor (threading a
-// GameAdapter through search/arena/selfplay + making Policy.pick async). These
-// hashes were captured from the pre-refactor synchronous code; awaiting
-// already-resolved promises reorders no rng draws, so the same seeds must still
-// produce the same command lists. (djb2 over the JSON of the command list.)
+// Golden regression: seeded games are fully deterministic. These djb2 hashes of
+// the command lists are pinned so any accidental change to the rng (pcg32),
+// move ordering, or the game loop is caught. Captured in isolation but verified
+// stable under heavy prior apply/enumerate work, so shared-runner test order
+// does not perturb them.
 //
-// Seed-1 recaptured after the engine's bare-USE fixes (cloisterCourtyard /
-// forgersWorkshop): 'USE G02' now applies instead of forcing a sampleMove
-// retry, so that walk's rng consumption legitimately changed (759 -> 715
-// commands). Seeds 2/3 never hit the affected paths and are unchanged.
-//
-// Captured in isolation but verified stable under heavy prior apply/enumerate
-// work, so test order in the shared runner does not perturb them.
+// Recaptured after the engine's bare-USE fixes (cloisterCourtyard /
+// forgersWorkshop): those buildings' bare 'USE' now applies instead of forcing
+// a sampleMove retry, so any random walk that reaches them consumes rng
+// differently than the pre-fix pcg32 capture on main.
 const djb2 = (s: string): number => {
   let h = 5381
   for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0
   return h
 }
-const rng = (seed: number) => mulberry32(seed * 7919 + 1)
+const rng = (seed: number) => pcg32(seed * 7919 + 1)
 const randoms = () => [randomPolicy(oel), randomPolicy(oel)]
 
-describe('golden: seeded behavior survives the adapter/async refactor', () => {
-  it('random-vs-random 2p short games are unchanged (seeds 1, 2)', async () => {
+describe('golden: seeded games are deterministic (pcg32 rng)', () => {
+  it('random-vs-random 2p short games (seeds 1, 2)', async () => {
     const g1 = await playGame(oel, randoms(), CONFIG_2P_SHORT, 1, rng(1))
-    assert.equal(g1.commands.length, 715)
-    assert.equal(djb2(JSON.stringify(g1.commands)), 1526401044)
+    assert.equal(g1.commands.length, 689)
+    assert.equal(djb2(JSON.stringify(g1.commands)), 2548227665)
 
     const g2 = await playGame(oel, randoms(), CONFIG_2P_SHORT, 2, rng(2))
-    assert.equal(g2.commands.length, 446)
-    assert.equal(djb2(JSON.stringify(g2.commands)), 1563751463)
+    assert.equal(g2.commands.length, 733)
+    assert.equal(djb2(JSON.stringify(g2.commands)), 742051434)
   })
 
-  it('a bounded self-play game is unchanged (seed 3, sims 8, 20 steps)', async () => {
+  it('a bounded self-play game (seed 3, sims 8, 20 steps)', async () => {
     const sp = await selfPlayGame(oel, CONFIG_2P_SHORT, 3, rng(3), { sims: 8 }, 20)
     assert.equal(sp.commands.length, 22)
     assert.equal(sp.decisions.length, 20)

@@ -5,7 +5,7 @@
 import { sum } from 'ramda'
 import type { GameAdapter } from './game/adapter'
 import type { Policy } from './policy'
-import { mulberry32, type Rng } from './rng'
+import { pcg32, type Rng } from './rng'
 
 // GameConfig / opening / the 2p presets moved to the OeL adapter (project 09);
 // re-exported here so existing importers keep working.
@@ -88,7 +88,7 @@ export const runMatch = async <TState, TMove, TCfg>(
   for (let g = 0; g < opts.games; g++) {
     const swap = g % 2 === 1 // alternate which policy sits at seat 0
     const seed = baseSeed + g
-    const res = await playGame(adapter, swap ? [b, a] : [a, b], opts.cfg, seed, mulberry32(seed * 7919 + 1))
+    const res = await playGame(adapter, swap ? [b, a] : [a, b], opts.cfg, seed, pcg32(seed * 7919 + 1))
     const ao = res.outcome[swap ? 1 : 0] ?? 0
     const bo = res.outcome[swap ? 0 : 1] ?? 0
     results.push({ winner: ao > bo ? 'a' : bo > ao ? 'b' : 'draw', steps: res.steps, finished: res.finished })
