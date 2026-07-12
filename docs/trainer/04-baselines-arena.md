@@ -60,7 +60,7 @@ runMatch(a: Policy, b: Policy, opts: MatchOptions): MatchResult
   `(policies, cfg, seed, rng seed)`.
 - **`runMatch`** plays `opts.games` games (default cfg `CONFIG_2P_LONG`,
   default `baseSeed = 1`). Game `g` uses board seed `baseSeed + g` and policy
-  rng `mulberry32(seed * 7919 + 1)`; odd games swap which policy takes seat 0
+  rng `pcg32(seed * 7919 + 1)`; odd games swap which policy takes seat 0
   so first-mover/turn-order advantage cancels over an even count. Winners are
   decided by comparing `outcome` components (rank-based, from
   [02](02-engine-adapter.md)) — equal outcomes count as a draw. Result:
