@@ -4,6 +4,15 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Header from './layout/header'
 import { SupabaseContextProvider } from '@/context/SupabaseContext'
+
+// The root layout renders <Header/>, which reads the auth cookie via
+// createClient() on every request, so nothing beneath this layout can be
+// statically prerendered. Marking the layout dynamic keeps `next build` from
+// attempting to statically generate framework pages like /_not-found and
+// /error — that attempt instantiates a Supabase client at build time and, when
+// the Supabase env vars aren't inlined into the build, crashes the whole build.
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Kennerspiel',
   description: 'Digital Tabletop',
