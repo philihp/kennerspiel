@@ -17,7 +17,7 @@
     "@vercel/speed-insights": "2.0.0",
     "date-fns": "4.4.0",
     "dotenv": "17.4.2",
-    "flags": "4.2.0",
+    "flags": "4.2.3",
     "form-urlencoded": "6.1.7",
     "hathora-et-labora-game": "workspace:*",
     "jsonwebtoken": "9.0.3",
