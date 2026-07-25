@@ -26,8 +26,8 @@
     "next": "16.2.11",
     "pointille": "^1.0.1",
     "ramda": "0.32.0",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "sort-unwind": "4.1.0",
     "ts-pattern": "5.9.0",
     "zod": "4.4.3"
