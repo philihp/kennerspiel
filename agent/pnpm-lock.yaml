@@ -25,8 +25,8 @@ importers:
         specifier: 0.32.0
         version: 0.32.0
       tsx:
-        specifier: 4.23.4
-        version: 4.23.4
+        specifier: 4.23.11
+        version: 4.23.11
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -335,8 +335,8 @@ packages:
   ts-toolbelt@9.6.0:
     resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
 
-  tsx@4.23.4:
-    resolution: {integrity: sha512-ZiUQ8oT/KzN51mJUWPqARYqwFLFJZtGZipRkw1ynHMr9vy3eU77m5yfF3Gzm6meEg/beW+lUu3fHYgskTN2oVQ==}
+  tsx@4.23.11:
+    resolution: {integrity: sha512-Ry2oTEUnhBdeEdWIztY8kf3/nBGnPnjMLVGL0YfdRXMORuPER5NlKmayqxtxRxwB1xBN+RivRaJfe7PM1rtiyw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -537,7 +537,7 @@ snapshots:
 
   ts-toolbelt@9.6.0: {}
 
-  tsx@4.23.4:
+  tsx@4.23.11:
     dependencies:
       esbuild: 0.28.1
     optionalDependencies:
