@@ -95,16 +95,12 @@ adapter) in a Next.js App Router catch-all route:
 // web/src/app/api/[transport]/route.ts
 import { createMcpHandler, withMcpAuth } from 'mcp-handler'
 
-const handler = createMcpHandler(
-  (server) => {
-    server.tool('list_my_games', ...)
-    server.tool('get_game', ...)
-    server.tool('get_legal_moves', ...)
-    server.tool('make_move', ...)
-  },
-  {},
-  { basePath: '/api' }
-)
+const handler = createMcpHandler((server) => {
+  server.registerTool('list_my_games', ...)
+  server.registerTool('get_game', ...)
+  server.registerTool('get_legal_moves', ...)
+  server.registerTool('make_move', ...)
+})
 
 const authHandler = withMcpAuth(handler, verifyToken, { required: true })
 
@@ -305,7 +301,8 @@ web/src/middleware.ts                  # matcher gains an api/mcp exclusion
 supabase/migrations/<ts>_append_command_rpc.sql
 ```
 
-New dependencies in `web/package.json`: `mcp-handler`, `zod`.
+New dependencies in `web/package.json`: `mcp-handler`, `@modelcontextprotocol/server`
+(peer of `mcp-handler` v2), `zod`.
 Already present: `@supabase/supabase-js`, `hathora-et-labora-game`.
 
 New env vars on the existing `kennerspiel` Vercel project:
