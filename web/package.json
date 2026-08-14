@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@marsidev/react-turnstile": "1.5.5",
-    "@modelcontextprotocol/sdk": "1.30.0",
+    "@modelcontextprotocol/server": "^2.0.0",
     "@next/third-parties": "16.3.0",
     "@philihp/prettier-config": "1.0.0",
     "@stdlib/math": "0.4.1",
@@ -22,7 +22,7 @@
     "hathora-et-labora-game": "workspace:*",
     "jsonwebtoken": "9.0.3",
     "jwks-rsa": "4.1.0",
-    "mcp-handler": "1.1.0",
+    "mcp-handler": "2.1.1",
     "next": "16.3.0",
     "pointille": "^1.0.1",
     "ramda": "0.32.0",
