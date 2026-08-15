@@ -1,0 +1,26 @@
+<div style="font-family: monospace; background: #0a0e14; color: #a0b4c8; padding: 32px; max-width: 600px;">
+  <div style="border-left: 3px solid #d9a441; padding-left: 16px; margin-bottom: 24px;">
+    <div style="color: #d9a441; font-size: 11px; letter-spacing: 2px;">EDENCOM SECURITY ADVISORY</div>
+    <div style="color: #e0eaf2; font-size: 18px; font-weight: bold; margin-top: 4px;">COMMS RELAY CHANGED</div>
+  </div>
+
+  <p>Capsuleer,</p>
+
+  <p>The relay number on your identity record has been changed. Short-burst verification codes will be
+  transmitted to the new relay from now on.</p>
+
+  <div style="background: #111823; border: 1px solid #1e2a38; padding: 16px; margin: 24px 0; font-size: 13px;">
+    <div style="color: #4a6070; letter-spacing: 1px;">PREVIOUS RELAY</div>
+    <div style="color: #e0eaf2; margin-top: 4px;">{{ .OldPhone }}</div>
+    <div style="color: #4a6070; letter-spacing: 1px; margin-top: 12px;">CURRENT RELAY</div>
+    <div style="color: #e0eaf2; margin-top: 4px;">{{ .Phone }}</div>
+  </div>
+
+  <p style="color: #d9a441;">If you did not authorize this change, your identity may be compromised. Reset your
+  access code immediately at <a href="https://kennerspiel.com/account/reset" style="color: #d9a441;">kennerspiel.com/account/reset</a>.</p>
+
+  <p style="font-size: 12px; color: #4a6070;">
+    This is an automated transmission from EDENCOM Identity Authority.<br>
+    Unauthorized access to capsuleer accounts is a Class 1 criminal offense under Yulai Accords §14.
+  </p>
+</div>

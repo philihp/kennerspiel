@@ -1,0 +1,33 @@
+<div style="font-family: monospace; background: #0a0e14; color: #a0b4c8; padding: 32px; max-width: 600px;">
+  <div style="border-left: 3px solid #4a9eca; padding-left: 16px; margin-bottom: 24px;">
+    <div style="color: #4a9eca; font-size: 11px; letter-spacing: 2px;">EDENCOM IDENTITY AUTHORITY</div>
+    <div style="color: #e0eaf2; font-size: 18px; font-weight: bold; margin-top: 4px;">COMMS ADDRESS UPDATE</div>
+  </div>
+
+  <p>Capsuleer,</p>
+
+  <p>A request has been filed to reroute your identity records to a new communication address. Confirm the
+  reroute to complete the update.</p>
+
+  <div style="background: #111823; border: 1px solid #1e2a38; padding: 16px; margin: 24px 0; font-size: 13px;">
+    <div style="color: #4a6070; letter-spacing: 1px;">CURRENT ADDRESS</div>
+    <div style="color: #e0eaf2; margin-top: 4px;">{{ .Email }}</div>
+    <div style="color: #4a6070; letter-spacing: 1px; margin-top: 12px;">REQUESTED ADDRESS</div>
+    <div style="color: #e0eaf2; margin-top: 4px;">{{ .NewEmail }}</div>
+  </div>
+
+  <p>If you did not file this request, disregard this transmission and reset your access code immediately.
+  Your records remain routed to the current address until the reroute is confirmed.</p>
+
+  <div style="margin: 32px 0;">
+    <a href="{{ .SiteURL }}/account/confirm?token_hash={{ .TokenHash }}&type=email_change"
+    style="background: #4a9eca; color: #0a0e14; padding: 12px 24px; text-decoration: none; font-weight: bold; letter-spacing: 1px; display: inline-block;"
+      >CONFIRM REROUTE</a
+    >
+  </div>
+
+  <p style="font-size: 12px; color: #4a6070;">
+    This is an automated transmission from EDENCOM Identity Authority.<br>
+    Unauthorized access to capsuleer accounts is a Class 1 criminal offense under Yulai Accords §14.
+  </p>
+</div>
