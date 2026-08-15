@@ -1,17 +1,17 @@
 # Supabase Email Templates
 
 The committed copy of the HTML that Supabase Auth sends to users. The dashboard
-is still the thing that actually stores these, but nothing here is authored in
-the dashboard — edit the files, merge to `main`, and the `supabase-email`
-workflow pushes them to the hosted project.
+is what actually stores these — this directory is the version-controlled
+original, kept so the emails can be reviewed in a diff instead of only in a web
+form. Editing a file here changes nothing on its own; see
+[Syncing to the project](#syncing-to-the-project).
 
 ## Layout
 
 | File | Purpose |
 | --- | --- |
 | `templates/*.html` | The email bodies, one per Supabase template |
-| `manifest.json` | Maps each template to its subject line and its Management API field names |
-| `sync.mjs` | Pushes the templates to a hosted project (or reports drift) |
+| `manifest.json` | Maps each file to its dashboard tab and subject line |
 | `preview.mjs` | Renders every template on one page with sample values |
 
 ## The templates
@@ -20,7 +20,7 @@ Six of these are transactional emails triggered by an auth flow. The other seven
 are security notifications Supabase sends after the fact — they have no call to
 action and are styled in amber rather than blue.
 
-| Template | File | Sent when |
+| Dashboard tab | File | Sent when |
 | --- | --- | --- |
 | Confirm sign up | `templates/confirmation.html` | A new account needs its email verified |
 | Invite user | `templates/invite.html` | An existing user invites someone |
@@ -77,42 +77,19 @@ node docs/supabase-email-templates/preview.mjs > preview.html && open preview.ht
 Sample values are substituted for the template variables, so this shows layout
 and copy, not exactly what the mailer emits.
 
-## Syncing to the hosted project
+## Syncing to the project
 
-`.github/workflows/supabase-email.yml` runs `sync.mjs` on every push to `main`
-that touches this directory, and on manual dispatch. The script `GET`s the
-project's auth config, compares only the mailer fields named in `manifest.json`,
-and `PATCH`es back the ones that differ. Every other auth setting — site URL,
-redirect allow-list, providers — is left untouched, so this cannot clobber
-dashboard configuration the way a full `supabase config push` would.
+By hand, under **Authentication → Emails** in the Supabase dashboard: paste the
+file body into the matching tab and set the subject from `manifest.json`. Nothing
+watches this directory, so a change here is not live until someone does that.
 
-It needs two things in repository settings:
+The seven security notifications each have their own enable toggle on that page.
+They are off until switched on, regardless of what HTML is saved.
 
-- `SUPABASE_ACCESS_TOKEN` (secret) — a personal access token from
-  <https://supabase.com/dashboard/account/tokens>
-- `SUPABASE_PROJECT_REF` (variable) — the project ref from the project's URL
-
-To run it by hand:
-
-```sh
-export SUPABASE_ACCESS_TOKEN=sbp_...
-export SUPABASE_PROJECT_REF=...
-
-node docs/supabase-email-templates/sync.mjs --check   # report drift, change nothing
-node docs/supabase-email-templates/sync.mjs           # push whatever differs
-```
-
-`--check` exits non-zero when the project has drifted from what is committed,
-which is the thing to run if someone has been editing in the dashboard.
-
-### Enabling the notification emails
-
-Pushing a notification template does not turn it on. The seven security
-notifications are each gated behind a separate flag
-(`mailer_notifications_password_changed_enabled` and friends), which `sync.mjs`
-deliberately leaves alone — turning them on starts sending mail, and that should
-be a deliberate click rather than a side effect of editing HTML. Enable them
-under **Authentication → Emails** in the dashboard.
+If this ever becomes tedious enough to automate, the hook is
+`PATCH /v1/projects/{ref}/config/auth` on the Management API, which takes
+`mailer_subjects_*` and `mailer_templates_*_content` fields covering all
+thirteen templates. It needs a personal access token and the project ref.
 
 ## Local development
 

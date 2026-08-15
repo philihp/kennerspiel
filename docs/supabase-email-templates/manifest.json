@@ -3,104 +3,78 @@
     "name": "confirmation",
     "label": "Confirm sign up",
     "file": "templates/confirmation.html",
-    "subject": "Confirm your capsuleer registration",
-    "subjectField": "mailer_subjects_confirmation",
-    "contentField": "mailer_templates_confirmation_content"
+    "subject": "Confirm your capsuleer registration"
   },
   {
     "name": "invite",
     "label": "Invite user",
     "file": "templates/invite.html",
-    "subject": "You have been sponsored for capsuleer access",
-    "subjectField": "mailer_subjects_invite",
-    "contentField": "mailer_templates_invite_content"
+    "subject": "You have been sponsored for capsuleer access"
   },
   {
     "name": "magic_link",
     "label": "Magic link or OTP",
     "file": "templates/magic-link.html",
-    "subject": "Your access authorization for Kennerspiel",
-    "subjectField": "mailer_subjects_magic_link",
-    "contentField": "mailer_templates_magic_link_content"
+    "subject": "Your access authorization for Kennerspiel"
   },
   {
     "name": "email_change",
     "label": "Change email address",
     "file": "templates/email-change.html",
-    "subject": "Confirm your new communication address",
-    "subjectField": "mailer_subjects_email_change",
-    "contentField": "mailer_templates_email_change_content"
+    "subject": "Confirm your new communication address"
   },
   {
     "name": "recovery",
     "label": "Reset password",
     "file": "templates/recovery.html",
-    "subject": "Reset your access code",
-    "subjectField": "mailer_subjects_recovery",
-    "contentField": "mailer_templates_recovery_content"
+    "subject": "Reset your access code"
   },
   {
     "name": "reauthentication",
     "label": "Reauthentication",
     "file": "templates/reauthentication.html",
-    "subject": "Identity reverification code",
-    "subjectField": "mailer_subjects_reauthentication",
-    "contentField": "mailer_templates_reauthentication_content"
+    "subject": "Identity reverification code"
   },
   {
     "name": "password_changed",
     "label": "Password changed",
     "file": "templates/notification-password-changed.html",
-    "subject": "Security advisory: access code changed",
-    "subjectField": "mailer_subjects_password_changed_notification",
-    "contentField": "mailer_templates_password_changed_notification_content"
+    "subject": "Security advisory: access code changed"
   },
   {
     "name": "email_changed",
     "label": "Email address changed",
     "file": "templates/notification-email-changed.html",
-    "subject": "Security advisory: communication address changed",
-    "subjectField": "mailer_subjects_email_changed_notification",
-    "contentField": "mailer_templates_email_changed_notification_content"
+    "subject": "Security advisory: communication address changed"
   },
   {
     "name": "phone_changed",
     "label": "Phone number changed",
     "file": "templates/notification-phone-changed.html",
-    "subject": "Security advisory: comms relay changed",
-    "subjectField": "mailer_subjects_phone_changed_notification",
-    "contentField": "mailer_templates_phone_changed_notification_content"
+    "subject": "Security advisory: comms relay changed"
   },
   {
     "name": "identity_linked",
     "label": "Sign-in method linked",
     "file": "templates/notification-identity-linked.html",
-    "subject": "Security advisory: sign-in method linked",
-    "subjectField": "mailer_subjects_identity_linked_notification",
-    "contentField": "mailer_templates_identity_linked_notification_content"
+    "subject": "Security advisory: sign-in method linked"
   },
   {
     "name": "identity_unlinked",
     "label": "Sign-in method removed",
     "file": "templates/notification-identity-unlinked.html",
-    "subject": "Security advisory: sign-in method removed",
-    "subjectField": "mailer_subjects_identity_unlinked_notification",
-    "contentField": "mailer_templates_identity_unlinked_notification_content"
+    "subject": "Security advisory: sign-in method removed"
   },
   {
     "name": "mfa_factor_enrolled",
     "label": "MFA method added",
     "file": "templates/notification-mfa-factor-enrolled.html",
-    "subject": "Security advisory: verification method added",
-    "subjectField": "mailer_subjects_mfa_factor_enrolled_notification",
-    "contentField": "mailer_templates_mfa_factor_enrolled_notification_content"
+    "subject": "Security advisory: verification method added"
   },
   {
     "name": "mfa_factor_unenrolled",
     "label": "MFA method removed",
     "file": "templates/notification-mfa-factor-unenrolled.html",
-    "subject": "Security advisory: verification method removed",
-    "subjectField": "mailer_subjects_mfa_factor_unenrolled_notification",
-    "contentField": "mailer_templates_mfa_factor_unenrolled_notification_content"
+    "subject": "Security advisory: verification method removed"
   }
 ]
