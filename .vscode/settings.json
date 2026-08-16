@@ -1,10 +1,5 @@
 {
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ]
+  }
 }

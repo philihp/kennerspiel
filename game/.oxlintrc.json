@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": ["dist"],
+  "rules": {
+    "no-unused-vars": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/**/__tests__/**/*.test.ts", "src/testHelpers.ts"],
+      "rules": {
+        "no-unused-expressions": "off"
+      }
+    }
+  ]
+}

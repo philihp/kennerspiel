@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "nextjs", "jsx-a11y"],
+  "ignorePatterns": [".next", "next-env.d.ts", "src/supabase.types.ts"],
+  "rules": {
+    "no-unused-vars": "off",
+    "no-unused-expressions": ["warn", { "allowShortCircuit": true, "allowTernary": true }],
+    "typescript/no-non-null-asserted-optional-chain": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/**/__tests__/**/*.test.ts", "src/testHelpers.ts"],
+      "rules": {
+        "no-unused-expressions": "off"
+      }
+    }
+  ]
+}

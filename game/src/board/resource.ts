@@ -261,7 +261,7 @@ export const settlementCostOptions = curry(({ food, energy }: SettlementCost, pl
   lift(concatStr)(foodCostOptions(food, player), energyCostOptions(energy, player))
 )
 
-export const differentGoods = (cost: Cost) => Object.keys(cost).filter((k) => cost[k as keyof Cost] ?? 0 >= 1).length
+export const differentGoods = (cost: Cost) => Object.keys(cost).filter((k) => cost[k as keyof Cost] !== 0).length
 
 export const totalGoods = (cost: Cost) => Object.keys(cost).reduce((sum, k) => sum + (cost[k as keyof Cost] ?? 0), 0)
 

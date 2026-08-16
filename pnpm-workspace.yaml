@@ -19,7 +19,7 @@ sharedWorkspaceLockfile: false
 allowBuilds:
   esbuild: true
 # Supply-chain age gate disabled. pnpm 11 defaults minimumReleaseAge to 24h,
-# which fails CI whenever a dependency bump (e.g. a Renovate eslint/prettier
+# which fails CI whenever a dependency bump (e.g. a Renovate oxlint/prettier
 # update) lands within that window. 0 turns it off; the exclude list is then
 # moot and removed.
 minimumReleaseAge: 0

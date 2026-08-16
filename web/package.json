@@ -35,7 +35,7 @@
   "scripts": {
     "build": "pnpm --filter hathora-et-labora-game run build && next build",
     "dev": "next dev --turbopack",
-    "lint": "next lint",
+    "lint": "oxlint",
     "test": "node --import tsx/esm --test 'src/**/__tests__/**/*.test.ts'",
     "start": "next start",
     "hourly": "node src/hourly.js",
@@ -48,15 +48,14 @@
     "@types/ramda": "0.32.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
-    "eslint": "10.8.1",
-    "eslint-config-next": "16.3.1",
     "husky": "9.1.7",
     "lint-staged": "17.3.0",
     "lucide-react": "1.31.0",
+    "oxlint": "^1.78.0",
     "prettier": "3.9.6",
     "supabase": "2.114.0",
     "tsx": "^4.22.4",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2"
   },
   "overrides": {
     "@types/react": "19.2.18",
