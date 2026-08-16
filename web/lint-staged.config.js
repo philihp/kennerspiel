@@ -1,10 +1,10 @@
 import path from 'path'
 
-const buildEslintCommand = (filenames) =>
-  `eslint --fix ${filenames.map((f) => `"${path.relative(process.cwd(), f)}"`).join(' ')}`
+const buildOxlintCommand = (filenames) =>
+  `oxlint --fix ${filenames.map((f) => `"${path.relative(process.cwd(), f)}"`).join(' ')}`
 
 export default {
   '**/*.{json,html}': ['prettier --write'],
-  '**/*.{js,jsx}': ['prettier --write', buildEslintCommand],
-  '**/*.{ts,tsx}': ['prettier --write', buildEslintCommand],
+  '**/*.{js,jsx}': ['prettier --write', buildOxlintCommand],
+  '**/*.{ts,tsx}': ['prettier --write', buildOxlintCommand],
 }

@@ -64,8 +64,8 @@ const checkWorkContractPayment =
   (payment: Cost): StateReducer =>
   (state) => {
     if (state === undefined) return undefined
-    if (payment.whiskey ?? 0 > 1) return state
-    if (payment.wine ?? 0 > 1) return state
+    if (payment.whiskey) return state
+    if (payment.wine) return state
     if (costMoney(payment) < workContractCost(state)) return undefined
     return state
   }

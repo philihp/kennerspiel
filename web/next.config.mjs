@@ -12,11 +12,6 @@ const nextConfig = {
   outputFileTracingIncludes: {
     '/api/[transport]': ['docs/ora-et-labora-strategy-SKILL.md'],
   },
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: process.env.LINT_ON_BUILD === 'true',
-  },
   images: {
     remotePatterns: [
       {
