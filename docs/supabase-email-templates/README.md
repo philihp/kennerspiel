@@ -91,6 +91,38 @@ If this ever becomes tedious enough to automate, the hook is
 `mailer_subjects_*` and `mailer_templates_*_content` fields covering all
 thirteen templates. It needs a personal access token and the project ref.
 
+## When the emails do not arrive
+
+The template is not the first thing to look at. Supabase Auth records the
+request before the mail leaves the mailer, so a reset that never arrives still
+looks successful in the database and in the auth logs:
+
+- `POST /recover` returns 200 in the auth logs.
+- `auth.users.recovery_sent_at` is set for the account.
+
+Both of these show only that the mailer accepted the message. Delivery fails
+after that point, for one of two reasons.
+
+**The built-in email service.** With no custom SMTP configured, Supabase sends
+the mail itself. That service is for development: it delivers only to members of
+the Supabase organization, and it is rate limited to a few messages per hour.
+Every other user gets nothing.
+
+**An unauthenticated sender.** With custom SMTP configured, the `From` address
+decides whether the large mailbox providers accept the message. Gmail and Yahoo
+reject mail that has neither SPF nor DKIM. A sender at `@kennerspiel.com`
+therefore needs these DNS records on the domain:
+
+| Record | Purpose |
+| --- | --- |
+| `TXT` `v=spf1 ...` on `kennerspiel.com` | Permits the SMTP provider to send for the domain |
+| `TXT` or `CNAME` on `<selector>._domainkey.kennerspiel.com` | The provider's DKIM key |
+| `TXT` `v=DMARC1; ...` on `_dmarc.kennerspiel.com` | Tells the recipient what to do when the two above fail |
+
+The SMTP provider supplies the exact values. Without SPF and DKIM, the relay
+accepts the message, the auth logs show success, and the recipient never sees
+it.
+
 ## Local development
 
 `supabase/config.toml` is not wired to these files. The local stack captures mail
