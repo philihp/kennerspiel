@@ -24,18 +24,13 @@ export const ChangePassword = () => {
   return (
     <>
       <form>
-        <label htmlFor="password">Old Password:</label>
-        <br />
-        <input id="password" name="password" type="password" required />
-        <br />
-        <br />
         <label htmlFor="password">New Password:</label>
         <br />
-        <input id="password" name="password" type="password" required />
+        <input id="password" name="password" type="password" required autoComplete="new-password" />
         <br />
         <label htmlFor="confirm">Confirm Password:</label>
         <br />
-        <input id="confirm" name="confirm" type="password" required />
+        <input id="confirm" name="confirm" type="password" required autoComplete="new-password" />
         <br />
         <br />
         <button formAction={changePasswordAndReturn}>Change Password</button>
