@@ -19,8 +19,8 @@ importers:
         version: 0.32.0
     devDependencies:
       '@types/node':
-        specifier: 24.13.3
-        version: 24.13.3
+        specifier: 24.13.4
+        version: 24.13.4
       '@types/ramda':
         specifier: 0.32.0
         version: 0.32.0
@@ -189,8 +189,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@types/node@24.13.3':
-    resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
+  '@types/node@24.13.4':
+    resolution: {integrity: sha512-YJ7EqCstVTzIr0fMr7qul/977en+pQHrfmuKIo6Zr9i75Be21dr3MovcfvGtyvi2HAUrRerWps5sMO9I7WaxDw==}
 
   '@types/ramda@0.32.0':
     resolution: {integrity: sha512-eTRIFYUxjVvZimlPNpXzXc3j4tnSYc7lBsD7X3zwtRvJML3qXclM4+m8vvmAZAHhBASKPmZAp6qu2C/DwJpBGQ==}
@@ -431,7 +431,7 @@ snapshots:
   '@esbuild/win32-x64@0.28.2':
     optional: true
 
-  '@types/node@24.13.3':
+  '@types/node@24.13.4':
     dependencies:
       undici-types: 7.18.2
 
