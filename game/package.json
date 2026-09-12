@@ -45,7 +45,7 @@
   "devDependencies": {
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/recommended": "1.0.13",
-    "@types/node": "24.13.3",
+    "@types/node": "24.13.4",
     "@types/ramda": "0.32.0",
     "husky": "9.1.7",
     "lint-staged": "17.5.1",
