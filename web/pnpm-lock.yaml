@@ -2341,8 +2341,6 @@ snapshots:
       '@stdlib/string': 0.4.1
       '@stdlib/types': 0.5.1
       '@stdlib/utils': 0.4.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@supabase/auth-helpers-nextjs@0.15.0(@supabase/supabase-js@2.116.0)':
     dependencies:
