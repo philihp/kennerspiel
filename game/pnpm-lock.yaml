@@ -31,8 +31,8 @@ importers:
         specifier: 1.0.13
         version: 1.0.13
       '@types/node':
-        specifier: 24.13.4
-        version: 24.13.4
+        specifier: 24.13.6
+        version: 24.13.6
       '@types/ramda':
         specifier: 0.32.0
         version: 0.32.0
@@ -341,8 +341,8 @@ packages:
   '@tsconfig/recommended@1.0.13':
     resolution: {integrity: sha512-sySRuBfMKyKO/j2ZAhR8kSembhjuPEV4Ra3AHtmWLq51+iGaudr45crPSzNC5b7/Ctrh9dfUpBuTlYrH6rM58Q==}
 
-  '@types/node@24.13.4':
-    resolution: {integrity: sha512-YJ7EqCstVTzIr0fMr7qul/977en+pQHrfmuKIo6Zr9i75Be21dr3MovcfvGtyvi2HAUrRerWps5sMO9I7WaxDw==}
+  '@types/node@24.13.6':
+    resolution: {integrity: sha512-SGrw/h3KPFshy3OE6ZL53LMBG5vGQQ8/gIpiqz/kRZhPJ7HgwCEs8LBuNtWLa8dvGZVpSF7+Bf+c11HUrCb/yg==}
 
   '@types/ramda@0.32.0':
     resolution: {integrity: sha512-eTRIFYUxjVvZimlPNpXzXc3j4tnSYc7lBsD7X3zwtRvJML3qXclM4+m8vvmAZAHhBASKPmZAp6qu2C/DwJpBGQ==}
@@ -696,7 +696,7 @@ snapshots:
 
   '@tsconfig/recommended@1.0.13': {}
 
-  '@types/node@24.13.4':
+  '@types/node@24.13.6':
     dependencies:
       undici-types: 7.18.2
 
