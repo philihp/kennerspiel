@@ -1,5 +1,7 @@
 import { Tile } from 'hathora-et-labora-game'
+import { useInstanceContext } from '@/context/InstanceContext'
 import { IsoLandscape } from './iso/isoLandscape'
+import { GridLandscape } from './grid/gridLandscape'
 
 interface Props {
   landscape: Tile[][]
@@ -7,6 +9,7 @@ interface Props {
   active: boolean
 }
 
-export const PlayerLandscape = ({ landscape, offset, active }: Props) => (
-  <IsoLandscape landscape={landscape} offset={offset} active={active} />
-)
+export const PlayerLandscape = (props: Props) => {
+  const { flags } = useInstanceContext()
+  return flags?.isometric ? <IsoLandscape {...props} /> : <GridLandscape {...props} />
+}

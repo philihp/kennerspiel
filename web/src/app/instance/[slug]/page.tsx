@@ -3,7 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { InstanceContextProvider, useInstanceContext } from '@/context/InstanceContext'
 import { Board } from './board'
-import { irelandFlag } from '../../flags'
+import { irelandFlag, isometricFlag } from '../../flags'
 type InstanceParams = { params: Promise<{ slug: string }> }
 
 const InstancePage = async (props: InstanceParams) => {
@@ -25,11 +25,13 @@ const InstancePage = async (props: InstanceParams) => {
   const { entrant, ...instance } = data
 
   const ireland = await irelandFlag()
+  const isometric = await isometricFlag()
 
   return (
     <InstanceContextProvider
       flags={{
         ireland,
+        isometric,
       }}
       instance={instance}
       entrants={entrant}
