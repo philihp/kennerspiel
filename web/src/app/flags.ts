@@ -7,3 +7,11 @@ export const irelandFlag = flag({
     return false
   },
 })
+
+export const isometricFlag = flag({
+  key: 'isometric',
+  description: 'Show landscapes in isometric projection',
+  decide() {
+    return false
+  },
+})
