@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { PostgrestError } from '@supabase/supabase-js'
+import { isEmpty } from 'ramda'
 
 export const serverMove = async (
   instanceId: string,
@@ -13,18 +14,18 @@ export const serverMove = async (
   } = await supabase.auth.getUser()
   if (!user) return { error: null, commands: undefined }
 
-  const { data: entrant, error: checkError } = await supabase
+  // one profile can hold more than one seat in an instance, so do not expect a single row
+  const { data: seats, error: checkError } = await supabase
     .from('entrant')
     .select('color')
     .eq('profile_id', user.id)
     .eq('instance_id', instanceId)
-    .maybeSingle()
-  if (!entrant || checkError) {
+  if (checkError || isEmpty(seats ?? [])) {
     console.error(`ERROR: Checking instance ${instanceId} for entrant ${user.id}`, checkError)
     return { error: checkError, commands: undefined }
   }
 
-  // TODO: check that it is players turn from entrant.color, oh god does this mean playing the commands?
+  // TODO: check that it is players turn from one of seats[].color, oh god does this mean playing the commands?
 
   const { error: updateError } = await supabase
     .from('instance')

@@ -144,10 +144,10 @@ export const InstanceContextProvider = ({
   const move = async () => {
     setDebounced(true)
     const { error, commands: newCommands } = await serverMove(instance.id, [...commands, partial.join(' ')])
+    setDebounced(false)
     if (error) return console.error(error)
     setCommands(newCommands ?? commands)
     setPartial([])
-    setDebounced(false)
   }
 
   const undo =
