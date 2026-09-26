@@ -61,5 +61,5 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0"
   },
-  "packageManager": "pnpm@11.27.1"
+  "packageManager": "pnpm@11.28.0"
 }
