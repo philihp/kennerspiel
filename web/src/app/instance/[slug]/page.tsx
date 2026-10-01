@@ -1,45 +1,12 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
-import { InstanceContextProvider, useInstanceContext } from '@/context/InstanceContext'
-import { Board } from './board'
-import { irelandFlag, isometricFlag } from '../../flags'
+import { InstanceView } from './instanceView'
+
 type InstanceParams = { params: Promise<{ slug: string }> }
 
 const InstancePage = async (props: InstanceParams) => {
-  const params = await props.params
-
-  const { slug } = params
-
-  const supabase = await createClient()
-  const { data, error } = await supabase.from('instance').select('*, entrant(*)').eq('id', slug).limit(1).single()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (data === null) {
-    return <pre>{JSON.stringify(error, undefined, 2)}</pre>
-  }
-
-  // pull out entrants so nobody accidentally uses it
-  const { entrant, ...instance } = data
-
-  const ireland = await irelandFlag()
-  const isometric = await isometricFlag()
-
-  return (
-    <InstanceContextProvider
-      flags={{
-        ireland,
-        isometric,
-      }}
-      instance={instance}
-      entrants={entrant}
-      user={user}
-    >
-      <Board />
-    </InstanceContextProvider>
-  )
+  const { slug } = await props.params
+  return <InstanceView id={slug} isometric={false} />
 }
 
 export default InstancePage
