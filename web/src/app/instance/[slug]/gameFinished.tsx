@@ -8,6 +8,7 @@ import { UnbuiltBuildings } from '@/components/unbuiltBuildings'
 import { UnbuiltDistricts } from '@/components/unbuiltDistricts'
 import { UnbuiltPlots } from '@/components/unbuiltPlots'
 import { UnbuiltWonders } from '@/components/unbuiltWonders'
+import { Scoreboard } from '@/components/scoreboard'
 import { useInstanceContext } from '@/context/InstanceContext'
 import { Enums } from '@/supabase.types'
 import { GameState, Tableau } from 'hathora-et-labora-game'
@@ -73,6 +74,7 @@ export const GameFinished = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '200px 2fr' }}>
         <MoveList />
         <div>
+          <Scoreboard />
           <Actions />
           <Rondel />
           <UnbuiltBuildings />
