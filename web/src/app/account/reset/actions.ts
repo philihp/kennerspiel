@@ -15,7 +15,7 @@ const origin = async (): Promise<string> => {
   return `${proto}://${host}`
 }
 
-export const reset = async (formData: FormData, captchaToken: string) => {
+export const reset = async (formData: FormData, captchaToken?: string) => {
   const supabase = await createClient()
 
   const { error } = await supabase.auth.resetPasswordForEmail(`${formData.get('email')}`, {
