@@ -3,7 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { randomUUID } from 'crypto'
 
-export const login = async (formData: FormData, captchaToken: string) => {
+export const login = async (formData: FormData, captchaToken?: string) => {
   const supabase = await createClient()
   const email = formData.get('email') as string
   const password = formData.get('password') as string

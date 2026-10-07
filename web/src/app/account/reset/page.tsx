@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { Turnstile } from '@marsidev/react-turnstile'
+import { useRef, useState } from 'react'
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile'
+import { captchaToken, resetCaptcha } from '@/utils/captcha'
 
 import { reset } from './actions'
 
@@ -9,10 +10,13 @@ const ResetPage = () => {
   const [disabled, setDisabled] = useState(false)
   const [color, setColor] = useState('#000000')
   const [response, setResponse] = useState('')
-  const [captchaToken, setCaptchaToken] = useState<string>('')
+  const turnstile = useRef<TurnstileInstance>(undefined)
 
   const resetAndReturn = async (formData: FormData) => {
-    const error = await reset(formData, captchaToken)
+    setResponse('')
+    setDisabled(true)
+    const error = await reset(formData, await captchaToken(turnstile))
+    resetCaptcha(turnstile)
     if (error) {
       setDisabled(false)
       setResponse(error)
@@ -29,12 +33,7 @@ const ResetPage = () => {
   }
 
   return (
-    <form
-      onSubmit={() => {
-        setResponse('')
-        setDisabled(true)
-      }}
-    >
+    <form action={resetAndReturn}>
       <h1>Reset Password</h1>
       <p>Forgot your password? Let&apos;s verify your email to reset it.</p>
       <label htmlFor="email">Email:</label>
@@ -45,8 +44,8 @@ const ResetPage = () => {
         <>
           <br />
           <Turnstile
+            ref={turnstile}
             siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-            onSuccess={setCaptchaToken}
             options={{
               action: 'reset',
               theme: 'light',
@@ -56,7 +55,7 @@ const ResetPage = () => {
         </>
       )}
       <br />
-      <button className="primary" formAction={resetAndReturn} disabled={disabled}>
+      <button className="primary" type="submit" disabled={disabled}>
         Re-verify Email
       </button>
       {response && (

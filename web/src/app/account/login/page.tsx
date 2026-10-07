@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { redirect } from 'next/navigation'
-import { Turnstile } from '@marsidev/react-turnstile'
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile'
 
 import { login } from './actions'
 import { useSupabaseContext } from '@/context/SupabaseContext'
 import Link from 'next/link'
+import { captchaToken, resetCaptcha } from '@/utils/captcha'
 
 // Only relative paths on this site, to prevent open-redirect via ?next=.
 const safeNext = (raw: string | null): string | null => {
@@ -18,10 +19,12 @@ const safeNext = (raw: string | null): string | null => {
 const Login = () => {
   const { redirectTo } = useSupabaseContext()
   const [response, setResponse] = useState<string>('')
-  const [captchaToken, setCaptchaToken] = useState<string>('')
+  const turnstile = useRef<TurnstileInstance>(undefined)
 
   const handleLogin = async (formData: FormData) => {
-    const error = await login(formData, captchaToken)
+    setResponse('')
+    const error = await login(formData, await captchaToken(turnstile))
+    resetCaptcha(turnstile)
     if (error) {
       setResponse(error)
       return
@@ -37,7 +40,7 @@ const Login = () => {
         Reconnect to your account to resume gameplay from another device, or{' '}
         <Link href="/account/register">register a new account</Link>.
       </p>
-      <form onSubmit={() => setResponse('')}>
+      <form action={handleLogin}>
         <label htmlFor="email">Email:</label>
         <br />
         <input id="email" name="email" type="email" autoComplete="email" />
@@ -52,8 +55,8 @@ const Login = () => {
         {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
           <>
             <Turnstile
+              ref={turnstile}
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-              onSuccess={setCaptchaToken}
               options={{
                 action: 'login',
                 theme: 'light',
@@ -63,7 +66,7 @@ const Login = () => {
             <br />
           </>
         )}
-        <button className="primary" formAction={handleLogin}>
+        <button className="primary" type="submit">
           Login
         </button>
         {response && (

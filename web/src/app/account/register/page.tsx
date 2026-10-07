@@ -1,7 +1,8 @@
 'use client'
 
-import { ChangeEvent, useEffect, useState } from 'react'
-import { Turnstile } from '@marsidev/react-turnstile'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile'
+import { captchaToken, resetCaptcha } from '@/utils/captcha'
 
 import { emailUsed, register } from './actions'
 import { CheckCircle2, XCircle } from 'lucide-react'
@@ -14,7 +15,7 @@ const RegisterPage = () => {
   const [disabled, setDisabled] = useState(false)
   const [color, setColor] = useState('#000000')
   const [response, setResponse] = useState('')
-  const [captchaToken, setCaptchaToken] = useState<string>('')
+  const turnstile = useRef<TurnstileInstance>(undefined)
   const [email, setEmail] = useState<string>('')
   const [valid, setValid] = useState<undefined | boolean>(undefined)
 
@@ -38,7 +39,10 @@ const RegisterPage = () => {
   }
 
   const signupAndReturn = async (formData: FormData) => {
-    const error = await register(formData, captchaToken)
+    setResponse('')
+    setDisabled(true)
+    const error = await register(formData, await captchaToken(turnstile))
+    resetCaptcha(turnstile)
     if (error) {
       setDisabled(false)
       setResponse(error)
@@ -51,7 +55,7 @@ const RegisterPage = () => {
   }
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
     if (!e.target.value.match(mailformat)) {
       // if the email is not valid
       setValid(undefined)
@@ -63,12 +67,7 @@ const RegisterPage = () => {
   }
 
   return (
-    <form
-      onSubmit={() => {
-        setResponse('')
-        setDisabled(true)
-      }}
-    >
+    <form action={signupAndReturn}>
       <h1>Register</h1>
       <p>Create an account to create or join an instance. </p>
       <label htmlFor="email">Email:</label>
@@ -94,8 +93,8 @@ const RegisterPage = () => {
         <>
           <br />
           <Turnstile
+            ref={turnstile}
             siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-            onSuccess={setCaptchaToken}
             options={{
               action: 'register',
               theme: 'light',
@@ -105,7 +104,7 @@ const RegisterPage = () => {
         </>
       )}
       <br />
-      <button className="primary" formAction={signupAndReturn} disabled={disabled}>
+      <button className="primary" type="submit" disabled={disabled}>
         Register
       </button>
       {response && (
