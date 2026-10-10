@@ -63,8 +63,8 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       mcp-handler:
-        specifier: 2.2.0
-        version: 2.2.0(@modelcontextprotocol/server@2.3.1)(next@16.3.8(@types/node@25.9.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
+        specifier: 2.3.0
+        version: 2.3.0(@modelcontextprotocol/server@2.3.1)(next@16.3.8(@types/node@25.9.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
       next:
         specifier: 16.3.8
         version: 16.3.8(@types/node@25.9.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -1340,8 +1340,8 @@ packages:
       '@types/react':
         optional: true
 
-  mcp-handler@2.2.0:
-    resolution: {integrity: sha512-loJsIem4jM1jLUsI4x2errOHSzvU+Et6XV4Aqq1AEUkHOqridUoY4dLM02OlRfsku+OjtMlk+tHyYjpfO65X6g==}
+  mcp-handler@2.3.0:
+    resolution: {integrity: sha512-mvs+fJTLTa6kFv71CKPr+2ey+yXeuooM6WHz96pHhSvXe9m83qPizswU5NJ0yrUnJ2T+70VFPjsdstZtdB3evQ==}
     engines: {node: '>=20'}
     hasBin: true
     peerDependencies:
@@ -2701,7 +2701,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  mcp-handler@2.2.0(@modelcontextprotocol/server@2.3.1)(next@16.3.8(@types/node@25.9.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)):
+  mcp-handler@2.3.0(@modelcontextprotocol/server@2.3.1)(next@16.3.8(@types/node@25.9.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)):
     dependencies:
       '@modelcontextprotocol/server': 2.3.1
       chalk: 5.6.2
