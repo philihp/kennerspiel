@@ -51,8 +51,8 @@ importers:
         specifier: 4.3.1
         version: 4.3.1(next@16.3.8(@types/node@25.9.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       form-urlencoded:
-        specifier: 6.1.7
-        version: 6.1.7
+        specifier: 6.1.8
+        version: 6.1.8
       hathora-et-labora-game:
         specifier: workspace:*
         version: link:../game
@@ -1249,8 +1249,8 @@ packages:
       react-dom:
         optional: true
 
-  form-urlencoded@6.1.7:
-    resolution: {integrity: sha512-ciEL2sRI+hBwEwzIWofE7aHC778Ss1zK2/NK0Y7EYUzkPLU2ZXwddIT9t9Q6w0CM2xEHSJC92kY1SOh1oimlRA==}
+  form-urlencoded@6.1.8:
+    resolution: {integrity: sha512-UgIie6l4/p6GuB/hwqSBABOLpReDarT9jfyD22axw7I0kjAwNEX41+cJgJ8zG+6EKGMVtKl3mPKVRm/KFUh3Zg==}
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -2610,7 +2610,7 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  form-urlencoded@6.1.7: {}
+  form-urlencoded@6.1.8: {}
 
   fsevents@2.3.3:
     optional: true
