@@ -1,7 +1,7 @@
 import { control } from 'hathora-et-labora-game'
 import { RondelToken, Tableau, Tile } from 'hathora-et-labora-game/dist/types'
 import { take } from 'hathora-et-labora-game/dist/board/rondel'
-import { activePlayerColor, engineColorToEntrantColor, GameStatePlaying } from './engine'
+import { activePlayerColor, engineColorToEntrantColor, GameStatePlaying, pendingWorkContract } from './engine'
 
 const RONDEL_TOKENS: RondelToken[] = ['wood', 'clay', 'coin', 'joker', 'grain', 'peat', 'sheep', 'grape', 'stone']
 
@@ -58,6 +58,19 @@ const renderResources = (player: Tableau): Partial<Record<(typeof RESOURCE_KEYS)
     {} as Partial<Record<(typeof RESOURCE_KEYS)[number], number>>
   )
 
+export const renderPendingWorkContract = (state: GameStatePlaying) => {
+  const pending = pendingWorkContract(state)
+  if (pending === undefined) return undefined
+  const contractor = engineColorToEntrantColor(pending.contractor)
+  const owner = engineColorToEntrantColor(pending.owner)
+  return {
+    contractor,
+    owner,
+    building: pending.building,
+    note: `${owner} must choose WITH_LAYBROTHER or WITH_PRIOR for ${contractor}'s work contract on ${pending.building}. ${contractor} continues (USE ${pending.building}) after ${owner} answers.`,
+  }
+}
+
 export const renderSummary = (state: GameStatePlaying, commands: string[], myColor?: string) => {
   const controls = control(state, [])
   const active = engineColorToEntrantColor(activePlayerColor(state))
@@ -72,6 +85,7 @@ export const renderSummary = (state: GameStatePlaying, commands: string[], myCol
     my_turn: myColor !== undefined && myColor === active,
     main_action_used: state.frame.mainActionUsed,
     bonus_actions: state.frame.bonusActions,
+    pending_work_contract: renderPendingWorkContract(state),
     rondel: {
       arm: state.rondel.pointingBefore,
       tokens: RONDEL_TOKENS.reduce(

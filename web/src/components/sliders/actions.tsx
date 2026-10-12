@@ -16,10 +16,15 @@ import { ActionConvert } from './actionConvert'
 import { ActionSettle } from './actionSettle'
 import { ActionCommit } from './actionCommit'
 import { ModalPriorChoice } from './modalPriorChoice'
+import { PlayerDot } from '../playerDot'
+import { buildingName } from '../buildingName'
+import { pendingWorkContract } from '@/mcp/engine'
 
 export const Actions = () => {
   const { controls, state, partial, setPartial, move, active } = useInstanceContext()
   const completion = controls?.completion ?? []
+
+  const pending = pendingWorkContract(state)
 
   const cancelDisabled = !active || controls?.partial?.length === 0
 
@@ -86,6 +91,12 @@ export const Actions = () => {
       <div className={classes.container}>
         {completion?.includes('WITH_LAYBROTHER') === true && (
           <>
+            {pending !== undefined && !active && (
+              <div>
+                Waiting for <PlayerDot color={pending.owner} /> to choose a lay brother or prior for the work contract
+                on {buildingName(pending.building) ?? pending.building}.
+              </div>
+            )}
             <br />
             <ActionWithLaybrother />
             <ActionWithPrior />
