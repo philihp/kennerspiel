@@ -1,7 +1,7 @@
 import { control } from 'hathora-et-labora-game'
 import { GameStatusEnum } from 'hathora-et-labora-game/dist/types'
 import { activePlayerColor, applyCommand, asPlaying, engineColorToEntrantColor, replay, tokenize } from '../engine'
-import { renderSummary } from '../render'
+import { renderPendingWorkContract, renderSummary } from '../render'
 import { errorResult, jsonResult, ToolResult } from '../content'
 import { fetchInstance } from './fetchInstance'
 
@@ -73,6 +73,7 @@ export const makeMove = async ({
   return jsonResult({
     ok: true,
     played: tokens.join(' '),
+    note: renderPendingWorkContract(updatedState)?.note,
     state: renderSummary(updatedState, updated.commands, activeSeat.color),
   })
 }

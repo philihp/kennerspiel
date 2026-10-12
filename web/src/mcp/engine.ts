@@ -1,5 +1,12 @@
 import { GameState, initialState, reducer, Tableau } from 'hathora-et-labora-game'
-import { Frame, GameCommandConfigParams, GameStatusEnum, PlayerColor, Rondel } from 'hathora-et-labora-game/dist/types'
+import {
+  BuildingEnum,
+  Frame,
+  GameCommandConfigParams,
+  GameStatusEnum,
+  PlayerColor,
+  Rondel,
+} from 'hathora-et-labora-game/dist/types'
 import { match } from 'ts-pattern'
 import { Enums } from '@/supabase.types'
 
@@ -51,3 +58,22 @@ export const engineColorToEntrantColor = (c?: PlayerColor): Enums<'color'> | und
     .with(PlayerColor.White, () => 'white')
     .with(undefined, () => undefined)
     .exhaustive()
+
+export type PendingWorkContract = {
+  contractor: PlayerColor
+  owner: PlayerColor
+  building: BuildingEnum
+}
+
+// after a WORK_CONTRACT on an owner holding both a prior and a lay brother, the
+// engine hands the active seat to the owner to send WITH_PRIOR/WITH_LAYBROTHER,
+// while the contractor stays the current player and waits
+export const pendingWorkContract = (state?: GameStatePlaying): PendingWorkContract | undefined => {
+  const frame = state?.frame
+  if (frame === undefined || frame.activePlayerIndex === frame.currentPlayerIndex) return undefined
+  const contractor = state?.players?.[frame.currentPlayerIndex]?.color
+  const owner = state?.players?.[frame.activePlayerIndex]?.color
+  const [building] = frame.usableBuildings ?? []
+  if (contractor === undefined || owner === undefined || building === undefined) return undefined
+  return { contractor, owner, building }
+}
