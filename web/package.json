@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@marsidev/react-turnstile": "1.6.1",
+    "@marsidev/react-turnstile": "1.6.2",
     "@modelcontextprotocol/server": "^2.0.0",
     "@next/third-parties": "16.4.0",
     "@philihp/prettier-config": "1.0.0",
