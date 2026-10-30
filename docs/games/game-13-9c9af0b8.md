@@ -53,3 +53,14 @@ Frame: peat token 0 (red cut), clay 2, wood 2. Prior stuck on G06 until both LBs
 Candidates: FELL_TREES 2 wood (clergy-free, no recall progress) vs `USE LG1` 2 clay (LB placed, F04's clay done).
 Chose `USE LG1` → clay 2; free action `BUY_PLOT 0 COAST` (3¢) → water ×2 (D3 each) + 2 coast. Left 1¢.
 Plan: R2 FELL_TREES at wood 3 → F04 (3w+2c) buildable R3 on hillside (3,-1) or coast; LB2 to Office/Farmyard for recall by R3–4.
+
+### R2 red (action 1)
+`BUILD G07 (0,0)` + prior `USE G07 PtPtPt` → coal 4, 2¢. Red has a dense fuel bank; expect settle-fuel or G06-less coin via Bakery.
+
+### R2 blue
+Frame: coin 3, 0¢, plot now 4¢. `USE LB3` (Office) → 3¢ → `BUY_DISTRICT -1 HILLS` (3¢). Castle can sit on a hillside, so
+the hills district substitutes for the 4¢ mountain plot for now. LB1 placed; LB2 next round → recall r4.
+
+### R2 green
+`FELL_TREES 2 0` → wood 3. F04 cost (3w+2c) complete. R3: `BUILD F04` on hillside (3,-1) (keeps (4,-1) for a later anchor).
+Prior still on G06 — no build bonus; fine, no grain to flip yet anyway.
