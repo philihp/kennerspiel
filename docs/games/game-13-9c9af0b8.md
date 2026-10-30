@@ -87,3 +87,18 @@ Keep priors off buildings red would love to borrow; prefer LBs on engines once r
 ### R4 green (action 1 of 2)
 `USE LG2 Gn` → grain 5 (LB2 out; all clergy placed → recall r5). Action 2: FELL_TREES if wood ≥3 else CUT_PEAT —
 fuel for F05 baking and settlement A (phase A arrives after the beam passes pile A; watch `upcoming_turns`).
+
+### R4 red
+`USE G01` → free `USE G06 CoCoCo` on GREEN's Fuel Merchant (prior-occupied) → 10¢; `BUY_DISTRICT 2 PLAINS`. Red: nickel+3¢, 4 rows.
+**Lesson (promote to G01 dossier / V.3):** in 3–4p with a Priory on the table, a prior parked on a no-input or sellable
+engine (G06, F11, G12 with staged inputs) is a free menu item for the Priory owner every cycle. Park the prior on
+input-gated buildings (F04 with no spare grain) or keep it home for build bonuses.
+
+### R4 blue
+`USE G12 ShShShShPtPt` (LB, not prior) → stone 6. Skipped phase-A settle prep: blue's only decent pocket is the ☩ slot (3,1).
+R5: Office → 3–4¢; settle A only if a cheap positive pocket exists, else bank for land.
+
+### R4 green (action 2)
+`FELL_TREES 1 0` → wood 3 (energy 3 + G02 material). Green: 1¢, wood 3, grain 5, sheep 1. Recall at r5.
+R5 (one action): `USE F04` with LB → 5 flour + 5 straw; settle A with flour as food (Market Town 7f/0e at coast (-1,0):
+D2 + water 3 = 5 + E2; or Farming Village 3f/3e keeping flour). Decide at the settle turn via get_legal_moves.
