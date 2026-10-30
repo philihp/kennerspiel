@@ -102,3 +102,16 @@ R5: Office → 3–4¢; settle A only if a cheap positive pocket exists, else ba
 `FELL_TREES 1 0` → wood 3 (energy 3 + G02 material). Green: 1¢, wood 3, grain 5, sheep 1. Recall at r5.
 R5 (one action): `USE F04` with LB → 5 flour + 5 straw; settle A with flour as food (Market Town 7f/0e at coast (-1,0):
 D2 + water 3 = 5 + E2; or Farming Village 3f/3e keeping flour). Decide at the settle turn via get_legal_moves.
+
+### R5 red (action 1)
+`USE LR1` → clay 7. Red is clay-heavy: F05 (2c+1sw) or the A-phase G18 Workshop are both live for red.
+
+### R5 blue
+`USE LB3` → 4¢ → `BUY_DISTRICT 2 PLAINS` (4¢; next district 5¢). Blue now 3 rows; prior home, 2 LBs out.
+No settle A possible (0 food). R6 plan: FELL_TREES for a 4th good, R7 `BUILD F08` + prior `USE F08` (4 goods → 7¢ + bread).
+
+### R5 green
+`BUILD G02 3 1` (☩ slot, E+4 → 19) + prior `USE G02 PnGnSh Gn` → grain 10. Choice of output weighed:
+grain (settle A Market Town now, 7 food) vs clay (locks F05 next round) vs peat (12 energy). Took grain: settle slot A
+is worth ~7 pts now and the slot does not come back; F05 clay comes from the Mound at r6 (clay token 2).
+Settle A plan: `SETTLE S03 -1 0` (Market Town, 7 grain, 0 energy): D2 + water 3 = 5 + E2.
