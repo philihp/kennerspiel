@@ -76,3 +76,14 @@ Action 2 plan: `CUT_PEAT` (peat 3 if nobody resets it) → 6 energy. R4 with pri
 `BUILD F04 3 -1` (hillside). Economic 5→15. Green: 1¢, 1 sheep, LB2 home, prior on G06, LB1 on Clay Mound.
 Next: LB2 → Farmyard grain (token 4→5 at r4) so all clergy are out → recall r5 → prior flips grain on F04.
 F05 Bakery (2c+1sw) is the next build; clay from the Mound after recall.
+
+### R3 red
+`BUILD G01 3 1` — Priory on red's cloister slot. Threat: red can free-USE any prior-occupied building (blue's G12, green's G06).
+Keep priors off buildings red would love to borrow; prefer LBs on engines once recall has happened.
+
+### R3 blue (action 2)
+`CUT_PEAT 0 0` → peat 3. Recall fired at r4 start: all clergy home. R4 plan: prior `USE G12 ShShShShPtPt` → +4 stone (6 total).
+
+### R4 green (action 1 of 2)
+`USE LG2 Gn` → grain 5 (LB2 out; all clergy placed → recall r5). Action 2: FELL_TREES if wood ≥3 else CUT_PEAT —
+fuel for F05 baking and settlement A (phase A arrives after the beam passes pile A; watch `upcoming_turns`).
