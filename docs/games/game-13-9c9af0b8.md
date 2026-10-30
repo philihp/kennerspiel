@@ -40,3 +40,16 @@ _(collected during play; promoted to Part II/V/VI at checkpoints and game end)_
 
 Instance 484e0497 was never started; Philihp opened a new lobby. Claude seated as blue, green, white.
 Waiting on START (mode/variant chosen on the website).
+
+### R1 red
+`CUT_PEAT 0 0` → peat 3. No build. Red is fuel-banking; G06 gone so likely G07 or a settle-fuel plan.
+
+### R1 blue
+Frame: G12 still in display, prior home, food 4 / energy 2. `BUILD G12 (3,0)` + prior `USE G12 ShGnPnPt` → stone 2, E+6.
+Spent the only penny: mountain plot (3¢) must wait for a Cloister Office harvest (coin token 2→3 at r2). Kept (3,1) open for ☩.
+
+### R1 green (action 2 of 2)
+Frame: peat token 0 (red cut), clay 2, wood 2. Prior stuck on G06 until both LBs are placed → recall needs LB placements.
+Candidates: FELL_TREES 2 wood (clergy-free, no recall progress) vs `USE LG1` 2 clay (LB placed, F04's clay done).
+Chose `USE LG1` → clay 2; free action `BUY_PLOT 0 COAST` (3¢) → water ×2 (D3 each) + 2 coast. Left 1¢.
+Plan: R2 FELL_TREES at wood 3 → F04 (3w+2c) buildable R3 on hillside (3,-1) or coast; LB2 to Office/Farmyard for recall by R3–4.
