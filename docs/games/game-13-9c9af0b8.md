@@ -64,3 +64,15 @@ the hills district substitutes for the 4¢ mountain plot for now. LB1 placed; LB
 ### R2 green
 `FELL_TREES 2 0` → wood 3. F04 cost (3w+2c) complete. R3: `BUILD F04` on hillside (3,-1) (keeps (4,-1) for a later anchor).
 Prior still on G06 — no build bonus; fine, no grain to flip yet anyway.
+
+### R2 red (action 2)
+`USE LR1 Jo` → clay 3 via joker. Red: clay 3, wood 1, coal 4, 2¢ — F04 was within one fell of red's reach.
+
+### R3 blue (action 1 of 2; start player)
+Frame: sheep 4, peat 3, all three clergy out after this → recall r4. `USE LB2 Sh` → sheep 4 (8 food).
+Action 2 plan: `CUT_PEAT` (peat 3 if nobody resets it) → 6 energy. R4 with prior home: `USE G12` 4 sheep + 2 peat → +4 stone = 6.
+
+### R3 green
+`BUILD F04 3 -1` (hillside). Economic 5→15. Green: 1¢, 1 sheep, LB2 home, prior on G06, LB1 on Clay Mound.
+Next: LB2 → Farmyard grain (token 4→5 at r4) so all clergy are out → recall r5 → prior flips grain on F04.
+F05 Bakery (2c+1sw) is the next build; clay from the Mound after recall.
