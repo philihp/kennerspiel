@@ -338,3 +338,26 @@ red (red start player). Green's next: F21 (grapes→wine) needs F14 grapes first
 `USE F14 Jo`? = 6 grapes), then F24 at (3,2) ☩ (cost 5 clay? check dossier) — green has 4 clay.
 Blue's next: G18 with 6 clay + energy (1 wood, 0 peat) → needs fuel: CUT_PEAT (peat 2) or buy coal.
 Blue stone: 2 → G22 Quarry needs a mountain plot (4¢ — blue has 4¢).
+
+## Round 11 — blue, green (moves 125–131)
+
+**Red R11 a1 (observed):** `CUT_PEAT 0 1 Jo` → 7 peat (joker 6 on the moor). Red: 7 peat, 6 flour,
+3¢, 3 meat. Red will WC green's F05 (1¢) and bake 6 bread with 3 peat — expect it at red's a2.
+Red's clergy: only LB2 home. Note: CUT_PEAT accepts a trailing `Jo`.
+
+**Blue:** `BUY_PLOT -1 COAST` (4¢ → 0¢) then `BUILD G26 -1 -1` Shipyard (4 clay + 1 stone), no bonus
+(needs 2 wood; blue has 1). Econ 18 → 33, total 37 → **52**. Uncontested: neither opponent has an
+empty coast tile. Placed in the corner so (-1,0) stays a pocket: water 3 + F11 7 − G26 2 = 8 + own D.
+Blue: 0¢, 2 clay, 1 wood, 3 sheep, 1 stone, ceramic, wine; all clergy home.
+R12 blue is start player (2 actions): a1 `FELL_TREES` (wood 4) → 2 wood for G26 + G18 fuel;
+a2 `USE G26 WoWo` → nickel + ornament (+6), or `USE G12` for F24 stone. F24 race: blue needs
+5 clay + 3 stone (has 2/1); green needs 3 stone (0); red 1 clay. Nobody is close — stone token
+enters R13. Blue's path: G12 (sheep + wood) 2 stone/fire, Clay Mound when the token regrows.
+
+**Green:** `USE F14` → 4 grapes (grape token 4, joker 0) with LB2; prior home. Green: 2 peat, 1¢,
+4 clay, 1 grain, 4 grapes. Next: F21 Winery (2c + 2 straw) needs 2 grain → Farmyard (grain 2 now,
+growing) then `BUILD F21` + prior → 4 wine. F21 also raises the WC fee to 2¢ — red's F05 rental
+gets pricier. F24 for green: 5 clay + 3 stone — no stone source; G22 needs a mountain plot (5¢)
++ 5¢ build. Realistic green chain: F21 wine → sell @7¢ or hold for a rented F24 if blue builds it.
+
+Scores: green 59 / blue 52 / red 39.
