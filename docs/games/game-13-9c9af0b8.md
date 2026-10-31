@@ -460,3 +460,23 @@ F21 spot: (1,0) touches F05 (not a settlement) — or (1,2)/(2,2)/(3,2)… F21 D
 → R15 a1: F21 at (1,0) (D5 touches F05 only) OR fell (1,1) first and build F21 there next round
 (touches SG5 → +5). The fell is clergy-free, so: R15 `FELL_TREES 1 1` AND… one action only. Decide
 at the turn: wine now vs +5 later.
+
+## Round 15 — blue a1, green (moves 167–173)
+
+**Red settle C (observed):** `SETTLE SR6 4 3 MtCoCo` — Hamlet on the hill beside F17: 4 + 7 = 11,
+E3. Red 74 (settlements 6/17/11, econ 40). Red: 8 sheep, 2 meat, 4 bread, 5 coal, 2 grape, 1¢.
+
+**Blue a1 (start player, full recall):** `USE F11` (LB1) → ceramic + wine + wood + 1¢. Goods 7,
+total 72. Blue: 1¢, 1 clay, 3 wood, 1 stone, 2 ceramic, 1 wine; LB2 + prior home.
+Blue a2 plan (end of R15): `USE G26 WoWo` (LB2) → nickel + ornament (+6). Prior stays home.
+C-tier read: F30 Town Estate (2st+2sw, ceramic → 12¢/turn) is blue's liquidity card — needs 1 more
+stone + straw (no grain). F27 Palace 25¢: out of reach. G28 Castle 6w+5st: out of reach.
+F32 Calefactory (1 stone, ☩): only ☩-adjacent slot is (4,2) — the F24 pocket; skip.
+
+**Green:** `BUILD F21 1 0` (2 clay + 2 straw auto-flipped from grain) → econ 35; `WITH_PRIOR` →
+`USE F21 GpGpGpWn` → 3 grapes → wine, 1 wine sold for 7¢. Green: 2 wine, 13¢, 5 peat, 4 grain,
+1 clay. Total ~85+. **WC fee is now 2¢ for everyone.** F21 at (1,0) touches F05 and sets up (1,1)
+(forest → fell → pocket touching SG5 5 + F21 5 + (2,1) Farmyard).
+R16 green (start player, 2 actions): `FELL_TREES 1 1` (wood 4, clergy-free) + `USE G06 PtPtPtPtPt`
+→ 10¢ (23¢ → F27 Palace at 25¢ is suddenly plausible by R17–18; Palace = D8 hillside at (4,2) +
+E25). Alternatively F20 Inn (2w+2sw, D6) at (1,1) after felling → sells food/wine for coins.
