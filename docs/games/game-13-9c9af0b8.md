@@ -421,3 +421,21 @@ R14 green: `WORK_CONTRACT G01 Pn` → `USE G01` → `USE G22` (prior-occupied, s
 then settle C Artist's Colony at (0,1). R15: `BUILD F17 3 2` (2st + straw) + prior → books — if red
 hasn't taken F17 by then. Fallback for the F17 slot: F20 Inn / F21 Winery.
 Rejected: WC G01 now (stone before energy = no settle), Farmyard grain (no energy either).
+
+## Round 14 — blue, green (moves 153–160)
+
+**Red R14 a1 (observed):** `BUILD F17 3 3` (2 stone + straw) beside SR5 → settlement 10 → 17, econ 37.
+Red 60. Red: 1¢, 1 stone, 4 bread, 2 grape, 7 coal, 3 meat. F17 is gone (green's Library plan dead).
+
+**Blue:** `BUILD F24 3 2` (5 clay + 3 stone) → econ 33 → 45, total **64** (leads). `WITH_PRIOR` →
+bare `USE F24` (barren — engine allows it) to park the prior: all three clergy out → full recall at
+R15 start, and nobody can rent the Church (red has 4 bread but no wine; green has neither).
+Blue: 1 clay, 3 wood, 1 stone, ceramic, wine. R15 blue is start player with 2 actions and C-tier
+intros (F27 Palace, G28 Castle, F29, F30, F32, F33). Blue's G28 Castle: 6 wood + 5 stone — far.
+F30 (ceramic → 12¢)? check dossier. Settle C (now, after red's a2): blue has wine (1 food) + wood →
+Shanty Town SB1 at (4,2): own −3 + F24 9 + Office = ? — drill it; E0 but points now.
+
+**Green:** `USE LG2 Gn` → 6 grain (prior; grain token 5+1). All clergy out → recall R15.
+Green: 6 peat, 11¢, 3 clay, 6 grain, 3 grapes. Settle C: Artist's Colony SG5 at (0,1) → 5 + SG4 6 +
+F05 5 = 16, plus SG4 +5 → ~+21 for 5 food + 1 energy (peat). R15 green: `BUILD F21` (2 clay + 2 straw)
++ prior → 3 wine, or `USE G06 PtPtPtPtPt` → 10¢ again. F21 also raises the WC fee to 2¢.
