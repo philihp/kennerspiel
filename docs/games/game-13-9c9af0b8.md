@@ -251,3 +251,25 @@ R9 green plan (after blue's a1, before red): prior home → `BUILD F05 3 2`?? F0
 for ☩. F05 at (2,2) or (1,2). But if red builds F05 at its a2 now (5 clay + 6 straw in hand), green
 switches to `BUILD G16 3 2` (3c+1sw, ☩, D5) + prior bonus → 1 of each basic good (diversity for G02
 and the next settle), keeping 3 clay toward G18 later. Watch for red's F05 before deciding.
+
+## Round 9 — blue a1, green (moves 96–104)
+
+**Red R8 a2 (observed):** `BUILD G19 3 0` + prior `USE G19 ShShShShSwSwSwSw` → 4 meat (20 food).
+Red: 1¢, 3 clay, 3 wood, 6 flour, 2 grape, 2 straw, 4 meat; econ 22 → 23 total. Red did NOT take F05.
+Grape token entered the wheel at R9 (value 2).
+
+**Blue a1 (start player):** `BUILD F11 -1 1` (1w+1st) → `WITH_PRIOR` → `USE F11` → ceramic + wine +
+wood + 1¢. Blue: 4¢, 5 wood, 4 sheep, 2 stone, ceramic, bread, wine; goods 5, econ 12 → 17.
+Pocket (-1,2): water 3 + F11 7 = 10 for settle B (end of R10). Phantom bonus `USE` lingered; COMMIT fine.
+Blue a2 (end of R9, after red): `BUILD G18 3 1` (3w, ☩ beside Office) — no bonus (prior on F11),
+but it banks econ and is the ceramic engine once clay/energy exist; OR `BUILD F17 3 1` (2st+1sw) —
+no straw. G18 it is, unless red's move changes the display.
+
+**Green:** `BUILD F05 0 0` (2 clay + grain→straw), no prior bonus (0 flour — the prior stays home).
+**Settlement scoring is live:** SG3 at (-1,0) went 5 → 10 the moment F05 (D5) landed beside it.
+Green 38 (goods 0 / econ 28 / settle 10). F05 denied to red's 6 flour: red must now rent it (1¢ to
+green, green's clergy seated) or route bread elsewhere. Green: 4¢, 4 clay, all clergy home.
+Next green (R10): `USE LG2 Gn` (grain 6) → F04 flour → bake; or `BUILD G16 3 2` (3c+1sw) needs straw
+→ needs grain first. Farmyard first.
+
+Scores: green 38 / red 23 / blue 17. Settle B: red settles first (R10 end), then blue, then green.
