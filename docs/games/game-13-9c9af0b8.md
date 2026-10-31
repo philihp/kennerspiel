@@ -553,3 +553,24 @@ opponent engine that is *occupied* — the opposite of a work contract.
 R18 green (2nd): LB on F21 (grapes 0 — none) / Farmyard grain 4 / `CUT_PEAT`? no moors left.
 Settle D arrives end of R19: green's SG6 Hamlet (5 food, 6 energy) / SG2 Farming Village — needs
 energy: buy G07-like fuel via G02 (`USE G02 ClGnPn Pt`)? Plan R18: `USE G02 <3 goods> Pt` → 6 peat.
+
+## Round 17 a2 → Round 18 (moves 203–209)
+
+**Red R17 a2 (observed):** `WORK_CONTRACT G06 Wn` (green's LB1 seated) → `USE G06 CoCoCo` → 10¢ →
+`BUY_PLOT 2 COAST` (rows 2–3). Red: 6¢, 8 wood, 6 clay, 1 stone, 8 sheep, 4 bread, 1 wine, 2 coal.
+Red skipped the stone — Castle still ≥2 actions away. Red's coast opens F33 Shipping Company
+(3w+3c, E8) — red can afford it now.
+
+**Blue a1 (start player, full recall):** bare `USE F24` (LB1) — the Church was empty again after
+recall and red moves before blue's a2 holding 4 bread + 1 wine + 6¢ (a 2¢ rental = 8 pts and a block
+on blue's own reliquary). Blue a2: `USE F11` (LB2) → wine etc. Prior stays home.
+Blue reliquary now waits for the R20 recall (prior `USE F24 BrWn`). Rule of thumb for the skill:
+**own-F24 with an unspent opponent bread+wine pair ⇒ the first action after every recall is the
+Church park.** Blue: 7¢, 2 wood, 5 stone, 2 ceramic, bread. 73.
+
+**Green:** `USE G02 PnClWo Pt` (LB2) → 6 peat. All clergy out → recall R19. Green: 5¢(Ni), 4 grain,
+ceramic, wine, 6 peat. 114.
+Settle D (end of R19, order red → blue → green): Hamlet SG6 (5 food + 6 energy) at (3,2): own 4 +
+F27 8 + G02 (D?) → drill. Food: 4 grain + wine; energy: 3 peat. Leaves 3 peat for G06 later.
+R19 green (start player, 2 actions): a1 Farmyard `USE LG2 Gn` (grain 5+) for food/straw; a2
+`FELL_TREES 1 1` (wood 4) → opens (1,1) pocket + 4 wood toward F20 Inn (2w+2sw) at (1,1) later.
