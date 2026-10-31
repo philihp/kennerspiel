@@ -157,3 +157,23 @@ red had 6 wood + an empty hill; claiming it gates red out of F21 wine / F24. Pri
 keeps borrowing it via Priory — accepted cost; it is not sellable output).
 Next green: `USE LG1` for 2 clay (clay token 2) → F05 Bakery (2c + straw from grain) R7/R8;
 LB on F14 once the joker regrows (F14 reads the joker until the grape indicator arrives r8).
+
+## Round 6 a2 → Round 7 green a1 (moves 69–74)
+
+**Red R6 (observed):** `USE LR2 Sh` → 5 sheep (red: 1¢, 6 clay, 6 wood, 5 sheep, grape). All red
+clergy out → engine returned them at the start of R7. Same for blue.
+
+**Blue a2:** `BUILD F08 2 2` (2 stone → 4 left), economic 11. Placed at (2,2) not (3,1): keeps the
+cloister slot (3,1) beside the Office open for F17 ☩, and (3,2) becomes a pocket touching F08 (D8)
+and a future F17 (D7). Engine quirk: all three clergy came home at the R7 round start without a
+placement being needed — recall is automatic when all are out at round start.
+Blue R7 plan: prior `USE F08 PtClStSh` → 7¢ + bread (red moves first and holds 1¢ + 4 goods; if red
+WCs F08, blue answers WITH_LAYBROTHER and pivots to Clay Mound / stone).
+
+**Green a1 (start player, 2 actions):** `CUT_PEAT 0 0` → 5 peat (peat token was 5, now 0).
+**Engine quirk: CUT_PEAT did NOT place a clergy** — both LBs still home after it. Treat FELL_TREES /
+CUT_PEAT as clergy-free main actions in this engine (verify FELL_TREES too).
+Plan a2 (end of R7): `USE G06 PtPtPtPtPt` → 10¢ (5 peat = 10 energy ≥ 9) → buy a plains district
+(row 2, 5¢) for ☩ growth below G02, and keep ~5¢ toward a plot / F05 clay next round.
+Risk: red WCs G06 with its 6 wood for 8¢ first; low odds (net +1¢ for red after the fee).
+Rejected: `USE LG1` 3 clay → F05 at a2 with no bonus (prior stuck on G02 until green's own recall).
