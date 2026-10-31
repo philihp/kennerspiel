@@ -201,3 +201,41 @@ needs F04 flour (3 grain). Alternative green ☩ target: F17 Library (2st+1sw) �
 
 Scores after R7: green 33 / red 15 / blue 11. Red is behind on the board but holds the richest
 bag (6 grain, 5 clay, 5 wood, 4 sheep, 2 grape) and a Priory that keeps milking green's G02.
+
+## Round 8 — red a1, blue, green (moves 85–90) + ROUND-8 CHECKPOINT
+
+**Red a1 (observed):** `WORK_CONTRACT F04 Pn` → `USE F04 GnGnGnGnGnGn` → 6 flour + 6 straw for 1¢.
+The engine auto-seated green's LB2 on F04 (no prompt — green had only LBs home). Red: 0¢, 5 clay,
+5 wood, 4 sheep, 6 flour, 6 straw, 2 grape. Red's a2 (end of R8) is almost certainly
+`BUILD F05` + prior bake → ~6 bread. F05 is unique: green's own Bakery is gone if so.
+
+**Blue:** `FELL_TREES 1 0` → 5 wood (wood token was 5; clergy-free). Blue: 3¢, 5 wood, 4 sheep,
+3 stone, bread; LB2 + prior home. R9 blue is start player (2 actions): a1 `BUILD F11 -1 1` (1w+1st)
++ prior `USE F11` → ceramic + wine + wood + coin; a2 `BUILD G18` (3w) at (3,1)?? — no, (3,1) is the
+☩ slot and G18 IS ☩ → yes G18 at (3,1) beside the Office. Or hold G18 until clay+energy exist.
+
+**Green:** all clergy out, BUILD not even offered (nothing affordable). `WORK_CONTRACT G01 Pn` (1¢ to
+red) → pending red's WITH_LAYBROTHER / WITH_PRIOR → then `USE G01` → `USE G02 <3 goods> Cl` → 6 clay.
+Side effect: red's clergy sits on G01 for the cycle, closing the Priory borrow loop. Fee gives red
+1¢ (red was at 0) — that re-arms a red WC next round; accepted.
+
+### Round-8 win-condition audit
+
+| | green (reliquary + cluster) | blue (stone / settlements) | red (Philihp) |
+|---|---|---|---|
+| F04 owned / contracted | ✓ owned (fired once — by red) | ✗ | ✓ rents it |
+| Cluster beside high-D anchor | ✗ (SG3 by water only; F11 slot kept) | ✗ (no settlement; F08 D8 placed) | ✗ (SR2 alone, value 1) |
+| Stone bank or chain online | ◐ F04+F14 built, F05 at risk to red | ◐ 3 stone, G12 owned | ◐ flour 6, F05 next |
+| Columns (goods/econ/settle) | 2 / 24 / 5 = 31 | 0 / 11 / 0 = 11 | 0 / 14 / 1 = 15 |
+
+Green: one hard "no". Chain pivot if red takes F05: green's bread = WC red's F05 (pre-stage flour via
+F04 + fuel), and lean harder on the ☩ cluster at (3,2)/(2,2)/(4,2) — G16 (3c+1sw) is affordable
+after the 6-clay haul and gives diversity for G02; F17 needs stone green does not have.
+Blue: two "no"s → pivot INTO settlements now: F11 at (-1,1) makes (-1,2) a 10-pocket (water 3 +
+F11 7); (3,2) is an 8+ pocket beside F08. Settle B food: 4 sheep (8) + bread.
+Red: strongest bag at the table, weakest board; the Priory/WC loop is red's engine. Blocking G01
+and firing F04/F05 before red can rent them is how blue/green stay ahead.
+
+Lessons injected into the strategy skill this checkpoint: G01 parking cost + WC-the-Priory counter,
+G06 tiers, F04 as 1¢ rental, start-player a2 build timing, grammar (`JoSh`, `Sn`, `SGn` ids),
+quirks 18 (auto LB response) and 19 (round-start full recall).

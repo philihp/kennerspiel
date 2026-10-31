@@ -166,6 +166,8 @@ Count: 4p star (many priors on board); absent in 2p.
 Memories:
 - (g8, open discrepancy) A bare `USE G01` once seated the prior and granted NO bonus despite prior-occupied targets existing — verify the precondition before relying on it.
 - Appendix: build-bonus on G01 is a no-op turn 1 (your own prior is still home; no prior-occupied targets) — skip the bonus, keeping the prior home.
+- (g13·red, 3p) **A prior parked on an input-light converter is a free menu for the Priory owner every cycle.** Green's prior sat on G02 after a build bonus; red's Priory borrowed it three times in four rounds (10¢ via G06, then 6 grain, then 6 grain). Price the parking spot: prior on G02/G06/F11 = gifting the Priory owner one action per cycle.
+- (g13·green) **Counter: work-contract the Priory itself (1¢).** `WORK_CONTRACT G01 Pn` then `USE G01` → borrow your OWN prior-occupied converter (G02 ×6 of one good) AND the owner's clergy sits on G01, closing their borrow loop for the cycle. Best idle-clergy move when all your clergy are out and nothing is buildable.
 
 #### G02 Cloister Courtyard — ★★★★☆ · ☩
 `2w · E4 D4 · C/P/H · P all · Start`
@@ -191,6 +193,8 @@ Function: flip ≤7 grain → straw sides; take **1 flour per flip** (flour = 1 
 Get it: **chain-critical — the front of F04→F05→F24, the dominant France win condition.** Target: built (or reliably contracted) by ~round 8 in 2p long.
 Cost pain: moderate (3w+2c) — the real gate is **terrain**: no coast/hillside in the starting heartland, so a coast plot or hills district must be bought first. Budget that purchase by round 5–7.
 Combos: F05 Bakery (flour→bread), F24 Church (bread+wine→reliquary); the straw byproduct simultaneously feeds G19 Slaughterhouse and F37 Dormitory; G02/F03 mass-produce its grain input. Prior on it flips up to 7 in one action.
+Memories:
+- (g13·red vs green) `WORK_CONTRACT F04 Pn` + `USE F04 GnGnGnGnGnGn` = 6 flour + 6 straw for 1¢ — the owner's un-fired Windmill is the best 1¢ rental on the table for anyone holding ≥4 grain. Owning F04 with grain-rich opponents means firing it yourself first or accepting it as income.
 WC: high magnet. If the opponent owns it, `WORK_CONTRACT F04 Wn` → `USE F04 GnGn…` every recall cycle is the only flour path — pre-stage the grain before contracting.
 Layout: E10 + D6 — also a respectable settlement anchor on a hillside.
 Count: all modes. In 4p it's a race card — one copy, four players.
@@ -214,6 +218,8 @@ Function: sell 3/6/9 energy → 5/8/10 coins.
 Get it: an early coin engine in modes that have it; pairs with G07 peat coal (3 energy each).
 Combos: G07 (coal), moor districts (peat), Calefactory. Appendix: build it turn 1 after `CUT_PEAT` with your prior and you hold 6¢ + 1 sheep — two landscape purchases funded immediately.
 Count: 1/3/4p; in 2p use Bakery sales / F30 / Cloister Office instead.
+Memories:
+- (g13·green) Tiers, not units: 5 peat (10 energy) sells for the 9-tier = 10¢; the drill offers exactly `PtPt`/`PtPtPt`/`PtPtPtPtPt`. One clergy-free `CUT_PEAT` at peat 5 + one G06 USE = 10¢ = a district + change — the cleanest land-funding pair in 3p.
 
 #### G07 Peat Coal Kiln — ★★★☆☆
 `1c · E4 **D−2** · C/P/H · P all · Start`
@@ -635,6 +641,7 @@ Every early action serves the named plan; "balanced economic development" is the
 - **F09-first hard check (violated twice in g12 despite g8 doctrine):** before ANY `USE` targeting a building orthogonal to your own UNOCCUPIED F09 Cloister Garden, route through F09 — same USE plus a free grape. Using the neighbor directly forfeits the grape AND self-occupies the neighbor, so the next F09 firing finds its best target blocked until recall (g12-white paid this twice on one G16).
 - **Hoard-flush rule:** holding ≥ two buildings' worth of material with the named win-condition building gone or unreachable (g12-green: wood 5 + stone 8, Castle taken) ⇒ BUILD the best available card NOW and on every prior-home turn after. Material→economic is the best point ROI on the board and each build re-arms the +18 BUILD+prior benchmark; a hoard is tempo already paid for and not yet banked.
 - Never pay a WORK_CONTRACT without a concrete same-turn USE plan; never COMMIT with the main action unspent.
+- **(g13, 3p) Start-player double action: gather at a1, BUILD at a2.** The round-end second action is the last move before your next turn, so a building built there cannot be work-contracted before you fire it; built at a1 it sits exposed through two opponents' turns (blue built F08 at a2 and fired it clean for 7¢ + bread). Clergy-free gathers (`FELL_TREES`/`CUT_PEAT`, or a joker harvest) are the natural a1.
 
 ## V.3 Clergy
 
@@ -698,6 +705,7 @@ Then: G12 for stone → F08/F17 if the heartland lacks coast/hillside; coast plo
 - Some trailing tokens are conversion INPUTS, not wheel selectors (`USE G07 Pt` flips peat→coal) — read the dossier first.
 - **The bare-verb `""` completion is usually a NO-OP** — occupy the building, do nothing, action + clergyman wasted. Always pass explicit tokens. Known traps: `USE F23 Pn` (bare = no recall), `USE F32 Pn` (bare = no bonus), G19 needs paired sheep+straw.
 - Unaffordable-leaf signature: completions `[""]` with `partial_is_complete_command: false` = valid tile/verb, cannot afford — never "send it".
+- (g13, engine-verified) Farmyard joker forms are `JoSh` / `JoGn` (joker FIRST), not `ShJo`. Stone is `Sn` in payment strings (`USE F08 PtClShSn`). Settlement pieces are per-colour ids `SG1..SG5` / `SB1..` / `SR1..` (not `S01..`), e.g. `SETTLE SG3 -1 0 GnGnGnGnGnGnGn`.
 
 ## Castle protocols (verified sequences)
 
@@ -724,6 +732,8 @@ Energy earmark: SETTLE needs food AND energy IN HAND at the moment of the comman
 15. (g8, unresolved) Bare `USE G01` seated the prior but granted no bonus despite prior-occupied targets — precondition unclear; verify before relying.
 16. **SETTLE piece enumeration ignores affordability:** `["SETTLE"]` lists every unplaced tile regardless of stock; feasibility only surfaces at the payment level (`["SETTLE","<S>","<col>","<row>"]` → payment bundles, or empty = unaffordable). Drill to payment before concluding a settle is live — three g12-blue turns died on the piece list alone. Full verified grammar: `SETTLE <S> <col> <row> <food+energy tokens>`.
 17. **L-slot IDs are per-color placement order, not fixed functions:** blue's Clay Mound sat at LB1 while white's was LW1 and the Farmyards at LB2/LW2 forked differently. Read the landscape legend row for ground truth; never map slot→function across colors (g12: one no-op action + one mis-planned harvest). When in doubt, identify by completion shape: `["", "Jo"]` = production building or Cloister Office (bare USE, no token argument); `["Sh","Gn","JoSh","JoGn"]` = the Farmyard fork. Sending a token to a production building returns a misleading "incomplete move" error, and a bare USE at wheel-token 0 seats a clergyman for nothing (same class as quirk 9).
+18. (g13) When a Claude-controlled owner has only lay brothers home, the engine auto-answers an opponent's WORK_CONTRACT with the LB (no WITH_LAYBROTHER prompt reached the owner). With the prior home the owner is prompted. Plan on the auto-response stranding your last LB.
+19. (g13) With every clergy of a colour out at round start, the engine returns all of them before that colour's first action — no placement is consumed. `BUILD` still never needs clergy, and a fully-placed colour's only top-level completions are `CUT_PEAT FELL_TREES WORK_CONTRACT BUY_* CONVERT COMMIT`.
 
 ## Solo-mode mechanics
 
