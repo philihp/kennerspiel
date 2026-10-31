@@ -137,3 +137,23 @@ dwelling-value target once the moor is cut.
 - Green: clay token is at 0 now; Clay Mound after it ticks (1 at R6, 2 at R7). F05 needs 2c+1sw:
   straw comes from flipping grain. Alternatively F11 needs 1w+1st — green has 1 wood, 0 stone.
   Watch the R6 intros (F14 G16 F17 G18 G19) before committing to a build target.
+
+## Round 6 — blue a1, green (moves 63–68)
+
+**Red settle A (observed):** `SETTLE SR2 1 2 PnPnPnCo` — Farming Village at (1,2), value 1. Red 15.
+Red now: 1¢, 6 clay, 6 wood, sheep, grape. No grain → no straw → F05/F17/G16 are NOT buildable
+for red this round; F14 (hill 4,2), G18 (3w), G19 (2w+2c) are.
+
+**Blue a1 (start player, 2 actions this round):** `USE LB2 JoSh` → 5 sheep. Joker (5) beat the sheep
+token (4). Sheep is blue's 4th distinct good (peat, clay, stone, sheep) and 10 food for settle B.
+Only the prior was home, so it went to the Farmyard; blue's a2 can only be a BUILD (no clergy).
+Plan a2: `BUILD F08 3 1` (2 stone) with no bonus. R7 blue has all 3 clergy out → recall → prior
+`USE F08 PtClStSh` → 7¢ + bread. Risk: red has 4 distinct goods + 1¢ and moves before blue in R7, so
+red can WC a fresh F08. Building at a2 rather than a1 at least denies red the R6 window.
+Rejected: FELL_TREES (3 wood < 5 sheep); BUILD F08 at a1 (exposed to red immediately).
+
+**Green:** `BUILD F14 4 -1` (1 wood) — economic +3 (29). Grapevine is the only grape wheel in 3p and
+red had 6 wood + an empty hill; claiming it gates red out of F21 wine / F24. Prior stays on G02 (red
+keeps borrowing it via Priory — accepted cost; it is not sellable output).
+Next green: `USE LG1` for 2 clay (clay token 2) → F05 Bakery (2c + straw from grain) R7/R8;
+LB on F14 once the joker regrows (F14 reads the joker until the grape indicator arrives r8).
