@@ -37,7 +37,7 @@
   ],
   "dependencies": {
     "fast-shuffle": "6.2.1",
-    "pcg": "3.0.0",
+    "pcg": "4.1.0",
     "ramda": "0.32.0",
     "ts-pattern": "5.9.2",
     "ts-toolbelt": "9.6.0"

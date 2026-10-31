@@ -12,8 +12,8 @@ importers:
         specifier: workspace:*
         version: link:../game
       pcg:
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: 4.1.0
+        version: 4.1.0
       ramda:
         specifier: 0.32.0
         version: 0.32.0
@@ -325,9 +325,9 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  pcg@3.0.0:
-    resolution: {integrity: sha512-lHETDr3c//q4xs0iZk9+LRFgmvjLtaUDIE3ztE2KN4IhwyHLcJ3H5VBv93SGop1XHZalC1UFSwoJepoZSMSVLQ==}
-    engines: {node: '>=18'}
+  pcg@4.1.0:
+    resolution: {integrity: sha512-otU3S14VRDk9fLLgMlfjzhDlCBv2TaQ+sCoZGuI29mXZHcvw7oypFUS/GeIbTIY7gZVykTWTZdVIduaNdt2MMw==}
+    engines: {node: '>=14'}
 
   ramda@0.32.0:
     resolution: {integrity: sha512-GQWAHhxhxWBWA8oIBr1XahFVjQ9Fic6MK9ikijfd4TZHfE2+urfk+irVlR5VOn48uwMgM+loRRBJd6Yjsbc0zQ==}
@@ -531,7 +531,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  pcg@3.0.0: {}
+  pcg@4.1.0: {}
 
   ramda@0.32.0: {}
 
