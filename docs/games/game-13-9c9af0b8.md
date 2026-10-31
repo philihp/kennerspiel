@@ -177,3 +177,27 @@ Plan a2 (end of R7): `USE G06 PtPtPtPtPt` → 10¢ (5 peat = 10 energy ≥ 9) �
 (row 2, 5¢) for ☩ growth below G02, and keep ~5¢ toward a plot / F05 clay next round.
 Risk: red WCs G06 with its 6 wood for 8¢ first; low odds (net +1¢ for red after the fee).
 Rejected: `USE LG1` 3 clay → F05 at a2 with no bonus (prior stuck on G02 until green's own recall).
+
+## Round 7 — red, blue, green a2 (moves 75–84)
+
+**Red R7 (observed):** `USE F09` (grape) + `USE G01` → green's G02 `ClShWo → Gn` (6 grain). Red: 1¢,
+5 clay, 5 wood, 6 grain, 4 sheep, 2 grape. Third Priory borrow of green's prior-occupied G02.
+Red did NOT WC blue's F08.
+
+**Blue:** `USE F08 PtClShSn` (LB seated, prior kept home) → 7¢ + bread, goods +2. Then
+`BUY_PLOT 1 COAST` (4¢) → coast at (-1,1),(-1,2), water (-2,1),(-2,2). Blue: 3¢, 4 sheep, 3 stone,
+bread. Token for stone is `Sn`. Plot price ladder now [4,5,5,5,6,6,7].
+Next blue: F11 (1w+1st, coast, D7) needs wood → FELL_TREES (wood 4) is clergy-free, so R8 can be
+`FELL_TREES` + nothing else… or `BUILD F11 -1 2` once wood is in hand, prior bonus optional
+(F11 needs inputs). Settle B pocket: (-1,2)? no — F11 at (-1,1), settle at (-1,2): water 3 + F11 7.
+
+**Green a2:** `USE G06 PtPtPtPtPt` → 10¢ (2 nickels), goods +4 (33). `BUY_DISTRICT 2 PLAINS` (5¢)
+→ row 2 = forest, plains ×3, hill at (4,2). Opens (3,2) directly under G02 for the next ☩ build and
+(4,2) hill for a Castle later. Green: 3 grain, 5¢, LB2 home, LB1 on G06, prior on G02.
+Next green (R8, after red+blue): `USE LG1` → 3 clay (clay token 3+) with LB2 → all 3 out → R9
+recall → `BUILD F05` + prior `USE F05`. Or if red threatens F05 (6 grain = straw, 5 clay): build F05
+first with LB… F05 is red's natural next build — red CAN build it now. Accept; green's chain still
+needs F04 flour (3 grain). Alternative green ☩ target: F17 Library (2st+1sw) — no stone. G16 (3c+1sw).
+
+Scores after R7: green 33 / red 15 / blue 11. Red is behind on the board but holds the richest
+bag (6 grain, 5 clay, 5 wood, 4 sheep, 2 grape) and a Priory that keeps milking green's G02.
