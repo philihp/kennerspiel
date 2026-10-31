@@ -399,3 +399,25 @@ Green a2 (end of R13): `BUY_PLOT <row> MOUNTAIN` (5¢) then `BUILD G22` (5¢) at
 `USE G22` → stone (token 2–3). That gives green 3 stone by R15 → F24 only if blue stalls. More
 realistic: F21 Winery (2 clay + 2 straw) once a 2nd grain arrives, wine → 7¢ each / F24 rental.
 Decision at a2: G22 (long stone play, D−4 on the periphery) vs holding 12¢ for WC fees + F17.
+
+## Round 13 — blue, green a2 (moves 145–151)
+
+**Red R13 (observed):** `BUY_PLOT 0 MOUNTAIN` (5¢) → `BUILD G22 6 0` (5¢) → prior `USE G22 Jo` → 3 stone.
+Red: 1¢, 3 stone, 1 clay, 4 bread, 2 grape, 7 coal, 3 meat. Red 46. Red is start player R14 and
+needs 4 more clay for F24 — but blue's Clay Mound reset the clay token to 0, so red's R14 mound
+yields 1. Red cannot build F24 at R14. Red CAN build F17 (3 stone + 1 straw) at any time.
+
+**Blue:** `USE LB1` Clay Mound (clay 4) → 6 clay. Blue: 6 clay, 3 wood, 4 stone, ceramic, wine;
+prior home, LB1 on G12, LB2 on mound. R14 blue (2nd in order): `BUILD F24 3 2` (5c+3st) + prior
+`USE F24` — blue has 1 wine, 0 bread → barren bonus; still +12 econ, D9 ☩ beside G18/Office.
+Settle C (end of R14): blue's pocket (4,2) hill: F24 9 + Office(4,1)? basic Office D? + (3,2)=F24.
+Food for settle: blue has 0 food (sheep gone, bread gone) → F08 Market (4 goods → 7¢ + bread)? LB
+is on G12/mound, prior on F24 → no clergy. Settle C for blue may be impossible; note it.
+
+**Green a2:** `USE G02 PnClGp Pt` → 6 peat (LB2); keeps 1 grain (straw) + 2 nickels + 1 penny.
+Reasoning: green had zero energy and every settlement costs energy; (0,1) with an Artist's Colony =
+own 5 + SG4 6 + F05 5 = 16, and it lifts SG4 by 5 → +21 for 5 food (coins) + 1 energy (peat).
+R14 green: `WORK_CONTRACT G01 Pn` → `USE G01` → `USE G22` (prior-occupied, stone 3) → 3 stone,
+then settle C Artist's Colony at (0,1). R15: `BUILD F17 3 2` (2st + straw) + prior → books — if red
+hasn't taken F17 by then. Fallback for the F17 slot: F20 Inn / F21 Winery.
+Rejected: WC G01 now (stone before energy = no settle), Farmyard grain (no energy either).
