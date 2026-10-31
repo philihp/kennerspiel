@@ -315,3 +315,26 @@ Flour can wait a round; a live 11-point settlement cannot.
 
 Lesson candidate (Part III): **settlement value is scored live** — F05 beside SG3 (+5) and red's G16
 beside SR2 (+5) both paid the moment they were built. Late builds belong next to existing settlements.
+
+## Settlement phase B (moves 118–124)
+
+**Red (observed):** `BUY_DISTRICT 3 PLAINS` then `SETTLE SR5 2 3 MtWo` — Artist's Colony under G16:
+5 + G16 5 = 10. Red: settlements [6, 10], total 39. Red paid 1 meat + 1 wood; still 3 meat, 6 flour, 3¢.
+
+**Blue:** `SETTLE SB4 -1 2` drill → empty (3 energy, blue had 2 wood). `SETTLE SB5 -1 2 BrShWo` →
+Artist's Colony: 5 + water 3 + F11 7 = **15**, E −1. Blue: 4¢, 6 clay, 1 wood, 3 sheep, 2 stone,
+ceramic, wine. Total 38. Full recall at R11 start.
+
+**Green:** `SETTLE SG4 -1 1 GnGnGnGnGnPnPnPnPtPt` (5 grain + 3¢ + 2 peat) → Fishing Village 11
+(6 + water 3 + SG3 2) AND SG3 rose 10 → 16 because SG4's D6 counts for it. **Settlements score each
+other's dwelling value** — a settlement pair is worth D(a)+D(b) extra on top of the buildings.
+Green: settlements [16, 11], econ 32, total **59**. Kept 1 grain, 1¢, 2 peat, 4 clay.
+
+Scores after B: green 59 / red 39 / blue 38. Green leads by 20 — no coalition trigger (that's
+Philihp-only); red and blue stay independent.
+
+R11 display: F17, F20, F21 Winery, G22 Quarry, F24 Cloister Church, G26. Order R11: red, blue, green,
+red (red start player). Green's next: F21 (grapes→wine) needs F14 grapes first (joker 6 / grape 4:
+`USE F14 Jo`? = 6 grapes), then F24 at (3,2) ☩ (cost 5 clay? check dossier) — green has 4 clay.
+Blue's next: G18 with 6 clay + energy (1 wood, 0 peat) → needs fuel: CUT_PEAT (peat 2) or buy coal.
+Blue stone: 2 → G22 Quarry needs a mountain plot (4¢ — blue has 4¢).
