@@ -361,3 +361,20 @@ gets pricier. F24 for green: 5 clay + 3 stone — no stone source; G22 needs a m
 + 5¢ build. Realistic green chain: F21 wine → sell @7¢ or hold for a rented F24 if blue builds it.
 
 Scores: green 59 / blue 52 / red 39.
+
+## Round 12 — blue a1, green (moves 132–137)
+
+**Red R11 a2 (observed):** `USE G07 PtPtPtPtPtPtPt` → 8 coal (+1¢). Red: 4¢, 8 coal, 6 flour, 3 meat,
+all clergy home (recalled at R12 start). Red hasn't rented F05 yet — the bake is coming.
+
+**Blue a1 (start player):** `FELL_TREES 2 -1` → wood 5 (token 5) → 6 wood. Clergy-free; all 3 home.
+Blue a2 plan (end of R12): `USE G12 ShShShWoWoWo` → 3 stone (4 total) — the F24 stone. Then R13
+`USE LB1` Clay Mound (token 4 → 6 clay), R14 `BUILD F24 3 2` + prior. G26 `WoWo` fires wait for R15
+(blue start player again). Keeping 2 wood for G26.
+
+**Green:** `CUT_PEAT 0 -1` (peat 3 → 5 peat) clergy-free; prior stays home. Green: 5 peat, 1¢,
+4 clay, 1 grain, 4 grapes; LB1 on Farmyard, LB2 on F14 until recall.
+R13 green (start player: green, red, blue, green): a1 prior `USE G06 PtPtPtPtPt` → 10¢ (all clergy out →
+recall R14... no: recall happens at round start only when ALL are out at that moment, so the prior
+goes out at a1 and comes back R14). a2 = BUILD only (F21 needs 2 straw: only 1 grain) → buy mountain
+plot (5¢) at a2 and bank 5¢ for G22 Quarry next cycle. Stone token enters R13.
