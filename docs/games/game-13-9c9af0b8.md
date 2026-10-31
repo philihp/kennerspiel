@@ -636,3 +636,29 @@ R20 green (3rd): Farmyard grain → straw for F20 Inn (2w+2sw) at (1,1) next; or
 chain for bread → rent blue's F24? no (prior-occupied → Palace! `USE F27 Wn` can fire blue's F24
 while blue's prior sits on it — needs green bread + wine: F05 bake needs flour). Plan: R20 `USE F04
 Gn…` flour, R21 `USE F05` bake + Palace→F24 with wine for a reliquary (8). Needs grapes → wine too.
+
+## Round 20 — blue, green (moves 232–239)
+
+**Red R20 a1 (observed):** `USE LR3` Office (coin 8 → 8¢?) then `BUY_PLOT 2 MOUNTAIN` (rows 2–3,
+cols 5–6: hills + mountain). Red: 4¢, 6 wood, 4 clay, 6 peat, 9 sheep, 7 meat, 3 bread. Red 106.
+Red is lining up the Castle site (hill/mountain) — still needs 4 stone (G22 at stone 5 next fire).
+
+**Blue:** `BUILD F38 0 0` Printing Office (1w+2st) beside SB1 (D5 → SB1 5 → 10), econ 47 → 52;
+`WITH_PRIOR` → `USE F38 1 -1 2 0 1 1 0 2` → all four forests → **4 books**, goods 14 → 22.
+Total 94 → **112** (+18 in one action). Syntax: forest coords listed flat after `USE F38`.
+Blue: 3¢, 3 stone, 4 books, 3 ceramic, 1 ornament, bread, wine; LB1 + LB2 home, prior on F38.
+**Sacristy line is live:** book ✓ ceramic ✓ ornament ✓ + reliquary (F24 BrWn next) → G34 Wonder
+(30). Needs: 3 stone ✓ + 2 straw (grain: Farmyard, token 2) + a ☩-adjacent slot — blue's cluster
+(Office 4,1 / G18 3,1 / F24 3,2) has NO open orthogonal tile → `BUY_DISTRICT 3` (8¢) gives (3,3).
+Coins: 3¢ → F08 (4 goods → 7¢) or sell via F30? not built. Sequence (blue is start player R21):
+R21 a1 LB `USE F24 BrWn` → reliquary; R21 a2 LB `USE F08 <4 goods>` → 7¢ (10¢) → `BUY_DISTRICT 3
+PLAINS`. R22 (blue 2nd): Farmyard grain (LB? all out → recall R22 ✓) → 2 grain; R23 (blue start):
+`BUILD G34 3 3` + prior `USE G34 BoCeOrRq` → Wonder. Tight but on schedule for R23–24.
+Rejected now: F24 reliquary first (+8) — F38's +18 and the book were worth more this action.
+
+**Green:** `USE G02 PtWoWn Gn` → 6 grain (LB2). Spent the wine (Palace idle this cycle), kept the
+ceramic + 3 wood. All clergy out → recall R21. Green: 6 grain, 3 wood, ceramic. 138.
+R21 green (2nd): `BUILD F20 1 1` Inn (2w + 2sw) + prior `USE F20` (sell ≤7 food @1¢: 4 grain → 4¢)
+→ D6 beside SG5 (+6) + E4 ≈ +14. Green's ☩ cluster is boxed in (no F40/G41 slot without a 6¢ plot
+at (5,1)) — note for the skill: **reserve the ☩ growth slot before settling beside the cluster**
+(SG7 at (3,2) and F27 at (4,2) sealed it).
