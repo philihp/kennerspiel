@@ -296,3 +296,22 @@ settle drill at the time; flour counts as 1 food too.
 R11 intros: F20 F21 G22 F24 G26 — F21 Winery (green: grapes from F14 → wine), F24 Church (reliquary,
 D9 ☩) is green's win-condition anchor; G22 Quarry needs a mountain plot. Blue wants G22/F24-adjacent
 stone. Red will chase F21/F24 too.
+
+## Round 10 — blue, green a2 (moves 112–117); settle B pending
+
+**Red R10 (observed):** `USE LR3` Cloister Office → 6¢ (coin token 6). Red: 8¢, 6 flour, 4 meat,
+4 wood, 2 grape, 1 peat. Red 32.
+
+**Blue:** `USE LB1` Clay Mound (clay 6) with LB2 → 6 clay. All blue clergy out → recall at R11.
+Rejected: `USE G12` (would eat settle sheep for 2 stone); F17 (no straw).
+Settle B (after red): pocket (-1,2) coast. Fishing Village SB4 (8 food + 3 energy) = D6 + water 3 +
+F11 7 = 16 — but blue's energy is 2 wood only → probably unaffordable; fallback Artist's Colony SB5
+(5 food + 1 energy, D5, E−1) = 15. Drill `["SETTLE","SB4","-1","2"]` first; `SB5` if empty.
+
+**Green a2:** `CUT_PEAT 0 1` (peat 4) → 4 peat, clergy-free. Chosen over the F04 flour flip because
+the settle turn needs energy: Fishing Village SG4 at (-1,1) = D6 + water 3 + SG3 2 = 11, E4, cost
+8 food (6 grain + 2¢) + 3 energy (2 peat). Leaves 2 peat (4 energy) for baking later, 4 clay, 2¢.
+Flour can wait a round; a live 11-point settlement cannot.
+
+Lesson candidate (Part III): **settlement value is scored live** — F05 beside SG3 (+5) and red's G16
+beside SR2 (+5) both paid the moment they were built. Late builds belong next to existing settlements.
