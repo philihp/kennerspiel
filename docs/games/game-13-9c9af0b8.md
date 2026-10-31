@@ -439,3 +439,24 @@ Shanty Town SB1 at (4,2): own −3 + F24 9 + Office = ? — drill it; E0 but poi
 Green: 6 peat, 11¢, 3 clay, 6 grain, 3 grapes. Settle C: Artist's Colony SG5 at (0,1) → 5 + SG4 6 +
 F05 5 = 16, plus SG4 +5 → ~+21 for 5 food + 1 energy (peat). R15 green: `BUILD F21` (2 clay + 2 straw)
 + prior → 3 wine, or `USE G06 PtPtPtPtPt` → 10¢ again. F21 also raises the WC fee to 2¢.
+
+## Settlement phase C (moves 161–166)
+
+**Red R14 a2 (observed):** `USE LR2 Sh` → 7 sheep (8 total). Red's settle food: 8 sheep + 3 meat +
+4 bread. Red 60 before its settle.
+
+**Blue:** `SETTLE SB1 -1 0 WnWo` — Shanty Town in the coast pocket between F11 and G26:
+water 3 + F11 7 − G26 2 − own 3 = **5**, E0. Blue 68. Deliberately kept (4,2) hill (F24 9 + Office)
+for a Market Town / Hamlet later. Legal shanty spots were listed by `["SETTLE","SB1"]`.
+Blue: 1 clay, 2 wood, 1 stone, ceramic; all clergy out → full recall R15 (start player, 2 actions).
+
+**Green:** `SETTLE SG5 0 1 NiPt` — Artist's Colony between SG4 and F05, paid with a nickel + 1 peat
+(kept all 6 grain + 3 grapes). Expected: own 5 + SG4 6 + F05 5 = 16, and SG4 → 16.
+Green: 5 peat, 6¢, 3 clay, 6 grain, 3 grapes; full recall at R15.
+R15 green (2nd in order): `BUILD F21 <spot>` (2 clay + 2 straw ← grain) + prior `USE F21` → 3 wine.
+F21 spot: (1,0) touches F05 (not a settlement) — or (1,2)/(2,2)/(3,2)… F21 D5: beside a settlement?
+(0,2) is forest; green's settlements SG3 (-1,0), SG4 (-1,1), SG5 (0,1): (0,0)=F05, (1,1)=forest,
+(0,2)=forest. Nothing open next to them without felling (1,1) or (0,2) first (wood 3 token).
+→ R15 a1: F21 at (1,0) (D5 touches F05 only) OR fell (1,1) first and build F21 there next round
+(touches SG5 → +5). The fell is clergy-free, so: R15 `FELL_TREES 1 1` AND… one action only. Decide
+at the turn: wine now vs +5 later.
