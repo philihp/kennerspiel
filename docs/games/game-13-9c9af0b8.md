@@ -574,3 +574,25 @@ Settle D (end of R19, order red → blue → green): Hamlet SG6 (5 food + 6 ener
 F27 8 + G02 (D?) → drill. Food: 4 grain + wine; energy: 3 peat. Leaves 3 peat for G06 later.
 R19 green (start player, 2 actions): a1 Farmyard `USE LG2 Gn` (grain 5+) for food/straw; a2
 `FELL_TREES 1 1` (wood 4) → opens (1,1) pocket + 4 wood toward F20 Inn (2w+2sw) at (1,1) later.
+
+## Round 18 a2 → Round 19 green a1 (moves 211–218)
+
+**Red R18 (observed):** `BUILD F33 -1 3` Shipping Company (3w+3c, coast) → prior `USE F33 MtCo`
+(3 energy → joker 6 → 6 meat) → 8 meat; `BUY_DISTRICT 5 HILLS` (7¢). Red 89 (econ 50). Red's
+settle-D bag: 8 sheep + 8 meat + 4 bread + 5 peat → Village SR7 (15 food / 9 energy) is trivial.
+Red's Castle: 5 wood, 1 stone — stalled (spent wood on F33).
+
+**Blue a2:** `USE F11` (LB2) → ceramic, wine, wood, 1¢. Blue: 8¢, 3 wood, 5 stone, 3 ceramic,
+1 bread, 1 wine; prior home; LB1 on F24, LB2 on F11. Total 77. R19 blue: prior → ? Options:
+`USE G26 WoWo` (nickel + ornament, +6) or prior `USE G18 ClCl…` (no clay). G26.
+Settle D (end of R19): Market Town SB3 (7 food, 0 energy, D2) at (4,2) hill beside F24 (9) +
+Office — food = bread 3? + wine 1 + 8¢ → drill. Keep (4,2) for this.
+
+**Green a1 (start player, full recall):** `USE LG2 Gn` (grain 6) → 10 grain. Green: 10 grain,
+6 peat, 5¢, ceramic, wine; LB2 + prior home. 114.
+Green a2 (end of R19, right before the settle turns): keep both clergy home? A2 options:
+`FELL_TREES 1 1` (wood 4, clergy-free) → wood for F20 Inn later and opens (1,1); or prior `USE F04`
+flour ×7 (no bakery energy… green has peat; F05 bake later). Fell.
+Settle D: Village SG7 (15 food / 9 energy, D6, **E8**) at (3,2): own 6 + F27 8 + G02 D? ≈ 16–18,
+plus econ +8. Food: 10 grain + wine + 5¢ = 16 ✓; energy: 5 peat = 10 ✓. Leaves 1 peat.
+R20 intros: G34 Sacristy (Wonder), F35, F36, F37, F38, F40, G41 + the D settlement pieces.
