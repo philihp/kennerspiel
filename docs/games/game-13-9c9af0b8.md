@@ -530,3 +530,26 @@ bread), red's F32 (prior; pay 1¢ → free fell + cut). Pick the best live targe
 Palace = econ +25 (→ ~121) and D8 beside (4,1) Office / (3,2) / (5,2)-plot pocket.
 
 Scores: green 96 / red 83 / blue 71.
+
+## Round 17 — blue, green (moves 194–201)
+
+**Red R17 a1 (observed):** `USE LR1` Clay Mound (clay 5) → 6 clay. Red: 8 wood, 6 clay, 1 stone,
+8 sheep, 5 coal, 5 peat, 4 bread, 2 wine, 2 meat. Red's a2 (end of R17): WC blue's G12 for stone
+(wine present) or F20 Inn (2w+2sw)… watch. Note: Philihp pinged before COMMIT — `wait_for_my_turn
+color=blue` resolved it in a few seconds; use that whenever `active_player` is still red.
+
+**Blue:** prior `USE F08 PnClWoSn` → 7¢ (nickel + 2 pennies) + bread. Blue: 7¢, 2 wood, 5 stone,
+2 ceramic, 1 bread; all clergy out → full recall at R18 (blue is start player, 2 actions).
+R18 blue: a1 `USE F11` (LB) → wine; a2 prior `USE F24 BrWn` → 1 reliquary (8) and the Church is
+re-occupied by the prior for the cycle. Also: with 5 stone + 7¢, F30 Town Estate (2st+2sw) needs
+straw — no grain. G28 Castle: 6 wood (have 2; wood token 2) — not yet.
+
+**Green:** `BUILD F27 4 2` Palace (25¢) → econ 35 → 60. `WITH_PRIOR` → `USE F27 Wn` → the enumerator
+listed every occupied building on the table (F27 LR1 G22 F32 F11 F08 F24); chose blue's F11
+(no-input: ceramic + wine + wood + 1¢). Green ≈ 115. Green: 1 clay, 4 grain, 6¢, + F11 haul;
+LB1 + LB2 home, prior on F27.
+Palace doctrine confirmed: E25 for 25¢ is near-free points, and the activation reaches any
+opponent engine that is *occupied* — the opposite of a work contract.
+R18 green (2nd): LB on F21 (grapes 0 — none) / Farmyard grain 4 / `CUT_PEAT`? no moors left.
+Settle D arrives end of R19: green's SG6 Hamlet (5 food, 6 energy) / SG2 Farming Village — needs
+energy: buy G07-like fuel via G02 (`USE G02 ClGnPn Pt`)? Plan R18: `USE G02 <3 goods> Pt` → 6 peat.
