@@ -273,3 +273,26 @@ Next green (R10): `USE LG2 Gn` (grain 6) → F04 flour → bake; or `BUILD G16 3
 → needs grain first. Farmyard first.
 
 Scores: green 38 / red 23 / blue 17. Settle B: red settles first (R10 end), then blue, then green.
+
+## Round 9 a2 → Round 10 green a1 (moves 105–111)
+
+**Red R9 (observed):** `BUILD G16 2 2` + prior `USE G16` → 1 of each basic; placed beside SR2 (1,2),
+settlement 1 → 6 live. Red 30 (econ 24 / settle 6). Red's bag: 2¢, 6 flour, 4 meat, 4 wood, 2 grape.
+
+**Blue a2:** `BUILD G18 3 1` (3 wood) — ☩ beside the Office, econ 12 → 19, total 24. No bonus (prior
+on F11). Blue: 4¢, 2 wood, 4 sheep, 2 stone, ceramic, bread, wine. Only F17 is left on the display.
+R10 blue (one action, before settle B): `USE G12` LB2 → stone (2 food + 1 energy each: sheep + wood →
+2 stone) — or keep sheep for the settle and USE G18 ClPt? no clay. Decide at the turn.
+Settle B plan: pocket (-1,2) = water 3 + F11 7 = 10 + the tile's own D. Food: 4 sheep (8) + bread.
+
+**Green a1 (start player R10, 2 actions):** `USE LG2 Gn` → 6 grain (grain token 6; joker was 5).
+Green: 4¢, 4 clay, 6 grain; LB2 + prior home.
+Green a2 (end of R10, right before the settle turns): `USE F04 GnGnGnGnGnGn` with LB2 → 6 flour + straw,
+leaving the prior home for an R11 `BUILD` + bonus; or prior `USE F05` can't (no flour yet). Settle B
+food for green = whatever grain is left — so a2 might instead be `BUILD G16`? gone. F17 (2st)? no stone.
+→ a2 = F04 flip of 4 grain (keep 2 grain as settle food? Fishing Village SG4 needs 8ish). Check the
+settle drill at the time; flour counts as 1 food too.
+
+R11 intros: F20 F21 G22 F24 G26 — F21 Winery (green: grapes from F14 → wine), F24 Church (reliquary,
+D9 ☩) is green's win-condition anchor; G22 Quarry needs a mountain plot. Blue wants G22/F24-adjacent
+stone. Red will chase F21/F24 too.
