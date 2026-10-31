@@ -239,3 +239,15 @@ and firing F04/F05 before red can rent them is how blue/green stay ahead.
 Lessons injected into the strategy skill this checkpoint: G01 parking cost + WC-the-Priory counter,
 G06 tiers, F04 as 1¢ rental, start-player a2 build timing, grammar (`JoSh`, `Sn`, `SGn` ids),
 quirks 18 (auto LB response) and 19 (round-start full recall).
+
+**Green (cont., moves 91–95):** red answered `WITH_LAYBROTHER` (LB2R on G01; red has only the prior
+home now). `USE G01` → the bare `USE G02` leaf was unaffordable (only 2 kinds of goods), so
+`CONVERT NiGn` (nickel → 5 pennies, 1 grain → straw) then `USE G02 PnGnSw Cl` → 6 clay.
+Green: 4¢, 6 clay, 1 grain, all clergy out → full recall at R9 start. Score 29 (coins spent).
+Grammar: G02 needs 3 DIFFERENT goods; straw from a free grain flip counts as its own good, so
+grain + straw + penny is the cheapest triple. `CONVERT` tokens: `Ni` (nickel→pennies), `Gn` (grain→straw).
+
+R9 green plan (after blue's a1, before red): prior home → `BUILD F05 3 2`?? F05 isn't ☩ — keep (3,2)
+for ☩. F05 at (2,2) or (1,2). But if red builds F05 at its a2 now (5 clay + 6 straw in hand), green
+switches to `BUILD G16 3 2` (3c+1sw, ☩, D5) + prior bonus → 1 of each basic good (diversity for G02
+and the next settle), keeping 3 clay toward G18 later. Watch for red's F05 before deciding.
