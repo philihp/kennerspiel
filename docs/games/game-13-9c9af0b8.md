@@ -504,3 +504,29 @@ Palace (25¢, hillside, E25 D8) + prior `USE F27 Wn` → use any occupied buildi
 F24 if bread… no bread; red's G19 with sheep? green has none). Palace is +25 econ + D8 pocket
 anchor at (4,2) beside (4,1) Office / (3,2) / (5,2).
 Alternative a2: `BUILD F20 1 1`?? (1,1) is forest until felled. Fell first.
+
+## Round 16 — blue, green a2 (moves 183–193)
+
+**Red R16 (observed):** `BUY_DISTRICT 4 HILLS` (6¢) → `BUILD F32 4 2` Calefactory (1 stone, ☩ beside
+F09) → prior `USE F32 Pn` → free `CUT_PEAT 0 4` (5 peat) + `FELL_TREES 2 4` (5 wood). SR6 → 16.
+Red 83: 8 wood, 5 peat, 5 coal, 8 sheep, 4 bread, 2 wine, 2 meat, 1 stone. **Red is 4 stone from
+the Castle (6w+5st).** Stone token was 5 — one G22 fire away.
+
+**Blue:** `WORK_CONTRACT G22 Wn` (wine present, red's LB auto-seated) → `USE G22` → **5 stone** (6 now)
+and the stone token reset to 0. Blue keeps LB2 parked on F24 (no clergy of blue's moved — a WC
+places only the owner's clergy), so the Church stays blocked through R17. Blue: 1¢, 1 clay, 3 wood,
+6 stone, 2 ceramic; prior home. Total 71 (wine spent).
+Red still has a stone route: WC blue's G12 (unoccupied) with wine present + 8 sheep + coal → 5 stone
+→ Castle at R17 a2 anyway. The Quarry raid buys at most a round and nets blue 5 stone.
+Blue R17 (after red): prior `USE F08 PnClWoSn` → 7¢ + bread → all out → R18 recall; R18 blue is
+start player: a1 `USE F11` (wine), a2 `USE F24 BrWn` → reliquary (8) and re-occupy. With 6 stone:
+F30 Town Estate (2st+2sw) once grain appears; G28 Castle needs 6 wood (3) + hill (3,-1)/(4,-1).
+
+**Green a2:** `USE F21 Wn` (LB2) → sold 1 wine → 30¢ (5 nickels + 5 pennies), 1 wine left. All
+clergy out → recalled at R17 start. Total 96.
+R17 green (3rd): `BUILD F27 4 2` Palace (25¢, hill) + prior `USE F27 Wn` → use any OCCUPIED
+building: candidates at that moment — red's G22 (LB1R, stone 2–3), blue's F24 (LB2B; green has no
+bread), red's F32 (prior; pay 1¢ → free fell + cut). Pick the best live target then.
+Palace = econ +25 (→ ~121) and D8 beside (4,1) Office / (3,2) / (5,2)-plot pocket.
+
+Scores: green 96 / red 83 / blue 71.
