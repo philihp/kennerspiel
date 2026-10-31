@@ -378,3 +378,24 @@ R13 green (start player: green, red, blue, green): a1 prior `USE G06 PtPtPtPtPt`
 recall R14... no: recall happens at round start only when ALL are out at that moment, so the prior
 goes out at a1 and comes back R14). a2 = BUILD only (F21 needs 2 straw: only 1 grain) → buy mountain
 plot (5¢) at a2 and bank 5¢ for G22 Quarry next cycle. Stone token enters R13.
+
+## Round 12 a2 → Round 13 green a1 (moves 138–144)
+
+**Red R12 (observed):** `WORK_CONTRACT F05 Pn` → the engine auto-seated green's PRIOR (it was the
+only clergy home — quirk 18 extends to the prior) → `USE F05 BrBrCoFlFlFlFlFlFl` → 4 bread kept,
+2 sold (nickel), 1 coal. Red: 11¢, 4 bread, 7 coal, 3 meat, 2 grape, 1 clay. Red 43.
+Red now has bread + grapes → F21 Winery (2c+2sw: red has 1 clay, 1 straw) and F24 are red's targets;
+red lacks clay and stone, but has 11¢ → a mountain plot + G22 Quarry is reachable.
+
+**Blue a2:** `USE G12 ShShShWoWoWo` → 3 stone (4 total). Blue: 2 clay, 3 wood, 4 stone, ceramic,
+wine; LB2 + prior home. R13 blue (one action, third in order): `USE LB1` Clay Mound (clay 4 → 6).
+R14 blue (second in order): `BUILD F24 3 2` (5c + 3st) + prior. Settle C comes at the end of R14 —
+F24 D9 at (3,2) makes (4,2) hill / (3,3)? no row 3 — (4,2) is the pocket: F24 9 + Office.
+Alternative if red buys F24 first: F17 Library (2st+1sw) at (3,2) instead.
+
+**Green a1 (start player, full recall):** `USE G06 PtPtPtPtPt` → 10¢ (goods +4, total 63). Green:
+12¢, 4 clay, 1 grain, 4 grapes; LB2 + prior home. Stone token entered at 2.
+Green a2 (end of R13): `BUY_PLOT <row> MOUNTAIN` (5¢) then `BUILD G22` (5¢) at the mountain + prior
+`USE G22` → stone (token 2–3). That gives green 3 stone by R15 → F24 only if blue stalls. More
+realistic: F21 Winery (2 clay + 2 straw) once a 2nd grain arrives, wine → 7¢ each / F24 rental.
+Decision at a2: G22 (long stone play, D−4 on the periphery) vs holding 12¢ for WC fees + F17.
