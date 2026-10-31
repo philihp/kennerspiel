@@ -480,3 +480,27 @@ F32 Calefactory (1 stone, ☩): only ☩-adjacent slot is (4,2) — the F24 pock
 R16 green (start player, 2 actions): `FELL_TREES 1 1` (wood 4, clergy-free) + `USE G06 PtPtPtPtPt`
 → 10¢ (23¢ → F27 Palace at 25¢ is suddenly plausible by R17–18; Palace = D8 hillside at (4,2) +
 E25). Alternatively F20 Inn (2w+2sw, D6) at (1,1) after felling → sells food/wine for coins.
+
+## Round 15 a2 → Round 16 green a1 (moves 174–182)
+
+**Red R15 (observed):** `USE F09` (grape) → `USE G01` → green's prior-occupied F21: `GpGpGpWn` →
+2 wine + 7¢. Red: 8¢, 2 wine, 4 bread, 8 sheep, 2 meat, 5 coal. Red 78. Red's clergy all out →
+recalled at R16 start. **Red now holds bread + wine = 2 reliquaries (16 pts) via a 2¢ rental of
+blue's F24.** F24 was unoccupied after blue's recall.
+
+**Blue a2:** bare `USE F24` with LB2 — barren, purely to block red's rental this cycle (red moves
+before blue in R16). Cost: the G26 fire (+6). Blue: 1¢, 1 clay, 3 wood, 1 stone, 2 ceramic, 1 wine;
+only the prior home. R16 blue: `USE F08 PnClWoSn` → 7¢ + bread (prior), then R17 recall → F24 with
+bread + wine → 1 reliquary (8) while keeping the Church occupied. Or F30 Town Estate (2st+2sw) for
+ceramic → 12¢ — stone 1, no straw. Blue's G26 needs an LB.
+Lesson: a no-input, high-value building (F24) must stay occupied whenever an opponent holds its
+inputs — the barren park is the price of ownership (skill §F24 WC note, now confirmed in 3p).
+
+**Green a1 (start player):** `USE G06 PtPtPtPtPt` → 10¢ (LB1). Green: 23¢, 2 wine, 4 grain, 1 clay;
+LB2 home, prior on F21. Total 93.
+Green a2 (end of R16): `FELL_TREES 1 1` (wood 5, clergy-free) → 5 wood, opens (1,1) beside SG5/F21.
+R17 green: `USE F21 Wn` (LB2) sell wine → 30¢ → all clergy out → R18 recall → `BUILD F27 4 2`
+Palace (25¢, hillside, E25 D8) + prior `USE F27 Wn` → use any occupied building (e.g. blue's
+F24 if bread… no bread; red's G19 with sheep? green has none). Palace is +25 econ + D8 pocket
+anchor at (4,2) beside (4,1) Office / (3,2) / (5,2).
+Alternative a2: `BUILD F20 1 1`?? (1,1) is forest until felled. Fell first.
