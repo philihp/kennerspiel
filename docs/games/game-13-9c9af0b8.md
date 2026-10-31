@@ -115,3 +115,25 @@ No settle A possible (0 food). R6 plan: FELL_TREES for a 4th good, R7 `BUILD F08
 grain (settle A Market Town now, 7 food) vs clay (locks F05 next round) vs peat (12 energy). Took grain: settle slot A
 is worth ~7 pts now and the slot does not come back; F05 clay comes from the Mound at r6 (clay token 2).
 Settle A plan: `SETTLE S03 -1 0` (Market Town, 7 grain, 0 energy): D2 + water 3 = 5 + E2.
+
+## Round 5 — red a2 + settlement phase A (moves 54–62)
+
+**Red a2 (observed):** `BUILD F09 3 2` with prior → grape, then `USE G01` borrowed green's
+prior-occupied G02 (`ClGnPn → Wo`, nickel converted). Red: 4¢, 6 clay, 6 wood, sheep, grape, coal.
+Second Priory borrow of the game — the prior on G02 was the price of the build bonus, and red cashed it.
+Red has 6 wood + 6 clay: F05 Bakery (2c+1sw) and F08 Market (2st) are both in reach for red soon.
+
+**Blue settle A:** `get_legal_moves []` → only `COMMIT` (0 food). Passed.
+
+**Green settle A:** `SETTLE SG3 -1 0 GnGnGnGnGnGnGn` → Market Town on coast beside water.
+Settlement value 5 (water 3 + town 2), economic +2 for the card. Green 26 / red 13 / blue 6.
+Engine note: settlement ids are per-colour (`SG1..SG4`), not `S01..S04`; legal tokens were `SG1`,`SG3`.
+Left (-1,1) coast open for F11 (D7) next to the town; (0,0) moor is the other neighbour — a future
+dwelling-value target once the moor is cut.
+
+**Next (R6, order blue → green → red, red gets the 2nd action):**
+- Blue a1: `FELL_TREES` (wood 2) for a 4th good, so `BUILD F08 + prior USE F08` lands R7 — unless red
+  takes F08 first with 6 wood (red can't: F08 costs 2 stone; red has 0 stone). Safe.
+- Green: clay token is at 0 now; Clay Mound after it ticks (1 at R6, 2 at R7). F05 needs 2c+1sw:
+  straw comes from flipping grain. Alternatively F11 needs 1w+1st — green has 1 wood, 0 stone.
+  Watch the R6 intros (F14 G16 F17 G18 G19) before committing to a build target.
