@@ -596,3 +596,22 @@ flour ×7 (no bakery energy… green has peat; F05 bake later). Fell.
 Settle D: Village SG7 (15 food / 9 energy, D6, **E8**) at (3,2): own 6 + F27 8 + G02 D? ≈ 16–18,
 plus econ +8. Food: 10 grain + wine + 5¢ = 16 ✓; energy: 5 peat = 10 ✓. Leaves 1 peat.
 R20 intros: G34 Sacristy (Wonder), F35, F36, F37, F38, F40, G41 + the D settlement pieces.
+
+## Round 19 — blue, green a2 (moves 219–225); settle D pending
+
+**Red R19 (observed):** `USE F09` (grape) → `USE G16` → 1 of each basic. Red: 6 peat, 6 wood, 4 clay,
+9 sheep, 8 meat, 4 bread, 1 grape, 1¢. Red 89. Village SR7 (15/9) is fully affordable for red.
+
+**Blue:** prior `USE G26 WoWo` → nickel + ornament → goods 18, total **83**. All clergy out →
+full recall at R20 (blue 2nd in order after red; red has no wine → F24 safe for one action).
+R20 blue: prior `USE F24 BrWn` → reliquary (8) and the prior stays resident.
+Settle D (after red): Market Town SB3 (7 food, 0 energy, D2) at (4,2): 2 + F24 9 + Office →
+drill; food = 13¢ + bread + wine. Alternatively Farming Village SB2 (3/3) — no energy (1 wood).
+
+**Green a2:** `FELL_TREES 1 1` (wood 4, clergy-free) → 4 wood; (1,1) now plains between SG5 (5),
+F21 (5), Farmyard. Green: 10 grain, 6 peat, 4 wood, 5¢, ceramic, wine; LB2 + prior home. 114.
+Settle D: Village SG7 at (3,2) — food 10 grain + wine + 5¢ = 16 ≥ 15; energy 5 peat = 10 ≥ 9.
+Own 6 + F27 8 + G02 (D4?) ≈ 18 live + E8 → ~+26. Drill `["SETTLE","SG7","3","2"]`.
+R20 green: `BUILD F20 1 1` Inn (2w + 2sw from grain) + prior `USE F20` (sell food/wine) → D6 beside
+SG5 (+6 to it). R20 D-tier intros: G34 Sacristy (Wonder: needs book+ceramic+ornament+reliquary —
+nobody is close), F37 Dormitory, F38, F40 Hospice, G41 Brotherhood (pays per ☩ built).
