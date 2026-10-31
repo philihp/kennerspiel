@@ -615,3 +615,24 @@ Own 6 + F27 8 + G02 (D4?) ≈ 18 live + E8 → ~+26. Drill `["SETTLE","SG7","3",
 R20 green: `BUILD F20 1 1` Inn (2w + 2sw from grain) + prior `USE F20` (sell food/wine) → D6 beside
 SG5 (+6 to it). R20 D-tier intros: G34 Sacristy (Wonder: needs book+ceramic+ornament+reliquary —
 nobody is close), F37 Dormitory, F38, F40 Hospice, G41 Brotherhood (pays per ☩ built).
+
+## Settlement phase D (moves 226–230)
+
+**Red (observed):** `SETTLE SR4 -1 2 MtBrCo` — Fishing Village on its new coast beside F33 (D4) +
+water: 13. Red 106 (settlements 13/6/17/16, econ 54). Red kept the Village SR7 for the Castle.
+
+**Blue:** `SETTLE SB3 4 2 NiNi` — Market Town on the hill beside F24: 2 + 9 + Office 2 = **13**,
+paid with two nickels (kept bread + wine for the reliquary). Blue **94** (settlements 5/15/13,
+econ 47, goods 14). Blue: 3¢, 1 wood, 5 stone, 3 ceramic, 1 ornament, bread, wine. Full recall R20.
+R20 blue (2nd): prior `USE F24 BrWn` → reliquary (8), prior resident. Then G34 Sacristy (D-tier,
+3st+2sw — engine accepts 2 grain for straw, quirk 6): blue has book? no — F17 is red's. Sacristy
+needs Bo+Ce+Or+Rq: blue has Ce, Or, Rq soon; book via WC red's F17 (2¢ / wine; red's F17 flips
+coins → books). That is a 30-pt Wonder line: track it.
+
+**Green:** `SETTLE SG7 3 2 GnGnGnGnGnGnGnGnGnGnNiPtPtPtPtPt` — Village (D6, E8) beside F27 (8) and
+G02: 10 grain + nickel for food, 5 peat for energy. Kept wine, 4 wood, 1 peat, ceramic.
+Expected ~18 live + econ 68.
+R20 green (3rd): Farmyard grain → straw for F20 Inn (2w+2sw) at (1,1) next; or prior on F04/F05
+chain for bread → rent blue's F24? no (prior-occupied → Palace! `USE F27 Wn` can fire blue's F24
+while blue's prior sits on it — needs green bread + wine: F05 bake needs flour). Plan: R20 `USE F04
+Gn…` flour, R21 `USE F05` bake + Palace→F24 with wine for a reliquary (8). Needs grapes → wine too.
