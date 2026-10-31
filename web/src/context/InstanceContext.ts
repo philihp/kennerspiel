@@ -36,8 +36,12 @@ type GameStatePlaying = GameState & {
   frame: Frame
 }
 import { match } from 'ts-pattern'
+import { equals } from 'ramda'
 import { serverMove } from './actions'
 import { useSupabaseContext } from './SupabaseContext'
+
+// stable reference, so a dropped partial does not invalidate the controls memo every render
+const NO_PARTIAL: string[] = []
 
 const engineColorToEntrantColor = (c?: PlayerColor): Enums<'color'> | undefined =>
   match<PlayerColor | undefined, Enums<'color'> | undefined>(c)
@@ -93,9 +97,18 @@ export const InstanceContextProvider = ({
   const { supabase } = useSupabaseContext()
   const [instance, setInstance] = useState<Tables<'instance'>>(providedInstance)
   const [entrants, setEntrants] = useState<Tables<'entrant'>[]>(providedEntrants)
-  const [partial, setPartial] = useState<string[]>([])
   const [commands, setCommands] = useState<string[]>(providedInstance.commands)
   const [debounced, setDebounced] = useState(false)
+
+  // a partial only means something against the commands it was composed on. when those change underneath it,
+  // e.g. our own move echoing back over realtime before serverMove returns, it is dropped in the same render
+  // rather than replayed against a state it was not built for (which reopens building dialogs)
+  const [draft, setDraft] = useState<{ base: string[]; partial: string[] }>({
+    base: providedInstance.commands,
+    partial: NO_PARTIAL,
+  })
+  const partial = equals(draft.base, commands) ? draft.partial : NO_PARTIAL
+  const setPartial = (next: string[]) => setDraft({ base: commands, partial: next })
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -127,9 +140,10 @@ export const InstanceContextProvider = ({
   const gameState = useMemo(() => {
     return [...commands]
       .map((s) => s.split(' '))
-      .reduce<
-        GameState | undefined
-      >(reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined, initialState)
+      .reduce<GameState | undefined>(
+        reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined,
+        initialState
+      )
   }, [commands])
 
   const controls = useMemo(() => {

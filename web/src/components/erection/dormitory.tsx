@@ -15,7 +15,7 @@ const multiplier = 1
 
 export const Dormitory = () => {
   const { currentPlayer, setPartial, addPartial, controls } = useInstanceContext()
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(partiallyUsed([id], controls?.partial))
   const max = min(currentPlayer?.straw ?? 0, currentPlayer?.wood ?? 0)
   const [times, setTimes] = useState(0)
 
