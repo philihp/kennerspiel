@@ -735,3 +735,24 @@ settle for the cost of a Priory action.
 Lessons: (1) F40 = USE any unbuilt display building; with G01 it is a repeatable Castle settle.
 (2) Shanty Town D = −3 — never place it beside your own settlement; park it on an isolated cell.
 (3) Opponents can rent the F40 chain through G01 for 2¢ whenever red has a clergy home.
+
+## Round 23 — blue, green
+
+**Red R23 a1 (observed):** `USE F09` → `USE F32 Pn` → `FELL_TREES 0 2` + `CUT_PEAT 0 5` → 8 wood,
+11 peat, 6 stone. Castle (6w+5st) is now affordable; red's a2 comes after green. Red 148.
+
+**Blue:** `BUILD G34 3 3` (3 stone + 2 grain-as-straw, econ +10) → `WITH_PRIOR` → `USE G34 BoCeOrRq`
+→ **Wonder #1** (30). Goods 24→37 (net +13 after burning 17 pts of inputs). Blue 137. Prior parked on
+G34, LB1 on F08, LB2 home. Blue now has 2 books, 1 ceramic, 1 bread, 1 grain, 1¢ — nothing left to
+make a second reliquary quickly; F24 fire needs bread+wine, wine is gone.
+
+**Green:** no F40 route (red's prior home → Priory can't reach it; direct WC F40 costs 2¢, green had 1).
+`USE G02 PnShCe Pt` → 6 peat (energy bank for phase E). Green 146 (−3 for the ceramic). Holds 6 sheep
+(12 food) + 6 peat. Settlement costs to verify by drill: Farming Village cheap, Village ~15f/9e,
+Hilltop ~30f/3e. SG2 Farming Village is the realistic next placement.
+
+Scores: red 148, green 146, blue 137. Red Castle incoming; red has 3 settlements left (SR1 SR3 SR7).
+
+**Blue R24 plan:** LB2 to F24 is dead (no wine). Options: `USE F38` forest cash-out? (no forests —
+row 3 has LFO at (0,3)!) → books; or WC red's G01 → F40 chain if red's prior is on F40/Castle after
+a2; or G12 stone for F29/F30 builds. Re-evaluate after red's a2.
