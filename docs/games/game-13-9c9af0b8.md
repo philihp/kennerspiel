@@ -686,3 +686,20 @@ peat/wood gather toward settlement food+energy for phase E (4 settlements unplac
 
 Lesson candidate: Inn's bonus fire pays only face value on food (4 grain → 4¢); the real gain was
 the +6 settlement and the econ points, not the coins.
+
+## Round 21 — a2 (blue)
+
+**Red R21 (observed):** `BUILD F40 5 3` + prior `USE F40` → `USE F29` (chained use), took the
+6-stone rondel token. Red now 6 stone / 3 wood / 1 grain, prior on F40, SR6 21. Red 121.
+Castle needs 6 wood (has 3); watch the wood token. Red could also race G34 — has 6 stone, needs
+2 straw/grain and a ☩ slot (3,4) beside F17.
+
+**Blue a2 — plan revised.** Market drill showed every 4-good combo spends stone or a Sacristy input
+(only 6 goods types held). Selling stone would drop blue to 2 (G34 needs 3). So instead:
+`USE LB2 JoGn` → 4 grain (joker 4 > grain 3). All clergy out → full recall at R22.
+- R22: LB `USE F08 PnBoCeGn` → 9¢, `BUY_DISTRICT 3 PLAINS` (8¢) for ☩ slot (3,3) under F24.
+- R23: `BUILD G34 3 3` (3 stone + 2 grain-as-straw) + prior `USE G34 BoCeOrRq` → Wonder 30.
+Blue 119 (unchanged).
+
+Lesson candidate: the Market needs 4 *distinct* goods — a narrow inventory makes it expensive.
+Pick up a throwaway basic good (grain) one action ahead so the sale never eats a build input.
