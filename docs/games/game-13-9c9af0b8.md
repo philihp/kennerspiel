@@ -778,3 +778,22 @@ energy allow. Blue 137.
 **Green a1:** `FELL_TREES 1 -1` → 2 wood. Green: 6 sheep (12 food), 6 peat + 2 wood (8 energy),
 PRIG home for the bonus turn. Target SG6 Village at (2,0) or (1,2); verify cost at the settle drill.
 Green 146.
+
+## Round 24 — a2 (blue), bonus turn (green)
+
+**Red R24 (observed):** `USE G01` → `USE G28` → `SETTLE SR3 0 2 ShShShGn`. Red 231, SR1 left.
+
+**Blue a2:** `CUT_PEAT 0 -1` → 2 peat (no clergy needed). Blue: 7 grain, bread, 1¢, 2 peat.
+
+**Engine discovery — bonus round:** at the bonus turn every prior came home, and the `USE` drill
+listed *every building on the table* (all three boards, including G28 Castle, F40, G01, F24). The
+bonus action is a free use of any building. Castle = extra settle before phase E.
+
+**Green bonus:** `USE G28` → `SETTLE SG6 2 0 ShShShPtPtPt` (Hamlet: 6 food + 3 energy) → 13 pts,
+econ +3. Green 162. Left: 3 sheep, 3 peat, 2 wood → SG2 Farming Village (4 food + 2 energy) at
+(1,-1) beside the Winery in phase E. SG8 Hilltop unaffordable.
+
+Settlement costs verified by drill: Hamlet 6f/3e, Farming Village 4f/2e, Shanty 1f/1e.
+
+**Blue bonus plan:** `USE G28` → settle (drill SB4/SB7 costs; 7 grain + bread + 1¢ ≈ 13 food,
+2 peat energy) at (2,3) between F08 (8) and G34 (7); then phase E a second settlement if affordable.
