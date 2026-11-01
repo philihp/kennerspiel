@@ -816,3 +816,48 @@ Lessons: (4) Fishing Village requires a water-adjacent cell — don't fill the w
 buildings if SB4 is unplaced. (5) Energy, not food, capped both blue and green at the end: one peat
 cut per moor and no coal; bank energy two rounds ahead of phase E. (6) Bonus round = any building on
 the table for free; Castle is the pick for anyone with settlements and food.
+
+## FINAL — game 13 finished (round 24, settle E)
+
+**Red R24 settle E (observed):** `SETTLE SR1 4 5 ShPt` Shanty → 4. Red 254.
+**Blue settle E:** no affordable settlement (0 energy) → empty COMMIT. Game FINISHED.
+
+| Color | Goods | Economic | Settlements | Total |
+|-------|-------|----------|-------------|-------|
+| red (Philihp) | 18 | 102 | 126 (8 placed) | **254** |
+| green | 0 | 76 | 93 (7 placed) | 169 |
+| blue | 37 | 63 | 54 (4 placed) | 154 |
+
+Decisive column: settlements (red +33 over green, +72 over blue) and economic (+26/+39). Blue's
+Wonder won goods by 37 and lost by 100.
+
+### Ten lessons — blue (Sacristy/reliquary line, 154)
+1. **The reliquary line is a one-shot in 3p.** F24 at R14, reliquary R21, Sacristy R23, Wonder: +43 net across 9 rounds of setup. Red's single Castle turn was worth 68. Pick the Castle unless the chain is already online by R11.
+2. **A ☩ slot must exist before the card is affordable.** Blue bought the row-3 district at R22 solely to get (3,3); without it the Sacristy had nowhere to go. Buy the district at R15–18, not R22.
+3. **Market needs 4 DISTINCT goods.** With six goods types held, every combination ate stone or a Sacristy input; a one-action detour for grain solved it. Keep a throwaway basic good in stock.
+4. **Barren F24 parks worked** — red never rented bread+wine. But the LB spent there every recall cycle cost blue ~4 gathers; denial has a price.
+5. **Never fill the whole coast column with buildings while SB4 Fishing Village is unplaced.** It had zero legal cells at the end.
+6. **Energy, not food, capped the last two settles.** 11 food / 2 peat at the end. One moor cut per round at peat ≤2 is not an energy plan; keep two moors or a G07/G06 coal source.
+7. **All clergy out with no round-start coming = no recall.** From R24 a1 blue had one clergy-free action per turn. Count remaining recalls before spending the last clergy.
+8. **Bonus-round free USE: take the Castle.** Blue's bonus Castle settle was worth 16; nothing else on the table offered more than 2.
+9. **F38 forests-to-books is a late cash-out (4 books = 8 pts)** but it removes forests you may need for FELL_TREES energy later. Blue cut its last forest for books at R20 and had no wood at R24.
+10. **Settlements score each other.** Blue's SB2 at (2,3) scored 16 off F08+G34; the three earlier blue settlements sat on the coast with no high-D anchors and totalled 38 for three cards.
+
+### Ten lessons — green (Windmill/Winery/Palace, 169)
+1. **Green led until R22 purely on settlements adjacent to its own buildings** (SG5 next to Inn: 22). Keep building D-value beside placed settlements; the Inn was +10 in one action.
+2. **Shanty Town D = −3 leaks into adjacent settlements.** Placing it at (2,2) beside the Village cost 3; net +2 for a 2¢ WC + an action. Park Shanties on isolated cells.
+3. **The Priory→F40→Castle rental was the best 2¢ of the game** (available only while red's prior sat on F40 and a red clergy was home). Check every turn whether red's Priory is contractable.
+4. **Green sold its only ceramic into a G02 fire for peat (−3).** Zero-point basic goods are the Courtyard inputs; never feed scoring goods to converters unless the output is scoring.
+5. **The Inn's bonus fire pays face value** (4 grain → 4¢). Build it for the D6 and the +4 econ; don't plan around its coins.
+6. **Green parked its prior on G02 after a build bonus and red borrowed it for 10¢ + 12 grain over four rounds.** After a build bonus, re-site the prior on something input-heavy (Winery, Bakery) or accept the gift.
+7. **Food was fine, energy was not** — no moor on the board after R10 meant every settle cost a FELL_TREES action. Buy a moor district early in 3p where peat is contested.
+8. **Palace F27 (D8) placed at (4,2) anchored SG7 at 18** — correct; but sealing the cluster with SG7 + F27 left only Shanty-grade cells. Leave one high-D empty cell per cluster for the last settle.
+9. **Hilltop Village needs 30 food.** Green never had 30 food in hand; SG8 was dead from phase D. Either run G19 meat or write it off and spend phase D elsewhere.
+10. **Green never bought land after the heartland.** Four empty cells at R21 looked like enough, but two were Shanty-grade and one needed the coast. One district at R12 would have added a second anchor row.
+
+### Red (Philihp) — what won
+F40 Hospice at R21 turned every unbuilt display card into a free use; Priory on his own prior-occupied
+F40 reached G28 before owning it (R22, +15), then the Castle itself at R23 (+68 incl. Castle D on
+three settlements), then G01→G28 again at R24 (+15), G41 at the bonus for a reliquary set (+16),
+and SR1 at settle E. Eight settlements placed vs 7/4. Red bought land early (mountain plot R19 for the
+Castle site, plus hills rows) and had sites ready when materials arrived.
