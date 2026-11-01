@@ -797,3 +797,22 @@ Settlement costs verified by drill: Hamlet 6f/3e, Farming Village 4f/2e, Shanty 
 
 **Blue bonus plan:** `USE G28` → settle (drill SB4/SB7 costs; 7 grain + bread + 1¢ ≈ 13 food,
 2 peat energy) at (2,3) between F08 (8) and G34 (7); then phase E a second settlement if affordable.
+
+## Round 24 — bonus turns (red, blue) and settle E (green)
+
+**Red bonus (observed):** `BUILD G41 5 1` + `USE G41 PnPnPnPnPn RqOrCeCe` — 5¢ → reliquary +
+ornament + 2 ceramic (goods +16). Red 250.
+
+**Blue bonus:** `USE G28` → SB4 Fishing Village had **no legal cells** (needs coast/water adjacency;
+blue's coast column is full) → `SETTLE SB2 2 3 GnGnGnPtPt` Farming Village (3 food + 2 energy) between
+F08 (8) and G34 (7) → 16. Blue 154. Energy now 0 → phase E settle for blue will be empty.
+
+**Green settle E:** `SETTLE SG2 1 -1 ShShPtPt` Farming Village beside the Winery → 6. Green 169.
+SG8 Hilltop stays in hand (30 food).
+
+Standing: red 250, green 169, blue 154. Red settles SR1 last; game ends after blue's empty settle.
+
+Lessons: (4) Fishing Village requires a water-adjacent cell — don't fill the whole coast column with
+buildings if SB4 is unplaced. (5) Energy, not food, capped both blue and green at the end: one peat
+cut per moor and no coal; bank energy two rounds ahead of phase E. (6) Bonus round = any building on
+the table for free; Castle is the pick for anyone with settlements and food.
