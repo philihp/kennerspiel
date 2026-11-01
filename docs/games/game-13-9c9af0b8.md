@@ -662,3 +662,27 @@ R21 green (2nd): `BUILD F20 1 1` Inn (2w + 2sw) + prior `USE F20` (sell ≤7 foo
 → D6 beside SG5 (+6) + E4 ≈ +14. Green's ☩ cluster is boxed in (no F40/G41 slot without a 6¢ plot
 at (5,1)) — note for the skill: **reserve the ☩ growth slot before settling beside the cluster**
 (SG7 at (3,2) and F27 at (4,2) sealed it).
+
+## Round 21 — a1 (blue start player), green
+
+**Red R20 a2 (observed):** `BUILD F37 5 2` Cooperage on the (5,2) hill. Not the Castle — red still
+sits at 6 wood / 0 stone with G22 unworked. Red 109.
+
+**Blue a1:** `USE F24 BrWn` (LB1) → reliquary. Goods 22→29, blue 119. Church occupied again, so
+red's bread+wine rental is blocked for the round. LB2 home for a2.
+
+**Green:** `BUILD F20 1 1` Inn (2 wood + 2 grain-as-straw), SG5 jumps 16→22 (Inn D=6), econ +4.
+Prior bonus `USE F20 GnGnGnGn` → 4 pennies (Inn pays 1:1 on food). Green 147. All three clergy out
+now (LB1 Farmyard, LB2 G02, prior Inn) → full recall at R22 start.
+
+Scores: green 147, blue 119, red 109.
+
+**Blue a2 plan (after red):** LB2 `USE F08 <4 goods>` → 7¢ (10¢ total) then `BUY_DISTRICT 3 PLAINS`
+for the ☩ slot at (3,3) beside F24; G34 Sacristy build R23 with prior `USE G34 BoCeOrRq` → Wonder.
+Blue has every reliquary input: 4 books, 3 ceramic, 1 ornament, 1 reliquary.
+
+**Green R22 plan:** full recall; 4¢ + 1 wood. Options: `USE F27` Palace via a worked building, or
+peat/wood gather toward settlement food+energy for phase E (4 settlements unplaced: SG1 SG2 SG6 SG8).
+
+Lesson candidate: Inn's bonus fire pays only face value on food (4 grain → 4¢); the real gain was
+the +6 settlement and the econ points, not the coins.
