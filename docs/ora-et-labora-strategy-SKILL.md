@@ -168,6 +168,7 @@ Memories:
 - Appendix: build-bonus on G01 is a no-op turn 1 (your own prior is still home; no prior-occupied targets) — skip the bonus, keeping the prior home.
 - (g13·red, 3p) **A prior parked on an input-light converter is a free menu for the Priory owner every cycle.** Green's prior sat on G02 after a build bonus; red's Priory borrowed it three times in four rounds (10¢ via G06, then 6 grain, then 6 grain). Price the parking spot: prior on G02/G06/F11 = gifting the Priory owner one action per cycle.
 - (g13·green) **Counter: work-contract the Priory itself (1¢).** `WORK_CONTRACT G01 Pn` then `USE G01` → borrow your OWN prior-occupied converter (G02 ×6 of one good) AND the owner's clergy sits on G01, closing their borrow loop for the cycle. Best idle-clergy move when all your clergy are out and nothing is buildable.
+- (g13·green) **Priory → F40 → Castle.** When the owner's prior sits on F40 Hospice, a 2¢ contract on their Priory buys a full Castle settle (verified: `WORK_CONTRACT G01 PnPn`, `USE G01`, `USE F40`, `USE G28`, `SETTLE …`). Check this line every turn in 3–4p once a Hospice is built.
 
 #### G02 Cloister Courtyard — ★★★★☆ · ☩
 `2w · E4 D4 · C/P/H · P all · Start`
@@ -239,6 +240,7 @@ WC: decent rental for liquidity.
 Layout: D8 — wedge it between settlement pockets.
 Memories:
 - **(g3b, −7 pts) F08 is a goods SINK — every input is priced at coin/bread parity. NEVER feed it books/ceramics/ornaments/wine.** Test any unfamiliar 4-input building with cheap inputs only. It is not the Sacristy.
+- (g13·blue) **Four DISTINCT goods.** With only six goods types held (Pn/Sn/Bo/Ce/Or/Rq), every legal bundle ate stone or a Sacristy input. Gather a throwaway basic good (grain) the action before a Market sale so the sale never consumes a build input.
 
 #### F09 Cloister Garden — ★★★★☆ · ☩
 `3¢ (financed) · E5 D0 · C/P/H · P 1·3·4 (not 2p) · Start`
@@ -350,6 +352,8 @@ Memories:
 Function: sell ≤7 food @ 1¢ each; and/or 1 wine @ 6¢.
 Get it: the food→coin tap for modes that have it; solid D6.
 Count: 1/3/4p; 2p relies on Bakery/F30 instead.
+Memories:
+- (g13·green) The build was +10 in one action (econ 4 + D6 beside an own settlement, 16→22); the prior-bonus fire sold 4 grain for 4¢ at face value. Build it for the D6 next to a settlement, not for the coins.
 
 #### F21 Winery — ★★★★☆
 `2c+2sw · E4 D5 · C/P/H · P all · B`
@@ -391,6 +395,7 @@ WC: the sharpest denial target in 2p — **an opponent can WC it with no bread/w
 Memories:
 - **(g3b, −5 pts) Inputs are BREAD + WINE (`USE F24 BrWn`) — not book + wine.** Pre-stage the bread before building or contracting it; a barren USE fires legally and produces nothing.
 - (g9) White's F24 landed r14 but the first firing was forfeited — no bread in hand on the BUILD turn. The build-bonus is half the value; stage inputs first.
+- (g13·blue, 3p) Won the race at R14; a barren LB park on F24 every recall cycle kept red (bread 3 + wine) from renting it — and cost blue a gather each cycle. Denial works; price it against your own tempo.
 
 #### F25 Chamber of Wonders — ★★☆☆☆
 `1w+1c · E0 D6 · C/P/H · P 1·4 · B`
@@ -433,6 +438,8 @@ Layout: **seat a LAY BROTHER on it, not the prior** — a prior parked on the Ca
 Memories:
 - (g2) Contracted-Castle protocol verified (+17 in one turn); (g4) opponent's self-owned Castle from r24 = 7 settlements vs my 4, a ~90-pt column swing. This is what hoarded stone is FOR.
 - (solo) In solo you accumulate more settlement cards than phases — a Castle is near-mandatory to avoid stranding.
+- (g13·red, 3p) **Build it where it touches settlements already placed.** Red's R23 `BUILD G28 4 4` + bonus settle was +68 in one turn: E15, the new settlement at 28, and the Castle's D7 lifted three existing neighbours (17→23, 21→28, 15→28). Site selection is worth more than timing — park a mountain/hill plot beside the cluster and wait for the materials.
+- (g13) **In the final bonus round every colour may USE any building on the table for free — the Castle is the default pick** for anyone still holding a settlement and 3+ energy (green +13, blue +16 off red's Castle).
 
 #### F29 Quarry (C) — ★★★☆☆
 `5¢ · E7 **D−4** · Mountain only · P 3·4 · C`
@@ -477,6 +484,7 @@ Layout: ☩ — the classic failure is a boxed-in cloister with no legal site (g
 Memories:
 - (g4) Chain verified end-to-end: `USE G34 BoCeOrRq` → Wonder. **Engine quirk: the build accepted grain in place of straw** (Part VI #6) — grain is far cheaper to mass; exploit until fixed.
 - (g3, observed) Red's killing block: Quarry→10 stone, BUILD G34, USE G34 — ~+30 and it advanced termination too.
+- (g13·blue, 3p) Wonder fired R23 (+10 econ, +13 net goods) — but the ☩ slot only existed because blue bought a district at R22, and the second reliquary set was 4–5 actions away when the game ended. **One Wonder in 3p ≈ +43 over nine rounds of setup; one Castle turn was +68.** Lay the rails by R15 or choose the Castle.
 
 #### F35 Forger's Workshop — ★★★★☆
 `2c+1sw · E4 **D2** · C/P/H · P all · D`
@@ -531,6 +539,8 @@ Get it: a sparse-board multiplier — its menu is every building nobody built. I
 Count: strongest in 4p; absent in 2p (uncovered buildings there are permanently unavailable).
 Memories:
 - (g8) Your own under-building directly arms the opponent's Hospice — another reason to build wide.
+- (g13·red, 3p) **F40 reaches G28 before anyone builds it** — `USE F40` → `USE G28` → SETTLE is a Castle settle with no Castle. With your own prior parked on F40, your Priory re-fires it every cycle (`USE G01` → `USE F40` → `USE G28`). Red took +15 this way at R22 and again at R24.
+- (g13·green) **Opponents rent the chain:** `WORK_CONTRACT G01 PnPn` → `USE G01` → `USE F40` → `USE G28` → settle, whenever the F40 owner has a clergy home for the Priory and the prior sits on F40. Direct `WORK_CONTRACT F40` is blocked while it is occupied.
 
 #### G41 House of the Brotherhood — ★★★☆☆ · ☩
 `1c+1st · E3 D3 · C/P/H · P all · D`
@@ -565,6 +575,8 @@ Cloister Office (basic) · G01 Priory · G02 Courtyard · F09 Garden · G16 Chap
 | S07 | Village | C | 15 | 9 | 8 | 6 | C/P/H | |
 | S08 | Hilltop Village | D | 30 | 3 | 10 | 8 | **Hillside** | In 2p ONLY placeable via the Castle |
 
+(g13 engine payments accepted: S01 `PnWo` 1f/1e; S02 `GnGnGnPtPt` 3f/2e; S04 `BrGnGnGnGnGnPtPt` 8f/2e; S06 `ShShShPtPtPt` 6f/3e — the energy column above reads high for S02/S04 and the Hamlet's food/energy are swapped vs the engine. Trust the payment drill. S04 with no free water-adjacent cell returns an empty `["SETTLE","S04"]` completion list while the bare `["SETTLE"]` still lists it.)
+
 ## Placement doctrine
 
 1. **Scout before paying — placement is irreversible.** Enumerate every legal (settlement × location × payment) via `get_legal_moves`; sum own D + all orthogonal Ds.
@@ -573,6 +585,9 @@ Cloister Office (basic) · G01 Priory · G02 Courtyard · F09 Garden · G16 Chap
 4. **Save the hillsides.** High-D anchors and the Hilltop need open adjacent plots at phase C/D; burying every hillside under early buildings forfeits the compounding column (g3's decisive error).
 5. **Payment = min-cost covering.** Prefer zero-point goods (grain/sheep/bread/meat); wine forfeits 1 pt, each nickel 2. When food divides by 5, `Mt×n + Co` or `Ni×n + Co` is exact-fit (g7: red's `SETTLE SR8 5 0 MtMtMtMtMtMtCo` = zero waste, zero points forfeited).
 6. **Pre-stage energy before every settle phase.** Food-with-zero-energy settles nothing (g9·blue forfeited phases B–D holding plenty of food). Keep a moor or forest alive so energy is one main action away.
+   (g13) Both Claude colours ended energy-bound with food to spare: blue 11 food / 2 peat, green 12 food / 8 energy only after a FELL_TREES. At peat-token ≤2 one moor cut per action is not a plan — bank energy by round 22 or run a coal/G02 source.
+7. **Shanty Town beside your own settlement is a net ~+2** (g13·green: +5 placed, −3 on the adjacent Village). Park it on an isolated cell, or skip it.
+8. **Leave one high-D empty cell per cluster for the last settle.** Green sealed its cluster with SG7 + F27 at phase D and had only Shanty-grade cells left for the two late settles; blue's coast column was fully built, leaving SB4 Fishing Village with zero legal cells.
 
 ## Landscape doctrine
 
@@ -631,6 +646,8 @@ Every early action serves the named plan; "balanced economic development" is the
 
 **Round-8 checkpoint (2p):** (a) do I own or reliably WC F04? (b) is a settlement cluster forming beside a high-D anchor? (c) is stone banking toward a Castle OR the reliquary chain online? **Two "no"s = you are losing — pivot THIS round.** In 4p, run the checkpoint and the column audit PER COLOR against each color's named arc milestone (V.5), not vibes — g12's win conditions all held to ~r6 and then drifted unchecked.
 
+**3p long (g13):** the Castle-settle plan beat both others by 85+. Red's Castle came late (R23) but onto a site touching three settlements, after F40 had already delivered two Castle settles; the reliquary line (blue) netted one Wonder, the Palace/Winery line (green) led on settlement adjacency until R22 and then had no settle sites left. In 3p name Castle-settle unless the chain is online by R11, and buy the Castle site beside the cluster before the stone.
+
 **Column audit every ~5 rounds:** read all three score columns; pivot INTO the one running away from you. Never pour actions into a column you already lead (g6: tied economic, won goods, lost settlements 33–153). Goods scale linearly; settlements and economic compound.
 
 ## V.2 Action economy
@@ -656,6 +673,7 @@ Every early action serves the named plan; "balanced economic development" is the
 - **Chain access:** F04/F05 bread pipeline when the opponent owns the chain — pre-stage grain/flour/fuel; two main actions per cycle.
 - **Denial (2p specialty):** contract the building the opponent most needs free, timed for that turn — their engine (g3's Workshop shutoff), a fresh F35 when their coins > ~25 (the coin-sink threat window), or a barren F24 park in the closing turns. Denial leverage SCALES DOWN with player count: in 3–4p, advancing your own board usually dominates hampering one of several rivals.
 - **Payment:** wine present > coins once F21 exists (saves 1¢ AND denies income). The engine makes change from nickels.
+- **Castle by proxy (3–4p):** `WC G01` → `USE G01` → `USE F40` → `USE G28` is a 2¢ settle whenever the Hospice owner's prior sits on F40 and they have a clergy home (g13·green). Also `WC G01` → prior-occupied G28 directly.
 - **Multi-color note (running several seats):** in-family WCs move the fee between your own colors (net zero) and can deliberately trip the contracted color's recall. Default to one whenever a sibling color owns a converter you lack (g12: blue's only midgame energy source was one wine paid through green's G07).
 
 ## V.5 Opening books
@@ -734,6 +752,9 @@ Energy earmark: SETTLE needs food AND energy IN HAND at the moment of the comman
 17. **L-slot IDs are per-color placement order, not fixed functions:** blue's Clay Mound sat at LB1 while white's was LW1 and the Farmyards at LB2/LW2 forked differently. Read the landscape legend row for ground truth; never map slot→function across colors (g12: one no-op action + one mis-planned harvest). When in doubt, identify by completion shape: `["", "Jo"]` = production building or Cloister Office (bare USE, no token argument); `["Sh","Gn","JoSh","JoGn"]` = the Farmyard fork. Sending a token to a production building returns a misleading "incomplete move" error, and a bare USE at wheel-token 0 seats a clergyman for nothing (same class as quirk 9).
 18. (g13) When a Claude-controlled owner has only lay brothers home, the engine auto-answers an opponent's WORK_CONTRACT with the LB (no WITH_LAYBROTHER prompt reached the owner). With the prior home the owner is prompted. Plan on the auto-response stranding your last LB.
 19. (g13) With every clergy of a colour out at round start, the engine returns all of them before that colour's first action — no placement is consumed. `BUILD` still never needs clergy, and a fully-placed colour's only top-level completions are `CUT_PEAT FELL_TREES WORK_CONTRACT BUY_* CONVERT COMMIT`.
+20. (g13) **Final bonus round:** at the bonus turn every prior is recalled (lay brothers stay out) and `["USE"]` lists every building on all boards — a free use of any building, opponents' included (G28 = free settle). `upcoming_turns[*].bonus` marks these turns; the regular settle E follows them.
+21. (g13) **SETTLE drill tokenisation:** pass col and row as separate tokens (`["SETTLE","SG6","2","0"]`). A combined `"2 0"` token returns bogus completions (`["0","2"]`).
+22. (g13) **F40 Hospice's menu is the whole unbuilt display** (`G28 F29 F30 G34 F35 F36 G41` offered), so `USE F40` → `USE G28` is a settle without a Castle; chained from G01 when the prior sits on F40.
 
 ## Solo-mode mechanics
 
@@ -788,3 +809,9 @@ Led +14 late; lost to F08 goods-sink misread (−7), F24 bread-not-book (−5), 
 Win conditions named (B Castle-settle, G reliquary chain, W cloister-cluster) — held early, drifted mid-game; third consecutive 4p game where every Claude color was goods-rich and land-poor while red bought fresh land every 2–3 rounds and built onto it.
 Decided by: W bought zero landscape after round 1 (settle phases forfeited to saturation, never used the mid-settle buying window); B built the Castle off a round-1 mountain plot and round-5 stone but never earmarked energy — three settle attempts died; G ran the F04→F05 chain well (bread + coins) but sat on wood 5 + stone 8 without flushing the hoard into buildings.
 Encoded: F09-first hard check, land-during-settle window, hoard-flush rule, Castle energy earmark, quirks 16–17 (SETTLE affordability enumeration, L-slot identity), 4p progression arcs A/B/C, bonus-round converter targets.
+
+#### 13. 9c9af0b8 (3p long, blue+green vs human red) · red 254 / G169 / B154
+Win conditions named: B reliquary chain (F24 R14 → Sacristy Wonder R23), G Windmill/Winery/Palace cluster, red Castle-settle.
+Decided by: red's F40 Hospice (R21) gave two proxy Castle settles, then the Castle itself at R23 on a three-settlement junction (+68 in one turn), eight settlements placed vs 7/4. Blue's Wonder won goods by 37 and lost settlements by 72; green led until R22 then ran out of anchored cells and energy.
+Encoded: G28/F40/G01 proxy-Castle memories, F08 distinct-goods rule, F20/G34/F24 memories, settlement table engine payments + Shanty/last-cell doctrine, quirks 20–22, V.1 3p note, V.4 Castle-by-proxy.
+
