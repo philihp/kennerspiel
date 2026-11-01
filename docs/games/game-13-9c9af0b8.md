@@ -703,3 +703,12 @@ Blue 119 (unchanged).
 
 Lesson candidate: the Market needs 4 *distinct* goods — a narrow inventory makes it expensive.
 Pick up a throwaway basic good (grain) one action ahead so the sale never eats a build input.
+
+## Round 22 — a1 (green start player)
+
+Full recall for green and blue. **Green a1:** `USE LG2 Sh` → 7 sheep (14 food). Green holds 4
+settlements (SG1 SG2 SG6 SG8) with 4 empty cells ((0,-1),(2,0),(1,2),(2,2)); food is the
+constraint, energy next (no moor — wood via FELL_TREES, wood token 4). Green 147.
+
+**Green a2 plan (after blue):** `FELL_TREES 1 -1` → 4 wood, or Inn sale of sheep for coins if a
+plot/district is needed. **Blue R22:** LB `USE F08 PnBoCeGn` → 9¢ then `BUY_DISTRICT 3 PLAINS`.
