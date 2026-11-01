@@ -756,3 +756,25 @@ Scores: red 148, green 146, blue 137. Red Castle incoming; red has 3 settlements
 **Blue R24 plan:** LB2 to F24 is dead (no wine). Options: `USE F38` forest cash-out? (no forests —
 row 3 has LFO at (0,3)!) → books; or WC red's G01 → F40 chain if red's prior is on F40/Castle after
 a2; or G12 stone for F29/F30 builds. Re-evaluate after red's a2.
+
+## Round 24 — a1 (final round: regular + bonus turns, then settle E)
+
+**Red R23 a2 (observed):** `BUILD G28 4 4` → `USE G28` → `SETTLE SR7 2 4` (meat+bread+sheep, 5 peat).
+Red 148→**216**: econ 74→97, settlements [13,6,23,28,19,28] — Castle D lifted SR5/SR6/SR8 and SR7
+landed at 28. Red leads by 70 with 2 settlements (SR1, SR3) still in hand.
+
+**Coalition trigger met** (red lead > 50, < 8 turns): but blue and green hold 0–1 coin, no clergy to
+spare and no shared lever on red — nothing individually rational to coordinate. Each plays for its own
+max.
+
+**Schedule from `upcoming_turns`:** R24 blue, green, red, blue, then bonus green/red/blue, then
+settle E (green, red, blue). Each color gets one final settlement.
+
+**Blue a1:** `USE LB2 Gn` → 7 grain (food). All clergy out; no recall coming. Remaining blue actions
+must be clergy-free: `FELL_TREES 0 3` (wood 0 now → wait for value), `CUT_PEAT` on (0,-1)/(0,1) moors
+(peat 2). Target: SB4 Fishing Village at (2,3) between F08 (8) and G34 (7), or SB6 Village if food+
+energy allow. Blue 137.
+
+**Green a1:** `FELL_TREES 1 -1` → 2 wood. Green: 6 sheep (12 food), 6 peat + 2 wood (8 energy),
+PRIG home for the bonus turn. Target SG6 Village at (2,0) or (1,2); verify cost at the settle drill.
+Green 146.
