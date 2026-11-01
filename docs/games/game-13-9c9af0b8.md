@@ -712,3 +712,26 @@ constraint, energy next (no moor — wood via FELL_TREES, wood token 4). Green 1
 
 **Green a2 plan (after blue):** `FELL_TREES 1 -1` → 4 wood, or Inn sale of sheep for coins if a
 plot/district is needed. **Blue R22:** LB `USE F08 PnBoCeGn` → 9¢ then `BUY_DISTRICT 3 PLAINS`.
+
+## Round 22 — blue, green a2
+
+**Red R22 (observed):** `USE F09` → `USE G01` → `USE F40` → `USE G28` → `SETTLE SR8 3 4` (6 meat +
+2 peat), 15 pts. Red 146→148. **Engine discovery: F40 lets you USE any *unbuilt* building in the
+display** (G28 Castle = free settle, G34, F35…). Red's Priory reaches F40 while the prior sits on it,
+so red can repeat the Castle settle every round it has a clergy for G01. Red has SR1 SR3 SR7 left.
+
+**Blue:** `USE F08 PnBoCeGn` → 7¢ (+bread), `BUY_DISTRICT 3 PLAINS` (8¢) → row 3 with plains (3,3)
+under F24 ☩. Blue 1¢, 3 grain, 3 stone, 3 books, 2 ceramic, 1 ornament, 1 reliquary, bread. 114
+(goods dipped from the sale). R23: `BUILD G34 3 3` + prior `USE G34 BoCeOrRq` → Wonder.
+
+**Green a2:** copied red's chain. `WORK_CONTRACT G01 PnPn` (engine auto-seated red's LB2 on G01)
+→ `USE G01` → `USE F40` → `USE G28` → `SETTLE SG1 2 2 PnWo`. Only SG1 Shanty was affordable
+(7 sheep = 14 food but 1 wood = 1 energy). Shanty scored 5 **but SG7 dropped 18→15: Shanty Town has
+dwelling value −3**. Net +2. Should have placed it at (0,-1) away from the cluster. Green 149.
+
+Scores: green 149, red 148, blue 114. Red's F40→G28 loop is now the biggest threat: ~15–20 per
+settle for the cost of a Priory action.
+
+Lessons: (1) F40 = USE any unbuilt display building; with G01 it is a repeatable Castle settle.
+(2) Shanty Town D = −3 — never place it beside your own settlement; park it on an isolated cell.
+(3) Opponents can rent the F40 chain through G01 for 2¢ whenever red has a clergy home.
