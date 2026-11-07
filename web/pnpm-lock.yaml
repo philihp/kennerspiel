@@ -70,7 +70,7 @@ importers:
         version: 16.4.5(@types/node@25.9.9)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       pointille:
         specifier: ^1.0.1
-        version: 1.0.1
+        version: 1.1.0
       ramda:
         specifier: 0.32.0
         version: 0.32.0
@@ -1406,8 +1406,8 @@ packages:
     resolution: {integrity: sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==}
     engines: {node: '>=12'}
 
-  pointille@1.0.1:
-    resolution: {integrity: sha512-H5VfTxqjFLr16MSos98qzBXoDMwADNKLSLYf0mP7A4c3UUhrvPEJCYKLjMSvfKrteCGTMojD7vUwq2FWm/VESw==}
+  pointille@1.1.0:
+    resolution: {integrity: sha512-5p8Q2ACpCEaFngnwhtLgtFL7YlhicCG/9Ct16oy22miwb2kwKNOwafZaSxDZIpUwBH5rbPppmaWb7n2fjxDzqQ==}
     engines: {node: '>=20.0.0'}
 
   polygon-clipping@0.15.7:
@@ -2771,7 +2771,7 @@ snapshots:
 
   picomatch@4.0.7: {}
 
-  pointille@1.0.1:
+  pointille@1.1.0:
     dependencies:
       d3-delaunay: 6.0.4
       polygon-clipping: 0.15.7
