@@ -38,7 +38,6 @@ import { introduceBuildings, roundBuildings } from '../buildings'
 import { introduceGrapeToken, introduceStoneToken, take } from '../rondel'
 import { introduceSettlements } from '../settlements'
 import { gameEnd } from '../state'
-import { stepWithTimestamp } from '../entropy'
 import { nextFrameSolo } from './nextFrameSolo'
 import { rotateRondelWithExpire } from './rotateRondel'
 
@@ -187,7 +186,7 @@ const robbinsFrame =
   (frame: OrdinalFrame): OrdinalFrame => {
     const upkeep = frame.upkeep ?? []
     const afterSettlement = aggressive ? afterSettlementSchedule[settledBefore as SettlementRound] : undefined
-    const afterSettlementBuild = afterSettlement ? [stepWithTimestamp, neutralBuild(afterSettlement, true)] : []
+    const afterSettlementBuild = afterSettlement ? [neutralBuild(afterSettlement, true)] : []
     if (!rotates) {
       return afterSettlementBuild.length ? { ...frame, upkeep: [...afterSettlementBuild, ...upkeep] } : frame
     }
@@ -196,8 +195,6 @@ const robbinsFrame =
       ...frame,
       upkeep: [
         // the settlement phase (new buildings and settlements) finishes the round before
-        // this frame uses the randomizer, so take a timestamp first
-        stepWithTimestamp,
         ...filter(isIntroduction, upkeep),
         ...afterSettlementBuild,
         ...(rotation === GRAPE_ROTATION ? [introduceGrapeToken] : []),

@@ -3,12 +3,12 @@
 import { createClient } from '@/utils/supabase/server'
 import { PostgrestError } from '@supabase/supabase-js'
 import { isEmpty } from 'ramda'
-import { nowInSeconds, timestampsAfter } from '@/mcp/engine'
+import { nowInSeconds, stampCommand, usesTimestamps } from '@/mcp/engine'
 
 export const serverMove = async (
   instanceId: string,
   newCommands: string[]
-): Promise<{ error: PostgrestError | null; commands: string[] | undefined; timestamps?: number[] }> => {
+): Promise<{ error: PostgrestError | null; commands: string[] | undefined }> => {
   const supabase = await createClient()
   const {
     data: { user },
@@ -28,13 +28,16 @@ export const serverMove = async (
 
   // TODO: check that it is players turn from one of seats[].color, oh god does this mean playing the commands?
 
-  // keep the timestamps the earlier commands use, and add one if the new last command uses the randomizer
-  const { data: current } = await supabase.from('instance').select('timestamps').eq('id', instanceId).single()
-  const timestamps = timestampsAfter(newCommands, current?.timestamps ?? [], nowInSeconds())
+  // in a variant with timestamps, the server stamps the new last command with the time now
+  const lastIndex = newCommands.length - 1
+  const commands =
+    usesTimestamps(newCommands) && lastIndex >= 2
+      ? newCommands.map((c, i) => (i === lastIndex ? stampCommand(c, nowInSeconds()) : c))
+      : newCommands
 
   const { error: updateError } = await supabase
     .from('instance')
-    .update({ commands: newCommands, timestamps, updated_at: new Date().toISOString() })
+    .update({ commands, updated_at: new Date().toISOString() })
     .eq('id', instanceId)
 
   if (updateError) {
@@ -44,9 +47,9 @@ export const serverMove = async (
 
   const { data: instance, error } = await supabase
     .from('instance')
-    .select('commands, timestamps, entrant(id)')
+    .select('commands, entrant(id)')
     .eq('id', instanceId)
     .single()
 
-  return { error, commands: instance?.commands, timestamps: instance?.timestamps }
+  return { error, commands: instance?.commands }
 }

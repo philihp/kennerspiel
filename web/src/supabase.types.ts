@@ -77,7 +77,6 @@ export type Database = {
           hidden: boolean | null
           id: string
           owner_id: string
-          timestamps: number[]
           updated_at: string
         }
         Insert: {
@@ -86,7 +85,6 @@ export type Database = {
           hidden?: boolean | null
           id?: string
           owner_id?: string
-          timestamps?: number[]
           updated_at?: string
         }
         Update: {
@@ -95,7 +93,6 @@ export type Database = {
           hidden?: boolean | null
           id?: string
           owner_id?: string
-          timestamps?: number[]
           updated_at?: string
         }
         Relationships: [
@@ -141,7 +138,6 @@ export type Database = {
           p_command: string
           p_expected_count: number
           p_instance_id: string
-          p_timestamp?: number
         }
         Returns: {
           commands: string[]
@@ -149,7 +145,6 @@ export type Database = {
           hidden: boolean | null
           id: string
           owner_id: string
-          timestamps: number[]
           updated_at: string
         }[]
       }
@@ -157,7 +152,6 @@ export type Database = {
         Args: {
           p_expected_count: number
           p_instance_id: string
-          p_keep_timestamps?: number
         }
         Returns: {
           commands: string[]
@@ -165,7 +159,6 @@ export type Database = {
           hidden: boolean | null
           id: string
           owner_id: string
-          timestamps: number[]
           updated_at: string
         }[]
       }

@@ -4,12 +4,14 @@ import {
   activePlayerColor,
   applyCommand,
   asPlaying,
-  commandUsesTimestamp,
   engineColorToEntrantColor,
   nowInSeconds,
   replay,
+  stampCommand,
   tokenize,
+  usesTimestamps,
 } from '../engine'
+import { isTimestampToken } from 'hathora-et-labora-game'
 import { renderPendingWorkContract, renderSummary } from '../render'
 import { errorResult, jsonResult, ToolResult } from '../content'
 import { fetchInstance } from './fetchInstance'
@@ -31,7 +33,7 @@ export const makeMove = async ({
   if (mySeats.length === 0) return errorResult('You are not seated in this game.')
 
   // 2. status check
-  const playing = asPlaying(replay(instance.commands, instance.timestamps))
+  const playing = asPlaying(replay(instance.commands))
   if (playing === undefined)
     return errorResult('Game has not started yet; seats and setup are managed from the website lobby.')
   if (playing.status === GameStatusEnum.FINISHED) return errorResult('Game is already finished.')
@@ -50,7 +52,8 @@ export const makeMove = async ({
   //      multi-token commands like `BUILD G07` without the position — the reducer
   //      would happily apply that and park the game in a sub-step, but it isn't a
   //      complete legal command per get_legal_moves).
-  const tokens = tokenize(command)
+  // the server sets the timestamp, so drop any the caller sent
+  const tokens = tokenize(command).filter((t) => !isTimestampToken(t))
   if (tokens.length === 0) return errorResult('Empty command. Use get_legal_moves to find a legal command.')
   const nextState = applyCommand(playing, tokens)
   if (nextState === undefined) {
@@ -69,9 +72,7 @@ export const makeMove = async ({
   const { data, error } = await supabase.rpc('append_command', {
     p_instance_id: instance.id,
     p_expected_count: instance.commands.length,
-    p_command: tokens.join(' '),
-    // a move that uses the randomizer also stores the timestamp it used
-    p_timestamp: commandUsesTimestamp(playing, tokens) ? nowInSeconds() : undefined,
+    p_command: usesTimestamps(instance.commands) ? stampCommand(tokens.join(' '), nowInSeconds()) : tokens.join(' '),
   })
   if (error) return errorResult(`Failed to append move: ${error.message}`)
   if (!data || data.length === 0) {
@@ -79,7 +80,7 @@ export const makeMove = async ({
   }
 
   const [updated] = data
-  const updatedState = asPlaying(replay(updated.commands, updated.timestamps))
+  const updatedState = asPlaying(replay(updated.commands))
   if (updatedState === undefined) return errorResult('Move was saved, but the resulting state could not be replayed.')
   return jsonResult({
     ok: true,

@@ -1,4 +1,4 @@
-import { GameState, initialState, reducer, Tableau, withTimestamps } from 'hathora-et-labora-game'
+import { GameState, initialState, isTimestampToken, reducer, Tableau, timestampToken } from 'hathora-et-labora-game'
 import {
   BuildingEnum,
   Frame,
@@ -22,38 +22,12 @@ type CommandReducer = (state: GameState | undefined, command: string[]) => GameS
 // the reducer throws on commands it cannot parse (game/src/reducer.ts:115), so
 // both helpers normalize that to undefined alongside ordinary illegal moves
 
-// timestamps: the unix timestamps (seconds) stored with the instance. A command that
-// uses the randomizer takes the next one as its pcg step distance.
-export const replay = (commands: string[], timestamps: number[] = []): GameState | undefined => {
+export const replay = (commands: string[]): GameState | undefined => {
   try {
-    return commands
-      .map((s) => s.split(' '))
-      .reduce<GameState | undefined>(reducer as CommandReducer, withTimestamps(timestamps)(initialState))
+    return commands.map((s) => s.split(' ')).reduce<GameState | undefined>(reducer as CommandReducer, initialState)
   } catch {
     return undefined
   }
-}
-
-export const nowInSeconds = (): number => Math.floor(Date.now() / 1000)
-
-// the stored timestamps that these commands use, from the front of the list
-export const usedTimestamps = (commands: string[], timestamps: number[]): number[] => {
-  const end = replay(commands, timestamps)
-  return end === undefined ? timestamps : timestamps.slice(0, timestamps.length - (end.timestamps?.length ?? 0))
-}
-
-// true if the command uses the randomizer, and so needs a new timestamp
-export const commandUsesTimestamp = (state: GameState, command: string[]): boolean =>
-  applyCommand(withTimestamps([0])(state), command)?.timestamps?.length === 0
-
-// the timestamps to store after the last command of the list is added
-export const timestampsAfter = (commands: string[], timestamps: number[], now: number): number[] => {
-  const before = commands.slice(0, -1)
-  const used = usedTimestamps(before, timestamps)
-  const prior = replay(before, used)
-  const last = commands[commands.length - 1]
-  if (prior === undefined || last === undefined) return used
-  return commandUsesTimestamp(prior, last.split(' ')) ? [...used, now] : used
 }
 
 export const tokenize = (command: string): string[] =>
@@ -103,3 +77,12 @@ export const pendingWorkContract = (state?: GameStatePlaying): PendingWorkContra
   if (contractor === undefined || owner === undefined || building === undefined) return undefined
   return { contractor, owner, building }
 }
+
+// games in the robbins variants add a "#<unix seconds>" timestamp to every command after CONFIG
+export const usesTimestamps = (commands: string[]): boolean => (commands[0]?.split(' ')[4] ?? '').startsWith('robbins')
+
+export const nowInSeconds = (): number => Math.floor(Date.now() / 1000)
+
+// put the server's timestamp on the end of a command, in place of any timestamp it already has
+export const stampCommand = (command: string, seconds: number): string =>
+  [...tokenize(command).filter((t) => !isTimestampToken(t)), timestampToken(seconds)].join(' ')

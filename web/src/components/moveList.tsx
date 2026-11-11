@@ -6,6 +6,7 @@ import { Tables } from '@/supabase.types'
 import { Frame } from './frame'
 import { FastForwardIcon, RewindIcon } from 'lucide-react'
 import { buildingName } from './buildingName'
+import { formatTimestamp, isTimestampToken, parseTimestamp } from 'hathora-et-labora-game'
 
 const scrollToBuilding = (id: string) => (e: React.MouseEvent) => {
   e.preventDefault()
@@ -20,6 +21,19 @@ const CommandDisplay = ({ command }: { command: string }) => {
         {verb.toLowerCase().replace(/_/g, ' ')}
       </span>
       {rest.map((token, i) => {
+        // a "#<seconds>" timestamp shows in game notation, as ISO8601
+        const seconds = isTimestampToken(token) ? parseTimestamp(token.slice(1)) : undefined
+        if (seconds !== undefined) {
+          const iso = formatTimestamp(seconds)
+          return (
+            <React.Fragment key={i}>
+              {' '}
+              <time dateTime={iso} title={token} style={{ opacity: 0.6 }}>
+                #{iso}
+              </time>
+            </React.Fragment>
+          )
+        }
         const name = buildingName(token)
         return (
           <React.Fragment key={i}>

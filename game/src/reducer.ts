@@ -11,7 +11,7 @@ import {
   SettlementEnum,
 } from './types'
 import { parseResourceParam } from './board/resource'
-import { beginCommand, endCommand } from './board/entropy'
+import { splitTimestamp, stepByTimestamp } from './board/timestamp'
 import {
   build,
   commit,
@@ -125,5 +125,8 @@ const applyCommand = (state: GameState, [command, ...params]: string[]): GameSta
     })
 }
 
-export const reducer = (state: GameState, command: string[]): GameState | undefined =>
-  endCommand(applyCommand(beginCommand(state), command))
+// a command may end with a "#<timestamp>" token, which steps the pcg before the command runs
+export const reducer = (state: GameState, command: string[]): GameState | undefined => {
+  const [tokens, seconds] = splitTimestamp(command)
+  return applyCommand(stepByTimestamp(seconds)(state), tokens)
+}

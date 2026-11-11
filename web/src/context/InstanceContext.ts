@@ -1,6 +1,6 @@
 'use client'
 
-import { control, GameState, initialState, reducer, withTimestamps } from 'hathora-et-labora-game'
+import { control, GameState, initialState, reducer } from 'hathora-et-labora-game'
 import {
   createContext,
   createElement,
@@ -142,9 +142,9 @@ export const InstanceContextProvider = ({
       .map((s) => s.split(' '))
       .reduce<GameState | undefined>(
         reducer as (state: GameState | undefined, [command, ...params]: string[]) => GameState | undefined,
-        withTimestamps(instance.timestamps ?? [])(initialState)
+        initialState
       )
-  }, [commands, instance.timestamps])
+  }, [commands])
 
   const controls = useMemo(() => {
     if (gameState?.status === GameStatusEnum.SETUP) return undefined
@@ -157,10 +157,9 @@ export const InstanceContextProvider = ({
 
   const move = async () => {
     setDebounced(true)
-    const { error, commands: newCommands, timestamps } = await serverMove(instance.id, [...commands, partial.join(' ')])
+    const { error, commands: newCommands } = await serverMove(instance.id, [...commands, partial.join(' ')])
     setDebounced(false)
     if (error) return console.error(error)
-    if (timestamps) setInstance((old) => ({ ...old, timestamps }))
     setCommands(newCommands ?? commands)
     setPartial([])
   }

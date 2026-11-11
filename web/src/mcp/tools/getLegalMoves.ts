@@ -19,7 +19,7 @@ export const getLegalMoves = async ({
   if ('error' in fetched) return errorResult(fetched.error)
   const { instance, mySeats } = fetched
 
-  const playing = asPlaying(replay(instance.commands, instance.timestamps))
+  const playing = asPlaying(replay(instance.commands))
   if (playing === undefined) return errorResult('Game has not started yet; there are no moves to make.')
   if (playing.status === GameStatusEnum.FINISHED) {
     return jsonResult({ status: playing.status, completions: [], note: 'Game is finished.' })
