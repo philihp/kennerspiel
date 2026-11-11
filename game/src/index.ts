@@ -5,6 +5,7 @@ export {
   formatTimestamp,
   parseTimestamp,
   splitComment,
+  splitNote,
   splitTimestamp,
   stripComment,
   withTimestamp,

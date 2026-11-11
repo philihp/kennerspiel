@@ -7,10 +7,12 @@ import { GameState, GameStatusEnum } from '../types'
 // unix epoch before the command runs. A move made at a different second then
 // gives different draws.
 //
-//   COMMIT #2026-11-11T08:13:01Z   steps the pcg by 1794384781
-//   COMMIT #1794384781             the same
-//   COMMIT #a good move            only a comment
+//   COMMIT #2026-11-11T08:13:01Z             steps the pcg by 1794384781
+//   COMMIT #1794384781                       the same
+//   COMMIT # 2026-11-11T08:13:01Z good move  the same, with a note after it
+//   COMMIT # a good move                     only a comment
 //
+// Only the first word of the comment can be the timestamp.
 // A timestamp is kept to the second. Anything more precise, like milliseconds, is dropped.
 
 const COMMENT = '#'
@@ -41,14 +43,24 @@ export const splitComment = (line: string): [string, string | undefined] => {
 // the line without its comment
 export const stripComment = (line: string): string => splitComment(line)[0]
 
-// the line with a timestamp comment in place of any comment it had
-export const withTimestamp = (line: string, seconds: number): string =>
-  `${stripComment(line)} ${COMMENT}${formatTimestamp(seconds)}`
+// split a comment into its timestamp (the first word, if it is one) and the note after it
+export const splitNote = (comment: string): [number | undefined, string] => {
+  const [first = '', ...rest] = tokens(comment)
+  const seconds = parseTimestamp(first)
+  return seconds === undefined ? [undefined, tokens(comment).join(' ')] : [seconds, rest.join(' ')]
+}
+
+// the line with this timestamp at the start of its comment. A note in the comment is kept, and an old timestamp is replaced.
+export const withTimestamp = (line: string, seconds: number): string => {
+  const [command, comment] = splitComment(line)
+  const [, note] = splitNote(comment ?? '')
+  return [command, `${COMMENT}${formatTimestamp(seconds)}`, ...(note ? [note] : [])].join(' ')
+}
 
 // split a tokenized command into the command tokens and the timestamp in its comment
 export const splitTimestamp = (command: string[]): [string[], number | undefined] => {
   const [line, comment] = splitComment(command.join(' '))
-  return [tokens(line), comment === undefined ? undefined : parseTimestamp(comment)]
+  return [tokens(line), comment === undefined ? undefined : splitNote(comment)[0]]
 }
 
 // step the pcg forward. Before START there is no pcg yet, so nothing happens.

@@ -6,7 +6,7 @@ import { Tables } from '@/supabase.types'
 import { Frame } from './frame'
 import { FastForwardIcon, RewindIcon } from 'lucide-react'
 import { buildingName } from './buildingName'
-import { formatTimestamp, parseTimestamp, splitComment } from 'hathora-et-labora-game'
+import { formatTimestamp, splitComment, splitNote } from 'hathora-et-labora-game'
 
 const scrollToBuilding = (id: string) => (e: React.MouseEvent) => {
   e.preventDefault()
@@ -14,11 +14,14 @@ const scrollToBuilding = (id: string) => (e: React.MouseEvent) => {
 }
 
 const CommandDisplay = ({ command }: { command: string }) => {
-  // the "#" comment is not printed. It shows when the mouse hovers on the move: a timestamp in ISO8601, else as written
+  // the "#" comment is not printed. It shows when the mouse hovers on the move: a timestamp in ISO8601, then any note
   const [line, comment] = splitComment(command)
   const [verb, ...rest] = line.split(' ').filter((s) => s)
-  const seconds = comment === undefined ? undefined : parseTimestamp(comment)
-  const time = seconds === undefined ? comment : formatTimestamp(seconds)
+  const [seconds, note] = splitNote(comment ?? '')
+  const time =
+    comment === undefined
+      ? undefined
+      : [...(seconds === undefined ? [] : [formatTimestamp(seconds)]), note].join(' ').trim()
   return (
     <span title={time}>
       <span title={time ?? verb} style={{ cursor: 'context-menu' }}>

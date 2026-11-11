@@ -2,7 +2,7 @@ import { describe, it, expect } from '../../testHelpers'
 import { reducer } from '../../reducer'
 import { initialState } from '../../state'
 import { GameState } from '../../types'
-import { formatTimestamp, parseTimestamp, splitComment, splitTimestamp, withTimestamp } from '../timestamp'
+import { formatTimestamp, parseTimestamp, splitComment, splitNote, splitTimestamp, withTimestamp } from '../timestamp'
 
 const play = (commands: string[]): GameState =>
   commands.reduce<GameState>((s, c) => reducer(s, c.split(' '))!, initialState)
@@ -30,6 +30,13 @@ describe('board/timestamp', () => {
       expect(splitTimestamp(['USE', 'LR1'])).toStrictEqual([['USE', 'LR1'], undefined]))
     it('ignores a comment that is not a timestamp', () =>
       expect(splitTimestamp(['COMMIT', '#a', 'good', 'move'])).toStrictEqual([['COMMIT'], undefined]))
+    it('reads the first word of the comment, before a note', () =>
+      expect(splitTimestamp('COMMIT # 2026-11-11T08:13:01Z good move'.split(' '))).toStrictEqual([
+        ['COMMIT'],
+        1794384781,
+      ]))
+    it('ignores a timestamp that is not the first word', () =>
+      expect(splitTimestamp('COMMIT # good move 1794384781'.split(' '))).toStrictEqual([['COMMIT'], undefined]))
     it('finds a comment with no space before it', () =>
       expect(splitTimestamp(['COMMIT#1794384781'])).toStrictEqual([['COMMIT'], 1794384781]))
   })
@@ -40,9 +47,18 @@ describe('board/timestamp', () => {
     it('has no comment', () => expect(splitComment('USE LR1')).toStrictEqual(['USE LR1', undefined]))
   })
 
+  describe('splitNote', () => {
+    it('splits the timestamp from the note', () =>
+      expect(splitNote(' 1794384781  good move')).toStrictEqual([1794384781, 'good move']))
+    it('is all note when there is no timestamp', () =>
+      expect(splitNote('good move')).toStrictEqual([undefined, 'good move']))
+  })
+
   describe('withTimestamp', () => {
-    it('replaces any comment', () =>
-      expect(withTimestamp('COMMIT # hi', 1794384781)).toBe('COMMIT #2026-11-11T08:13:01Z'))
+    it('adds a timestamp', () => expect(withTimestamp('COMMIT', 1794384781)).toBe('COMMIT #2026-11-11T08:13:01Z'))
+    it('keeps a note', () => expect(withTimestamp('COMMIT # hi', 1794384781)).toBe('COMMIT #2026-11-11T08:13:01Z hi'))
+    it('replaces an old timestamp and keeps the note', () =>
+      expect(withTimestamp('COMMIT # 1 good move', 1794384781)).toBe('COMMIT #2026-11-11T08:13:01Z good move'))
   })
 
   describe('reducer', () => {
@@ -64,6 +80,11 @@ describe('board/timestamp', () => {
         ...Array.from({ length: 20 }, (_, i) => `COMMIT #${1762848100 + i * 60 + offset}`),
       ]
       expect(play(commands(0)).rondel).not.toStrictEqual(play(commands(1)).rondel)
+    })
+    it('a note after the timestamp does not change the game', () => {
+      expect(play([...robbins, 'COMMIT # 2026-11-11T08:13:01Z good move'])).toStrictEqual(
+        play([...robbins, 'COMMIT #1794384781'])
+      )
     })
     it('a plain comment does not change the game', () => {
       expect(play([...robbins, 'COMMIT # thinking'])).toStrictEqual(play([...robbins, 'COMMIT']))

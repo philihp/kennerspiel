@@ -83,6 +83,6 @@ export const usesTimestamps = (commands: string[]): boolean => (commands[0]?.spl
 
 export const nowInSeconds = (): number => Math.floor(Date.now() / 1000)
 
-// put the server's timestamp in the command's comment, in place of any comment it already has
+// put the server's timestamp first in the command's comment. A note in the comment is kept, and an old timestamp is replaced
 export const stampCommand = (command: string, seconds: number): string =>
   withTimestamp(tokenize(command).join(' '), seconds)
