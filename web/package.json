@@ -6,15 +6,15 @@
   "dependencies": {
     "@marsidev/react-turnstile": "1.6.3",
     "@modelcontextprotocol/server": "^2.0.0",
-    "@next/third-parties": "16.4.3",
+    "@next/third-parties": "16.4.5",
     "@philihp/prettier-config": "1.0.0",
     "@stdlib/math": "0.4.1",
     "@supabase/auth-helpers-nextjs": "0.15.0",
     "@supabase/ssr": "0.12.7",
-    "@supabase/supabase-js": "2.118.0",
+    "@supabase/supabase-js": "2.119.0",
     "@vercel/analytics": "2.0.1",
     "@vercel/flags": "3.1.1",
-    "@vercel/speed-insights": "2.0.0",
+    "@vercel/speed-insights": "2.1.0",
     "date-fns": "4.4.0",
     "dotenv": "17.4.2",
     "flags": "4.4.0",
@@ -22,8 +22,8 @@
     "hathora-et-labora-game": "workspace:*",
     "jsonwebtoken": "9.0.3",
     "jwks-rsa": "4.1.0",
-    "mcp-handler": "2.3.0",
-    "next": "16.4.3",
+    "mcp-handler": "2.3.1",
+    "next": "16.4.5",
     "pointille": "^1.0.1",
     "ramda": "0.32.0",
     "react": "19.3.1",
@@ -50,10 +50,10 @@
     "@types/react-dom": "19.3.0",
     "husky": "9.1.7",
     "lint-staged": "17.6.0",
-    "lucide-react": "1.66.0",
+    "lucide-react": "1.70.0",
     "oxlint": "^1.78.0",
     "prettier": "3.9.10",
-    "supabase": "2.122.0",
+    "supabase": "3.0.0",
     "tsx": "^4.22.4",
     "typescript": "7.0.2"
   },
@@ -61,5 +61,5 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0"
   },
-  "packageManager": "pnpm@11.28.10"
+  "packageManager": "pnpm@11.28.11"
 }
