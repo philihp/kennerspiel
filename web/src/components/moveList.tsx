@@ -6,6 +6,7 @@ import { Tables } from '@/supabase.types'
 import { Frame } from './frame'
 import { FastForwardIcon, RewindIcon } from 'lucide-react'
 import { buildingName } from './buildingName'
+import { formatTimestamp, splitComment, splitNote } from 'hathora-et-labora-game'
 
 const scrollToBuilding = (id: string) => (e: React.MouseEvent) => {
   e.preventDefault()
@@ -13,10 +14,17 @@ const scrollToBuilding = (id: string) => (e: React.MouseEvent) => {
 }
 
 const CommandDisplay = ({ command }: { command: string }) => {
-  const [verb, ...rest] = command.split(' ')
+  // the "#" comment is not printed. It shows when the mouse hovers on the move: a timestamp in ISO8601, then any note
+  const [line, comment] = splitComment(command)
+  const [verb, ...rest] = line.split(' ').filter((s) => s)
+  const [seconds, note] = splitNote(comment ?? '')
+  const time =
+    comment === undefined
+      ? undefined
+      : [...(seconds === undefined ? [] : [formatTimestamp(seconds)]), note].join(' ').trim()
   return (
-    <>
-      <span title={verb} style={{ cursor: 'context-menu' }}>
+    <span title={time}>
+      <span title={time ?? verb} style={{ cursor: 'context-menu' }}>
         {verb.toLowerCase().replace(/_/g, ' ')}
       </span>
       {rest.map((token, i) => {
@@ -34,7 +42,7 @@ const CommandDisplay = ({ command }: { command: string }) => {
           </React.Fragment>
         )
       })}
-    </>
+    </span>
   )
 }
 

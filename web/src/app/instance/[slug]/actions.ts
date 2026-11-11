@@ -1,5 +1,6 @@
 'use server'
 
+import { nowInSeconds, stampCommand, usesTimestamps } from '@/mcp/engine'
 import { Enums, Tables } from '@/supabase.types'
 import { createClient } from '@/utils/supabase/server'
 
@@ -103,7 +104,9 @@ export const join = async (
   if (updatedInstance.commands.length) {
     const players = Math.max(updatedInstance.entrant.length, 1)
     const oldConfig = instance.commands[0].split(' ')
-    config(instance.id, `CONFIG ${players} ${oldConfig[2]} ${oldConfig[3]}`)
+    // solo variants (5th token) only apply to a 1 player game
+    const variant = players === 1 && oldConfig[4] ? ` ${oldConfig[4]}` : ''
+    config(instance.id, `CONFIG ${players} ${oldConfig[2]} ${oldConfig[3]}${variant}`)
   }
 
   const { entrant, ...shallowInstance } = updatedInstance
@@ -187,7 +190,12 @@ export const start = async (instanceId: string) => {
   const { data: updatedData, error: startError } = await supabase
     .from('instance')
     .update({
-      commands: [instance.commands[0], `START ${seed} ${colors}`],
+      commands: [
+        instance.commands[0],
+        usesTimestamps(instance.commands)
+          ? stampCommand(`START ${seed} ${colors}`, nowInSeconds())
+          : `START ${seed} ${colors}`,
+      ],
       updated_at: new Date().toISOString(),
     })
     .eq('id', instanceId)

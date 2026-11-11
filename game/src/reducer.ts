@@ -5,11 +5,13 @@ import {
   GameConfigCountry,
   GameConfigLength,
   GameConfigPlayers,
+  GameConfigVariant,
   GameState,
   PlayerColor,
   SettlementEnum,
 } from './types'
 import { parseResourceParam } from './board/resource'
+import { splitTimestamp, stepByTimestamp } from './board/timestamp'
 import {
   build,
   commit,
@@ -32,8 +34,9 @@ const PDistrict = P.union('HILLS', 'PLAINS')
 const PPlayerCount = P.union('1', '2', '3', '4')
 const PCountry = P.union('ireland', 'france')
 const PLength = P.union('short', 'long')
+const PVariant = P.union('robbins', 'robbins!')
 
-export const reducer = (state: GameState, [command, ...params]: string[]): GameState | undefined => {
+const applyCommand = (state: GameState, [command, ...params]: string[]): GameState | undefined => {
   return match<[string, string[]], GameState | undefined>([command, params])
     .with([GameCommandEnum.COMMIT, []], () => commit(state))
     .with([GameCommandEnum.USE, P.array(P.string)], ([_command, [building, ...params]]) =>
@@ -88,6 +91,14 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
         resources,
       })(state)
     )
+    .with([GameCommandEnum.CONFIG, ['1', PCountry, PLength, PVariant]], ([_, [players, country, length, variant]]) =>
+      config({
+        players: Number.parseInt(players, 10) as GameConfigPlayers,
+        length,
+        country,
+        variant: variant as GameConfigVariant,
+      })(state)
+    )
     .with([GameCommandEnum.CONFIG, [PPlayerCount, PCountry, PLength]], ([_, [players, country, length]]) =>
       config({
         players: Number.parseInt(players, 10) as GameConfigPlayers,
@@ -112,4 +123,10 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
     .otherwise((command) => {
       throw new Error(`Unable to parse [${command.join(',')}]`)
     })
+}
+
+// "#" starts a comment. A timestamp in the comment steps the pcg before the command runs
+export const reducer = (state: GameState, command: string[]): GameState | undefined => {
+  const [tokens, seconds] = splitTimestamp(command)
+  return applyCommand(stepByTimestamp(seconds)(state), tokens)
 }

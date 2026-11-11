@@ -1,6 +1,15 @@
 export { reducer } from './reducer'
 export { control, completions, scores } from './control'
 export { initialState } from './state'
+export {
+  formatTimestamp,
+  parseTimestamp,
+  splitComment,
+  splitNote,
+  splitTimestamp,
+  stripComment,
+  withTimestamp,
+} from './board/timestamp'
 export { encode, encodeInto, erectionId, featureSpec, FEATURE_LEN } from './encode'
 export type { FeatureSpec } from './encode'
 export { parseResourceParam } from './board/resource'

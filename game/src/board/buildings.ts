@@ -1,5 +1,5 @@
 import { filter, union } from 'ramda'
-import { match } from 'ts-pattern'
+import { P, match } from 'ts-pattern'
 import {
   BuildingEnum,
   Cost,
@@ -361,6 +361,15 @@ export const roundBuildings = (config: GameCommandConfigParams, round: Settlemen
       BuildingEnum.Palace,
       BuildingEnum.Castle,
       BuildingEnum.TownEstate,
+      BuildingEnum.ShippingCompany,
+    ])
+    // the robbins solo variants keep Grapevine B in the game
+    .with([{ country: 'france', players: 1, variant: P.string }, SettlementRound.C], () => [
+      BuildingEnum.Palace,
+      BuildingEnum.Castle,
+      BuildingEnum.TownEstate,
+      BuildingEnum.GrapevineB,
+      BuildingEnum.Calefactory,
       BuildingEnum.ShippingCompany,
     ])
     .with([{ country: 'france', players: 1 }, SettlementRound.C], () => [

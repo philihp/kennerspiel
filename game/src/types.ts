@@ -20,11 +20,15 @@ export enum GameCommandEnum {
 export type GameConfigPlayers = 1 | 2 | 3 | 4
 export type GameConfigLength = 'short' | 'long'
 export type GameConfigCountry = 'ireland' | 'france'
+// optional rule variants. 'robbins' and 'robbins!' are solo variants
+// where the neutral player also builds during rounds.
+export type GameConfigVariant = 'robbins' | 'robbins!'
 
 export type GameCommandConfigParams = {
   players: GameConfigPlayers
   length: GameConfigLength
   country: GameConfigCountry
+  variant?: GameConfigVariant
 }
 
 export type GameCommandBuyDistrictParams = {
@@ -415,12 +419,7 @@ export type GameActionCutPeat = { command: GameCommandEnum.CUT_PEAT; params: Gam
 export type GameActionFellTrees = { command: GameCommandEnum.FELL_TREES; params: GameCommandFellTreesParams }
 export type GameActionUndefined = undefined
 export type GameAction =
-  | GameActionCommit
-  | GameActionConfig
-  | GameActionStart
-  | GameActionCutPeat
-  | GameActionFellTrees
-  | GameActionUndefined
+  GameActionCommit | GameActionConfig | GameActionStart | GameActionCutPeat | GameActionFellTrees | GameActionUndefined
 
 export type GameState = {
   status: GameStatusEnum
@@ -434,6 +433,9 @@ export type GameState = {
   plotPurchasePrices?: number[]
   districtPurchasePrices?: number[]
   frame?: Frame
+  // robbins solo variant: how many times the neutral player has covered a building
+  // because no empty space was left on its heartland
+  neutralCovers?: number
 }
 
 export type StateReducer = (state: GameState | undefined) => GameState | undefined

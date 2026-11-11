@@ -1,6 +1,17 @@
 import { control } from 'hathora-et-labora-game'
 import { GameStatusEnum } from 'hathora-et-labora-game/dist/types'
-import { activePlayerColor, applyCommand, asPlaying, engineColorToEntrantColor, replay, tokenize } from '../engine'
+import {
+  activePlayerColor,
+  applyCommand,
+  asPlaying,
+  engineColorToEntrantColor,
+  nowInSeconds,
+  replay,
+  stampCommand,
+  tokenize,
+  usesTimestamps,
+} from '../engine'
+import { stripComment } from 'hathora-et-labora-game'
 import { renderPendingWorkContract, renderSummary } from '../render'
 import { errorResult, jsonResult, ToolResult } from '../content'
 import { fetchInstance } from './fetchInstance'
@@ -41,7 +52,8 @@ export const makeMove = async ({
   //      multi-token commands like `BUILD G07` without the position — the reducer
   //      would happily apply that and park the game in a sub-step, but it isn't a
   //      complete legal command per get_legal_moves).
-  const tokens = tokenize(command)
+  // check the move without its comment. The server sets the timestamp; a note in the comment is kept
+  const tokens = tokenize(stripComment(command))
   if (tokens.length === 0) return errorResult('Empty command. Use get_legal_moves to find a legal command.')
   const nextState = applyCommand(playing, tokens)
   if (nextState === undefined) {
@@ -60,7 +72,7 @@ export const makeMove = async ({
   const { data, error } = await supabase.rpc('append_command', {
     p_instance_id: instance.id,
     p_expected_count: instance.commands.length,
-    p_command: tokens.join(' '),
+    p_command: usesTimestamps(instance.commands) ? stampCommand(command, nowInSeconds()) : tokens.join(' '),
   })
   if (error) return errorResult(`Failed to append move: ${error.message}`)
   if (!data || data.length === 0) {

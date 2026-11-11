@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { PostgrestError } from '@supabase/supabase-js'
 import { isEmpty } from 'ramda'
+import { nowInSeconds, stampCommand, usesTimestamps } from '@/mcp/engine'
 
 export const serverMove = async (
   instanceId: string,
@@ -27,9 +28,16 @@ export const serverMove = async (
 
   // TODO: check that it is players turn from one of seats[].color, oh god does this mean playing the commands?
 
+  // in a variant with timestamps, the server stamps the new last command with the time now
+  const lastIndex = newCommands.length - 1
+  const commands =
+    usesTimestamps(newCommands) && lastIndex >= 2
+      ? newCommands.map((c, i) => (i === lastIndex ? stampCommand(c, nowInSeconds()) : c))
+      : newCommands
+
   const { error: updateError } = await supabase
     .from('instance')
-    .update({ commands: newCommands, updated_at: new Date().toISOString() })
+    .update({ commands, updated_at: new Date().toISOString() })
     .eq('id', instanceId)
 
   if (updateError) {
