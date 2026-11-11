@@ -1,5 +1,5 @@
 import { GameStatusEnum } from 'hathora-et-labora-game/dist/types'
-import { activePlayerColor, asPlaying, engineColorToEntrantColor, replay } from '../engine'
+import { activePlayerColor, asPlaying, engineColorToEntrantColor, replay, usedTimestamps } from '../engine'
 import { renderSummary } from '../render'
 import { errorResult, jsonResult, ToolResult } from '../content'
 import { fetchInstance } from './fetchInstance'
@@ -19,7 +19,7 @@ export const undoMove = async ({ userId, instanceId }: { userId: string; instanc
 
   // 3. ownership check — replay everything except the last command and read
   // whose turn it was; only that player could have appended it
-  const priorState = asPlaying(replay(instance.commands.slice(0, -1)))
+  const priorState = asPlaying(replay(instance.commands.slice(0, -1), instance.timestamps))
   if (priorState === undefined) {
     return errorResult('Cannot undo: prior state could not be replayed.')
   }
@@ -39,6 +39,8 @@ export const undoMove = async ({ userId, instanceId }: { userId: string; instanc
   const { data, error } = await supabase.rpc('pop_command', {
     p_instance_id: instance.id,
     p_expected_count: instance.commands.length,
+    // keep only the timestamps that the remaining commands use
+    p_keep_timestamps: usedTimestamps(instance.commands.slice(0, -1), instance.timestamps).length,
   })
   if (error) return errorResult(`Failed to undo move: ${error.message}`)
   if (!data || data.length === 0) {
@@ -46,7 +48,7 @@ export const undoMove = async ({ userId, instanceId }: { userId: string; instanc
   }
 
   const [updated] = data
-  const updatedState = asPlaying(replay(updated.commands))
+  const updatedState = asPlaying(replay(updated.commands, updated.timestamps))
   if (updatedState === undefined) return errorResult('Undo was applied, but the resulting state could not be replayed.')
   return jsonResult({
     ok: true,

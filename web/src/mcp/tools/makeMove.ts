@@ -1,6 +1,15 @@
 import { control } from 'hathora-et-labora-game'
 import { GameStatusEnum } from 'hathora-et-labora-game/dist/types'
-import { activePlayerColor, applyCommand, asPlaying, engineColorToEntrantColor, replay, tokenize } from '../engine'
+import {
+  activePlayerColor,
+  applyCommand,
+  asPlaying,
+  commandUsesTimestamp,
+  engineColorToEntrantColor,
+  nowInSeconds,
+  replay,
+  tokenize,
+} from '../engine'
 import { renderPendingWorkContract, renderSummary } from '../render'
 import { errorResult, jsonResult, ToolResult } from '../content'
 import { fetchInstance } from './fetchInstance'
@@ -22,7 +31,7 @@ export const makeMove = async ({
   if (mySeats.length === 0) return errorResult('You are not seated in this game.')
 
   // 2. status check
-  const playing = asPlaying(replay(instance.commands))
+  const playing = asPlaying(replay(instance.commands, instance.timestamps))
   if (playing === undefined)
     return errorResult('Game has not started yet; seats and setup are managed from the website lobby.')
   if (playing.status === GameStatusEnum.FINISHED) return errorResult('Game is already finished.')
@@ -61,6 +70,8 @@ export const makeMove = async ({
     p_instance_id: instance.id,
     p_expected_count: instance.commands.length,
     p_command: tokens.join(' '),
+    // a move that uses the randomizer also stores the timestamp it used
+    p_timestamp: commandUsesTimestamp(playing, tokens) ? nowInSeconds() : undefined,
   })
   if (error) return errorResult(`Failed to append move: ${error.message}`)
   if (!data || data.length === 0) {
@@ -68,7 +79,7 @@ export const makeMove = async ({
   }
 
   const [updated] = data
-  const updatedState = asPlaying(replay(updated.commands))
+  const updatedState = asPlaying(replay(updated.commands, updated.timestamps))
   if (updatedState === undefined) return errorResult('Move was saved, but the resulting state could not be replayed.')
   return jsonResult({
     ok: true,

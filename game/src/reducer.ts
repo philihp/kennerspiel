@@ -11,6 +11,7 @@ import {
   SettlementEnum,
 } from './types'
 import { parseResourceParam } from './board/resource'
+import { beginCommand, endCommand } from './board/entropy'
 import {
   build,
   commit,
@@ -35,7 +36,7 @@ const PCountry = P.union('ireland', 'france')
 const PLength = P.union('short', 'long')
 const PVariant = P.union('robbins', 'robbins-aggressive')
 
-export const reducer = (state: GameState, [command, ...params]: string[]): GameState | undefined => {
+const applyCommand = (state: GameState, [command, ...params]: string[]): GameState | undefined => {
   return match<[string, string[]], GameState | undefined>([command, params])
     .with([GameCommandEnum.COMMIT, []], () => commit(state))
     .with([GameCommandEnum.USE, P.array(P.string)], ([_command, [building, ...params]]) =>
@@ -123,3 +124,6 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
       throw new Error(`Unable to parse [${command.join(',')}]`)
     })
 }
+
+export const reducer = (state: GameState, command: string[]): GameState | undefined =>
+  endCommand(applyCommand(beginCommand(state), command))

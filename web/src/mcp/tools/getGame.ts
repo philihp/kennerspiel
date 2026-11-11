@@ -19,7 +19,7 @@ export const getGame = async ({
   const myColors = mySeats.map((s) => s.color)
   const mySeatIds = new Set(mySeats.map((s) => s.id))
 
-  const state = replay(instance.commands)
+  const state = replay(instance.commands, instance.timestamps)
   const playing = asPlaying(state)
   if (playing === undefined) {
     return jsonResult({

@@ -1,4 +1,4 @@
-import { GameState, initialState, reducer, Tableau } from 'hathora-et-labora-game'
+import { GameState, initialState, reducer, Tableau, withTimestamps } from 'hathora-et-labora-game'
 import {
   BuildingEnum,
   Frame,
@@ -22,12 +22,38 @@ type CommandReducer = (state: GameState | undefined, command: string[]) => GameS
 // the reducer throws on commands it cannot parse (game/src/reducer.ts:115), so
 // both helpers normalize that to undefined alongside ordinary illegal moves
 
-export const replay = (commands: string[]): GameState | undefined => {
+// timestamps: the unix timestamps (seconds) stored with the instance. A command that
+// uses the randomizer takes the next one as its pcg step distance.
+export const replay = (commands: string[], timestamps: number[] = []): GameState | undefined => {
   try {
-    return commands.map((s) => s.split(' ')).reduce<GameState | undefined>(reducer as CommandReducer, initialState)
+    return commands
+      .map((s) => s.split(' '))
+      .reduce<GameState | undefined>(reducer as CommandReducer, withTimestamps(timestamps)(initialState))
   } catch {
     return undefined
   }
+}
+
+export const nowInSeconds = (): number => Math.floor(Date.now() / 1000)
+
+// the stored timestamps that these commands use, from the front of the list
+export const usedTimestamps = (commands: string[], timestamps: number[]): number[] => {
+  const end = replay(commands, timestamps)
+  return end === undefined ? timestamps : timestamps.slice(0, timestamps.length - (end.timestamps?.length ?? 0))
+}
+
+// true if the command uses the randomizer, and so needs a new timestamp
+export const commandUsesTimestamp = (state: GameState, command: string[]): boolean =>
+  applyCommand(withTimestamps([0])(state), command)?.timestamps?.length === 0
+
+// the timestamps to store after the last command of the list is added
+export const timestampsAfter = (commands: string[], timestamps: number[], now: number): number[] => {
+  const before = commands.slice(0, -1)
+  const used = usedTimestamps(before, timestamps)
+  const prior = replay(before, used)
+  const last = commands[commands.length - 1]
+  if (prior === undefined || last === undefined) return used
+  return commandUsesTimestamp(prior, last.split(' ')) ? [...used, now] : used
 }
 
 export const tokenize = (command: string): string[] =>

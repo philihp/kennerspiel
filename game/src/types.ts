@@ -436,6 +436,11 @@ export type GameState = {
   // robbins solo variant: how many times the neutral player has covered a building
   // because no empty space was left on its heartland
   neutralCovers?: number
+  // unix timestamps (seconds) not used yet. A command that uses the randomizer
+  // takes the first one, and steps the pcg forward by it.
+  timestamps?: number[]
+  // true after the current command has stepped the pcg
+  entropyStepped?: boolean
 }
 
 export type StateReducer = (state: GameState | undefined) => GameState | undefined

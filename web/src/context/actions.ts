@@ -3,11 +3,12 @@
 import { createClient } from '@/utils/supabase/server'
 import { PostgrestError } from '@supabase/supabase-js'
 import { isEmpty } from 'ramda'
+import { nowInSeconds, timestampsAfter } from '@/mcp/engine'
 
 export const serverMove = async (
   instanceId: string,
   newCommands: string[]
-): Promise<{ error: PostgrestError | null; commands: string[] | undefined }> => {
+): Promise<{ error: PostgrestError | null; commands: string[] | undefined; timestamps?: number[] }> => {
   const supabase = await createClient()
   const {
     data: { user },
@@ -27,9 +28,13 @@ export const serverMove = async (
 
   // TODO: check that it is players turn from one of seats[].color, oh god does this mean playing the commands?
 
+  // keep the timestamps the earlier commands use, and add one if the new last command uses the randomizer
+  const { data: current } = await supabase.from('instance').select('timestamps').eq('id', instanceId).single()
+  const timestamps = timestampsAfter(newCommands, current?.timestamps ?? [], nowInSeconds())
+
   const { error: updateError } = await supabase
     .from('instance')
-    .update({ commands: newCommands, updated_at: new Date().toISOString() })
+    .update({ commands: newCommands, timestamps, updated_at: new Date().toISOString() })
     .eq('id', instanceId)
 
   if (updateError) {
@@ -39,9 +44,9 @@ export const serverMove = async (
 
   const { data: instance, error } = await supabase
     .from('instance')
-    .select('commands, entrant(id)')
+    .select('commands, timestamps, entrant(id)')
     .eq('id', instanceId)
     .single()
 
-  return { error, commands: instance?.commands }
+  return { error, commands: instance?.commands, timestamps: instance?.timestamps }
 }

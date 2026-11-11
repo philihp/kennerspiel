@@ -1,5 +1,6 @@
 'use server'
 
+import { nowInSeconds, timestampsAfter } from '@/mcp/engine'
 import { Enums, Tables } from '@/supabase.types'
 import { createClient } from '@/utils/supabase/server'
 
@@ -155,7 +156,7 @@ export const config = async (instanceId: string, configString: string) => {
   }
   const { data, error } = await supabase
     .from('instance')
-    .update({ commands: [configString], updated_at: new Date().toISOString() })
+    .update({ commands: [configString], timestamps: [], updated_at: new Date().toISOString() })
     .eq('id', instanceId)
     .select()
     .single()
@@ -190,6 +191,8 @@ export const start = async (instanceId: string) => {
     .from('instance')
     .update({
       commands: [instance.commands[0], `START ${seed} ${colors}`],
+      // START in a robbins game rolls the wheel, so it uses a timestamp
+      timestamps: timestampsAfter([instance.commands[0], `START ${seed} ${colors}`], [], nowInSeconds()),
       updated_at: new Date().toISOString(),
     })
     .eq('id', instanceId)
