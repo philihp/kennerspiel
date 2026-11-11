@@ -14,26 +14,18 @@ const scrollToBuilding = (id: string) => (e: React.MouseEvent) => {
 }
 
 const CommandDisplay = ({ command }: { command: string }) => {
-  const [verb, ...rest] = command.split(' ')
+  const [verb, ...tokens] = command.split(' ')
+  // the "#<seconds>" timestamp is not printed; it shows in ISO8601 when the mouse hovers on the move
+  const stamp = tokens.find(isTimestampToken)
+  const seconds = stamp === undefined ? undefined : parseTimestamp(stamp.slice(1))
+  const rest = tokens.filter((token) => !isTimestampToken(token))
+  const time = seconds === undefined ? undefined : formatTimestamp(seconds)
   return (
-    <>
-      <span title={verb} style={{ cursor: 'context-menu' }}>
+    <span title={time}>
+      <span title={time ?? verb} style={{ cursor: 'context-menu' }}>
         {verb.toLowerCase().replace(/_/g, ' ')}
       </span>
       {rest.map((token, i) => {
-        // a "#<seconds>" timestamp shows in game notation, as ISO8601
-        const seconds = isTimestampToken(token) ? parseTimestamp(token.slice(1)) : undefined
-        if (seconds !== undefined) {
-          const iso = formatTimestamp(seconds)
-          return (
-            <React.Fragment key={i}>
-              {' '}
-              <time dateTime={iso} title={token} style={{ opacity: 0.6 }}>
-                #{iso}
-              </time>
-            </React.Fragment>
-          )
-        }
         const name = buildingName(token)
         return (
           <React.Fragment key={i}>
@@ -48,7 +40,7 @@ const CommandDisplay = ({ command }: { command: string }) => {
           </React.Fragment>
         )
       })}
-    </>
+    </span>
   )
 }
 
