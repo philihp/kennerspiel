@@ -15,6 +15,7 @@ import {
   reject,
   set,
   sum,
+  unless,
 } from 'ramda'
 import { match } from 'ts-pattern'
 import {
@@ -183,11 +184,19 @@ export const checkCloisterAdjacencyPlayer = (row: number, col: number, building:
     : undefined
 }
 
+const occupiedByCloisterBuilding =
+  (row: number, col: number) =>
+  (player: Tableau): boolean =>
+    isCloisterBuilding(player.landscape[row + (player.landscapeOffset ?? 0)]?.[col + 2]?.[1])
+
 export const checkCloisterAdjacency =
   (row: number, col: number, building: ErectionEnum): StateReducer =>
   (state) => {
     if (state?.frame?.neutralBuildingPhase) {
-      return withPlayerIndex(1)(checkCloisterAdjacencyPlayer(row, col, building))(state)
+      return withPlayerIndex(1)(
+        // a cloister building which covers another cloister building keeps its place in the cloister
+        unless(occupiedByCloisterBuilding(row, col), checkCloisterAdjacencyPlayer(row, col, building))
+      )(state)
     }
     return withActivePlayer(checkCloisterAdjacencyPlayer(row, col, building))(state)
   }
