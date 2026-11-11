@@ -15,7 +15,7 @@ const scrollToBuilding = (id: string) => (e: React.MouseEvent) => {
 
 const CommandDisplay = ({ command }: { command: string }) => {
   const [verb, ...tokens] = command.split(' ')
-  // the "#<seconds>" timestamp is not printed; it shows in ISO8601 when the mouse hovers on the move
+  // the "#<ISO8601>" timestamp is not printed; it shows in ISO8601 when the mouse hovers on the move
   const stamp = tokens.find(isTimestampToken)
   const seconds = stamp === undefined ? undefined : parseTimestamp(stamp.slice(1))
   const rest = tokens.filter((token) => !isTimestampToken(token))

@@ -78,7 +78,7 @@ export const pendingWorkContract = (state?: GameStatePlaying): PendingWorkContra
   return { contractor, owner, building }
 }
 
-// games in the robbins variants add a "#<unix seconds>" timestamp to every command after CONFIG
+// games in the robbins variants add a "#<ISO8601>" timestamp to every command after CONFIG
 export const usesTimestamps = (commands: string[]): boolean => (commands[0]?.split(' ')[4] ?? '').startsWith('robbins')
 
 export const nowInSeconds = (): number => Math.floor(Date.now() / 1000)

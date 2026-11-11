@@ -9,9 +9,9 @@ d('usesTimestamps', () => {
 })
 
 d('stampCommand', () => {
-  test('adds a timestamp', () => expect(stampCommand('USE LR1', 1794384781)).toBe('USE LR1 #1794384781'))
+  test('adds a timestamp', () => expect(stampCommand('USE LR1', 1794384781)).toBe('USE LR1 #2026-11-11T08:13:01Z'))
   test('replaces a timestamp', () =>
-    expect(stampCommand('COMMIT #2026-01-01T00:00:00Z', 1794384781)).toBe('COMMIT #1794384781'))
+    expect(stampCommand('COMMIT #2026-01-01T00:00:00Z', 1794384781)).toBe('COMMIT #2026-11-11T08:13:01Z'))
 })
 
 d('replay', () => {

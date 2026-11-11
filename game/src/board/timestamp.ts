@@ -34,7 +34,8 @@ export const splitTimestamp = (command: string[]): [string[], number | undefined
   return [init(command), seconds]
 }
 
-export const timestampToken = (seconds: number): string => `${TIMESTAMP_PREFIX}${seconds}`
+// the stored form of a timestamp: ISO8601 to the second, e.g. #2026-11-11T08:13:01Z
+export const timestampToken = (seconds: number): string => `${TIMESTAMP_PREFIX}${formatTimestamp(seconds)}`
 
 // step the pcg forward. Before START there is no pcg yet, so nothing happens.
 export const stepByTimestamp =
