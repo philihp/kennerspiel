@@ -11,7 +11,7 @@ import {
   tokenize,
   usesTimestamps,
 } from '../engine'
-import { isTimestampToken } from 'hathora-et-labora-game'
+import { stripComment } from 'hathora-et-labora-game'
 import { renderPendingWorkContract, renderSummary } from '../render'
 import { errorResult, jsonResult, ToolResult } from '../content'
 import { fetchInstance } from './fetchInstance'
@@ -52,8 +52,8 @@ export const makeMove = async ({
   //      multi-token commands like `BUILD G07` without the position — the reducer
   //      would happily apply that and park the game in a sub-step, but it isn't a
   //      complete legal command per get_legal_moves).
-  // the server sets the timestamp, so drop any the caller sent
-  const tokens = tokenize(command).filter((t) => !isTimestampToken(t))
+  // the server sets the timestamp, so drop any comment the caller sent
+  const tokens = tokenize(stripComment(command))
   if (tokens.length === 0) return errorResult('Empty command. Use get_legal_moves to find a legal command.')
   const nextState = applyCommand(playing, tokens)
   if (nextState === undefined) {

@@ -1,41 +1,55 @@
 import { stepState } from 'pcg'
-import { init, last } from 'ramda'
 import { GameState, GameStatusEnum } from '../types'
 
-// A command may end with a timestamp token, like "COMMIT #1762848128" or
-// "COMMIT #2026-11-11T08:13:01Z". The value is a moment in time, kept to the
-// second: anything more precise, like milliseconds, is dropped. The seconds
-// since the unix epoch are the distance that the pcg steps forward before the
-// command runs, so a move made at a different second gives different draws.
+// A "#" starts a comment, which runs to the end of the line, like in many
+// programming languages. The game ignores a comment, with one exception: if
+// the comment is a timestamp, the pcg steps forward by the seconds since the
+// unix epoch before the command runs. A move made at a different second then
+// gives different draws.
+//
+//   COMMIT #2026-11-11T08:13:01Z   steps the pcg by 1794384781
+//   COMMIT #1794384781             the same
+//   COMMIT #a good move            only a comment
+//
+// A timestamp is kept to the second. Anything more precise, like milliseconds, is dropped.
 
-const TIMESTAMP_PREFIX = '#'
+const COMMENT = '#'
 
 const DIGITS = /^\d+$/
+const ISO8601 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})$/
 
-// seconds since the unix epoch, from "1762848128" or an ISO8601 string
+// seconds since the unix epoch, from "1794384781" or an ISO8601 date and time
 export const parseTimestamp = (value: string): number | undefined => {
   if (DIGITS.test(value)) return Number.parseInt(value, 10)
+  if (!ISO8601.test(value)) return undefined
   const ms = Date.parse(value)
   return Number.isNaN(ms) ? undefined : Math.floor(ms / 1000)
 }
 
-// the ISO8601 form of a timestamp, for game notation. e.g. 2026-11-11T08:13:01Z
+// the ISO8601 form of a timestamp, to the second. e.g. 2026-11-11T08:13:01Z
 export const formatTimestamp = (seconds: number): string =>
   new Date(seconds * 1000).toISOString().replace(/\.\d{3}Z$/, 'Z')
 
-export const isTimestampToken = (token?: string): boolean => token?.startsWith(TIMESTAMP_PREFIX) ?? false
+const tokens = (line: string): string[] => line.split(' ').filter((s) => s !== '')
 
-// split a tokenized command into the command and its timestamp, if it has one
-export const splitTimestamp = (command: string[]): [string[], number | undefined] => {
-  const token = last(command)
-  if (!isTimestampToken(token)) return [command, undefined]
-  const seconds = parseTimestamp(token!.slice(TIMESTAMP_PREFIX.length))
-  if (seconds === undefined) throw new Error(`Unable to parse timestamp [${token}]`)
-  return [init(command), seconds]
+// split a line into the command and its comment, if it has one
+export const splitComment = (line: string): [string, string | undefined] => {
+  const at = line.indexOf(COMMENT)
+  return at === -1 ? [line, undefined] : [line.slice(0, at).trim(), line.slice(at + 1).trim()]
 }
 
-// the stored form of a timestamp: ISO8601 to the second, e.g. #2026-11-11T08:13:01Z
-export const timestampToken = (seconds: number): string => `${TIMESTAMP_PREFIX}${formatTimestamp(seconds)}`
+// the line without its comment
+export const stripComment = (line: string): string => splitComment(line)[0]
+
+// the line with a timestamp comment in place of any comment it had
+export const withTimestamp = (line: string, seconds: number): string =>
+  `${stripComment(line)} ${COMMENT}${formatTimestamp(seconds)}`
+
+// split a tokenized command into the command tokens and the timestamp in its comment
+export const splitTimestamp = (command: string[]): [string[], number | undefined] => {
+  const [line, comment] = splitComment(command.join(' '))
+  return [tokens(line), comment === undefined ? undefined : parseTimestamp(comment)]
+}
 
 // step the pcg forward. Before START there is no pcg yet, so nothing happens.
 export const stepByTimestamp =

@@ -125,7 +125,7 @@ const applyCommand = (state: GameState, [command, ...params]: string[]): GameSta
     })
 }
 
-// a command may end with a "#<timestamp>" token, which steps the pcg before the command runs
+// "#" starts a comment. A timestamp in the comment steps the pcg before the command runs
 export const reducer = (state: GameState, command: string[]): GameState | undefined => {
   const [tokens, seconds] = splitTimestamp(command)
   return applyCommand(stepByTimestamp(seconds)(state), tokens)

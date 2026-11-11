@@ -1,4 +1,4 @@
-import { GameState, initialState, isTimestampToken, reducer, Tableau, timestampToken } from 'hathora-et-labora-game'
+import { GameState, initialState, reducer, Tableau, withTimestamp } from 'hathora-et-labora-game'
 import {
   BuildingEnum,
   Frame,
@@ -78,11 +78,11 @@ export const pendingWorkContract = (state?: GameStatePlaying): PendingWorkContra
   return { contractor, owner, building }
 }
 
-// games in the robbins variants add a "#<ISO8601>" timestamp to every command after CONFIG
+// games in the robbins variants add a "#<ISO8601>" timestamp comment to every command after CONFIG
 export const usesTimestamps = (commands: string[]): boolean => (commands[0]?.split(' ')[4] ?? '').startsWith('robbins')
 
 export const nowInSeconds = (): number => Math.floor(Date.now() / 1000)
 
-// put the server's timestamp on the end of a command, in place of any timestamp it already has
+// put the server's timestamp in the command's comment, in place of any comment it already has
 export const stampCommand = (command: string, seconds: number): string =>
-  [...tokenize(command).filter((t) => !isTimestampToken(t)), timestampToken(seconds)].join(' ')
+  withTimestamp(tokenize(command).join(' '), seconds)
