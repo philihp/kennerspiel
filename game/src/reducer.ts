@@ -34,7 +34,7 @@ const PDistrict = P.union('HILLS', 'PLAINS')
 const PPlayerCount = P.union('1', '2', '3', '4')
 const PCountry = P.union('ireland', 'france')
 const PLength = P.union('short', 'long')
-const PVariant = P.union('robbins', 'robbins-aggressive')
+const PVariant = P.union('robbins', 'robbins!')
 
 const applyCommand = (state: GameState, [command, ...params]: string[]): GameState | undefined => {
   return match<[string, string[]], GameState | undefined>([command, params])

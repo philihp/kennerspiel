@@ -7,7 +7,7 @@ import { EventHandler, ReactNode, SyntheticEvent, useOptimistic, useTransition }
 type Instance = Tables<'instance'>
 
 // solo-only rule variants, sent as an optional fifth CONFIG token
-type SoloVariant = '' | 'robbins' | 'robbins-aggressive'
+type SoloVariant = '' | 'robbins' | 'robbins!'
 
 const configCommand = (players: number, country: EngineCountry, length: EngineLength, variant: SoloVariant) =>
   [`CONFIG`, Math.max(players, 1), country.toLowerCase(), length.toLowerCase(), ...(variant ? [variant] : [])].join(' ')
@@ -83,7 +83,7 @@ export const GameSetupVariant = () => {
     EngineCountry.france,
     EngineLength.long,
     optInstance?.commands?.[0],
-    'robbins-aggressive'
+    'robbins!'
   )
 
   return (
@@ -120,7 +120,7 @@ export const GameSetupVariant = () => {
           <RadioPair
             selected={isFranceRobbinsAggressive}
             disabled={isFranceRobbinsAggressive}
-            onClick={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.long, 'robbins-aggressive')}
+            onClick={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.long, 'robbins!')}
           >
             France (Robbins, aggressive)
           </RadioPair>

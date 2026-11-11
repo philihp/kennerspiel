@@ -39,8 +39,8 @@ describe('board/frame/robbins', () => {
     it('parses the robbins variants', () => {
       const s1 = reducer(initialState, ['CONFIG', '1', 'france', 'long', 'robbins'])!
       expect(s1.config).toStrictEqual({ players: 1, country: 'france', length: 'long', variant: 'robbins' })
-      const s2 = reducer(initialState, ['CONFIG', '1', 'france', 'long', 'robbins-aggressive'])!
-      expect(s2.config!.variant).toBe('robbins-aggressive')
+      const s2 = reducer(initialState, ['CONFIG', '1', 'france', 'long', 'robbins!'])!
+      expect(s2.config!.variant).toBe('robbins!')
     })
     it('does not allow the variant for more than one player', () => {
       expect(() => reducer(initialState, ['CONFIG', '2', 'france', 'long', 'robbins'])).toThrow()
@@ -211,7 +211,7 @@ describe('board/frame/robbins', () => {
       expect(roundBuildings(after.config!, SettlementRound.S)).toContain(built)
     })
     it('aggressive: neutral builds 12 times', () => {
-      const states = playOut(startGame('robbins-aggressive'))
+      const states = playOut(startGame('robbins!'))
       const last = states[states.length - 1]
       expect(last.status).toBe('FINISHED')
       expect(last.neutralCovers).toBe(6)

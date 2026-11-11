@@ -79,7 +79,7 @@ export const pickFrameFlow = (config: GameCommandConfigParams): FrameFlow =>
     .with({ players: 2, length: 'long' }, () => nextFrame2Long)
     .with({ players: 2, length: 'short' }, () => nextFrame2Short)
     .with({ players: 1, variant: 'robbins' }, () => nextFrameRobbins)
-    .with({ players: 1, variant: 'robbins-aggressive' }, () => nextFrameRobbinsAggressive)
+    .with({ players: 1, variant: 'robbins!' }, () => nextFrameRobbinsAggressive)
     .with({ players: 1 }, () => nextFrameSolo)
     .exhaustive()
 

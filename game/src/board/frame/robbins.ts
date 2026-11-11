@@ -219,7 +219,7 @@ const settledBeforeFrame = (flow: FrameFlow): Record<string, SettlementRound> =>
   ])
 
 export const robbinsFrameFlow = (variant: GameConfigVariant): FrameFlow => {
-  const aggressive = equals(variant, 'robbins-aggressive')
+  const aggressive = equals(variant, 'robbins!')
   const settledBefore = settledBeforeFrame(nextFrameSolo)
   const frameKeys = sort((a: number, b: number) => a - b, map(Number, keys(nextFrameSolo)))
   const [, frames] = mapAccum(
@@ -236,4 +236,4 @@ export const robbinsFrameFlow = (variant: GameConfigVariant): FrameFlow => {
 }
 
 export const nextFrameRobbins: FrameFlow = robbinsFrameFlow('robbins')
-export const nextFrameRobbinsAggressive: FrameFlow = robbinsFrameFlow('robbins-aggressive')
+export const nextFrameRobbinsAggressive: FrameFlow = robbinsFrameFlow('robbins!')

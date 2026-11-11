@@ -3,7 +3,7 @@ import { replay, stampCommand, usesTimestamps } from '../engine'
 
 d('usesTimestamps', () => {
   test('robbins', () => expect(usesTimestamps(['CONFIG 1 france long robbins'])).toBe(true))
-  test('robbins aggressive', () => expect(usesTimestamps(['CONFIG 1 france long robbins-aggressive'])).toBe(true))
+  test('robbins aggressive', () => expect(usesTimestamps(['CONFIG 1 france long robbins!'])).toBe(true))
   test('plain solo', () => expect(usesTimestamps(['CONFIG 1 france long'])).toBe(false))
   test('no commands', () => expect(usesTimestamps([])).toBe(false))
 })

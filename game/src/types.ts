@@ -20,9 +20,9 @@ export enum GameCommandEnum {
 export type GameConfigPlayers = 1 | 2 | 3 | 4
 export type GameConfigLength = 'short' | 'long'
 export type GameConfigCountry = 'ireland' | 'france'
-// optional rule variants. 'robbins' and 'robbins-aggressive' are solo variants
+// optional rule variants. 'robbins' and 'robbins!' are solo variants
 // where the neutral player also builds during rounds.
-export type GameConfigVariant = 'robbins' | 'robbins-aggressive'
+export type GameConfigVariant = 'robbins' | 'robbins!'
 
 export type GameCommandConfigParams = {
   players: GameConfigPlayers
