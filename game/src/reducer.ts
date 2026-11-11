@@ -5,6 +5,7 @@ import {
   GameConfigCountry,
   GameConfigLength,
   GameConfigPlayers,
+  GameConfigVariant,
   GameState,
   PlayerColor,
   SettlementEnum,
@@ -32,6 +33,7 @@ const PDistrict = P.union('HILLS', 'PLAINS')
 const PPlayerCount = P.union('1', '2', '3', '4')
 const PCountry = P.union('ireland', 'france')
 const PLength = P.union('short', 'long')
+const PVariant = P.union('robbins', 'robbins-aggressive')
 
 export const reducer = (state: GameState, [command, ...params]: string[]): GameState | undefined => {
   return match<[string, string[]], GameState | undefined>([command, params])
@@ -86,6 +88,14 @@ export const reducer = (state: GameState, [command, ...params]: string[]): GameS
         col: Number.parseInt(col, 10),
         row: Number.parseInt(row, 10),
         resources,
+      })(state)
+    )
+    .with([GameCommandEnum.CONFIG, ['1', PCountry, PLength, PVariant]], ([_, [players, country, length, variant]]) =>
+      config({
+        players: Number.parseInt(players, 10) as GameConfigPlayers,
+        length,
+        country,
+        variant: variant as GameConfigVariant,
       })(state)
     )
     .with([GameCommandEnum.CONFIG, [PPlayerCount, PCountry, PLength]], ([_, [players, country, length]]) =>

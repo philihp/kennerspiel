@@ -6,8 +6,21 @@ import { EventHandler, ReactNode, SyntheticEvent, useOptimistic, useTransition }
 
 type Instance = Tables<'instance'>
 
-const configured = (country: EngineCountry, length: EngineLength, firstCommand: string = '') =>
-  firstCommand.includes(country.toLowerCase()) && firstCommand.includes(length.toLowerCase())
+// solo-only rule variants, sent as an optional fifth CONFIG token
+type SoloVariant = '' | 'robbins' | 'robbins-aggressive'
+
+const configCommand = (players: number, country: EngineCountry, length: EngineLength, variant: SoloVariant) =>
+  [`CONFIG`, Math.max(players, 1), country.toLowerCase(), length.toLowerCase(), ...(variant ? [variant] : [])].join(' ')
+
+const configured = (
+  country: EngineCountry,
+  length: EngineLength,
+  firstCommand: string = '',
+  variant: SoloVariant = ''
+) => {
+  const [, , c, l, v = ''] = firstCommand.split(' ')
+  return c === country.toLowerCase() && l === length.toLowerCase() && v === variant
+}
 
 type RadioPairProps = {
   disabled: boolean
@@ -35,25 +48,27 @@ export const GameSetupVariant = () => {
     flags: { ireland: irelandAllowed },
   } = useInstanceContext()
 
-  const [optInstance, setOptInstance] = useOptimistic<Instance, [EngineCountry, EngineLength]>(
+  const [optInstance, setOptInstance] = useOptimistic<Instance, [EngineCountry, EngineLength, SoloVariant]>(
     instance,
     // optimistically, predict what the resulting list of entrants will look like
-    (oldInstance, [country, length]) => ({
+    (oldInstance, [country, length, variant]) => ({
       ...oldInstance,
-      commands: [`CONFIG ${entrants.length} ${country.toLowerCase()} ${length.toLowerCase()}`],
+      commands: [configCommand(entrants.length, country, length, variant)],
     })
   )
 
   const [_isPending, startTransition] = useTransition()
 
-  const handleConfig = async (players: number, country: EngineCountry, length: EngineLength) => {
+  const handleConfig = async (
+    players: number,
+    country: EngineCountry,
+    length: EngineLength,
+    variant: SoloVariant = ''
+  ) => {
     startTransition(async () => {
       // optimistic reducer
-      setOptInstance([country, length])
-      const finalInstance = await config(
-        instance.id,
-        `CONFIG ${Math.max(players, 1)} ${country.toLowerCase()} ${length.toLowerCase()}`
-      )
+      setOptInstance([country, length, variant])
+      const finalInstance = await config(instance.id, configCommand(players, country, length, variant))
       // pessimistic reducer
       if (finalInstance) setInstance((oldInstance) => ({ ...oldInstance, ...finalInstance }))
     })
@@ -63,6 +78,13 @@ export const GameSetupVariant = () => {
   const isFranceShort = configured(EngineCountry.france, EngineLength.short, optInstance?.commands?.[0])
   const isIrelandLong = configured(EngineCountry.ireland, EngineLength.long, optInstance?.commands?.[0])
   const isIrelandShort = configured(EngineCountry.ireland, EngineLength.short, optInstance?.commands?.[0])
+  const isFranceRobbins = configured(EngineCountry.france, EngineLength.long, optInstance?.commands?.[0], 'robbins')
+  const isFranceRobbinsAggressive = configured(
+    EngineCountry.france,
+    EngineLength.long,
+    optInstance?.commands?.[0],
+    'robbins-aggressive'
+  )
 
   return (
     <>
@@ -85,6 +107,26 @@ export const GameSetupVariant = () => {
       </RadioPair>
       {!irelandAllowed && <i>Disabled during beta</i>}
       <br />
+      {entrants.length === 1 && (
+        <>
+          <RadioPair
+            selected={isFranceRobbins}
+            disabled={isFranceRobbins}
+            onClick={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.long, 'robbins')}
+          >
+            France (Robbins)
+          </RadioPair>
+          <br />
+          <RadioPair
+            selected={isFranceRobbinsAggressive}
+            disabled={isFranceRobbinsAggressive}
+            onClick={() => handleConfig(entrants.length, EngineCountry.france, EngineLength.long, 'robbins-aggressive')}
+          >
+            France (Robbins, aggressive)
+          </RadioPair>
+          <br />
+        </>
+      )}
       {entrants.length > 1 && (
         <>
           {' '}
@@ -108,6 +150,12 @@ export const GameSetupVariant = () => {
         </>
       )}
       <p>Country variants contain a different set of buildings. </p>
+      {entrants.length === 1 && (
+        <p>
+          In the Robbins variants, the neutral player takes a random good from the wheel each round, and builds random
+          buildings during the game.
+        </p>
+      )}
     </>
   )
 }
