@@ -1,6 +1,6 @@
 import { compose, filter, fromPairs, map, pipe, toPairs, transduce, zip } from 'ramda'
 import { pointille } from 'pointille'
-import { match } from 'ts-pattern'
+import { match, P } from 'ts-pattern'
 import { GameCommandConfigParams, Rondel } from 'hathora-et-labora-game'
 
 export type TokenKey = 'clay' | 'coin' | 'grain' | 'grape' | 'joker' | 'peat' | 'sheep' | 'stone' | 'wood'
@@ -17,15 +17,17 @@ const wedgePoint = (n: number, radius: number): [number, number] => [
   -Math.cos((n * Math.PI * 2) / N_WEDGES) * radius,
 ]
 
+// the solo game does not use the stone and grape tokens, but the robbins
+// variants add them as in the multi-player long game
 export const isStoneUsed = (config: GameCommandConfigParams): boolean =>
   match(config)
+    .with({ players: 1, variant: P.union('robbins', 'robbins!') }, () => true)
     .with({ players: 1 }, () => false)
     .otherwise(() => true)
 
 export const isGrapeUsed = (config: GameCommandConfigParams): boolean =>
   match(config)
-    .with({ players: 1 }, () => false)
-    .with({ country: 'france' }, () => true)
+    .with({ country: 'france' }, isStoneUsed)
     .otherwise(() => false)
 
 export const getWedgePolygon = (pos: number): [number, number][] => {
@@ -69,8 +71,9 @@ export const computeTokenPositions = (
     toPairs as (x: Record<string, TokenKey[]>) => [string, TokenKey[]][],
     (pairs: [string, TokenKey[]][]) =>
       transduce(
-        map(([posStr, tokens]: [string, TokenKey[]]) =>
-          zip(tokens, pointille(getWedgePolygon(Number(posStr)), tokens.length)) as [TokenKey, [number, number]][]
+        map(
+          ([posStr, tokens]: [string, TokenKey[]]) =>
+            zip(tokens, pointille(getWedgePolygon(Number(posStr)), tokens.length)) as [TokenKey, [number, number]][]
         ),
         (acc: Partial<Record<TokenKey, [number, number]>>, pts: [TokenKey, [number, number]][]) => ({
           ...acc,

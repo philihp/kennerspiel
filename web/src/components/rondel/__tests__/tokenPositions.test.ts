@@ -12,6 +12,10 @@ import {
 const ireland4: GameCommandConfigParams = { players: 4, length: 'long', country: 'ireland' }
 const france4: GameCommandConfigParams = { players: 4, length: 'long', country: 'france' }
 const solo: GameCommandConfigParams = { players: 1, length: 'long', country: 'ireland' }
+const soloFrance: GameCommandConfigParams = { players: 1, length: 'long', country: 'france' }
+const robbins: GameCommandConfigParams = { players: 1, length: 'long', country: 'france', variant: 'robbins' }
+const robbinsAggressive: GameCommandConfigParams = { ...robbins, variant: 'robbins!' }
+const robbinsIreland: GameCommandConfigParams = { ...robbins, country: 'ireland' }
 
 const baseRondel: Rondel = {
   pointingBefore: 0,
@@ -28,12 +32,18 @@ const baseRondel: Rondel = {
 
 d('isGrapeUsed', () => {
   test('false for solo', () => expect(isGrapeUsed(solo)).toBe(false))
+  test('false for france solo', () => expect(isGrapeUsed(soloFrance)).toBe(false))
+  test('true for france robbins', () => expect(isGrapeUsed(robbins)).toBe(true))
+  test('true for france robbins!', () => expect(isGrapeUsed(robbinsAggressive)).toBe(true))
+  test('false for ireland robbins', () => expect(isGrapeUsed(robbinsIreland)).toBe(false))
   test('false for ireland', () => expect(isGrapeUsed(ireland4)).toBe(false))
   test('true for france multiplayer', () => expect(isGrapeUsed(france4)).toBe(true))
 })
 
 d('isStoneUsed', () => {
   test('false for solo', () => expect(isStoneUsed(solo)).toBe(false))
+  test('true for robbins', () => expect(isStoneUsed(robbins)).toBe(true))
+  test('true for robbins!', () => expect(isStoneUsed(robbinsAggressive)).toBe(true))
   test('true for multiplayer', () => expect(isStoneUsed(ireland4)).toBe(true))
 })
 
@@ -81,6 +91,13 @@ d('computeTokenPositions', () => {
   test('omits stone in solo games', () => {
     const result = computeTokenPositions(baseRondel, solo)
     expect(result.stone).toBeUndefined()
+  })
+
+  test('includes stone and grape in robbins solo games', () => {
+    const rondel = { ...baseRondel, grape: 3 }
+    const result = computeTokenPositions(rondel, robbins)
+    expect(result.stone).toBeDefined()
+    expect(result.grape).toBeDefined()
   })
 
   test('includes stone in multiplayer games', () => {
