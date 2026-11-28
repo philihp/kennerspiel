@@ -50,7 +50,7 @@
     "@types/react-dom": "19.3.0",
     "husky": "9.1.7",
     "lint-staged": "17.6.2",
-    "lucide-react": "1.77.0",
+    "lucide-react": "1.83.0",
     "oxlint": "^1.78.0",
     "prettier": "3.10.1",
     "supabase": "3.2.0",

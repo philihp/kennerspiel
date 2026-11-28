@@ -109,8 +109,8 @@ importers:
         specifier: 17.6.2
         version: 17.6.2
       lucide-react:
-        specifier: 1.77.0
-        version: 1.77.0(@types/react@19.3.3)(react@19.3.1)
+        specifier: 1.83.0
+        version: 1.83.0(@types/react@19.3.3)(react@19.3.1)
       oxlint:
         specifier: ^1.78.0
         version: 1.94.0
@@ -1332,8 +1332,8 @@ packages:
   lru-memoizer@3.0.0:
     resolution: {integrity: sha512-m83w/cYXLdUIboKSPxzPAGfYnk+vqeDYXuoSrQRw1q+yVEd8IXhvMufN8Q5TIPe7e2jyX4SRNrDJI2Skw1yznQ==}
 
-  lucide-react@1.77.0:
-    resolution: {integrity: sha512-VS6sOi8ZUH1qm6swBL/tpI4xAhB6pFTdHvw3pfCJD+DaTJwpyynVzfOS6mdyMZ+OCdY/GMSQbqinOMOPbNSrQA==}
+  lucide-react@1.83.0:
+    resolution: {integrity: sha512-bYosQeQphbbNtdWT4DvY1/wlen2CcsZEQI/pMykcQ8twiu+T7m7cY7s8hOTJiMEAs3nUxCkeCxTe4ohczS5jhA==}
     peerDependencies:
       '@types/react': '*'
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -2703,7 +2703,7 @@ snapshots:
       lodash.clonedeep: 4.5.0
       lru-cache: 11.5.3
 
-  lucide-react@1.77.0(@types/react@19.3.3)(react@19.3.1):
+  lucide-react@1.83.0(@types/react@19.3.3)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
