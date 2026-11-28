@@ -39,8 +39,8 @@ importers:
         specifier: 3.1.1
         version: 3.1.1(next@16.4.6(@types/node@26.6.11)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@vercel/speed-insights':
-        specifier: 2.1.0
-        version: 2.1.0(next@16.4.6(@types/node@26.6.11)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
+        specifier: 2.1.1
+        version: 2.1.1(next@16.4.6(@types/node@26.6.11)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
       date-fns:
         specifier: 4.4.0
         version: 4.4.0
@@ -1127,8 +1127,8 @@ packages:
       react-dom:
         optional: true
 
-  '@vercel/speed-insights@2.1.0':
-    resolution: {integrity: sha512-tkDiIEjjmlwPpTFnOK14hBhsRLMo5yoCeK2Er3AHWlL7WTzHgFSyItps3TOW0HukErUlYlaUeHiVLCyfiE4WAA==}
+  '@vercel/speed-insights@2.1.1':
+    resolution: {integrity: sha512-gaaFVQ4Rv5IfuGU5qpvN1h+A+XvezAJZOMHAziapyWqLPzq3dmS+hUNeuAJcD55zUYAfrJIMTbSh39+xElp0+Q==}
     peerDependencies:
       '@sveltejs/kit': ^1 || ^2 || ^3 || ^3.0.0-next.0
       next: '>= 13'
@@ -1136,7 +1136,7 @@ packages:
       react: ^18 || ^19 || ^19.0.0-rc
       svelte: '>= 4'
       vue: ^3
-      vue-router: ^4
+      vue-router: ^4 || ^5
     peerDependenciesMeta:
       '@sveltejs/kit':
         optional: true
@@ -2523,7 +2523,7 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@vercel/speed-insights@2.1.0(next@16.4.6(@types/node@26.6.11)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)':
+  '@vercel/speed-insights@2.1.1(next@16.4.6(@types/node@26.6.11)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)':
     optionalDependencies:
       next: 16.4.6(@types/node@26.6.11)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react: 19.3.1
